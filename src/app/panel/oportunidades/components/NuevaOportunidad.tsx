@@ -1,0 +1,60 @@
+"use client";
+
+import { useActionState, useState } from "react";
+import type { OpportunityType } from "@/lib/types";
+import type { PlantillaOportunidad } from "@/lib/opportunities";
+import { crearOportunidad } from "../actions";
+import { OportunidadForm } from "./OportunidadForm";
+import { PlantillasRapidas } from "./PlantillasRapidas";
+
+export function NuevaOportunidad() {
+  const [abierto, setAbierto] = useState(false);
+  const [plantilla, setPlantilla] = useState<{ tipo: OpportunityType; datos: PlantillaOportunidad } | null>(
+    null,
+  );
+  const [estado, formAction] = useActionState(crearOportunidad, null);
+
+  // Al crearse con éxito, el padre vuelve a pasar `oportunidades` con
+  // una fila más; su `key={oportunidades.length}` cambia y remonta este
+  // componente ya cerrado, sin necesidad de cerrarlo manualmente aquí.
+  if (!abierto) {
+    return (
+      <button
+        type="button"
+        onClick={() => setAbierto(true)}
+        className="rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+      >
+        + Nueva oportunidad
+      </button>
+    );
+  }
+
+  return (
+    <div className="rounded-xl border border-zinc-200 bg-white p-6">
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-base font-semibold text-zinc-900">Nueva oportunidad</h2>
+        <button
+          type="button"
+          onClick={() => setAbierto(false)}
+          className="text-sm text-zinc-500 hover:underline"
+        >
+          Cerrar
+        </button>
+      </div>
+
+      <PlantillasRapidas onElegir={(tipo, datos) => setPlantilla({ tipo, datos })} />
+
+      <OportunidadForm
+        key={plantilla ? `${plantilla.tipo}-${plantilla.datos.title}` : "en-blanco"}
+        accion={formAction}
+        estado={estado}
+        textoBoton="Crear oportunidad"
+        valoresIniciales={
+          plantilla
+            ? { title: plantilla.datos.title, description: plantilla.datos.description, opportunityType: plantilla.tipo }
+            : undefined
+        }
+      />
+    </div>
+  );
+}
