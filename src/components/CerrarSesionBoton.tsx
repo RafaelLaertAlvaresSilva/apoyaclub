@@ -1,4 +1,4 @@
-import { cerrarSesion } from "@/app/actions";
+import { cerrarSesion } from "@/app/[locale]/actions";
 
 export function CerrarSesionBoton() {
   return (

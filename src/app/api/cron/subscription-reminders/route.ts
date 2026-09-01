@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { enviarEmailAvisoCaducidadSuscripcion } from "@/lib/email/resend";
+import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -93,7 +94,7 @@ export async function GET(request: Request) {
         month: "long",
         year: "numeric",
       }),
-      panelUrl: `${SITE_URL}/panel/suscripcion`,
+      panelUrl: `${SITE_URL}/${routing.defaultLocale}/panel/suscripcion`,
     });
 
     // Se marca como enviado tanto si Resend confirma el envío como si

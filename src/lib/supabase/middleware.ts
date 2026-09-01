@@ -1,5 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
+import type { NextRequest, NextResponse } from "next/server";
 
 /**
  * Refresca la sesión de Supabase en cada petición (necesario porque los
@@ -8,10 +8,13 @@ import { NextResponse, type NextRequest } from "next/server";
  * Importante: siempre se usa `getUser()` (que valida el token contra el
  * servidor de Supabase) y nunca `getSession()`, que solo lee la cookie sin
  * verificarla.
+ *
+ * Fase 14: recibe la respuesta como parámetro (la que ya ha construido
+ * `createIntlMiddleware`, con la cabecera interna del idioma resuelto)
+ * en vez de crear la suya propia, para que las cookies de sesión y el
+ * idioma viajen en la misma respuesta.
  */
-export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
-
+export async function updateSession(request: NextRequest, response: NextResponse) {
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -24,9 +27,8 @@ export async function updateSession(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value),
           );
-          supabaseResponse = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options),
+            response.cookies.set(name, value, options),
           );
         },
       },
@@ -41,5 +43,5 @@ export async function updateSession(request: NextRequest) {
   // petición ya cargada) para que el middleware pueda hacer alguna
   // consulta adicional sin tener que repetir esta configuración de
   // cookies (comprobar si un club está suspendido, más abajo).
-  return { supabaseResponse, user, supabase };
+  return { user, supabase };
 }

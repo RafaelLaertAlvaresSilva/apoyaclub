@@ -1,6 +1,7 @@
 import { Document, Image, Page, StyleSheet, Text, View, renderToBuffer } from "@react-pdf/renderer";
 import { deportesDelClub, seccionesConContenido } from "@/lib/dossier";
 import { formatoValorOportunidad } from "@/lib/opportunities";
+import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
 import type {
   ClubProfile,
@@ -293,7 +294,7 @@ function DossierDocumento({
 
   const deportes = deportesDelClub(equipos);
   const ubicacion = [perfil.city, perfil.province].filter(Boolean).join(", ");
-  const urlPublica = `${SITE_URL}/club/${perfil.slug}`;
+  const urlPublica = `${SITE_URL}/${routing.defaultLocale}/club/${perfil.slug}`;
 
   const redesSociales = (Object.entries(perfil.socialLinks) as [keyof SocialLinks, string | undefined][])
     .filter((entrada): entrada is [keyof SocialLinks, string] => !!entrada[1]);

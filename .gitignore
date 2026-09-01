@@ -44,3 +44,6 @@ next-env.d.ts
 # carpetas temporales de limpieza de una sesión anterior, no forman parte del proyecto
 /_to_delete/
 /node_modules_bad_prev_*/
+
+# log de una prueba de build en local, sin contenido útil
+/build.log

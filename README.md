@@ -579,3 +579,90 @@ enlace hacia aquí en el resto de la aplicación.
   cada club — ver el comentario de `ESTADOS_CONVERTIDOS` en
   `lib/admin-metrics.ts` para la definición exacta y su límite
   conocido.
+
+## Internacionalización (Fase 14)
+
+Arquitectura multiidioma lista para funcionar, pero **todavía sin
+traducir nada**: hoy solo existe español, y el objetivo de esta fase es
+que añadir un segundo idioma sea cuestión de horas (crear su carpeta de
+mensajes y su entrada en la tabla de configuración) y no un rediseño de
+la aplicación.
+
+### Cómo funciona
+
+- **Librería**: [next-intl](https://next-intl.dev), la opción estándar
+  para App Router con rutas con prefijo de idioma.
+- **Rutas**: toda la app vive bajo `src/app/[locale]/...` (español por
+  ahora: `/es/...`, siempre con prefijo — `localePrefix: "always"` en
+  `src/i18n/routing.ts` — así no hay que cambiar ninguna URL el día que
+  se añada el segundo idioma). Las rutas de API (`/api/...`) se quedan
+  **fuera** de `[locale]`, tal cual: no son páginas, y el webhook de
+  Stripe y el cron necesitan una URL fija.
+- **`src/i18n/routing.ts`**: la única fuente de verdad de qué idiomas
+  existen (`locales`) y cuál es el de por defecto. La usan el
+  middleware, la navegación y la carga de mensajes.
+- **`src/i18n/navigation.ts`**: sustitutos de `next/link` y
+  `next/navigation` que ya anteponen el idioma actual a cualquier ruta
+  interna (`Link`, `redirect`, `useRouter`, `usePathname`). Se usan
+  igual que los originales; solo cambia de dónde se importan. Dentro de
+  una Server Action o Route Handler, `redirect(...)` necesita el idioma
+  explícito — `redirect({ href: "/login", locale })`, con `locale`
+  sacado de `getLocale()` (`next-intl/server`) o de `params.locale` — y
+  hay que escribirlo siempre como `return redirect(...)`, no como
+  sentencia suelta: si no, TypeScript dejar de detectar que esa rama no
+  sigue adelante y da error en el código de después (una limitación
+  conocida del tipado de next-intl, no un bug de la app).
+  Para una URL **externa** (p. ej. la de Stripe Checkout en
+  `panel/suscripcion/actions.ts`) hay que seguir usando el `redirect` de
+  `next/navigation` tal cual — el de next-intl asume que el destino es
+  una ruta interna y le antepondría el idioma, rompiendo la URL.
+- **`src/middleware.ts`**: encadena el middleware de next-intl (decide
+  el idioma y redirige si la URL no lleva prefijo) con la comprobación
+  de sesión/rol que ya existía (Fase 3/12), reutilizando la misma
+  respuesta para que las cookies de sesión y el idioma resuelto viajen
+  juntos.
+- **Textos de interfaz**: en `messages/<locale>/*.json`, repartidos por
+  módulo (`common`, `home`, `auth`, `club`, `buscar`, `panel`,
+  `empresa`, `admin`, `legal`, `emails`) en vez de un único archivo
+  gigante — `src/i18n/request.ts` los carga y fusiona. **Solo
+  `common.json` → `footer` tiene contenido real por ahora**, como
+  ejemplo del patrón (`Footer.tsx`, migrado con `useTranslations`); el
+  resto de módulos existen como `{}` a la espera de que se vaya
+  extrayendo el texto de cada área en fases sucesivas — el texto en
+  español no ha cambiado en ningún sitio, sigue igual, solo que la
+  mayoría todavía está escrito directamente en el JSX en vez de en su
+  archivo de mensajes.
+- **Formato de moneda, fecha y número**: `src/config/locales.ts` (moneda,
+  huso horario) y `src/lib/format.ts` (`formatearMoneda`,
+  `formatearFecha`, `formatearNumero`), en vez de instancias sueltas de
+  `Intl.NumberFormat("es-ES")` por el código. Solo están migrados a este
+  helper los sitios nuevos; las instancias sueltas ya existentes
+  (`club/[slug]/page.tsx`, `dossier-pdf.tsx`,
+  `panel/suscripcion/page.tsx`) siguen como estaban — de momento dan el
+  mismo resultado porque solo hay un idioma — y quedan pendientes de
+  pasar por el helper cuando se extraigan los textos de esos módulos.
+- **Provincia y deporte**: ya eran texto libre que escribe el club
+  (`ClubProfile.province`, `ClubTeam.sport`) y el buscador los saca de
+  los valores reales guardados (`lib/search.ts`), no de una lista fija
+  en el código — no ha hecho falta crear ninguna tabla de configuración
+  para esto. Si algún mercado futuro necesitara una lista cerrada (p.
+  ej. un desplegable de provincias), iría en `src/config/locales.ts`.
+- **Enlaces sin idioma que ya funcionaban solos**: cualquier enlace
+  interno con `<a href="/privacidad">` en vez de `Link` (páginas
+  legales, `CookieBanner`) sigue funcionando — next-intl redirige igual
+  a `/es/privacidad` — pero da un salto extra; están señalados para
+  pasarlos a `Link` cuando se extraigan los textos de esas páginas.
+- **Enlaces por email y PDF sin petición de por medio** (recordatorio
+  de suscripción por cron, dossier en PDF): usan el idioma por defecto
+  (`routing.defaultLocale`) porque no hay ninguna petición de usuario de
+  la que sacar el idioma real.
+
+### Cómo añadir un idioma nuevo (cuando llegue el momento)
+
+1. Añadirlo a `locales` en `src/i18n/routing.ts`.
+2. Crear `messages/<locale>/*.json` (un archivo por módulo, mismas
+   claves que `messages/es/`).
+3. Añadir su entrada en `LOCALE_CONFIG` (`src/config/locales.ts`):
+   moneda y huso horario.
+4. Traducir. Nada de rutas, middleware ni componentes debería tener que
+   tocarse.

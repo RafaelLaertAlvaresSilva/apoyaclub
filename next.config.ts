@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 // El logo, las fotos y los patrocinadores del club viven en Supabase
 // Storage (bucket público `club-media`). Registramos ese host para que
@@ -22,4 +23,8 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Fase 14: conecta `src/i18n/request.ts` con Next.js (carga de mensajes
+// por petición y el plugin de compilación de next-intl).
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+
+export default withNextIntl(nextConfig);
