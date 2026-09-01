@@ -38,7 +38,7 @@ export async function Header() {
           <Image
             src="/logo-full.png"
             alt="ApoyaClub"
-            width={4227}
+            width={4275}
             height={984}
             priority
             className="h-10 w-auto sm:h-12"
