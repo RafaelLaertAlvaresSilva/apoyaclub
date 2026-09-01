@@ -1,81 +1,91 @@
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
+import { Badge } from "@/components/ui/Badge";
 import { FormularioContacto } from "./components/FormularioContacto";
 
 /**
- * Landing de conversión (Fase 13). Sustituye a la home mínima de las
- * fases anteriores: dos caminos claros (club / empresa), con su propio
- * problema, solución, ejemplo visual, precio y llamada a la acción, más
- * las secciones compartidas (cómo funciona, preguntas frecuentes,
- * fiscalidad y contacto). El resto del sitio no cambia: el Footer con
- * los enlaces legales lo sigue poniendo `app/layout.tsx`.
+ * Landing de conversión (Fase 13, rediseño Fase 15). Evolución visual
+ * de la landing anterior: mismo contenido y conceptos (dos caminos,
+ * problema/solución, precio, cómo funciona, FAQ, fiscalidad, contacto),
+ * con más aire, jerarquía y una estética más "SaaS premium" acorde al
+ * sistema de diseño de Fase 1 (tokens `brand-navy`/`brand-teal`). El
+ * Footer con los enlaces legales lo sigue poniendo `app/layout.tsx`.
+ *
+ * Las fotografías reales de clubes quedan pendientes de contenido: las
+ * maquetas (página de club, dossier, panel) usan datos de ejemplo,
+ * marcados como tales, en vez de datos inventados que parezcan reales.
  */
 export const metadata: Metadata = {
   title: "ApoyaClub — Conecta tu club deportivo con empresas patrocinadoras",
   description:
-    "Publica la página de tu club y tus oportunidades de patrocinio, desde 50 € hasta el patrocinio principal. Las empresas buscan y contactan directamente. Sin comisiones.",
+    "Conecta tu club con empresas interesadas en colaborar. Publica tus oportunidades de patrocinio, desde 50 € hasta el patrocinio principal, y deja que te encuentren y contacten directamente. Sin comisiones.",
 };
 
-const PROBLEMAS_CLUB = [
-  {
-    titulo: "No sabes cómo presentar tu valor",
-    texto:
-      "Sin una página profesional, tu club es solo un nombre y un escudo. Las empresas no ven lo que de verdad ofreces: equipos, cantera, audiencia, comunidad.",
-  },
-  {
-    titulo: "Dependes de la camiseta y la pancarta",
-    texto:
-      "El patrocinio se reduce a “ponme el logo en la equipación”, sin más opciones ni forma de destacar oportunidades concretas.",
-  },
-  {
-    titulo: "Pierdes renovaciones cada temporada",
-    texto:
-      "Sin visibilidad constante ante nuevas empresas, cada temporada tienes que volver a buscar patrocinador casi desde cero.",
-  },
+const PROBLEMA_TAGS = [
+  "Equipaciones",
+  "Equipos",
+  "Cantera",
+  "Redes sociales",
+  "Jugadores",
+  "Eventos",
+  "Torneos",
+  "Instalaciones",
+  "Familias",
+  "Visibilidad local",
+  "Servicios",
+  "Contenido",
 ] as const;
 
-const EJEMPLOS_OPORTUNIDADES = [
-  { titulo: "Publicidad en la equipación", precio: "150 €/temporada" },
-  { titulo: "Contenido en redes sociales", precio: "50 €/mes" },
-  { titulo: "Naming del pabellón", precio: "Patrocinio principal" },
-] as const;
-
-const ESTADISTICAS_EJEMPLO = [
-  "Seguidores en redes",
-  "Alcance estimado",
-  "Asistencia media",
-  "Jugadores en cantera",
-] as const;
-
-const PASOS_CLUB = [
+const PASOS = [
   {
-    titulo: "Crea la página de tu club",
-    texto: "Cuéntanos sobre tus equipos, tu cantera, tu audiencia, tus instalaciones y tu comunidad.",
+    titulo: "Crea tu perfil",
+    texto: "Equipos, cantera, audiencia, instalaciones y comunidad: todo lo que hace valioso a tu club.",
   },
   {
     titulo: "Publica tus oportunidades",
     texto: "Desde 50 € hasta el patrocinio principal: tú decides qué ofreces y a qué precio.",
   },
   {
-    titulo: "Recibe solicitudes de empresas",
+    titulo: "Encuentra empresas",
     texto: "Las empresas te encuentran y te contactan directamente. Vosotros negociáis el acuerdo.",
   },
 ] as const;
 
-const PASOS_EMPRESA = [
-  {
-    titulo: "Busca por zona, deporte y presupuesto",
-    texto: "Filtra entre los clubes y oportunidades que encajan con lo que buscas.",
-  },
-  {
-    titulo: "Descubre el club a fondo",
-    texto: "Equipos, cantera, audiencia y comunidad: la información que necesitas para decidir.",
-  },
-  {
-    titulo: "Contacta directamente",
-    texto: "Sin intermediarios ni comisiones. El acuerdo es siempre entre vosotros dos.",
-  },
+const OPORTUNIDADES_EJEMPLO = [
+  { titulo: "Patrocinador principal", texto: "Máxima visibilidad: naming, equipación y comunicación oficial.", accent: "bg-brand-navy" },
+  { titulo: "Equipo femenino", texto: "Impulsa una sección concreta con su propio patrocinio.", accent: "bg-brand-teal-dark" },
+  { titulo: "Cantera", texto: "Apoya a las categorías base y su formación.", accent: "bg-brand-teal" },
+  { titulo: "Equipación", texto: "Tu marca en la camiseta, en cada partido.", accent: "bg-brand-navy-dark" },
+  { titulo: "Torneo", texto: "Patrocina un evento puntual de alto impacto.", accent: "bg-brand-navy" },
+  { titulo: "Redes sociales", texto: "Contenido y menciones en los canales del club.", accent: "bg-brand-teal-dark" },
+  { titulo: "Instalaciones", texto: "Tu marca en el pabellón, campo o vestuarios.", accent: "bg-brand-teal" },
+  { titulo: "Jugador", texto: "Patrocinio individual a una figura del equipo.", accent: "bg-brand-navy-dark" },
+  { titulo: "Transporte", texto: "Cubre los desplazamientos del equipo.", accent: "bg-brand-navy" },
+  { titulo: "Fisioterapia", texto: "Servicios de recuperación para la plantilla.", accent: "bg-brand-teal-dark" },
+  { titulo: "Restaurante", texto: "Colaboración con comidas de equipo y eventos.", accent: "bg-brand-teal" },
+  { titulo: "Hotel", texto: "Alojamiento en desplazamientos y concentraciones.", accent: "bg-brand-navy-dark" },
+  { titulo: "Material deportivo", texto: "Balones, material de entrenamiento y más.", accent: "bg-brand-navy" },
+  { titulo: "Producto o servicio", texto: "Colaboraciones a medida con tu negocio.", accent: "bg-brand-teal-dark" },
+] as const;
+
+const RESULTADOS_EJEMPLO = [
+  { categoria: "Equipación", titulo: "Club de fútbol · Cantera · Alicante", texto: "Patrocinio de equipación para la temporada.", precio: "450 €" },
+  { categoria: "Redes sociales", titulo: "Club de baloncesto · Familias · Alicante", texto: "Menciones y contenido en redes durante la liga.", precio: "500 €" },
+  { categoria: "Instalaciones", titulo: "Club de pádel · Todos los públicos · Alicante", texto: "Presencia de marca en pistas y vestuarios.", precio: "480 €" },
+] as const;
+
+const PRESUPUESTOS_EJEMPLO = ["250 €", "500 €", "1.000 €", "2.500 €", "Personalizado"] as const;
+
+const VENTAJAS_PRECIO = [
+  "Página profesional",
+  "Oportunidades ilimitadas",
+  "Dossier automático",
+  "Buscador de empresas",
+  "Gestión de contactos",
+  "Estadísticas",
+  "Herramientas de prospección",
+  "Soporte",
 ] as const;
 
 const PREGUNTAS_FRECUENTES = [
@@ -115,260 +125,478 @@ export default async function Home() {
       <Header />
 
       <main className="flex-1">
-        {/* Hero: los dos caminos, uno al lado del otro */}
-        <section className="border-b border-zinc-200 bg-zinc-50 px-4 py-16 sm:px-6 sm:py-24">
-          <div className="mx-auto max-w-6xl text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-5xl">
-              El punto de encuentro entre clubes deportivos y sus patrocinadores
+        {/* ============ HERO ============ */}
+        <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-zinc-50 to-white px-4 py-20 sm:px-6 sm:py-28">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-brand-teal/10 blur-3xl"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-40 -left-32 h-96 w-96 rounded-full bg-brand-navy/5 blur-3xl"
+          />
+
+          <div className="relative mx-auto max-w-3xl text-center">
+            <span className="mb-7 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-brand-teal-dark">
+              LA PLATAFORMA DE PATROCINIO DEPORTIVO
+            </span>
+
+            <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-5xl lg:text-6xl">
+              Cada club tiene algo que ofrecer.{" "}
+              <span className="text-brand-teal-dark">Nosotros ayudamos a encontrar quién quiere apoyarlo.</span>
             </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-lg text-zinc-600">
-              Los clubes muestran su valor real — equipos, cantera, audiencia, instalaciones, comunidad — y publican
-              oportunidades de patrocinio desde 50 € hasta el patrocinio principal. Las empresas buscan, filtran y
-              contactan directamente. Sin comisiones.
+
+            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-zinc-600 sm:text-xl">
+              Conecta tu club con empresas interesadas en colaborar. Publica tus oportunidades y deja que ellas te
+              encuentren y contacten directamente. Sin comisiones.
             </p>
 
-            <div className="mx-auto mt-10 grid max-w-3xl gap-4 text-left sm:grid-cols-2">
-              <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <p className="text-sm font-semibold text-teal-700">Para clubes</p>
-                <p className="mt-1 text-zinc-600">
-                  Crea tu página, publica tus oportunidades y que las empresas te encuentren.
-                </p>
-                <Link
-                  href="/registro-club"
-                  className="mt-4 inline-block rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700"
-                >
-                  Crea la página de tu club
-                </Link>
-              </div>
+            <div className="mt-9 flex flex-col items-center gap-3">
+              <Link
+                href="/registro-club"
+                className="inline-flex items-center justify-center rounded-full bg-brand-teal px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-teal-dark"
+              >
+                Prueba 1 mes gratis
+              </Link>
+              <p className="text-sm text-zinc-500">Sin permanencia · 29,90 €/mes después del primer mes · IVA incluido</p>
+            </div>
 
-              <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <p className="text-sm font-semibold text-teal-700">Para empresas</p>
-                <p className="mt-1 text-zinc-600">
-                  Busca clubes de tu zona y patrocina desde 50 €. Acceso gratuito.
-                </p>
-                <Link
-                  href="/buscar"
-                  className="mt-4 inline-block rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
-                >
-                  Explorar clubes
-                </Link>
+            {/* CLUB -> OPORTUNIDAD -> EMPRESA */}
+            <div className="mt-14 flex flex-wrap items-center justify-center gap-3">
+              <div className="flex items-center gap-2.5 rounded-full border border-zinc-200 bg-white py-2 pl-2.5 pr-5 shadow-sm">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-navy">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2l3 7h7l-5.5 4.2L18.5 21 12 16.8 5.5 21l2-7.8L2 9h7z" />
+                  </svg>
+                </span>
+                <span className="text-sm font-bold text-brand-navy">Club</span>
+              </div>
+              <svg aria-hidden="true" width="22" height="14" viewBox="0 0 24 14" fill="none" className="text-zinc-300">
+                <path d="M1 7h20M15 1l6 6-6 6" stroke="currentColor" strokeWidth="2" />
+              </svg>
+              <div className="flex items-center gap-2.5 rounded-full border border-zinc-200 bg-white py-2 pl-2.5 pr-5 shadow-sm">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-teal">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M13 2L3 14h7l-1 8 10-12h-7z" />
+                  </svg>
+                </span>
+                <span className="text-sm font-bold text-brand-navy">Oportunidad</span>
+              </div>
+              <svg aria-hidden="true" width="22" height="14" viewBox="0 0 24 14" fill="none" className="text-zinc-300">
+                <path d="M1 7h20M15 1l6 6-6 6" stroke="currentColor" strokeWidth="2" />
+              </svg>
+              <div className="flex items-center gap-2.5 rounded-full border border-zinc-200 bg-white py-2 pl-2.5 pr-5 shadow-sm">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-navy-dark">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="8" width="18" height="12" rx="1.5" />
+                    <path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                  </svg>
+                </span>
+                <span className="text-sm font-bold text-brand-navy">Empresa</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Para clubes */}
-        <section id="clubes" className="px-4 py-16 sm:px-6 sm:py-24">
-          <div className="mx-auto max-w-6xl">
-            <div className="text-center">
-              <p className="text-sm font-semibold uppercase tracking-wide text-teal-700">Para clubes</p>
-              <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
-                Consigue el patrocinio que tu club merece
-              </h2>
-            </div>
+        {/* ============ SOY CLUB / SOY EMPRESA ============ */}
+        <section className="mx-auto grid max-w-6xl gap-6 px-4 py-16 sm:grid-cols-2 sm:px-6 sm:py-20">
+          <div className="rounded-3xl bg-gradient-to-br from-brand-navy to-brand-navy-dark p-10 text-white shadow-xl shadow-brand-navy/20">
+            <h3 className="text-2xl font-extrabold">Soy un club</h3>
+            <p className="mt-2.5 text-[15px] leading-relaxed text-white/80">
+              Crea tu página, publica tus oportunidades de patrocinio y que las empresas te encuentren.
+            </p>
+            <Link
+              href="/registro-club"
+              className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-brand-teal px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-teal-dark"
+            >
+              Crea la página de tu club →
+            </Link>
+          </div>
+          <div className="rounded-3xl border border-zinc-200 bg-white p-10 shadow-sm">
+            <h3 className="text-2xl font-extrabold text-brand-navy">Soy una empresa</h3>
+            <p className="mt-2.5 text-[15px] leading-relaxed text-zinc-600">
+              Busca clubes de tu zona y patrocina desde 50 €. Acceso gratuito, sin intermediarios.
+            </p>
+            <Link
+              href="/buscar"
+              className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-brand-navy px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-navy-dark"
+            >
+              Explorar clubes →
+            </Link>
+          </div>
+        </section>
 
-            <div className="mt-10 grid gap-6 sm:grid-cols-3">
-              {PROBLEMAS_CLUB.map((problema) => (
-                <div key={problema.titulo} className="rounded-xl border border-zinc-200 bg-white p-6">
-                  <h3 className="font-semibold text-zinc-900">{problema.titulo}</h3>
-                  <p className="mt-2 text-sm text-zinc-600">{problema.texto}</p>
+        {/* ============ PROBLEMA / VALOR ============ */}
+        <section id="clubes" className="bg-zinc-50 px-4 py-20 sm:px-6 sm:py-24">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">Para clubes</p>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+              Un patrocinio no tiene por qué ser solo poner un logo en una camiseta
+            </h2>
+            <p className="mx-auto mt-4 max-w-lg text-zinc-600">
+              Tu club tiene mucho más que ofrecer de lo que crees. Esto es lo que las empresas valoran:
+            </p>
+          </div>
+          <div className="mx-auto mt-11 flex max-w-3xl flex-wrap justify-center gap-3">
+            {PROBLEMA_TAGS.map((tag) => (
+              <Badge key={tag} tone="navy" className="rounded-full border border-zinc-200 bg-white px-5 py-3 text-sm font-semibold text-brand-navy">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        </section>
+
+        {/* ============ CÓMO FUNCIONA ============ */}
+        <section id="como-funciona" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
+          <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">Cómo funciona</h2>
+          <div className="mt-14 grid gap-10 sm:grid-cols-3">
+            {PASOS.map((paso, indice) => (
+              <div key={paso.titulo} className="text-center">
+                <div className="text-sm font-extrabold tracking-wide text-zinc-300">0{indice + 1}</div>
+                <div className="mx-auto mt-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-teal-light">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--brand-teal-dark)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                    {indice === 0 ? (
+                      <>
+                        <circle cx="12" cy="8" r="4" />
+                        <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+                      </>
+                    ) : indice === 1 ? (
+                      <>
+                        <path d="M12 3v12" />
+                        <path d="M6 9l6-6 6 6" />
+                        <path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
+                      </>
+                    ) : (
+                      <>
+                        <circle cx="11" cy="11" r="7" />
+                        <path d="M21 21l-4.3-4.3" />
+                      </>
+                    )}
+                  </svg>
+                </div>
+                <h3 className="mt-5 text-lg font-bold text-brand-navy">{paso.titulo}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-zinc-600">{paso.texto}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ============ OPORTUNIDADES ============ */}
+        <section className="bg-zinc-50 px-4 py-20 sm:px-6 sm:py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">Oportunidades de patrocinio</p>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+                Cada club crea las suyas, a su medida
+              </h2>
+              <p className="mx-auto mt-4 text-zinc-600">Algunos ejemplos de lo que un club puede publicar en su página:</p>
+            </div>
+            <div className="mt-11 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {OPORTUNIDADES_EJEMPLO.map((oportunidad) => (
+                <div key={oportunidad.titulo} className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+                  <div className={`h-1.5 ${oportunidad.accent}`} />
+                  <div className="p-5">
+                    <h4 className="text-[15px] font-bold text-brand-navy">{oportunidad.titulo}</h4>
+                    <p className="mt-1.5 text-sm text-zinc-500">{oportunidad.texto}</p>
+                  </div>
                 </div>
               ))}
             </div>
+          </div>
+        </section>
 
-            <div className="mt-16 grid gap-10 lg:grid-cols-2 lg:items-center">
-              <div>
-                <h3 className="text-xl font-bold text-zinc-900">Tu página profesional, siempre visible</h3>
-                <p className="mt-3 text-zinc-600">
-                  En vez de un logo suelto en una camiseta, tu club tiene una página propia con todo lo que lo hace
-                  valioso: equipos, cantera, audiencia, instalaciones y comunidad. Y un catálogo de oportunidades de
-                  patrocinio concretas, con su precio, para que cualquier empresa sepa exactamente cómo colaborar.
-                </p>
-                <p className="mt-3 text-zinc-600">
-                  Tú decides qué ofreces y a qué precio, desde 50 € hasta el patrocinio principal.
-                </p>
+        {/* ============ PARA EMPRESAS: BUSCADOR ============ */}
+        <section id="empresas" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">Para empresas</p>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+              Descubre qué puedes patrocinar
+            </h2>
+          </div>
+
+          <div className="mx-auto mt-10 max-w-3xl rounded-3xl border border-zinc-200 bg-white p-5 shadow-lg shadow-brand-navy/5 sm:p-6">
+            <div className="grid gap-2.5 sm:grid-cols-[repeat(4,1fr)_auto]">
+              <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
+                <div className="text-[11px] font-semibold text-zinc-400">PRESUPUESTO</div>
+                <div className="text-sm font-semibold text-brand-navy">500 €</div>
               </div>
+              <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
+                <div className="text-[11px] font-semibold text-zinc-400">UBICACIÓN</div>
+                <div className="text-sm font-semibold text-brand-navy">Alicante</div>
+              </div>
+              <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
+                <div className="text-[11px] font-semibold text-zinc-400">PÚBLICO</div>
+                <div className="text-sm font-semibold text-brand-navy">Familias</div>
+              </div>
+              <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
+                <div className="text-[11px] font-semibold text-zinc-400">DEPORTE</div>
+                <div className="text-sm font-semibold text-brand-navy">Todos</div>
+              </div>
+              <Link
+                href="/buscar"
+                className="flex items-center justify-center rounded-xl bg-brand-teal px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-brand-teal-dark"
+              >
+                Buscar
+              </Link>
+            </div>
 
-              {/* Ejemplo visual: cómo se ve la página pública del club */}
-              <div className="overflow-hidden rounded-2xl border border-zinc-200 shadow-sm">
-                <div className="flex items-center gap-1.5 border-b border-zinc-200 bg-zinc-100 px-4 py-2.5">
-                  <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
-                  <span className="ml-2 truncate text-xs text-zinc-400">apoyaclub.com/club/tu-club</span>
+            <details className="group mt-3">
+              <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm font-semibold text-brand-teal-dark marker:content-none">
+                Más filtros
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="transition-transform group-open:rotate-180">
+                  <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </summary>
+              <div className="mt-3 grid gap-2.5 border-t border-zinc-100 pt-4 sm:grid-cols-3">
+                <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
+                  <div className="text-[11px] font-semibold text-zinc-400">TIPO DE OPORTUNIDAD</div>
+                  <div className="text-sm font-semibold text-brand-navy">Equipación</div>
                 </div>
-                <div className="h-28 bg-gradient-to-br from-teal-600 to-teal-800 sm:h-32" />
-                <div className="space-y-4 bg-white p-5">
-                  <div>
-                    <div className="h-4 w-40 rounded bg-zinc-800/90" />
-                    <div className="mt-2 flex gap-2">
-                      <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-xs text-zinc-500">Fútbol</span>
-                      <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-xs text-zinc-500">Cantera</span>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3 border-t border-zinc-100 pt-4">
-                    {ESTADISTICAS_EJEMPLO.map((etiqueta) => (
-                      <div key={etiqueta} className="rounded-lg bg-zinc-50 px-3 py-2">
-                        <p className="text-xs text-zinc-500">{etiqueta}</p>
-                      </div>
-                    ))}
-                  </div>
+                <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
+                  <div className="text-[11px] font-semibold text-zinc-400">CATEGORÍA</div>
+                  <div className="text-sm font-semibold text-brand-navy">Cantera</div>
+                </div>
+                <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
+                  <div className="text-[11px] font-semibold text-zinc-400">ALCANCE</div>
+                  <div className="text-sm font-semibold text-brand-navy">Local</div>
+                </div>
+              </div>
+            </details>
+          </div>
+
+          <div className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-3">
+            {RESULTADOS_EJEMPLO.map((resultado) => (
+              <div key={resultado.titulo} className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+                <Badge tone="teal" className="mb-3">
+                  {resultado.categoria.toUpperCase()}
+                </Badge>
+                <h4 className="text-[15px] font-bold text-brand-navy">{resultado.titulo}</h4>
+                <p className="mt-1.5 text-sm text-zinc-500">{resultado.texto}</p>
+                <div className="mt-3 text-lg font-extrabold text-brand-navy">{resultado.precio}</div>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-center text-xs text-zinc-400">Resultados de ejemplo — ilustrativos, no clubes reales.</p>
+        </section>
+
+        {/* ============ PRESUPUESTO ============ */}
+        <section className="bg-brand-navy px-4 py-16 sm:px-6 sm:py-20">
+          <div className="mx-auto max-w-xl text-center">
+            <h2 className="text-2xl font-extrabold text-white sm:text-3xl">¿Cuánto quieres invertir?</h2>
+            <p className="mt-2.5 text-white/70">Encuentra oportunidades que encajan con tu presupuesto.</p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              {PRESUPUESTOS_EJEMPLO.map((importe, indice) => (
+                <span
+                  key={importe}
+                  className={`rounded-full border px-6 py-3 text-sm font-bold ${
+                    indice === 1
+                      ? "border-brand-teal bg-brand-teal text-brand-navy-dark"
+                      : "border-white/20 bg-white/5 text-white"
+                  }`}
+                >
+                  {importe}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ============ PÁGINA PROFESIONAL DEL CLUB ============ */}
+        <section className="mx-auto grid max-w-6xl items-center gap-14 px-4 py-24 sm:px-6 lg:grid-cols-[0.85fr_1.15fr]">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">La página de tu club</p>
+            <h2 className="mt-3 text-[28px] font-extrabold leading-tight tracking-tight text-brand-navy sm:text-3xl">
+              Un perfil profesional, no una simple ficha
+            </h2>
+            <p className="mt-4 leading-relaxed text-zinc-600">
+              Logo, portada, fotos, vídeos, equipos, jugadores, seguidores, alcance, cantera, palmarés, instalaciones,
+              eventos y patrocinadores actuales — todo lo que hace valioso a tu club, en un solo lugar.
+            </p>
+            <p className="mt-4 leading-relaxed text-zinc-600">
+              Y siempre visibles, tus oportunidades de patrocinio disponibles.
+            </p>
+          </div>
+
+          <div className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-xl shadow-brand-navy/10">
+            <div className="flex items-center gap-1.5 border-b border-zinc-200 bg-zinc-100 px-4 py-2.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
+              <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
+              <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
+              <span className="ml-2 truncate text-xs text-zinc-400">apoyaclub.com/club/tu-club</span>
+            </div>
+            <div className="h-32 bg-gradient-to-br from-brand-navy to-brand-teal-dark" />
+            <div className="px-6">
+              <div className="-mt-8 flex h-16 w-16 items-center justify-center rounded-2xl border-4 border-white bg-white shadow-md">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--brand-teal-dark)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2l3 7h7l-5.5 4.2L18.5 21 12 16.8 5.5 21l2-7.8L2 9h7z" />
+                </svg>
+              </div>
+            </div>
+            <div className="px-6 pb-6 pt-3.5">
+              <div className="text-[17px] font-extrabold text-brand-navy">Nombre del club</div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <Badge tone="teal">Fútbol</Badge>
+                <Badge tone="teal">Cantera</Badge>
+                <Badge tone="neutral">3ª RFEF</Badge>
+              </div>
+              <div className="mt-4 grid grid-cols-4 gap-2.5 border-t border-zinc-100 pt-4">
+                <div>
+                  <div className="text-base font-extrabold text-brand-navy">12,4k</div>
+                  <div className="text-[11px] text-zinc-400">Seguidores</div>
+                </div>
+                <div>
+                  <div className="text-base font-extrabold text-brand-navy">48k</div>
+                  <div className="text-[11px] text-zinc-400">Alcance</div>
+                </div>
+                <div>
+                  <div className="text-base font-extrabold text-brand-navy">9</div>
+                  <div className="text-[11px] text-zinc-400">Equipos</div>
+                </div>
+                <div>
+                  <div className="text-base font-extrabold text-brand-navy">3</div>
+                  <div className="text-[11px] text-zinc-400">Oportunidades</div>
                 </div>
               </div>
             </div>
+          </div>
+        </section>
 
-            <div className="mt-16">
-              <p className="text-center text-sm text-zinc-500">Ejemplos de oportunidades que puedes publicar</p>
-              <div className="mt-4 grid gap-4 sm:grid-cols-3">
-                {EJEMPLOS_OPORTUNIDADES.map((oportunidad) => (
-                  <div key={oportunidad.titulo} className="rounded-xl border border-zinc-200 bg-white p-5">
-                    <h4 className="font-semibold text-zinc-900">{oportunidad.titulo}</h4>
-                    <p className="mt-1 text-lg font-bold text-teal-700">{oportunidad.precio}</p>
+        {/* ============ DOSSIER + PANEL ============ */}
+        <section className="bg-zinc-50 px-4 py-20 sm:px-6 sm:py-24">
+          <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2">
+            <div className="rounded-3xl border border-zinc-200 bg-white p-9 shadow-sm">
+              <h3 className="text-xl font-extrabold text-brand-navy">Tu dossier de patrocinio, listo en segundos</h3>
+              <p className="mt-2 text-sm text-zinc-600">
+                Generado automáticamente con los datos de tu página. Sin diseñarlo tú mismo.
+              </p>
+              <div className="mt-6 flex items-center gap-5">
+                <div className="w-24 flex-none rounded-lg border border-zinc-200 bg-white p-2.5 shadow-md shadow-brand-navy/10">
+                  <div className="mb-2 h-1.5 w-3/5 rounded bg-brand-navy" />
+                  <div className="mb-1 h-0.5 w-full rounded bg-zinc-200" />
+                  <div className="mb-1 h-0.5 w-11/12 rounded bg-zinc-200" />
+                  <div className="mb-2.5 h-0.5 w-full rounded bg-zinc-200" />
+                  <div className="mb-2 h-6 w-full rounded bg-brand-teal-light" />
+                  <div className="mb-1 h-0.5 w-4/5 rounded bg-zinc-200" />
+                  <div className="h-0.5 w-5/6 rounded bg-zinc-200" />
+                </div>
+                <span className="inline-flex items-center rounded-full bg-brand-navy px-5 py-3 text-sm font-bold text-white">
+                  Generar dossier
+                </span>
+              </div>
+            </div>
+
+            <div className="rounded-3xl bg-brand-navy-dark p-9 shadow-lg shadow-brand-navy-dark/30">
+              <div className="mb-5 flex items-center justify-between">
+                <h3 className="text-xl font-extrabold text-white">Tu panel, siempre a mano</h3>
+                <span className="rounded-full bg-brand-teal px-4 py-2 text-xs font-bold text-white">+ Crear oportunidad</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2.5">
+                {[
+                  ["4", "Oportunidades activas"],
+                  ["12", "Nuevos contactos"],
+                  ["7", "Empresas interesadas"],
+                  ["3", "Negociaciones"],
+                  ["1", "Renovaciones"],
+                ].map(([numero, etiqueta]) => (
+                  <div key={etiqueta} className="rounded-xl bg-white/[0.06] p-3.5">
+                    <div className="text-xl font-extrabold text-white">{numero}</div>
+                    <div className="text-[11px] text-white/60">{etiqueta}</div>
                   </div>
                 ))}
               </div>
             </div>
-
-            <div className="mx-auto mt-16 max-w-xl rounded-2xl border border-zinc-200 bg-zinc-50 p-8 text-center">
-              <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">Precio transparente</p>
-              <p className="mt-2">
-                <span className="text-4xl font-bold text-zinc-900">29,90 €</span>
-                <span className="text-zinc-500">/mes, IVA incluido</span>
-              </p>
-              <p className="mt-1 text-teal-700">El primer mes es gratis</p>
-              <p className="mt-4 text-sm text-zinc-600">
-                Comisión: 0 %. Tú y la empresa negociáis directamente, sin agencia de por medio.
-              </p>
-              <Link
-                href="/registro-club"
-                className="mt-6 inline-block rounded-lg bg-teal-600 px-6 py-3 font-medium text-white transition-colors hover:bg-teal-700"
-              >
-                Crea la página de tu club
-              </Link>
-            </div>
           </div>
         </section>
 
-        {/* Para empresas */}
-        <section id="empresas" className="border-t border-zinc-200 bg-zinc-50 px-4 py-16 sm:px-6 sm:py-24">
-          <div className="mx-auto max-w-6xl">
-            <div className="text-center">
-              <p className="text-sm font-semibold uppercase tracking-wide text-teal-700">Para empresas</p>
-              <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
-                Encuentra el club perfecto para tu marca
-              </h2>
-              <p className="mx-auto mt-3 max-w-2xl text-zinc-600">
-                Busca clubes de tu zona y filtra por deporte, presupuesto y objetivo. Patrocina desde 50 € hasta el
-                patrocinio principal, con acceso siempre gratuito.
-              </p>
-            </div>
+        {/* ============ PRECIO ============ */}
+        <section id="precio" className="mx-auto max-w-xl px-4 py-24 text-center sm:px-6">
+          <h2 className="text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">Precio transparente</h2>
+          <div className="mt-11 rounded-3xl border-2 border-brand-teal bg-white p-10 shadow-xl shadow-brand-teal/15">
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">Primer mes gratis</p>
+            <p className="mt-3">
+              <span className="text-5xl font-extrabold tracking-tight text-brand-navy">29,90 €</span>
+              <span className="text-lg text-zinc-500">/mes</span>
+            </p>
+            <p className="mt-1.5 text-sm text-zinc-500">IVA incluido · Sin permanencia</p>
+            <p className="mt-1 text-sm text-zinc-400">Comisión: 0 % — tú y la empresa negociáis directamente.</p>
 
-            <div className="mt-10 grid gap-6 sm:grid-cols-3">
-              <div className="rounded-xl border border-zinc-200 bg-white p-6">
-                <h3 className="font-semibold text-zinc-900">Busca por zona, deporte, presupuesto y objetivo</h3>
-                <p className="mt-2 text-sm text-zinc-600">
-                  Filtra entre todos los clubes registrados hasta encontrar los que de verdad encajan contigo.
-                </p>
-              </div>
-              <div className="rounded-xl border border-zinc-200 bg-white p-6">
-                <h3 className="font-semibold text-zinc-900">Patrocina desde 50 €</h3>
-                <p className="mt-2 text-sm text-zinc-600">
-                  Desde una colaboración puntual hasta el patrocinio principal de un club: eliges tú.
-                </p>
-              </div>
-              <div className="rounded-xl border border-zinc-200 bg-white p-6">
-                <h3 className="font-semibold text-zinc-900">Acceso gratuito</h3>
-                <p className="mt-2 text-sm text-zinc-600">
-                  Buscar, ver la página de cada club y contactar con ellos no tiene ningún coste para tu empresa.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-10 text-center">
-              <Link
-                href="/buscar"
-                className="inline-block rounded-lg bg-teal-600 px-6 py-3 font-medium text-white transition-colors hover:bg-teal-700"
-              >
-                Explorar clubes
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Cómo funciona en 3 pasos */}
-        <section className="px-4 py-16 sm:px-6 sm:py-24">
-          <div className="mx-auto max-w-6xl">
-            <h2 className="text-center text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
-              Cómo funciona en 3 pasos
-            </h2>
-
-            <div className="mt-10 grid gap-10 lg:grid-cols-2">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-wide text-teal-700">Si eres un club</p>
-                <ol className="mt-4 space-y-6">
-                  {PASOS_CLUB.map((paso, indice) => (
-                    <li key={paso.titulo} className="flex gap-4">
-                      <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-teal-600 text-sm font-semibold text-white">
-                        {indice + 1}
-                      </span>
-                      <div>
-                        <h3 className="font-semibold text-zinc-900">{paso.titulo}</h3>
-                        <p className="mt-1 text-sm text-zinc-600">{paso.texto}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-wide text-teal-700">Si eres una empresa</p>
-                <ol className="mt-4 space-y-6">
-                  {PASOS_EMPRESA.map((paso, indice) => (
-                    <li key={paso.titulo} className="flex gap-4">
-                      <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-zinc-800 text-sm font-semibold text-white">
-                        {indice + 1}
-                      </span>
-                      <div>
-                        <h3 className="font-semibold text-zinc-900">{paso.titulo}</h3>
-                        <p className="mt-1 text-sm text-zinc-600">{paso.texto}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Preguntas frecuentes */}
-        <section className="border-t border-zinc-200 bg-zinc-50 px-4 py-16 sm:px-6 sm:py-24">
-          <div className="mx-auto max-w-3xl">
-            <h2 className="text-center text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
-              Preguntas frecuentes
-            </h2>
-
-            <div className="mt-8 space-y-3">
-              {PREGUNTAS_FRECUENTES.map((item) => (
-                <details
-                  key={item.pregunta}
-                  className="group rounded-xl border border-zinc-200 bg-white p-5 open:border-teal-200"
-                >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-zinc-900 marker:content-none">
-                    {item.pregunta}
-                    <span className="flex-none text-zinc-400 transition-transform group-open:rotate-45">+</span>
-                  </summary>
-                  <p className="mt-3 text-sm text-zinc-600">{item.respuesta}</p>
-                </details>
+            <div className="mt-8 grid gap-3 text-left sm:grid-cols-2">
+              {VENTAJAS_PRECIO.map((ventaja) => (
+                <div key={ventaja} className="flex items-center gap-2.5">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" className="flex-none text-brand-teal">
+                    <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span className="text-sm font-medium text-zinc-700">{ventaja}</span>
+                </div>
               ))}
             </div>
 
-            {/* Fiscalidad: aviso de que no se ofrece asesoramiento fiscal */}
-            <div
-              role="alert"
-              className="mt-8 rounded-xl border border-amber-300 bg-amber-50 p-5 text-sm text-amber-900"
+            <Link
+              href="/registro-club"
+              className="mt-9 inline-flex w-full items-center justify-center rounded-2xl bg-brand-teal px-6 py-4 text-base font-bold text-white shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-teal-dark"
             >
-              <p className="font-semibold">Sobre la fiscalidad del patrocinio</p>
-              <p className="mt-1">
+              Prueba 1 mes gratis
+            </Link>
+          </div>
+        </section>
+
+        {/* ============ CONFIANZA ============ */}
+        <section className="bg-zinc-50 px-4 py-16 sm:px-6 sm:py-20">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-center text-xs font-bold uppercase tracking-wider text-zinc-400">Ejemplos ilustrativos</p>
+            <div className="mt-8 grid gap-5 sm:grid-cols-3">
+              {["un club", "una empresa", "un club"].map((tipo, indice) => (
+                <div key={indice} className="rounded-2xl border border-dashed border-zinc-300 bg-white p-6">
+                  <div className="mb-3 flex gap-0.5">
+                    {[0, 1, 2, 3, 4].map((i) => (
+                      <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="var(--brand-teal)">
+                        <path d="M12 2l3 7h7l-5.5 4.2L18.5 21 12 16.8 5.5 21l2-7.8L2 9h7z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="text-sm italic leading-relaxed text-zinc-600">
+                    &ldquo;[Espacio para un testimonio real de {tipo} cuando esté disponible.]&rdquo;
+                  </p>
+                  <div className="mt-3.5 text-sm font-bold text-brand-navy">
+                    [Nombre {tipo === "una empresa" ? "de la empresa" : "del club"}]
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ============ FAQ ============ */}
+        <section id="faq" className="mx-auto max-w-3xl px-4 py-24 sm:px-6">
+          <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+            Preguntas frecuentes
+          </h2>
+
+          <div className="mt-11 space-y-3">
+            {PREGUNTAS_FRECUENTES.map((item) => (
+              <details
+                key={item.pregunta}
+                className="group rounded-2xl border border-zinc-200 bg-white p-5 open:border-brand-teal/40"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-brand-navy marker:content-none">
+                  {item.pregunta}
+                  <span className="flex-none text-zinc-400 transition-transform group-open:rotate-45">+</span>
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed text-zinc-600">{item.respuesta}</p>
+              </details>
+            ))}
+          </div>
+
+          {/* Fiscalidad: aviso de que no se ofrece asesoramiento fiscal */}
+          <div role="alert" className="mt-8 flex gap-3.5 rounded-2xl border border-amber-200 bg-amber-50 p-6">
+            <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-amber-100">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#92400e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
+              </svg>
+            </span>
+            <div>
+              <p className="font-semibold text-amber-900">Sobre la fiscalidad del patrocinio</p>
+              <p className="mt-1 text-sm leading-relaxed text-amber-800">
                 Un acuerdo de patrocinio entre un club y una empresa puede tener implicaciones fiscales (IVA,
                 facturación, deducciones…) para ambas partes. ApoyaClub no gestiona el cobro ni actúa como agencia, y{" "}
                 <strong>no ofrece asesoramiento fiscal</strong>: te recomendamos consultar con un asesor fiscal o
@@ -378,19 +606,38 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Contacto */}
-        <section id="contacto" className="px-4 py-16 sm:px-6 sm:py-24">
-          <div className="mx-auto max-w-xl">
-            <h2 className="text-center text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
-              ¿Tienes dudas? Escríbenos
+        {/* ============ CTA FINAL ============ */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-brand-navy to-brand-navy-dark px-4 py-24 text-center sm:px-6">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-brand-teal/15 blur-3xl"
+          />
+          <div className="relative mx-auto max-w-xl">
+            <h2 className="text-3xl font-extrabold leading-tight text-white sm:text-4xl">
+              Tu club ya tiene valor.
+              <br />
+              Ahora toca mostrarlo.
             </h2>
-            <p className="mt-3 text-center text-zinc-600">
-              Ya seas un club, una empresa o simplemente tengas una pregunta, cuéntanoslo y te respondemos por email.
-            </p>
+            <Link
+              href="/registro-club"
+              className="mt-8 inline-flex items-center justify-center rounded-full bg-brand-teal px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/40 transition-colors hover:bg-brand-teal-dark"
+            >
+              Empieza tu mes gratis
+            </Link>
+          </div>
+        </section>
 
-            <div className="mt-8">
-              <FormularioContacto />
-            </div>
+        {/* ============ CONTACTO ============ */}
+        <section id="contacto" className="mx-auto max-w-xl px-4 py-24 sm:px-6">
+          <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+            ¿Tienes dudas? Escríbenos
+          </h2>
+          <p className="mt-3 text-center text-zinc-600">
+            Ya seas un club, una empresa o simplemente tengas una pregunta, cuéntanoslo y te respondemos por email.
+          </p>
+
+          <div className="mt-9 rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm">
+            <FormularioContacto />
           </div>
         </section>
       </main>

@@ -1,6 +1,22 @@
 {
   "footer": {
     "derechos": "ApoyaClub",
+    "descripcion": "Conecta tu club deportivo con empresas patrocinadoras.",
+    "contacto": "Contacto",
+    "clubes": {
+      "titulo": "Para clubes",
+      "comoFunciona": "Cómo funciona",
+      "precios": "Precios",
+      "crearPagina": "Crea la página de tu club",
+      "faq": "Preguntas frecuentes"
+    },
+    "empresas": {
+      "titulo": "Para empresas",
+      "buscarClubes": "Buscar clubes",
+      "comoFunciona": "Cómo funciona",
+      "accesoGratuito": "Acceso gratuito"
+    },
+    "legalTitulo": "Legal",
     "enlaces": {
       "avisoLegal": "Aviso legal",
       "privacidad": "Privacidad",
