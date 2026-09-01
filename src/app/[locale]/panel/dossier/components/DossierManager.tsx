@@ -121,7 +121,7 @@ export function DossierManager({
                   value={seccion.id}
                   disabled={!disponible}
                   defaultChecked={disponible && seccionesIniciales.includes(seccion.id)}
-                  className="mt-0.5 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500"
+                  className="mt-0.5 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
                 />
                 <span>
                   <span className="block font-medium text-zinc-900">{seccion.etiqueta}</span>
@@ -142,7 +142,7 @@ export function DossierManager({
         {oportunidades.length === 0 ? (
           <p className="text-sm text-zinc-500">
             Todavía no tienes oportunidades publicadas. Puedes crearlas en{" "}
-            <Link href="/panel/oportunidades" className="font-medium text-emerald-700 hover:underline">
+            <Link href="/panel/oportunidades" className="font-medium text-teal-700 hover:underline">
               Oportunidades
             </Link>
             .
@@ -160,11 +160,11 @@ export function DossierManager({
                     name="opportunityIds"
                     value={oportunidad.id}
                     defaultChecked={oportunidadesIniciales.has(oportunidad.id)}
-                    className="rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500"
+                    className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
                   />
                   <span className="font-medium text-zinc-900">{oportunidad.title}</span>
                 </span>
-                <span className="whitespace-nowrap font-semibold text-emerald-700">
+                <span className="whitespace-nowrap font-semibold text-teal-700">
                   {formatoValorOportunidad.format(oportunidad.value)}
                 </span>
               </label>
@@ -180,11 +180,11 @@ export function DossierManager({
             type="button"
             onClick={descargarPdf}
             disabled={descargando}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-emerald-600 px-4 py-2.5 font-medium text-emerald-700 transition-colors hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-teal-600 px-4 py-2.5 font-medium text-teal-700 transition-colors hover:bg-teal-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
             {descargando && (
               <span
-                className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-600/40 border-t-emerald-600"
+                className="h-4 w-4 animate-spin rounded-full border-2 border-teal-600/40 border-t-teal-600"
                 aria-hidden="true"
               />
             )}
@@ -203,7 +203,7 @@ export function DossierManager({
               type="checkbox"
               name="shareEnabled"
               defaultChecked={configuracion?.shareEnabled ?? false}
-              className="rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500"
+              className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
             />
             Activar enlace público
           </label>
@@ -221,12 +221,12 @@ export function DossierManager({
           {estado?.ok && <AvisoExito mensaje="Selección guardada." />}
 
           {enlaceActual && (
-            <div className="flex flex-wrap items-center gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm">
-              <span className="break-all text-emerald-800">{enlaceActual}</span>
+            <div className="flex flex-wrap items-center gap-3 rounded-lg border border-teal-200 bg-teal-50 p-3 text-sm">
+              <span className="break-all text-teal-800">{enlaceActual}</span>
               <button
                 type="button"
                 onClick={copiarEnlace}
-                className="ml-auto shrink-0 rounded-lg border border-emerald-300 bg-white px-3 py-1.5 text-xs font-medium text-emerald-700 transition-colors hover:bg-emerald-100"
+                className="ml-auto shrink-0 rounded-lg border border-teal-300 bg-white px-3 py-1.5 text-xs font-medium text-teal-700 transition-colors hover:bg-teal-100"
               >
                 {enlaceCopiado ? "¡Copiado!" : "Copiar enlace"}
               </button>

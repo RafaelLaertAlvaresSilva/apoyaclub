@@ -15,7 +15,7 @@ export function NuevaListaForm() {
           name="name"
           placeholder="Nombre de la nueva lista (ej. Fútbol base Madrid)"
           required
-          className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 sm:flex-1"
+          className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 sm:flex-1"
         />
         <div className="sm:w-40">
           <BotonEnviar>+ Nueva lista</BotonEnviar>

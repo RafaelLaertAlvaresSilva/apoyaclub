@@ -17,7 +17,7 @@ export function AvisoExito({ mensaje }: { mensaje?: string | null }) {
   return (
     <div
       role="status"
-      className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700"
+      className="rounded-lg border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-700"
     >
       {mensaje}
     </div>

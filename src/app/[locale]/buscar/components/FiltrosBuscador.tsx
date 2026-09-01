@@ -55,7 +55,7 @@ function leerFiltrosDelFormulario(formData: FormData): FiltrosBusqueda {
 
 const clasesEtiquetaGrupo = "mb-2 block text-sm font-medium text-zinc-700";
 const clasesCheckbox =
-  "flex items-center gap-2 rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-700 has-checked:border-emerald-500 has-checked:bg-emerald-50 has-checked:text-emerald-800";
+  "flex items-center gap-2 rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-700 has-checked:border-teal-500 has-checked:bg-teal-50 has-checked:text-teal-800";
 
 export function FiltrosBuscador({
   filtrosIniciales,
@@ -221,7 +221,7 @@ export function FiltrosBuscador({
                 value={forma.id}
                 defaultChecked={filtrosIniciales.formasColaboracion?.includes(forma.id) ?? false}
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
-                className="rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500"
+                className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
               />
               {forma.etiqueta}
             </label>
@@ -240,7 +240,7 @@ export function FiltrosBuscador({
                 value={tipo.id}
                 defaultChecked={filtrosIniciales.tipos?.includes(tipo.id) ?? false}
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
-                className="rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500"
+                className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
               />
               {tipo.etiqueta}
             </label>
@@ -259,7 +259,7 @@ export function FiltrosBuscador({
                 value={objetivo.id}
                 defaultChecked={filtrosIniciales.objetivos?.includes(objetivo.id) ?? false}
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
-                className="rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500"
+                className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
               />
               {objetivo.etiqueta}
             </label>
@@ -273,7 +273,7 @@ export function FiltrosBuscador({
       <div className="flex gap-2 lg:hidden">
         <button
           type="submit"
-          className="flex-1 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+          className="flex-1 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700"
         >
           Ver resultados
         </button>

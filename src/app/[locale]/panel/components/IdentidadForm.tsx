@@ -39,7 +39,7 @@ export function IdentidadForm({
       descripcion="Cómo se presenta tu club a las empresas. El nombre y la localidad son los únicos campos obligatorios."
     >
       {perfil?.slug && (
-        <p className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+        <p className="mb-6 rounded-lg border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-800">
           Tu página pública ya está en{" "}
           <a href={`/club/${perfil.slug}`} target="_blank" rel="noreferrer" className="font-medium underline">
             /club/{perfil.slug}
@@ -99,7 +99,7 @@ export function IdentidadForm({
                   });
                 }
               }}
-              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500"
+              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
             />
             Confirmo que las fotos que subo no incluyen menores identificables sin
             consentimiento, o que dispongo de dicho consentimiento.
@@ -291,7 +291,7 @@ export function IdentidadForm({
               type="checkbox"
               name="contactPublicConsent"
               defaultChecked={perfil?.contactPublicConsent ?? false}
-              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500"
+              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
             />
             Autorizo mostrar el teléfono y el nombre de contacto en la página pública del
             club.

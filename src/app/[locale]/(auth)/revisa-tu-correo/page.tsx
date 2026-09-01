@@ -11,7 +11,7 @@ export default function RevisaTuCorreoPage() {
       <p className="text-xs text-zinc-400">
         Si no lo encuentras, revisa también la carpeta de spam.
       </p>
-      <Link href="/login" className="inline-block text-sm font-medium text-emerald-700 hover:underline">
+      <Link href="/login" className="inline-block text-sm font-medium text-teal-700 hover:underline">
         Volver a iniciar sesión
       </Link>
     </div>

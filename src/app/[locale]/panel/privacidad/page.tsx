@@ -21,7 +21,7 @@ export default async function PrivacidadClubPage() {
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-emerald-700">Panel del club</p>
+          <p className="text-sm font-medium text-teal-700">Panel del club</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Privacidad y datos</h1>
         </div>
         <CerrarSesionBoton />
@@ -57,7 +57,7 @@ export default async function PrivacidadClubPage() {
 
       <p className="text-xs text-zinc-400">
         Más información sobre cómo tratamos tus datos en nuestra{" "}
-        <a href="/privacidad" className="font-medium text-emerald-700 hover:underline">
+        <a href="/privacidad" className="font-medium text-teal-700 hover:underline">
           Política de Privacidad
         </a>
         .

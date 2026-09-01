@@ -24,7 +24,7 @@ import type {
  * perfil, sin necesidad de regenerarlo manualmente ni de limpiar nada.
  */
 
-const COLOR_MARCA = "#047857"; // emerald-700
+const COLOR_MARCA = "#14304f"; // brand-navy (azul marino de marca)
 const COLOR_TEXTO = "#18181b"; // zinc-900
 const COLOR_TEXTO_SUAVE = "#52525b"; // zinc-600
 const COLOR_TEXTO_TENUE = "#a1a1aa"; // zinc-400

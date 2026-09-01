@@ -47,11 +47,11 @@ export default function AvisoLegalPage() {
         <p>
           El acceso y uso de la Plataforma atribuye la condición de usuario y implica la
           aceptación de este aviso legal, de las{" "}
-          <a href="/condiciones-de-uso" className="font-medium text-emerald-700 hover:underline">
+          <a href="/condiciones-de-uso" className="font-medium text-teal-700 hover:underline">
             Condiciones de Uso
           </a>{" "}
           y de la{" "}
-          <a href="/privacidad" className="font-medium text-emerald-700 hover:underline">
+          <a href="/privacidad" className="font-medium text-teal-700 hover:underline">
             Política de Privacidad
           </a>
           .

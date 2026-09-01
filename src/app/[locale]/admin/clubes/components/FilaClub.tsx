@@ -6,7 +6,7 @@ const formatoFecha = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "
 
 const ESTILO_SUSCRIPCION: Record<Exclude<SubscriptionStatus, null>, string> = {
   trialing: "bg-sky-100 text-sky-700",
-  active: "bg-emerald-100 text-emerald-700",
+  active: "bg-teal-100 text-teal-700",
   past_due: "bg-amber-100 text-amber-700",
   unpaid: "bg-red-100 text-red-700",
   canceled: "bg-zinc-200 text-zinc-600",
@@ -40,7 +40,7 @@ export function FilaClub({ fila }: { fila: ClubAdminRow }) {
       <td className="px-4 py-3">
         <div className="flex flex-wrap gap-1">
           {fila.verified && (
-            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">
+            <span className="rounded-full bg-teal-100 px-2 py-0.5 text-xs font-medium text-teal-700">
               Verificado
             </span>
           )}

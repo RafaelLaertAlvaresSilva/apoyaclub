@@ -41,7 +41,7 @@ export function LoginForm() {
             type="email"
             required
             autoComplete="email"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           />
         </div>
 
@@ -50,7 +50,7 @@ export function LoginForm() {
             <label htmlFor="password" className="block text-sm font-medium text-zinc-700">
               Contraseña
             </label>
-            <Link href="/recuperar-password" className="text-xs font-medium text-emerald-700 hover:underline">
+            <Link href="/recuperar-password" className="text-xs font-medium text-teal-700 hover:underline">
               ¿La has olvidado?
             </Link>
           </div>
@@ -60,7 +60,7 @@ export function LoginForm() {
             type="password"
             required
             autoComplete="current-password"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           />
         </div>
 
@@ -73,10 +73,10 @@ export function LoginForm() {
       <div className="space-y-1 text-center text-sm text-zinc-500">
         <p>¿Todavía no tienes cuenta?</p>
         <div className="flex justify-center gap-4">
-          <Link href="/registro-club" className="font-medium text-emerald-700 hover:underline">
+          <Link href="/registro-club" className="font-medium text-teal-700 hover:underline">
             Registrar mi club
           </Link>
-          <Link href="/registro-empresa" className="font-medium text-emerald-700 hover:underline">
+          <Link href="/registro-empresa" className="font-medium text-teal-700 hover:underline">
             Registrar mi empresa
           </Link>
         </div>

@@ -164,7 +164,7 @@ export function OportunidadForm({
                 name="objectives"
                 value={objetivo.id}
                 defaultChecked={valoresIniciales?.objectives?.includes(objetivo.id) ?? false}
-                className="rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500"
+                className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
               />
               {objetivo.etiqueta}
             </label>

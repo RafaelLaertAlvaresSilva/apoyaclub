@@ -58,7 +58,7 @@ export default async function SolicitudesPage() {
     <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-emerald-700">Panel del club</p>
+          <p className="text-sm font-medium text-teal-700">Panel del club</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Solicitudes de contacto</h1>
         </div>
         <CerrarSesionBoton />

@@ -17,7 +17,7 @@ export default function RecuperarPasswordPage() {
           Si existe una cuenta con ese correo electrónico, te hemos enviado un
           enlace para restablecer tu contraseña.
         </p>
-        <Link href="/login" className="inline-block text-sm font-medium text-emerald-700 hover:underline">
+        <Link href="/login" className="inline-block text-sm font-medium text-teal-700 hover:underline">
           Volver a iniciar sesión
         </Link>
       </div>
@@ -46,7 +46,7 @@ export default function RecuperarPasswordPage() {
             type="email"
             required
             autoComplete="email"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           />
         </div>
 
@@ -56,7 +56,7 @@ export default function RecuperarPasswordPage() {
       </form>
 
       <div className="text-center text-sm text-zinc-500">
-        <Link href="/login" className="font-medium text-emerald-700 hover:underline">
+        <Link href="/login" className="font-medium text-teal-700 hover:underline">
           Volver a iniciar sesión
         </Link>
       </div>

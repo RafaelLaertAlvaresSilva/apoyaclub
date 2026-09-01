@@ -84,7 +84,7 @@ export function PerfilEmpresaForm({ perfil }: { perfil: CompanyProfile | null })
                   name="objectives"
                   value={objetivo.id}
                   defaultChecked={perfil?.objectives.includes(objetivo.id) ?? false}
-                  className="h-4 w-4 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500"
+                  className="h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
                 />
                 {objetivo.etiqueta}
               </label>

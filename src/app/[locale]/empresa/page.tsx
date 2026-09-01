@@ -32,7 +32,7 @@ export default async function EmpresaPage() {
     <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-emerald-700">Panel de empresa</p>
+          <p className="text-sm font-medium text-teal-700">Panel de empresa</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">
             {perfil?.name ?? nombreProvisional}
           </h1>

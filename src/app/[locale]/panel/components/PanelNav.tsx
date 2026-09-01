@@ -21,7 +21,7 @@ export function PanelNav({ activo }: { activo: SeccionPanel }) {
           href={enlace.href}
           className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
             activo === enlace.id
-              ? "bg-emerald-600 text-white"
+              ? "bg-teal-600 text-white"
               : "text-zinc-600 hover:bg-zinc-100"
           }`}
         >

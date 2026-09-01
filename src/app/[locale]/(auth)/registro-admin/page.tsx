@@ -34,7 +34,7 @@ export default function RegistroAdminPage() {
             type="text"
             required
             autoComplete="name"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           />
         </div>
 
@@ -48,7 +48,7 @@ export default function RegistroAdminPage() {
             type="email"
             required
             autoComplete="email"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           />
         </div>
 
@@ -63,7 +63,7 @@ export default function RegistroAdminPage() {
             required
             minLength={8}
             autoComplete="new-password"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           />
           <p className="mt-1 text-xs text-zinc-400">Mínimo 8 caracteres.</p>
         </div>
@@ -78,7 +78,7 @@ export default function RegistroAdminPage() {
             type="password"
             required
             autoComplete="new-password"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           />
         </div>
 
@@ -92,7 +92,7 @@ export default function RegistroAdminPage() {
             type="password"
             required
             autoComplete="off"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           />
         </div>
 
@@ -104,7 +104,7 @@ export default function RegistroAdminPage() {
       <div className="text-center text-sm text-zinc-500">
         <p>
           ¿Ya tienes cuenta?{" "}
-          <Link href="/login" className="font-medium text-emerald-700 hover:underline">
+          <Link href="/login" className="font-medium text-teal-700 hover:underline">
             Inicia sesión
           </Link>
         </p>

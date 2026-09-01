@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { Header } from "@/components/Header";
 import { LOCALE_CONFIG } from "@/config/locales";
 import type { AppLocale } from "@/i18n/routing";
 import { formatoValorOportunidad } from "@/lib/opportunities";
@@ -139,8 +140,10 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados) }}
       />
 
+      <Header />
+
       <header className="relative">
-        <div className="relative h-56 w-full overflow-hidden bg-gradient-to-br from-emerald-600 to-emerald-800 sm:h-72">
+        <div className="relative h-56 w-full overflow-hidden bg-gradient-to-br from-teal-600 to-teal-800 sm:h-72">
           {portada && (
             <Image
               src={portada}
@@ -166,7 +169,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center bg-emerald-50 text-3xl font-bold text-emerald-700">
+                <div className="flex h-full w-full items-center justify-center bg-teal-50 text-3xl font-bold text-teal-700">
                   {perfil.name.charAt(0).toUpperCase()}
                 </div>
               )}
@@ -176,7 +179,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                 <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl">{perfil.name}</h1>
                 {perfil.verified && (
                   <span
-                    className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700"
+                    className="inline-flex items-center gap-1 rounded-full bg-teal-100 px-2.5 py-1 text-xs font-semibold text-teal-700"
                     title="Club verificado por el equipo de ApoyaClub"
                   >
                     <span aria-hidden="true">&#10003;</span> Verificado
@@ -197,7 +200,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             {emailContacto && (
               <a
                 href={`mailto:${emailContacto}`}
-                className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+                className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700"
               >
                 Contactar
               </a>
@@ -221,8 +224,8 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
       </header>
 
       <section className="mx-auto w-full max-w-4xl px-4 pt-8">
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+        <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 sm:p-8">
+          <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">
             Oportunidades disponibles
           </p>
           {oportunidades.length === 0 ? (
@@ -235,11 +238,11 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
               {oportunidades.map((oportunidad) => (
                 <div
                   key={oportunidad.id}
-                  className="flex flex-col gap-2 rounded-xl border border-emerald-100 bg-white p-4"
+                  className="flex flex-col gap-2 rounded-xl border border-teal-100 bg-white p-4"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <p className="font-semibold text-zinc-900">{oportunidad.title}</p>
-                    <p className="whitespace-nowrap text-lg font-bold text-emerald-700">
+                    <p className="whitespace-nowrap text-lg font-bold text-teal-700">
                       {formatoValorOportunidad.format(oportunidad.value)}
                     </p>
                   </div>
@@ -363,13 +366,13 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
               </p>
             )}
             {perfil.milestones.length > 0 && (
-              <ul className="mt-4 space-y-3 border-l-2 border-emerald-200 pl-4">
+              <ul className="mt-4 space-y-3 border-l-2 border-teal-200 pl-4">
                 {perfil.milestones
                   .slice()
                   .sort((a, b) => a.year - b.year)
                   .map((hito, indice) => (
                     <li key={`${hito.year}-${indice}`}>
-                      <span className="font-semibold text-emerald-700">{hito.year}</span>{" "}
+                      <span className="font-semibold text-teal-700">{hito.year}</span>{" "}
                       <span className="text-zinc-700">{hito.text}</span>
                     </li>
                   ))}
@@ -441,7 +444,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                         href={patrocinador.website}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-sm text-emerald-700 hover:underline"
+                        className="text-sm text-teal-700 hover:underline"
                       >
                         {patrocinador.website.replace(/^https?:\/\//, "")}
                       </a>
@@ -466,7 +469,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
               <div className="flex flex-wrap gap-2">
                 <a
                   href={`mailto:${emailContacto}`}
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700"
                 >
                   Escribir email
                 </a>

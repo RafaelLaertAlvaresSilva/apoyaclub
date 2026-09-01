@@ -11,7 +11,7 @@ export default function AuthErrorPage() {
           El enlace ha caducado o ya se ha utilizado antes. Vuelve a
           solicitarlo desde el inicio de sesión.
         </p>
-        <Link href="/login" className="inline-block text-sm font-medium text-emerald-700 hover:underline">
+        <Link href="/login" className="inline-block text-sm font-medium text-teal-700 hover:underline">
           Ir a iniciar sesión
         </Link>
       </div>

@@ -126,7 +126,7 @@ export function GuardarFavoritoBoton({ opportunityId }: { opportunityId: string 
         onClick={() => (abierto ? setAbierto(false) : abrir())}
         className={`${clasesBase} ${
           guardadoEnAlguna
-            ? "border-emerald-300 bg-emerald-50 text-emerald-700"
+            ? "border-teal-300 bg-teal-50 text-teal-700"
             : "border-zinc-300 text-zinc-600 hover:bg-zinc-100"
         }`}
       >
@@ -147,7 +147,7 @@ export function GuardarFavoritoBoton({ opportunityId }: { opportunityId: string 
                     type="checkbox"
                     checked={lista.guardado}
                     onChange={() => alternar(lista.id)}
-                    className="h-4 w-4 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500"
+                    className="h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
                   />
                   {lista.name}
                 </label>
@@ -164,13 +164,13 @@ export function GuardarFavoritoBoton({ opportunityId }: { opportunityId: string 
               value={nombreNuevaLista}
               onChange={(evento) => setNombreNuevaLista(evento.target.value)}
               placeholder="Nueva lista…"
-              className="w-full rounded-md border border-zinc-300 px-2 py-1 text-xs focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              className="w-full rounded-md border border-zinc-300 px-2 py-1 text-xs focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
             />
             <button
               type="button"
               onClick={crearYGuardar}
               disabled={!nombreNuevaLista.trim()}
-              className="whitespace-nowrap rounded-md bg-emerald-600 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="whitespace-nowrap rounded-md bg-teal-600 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
               Crear
             </button>
@@ -180,7 +180,7 @@ export function GuardarFavoritoBoton({ opportunityId }: { opportunityId: string 
 
           <Link
             href="/empresa/favoritos"
-            className="mt-3 block text-center text-xs font-medium text-emerald-700 hover:underline"
+            className="mt-3 block text-center text-xs font-medium text-teal-700 hover:underline"
           >
             Gestionar mis listas
           </Link>

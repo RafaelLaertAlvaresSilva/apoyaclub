@@ -17,7 +17,7 @@ type Props = {
 };
 
 const CLASES_PRIMARIA =
-  "inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-700";
+  "inline-flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700";
 const CLASES_SECUNDARIA =
   "inline-flex items-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100";
 
@@ -96,7 +96,7 @@ export function SolicitarContactoBoton({
             </div>
 
             {estado && "ok" in estado && estado.ok ? (
-              <p className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+              <p className="rounded-lg border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-800">
                 Solicitud enviada. {clubName} la recibirá en su panel y por email.
               </p>
             ) : (
@@ -115,7 +115,7 @@ export function SolicitarContactoBoton({
                     minLength={10}
                     rows={5}
                     placeholder="Cuéntale al club quién eres y qué tipo de colaboración te interesa…"
-                    className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
                   />
                 </div>
 
@@ -153,7 +153,7 @@ function BotonEnviarSolicitud() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+      className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
     >
       {pending ? "Enviando…" : "Enviar solicitud"}
     </button>

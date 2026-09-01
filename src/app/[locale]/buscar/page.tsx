@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Header } from "@/components/Header";
 import { parametrosAFiltros, type ParametrosURL } from "@/lib/buscar-params";
 import { buscarOportunidades, obtenerOpcionesEquipo, obtenerProvinciasDisponibles } from "@/lib/search";
 import { FiltrosBuscador } from "./components/FiltrosBuscador";
@@ -27,6 +28,8 @@ export default async function PaginaBuscar({ searchParams }: { searchParams: Pro
 
   return (
     <div className="flex flex-1 flex-col bg-zinc-50">
+      <Header />
+
       <header className="border-b border-zinc-200 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-8">
           <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl">Buscar oportunidades de patrocinio</h1>

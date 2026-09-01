@@ -30,7 +30,7 @@ export function PlantillasRapidas({
                   key={plantilla.title}
                   type="button"
                   onClick={() => onElegir(tipo.id, plantilla)}
-                  className="rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                  className="rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:border-teal-300 hover:bg-teal-50 hover:text-teal-700"
                 >
                   {plantilla.title}
                 </button>

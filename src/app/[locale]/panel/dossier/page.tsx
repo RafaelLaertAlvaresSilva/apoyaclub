@@ -62,7 +62,7 @@ export default async function DossierPage() {
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-emerald-700">Panel del club</p>
+          <p className="text-sm font-medium text-teal-700">Panel del club</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Dossier comercial en PDF</h1>
         </div>
         <CerrarSesionBoton />
@@ -73,7 +73,7 @@ export default async function DossierPage() {
       {!perfil ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
           Completa primero la identidad del club (nombre y localidad) en{" "}
-          <Link href="/panel" className="font-medium text-emerald-700 hover:underline">
+          <Link href="/panel" className="font-medium text-teal-700 hover:underline">
             tu perfil
           </Link>{" "}
           para poder generar tu dossier de patrocinio.

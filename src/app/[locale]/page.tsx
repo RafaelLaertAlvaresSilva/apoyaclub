@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { RUTA_POR_ROL, type Role } from "@/lib/types";
+import { Header } from "@/components/Header";
 import { FormularioContacto } from "./components/FormularioContacto";
 
 /**
@@ -111,44 +110,9 @@ const PREGUNTAS_FRECUENTES = [
 ] as const;
 
 export default async function Home() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const rol = user?.app_metadata?.role as Role | undefined;
-  const accesoDirecto = user && rol ? { href: RUTA_POR_ROL[rol], etiqueta: "Ir a mi panel" } : null;
-
   return (
     <div className="flex flex-1 flex-col bg-white">
-      <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-          <Link href="/" className="text-lg font-bold tracking-tight text-zinc-900">
-            Apoya<span className="text-emerald-600">Club</span>
-          </Link>
-
-          {accesoDirecto ? (
-            <Link
-              href={accesoDirecto.href}
-              className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
-            >
-              {accesoDirecto.etiqueta}
-            </Link>
-          ) : (
-            <div className="flex items-center gap-3 sm:gap-4">
-              <Link href="/login" className="hidden text-sm font-medium text-zinc-600 hover:text-zinc-900 sm:inline">
-                Iniciar sesión
-              </Link>
-              <Link
-                href="/registro-club"
-                className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
-              >
-                Crea la página de tu club
-              </Link>
-            </div>
-          )}
-        </div>
-      </header>
+      <Header />
 
       <main className="flex-1">
         {/* Hero: los dos caminos, uno al lado del otro */}
@@ -165,20 +129,20 @@ export default async function Home() {
 
             <div className="mx-auto mt-10 grid max-w-3xl gap-4 text-left sm:grid-cols-2">
               <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <p className="text-sm font-semibold text-emerald-700">Para clubes</p>
+                <p className="text-sm font-semibold text-teal-700">Para clubes</p>
                 <p className="mt-1 text-zinc-600">
                   Crea tu página, publica tus oportunidades y que las empresas te encuentren.
                 </p>
                 <Link
                   href="/registro-club"
-                  className="mt-4 inline-block rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+                  className="mt-4 inline-block rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700"
                 >
                   Crea la página de tu club
                 </Link>
               </div>
 
               <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <p className="text-sm font-semibold text-emerald-700">Para empresas</p>
+                <p className="text-sm font-semibold text-teal-700">Para empresas</p>
                 <p className="mt-1 text-zinc-600">
                   Busca clubes de tu zona y patrocina desde 50 €. Acceso gratuito.
                 </p>
@@ -197,7 +161,7 @@ export default async function Home() {
         <section id="clubes" className="px-4 py-16 sm:px-6 sm:py-24">
           <div className="mx-auto max-w-6xl">
             <div className="text-center">
-              <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">Para clubes</p>
+              <p className="text-sm font-semibold uppercase tracking-wide text-teal-700">Para clubes</p>
               <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
                 Consigue el patrocinio que tu club merece
               </h2>
@@ -233,7 +197,7 @@ export default async function Home() {
                   <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
                   <span className="ml-2 truncate text-xs text-zinc-400">apoyaclub.com/club/tu-club</span>
                 </div>
-                <div className="h-28 bg-gradient-to-br from-emerald-600 to-emerald-800 sm:h-32" />
+                <div className="h-28 bg-gradient-to-br from-teal-600 to-teal-800 sm:h-32" />
                 <div className="space-y-4 bg-white p-5">
                   <div>
                     <div className="h-4 w-40 rounded bg-zinc-800/90" />
@@ -259,7 +223,7 @@ export default async function Home() {
                 {EJEMPLOS_OPORTUNIDADES.map((oportunidad) => (
                   <div key={oportunidad.titulo} className="rounded-xl border border-zinc-200 bg-white p-5">
                     <h4 className="font-semibold text-zinc-900">{oportunidad.titulo}</h4>
-                    <p className="mt-1 text-lg font-bold text-emerald-700">{oportunidad.precio}</p>
+                    <p className="mt-1 text-lg font-bold text-teal-700">{oportunidad.precio}</p>
                   </div>
                 ))}
               </div>
@@ -271,13 +235,13 @@ export default async function Home() {
                 <span className="text-4xl font-bold text-zinc-900">29,90 €</span>
                 <span className="text-zinc-500">/mes, IVA incluido</span>
               </p>
-              <p className="mt-1 text-emerald-700">El primer mes es gratis</p>
+              <p className="mt-1 text-teal-700">El primer mes es gratis</p>
               <p className="mt-4 text-sm text-zinc-600">
                 Comisión: 0 %. Tú y la empresa negociáis directamente, sin agencia de por medio.
               </p>
               <Link
                 href="/registro-club"
-                className="mt-6 inline-block rounded-lg bg-emerald-600 px-6 py-3 font-medium text-white transition-colors hover:bg-emerald-700"
+                className="mt-6 inline-block rounded-lg bg-teal-600 px-6 py-3 font-medium text-white transition-colors hover:bg-teal-700"
               >
                 Crea la página de tu club
               </Link>
@@ -289,7 +253,7 @@ export default async function Home() {
         <section id="empresas" className="border-t border-zinc-200 bg-zinc-50 px-4 py-16 sm:px-6 sm:py-24">
           <div className="mx-auto max-w-6xl">
             <div className="text-center">
-              <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">Para empresas</p>
+              <p className="text-sm font-semibold uppercase tracking-wide text-teal-700">Para empresas</p>
               <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
                 Encuentra el club perfecto para tu marca
               </h2>
@@ -323,7 +287,7 @@ export default async function Home() {
             <div className="mt-10 text-center">
               <Link
                 href="/buscar"
-                className="inline-block rounded-lg bg-emerald-600 px-6 py-3 font-medium text-white transition-colors hover:bg-emerald-700"
+                className="inline-block rounded-lg bg-teal-600 px-6 py-3 font-medium text-white transition-colors hover:bg-teal-700"
               >
                 Explorar clubes
               </Link>
@@ -340,11 +304,11 @@ export default async function Home() {
 
             <div className="mt-10 grid gap-10 lg:grid-cols-2">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">Si eres un club</p>
+                <p className="text-sm font-semibold uppercase tracking-wide text-teal-700">Si eres un club</p>
                 <ol className="mt-4 space-y-6">
                   {PASOS_CLUB.map((paso, indice) => (
                     <li key={paso.titulo} className="flex gap-4">
-                      <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-emerald-600 text-sm font-semibold text-white">
+                      <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-teal-600 text-sm font-semibold text-white">
                         {indice + 1}
                       </span>
                       <div>
@@ -357,7 +321,7 @@ export default async function Home() {
               </div>
 
               <div>
-                <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">Si eres una empresa</p>
+                <p className="text-sm font-semibold uppercase tracking-wide text-teal-700">Si eres una empresa</p>
                 <ol className="mt-4 space-y-6">
                   {PASOS_EMPRESA.map((paso, indice) => (
                     <li key={paso.titulo} className="flex gap-4">
@@ -387,7 +351,7 @@ export default async function Home() {
               {PREGUNTAS_FRECUENTES.map((item) => (
                 <details
                   key={item.pregunta}
-                  className="group rounded-xl border border-zinc-200 bg-white p-5 open:border-emerald-200"
+                  className="group rounded-xl border border-zinc-200 bg-white p-5 open:border-teal-200"
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-zinc-900 marker:content-none">
                     {item.pregunta}

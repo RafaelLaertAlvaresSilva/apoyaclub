@@ -79,7 +79,7 @@ export function CookieBanner() {
         <p className="text-sm text-zinc-600">
           Usamos cookies técnicas necesarias para que ApoyaClub funcione. Puedes aceptar o
           rechazar las cookies no técnicas; más información en nuestra{" "}
-          <a href="/cookies" className="font-medium text-emerald-700 hover:underline">
+          <a href="/cookies" className="font-medium text-teal-700 hover:underline">
             Política de Cookies
           </a>
           .
@@ -95,7 +95,7 @@ export function CookieBanner() {
           <button
             type="button"
             onClick={() => elegir("accepted")}
-            className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+            className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-700"
           >
             Aceptar
           </button>

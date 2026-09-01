@@ -162,7 +162,7 @@ export default function PrivacidadPage() {
         <p>
           ApoyaClub usa cookies técnicas necesarias y, si las aceptas, cookies adicionales.
           Puedes ver el detalle y cambiar tu elección en la{" "}
-          <a href="/cookies" className="font-medium text-emerald-700 hover:underline">
+          <a href="/cookies" className="font-medium text-teal-700 hover:underline">
             Política de Cookies
           </a>
           .

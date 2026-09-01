@@ -63,7 +63,7 @@ export function PanelTabs({
               onClick={() => setPestanaActiva(pestana.id)}
               className={`whitespace-nowrap rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                 pestanaActiva === pestana.id
-                  ? "bg-emerald-600 text-white"
+                  ? "bg-teal-600 text-white"
                   : "text-zinc-600 hover:bg-zinc-100"
               }`}
             >

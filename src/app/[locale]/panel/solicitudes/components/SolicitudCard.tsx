@@ -4,7 +4,7 @@ import type { CompanyProfile, ContactRequest, ContactRequestStatus } from "@/lib
 import { cambiarEstadoSolicitud } from "../actions";
 
 const ESTILO_ESTADO: Record<ContactRequestStatus, string> = {
-  new: "bg-emerald-600 text-white",
+  new: "bg-teal-600 text-white",
   seen: "bg-sky-500 text-white",
   in_conversation: "bg-amber-500 text-white",
   closed: "bg-zinc-400 text-white",
@@ -58,7 +58,7 @@ export function SolicitudCard({
         {empresaEmail && (
           <p>
             Email:{" "}
-            <a href={`mailto:${empresaEmail}`} className="font-medium text-emerald-700 hover:underline">
+            <a href={`mailto:${empresaEmail}`} className="font-medium text-teal-700 hover:underline">
               {empresaEmail}
             </a>
           </p>
@@ -72,7 +72,7 @@ export function SolicitudCard({
               href={empresa.website}
               target="_blank"
               rel="noreferrer"
-              className="font-medium text-emerald-700 hover:underline"
+              className="font-medium text-teal-700 hover:underline"
             >
               {empresa.website.replace(/^https?:\/\//, "")}
             </a>

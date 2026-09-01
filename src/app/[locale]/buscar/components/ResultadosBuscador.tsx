@@ -82,7 +82,7 @@ export function ResultadosBuscador({
             id="orden"
             value={filtros.orden ?? "novedad"}
             onChange={(evento) => cambiarOrden(evento.target.value as FiltrosBusqueda["orden"])}
-            className="rounded-lg border border-zinc-300 px-2 py-1.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-zinc-300 px-2 py-1.5 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           >
             {OPCIONES_ORDEN.map((opcion) => (
               <option key={opcion.id} value={opcion.id}>
@@ -145,7 +145,7 @@ function BotonVista({
       type="button"
       onClick={onClick}
       className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-        activo ? "bg-emerald-600 text-white" : "text-zinc-600 hover:bg-zinc-100"
+        activo ? "bg-teal-600 text-white" : "text-zinc-600 hover:bg-zinc-100"
       }`}
     >
       {children}
@@ -157,7 +157,7 @@ function Logo({ url, nombre }: { url: string | null; nombre: string }) {
   return url ? (
     <Image src={url} alt={nombre} width={40} height={40} className="h-10 w-10 shrink-0 rounded-lg object-cover" />
   ) : (
-    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-sm font-bold text-emerald-700">
+    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-sm font-bold text-teal-700">
       {nombre.charAt(0).toUpperCase()}
     </div>
   );
@@ -175,7 +175,7 @@ function Ubicacion({
   return (
     <p className="text-xs text-zinc-500">
       {[ciudad, provincia].filter(Boolean).join(", ")}
-      {distanceKm != null && <span className="font-medium text-emerald-700"> · a {formatoDistancia(distanceKm)}</span>}
+      {distanceKm != null && <span className="font-medium text-teal-700"> · a {formatoDistancia(distanceKm)}</span>}
     </p>
   );
 }
@@ -211,17 +211,17 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
           </span>
         ))}
         {oportunidad.objectives.map((objetivo) => (
-          <span key={objetivo} className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700">
+          <span key={objetivo} className="rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-medium text-teal-700">
             {ETIQUETA_OBJETIVO[objetivo]}
           </span>
         ))}
       </div>
 
       <div className="mt-auto flex items-center justify-between pt-1">
-        <p className="text-lg font-bold text-emerald-700">{formatoValorOportunidad.format(oportunidad.value)}</p>
+        <p className="text-lg font-bold text-teal-700">{formatoValorOportunidad.format(oportunidad.value)}</p>
         <Link
           href={`/club/${oportunidad.clubSlug}`}
-          className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-emerald-700"
+          className="rounded-lg bg-teal-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-teal-700"
         >
           Ver club
         </Link>
@@ -260,7 +260,7 @@ function TarjetaClub({ club }: { club: ResultadoClub }) {
 
       <Link
         href={`/club/${club.clubSlug}`}
-        className="mt-auto rounded-lg bg-emerald-600 px-3 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+        className="mt-auto rounded-lg bg-teal-600 px-3 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-teal-700"
       >
         Ver página del club
       </Link>
@@ -289,7 +289,7 @@ function EstadoVacio({ filtros, vista }: { filtros: FiltrosBusqueda; vista: Vist
             onClick={() =>
               router.push(`/buscar?${filtrosAQueryString({ ...filtros, radioKm: filtros.radioKm! * 2 }, vista)}`)
             }
-            className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700"
+            className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700"
           >
             Ampliar radio a {filtros.radioKm! * 2} km
           </button>

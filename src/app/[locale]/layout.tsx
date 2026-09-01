@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -25,6 +25,20 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "ApoyaClub",
   description: "Conecta tu club deportivo con empresas patrocinadoras.",
+  appleWebApp: {
+    // Fase 15: para que "Añadir a pantalla de inicio" en iOS use el
+    // nombre de la marca en vez de la URL, con el icono de
+    // `apple-icon.png` (convención de archivo, se detecta solo).
+    title: "ApoyaClub",
+    statusBarStyle: "default",
+  },
+};
+
+// Color de la barra de direcciones en Android y de la barra de estado en
+// iOS cuando la web está en pantalla completa (Fase 15, mejoras para
+// móvil): el azul marino de marca en vez del blanco/gris por defecto.
+export const viewport: Viewport = {
+  themeColor: "#14304f",
 };
 
 // Fase 14: una versión estática por idioma soportado (solo "es" por ahora).

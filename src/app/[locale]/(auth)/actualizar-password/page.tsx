@@ -20,7 +20,7 @@ export default async function ActualizarPasswordPage() {
         </p>
         <Link
           href="/recuperar-password"
-          className="inline-block text-sm font-medium text-emerald-700 hover:underline"
+          className="inline-block text-sm font-medium text-teal-700 hover:underline"
         >
           Solicitar un nuevo enlace
         </Link>

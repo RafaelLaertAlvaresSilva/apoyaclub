@@ -14,7 +14,7 @@ import {
 import { OportunidadForm } from "./OportunidadForm";
 
 const ESTILO_ESTADO: Record<OpportunityStatus, string> = {
-  available: "bg-emerald-600 text-white",
+  available: "bg-teal-600 text-white",
   reserved: "bg-amber-500 text-white",
   closed: "bg-zinc-400 text-white",
 };
@@ -47,7 +47,7 @@ export function TarjetaOportunidad({ oportunidad }: { oportunidad: Opportunity }
           )}
         </div>
 
-        <p className="whitespace-nowrap text-lg font-bold text-emerald-700">
+        <p className="whitespace-nowrap text-lg font-bold text-teal-700">
           {formatoValorOportunidad.format(oportunidad.value)}
         </p>
       </div>
@@ -144,7 +144,7 @@ function EditorOportunidad({
   const [estado, formAction] = useActionState(actualizarOportunidad, null);
 
   return (
-    <li className="rounded-xl border border-emerald-200 bg-white p-6">
+    <li className="rounded-xl border border-teal-200 bg-white p-6">
       <OportunidadForm
         idOportunidad={oportunidad.id}
         accion={formAction}

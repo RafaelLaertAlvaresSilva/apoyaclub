@@ -23,7 +23,7 @@ export default function CuentaSuspendidaPage() {
         <div className="flex flex-col items-center gap-3 pt-2 sm:flex-row sm:justify-center">
           <Link
             href="/"
-            className="inline-block rounded-lg bg-emerald-600 px-6 py-3 font-medium text-white transition-colors hover:bg-emerald-700"
+            className="inline-block rounded-lg bg-teal-600 px-6 py-3 font-medium text-white transition-colors hover:bg-teal-700"
           >
             Volver al inicio
           </Link>

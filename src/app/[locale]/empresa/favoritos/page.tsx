@@ -80,7 +80,7 @@ export default async function FavoritosPage() {
     <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-emerald-700">Panel de empresa</p>
+          <p className="text-sm font-medium text-teal-700">Panel de empresa</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Favoritos</h1>
         </div>
         <CerrarSesionBoton />
@@ -107,9 +107,9 @@ export default async function FavoritosPage() {
                     <input
                       name="name"
                       defaultValue={lista.name}
-                      className="rounded-lg border border-transparent px-2 py-1 text-base font-semibold text-zinc-900 hover:border-zinc-200 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                      className="rounded-lg border border-transparent px-2 py-1 text-base font-semibold text-zinc-900 hover:border-zinc-200 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
                     />
-                    <button type="submit" className="text-xs font-medium text-emerald-700 hover:underline">
+                    <button type="submit" className="text-xs font-medium text-teal-700 hover:underline">
                       Guardar nombre
                     </button>
                   </form>
