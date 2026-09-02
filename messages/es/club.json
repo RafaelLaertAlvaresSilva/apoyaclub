@@ -1,1 +1,47 @@
-{}
+{
+  "meta": {
+    "noEncontrado": "Club no encontrado — ApoyaClub",
+    "titulo": "{club} — ApoyaClub",
+    "descripcionPorDefecto": "{resumen}. Descubre cómo patrocinar a este club en ApoyaClub."
+  },
+  "portada": {
+    "verificado": "Verificado",
+    "verificadoAyuda": "Club verificado por el equipo de ApoyaClub",
+    "solicitarContacto": "Solicitar contacto",
+    "contactar": "Contactar",
+    "compartirTitulo": "{club} — ApoyaClub"
+  },
+  "oportunidades": {
+    "titulo": "Oportunidades disponibles",
+    "vacio": "Este club todavía no ha publicado oportunidades de patrocinio. Vuelve pronto o contacta directamente con el club para proponer una colaboración.",
+    "exclusiva": "En exclusiva para el sector: {sector}",
+    "solicitar": "Solicitar"
+  },
+  "secciones": {
+    "quienesSomos": "Quiénes somos",
+    "equipos": "Equipos",
+    "cantera": "Cantera",
+    "canteraDescripcion": "Datos agregados de las categorías inferiores del club.",
+    "canteraEquipos": "Equipos",
+    "canteraJugadores": "Jugadores",
+    "canteraFamilias": "Familias",
+    "palmares": "Palmarés",
+    "maximaCategoria": "Máxima categoría",
+    "competiciones": "Competiciones",
+    "logros": "Logros",
+    "historia": "Nuestra historia",
+    "fundadoEn": "Fundado en",
+    "audiencia": "Audiencia en cifras",
+    "alcanceEstimado": "Alcance estimado",
+    "asistenciaMedia": "Asistencia media",
+    "seguidoresEn": "Seguidores en {red}",
+    "comunidad": "Comunidad",
+    "comunidadDescripcion": "Acciones sociales, educativas o benéficas del club.",
+    "instalaciones": "Instalaciones",
+    "patrocinadores": "Patrocinadores actuales",
+    "contacto": "Contacto",
+    "escribirEmail": "Escribir email",
+    "llamar": "Llamar"
+  },
+  "pie": "Página de {club} en ApoyaClub — la plataforma que conecta clubes deportivos con empresas patrocinadoras."
+}

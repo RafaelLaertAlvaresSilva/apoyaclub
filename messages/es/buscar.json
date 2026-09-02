@@ -1,1 +1,53 @@
-{}
+{
+  "meta": {
+    "titulo": "Buscar oportunidades de patrocinio — ApoyaClub",
+    "descripcion": "Encuentra clubes deportivos que buscan patrocinador. Filtra por deporte, ubicación, presupuesto, forma de colaboración y objetivo."
+  },
+  "cabecera": {
+    "titulo": "Buscar oportunidades de patrocinio",
+    "texto": "Filtra por deporte, ubicación, presupuesto y objetivo para encontrar el club que mejor encaja con tu marca."
+  },
+  "filtros": {
+    "titulo": "Filtros",
+    "cerrar": "Cerrar",
+    "ubicacion": "Ubicación",
+    "todaEspana": "Toda España",
+    "ubicacionPlaceholder": "Ciudad o código postal",
+    "sinRadio": "Sin radio (coincidencia exacta)",
+    "radio": "Hasta {km} km",
+    "deporte": "Deporte",
+    "categoria": "Categoría",
+    "genero": "Género",
+    "nivel": "Nivel",
+    "cualquiera": "Cualquiera",
+    "presupuesto": "Presupuesto",
+    "desde": "Desde €",
+    "hasta": "Hasta €",
+    "cualquierPeriodo": "Cualquier periodo",
+    "formaColaboracion": "Forma de colaboración",
+    "nivelPatrocinador": "Nivel de patrocinador",
+    "tipoOportunidad": "Tipo de oportunidad",
+    "objetivo": "Objetivo",
+    "verResultados": "Ver resultados",
+    "limpiar": "Limpiar",
+    "limpiarFiltros": "Limpiar filtros"
+  },
+  "resultados": {
+    "porOportunidad": "Por oportunidad",
+    "porClub": "Por club",
+    "ordenarPor": "Ordenar por",
+    "cuenta": "{total, plural, one {# resultado} other {# resultados}}",
+    "cuentaAproximada": "{cantidad}+ resultados",
+    "cargando": "Cargando…",
+    "cargarMas": "Cargar más",
+    "verClub": "Ver club",
+    "distancia": " · a {distancia}",
+    "exclusiva": "Exclusiva de sector: {sector}",
+    "oportunidadesDelClub": "{total, plural, one {# oportunidad} other {# oportunidades}} · {rango}",
+    "vacioTitulo": "No hay oportunidades que coincidan con esta búsqueda.",
+    "vacioConRadio": "Prueba a ampliar el radio de búsqueda o a quitar algún filtro.",
+    "vacioSinRadio": "Prueba a quitar algún filtro para ver más resultados.",
+    "ampliarRadio": "Ampliar radio a {km} km",
+    "quitarFiltros": "Quitar todos los filtros"
+  }
+}

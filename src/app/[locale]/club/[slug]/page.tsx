@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { LOCALE_CONFIG } from "@/config/locales";
@@ -45,9 +46,10 @@ type ParametrosRuta = { params: Promise<{ locale: AppLocale; slug: string }> };
 export async function generateMetadata({ params }: ParametrosRuta): Promise<Metadata> {
   const { locale, slug } = await params;
   const datos = await obtenerClubPublico(slug);
+  const tMeta = await getTranslations("club.meta");
 
   if (!datos) {
-    return { title: "Club no encontrado — ApoyaClub" };
+    return { title: tMeta("noEncontrado") };
   }
 
   const { perfil, equipos } = datos;
@@ -56,8 +58,8 @@ export async function generateMetadata({ params }: ParametrosRuta): Promise<Meta
   const resumen = [perfil.name, deportes.join(", "), ubicacion].filter(Boolean).join(" · ");
   const descripcion = perfil.description
     ? recortar(perfil.description, 160)
-    : `${resumen}. Descubre cómo patrocinar a este club en ApoyaClub.`;
-  const titulo = `${perfil.name} — ApoyaClub`;
+    : tMeta("descripcionPorDefecto", { resumen });
+  const titulo = tMeta("titulo", { club: perfil.name });
   const ruta = `/${locale}/club/${perfil.slug}`;
 
   return {
@@ -83,6 +85,7 @@ export async function generateMetadata({ params }: ParametrosRuta): Promise<Meta
 export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   const { locale, slug } = await params;
   const datos = await obtenerClubPublico(slug);
+  const t = await getTranslations("club");
 
   if (!datos) notFound();
 
@@ -108,14 +111,17 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
 
   const estadisticasAudiencia = [
     perfil.estimatedReach != null
-      ? { etiqueta: "Alcance estimado", valor: formatoNumero.format(perfil.estimatedReach) }
+      ? { etiqueta: t("secciones.alcanceEstimado"), valor: formatoNumero.format(perfil.estimatedReach) }
       : null,
     perfil.averageAttendance != null
-      ? { etiqueta: "Asistencia media", valor: formatoNumero.format(perfil.averageAttendance) }
+      ? { etiqueta: t("secciones.asistenciaMedia"), valor: formatoNumero.format(perfil.averageAttendance) }
       : null,
     ...(Object.entries(perfil.followersByNetwork) as [keyof SocialLinks, number | undefined][])
       .filter((entrada): entrada is [keyof SocialLinks, number] => entrada[1] != null)
-      .map(([red, valor]) => ({ etiqueta: `Seguidores en ${ETIQUETA_RED[red]}`, valor: formatoNumero.format(valor) })),
+      .map(([red, valor]) => ({
+        etiqueta: t("secciones.seguidoresEn", { red: ETIQUETA_RED[red] }),
+        valor: formatoNumero.format(valor),
+      })),
   ].filter((estadistica): estadistica is { etiqueta: string; valor: string } => estadistica !== null);
 
   const datosEstructurados = {
@@ -184,9 +190,9 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                 {perfil.verified && (
                   <span
                     className="inline-flex items-center gap-1 rounded-full bg-teal-100 px-2.5 py-1 text-xs font-semibold text-teal-700"
-                    title="Club verificado por el equipo de ApoyaClub"
+                    title={t("portada.verificadoAyuda")}
                   >
-                    <span aria-hidden="true">&#10003;</span> Verificado
+                    <span aria-hidden="true">&#10003;</span> {t("portada.verificado")}
                   </span>
                 )}
               </div>
@@ -197,16 +203,16 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
           </div>
 
           <div className="flex flex-wrap gap-2 pb-1">
-            <CompartirBoton url={urlPublica} titulo={`${perfil.name} — ApoyaClub`} />
+            <CompartirBoton url={urlPublica} titulo={t("portada.compartirTitulo", { club: perfil.name })} />
             <SolicitarContactoBoton clubId={perfil.id} clubName={perfil.name}>
-              Solicitar contacto
+              {t("portada.solicitarContacto")}
             </SolicitarContactoBoton>
             {emailContacto && (
               <a
                 href={`mailto:${emailContacto}`}
                 className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700"
               >
-                Contactar
+                {t("portada.contactar")}
               </a>
             )}
           </div>
@@ -230,12 +236,11 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
       <section className="mx-auto w-full max-w-4xl px-4 pt-8">
         <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">
-            Oportunidades disponibles
+            {t("oportunidades.titulo")}
           </p>
           {oportunidades.length === 0 ? (
             <p className="mt-2 text-zinc-700">
-              Este club todavía no ha publicado oportunidades de patrocinio. Vuelve pronto o
-              contacta directamente con el club para proponer una colaboración.
+              {t("oportunidades.vacio")}
             </p>
           ) : (
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -266,7 +271,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                   )}
                   {oportunidad.exclusivity && (
                     <p className="text-xs font-medium text-brand-teal-dark">
-                      En exclusiva para el sector: {oportunidad.exclusivity}
+                      {t("oportunidades.exclusiva", { sector: oportunidad.exclusivity })}
                     </p>
                   )}
                   {oportunidad.duration && (
@@ -280,7 +285,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                       opportunityTitle={oportunidad.title}
                       variante="secundaria"
                     >
-                      Solicitar
+                      {t("oportunidades.solicitar")}
                     </SolicitarContactoBoton>
                     <GuardarFavoritoBoton opportunityId={oportunidad.id} />
                   </div>
@@ -293,7 +298,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
 
       <main className="mx-auto w-full max-w-4xl px-4 pb-16">
         {mostrarQuienesSomos && (
-          <Seccion titulo="Quiénes somos">
+          <Seccion titulo={t("secciones.quienesSomos")}>
             {perfil.description && (
               <p className="whitespace-pre-line text-zinc-700">{perfil.description}</p>
             )}
@@ -316,7 +321,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         )}
 
         {equipos.length > 0 && (
-          <Seccion titulo="Equipos">
+          <Seccion titulo={t("secciones.equipos")}>
             <ul className="grid gap-3 sm:grid-cols-2">
               {equipos.map((equipo) => (
                 <li key={equipo.id} className="rounded-xl border border-zinc-200 p-4">
@@ -338,39 +343,39 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         )}
 
         {mostrarCantera && (
-          <Seccion titulo="Cantera" descripcion="Datos agregados de las categorías inferiores del club.">
+          <Seccion titulo={t("secciones.cantera")} descripcion={t("secciones.canteraDescripcion")}>
             <div className="flex flex-wrap gap-3">
               {perfil.youthTeamsCount != null && (
-                <TarjetaEstadistica etiqueta="Equipos" valor={formatoNumero.format(perfil.youthTeamsCount)} />
+                <TarjetaEstadistica etiqueta={t("secciones.canteraEquipos")} valor={formatoNumero.format(perfil.youthTeamsCount)} />
               )}
               {perfil.youthPlayersCount != null && (
-                <TarjetaEstadistica etiqueta="Jugadores" valor={formatoNumero.format(perfil.youthPlayersCount)} />
+                <TarjetaEstadistica etiqueta={t("secciones.canteraJugadores")} valor={formatoNumero.format(perfil.youthPlayersCount)} />
               )}
               {perfil.youthFamiliesCount != null && (
-                <TarjetaEstadistica etiqueta="Familias" valor={formatoNumero.format(perfil.youthFamiliesCount)} />
+                <TarjetaEstadistica etiqueta={t("secciones.canteraFamilias")} valor={formatoNumero.format(perfil.youthFamiliesCount)} />
               )}
             </div>
           </Seccion>
         )}
 
         {mostrarPalmares && (
-          <Seccion titulo="Palmarés">
+          <Seccion titulo={t("secciones.palmares")}>
             <div className="space-y-4">
               {perfil.topCategory && (
                 <div>
-                  <p className="text-sm font-medium text-zinc-500">Máxima categoría</p>
+                  <p className="text-sm font-medium text-zinc-500">{t("secciones.maximaCategoria")}</p>
                   <p className="text-zinc-900">{perfil.topCategory}</p>
                 </div>
               )}
               {perfil.competitions && (
                 <div>
-                  <p className="text-sm font-medium text-zinc-500">Competiciones</p>
+                  <p className="text-sm font-medium text-zinc-500">{t("secciones.competiciones")}</p>
                   <p className="whitespace-pre-line text-zinc-900">{perfil.competitions}</p>
                 </div>
               )}
               {perfil.achievements && (
                 <div>
-                  <p className="text-sm font-medium text-zinc-500">Logros</p>
+                  <p className="text-sm font-medium text-zinc-500">{t("secciones.logros")}</p>
                   <p className="whitespace-pre-line text-zinc-900">{perfil.achievements}</p>
                 </div>
               )}
@@ -379,10 +384,11 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         )}
 
         {mostrarHistoria && (
-          <Seccion titulo="Nuestra historia">
+          <Seccion titulo={t("secciones.historia")}>
             {perfil.foundingYear != null && (
               <p className="text-zinc-700">
-                Fundado en <span className="font-medium text-zinc-900">{perfil.foundingYear}</span>.
+                {t("secciones.fundadoEn")}{" "}
+                <span className="font-medium text-zinc-900">{perfil.foundingYear}</span>.
               </p>
             )}
             {perfil.milestones.length > 0 && (
@@ -402,7 +408,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         )}
 
         {estadisticasAudiencia.length > 0 && (
-          <Seccion titulo="Audiencia en cifras">
+          <Seccion titulo={t("secciones.audiencia")}>
             <div className="flex flex-wrap gap-3">
               {estadisticasAudiencia.map((estadistica) => (
                 <TarjetaEstadistica
@@ -416,7 +422,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         )}
 
         {perfil.communityActions.length > 0 && (
-          <Seccion titulo="Comunidad" descripcion="Acciones sociales, educativas o benéficas del club.">
+          <Seccion titulo={t("secciones.comunidad")} descripcion={t("secciones.comunidadDescripcion")}>
             <ul className="grid gap-3 sm:grid-cols-2">
               {perfil.communityActions.map((accion, indice) => (
                 <li key={`${accion.title}-${indice}`} className="rounded-xl border border-zinc-200 p-4">
@@ -431,13 +437,13 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         )}
 
         {perfil.facilities && (
-          <Seccion titulo="Instalaciones">
+          <Seccion titulo={t("secciones.instalaciones")}>
             <p className="whitespace-pre-line text-zinc-700">{perfil.facilities}</p>
           </Seccion>
         )}
 
         {patrocinadores.length > 0 && (
-          <Seccion titulo="Patrocinadores actuales">
+          <Seccion titulo={t("secciones.patrocinadores")}>
             <ul className="grid gap-3 sm:grid-cols-2">
               {patrocinadores.map((patrocinador) => (
                 <li
@@ -477,7 +483,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         )}
 
         {emailContacto && (
-          <Seccion id="contacto" titulo="Contacto">
+          <Seccion id="contacto" titulo={t("secciones.contacto")}>
             <div className="flex flex-col gap-4 rounded-xl border border-zinc-200 p-5 sm:flex-row sm:items-center sm:justify-between">
               <div className="text-sm text-zinc-600">
                 {perfil.contactName && (
@@ -491,17 +497,17 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                   href={`mailto:${emailContacto}`}
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700"
                 >
-                  Escribir email
+                  {t("secciones.escribirEmail")}
                 </a>
                 <SolicitarContactoBoton clubId={perfil.id} clubName={perfil.name} variante="secundaria">
-                  Solicitar contacto
+                  {t("portada.solicitarContacto")}
                 </SolicitarContactoBoton>
                 {perfil.contactPhone && (
                   <a
                     href={`tel:${perfil.contactPhone.replace(/\s+/g, "")}`}
                     className="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
                   >
-                    Llamar
+                    {t("secciones.llamar")}
                   </a>
                 )}
               </div>
@@ -511,8 +517,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
       </main>
 
       <footer className="border-t border-zinc-100 py-8 text-center text-xs text-zinc-400">
-        Página de {perfil.name} en ApoyaClub — la plataforma que conecta clubes deportivos con
-        empresas patrocinadoras.
+        {t("pie", { club: perfil.name })}
       </footer>
     </div>
   );

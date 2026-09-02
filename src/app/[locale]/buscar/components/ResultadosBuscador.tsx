@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 import { filtrosAQueryString, OPCIONES_ORDEN } from "@/lib/buscar-params";
@@ -27,6 +28,7 @@ export function ResultadosBuscador({
   vistaInicial: VistaBusqueda;
   paginaInicial: PaginaBusqueda<ResultadoOportunidad>;
 }) {
+  const t = useTranslations("buscar.resultados");
   const router = useRouter();
   const [vista, setVista] = useState<VistaBusqueda>(vistaInicial);
   const [oportunidades, setOportunidades] = useState<ResultadoOportunidad[]>(paginaInicial.resultados);
@@ -69,16 +71,16 @@ export function ResultadosBuscador({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-1 rounded-lg border border-zinc-200 bg-white p-1">
           <BotonVista activo={vista === "oportunidad"} onClick={() => cambiarVista("oportunidad")}>
-            Por oportunidad
+            {t("porOportunidad")}
           </BotonVista>
           <BotonVista activo={vista === "club"} onClick={() => cambiarVista("club")}>
-            Por club
+            {t("porClub")}
           </BotonVista>
         </div>
 
         <div className="flex items-center gap-2 text-sm">
           <label htmlFor="orden" className="text-zinc-500">
-            Ordenar por
+            {t("ordenarPor")}
           </label>
           <select
             id="orden"
@@ -97,8 +99,8 @@ export function ResultadosBuscador({
 
       <p className="text-sm text-zinc-500">
         {total != null
-          ? `${total} ${total === 1 ? "resultado" : "resultados"}`
-          : `${oportunidades.length}+ resultados`}
+          ? t("cuenta", { total })
+          : t("cuentaAproximada", { cantidad: oportunidades.length })}
       </p>
 
       {oportunidades.length === 0 ? (
@@ -125,7 +127,7 @@ export function ResultadosBuscador({
             disabled={cargando}
             className="rounded-lg border border-zinc-300 bg-white px-6 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 disabled:opacity-50"
           >
-            {cargando ? "Cargando…" : "Cargar más"}
+            {cargando ? t("cargando") : t("cargarMas")}
           </button>
         </div>
       )}
@@ -174,15 +176,22 @@ function Ubicacion({
   provincia: string | null;
   distanceKm: number | null;
 }) {
+  const tUbicacion = useTranslations("buscar.resultados");
+
   return (
     <p className="text-xs text-zinc-500">
       {[ciudad, provincia].filter(Boolean).join(", ")}
-      {distanceKm != null && <span className="font-medium text-teal-700"> · a {formatoDistancia(distanceKm)}</span>}
+      {distanceKm != null && (
+        <span className="font-medium text-teal-700">
+          {tUbicacion("distancia", { distancia: formatoDistancia(distanceKm) })}
+        </span>
+      )}
     </p>
   );
 }
 
 function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad }) {
+  const tTarjeta = useTranslations("buscar.resultados");
   const etiquetas = [
     ETIQUETA_TIPO_OPORTUNIDAD[oportunidad.opportunityType],
     oportunidad.period ? ETIQUETA_PERIODO[oportunidad.period] : null,
@@ -218,7 +227,7 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
         {oportunidad.description && <p className="mt-1 line-clamp-2 text-sm text-zinc-600">{oportunidad.description}</p>}
         {oportunidad.exclusivity && (
           <p className="mt-1 text-xs font-medium text-brand-teal-dark">
-            Exclusiva de sector: {oportunidad.exclusivity}
+            {tTarjeta("exclusiva", { sector: oportunidad.exclusivity })}
           </p>
         )}
       </div>
@@ -242,7 +251,7 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
           href={`/club/${oportunidad.clubSlug}`}
           className="rounded-lg bg-teal-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-teal-700"
         >
-          Ver club
+          {tTarjeta("verClub")}
         </Link>
       </div>
     </li>
@@ -250,6 +259,7 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
 }
 
 function TarjetaClub({ club }: { club: ResultadoClub }) {
+  const tClub = useTranslations("buscar.resultados");
   const rango =
     club.minValue === club.maxValue
       ? formatoValorOportunidad.format(club.minValue)
@@ -274,7 +284,7 @@ function TarjetaClub({ club }: { club: ResultadoClub }) {
       </div>
 
       <p className="text-sm text-zinc-600">
-        {club.opportunitiesCount} {club.opportunitiesCount === 1 ? "oportunidad" : "oportunidades"} · {rango}
+        {tClub("oportunidadesDelClub", { total: club.opportunitiesCount, rango })}
       </p>
 
       <Link
@@ -288,6 +298,7 @@ function TarjetaClub({ club }: { club: ResultadoClub }) {
 }
 
 function EstadoVacio({ filtros, vista }: { filtros: FiltrosBusqueda; vista: VistaBusqueda }) {
+  const tVacio = useTranslations("buscar.resultados");
   const router = useRouter();
   const tieneFiltros = Object.values(filtros).some((valor) =>
     Array.isArray(valor) ? valor.length > 0 : valor != null && valor !== "" && valor !== "novedad",
@@ -295,11 +306,9 @@ function EstadoVacio({ filtros, vista }: { filtros: FiltrosBusqueda; vista: Vist
 
   return (
     <div className="rounded-xl border border-dashed border-zinc-300 bg-white p-8 text-center">
-      <p className="font-medium text-zinc-900">No hay oportunidades que coincidan con esta búsqueda.</p>
+      <p className="font-medium text-zinc-900">{tVacio("vacioTitulo")}</p>
       <p className="mt-1 text-sm text-zinc-500">
-        {filtros.radioKm
-          ? "Prueba a ampliar el radio de búsqueda o a quitar algún filtro."
-          : "Prueba a quitar algún filtro para ver más resultados."}
+        {filtros.radioKm ? tVacio("vacioConRadio") : tVacio("vacioSinRadio")}
       </p>
       <div className="mt-4 flex flex-wrap justify-center gap-2">
         {filtros.radioKm && (
@@ -310,7 +319,7 @@ function EstadoVacio({ filtros, vista }: { filtros: FiltrosBusqueda; vista: Vist
             }
             className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700"
           >
-            Ampliar radio a {filtros.radioKm! * 2} km
+            {tVacio("ampliarRadio", { km: filtros.radioKm! * 2 })}
           </button>
         )}
         {tieneFiltros && (
@@ -319,7 +328,7 @@ function EstadoVacio({ filtros, vista }: { filtros: FiltrosBusqueda; vista: Vist
             onClick={() => router.push("/buscar")}
             className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
           >
-            Quitar todos los filtros
+            {tVacio("quitarFiltros")}
           </button>
         )}
       </div>

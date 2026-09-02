@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 import { clasesInput } from "@/app/[locale]/panel/components/SeccionCard";
@@ -76,6 +77,7 @@ export function FiltrosBuscador({
   opcionesEquipo: { deportes: string[]; categorias: string[]; generos: string[] };
   provincias: string[];
 }) {
+  const t = useTranslations("buscar.filtros");
   const router = useRouter();
   const [abiertoEnMovil, setAbiertoEnMovil] = useState(false);
 
@@ -104,7 +106,7 @@ export function FiltrosBuscador({
       className="space-y-5"
     >
       <div>
-        <p className={clasesEtiquetaGrupo}>Ubicación</p>
+        <p className={clasesEtiquetaGrupo}>{t("ubicacion")}</p>
         <div className="space-y-2">
           <select
             name="provincia"
@@ -112,7 +114,7 @@ export function FiltrosBuscador({
             onChange={(evento) => aplicar(evento.currentTarget.form!)}
             className={clasesInput}
           >
-            <option value="">Toda España</option>
+            <option value="">{t("todaEspana")}</option>
             {provincias.map((provincia) => (
               <option key={provincia} value={provincia}>
                 {provincia}
@@ -121,15 +123,15 @@ export function FiltrosBuscador({
           </select>
           <input
             name="ubicacion"
-            placeholder="Ciudad o código postal"
+            placeholder={t("ubicacionPlaceholder")}
             defaultValue={filtrosIniciales.ubicacion ?? ""}
             className={clasesInput}
           />
           <select name="radio" defaultValue={filtrosIniciales.radioKm ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
-            <option value="">Sin radio (coincidencia exacta)</option>
+            <option value="">{t("sinRadio")}</option>
             {RADIOS_KM.map((km) => (
               <option key={km} value={km}>
-                Hasta {km} km
+                {t("radio", { km })}
               </option>
             ))}
           </select>
@@ -138,9 +140,9 @@ export function FiltrosBuscador({
 
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         <div>
-          <p className={clasesEtiquetaGrupo}>Deporte</p>
+          <p className={clasesEtiquetaGrupo}>{t("deporte")}</p>
           <select name="deporte" defaultValue={filtrosIniciales.deporte ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
-            <option value="">Cualquiera</option>
+            <option value="">{t("cualquiera")}</option>
             {opcionesEquipo.deportes.map((deporte) => (
               <option key={deporte} value={deporte}>
                 {deporte}
@@ -149,9 +151,9 @@ export function FiltrosBuscador({
           </select>
         </div>
         <div>
-          <p className={clasesEtiquetaGrupo}>Categoría</p>
+          <p className={clasesEtiquetaGrupo}>{t("categoria")}</p>
           <select name="categoria" defaultValue={filtrosIniciales.categoria ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
-            <option value="">Cualquiera</option>
+            <option value="">{t("cualquiera")}</option>
             {opcionesEquipo.categorias.map((categoria) => (
               <option key={categoria} value={categoria}>
                 {categoria}
@@ -160,9 +162,9 @@ export function FiltrosBuscador({
           </select>
         </div>
         <div>
-          <p className={clasesEtiquetaGrupo}>Género</p>
+          <p className={clasesEtiquetaGrupo}>{t("genero")}</p>
           <select name="genero" defaultValue={filtrosIniciales.genero ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
-            <option value="">Cualquiera</option>
+            <option value="">{t("cualquiera")}</option>
             {opcionesEquipo.generos.map((genero) => (
               <option key={genero} value={genero}>
                 {genero}
@@ -171,9 +173,9 @@ export function FiltrosBuscador({
           </select>
         </div>
         <div>
-          <p className={clasesEtiquetaGrupo}>Nivel</p>
+          <p className={clasesEtiquetaGrupo}>{t("nivel")}</p>
           <select name="nivel" defaultValue={filtrosIniciales.nivelEquipo ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
-            <option value="">Cualquiera</option>
+            <option value="">{t("cualquiera")}</option>
             {NIVELES_EQUIPO.map((nivel) => (
               <option key={nivel.id} value={nivel.id}>
                 {nivel.etiqueta}
@@ -184,13 +186,13 @@ export function FiltrosBuscador({
       </div>
 
       <div>
-        <p className={clasesEtiquetaGrupo}>Presupuesto</p>
+        <p className={clasesEtiquetaGrupo}>{t("presupuesto")}</p>
         <div className="grid grid-cols-2 gap-2">
           <input
             name="min"
             type="number"
             min={0}
-            placeholder="Desde €"
+            placeholder={t("desde")}
             defaultValue={filtrosIniciales.presupuestoMin ?? ""}
             className={clasesInput}
           />
@@ -198,7 +200,7 @@ export function FiltrosBuscador({
             name="max"
             type="number"
             min={0}
-            placeholder="Hasta €"
+            placeholder={t("hasta")}
             defaultValue={filtrosIniciales.presupuestoMax ?? ""}
             className={clasesInput}
           />
@@ -209,7 +211,7 @@ export function FiltrosBuscador({
           onChange={(evento) => aplicar(evento.currentTarget.form!)}
           className={`${clasesInput} mt-2`}
         >
-          <option value="">Cualquier periodo</option>
+          <option value="">{t("cualquierPeriodo")}</option>
           {PERIODOS_OPORTUNIDAD.map((periodo) => (
             <option key={periodo.id} value={periodo.id}>
               {periodo.etiqueta}
@@ -219,7 +221,7 @@ export function FiltrosBuscador({
       </div>
 
       <div>
-        <p className={clasesEtiquetaGrupo}>Forma de colaboración</p>
+        <p className={clasesEtiquetaGrupo}>{t("formaColaboracion")}</p>
         <div className="grid grid-cols-2 gap-2">
           {FORMAS_COLABORACION.map((forma) => (
             <label key={forma.id} className={clasesCheckbox}>
@@ -238,7 +240,7 @@ export function FiltrosBuscador({
       </div>
 
       <div>
-        <p className={clasesEtiquetaGrupo}>Nivel de patrocinador</p>
+        <p className={clasesEtiquetaGrupo}>{t("nivelPatrocinador")}</p>
         <div className="grid grid-cols-1 gap-2">
           {NIVELES_PATROCINIO.map((nivel) => (
             <label key={nivel.id} className={clasesCheckbox} title={nivel.ayuda}>
@@ -257,7 +259,7 @@ export function FiltrosBuscador({
       </div>
 
       <div>
-        <p className={clasesEtiquetaGrupo}>Tipo de oportunidad</p>
+        <p className={clasesEtiquetaGrupo}>{t("tipoOportunidad")}</p>
         <div className="grid grid-cols-1 gap-2">
           {TIPOS_OPORTUNIDAD.map((tipo) => (
             <label key={tipo.id} className={clasesCheckbox}>
@@ -276,7 +278,7 @@ export function FiltrosBuscador({
       </div>
 
       <div>
-        <p className={clasesEtiquetaGrupo}>Objetivo</p>
+        <p className={clasesEtiquetaGrupo}>{t("objetivo")}</p>
         <div className="grid grid-cols-1 gap-2">
           {OBJETIVOS_OPORTUNIDAD.map((objetivo) => (
             <label key={objetivo.id} className={clasesCheckbox}>
@@ -302,14 +304,14 @@ export function FiltrosBuscador({
           type="submit"
           className="flex-1 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700"
         >
-          Ver resultados
+          {t("verResultados")}
         </button>
         <button
           type="button"
           onClick={limpiar}
           className="rounded-lg border border-zinc-300 px-4 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
         >
-          Limpiar
+          {t("limpiar")}
         </button>
       </div>
 
@@ -318,7 +320,7 @@ export function FiltrosBuscador({
         onClick={limpiar}
         className="hidden w-full rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 lg:block"
       >
-        Limpiar filtros
+        {t("limpiarFiltros")}
       </button>
     </form>
   );
@@ -332,7 +334,7 @@ export function FiltrosBuscador({
           onClick={() => setAbiertoEnMovil(true)}
           className="flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700"
         >
-          Filtros
+          {t("titulo")}
         </button>
 
         {abiertoEnMovil && (
@@ -344,13 +346,13 @@ export function FiltrosBuscador({
             />
             <div className="relative ml-auto flex h-full w-full max-w-sm flex-col overflow-y-auto bg-white p-4 shadow-xl">
               <div className="mb-4 flex items-center justify-between">
-                <p className="font-semibold text-zinc-900">Filtros</p>
+                <p className="font-semibold text-zinc-900">{t("titulo")}</p>
                 <button
                   type="button"
                   onClick={() => setAbiertoEnMovil(false)}
                   className="rounded-lg px-2 py-1 text-sm text-zinc-500 hover:bg-zinc-100"
                 >
-                  Cerrar
+                  {t("cerrar")}
                 </button>
               </div>
               {contenido}
