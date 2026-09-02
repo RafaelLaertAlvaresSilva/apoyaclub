@@ -1,6 +1,7 @@
 "use server";
 
 import { enviarEmailContactoLanding } from "@/lib/email/resend";
+import { consumirLimite, ipDelVisitante, pareceBot } from "@/lib/rate-limit";
 
 export type EstadoContacto = { error: string; ok?: false } | { ok: true; error?: undefined } | null;
 
@@ -19,6 +20,10 @@ export async function enviarConsultaContacto(
   _estadoPrevio: EstadoContacto,
   formData: FormData,
 ): Promise<EstadoContacto> {
+  // Campo trampa: si viene relleno es un bot. Se responde como si el
+  // mensaje se hubiera enviado, pero no se envía nada (Fase 15).
+  if (pareceBot(formData)) return { ok: true };
+
   const nombre = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const mensaje = String(formData.get("message") ?? "").trim();
@@ -26,6 +31,25 @@ export async function enviarConsultaContacto(
   if (!nombre) return { error: "Escribe tu nombre." };
   if (!email || !email.includes("@")) return { error: "Escribe un email válido." };
   if (!mensaje || mensaje.length < 10) return { error: "Cuéntanos brevemente en qué podemos ayudarte." };
+
+  // Límite de envíos (Fase 15): por IP para frenar ráfagas, y por email
+  // para que cambiar de IP no sirva de nada. Ver `lib/rate-limit.ts`.
+  const ip = await ipDelVisitante();
+  const [cupoIp, cupoEmail] = await Promise.all([
+    consumirLimite({ bucket: "contacto-landing:ip", identificador: ip, limite: 3, ventanaSegundos: 3600 }),
+    consumirLimite({
+      bucket: "contacto-landing:email",
+      identificador: email.toLowerCase(),
+      limite: 5,
+      ventanaSegundos: 86400,
+    }),
+  ]);
+
+  if (!cupoIp || !cupoEmail) {
+    return {
+      error: "Has enviado varios mensajes seguidos. Espera un rato antes de volver a escribirnos.",
+    };
+  }
 
   const destinatario = process.env.CONTACT_EMAIL;
   if (!destinatario) {

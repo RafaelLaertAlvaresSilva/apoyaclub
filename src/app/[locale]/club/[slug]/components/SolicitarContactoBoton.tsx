@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { usePathname } from "@/i18n/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
+import { CampoTrampa } from "@/components/CampoTrampa";
 import { crearSolicitudContacto, type EstadoSolicitud } from "../contact-actions";
 import { useSesionActual } from "../hooks/useSesionActual";
 
@@ -101,6 +102,7 @@ export function SolicitarContactoBoton({
               </p>
             ) : (
               <form action={formAction} className="space-y-4">
+                  <CampoTrampa />
                 <input type="hidden" name="clubId" value={clubId} />
                 {opportunityId && <input type="hidden" name="opportunityId" value={opportunityId} />}
 

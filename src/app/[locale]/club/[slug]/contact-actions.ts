@@ -2,6 +2,7 @@
 
 import type { CompanyRow } from "@/lib/company-mappers";
 import { enviarEmailNuevaSolicitudContacto } from "@/lib/email/resend";
+import { consumirLimite, pareceBot } from "@/lib/rate-limit";
 import { getLocale } from "next-intl/server";
 import { SITE_URL } from "@/lib/site";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -35,6 +36,23 @@ export async function crearSolicitudContacto(
   const rol = user.app_metadata?.role as Role | undefined;
   if (rol !== "empresa") {
     return { error: "Solo las empresas pueden solicitar contacto." };
+  }
+
+  if (pareceBot(formData)) return { ok: true };
+
+  // Una empresa real no manda diez solicitudes en una hora (Fase 15).
+  // El límite es por empresa, no por IP: aquí siempre hay sesión.
+  const cupo = await consumirLimite({
+    bucket: "solicitud-contacto",
+    identificador: user.id,
+    limite: 10,
+    ventanaSegundos: 3600,
+  });
+
+  if (!cupo) {
+    return {
+      error: "Has enviado muchas solicitudes seguidas. Espera un rato y vuelve a intentarlo.",
+    };
   }
 
   const clubId = String(formData.get("clubId") ?? "");

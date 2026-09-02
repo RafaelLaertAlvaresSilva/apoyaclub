@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
+import { CampoTrampa } from "@/components/CampoTrampa";
 import { enviarConsultaContacto, type EstadoContacto } from "../contact-actions";
 
 /** Formulario de contacto de la landing (Fase 13). Ver `contact-actions.ts`. */
@@ -15,6 +16,7 @@ export function FormularioContacto() {
 
   return (
     <form action={formAction} className="space-y-4">
+      <CampoTrampa />
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className="mb-1 block text-sm font-medium text-zinc-700">

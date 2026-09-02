@@ -11,16 +11,87 @@
  * Usa el geocodificador gratuito de OpenStreetMap (Nominatim): no hace
  * falta ninguna clave de API ni coste. Su política de uso pide como
  * mucho 1 petición por segundo y un User-Agent identificable
- * (https://operations.osmfoundation.org/policies/nominatim/). Aquí solo
- * se llama de una en una, disparada por una acción humana (guardar el
- * formulario, lanzar una búsqueda), nunca en bucle, así que no hace
- * falta ninguna cola ni límite adicional.
+ * (https://operations.osmfoundation.org/policies/nominatim/).
+ *
+ * Para no acercarse a ese límite (una búsqueda pública con radio la
+ * dispara cualquier visitante, sin sesión), Fase 15 añade dos cosas:
+ *
+ * 1. Caché en base de datos (`geocode_cache`, migración 0010): la misma
+ *    ciudad solo se pregunta una vez. Se guardan también los fallos,
+ *    para no reintentar en bucle una dirección que no existe.
+ * 2. Un tope global de llamadas reales a Nominatim por minuto
+ *    (`consume_rate_limit`). Si se supera, la petición se resuelve sin
+ *    coordenadas: la búsqueda sigue funcionando, solo se queda sin
+ *    filtro de radio, que es mucho mejor que quedarse sin geocodificador
+ *    porque nos hayan bloqueado la IP.
  */
+
+import { consumirLimite } from "@/lib/rate-limit";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export type Coordenadas = {
   latitude: number;
   longitude: number;
 };
+
+/** Días que se da por buena una entrada de la caché antes de volver a preguntar. */
+const DIAS_VALIDEZ_CACHE = 180;
+
+/** Llamadas reales a Nominatim permitidas por minuto en toda la aplicación. */
+const LLAMADAS_POR_MINUTO = 30;
+
+function normalizar(texto: string): string {
+  return texto.toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+async function leerDeCache(
+  clave: string,
+): Promise<{ encontrado: boolean; coordenadas: Coordenadas | null } | null> {
+  try {
+    const admin = createAdminClient();
+    const { data, error } = await admin
+      .from("geocode_cache")
+      .select("latitude, longitude, found, created_at")
+      .eq("query", clave)
+      .maybeSingle();
+
+    if (error || !data) return null;
+
+    const caducada =
+      Date.now() - new Date(data.created_at as string).getTime() >
+      DIAS_VALIDEZ_CACHE * 24 * 60 * 60 * 1000;
+    if (caducada) return null;
+
+    if (!data.found || data.latitude == null || data.longitude == null) {
+      return { encontrado: false, coordenadas: null };
+    }
+
+    return {
+      encontrado: true,
+      coordenadas: { latitude: data.latitude as number, longitude: data.longitude as number },
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function guardarEnCache(clave: string, coordenadas: Coordenadas | null): Promise<void> {
+  try {
+    const admin = createAdminClient();
+    await admin.from("geocode_cache").upsert(
+      {
+        query: clave,
+        latitude: coordenadas?.latitude ?? null,
+        longitude: coordenadas?.longitude ?? null,
+        found: coordenadas !== null,
+        created_at: new Date().toISOString(),
+      },
+      { onConflict: "query" },
+    );
+  } catch {
+    // La caché es una optimización: si no se puede escribir, se sigue.
+  }
+}
 
 export async function geocodificarDireccion(partes: {
   city?: string | null;
@@ -33,6 +104,23 @@ export async function geocodificarDireccion(partes: {
     .join(", ");
 
   if (!texto) return null;
+
+  const clave = normalizar(texto);
+
+  const enCache = await leerDeCache(clave);
+  if (enCache) return enCache.coordenadas;
+
+  const hayCupo = await consumirLimite({
+    bucket: "geocode:nominatim",
+    identificador: "global",
+    limite: LLAMADAS_POR_MINUTO,
+    ventanaSegundos: 60,
+  });
+
+  if (!hayCupo) {
+    console.warn("[geocoding] Tope de llamadas a Nominatim alcanzado; se resuelve sin coordenadas.");
+    return null;
+  }
 
   try {
     const url = new URL("https://nominatim.openstreetmap.org/search");
@@ -56,13 +144,20 @@ export async function geocodificarDireccion(partes: {
 
     const resultados = (await respuesta.json()) as { lat: string; lon: string }[];
     const primero = resultados[0];
-    if (!primero) return null;
+    if (!primero) {
+      // Dirección que Nominatim no reconoce: se cachea el fallo para no
+      // volver a preguntar por ella en cada búsqueda.
+      await guardarEnCache(clave, null);
+      return null;
+    }
 
     const latitude = Number.parseFloat(primero.lat);
     const longitude = Number.parseFloat(primero.lon);
     if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
 
-    return { latitude, longitude };
+    const coordenadas = { latitude, longitude };
+    await guardarEnCache(clave, coordenadas);
+    return coordenadas;
   } catch {
     // Si Nominatim falla, está caído o no responde a tiempo, no
     // bloqueamos ni la búsqueda ni el guardado del club: simplemente se
