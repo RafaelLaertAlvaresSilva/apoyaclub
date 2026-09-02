@@ -129,6 +129,10 @@ create unique index if not exists clubs_slug_key on public.clubs (slug);
 -- la tabla sigue siendo legible solo por su dueño, y esta vista es el
 -- único punto de lectura pública, con el filtro de `contact_public_consent`
 -- aplicado siempre.
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.club_public_profiles cascade;
+
 create or replace view public.club_public_profiles as
 select
   id,

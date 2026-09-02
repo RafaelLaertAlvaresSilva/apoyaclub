@@ -35,6 +35,10 @@ comment on column public.opportunities.slots_taken is
 
 -- La vista del buscador expone las dos columnas (al final, que es lo
 -- único que permite `create or replace view`).
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.opportunity_search_view cascade;
+
 create or replace view public.opportunity_search_view as
 select
   o.id as opportunity_id,

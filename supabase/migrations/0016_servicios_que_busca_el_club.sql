@@ -70,6 +70,10 @@ create policy "club_service_needs_delete_own"
 -- necesidades que siguen abiertas. Es una proyección recortada, por eso
 -- es SECURITY DEFINER y las tablas base siguen cerradas a `anon`.
 -- ---------------------------------------------------------------------
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.club_service_needs_public cascade;
+
 create or replace view public.club_service_needs_public as
 select
   n.id,

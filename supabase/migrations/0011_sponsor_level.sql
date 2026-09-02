@@ -47,6 +47,10 @@ create index if not exists opportunities_team_id_idx on public.opportunities (te
 -- El equipo se une por LEFT JOIN para que una oportunidad sin equipo
 -- asociado siga apareciendo.
 -- ---------------------------------------------------------------------
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.opportunity_search_view cascade;
+
 create or replace view public.opportunity_search_view as
 select
   o.id as opportunity_id,

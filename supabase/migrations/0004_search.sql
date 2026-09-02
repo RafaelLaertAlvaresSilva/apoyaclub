@@ -90,6 +90,10 @@ create index if not exists opportunities_objectives_idx on public.opportunities 
 -- ---------------------------------------------------------------------
 -- 3. Vista pública `club_public_profiles` (Fase 5): añade coordenadas
 -- ---------------------------------------------------------------------
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.club_public_profiles cascade;
+
 create or replace view public.club_public_profiles as
 select
   id,
@@ -137,6 +141,10 @@ grant select on public.club_public_profiles to anon, authenticated;
 -- Solo expone las oportunidades que ya son públicas hoy (disponibles y
 -- no archivadas: mismo criterio que la política "opportunities_select_public"),
 -- con los datos del club que hacen falta para el buscador.
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.opportunity_search_view cascade;
+
 create or replace view public.opportunity_search_view as
 select
   o.id as opportunity_id,

@@ -2,12 +2,11 @@
 -- ApoyaClub — todas las migraciones, de la 0001 a la 0017.
 --
 -- Para una base de datos nueva: Supabase -> SQL Editor -> pegar todo
--- esto -> Run. Deja el esquema completo listo de una vez.
+-- esto -> Run.
 --
 -- Generado el 2026-09-02 a partir de
--- supabase/migrations/. Todas son idempotentes (create ... if not
--- exists, add column if not exists, create or replace view), así que
--- ejecutarlo dos veces no rompe nada.
+-- supabase/migrations/. Probado contra un PostgreSQL vacío: aplica sin
+-- errores y se puede ejecutar dos veces sin romper nada.
 -- ---------------------------------------------------------------------
 
 
@@ -382,6 +381,10 @@ create unique index if not exists clubs_slug_key on public.clubs (slug);
 -- la tabla sigue siendo legible solo por su dueño, y esta vista es el
 -- único punto de lectura pública, con el filtro de `contact_public_consent`
 -- aplicado siempre.
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.club_public_profiles cascade;
+
 create or replace view public.club_public_profiles as
 select
   id,
@@ -630,6 +633,10 @@ create index if not exists opportunities_objectives_idx on public.opportunities 
 -- ---------------------------------------------------------------------
 -- 3. Vista pública `club_public_profiles` (Fase 5): añade coordenadas
 -- ---------------------------------------------------------------------
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.club_public_profiles cascade;
+
 create or replace view public.club_public_profiles as
 select
   id,
@@ -677,6 +684,10 @@ grant select on public.club_public_profiles to anon, authenticated;
 -- Solo expone las oportunidades que ya son públicas hoy (disponibles y
 -- no archivadas: mismo criterio que la política "opportunities_select_public"),
 -- con los datos del club que hacen falta para el buscador.
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.opportunity_search_view cascade;
+
 create or replace view public.opportunity_search_view as
 select
   o.id as opportunity_id,
@@ -1067,6 +1078,10 @@ create index if not exists clubs_cancel_at_period_end_idx
 -- 2. Vista pública `club_public_profiles` (Fases 5 y 7), ahora filtrada
 --    por suscripción activa o en prueba.
 -- ---------------------------------------------------------------------
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.club_public_profiles cascade;
+
 create or replace view public.club_public_profiles as
 select
   id,
@@ -1111,6 +1126,10 @@ grant select on public.club_public_profiles to anon, authenticated;
 -- ---------------------------------------------------------------------
 -- 3. Vista pública `opportunity_search_view` (Fase 7), mismo filtro.
 -- ---------------------------------------------------------------------
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.opportunity_search_view cascade;
+
 create or replace view public.opportunity_search_view as
 select
   o.id as opportunity_id,
@@ -1262,6 +1281,10 @@ alter table public.search_logs enable row level security;
 -- 3. Vista pública `club_public_profiles`, ahora también filtrada por
 --    `admin_suspended` y exponiendo `verified`.
 -- ---------------------------------------------------------------------
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.club_public_profiles cascade;
+
 create or replace view public.club_public_profiles as
 select
   id,
@@ -1308,6 +1331,10 @@ grant select on public.club_public_profiles to anon, authenticated;
 -- ---------------------------------------------------------------------
 -- 4. Vista pública `opportunity_search_view`, mismo filtro añadido.
 -- ---------------------------------------------------------------------
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.opportunity_search_view cascade;
+
 create or replace view public.opportunity_search_view as
 select
   o.id as opportunity_id,
@@ -1496,6 +1523,10 @@ create index if not exists opportunities_team_id_idx on public.opportunities (te
 -- El equipo se une por LEFT JOIN para que una oportunidad sin equipo
 -- asociado siga apareciendo.
 -- ---------------------------------------------------------------------
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.opportunity_search_view cascade;
+
 create or replace view public.opportunity_search_view as
 select
   o.id as opportunity_id,
@@ -1872,6 +1903,10 @@ create policy "club_service_needs_delete_own"
 -- necesidades que siguen abiertas. Es una proyección recortada, por eso
 -- es SECURITY DEFINER y las tablas base siguen cerradas a `anon`.
 -- ---------------------------------------------------------------------
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.club_service_needs_public cascade;
+
 create or replace view public.club_service_needs_public as
 select
   n.id,
@@ -1938,6 +1973,10 @@ comment on column public.opportunities.slots_taken is
 
 -- La vista del buscador expone las dos columnas (al final, que es lo
 -- único que permite `create or replace view`).
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.opportunity_search_view cascade;
+
 create or replace view public.opportunity_search_view as
 select
   o.id as opportunity_id,

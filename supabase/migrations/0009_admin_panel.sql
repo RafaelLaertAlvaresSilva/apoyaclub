@@ -59,6 +59,10 @@ alter table public.search_logs enable row level security;
 -- 3. Vista pública `club_public_profiles`, ahora también filtrada por
 --    `admin_suspended` y exponiendo `verified`.
 -- ---------------------------------------------------------------------
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.club_public_profiles cascade;
+
 create or replace view public.club_public_profiles as
 select
   id,
@@ -105,6 +109,10 @@ grant select on public.club_public_profiles to anon, authenticated;
 -- ---------------------------------------------------------------------
 -- 4. Vista pública `opportunity_search_view`, mismo filtro añadido.
 -- ---------------------------------------------------------------------
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.opportunity_search_view cascade;
+
 create or replace view public.opportunity_search_view as
 select
   o.id as opportunity_id,

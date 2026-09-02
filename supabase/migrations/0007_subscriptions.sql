@@ -57,6 +57,10 @@ create index if not exists clubs_cancel_at_period_end_idx
 -- 2. Vista pública `club_public_profiles` (Fases 5 y 7), ahora filtrada
 --    por suscripción activa o en prueba.
 -- ---------------------------------------------------------------------
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.club_public_profiles cascade;
+
 create or replace view public.club_public_profiles as
 select
   id,
@@ -101,6 +105,10 @@ grant select on public.club_public_profiles to anon, authenticated;
 -- ---------------------------------------------------------------------
 -- 3. Vista pública `opportunity_search_view` (Fase 7), mismo filtro.
 -- ---------------------------------------------------------------------
+-- Se borra antes de recrearla: `create or replace view` no permite
+-- cambiar el orden de las columnas, y aquí se añaden en medio.
+drop view if exists public.opportunity_search_view cascade;
+
 create or replace view public.opportunity_search_view as
 select
   o.id as opportunity_id,
