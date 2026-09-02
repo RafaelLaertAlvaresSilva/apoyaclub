@@ -135,6 +135,21 @@ async function leerEquipo(
   return data ? valor : null;
 }
 
+/**
+ * Plazas de una oportunidad repartida entre varias empresas
+ * (migración 0017). Menos de dos plazas no es un reparto: se guarda como
+ * null, que es el caso normal de un único patrocinador.
+ */
+function leerPlazas(formData: FormData): { total: number | null; cubiertas: number } {
+  const total = Number.parseInt(String(formData.get("slotsTotal") ?? ""), 10);
+  if (!Number.isFinite(total) || total < 2) return { total: null, cubiertas: 0 };
+
+  const cubiertas = Number.parseInt(String(formData.get("slotsTaken") ?? "0"), 10);
+  const validas = Number.isFinite(cubiertas) ? Math.min(Math.max(cubiertas, 0), total) : 0;
+
+  return { total, cubiertas: validas };
+}
+
 function leerObjetivos(formData: FormData): ObjectiveTag[] {
   return formData
     .getAll("objectives")
@@ -162,6 +177,8 @@ export async function crearOportunidad(
   const value = leerValor(formData);
   if (value === null) return { error: "Indica un valor válido (0 o más)." };
 
+  const plazas = leerPlazas(formData);
+
   const { error } = await supabase.from("opportunities").insert({
     club_id: user.id,
     title,
@@ -175,6 +192,8 @@ export async function crearOportunidad(
     sponsor_level: leerNivelPatrocinio(formData),
     exclusivity: leerTexto(formData, "exclusivity"),
     team_id: await leerEquipo(supabase, user.id, formData),
+    slots_total: plazas.total,
+    slots_taken: plazas.cubiertas,
   });
 
   if (error) return { error: "No se ha podido crear la oportunidad." };
@@ -207,6 +226,7 @@ export async function actualizarOportunidad(
   if (value === null) return { error: "Indica un valor válido (0 o más)." };
 
   const status = leerEstado(formData) ?? "available";
+  const plazas = leerPlazas(formData);
 
   const { error } = await supabase
     .from("opportunities")
@@ -222,6 +242,8 @@ export async function actualizarOportunidad(
       sponsor_level: leerNivelPatrocinio(formData),
       exclusivity: leerTexto(formData, "exclusivity"),
       team_id: await leerEquipo(supabase, user.id, formData),
+      slots_total: plazas.total,
+      slots_taken: plazas.cubiertas,
       status,
     })
     .eq("id", id)
@@ -268,7 +290,7 @@ export async function duplicarOportunidad(formData: FormData): Promise<void> {
   const { data: original } = await supabase
     .from("opportunities")
     .select(
-      "title, description, opportunity_type, value, duration, period, collaboration_type, objectives, sponsor_level, exclusivity, team_id",
+      "title, description, opportunity_type, value, duration, period, collaboration_type, objectives, sponsor_level, exclusivity, team_id, slots_total",
     )
     .eq("id", id)
     .eq("club_id", user.id)
@@ -289,6 +311,10 @@ export async function duplicarOportunidad(formData: FormData): Promise<void> {
     sponsor_level: original.sponsor_level,
     exclusivity: original.exclusivity,
     team_id: original.team_id,
+    // La copia empieza con las plazas a cero: las cubiertas son del
+    // original, no de la copia.
+    slots_total: original.slots_total,
+    slots_taken: 0,
   });
 
   revalidatePath(RUTA_OPORTUNIDADES);

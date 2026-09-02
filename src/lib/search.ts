@@ -76,6 +76,8 @@ type FilaBusqueda = {
   team_sport: string | null;
   team_category: string | null;
   team_gender: string | null;
+  slots_total: number | null;
+  slots_taken: number | null;
 };
 
 function filaAResultado(fila: FilaBusqueda, centro: Coordenadas | null): ResultadoOportunidad {
@@ -96,6 +98,8 @@ function filaAResultado(fila: FilaBusqueda, centro: Coordenadas | null): Resulta
     collaborationType: fila.collaboration_type,
     objectives: fila.objectives ?? [],
     sponsorLevel: fila.sponsor_level ?? "libre",
+    slotsTotal: fila.slots_total,
+    slotsTaken: fila.slots_taken ?? 0,
     exclusivity: fila.exclusivity,
     teamLabel: etiquetaEquipo({
       sport: fila.team_sport,

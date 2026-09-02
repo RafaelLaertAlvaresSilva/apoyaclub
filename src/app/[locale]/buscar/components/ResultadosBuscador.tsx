@@ -13,7 +13,9 @@ import {
   CLASES_NIVEL_PATROCINIO,
   ETIQUETA_NIVEL_PATROCINIO,
   ETIQUETA_TIPO_OPORTUNIDAD,
+  esPorPlazas,
   formatoValorOportunidad,
+  plazasLibres,
 } from "@/lib/opportunities";
 import { agruparPorClub, type FiltrosBusqueda, type PaginaBusqueda, type ResultadoClub, type ResultadoOportunidad, type VistaBusqueda } from "@/lib/search-types";
 
@@ -245,8 +247,22 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
         ))}
       </div>
 
+      {esPorPlazas(oportunidad) && (
+        <p className="text-xs font-medium text-brand-teal-dark">
+          {tTarjeta("plazas", {
+            libres: plazasLibres(oportunidad),
+            total: oportunidad.slotsTotal ?? 0,
+          })}
+        </p>
+      )}
+
       <div className="mt-auto flex items-center justify-between pt-1">
-        <p className="text-lg font-bold text-teal-700">{formatoValorOportunidad.format(oportunidad.value)}</p>
+        <p className="text-lg font-bold text-teal-700">
+          {formatoValorOportunidad.format(oportunidad.value)}
+          {esPorPlazas(oportunidad) && (
+            <span className="ml-1 text-xs font-medium text-zinc-500">{tTarjeta("porEmpresa")}</span>
+          )}
+        </p>
         <Link
           href={`/club/${oportunidad.clubSlug}`}
           className="rounded-lg bg-teal-700 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-teal-800"

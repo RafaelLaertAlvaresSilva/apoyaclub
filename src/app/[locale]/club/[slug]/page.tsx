@@ -8,7 +8,9 @@ import type { AppLocale } from "@/i18n/routing";
 import {
   CLASES_NIVEL_PATROCINIO,
   ETIQUETA_NIVEL_PATROCINIO,
+  esPorPlazas,
   formatoValorOportunidad,
+  plazasLibres,
 } from "@/lib/opportunities";
 import { SITE_URL } from "@/lib/site";
 import type { ClubTeam, SocialLinks } from "@/lib/types";
@@ -273,6 +275,11 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     </div>
                     <p className="whitespace-nowrap text-lg font-bold text-teal-700">
                       {formatoValorOportunidad.format(oportunidad.value)}
+                      {esPorPlazas(oportunidad) && (
+                        <span className="ml-1 text-xs font-medium text-zinc-500">
+                          {t("oportunidades.porEmpresa")}
+                        </span>
+                      )}
                     </p>
                   </div>
                   {oportunidad.description && (
@@ -281,6 +288,14 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                   {oportunidad.exclusivity && (
                     <p className="text-xs font-medium text-brand-teal-dark">
                       {t("oportunidades.exclusiva", { sector: oportunidad.exclusivity })}
+                    </p>
+                  )}
+                  {esPorPlazas(oportunidad) && (
+                    <p className="text-xs font-medium text-brand-teal-dark">
+                      {t("oportunidades.plazas", {
+                        libres: plazasLibres(oportunidad),
+                        total: oportunidad.slotsTotal ?? 0,
+                      })}
                     </p>
                   )}
                   {oportunidad.duration && (

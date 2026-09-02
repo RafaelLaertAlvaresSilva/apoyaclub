@@ -29,6 +29,8 @@ export type OpportunityRow = {
   sponsor_level: SponsorLevel | null;
   exclusivity: string | null;
   team_id: string | null;
+  slots_total: number | null;
+  slots_taken: number | null;
   archived_at: string | null;
   created_at: string;
   updated_at: string;
@@ -53,6 +55,8 @@ export function opportunityRowToOpportunity(row: OpportunityRow): Opportunity {
     sponsorLevel: row.sponsor_level ?? "libre",
     exclusivity: row.exclusivity,
     teamId: row.team_id,
+    slotsTotal: row.slots_total,
+    slotsTaken: row.slots_taken ?? 0,
     archivedAt: row.archived_at,
     createdAt: row.created_at,
     updatedAt: row.updated_at,

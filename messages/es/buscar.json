@@ -35,21 +35,23 @@
     "verResultados": "Ver resultados"
   },
   "resultados": {
-    "porOportunidad": "Por oportunidad",
-    "porClub": "Por club",
-    "ordenarPor": "Ordenar por",
-    "cuenta": "{total, plural, one {# resultado} other {# resultados}}",
-    "cuentaAproximada": "{cantidad}+ resultados",
+    "ampliarRadio": "Ampliar radio a {km} km",
     "cargando": "Cargando…",
     "cargarMas": "Cargar más",
-    "verClub": "Ver club",
+    "cuenta": "{total, plural, one {# resultado} other {# resultados}}",
+    "cuentaAproximada": "{cantidad}+ resultados",
     "distancia": " · a {distancia}",
     "exclusiva": "Exclusiva de sector: {sector}",
     "oportunidadesDelClub": "{total, plural, one {# oportunidad} other {# oportunidades}} · {rango}",
-    "vacioTitulo": "No hay oportunidades que coincidan con esta búsqueda.",
+    "ordenarPor": "Ordenar por",
+    "plazas": "{libres, plural, =0 {Todas las plazas cubiertas} one {Queda # plaza de {total}} other {Quedan # plazas de {total}}}",
+    "porClub": "Por club",
+    "porEmpresa": "por empresa",
+    "porOportunidad": "Por oportunidad",
+    "quitarFiltros": "Quitar todos los filtros",
     "vacioConRadio": "Prueba a ampliar el radio de búsqueda o a quitar algún filtro.",
     "vacioSinRadio": "Prueba a quitar algún filtro para ver más resultados.",
-    "ampliarRadio": "Ampliar radio a {km} km",
-    "quitarFiltros": "Quitar todos los filtros"
+    "vacioTitulo": "No hay oportunidades que coincidan con esta búsqueda.",
+    "verClub": "Ver club"
   }
 }

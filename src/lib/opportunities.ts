@@ -224,3 +224,25 @@ export const PLANTILLAS_OPORTUNIDAD: Record<OpportunityType, PlantillaOportunida
     },
   ],
 };
+
+/**
+ * ¿Esta oportunidad se reparte entre varias empresas? (migración 0017).
+ * Una plaza sola no es un reparto: es una oportunidad normal.
+ */
+export function esPorPlazas(oportunidad: { slotsTotal: number | null }): boolean {
+  return (oportunidad.slotsTotal ?? 0) >= 2;
+}
+
+/** Plazas que quedan libres, nunca negativas. */
+export function plazasLibres(oportunidad: { slotsTotal: number | null; slotsTaken: number }): number {
+  if (!esPorPlazas(oportunidad)) return 0;
+  return Math.max((oportunidad.slotsTotal ?? 0) - oportunidad.slotsTaken, 0);
+}
+
+/** Aportación total que busca el club: lo que pone cada empresa por el número de plazas. */
+export function valorTotalDeLasPlazas(oportunidad: {
+  slotsTotal: number | null;
+  value: number;
+}): number {
+  return (oportunidad.slotsTotal ?? 1) * oportunidad.value;
+}

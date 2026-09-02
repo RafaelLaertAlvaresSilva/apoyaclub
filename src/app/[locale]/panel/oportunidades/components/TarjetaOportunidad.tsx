@@ -205,6 +205,8 @@ function EditorOportunidad({
           sponsorLevel: oportunidad.sponsorLevel,
           exclusivity: oportunidad.exclusivity,
           teamId: oportunidad.teamId,
+          slotsTotal: oportunidad.slotsTotal,
+          slotsTaken: oportunidad.slotsTaken,
         }}
       />
     </li>

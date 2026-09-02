@@ -20,6 +20,8 @@ function oportunidad(cambios: Partial<ResultadoOportunidad> = {}): ResultadoOpor
     collaborationType: "money",
     objectives: [],
     sponsorLevel: "libre",
+    slotsTotal: null,
+    slotsTaken: 0,
     exclusivity: null,
     teamLabel: null,
     createdAt: "2026-01-01T00:00:00.000Z",

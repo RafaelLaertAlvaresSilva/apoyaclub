@@ -201,6 +201,14 @@ export type Opportunity = {
   exclusivity: string | null;
   /** Equipo del club al que va asociada. Null = al club entero. */
   teamId: string | null;
+  /**
+   * Número de patrocinadores que busca esta oportunidad. Null = uno
+   * solo, que es el caso normal. A partir de 2 se reparte en plazas y
+   * `value` es lo que aporta cada empresa (migración 0017).
+   */
+  slotsTotal: number | null;
+  /** Plazas ya cubiertas, que lleva el club a mano. */
+  slotsTaken: number;
   /** Fecha en la que se archivó (null = activa). Archivar no borra la oportunidad, solo la oculta. */
   archivedAt: string | null;
   createdAt: string;

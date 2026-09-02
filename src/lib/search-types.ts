@@ -55,6 +55,9 @@ export type ResultadoOportunidad = {
   collaborationType: CollaborationType | null;
   objectives: ObjectiveTag[];
   sponsorLevel: SponsorLevel;
+  /** Plazas de una oportunidad repartida entre varias empresas. Null = un único patrocinador. */
+  slotsTotal: number | null;
+  slotsTaken: number;
   /** Sector en exclusiva, si la oportunidad la lleva. */
   exclusivity: string | null;
   /** Equipo asociado ya formateado ("Balonmano · Cadete · Masculino"), o null. */

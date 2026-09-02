@@ -2,8 +2,11 @@ import { describe, expect, it } from "vitest";
 import {
   ETIQUETA_NIVEL_PATROCINIO,
   NIVELES_PATROCINIO,
+  esPorPlazas,
   etiquetaEquipo,
   formatoValorOportunidad,
+  plazasLibres,
+  valorTotalDeLasPlazas,
 } from "@/lib/opportunities";
 import { opportunityRowToOpportunity } from "@/lib/opportunity-mappers";
 
@@ -44,6 +47,8 @@ describe("oportunidades", () => {
       sponsor_level: null,
       exclusivity: null,
       team_id: null,
+      slots_total: null,
+      slots_taken: null,
       archived_at: null,
       created_at: "2026-01-01T00:00:00.000Z",
       updated_at: "2026-01-01T00:00:00.000Z",
@@ -52,5 +57,27 @@ describe("oportunidades", () => {
     expect(oportunidad.value).toBe(250);
     expect(oportunidad.sponsorLevel).toBe("libre");
     expect(oportunidad.objectives).toEqual([]);
+  });
+});
+
+describe("oportunidades repartidas entre varias empresas", () => {
+  it("una sola plaza no es un reparto", () => {
+    expect(esPorPlazas({ slotsTotal: null })).toBe(false);
+    expect(esPorPlazas({ slotsTotal: 1 })).toBe(false);
+    expect(esPorPlazas({ slotsTotal: 2 })).toBe(true);
+  });
+
+  it("cuenta las plazas que quedan sin bajar de cero", () => {
+    expect(plazasLibres({ slotsTotal: 10, slotsTaken: 3 })).toBe(7);
+    expect(plazasLibres({ slotsTotal: 10, slotsTaken: 10 })).toBe(0);
+    // Si el club se pasa apuntando plazas, no se enseña un número negativo.
+    expect(plazasLibres({ slotsTotal: 5, slotsTaken: 8 })).toBe(0);
+    expect(plazasLibres({ slotsTotal: null, slotsTaken: 0 })).toBe(0);
+  });
+
+  it("el total que busca el club es lo que pone cada empresa por las plazas", () => {
+    expect(valorTotalDeLasPlazas({ slotsTotal: 10, value: 100 })).toBe(1000);
+    // Sin plazas, el total es el valor de la propia oportunidad.
+    expect(valorTotalDeLasPlazas({ slotsTotal: null, value: 450 })).toBe(450);
   });
 });

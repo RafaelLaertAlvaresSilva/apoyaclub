@@ -15,7 +15,9 @@
     "titulo": "Oportunidades disponibles",
     "vacio": "Este club todavía no ha publicado oportunidades de patrocinio. Vuelve pronto o contacta directamente con el club para proponer una colaboración.",
     "exclusiva": "En exclusiva para el sector: {sector}",
-    "solicitar": "Solicitar"
+    "solicitar": "Solicitar",
+    "plazas": "{libres, plural, =0 {Todas las plazas cubiertas} one {Queda # plaza de {total}} other {Quedan # plazas de {total}}}",
+    "porEmpresa": "por empresa"
   },
   "secciones": {
     "quienesSomos": "Quiénes somos",

@@ -40,6 +40,9 @@ export type ValoresOportunidad = {
   sponsorLevel?: SponsorLevel;
   exclusivity?: string | null;
   teamId?: string | null;
+  // Fase 17: oportunidad repartida entre varias empresas.
+  slotsTotal?: number | null;
+  slotsTaken?: number;
 };
 
 /**
@@ -215,6 +218,30 @@ export function OportunidadForm({
           </select>
         </Campo>
       )}
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Campo etiqueta={t("plazas")} ayuda={t("plazasAyuda")}>
+          <input
+            name="slotsTotal"
+            type="number"
+            min={0}
+            step={1}
+            defaultValue={valoresIniciales?.slotsTotal ?? ""}
+            className={clasesInput}
+          />
+        </Campo>
+
+        <Campo etiqueta={t("plazasCubiertas")} ayuda={t("plazasCubiertasAyuda")}>
+          <input
+            name="slotsTaken"
+            type="number"
+            min={0}
+            step={1}
+            defaultValue={valoresIniciales?.slotsTaken ?? 0}
+            className={clasesInput}
+          />
+        </Campo>
+      </div>
 
       <Campo
         grupo
