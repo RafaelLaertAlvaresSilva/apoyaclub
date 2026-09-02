@@ -1,5 +1,6 @@
 "use client";
 
+import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
 import { Link } from "@/i18n/navigation";
 
@@ -24,8 +25,9 @@ export default function ErrorEnLaPagina({
   reset: () => void;
 }) {
   useEffect(() => {
-    // En producción esto llega a Sentry (ver `instrumentation-client.ts`
-    // y `sentry.server.config.ts`); en local, a la consola.
+    // Con SENTRY_DSN configurado llega a Sentry; sin él, solo a la
+    // consola (ver `src/lib/sentry-opciones.ts`).
+    Sentry.captureException(error);
     console.error("[error]", error);
   }, [error]);
 

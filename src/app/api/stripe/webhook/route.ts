@@ -1,3 +1,4 @@
+import { avisarDeFallo } from "@/lib/monitoring";
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { obtenerStripe } from "@/lib/stripe/client";
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
   const secretoWebhook = process.env.STRIPE_WEBHOOK_SECRET;
 
   if (!firma || !secretoWebhook) {
-    console.error("[stripe webhook] Falta la firma o STRIPE_WEBHOOK_SECRET no está configurado.");
+    avisarDeFallo("stripe-webhook", "Falta la firma o STRIPE_WEBHOOK_SECRET no está configurado.");
     return NextResponse.json({ error: "Webhook no configurado." }, { status: 400 });
   }
 
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
   try {
     evento = stripe.webhooks.constructEvent(payload, firma, secretoWebhook);
   } catch (excepcion) {
-    console.error("[stripe webhook] Firma inválida:", excepcion);
+    avisarDeFallo("stripe-webhook", "Firma inválida", excepcion);
     return NextResponse.json({ error: "Firma inválida." }, { status: 400 });
   }
 
@@ -52,7 +53,7 @@ export async function POST(request: Request) {
         const customerId = typeof session.customer === "string" ? session.customer : session.customer?.id;
 
         if (!clubId || !subscriptionId || !customerId) {
-          console.error("[stripe webhook] checkout.session.completed sin club_id/subscription/customer.");
+          avisarDeFallo("stripe-webhook", "checkout.session.completed sin club_id/subscription/customer.");
           break;
         }
 
@@ -84,7 +85,7 @@ export async function POST(request: Request) {
           .eq("stripe_customer_id", customerId);
 
         if (error) {
-          console.error("[stripe webhook] No se ha podido marcar la suscripción como cancelada:", error);
+          avisarDeFallo("stripe-webhook", "No se ha podido marcar la suscripción como cancelada", error);
         }
         break;
       }
@@ -94,7 +95,7 @@ export async function POST(request: Request) {
         break;
     }
   } catch (excepcion) {
-    console.error("[stripe webhook] Error procesando el evento", evento.type, excepcion);
+    avisarDeFallo("stripe-webhook", `Error procesando el evento ${evento.type}`, excepcion);
     // Devolvemos 500 para que Stripe reintente el envío más tarde.
     return NextResponse.json({ error: "Error procesando el evento." }, { status: 500 });
   }
@@ -153,7 +154,7 @@ async function guardarSuscripcionPorClubId(
     .eq("id", clubId);
 
   if (error) {
-    console.error("[stripe webhook] No se ha podido guardar la suscripción (por club_id):", error);
+    avisarDeFallo("stripe-webhook", "No se ha podido guardar la suscripción (por club_id)", error);
   }
 }
 
@@ -168,6 +169,6 @@ async function guardarSuscripcionPorCustomerId(
     .eq("stripe_customer_id", customerId);
 
   if (error) {
-    console.error("[stripe webhook] No se ha podido guardar la suscripción (por customer_id):", error);
+    avisarDeFallo("stripe-webhook", "No se ha podido guardar la suscripción (por customer_id)", error);
   }
 }

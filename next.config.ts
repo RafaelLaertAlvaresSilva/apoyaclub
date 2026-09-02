@@ -1,3 +1,4 @@
+import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
@@ -27,4 +28,15 @@ const nextConfig: NextConfig = {
 // por petición y el plugin de compilación de next-intl).
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
-export default withNextIntl(nextConfig);
+// Monitorización de errores (Fase 15). El plugin solo sube los mapas de
+// código a Sentry cuando existe SENTRY_AUTH_TOKEN (en Vercel); en local
+// no hace nada, así que el build sigue funcionando sin cuenta de Sentry.
+export default withSentryConfig(withNextIntl(nextConfig), {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  silent: !process.env.CI,
+  telemetry: false,
+  widenClientFileUpload: true,
+  disableLogger: true,
+});

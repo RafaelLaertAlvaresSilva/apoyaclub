@@ -1,3 +1,4 @@
+import { avisarDeFallo } from "@/lib/monitoring";
 import { NextResponse } from "next/server";
 import { enviarEmailAvisoCaducidadSuscripcion } from "@/lib/email/resend";
 import { routing } from "@/i18n/routing";
@@ -45,7 +46,7 @@ export async function GET(request: Request) {
     .returns<FilaRecordatorio[]>();
 
   if (error) {
-    console.error("[cron avisos suscripción] No se han podido leer los clubes:", error);
+    avisarDeFallo("cron-suscripciones", "No se han podido leer los clubes", error);
     return NextResponse.json({ error: "No se han podido leer los clubes." }, { status: 500 });
   }
 

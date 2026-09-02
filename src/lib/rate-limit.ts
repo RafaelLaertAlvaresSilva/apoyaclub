@@ -71,16 +71,9 @@ export async function ipDelVisitante(): Promise<string> {
 }
 
 /**
- * Campo trampa: un input oculto que una persona nunca rellena y casi
- * cualquier bot sí. El nombre (`website_url`) es lo bastante corriente
- * como para que los rellenadores automáticos piquen.
- *
- * Cuando viene relleno se responde como si todo hubiera ido bien, sin
- * enviar nada: si se devolviera un error, el bot sabría que lo hemos
- * detectado y probaría otra cosa.
+ * El campo trampa y su comprobación viven en `lib/honeypot.ts`, sin
+ * dependencias de servidor, para que el componente que lo pinta pueda
+ * importarlo desde el navegador. Se reexportan aquí porque las Server
+ * Actions los usan siempre junto al limitador.
  */
-export const CAMPO_TRAMPA = "website_url";
-
-export function pareceBot(formData: FormData): boolean {
-  return String(formData.get(CAMPO_TRAMPA) ?? "").trim().length > 0;
-}
+export { CAMPO_TRAMPA, pareceBot } from "@/lib/honeypot";
