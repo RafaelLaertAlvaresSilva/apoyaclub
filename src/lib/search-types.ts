@@ -117,7 +117,17 @@ export function agruparPorClub(oportunidades: ResultadoOportunidad[]): Resultado
     if (!club.opportunityTypes.includes(oportunidad.opportunityType)) {
       club.opportunityTypes.push(oportunidad.opportunityType);
     }
-    if (club.topOpportunities.length < 3) club.topOpportunities.push(oportunidad);
+    club.topOpportunities.push(oportunidad);
+  }
+
+  // La vista previa de la tarjeta enseña las de mayor valor, no las tres
+  // primeras que hayan llegado: el orden de llegada depende del criterio
+  // de búsqueda (novedad, cercanía) y dejaba fuera justo la oportunidad
+  // más llamativa del club. Lo detectó el test de `agruparPorClub`.
+  for (const club of mapa.values()) {
+    club.topOpportunities = [...club.topOpportunities]
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 3);
   }
 
   return Array.from(mapa.values());
