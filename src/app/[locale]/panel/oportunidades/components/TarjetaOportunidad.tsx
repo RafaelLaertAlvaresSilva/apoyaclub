@@ -13,6 +13,7 @@ import {
 import {
   actualizarOportunidad,
   archivarOportunidad,
+  compartirComoPlantilla,
   cambiarEstadoOportunidad,
   duplicarOportunidad,
   eliminarOportunidad,
@@ -115,6 +116,17 @@ export function TarjetaOportunidad({
           onClick={() => setEnEdicion(true)}
           className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
         >{t("editar")}</button>
+
+        <form action={compartirComoPlantilla}>
+          <input type="hidden" name="id" value={oportunidad.id} />
+          <button
+            type="submit"
+            title={t("compartirPlantillaAyuda")}
+            className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
+          >
+            {t("compartirPlantilla")}
+          </button>
+        </form>
 
         <form action={duplicarOportunidad}>
           <input type="hidden" name="id" value={oportunidad.id} />

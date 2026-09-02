@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { PLANTILLAS_OPORTUNIDAD, TIPOS_OPORTUNIDAD, type PlantillaOportunidad } from "@/lib/opportunities";
+import type { PlantillasPorTipo } from "@/lib/opportunity-templates";
 import type { OpportunityType } from "@/lib/types";
 
 /**
@@ -11,22 +12,25 @@ import type { OpportunityType } from "@/lib/types";
  */
 export function PlantillasRapidas({
   onElegir,
+  plantillas = PLANTILLAS_OPORTUNIDAD,
 }: {
   onElegir: (tipo: OpportunityType, plantilla: PlantillaOportunidad) => void;
+  /** Vienen de la base de datos (migración 0015); las del código son el respaldo. */
+  plantillas?: PlantillasPorTipo;
 }) {
   const t = useTranslations("panel.oportunidades");
   return (
     <div className="mb-6 rounded-lg border border-dashed border-zinc-300 p-4">
-      <p className="mb-3 text-sm font-medium text-zinc-700">{t("plantillasRapidas")}<span className="font-normal text-zinc-500">(opcional, para no partir de cero)</span>
+      <p className="mb-3 text-sm font-medium text-zinc-700">{t("plantillasRapidas")}<span className="font-normal text-zinc-500">{t("plantillasOpcional")}</span>
       </p>
       <div className="space-y-4">
-        {TIPOS_OPORTUNIDAD.map((tipo) => (
+        {TIPOS_OPORTUNIDAD.filter((tipo) => (plantillas[tipo.id] ?? []).length > 0).map((tipo) => (
           <div key={tipo.id}>
             <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500">
               {tipo.etiqueta}
             </p>
             <div className="flex flex-wrap gap-2">
-              {PLANTILLAS_OPORTUNIDAD[tipo.id].map((plantilla) => (
+              {(plantillas[tipo.id] ?? []).map((plantilla) => (
                 <button
                   key={plantilla.title}
                   type="button"

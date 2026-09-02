@@ -345,3 +345,42 @@ export async function eliminarOportunidad(formData: FormData): Promise<void> {
   await supabase.from("opportunities").delete().eq("id", id).eq("club_id", user.id);
   revalidatePath(RUTA_OPORTUNIDADES);
 }
+
+// ---------------------------------------------------------------------
+// Compartir como plantilla (migración 0015)
+// ---------------------------------------------------------------------
+/**
+ * Publica el título y la descripción de una oportunidad como plantilla
+ * para el resto de clubes. No comparte el valor ni la exclusividad: lo
+ * que sirve a otro club es la idea, no el precio que tú le has puesto.
+ *
+ * Si ya la había compartido, el índice único de la tabla lo ignora en
+ * vez de duplicarla.
+ */
+export async function compartirComoPlantilla(formData: FormData): Promise<void> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return;
+  const { supabase, user } = contexto;
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  const { data: oportunidad } = await supabase
+    .from("opportunities")
+    .select("title, description, opportunity_type")
+    .eq("id", id)
+    .eq("club_id", user.id)
+    .maybeSingle<{ title: string; description: string | null; opportunity_type: OpportunityType }>();
+
+  if (!oportunidad) return;
+
+  await supabase.from("opportunity_templates").insert({
+    opportunity_type: oportunidad.opportunity_type,
+    title: oportunidad.title,
+    description: oportunidad.description,
+    created_by: user.id,
+    is_public: true,
+  });
+
+  revalidatePath(RUTA_OPORTUNIDADES);
+}

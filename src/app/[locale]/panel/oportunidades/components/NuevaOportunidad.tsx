@@ -3,12 +3,19 @@
 import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 import type { ClubTeam, OpportunityType } from "@/lib/types";
+import type { PlantillasPorTipo } from "@/lib/opportunity-templates";
 import type { PlantillaOportunidad } from "@/lib/opportunities";
 import { crearOportunidad } from "../actions";
 import { OportunidadForm } from "./OportunidadForm";
 import { PlantillasRapidas } from "./PlantillasRapidas";
 
-export function NuevaOportunidad({ equipos = [] }: { equipos?: ClubTeam[] }) {
+export function NuevaOportunidad({
+  equipos = [],
+  plantillas,
+}: {
+  equipos?: ClubTeam[];
+  plantillas?: PlantillasPorTipo;
+}) {
   const t = useTranslations("panel.oportunidades");
   const [abierto, setAbierto] = useState(false);
   const [plantilla, setPlantilla] = useState<{ tipo: OpportunityType; datos: PlantillaOportunidad } | null>(
@@ -40,7 +47,7 @@ export function NuevaOportunidad({ equipos = [] }: { equipos?: ClubTeam[] }) {
         >{t("cerrar")}</button>
       </div>
 
-      <PlantillasRapidas onElegir={(tipo, datos) => setPlantilla({ tipo, datos })} />
+      <PlantillasRapidas plantillas={plantillas} onElegir={(tipo, datos) => setPlantilla({ tipo, datos })} />
 
       <OportunidadForm
         key={plantilla ? `${plantilla.tipo}-${plantilla.datos.title}` : "en-blanco"}

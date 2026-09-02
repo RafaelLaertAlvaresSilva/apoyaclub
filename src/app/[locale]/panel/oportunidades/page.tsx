@@ -4,6 +4,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { clubRowToProfile, clubTeamRowToTeam, type ClubRow, type ClubTeamRow } from "@/lib/club-mappers";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
+import { obtenerPlantillas } from "@/lib/opportunity-templates";
 import { createClient } from "@/lib/supabase/server";
 import { PanelNav } from "../components/PanelNav";
 import { OportunidadesManager } from "./components/OportunidadesManager";
@@ -40,6 +41,10 @@ export default async function OportunidadesPage() {
       .returns<ClubTeamRow[]>(),
   ]);
 
+  // Las plantillas viven en la base de datos (migración 0015); si no
+  // están, `obtenerPlantillas` devuelve las del código.
+  const plantillas = await obtenerPlantillas(supabase);
+
   const perfil = filaClub ? clubRowToProfile(filaClub) : null;
   const oportunidades = (filasOportunidades ?? []).map(opportunityRowToOpportunity);
   const equipos = (filasEquipos ?? []).map(clubTeamRowToTeam);
@@ -63,7 +68,7 @@ export default async function OportunidadesPage() {
           para poder publicar oportunidades de patrocinio.
         </div>
       ) : (
-        <OportunidadesManager oportunidades={oportunidades} equipos={equipos} />
+        <OportunidadesManager oportunidades={oportunidades} equipos={equipos} plantillas={plantillas} />
       )}
     </div>
   );
