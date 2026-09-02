@@ -18,6 +18,11 @@ import { Button } from "@/components/ui/Button";
  * tamaño justo para cada pantalla, así que no pesa lo que pesa el
  * archivo original en `public/`.
  *
+ * "Buscar clubes" es la puerta de entrada del lado empresa, que antes
+ * solo existía dentro de la landing: se ve siempre, con y sin sesión, y
+ * también en móvil (ahí abreviado a "Clubes" para que quepa junto al
+ * botón principal).
+ *
  * No se usa en /panel, /empresa ni /admin: esas zonas tienen su propia
  * navegación (PanelNav, EmpresaNav, AdminNav), ni en las páginas de
  * autenticación, que mantienen a propósito un layout mínimo sin nav.
@@ -45,21 +50,34 @@ export async function Header() {
           />
         </Link>
 
-        {accesoDirecto ? (
-          <Button href={accesoDirecto.href} size="sm">
-            {accesoDirecto.etiqueta}
-          </Button>
-        ) : (
-          <div className="flex items-center gap-3 sm:gap-4">
-            <Link href="/login" className="hidden text-sm font-medium text-zinc-600 hover:text-brand-navy sm:inline">
-              Iniciar sesión
-            </Link>
-            <Button href="/registro-club" size="sm">
-              <span className="sm:hidden">Empezar</span>
-              <span className="hidden sm:inline">Crea la página de tu club</span>
+        <div className="flex items-center gap-3 sm:gap-4">
+          <Link
+            href="/buscar"
+            className="text-sm font-medium text-zinc-600 transition hover:text-brand-navy"
+          >
+            <span className="sm:hidden">Clubes</span>
+            <span className="hidden sm:inline">Buscar clubes</span>
+          </Link>
+
+          {accesoDirecto ? (
+            <Button href={accesoDirecto.href} size="sm">
+              {accesoDirecto.etiqueta}
             </Button>
-          </div>
-        )}
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="hidden text-sm font-medium text-zinc-600 transition hover:text-brand-navy sm:inline"
+              >
+                Iniciar sesión
+              </Link>
+              <Button href="/registro-club" size="sm">
+                <span className="sm:hidden">Empezar</span>
+                <span className="hidden sm:inline">Crea la página de tu club</span>
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );

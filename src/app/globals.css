@@ -45,3 +45,29 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
+/* ---------------------------------------------------------------------
+ * Accesibilidad (Fase 15)
+ * ------------------------------------------------------------------ */
+
+/* Foco visible y consistente en toda la aplicación: sin esto, navegar
+ * con el tabulador dependía del estilo por defecto de cada navegador y
+ * en varios botones de marca no se veía nada. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--brand-teal-dark);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Quien pide menos movimiento en su sistema no ve animaciones: afecta a
+ * los esqueletos de carga y a las transiciones de la landing. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
