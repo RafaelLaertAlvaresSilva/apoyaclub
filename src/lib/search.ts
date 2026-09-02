@@ -161,6 +161,17 @@ async function registrarBusqueda(
       filters: filtros,
       results_count: resultado.total ?? resultado.resultados.length,
     });
+
+    // Además del recuento global (Fase 12), se apunta qué clubes han
+    // salido: es la mitad de "tu mes en ApoyaClub" que el club ve en su
+    // panel (migración 0014). Un club aparece una vez por búsqueda,
+    // aunque salgan tres oportunidades suyas.
+    const clubesQueAparecen = Array.from(new Set(resultado.resultados.map((fila) => fila.clubId)));
+    if (clubesQueAparecen.length > 0) {
+      await admin
+        .from("club_search_appearances")
+        .insert(clubesQueAparecen.map((clubId) => ({ club_id: clubId })));
+    }
   } catch (excepcion) {
     console.error("[search_logs] No se ha podido registrar la búsqueda:", excepcion);
   }

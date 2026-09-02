@@ -14,6 +14,7 @@ import { SITE_URL } from "@/lib/site";
 import type { ClubTeam, SocialLinks } from "@/lib/types";
 import { CompartirBoton } from "./components/CompartirBoton";
 import { GuardarFavoritoBoton } from "./components/GuardarFavoritoBoton";
+import { RegistrarVisita } from "./components/RegistrarVisita";
 import { SolicitarContactoBoton } from "./components/SolicitarContactoBoton";
 import { deportesDelClub, obtenerClubPublico, obtenerEmailContacto } from "./data";
 
@@ -149,6 +150,8 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados) }}
       />
+
+      <RegistrarVisita slug={perfil.slug} />
 
       <Header />
 

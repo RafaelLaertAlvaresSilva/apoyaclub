@@ -59,6 +59,15 @@ export async function GET(_request: Request, { params }: ParametrosRuta) {
 
   if (!filaClub) return paginaNoDisponible("El club ya no está disponible.");
 
+  // Métrica del panel (migración 0014): cuántas veces se ha abierto el
+  // dossier que el club comparte. Si falla, el dossier se sirve igual.
+  void admin
+    .from("dossier_views")
+    .insert({ club_id: filaClub.id })
+    .then(({ error }) => {
+      if (error) console.error("[dossier] No se ha podido registrar la apertura:", error.message);
+    });
+
   const [{ data: filasEquipos }, { data: filasPatrocinadores }, { data: filasOportunidades }, { data: usuario }] =
     await Promise.all([
       admin

@@ -9,9 +9,11 @@ import {
   type ClubSponsorRow,
   type ClubTeamRow,
 } from "@/lib/club-mappers";
+import { obtenerMetricasClub } from "@/lib/club-metrics";
 import { calcularPorcentajeCompletado } from "@/lib/profile-completion";
 import { createClient } from "@/lib/supabase/server";
 import { BarraProgreso } from "./components/BarraProgreso";
+import { MetricasClub } from "./components/MetricasClub";
 import { PanelNav } from "./components/PanelNav";
 import { PanelTabs } from "./components/PanelTabs";
 
@@ -46,6 +48,10 @@ export default async function PanelPage() {
         .returns<ClubSponsorRow[]>(),
     ]);
 
+  // Las métricas se piden aparte porque van con la clave de servicio
+  // (el club no lee las tablas de eventos, solo sus números agregados).
+  const metricas = await obtenerMetricasClub(user.id);
+
   const perfil = filaClub ? clubRowToProfile(filaClub) : null;
   const equipos = (filasEquipos ?? []).map(clubTeamRowToTeam);
   const patrocinadores = (filasPatrocinadores ?? []).map(clubSponsorRowToSponsor);
@@ -66,6 +72,8 @@ export default async function PanelPage() {
       </div>
 
       <PanelNav activo="perfil" />
+
+      <MetricasClub metricas={metricas} />
 
       <BarraProgreso porcentaje={porcentaje} />
 
