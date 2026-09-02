@@ -217,6 +217,7 @@ export function OportunidadForm({
       )}
 
       <Campo
+        grupo
         etiqueta={t("objetivo")}
         ayuda={t("aQuePublicoO")}
       >

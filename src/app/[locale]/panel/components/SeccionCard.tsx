@@ -18,21 +18,50 @@ export function SeccionCard({
   );
 }
 
+/**
+ * Etiqueta + control de un formulario del panel.
+ *
+ * La etiqueta envuelve al control en vez de ir suelta a su lado: hasta
+ * ahora era un `<label>` hermano y sin `htmlFor`, así que ni un lector de
+ * pantalla sabía a qué campo pertenecía ni se podía pulsar el texto para
+ * enfocar el campo. Envolviéndolo, las dos cosas funcionan sin tener que
+ * inventar un `id` en cada uno de los cuarenta campos del panel.
+ *
+ * Cuando dentro hay varios controles (un grupo de casillas, un rango de
+ * dos números), una etiqueta única sería ambigua: ahí se usa
+ * `<fieldset>` + `<legend>`, que es lo que describe a un grupo.
+ */
 export function Campo({
   etiqueta,
   ayuda,
+  grupo = false,
   children,
 }: {
   etiqueta: string;
   ayuda?: string;
+  /** true cuando dentro hay más de un control (casillas, rangos). */
+  grupo?: boolean;
   children: React.ReactNode;
 }) {
+  const textoEtiqueta = <span className="mb-1 block text-sm font-medium text-zinc-700">{etiqueta}</span>;
+  const textoAyuda = ayuda ? <span className="mt-1 block text-xs text-zinc-400">{ayuda}</span> : null;
+
+  if (grupo) {
+    return (
+      <fieldset className="min-w-0">
+        <legend className="mb-1 text-sm font-medium text-zinc-700">{etiqueta}</legend>
+        {children}
+        {textoAyuda}
+      </fieldset>
+    );
+  }
+
   return (
-    <div>
-      <label className="mb-1 block text-sm font-medium text-zinc-700">{etiqueta}</label>
+    <label className="block">
+      {textoEtiqueta}
       {children}
-      {ayuda && <p className="mt-1 text-xs text-zinc-400">{ayuda}</p>}
-    </div>
+      {textoAyuda}
+    </label>
   );
 }
 

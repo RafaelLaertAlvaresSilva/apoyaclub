@@ -109,7 +109,7 @@ export function FiltrosBuscador({
         <p className={clasesEtiquetaGrupo}>{t("ubicacion")}</p>
         <div className="space-y-2">
           <select
-            name="provincia"
+            name="provincia" aria-label={t("ubicacion")}
             defaultValue={filtrosIniciales.provincia ?? ""}
             onChange={(evento) => aplicar(evento.currentTarget.form!)}
             className={clasesInput}
@@ -122,12 +122,12 @@ export function FiltrosBuscador({
             ))}
           </select>
           <input
-            name="ubicacion"
+            name="ubicacion" aria-label={t("ubicacionPlaceholder")}
             placeholder={t("ubicacionPlaceholder")}
             defaultValue={filtrosIniciales.ubicacion ?? ""}
             className={clasesInput}
           />
-          <select name="radio" defaultValue={filtrosIniciales.radioKm ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
+          <select name="radio" aria-label={t("radioEtiqueta")} defaultValue={filtrosIniciales.radioKm ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
             <option value="">{t("sinRadio")}</option>
             {RADIOS_KM.map((km) => (
               <option key={km} value={km}>
@@ -141,7 +141,7 @@ export function FiltrosBuscador({
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         <div>
           <p className={clasesEtiquetaGrupo}>{t("deporte")}</p>
-          <select name="deporte" defaultValue={filtrosIniciales.deporte ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
+          <select name="deporte" aria-label={t("deporte")} defaultValue={filtrosIniciales.deporte ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
             <option value="">{t("cualquiera")}</option>
             {opcionesEquipo.deportes.map((deporte) => (
               <option key={deporte} value={deporte}>
@@ -152,7 +152,7 @@ export function FiltrosBuscador({
         </div>
         <div>
           <p className={clasesEtiquetaGrupo}>{t("categoria")}</p>
-          <select name="categoria" defaultValue={filtrosIniciales.categoria ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
+          <select name="categoria" aria-label={t("categoria")} defaultValue={filtrosIniciales.categoria ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
             <option value="">{t("cualquiera")}</option>
             {opcionesEquipo.categorias.map((categoria) => (
               <option key={categoria} value={categoria}>
@@ -163,7 +163,7 @@ export function FiltrosBuscador({
         </div>
         <div>
           <p className={clasesEtiquetaGrupo}>{t("genero")}</p>
-          <select name="genero" defaultValue={filtrosIniciales.genero ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
+          <select name="genero" aria-label={t("genero")} defaultValue={filtrosIniciales.genero ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
             <option value="">{t("cualquiera")}</option>
             {opcionesEquipo.generos.map((genero) => (
               <option key={genero} value={genero}>
@@ -174,7 +174,7 @@ export function FiltrosBuscador({
         </div>
         <div>
           <p className={clasesEtiquetaGrupo}>{t("nivel")}</p>
-          <select name="nivel" defaultValue={filtrosIniciales.nivelEquipo ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
+          <select name="nivel" aria-label={t("nivel")} defaultValue={filtrosIniciales.nivelEquipo ?? ""} onChange={(evento) => aplicar(evento.currentTarget.form!)} className={clasesInput}>
             <option value="">{t("cualquiera")}</option>
             {NIVELES_EQUIPO.map((nivel) => (
               <option key={nivel.id} value={nivel.id}>
@@ -189,7 +189,7 @@ export function FiltrosBuscador({
         <p className={clasesEtiquetaGrupo}>{t("presupuesto")}</p>
         <div className="grid grid-cols-2 gap-2">
           <input
-            name="min"
+            name="min" aria-label={t("desde")}
             type="number"
             min={0}
             placeholder={t("desde")}
@@ -197,7 +197,7 @@ export function FiltrosBuscador({
             className={clasesInput}
           />
           <input
-            name="max"
+            name="max" aria-label={t("hasta")}
             type="number"
             min={0}
             placeholder={t("hasta")}
@@ -206,7 +206,7 @@ export function FiltrosBuscador({
           />
         </div>
         <select
-          name="periodo"
+          name="periodo" aria-label={t("cualquierPeriodo")}
           defaultValue={filtrosIniciales.periodo ?? ""}
           onChange={(evento) => aplicar(evento.currentTarget.form!)}
           className={`${clasesInput} mt-2`}

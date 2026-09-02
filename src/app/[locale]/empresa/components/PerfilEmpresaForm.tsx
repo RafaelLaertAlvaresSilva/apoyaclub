@@ -45,8 +45,8 @@ export function PerfilEmpresaForm({ perfil }: { perfil: CompanyProfile | null })
           </Campo>
         </div>
 
-        <div>
-          <p className="mb-1 text-sm font-medium text-zinc-700">{t("presupuestoOrientativo")}</p>
+        <fieldset>
+          <legend className="mb-1 text-sm font-medium text-zinc-700">{t("presupuestoOrientativo")}</legend>
           <p className="mb-2 text-xs text-zinc-400">{t("unRangoAproximadoEn")}</p>
           <div className="grid gap-4 sm:grid-cols-2">
             <input
@@ -55,7 +55,8 @@ export function PerfilEmpresaForm({ perfil }: { perfil: CompanyProfile | null })
               min={0}
               step="0.01"
               defaultValue={perfil?.budgetMin ?? ""}
-              placeholder="Desde (€)"
+              aria-label={t("presupuestoDesde")}
+              placeholder={t("presupuestoDesde")}
               className={clasesInput}
             />
             <input
@@ -64,14 +65,15 @@ export function PerfilEmpresaForm({ perfil }: { perfil: CompanyProfile | null })
               min={0}
               step="0.01"
               defaultValue={perfil?.budgetMax ?? ""}
-              placeholder="Hasta (€)"
+              aria-label={t("presupuestoHasta")}
+              placeholder={t("presupuestoHasta")}
               className={clasesInput}
             />
           </div>
-        </div>
+        </fieldset>
 
-        <div>
-          <p className="mb-1 text-sm font-medium text-zinc-700">{t("objetivosDePatrocinio")}</p>
+        <fieldset>
+          <legend className="mb-1 text-sm font-medium text-zinc-700">{t("objetivosDePatrocinio")}</legend>
           <p className="mb-2 text-xs text-zinc-400">{t("aQuePublicoU")}</p>
           <div className="grid gap-2 sm:grid-cols-2">
             {OBJETIVOS_OPORTUNIDAD.map((objetivo) => (
@@ -87,7 +89,7 @@ export function PerfilEmpresaForm({ perfil }: { perfil: CompanyProfile | null })
               </label>
             ))}
           </div>
-        </div>
+        </fieldset>
 
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
         <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />
