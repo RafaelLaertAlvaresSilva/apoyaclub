@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { mensajeErrorAuth } from "@/lib/auth-errors";
@@ -11,10 +12,11 @@ export async function solicitarRecuperacion(
   _estadoPrevio: EstadoRecuperar,
   formData: FormData,
 ): Promise<EstadoRecuperar> {
+  const tValidacion = await getTranslations("auth.validacion");
   const email = String(formData.get("email") ?? "").trim();
 
   if (!email) {
-    return { error: "Indica tu correo electrónico." };
+    return { error: tValidacion("email") };
   }
 
   const origin = (await headers()).get("origin");
@@ -29,7 +31,7 @@ export async function solicitarRecuperacion(
   // solo distinguimos errores de formato o de límite de intentos.
   if (error && !error.message.toLowerCase().includes("unable to validate")) {
     if (error.message.toLowerCase().includes("rate limit") || error.message.toLowerCase().includes("security purposes")) {
-      return { error: mensajeErrorAuth(error.message) };
+      return { error: await mensajeErrorAuth(error.message) };
     }
   }
 

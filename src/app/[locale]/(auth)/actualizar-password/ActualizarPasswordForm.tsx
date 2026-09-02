@@ -1,28 +1,31 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { AvisoError } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { actualizarPassword } from "./actions";
 
 export function ActualizarPasswordForm() {
+  const t = useTranslations("auth.actualizarPassword");
+  const tComun = useTranslations("auth.comun");
   const [estado, formAction] = useActionState(actualizarPassword, null);
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-lg font-semibold text-zinc-900">
-          Crea una nueva contraseña
+          {t("titulo")}
         </h1>
         <p className="mt-1 text-sm text-zinc-500">
-          Elige una contraseña nueva para tu cuenta.
+          {t("subtitulo")}
         </p>
       </div>
 
       <form action={formAction} className="space-y-4">
         <div>
           <label htmlFor="password" className="mb-1 block text-sm font-medium text-zinc-700">
-            Nueva contraseña
+            {t("nueva")}
           </label>
           <input
             id="password"
@@ -33,12 +36,12 @@ export function ActualizarPasswordForm() {
             autoComplete="new-password"
             className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           />
-          <p className="mt-1 text-xs text-zinc-400">Mínimo 8 caracteres.</p>
+          <p className="mt-1 text-xs text-zinc-400">{tComun("minimoCaracteres")}</p>
         </div>
 
         <div>
           <label htmlFor="confirmarPassword" className="mb-1 block text-sm font-medium text-zinc-700">
-            Confirma la nueva contraseña
+            {t("confirmarNueva")}
           </label>
           <input
             id="confirmarPassword"
@@ -52,7 +55,7 @@ export function ActualizarPasswordForm() {
 
         <AvisoError mensaje={estado?.error} />
 
-        <BotonEnviar>Guardar nueva contraseña</BotonEnviar>
+        <BotonEnviar>{t("boton")}</BotonEnviar>
       </form>
     </div>
   );

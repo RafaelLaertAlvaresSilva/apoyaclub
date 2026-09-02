@@ -1,19 +1,25 @@
 "use client";
 
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { iniciarSesion } from "./actions";
 
-const MENSAJES_EXITO: Record<string, string> = {
-  "password-actualizada": "Tu contraseña se ha actualizado. Ya puedes iniciar sesión.",
-  "email-verificado": "Tu correo se ha verificado. Ya puedes iniciar sesión.",
-};
-
 export function LoginForm() {
+  const t = useTranslations("auth.login");
+  const tComun = useTranslations("auth.comun");
   const searchParams = useSearchParams();
+
+  // Los avisos que llegan por la URL después de verificar el correo o
+  // cambiar la contraseña.
+  const MENSAJES_EXITO: Record<string, string> = {
+    "password-actualizada": t("passwordActualizada"),
+    "email-verificado": t("emailVerificado"),
+  };
+
   const next = searchParams.get("next");
   const mensajeExito = searchParams.get("mensaje");
 
@@ -22,10 +28,8 @@ export function LoginForm() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-lg font-semibold text-zinc-900">Accede a tu cuenta</h1>
-        <p className="mt-1 text-sm text-zinc-500">
-          Introduce tus datos para entrar en ApoyaClub.
-        </p>
+        <h1 className="text-lg font-semibold text-zinc-900">{t("titulo")}</h1>
+        <p className="mt-1 text-sm text-zinc-500">{t("subtitulo")}</p>
       </div>
 
       <form action={formAction} className="space-y-4">
@@ -33,7 +37,7 @@ export function LoginForm() {
 
         <div>
           <label htmlFor="email" className="mb-1 block text-sm font-medium text-zinc-700">
-            Correo electrónico
+            {tComun("email")}
           </label>
           <input
             id="email"
@@ -48,10 +52,10 @@ export function LoginForm() {
         <div>
           <div className="mb-1 flex items-center justify-between">
             <label htmlFor="password" className="block text-sm font-medium text-zinc-700">
-              Contraseña
+              {tComun("password")}
             </label>
             <Link href="/recuperar-password" className="text-xs font-medium text-teal-700 hover:underline">
-              ¿La has olvidado?
+              {t("olvidada")}
             </Link>
           </div>
           <input
@@ -67,17 +71,17 @@ export function LoginForm() {
         {mensajeExito && <AvisoExito mensaje={MENSAJES_EXITO[mensajeExito]} />}
         <AvisoError mensaje={estado?.error} />
 
-        <BotonEnviar>Iniciar sesión</BotonEnviar>
+        <BotonEnviar>{t("boton")}</BotonEnviar>
       </form>
 
       <div className="space-y-1 text-center text-sm text-zinc-500">
-        <p>¿Todavía no tienes cuenta?</p>
+        <p>{t("sinCuenta")}</p>
         <div className="flex justify-center gap-4">
           <Link href="/registro-club" className="font-medium text-teal-700 hover:underline">
-            Registrar mi club
+            {t("registrarClub")}
           </Link>
           <Link href="/registro-empresa" className="font-medium text-teal-700 hover:underline">
-            Registrar mi empresa
+            {t("registrarEmpresa")}
           </Link>
         </div>
       </div>

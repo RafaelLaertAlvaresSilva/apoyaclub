@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import { mensajeErrorAuth } from "@/lib/auth-errors";
@@ -18,12 +19,13 @@ export async function iniciarSesion(
   _estadoPrevio: EstadoLogin,
   formData: FormData,
 ): Promise<EstadoLogin> {
+  const tValidacion = await getTranslations("auth.validacion");
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
   const next = formData.get("next") ? String(formData.get("next")) : null;
 
   if (!email || !password) {
-    return { error: "Indica tu correo electrónico y tu contraseña." };
+    return { error: tValidacion("emailYPassword") };
   }
 
   const supabase = await createClient();
@@ -34,7 +36,7 @@ export async function iniciarSesion(
   });
 
   if (error) {
-    return { error: mensajeErrorAuth(error.message) };
+    return { error: await mensajeErrorAuth(error.message) };
   }
 
   const rol = data.user?.app_metadata?.role as Role | undefined;

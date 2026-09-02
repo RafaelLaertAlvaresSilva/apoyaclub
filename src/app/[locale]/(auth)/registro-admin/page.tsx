@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { AvisoError } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
@@ -12,21 +13,23 @@ import { registrarAdmin } from "./actions";
  * de administrador.
  */
 export default function RegistroAdminPage() {
+  const t = useTranslations("auth.registroAdmin");
+  const tComun = useTranslations("auth.comun");
   const [estado, formAction] = useActionState(registrarAdmin, null);
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-lg font-semibold text-zinc-900">Nueva cuenta de administrador</h1>
+        <h1 className="text-lg font-semibold text-zinc-900">{t("titulo")}</h1>
         <p className="mt-1 text-sm text-zinc-500">
-          Solo para el equipo de ApoyaClub. Necesitas la clave de administrador.
+          {t("subtitulo")}
         </p>
       </div>
 
       <form action={formAction} className="space-y-4">
         <div>
           <label htmlFor="nombre" className="mb-1 block text-sm font-medium text-zinc-700">
-            Nombre
+            {t("nombre")}
           </label>
           <input
             id="nombre"
@@ -40,7 +43,7 @@ export default function RegistroAdminPage() {
 
         <div>
           <label htmlFor="email" className="mb-1 block text-sm font-medium text-zinc-700">
-            Correo electrónico
+            {tComun("email")}
           </label>
           <input
             id="email"
@@ -54,7 +57,7 @@ export default function RegistroAdminPage() {
 
         <div>
           <label htmlFor="password" className="mb-1 block text-sm font-medium text-zinc-700">
-            Contraseña
+            {tComun("password")}
           </label>
           <input
             id="password"
@@ -65,12 +68,12 @@ export default function RegistroAdminPage() {
             autoComplete="new-password"
             className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           />
-          <p className="mt-1 text-xs text-zinc-400">Mínimo 8 caracteres.</p>
+          <p className="mt-1 text-xs text-zinc-400">{tComun("minimoCaracteres")}</p>
         </div>
 
         <div>
           <label htmlFor="confirmarPassword" className="mb-1 block text-sm font-medium text-zinc-700">
-            Confirma la contraseña
+            {tComun("confirmarPassword")}
           </label>
           <input
             id="confirmarPassword"
@@ -84,7 +87,7 @@ export default function RegistroAdminPage() {
 
         <div>
           <label htmlFor="claveAdmin" className="mb-1 block text-sm font-medium text-zinc-700">
-            Clave de administrador
+            {t("clave")}
           </label>
           <input
             id="claveAdmin"
@@ -98,14 +101,14 @@ export default function RegistroAdminPage() {
 
         <AvisoError mensaje={estado?.error} />
 
-        <BotonEnviar>Crear cuenta de administrador</BotonEnviar>
+        <BotonEnviar>{t("boton")}</BotonEnviar>
       </form>
 
       <div className="text-center text-sm text-zinc-500">
         <p>
           ¿Ya tienes cuenta?{" "}
           <Link href="/login" className="font-medium text-teal-700 hover:underline">
-            Inicia sesión
+            {tComun("iniciaSesion")}
           </Link>
         </p>
       </div>

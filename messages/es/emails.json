@@ -1,1 +1,30 @@
-{}
+{
+  "solicitudContacto": {
+    "asunto": "{empresa} quiere contactar contigo en ApoyaClub",
+    "eyebrow": "Nueva solicitud de contacto en ApoyaClub",
+    "titulo": "{empresa} quiere contactar con {club}",
+    "sobreOportunidad": "Sobre la oportunidad:",
+    "sobreElClub": "Sobre tu club en general (sin una oportunidad concreta).",
+    "sector": "Sector",
+    "localidad": "Localidad",
+    "web": "Web",
+    "presupuesto": "Presupuesto orientativo",
+    "boton": "Ver y responder en tu panel",
+    "pie": "ApoyaClub solo pone en contacto a las dos partes: la conversación y cualquier acuerdo se gestionan directamente entre el club y la empresa."
+  },
+  "caducidadSuscripcion": {
+    "asunto": "{dias, plural, one {Queda # día} other {Quedan # días}} para que caduque tu suscripción a ApoyaClub",
+    "eyebrow": "Tu suscripción a ApoyaClub caduca pronto",
+    "titulo": "{dias, plural, one {Queda # día} other {Quedan # días}} para que {club} pierda visibilidad",
+    "texto": "Has cancelado tu suscripción y el {fecha} perderás el acceso: tu página pública y tus oportunidades dejarán de ser visibles para las empresas (tus datos no se borran).",
+    "texto2": "Si ha sido un error o quieres seguir, puedes reactivarla en cualquier momento antes de esa fecha.",
+    "boton": "Gestionar mi suscripción"
+  },
+  "contactoLanding": {
+    "asunto": "Nuevo mensaje de contacto: {nombre}",
+    "eyebrow": "Nuevo mensaje desde el formulario de contacto de ApoyaClub"
+  },
+  "errores": {
+    "envio": "No se ha podido enviar el email."
+  }
+}

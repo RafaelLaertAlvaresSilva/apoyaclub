@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import { mensajeErrorAuth } from "@/lib/auth-errors";
@@ -11,14 +12,15 @@ export async function actualizarPassword(
   _estadoPrevio: EstadoActualizar,
   formData: FormData,
 ): Promise<EstadoActualizar> {
+  const tValidacion = await getTranslations("auth.validacion");
   const password = String(formData.get("password") ?? "");
   const confirmarPassword = String(formData.get("confirmarPassword") ?? "");
 
   if (password.length < 8) {
-    return { error: "La contraseña debe tener al menos 8 caracteres." };
+    return { error: tValidacion("passwordCorta") };
   }
   if (password !== confirmarPassword) {
-    return { error: "Las contraseñas no coinciden." };
+    return { error: tValidacion("noCoinciden") };
   }
 
   const supabase = await createClient();
@@ -29,14 +31,14 @@ export async function actualizarPassword(
 
   if (!user) {
     return {
-      error: "El enlace ha caducado o no es válido. Solicita uno nuevo.",
+      error: tValidacion("enlaceCaducado"),
     };
   }
 
   const { error } = await supabase.auth.updateUser({ password });
 
   if (error) {
-    return { error: mensajeErrorAuth(error.message) };
+    return { error: await mensajeErrorAuth(error.message) };
   }
 
   // Cerramos la sesión temporal de recuperación: el usuario debe volver

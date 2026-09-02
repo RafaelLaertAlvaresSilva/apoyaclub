@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { redirect } from "@/i18n/navigation";
@@ -15,6 +16,7 @@ export async function registrarClub(
   _estadoPrevio: EstadoRegistro,
   formData: FormData,
 ): Promise<EstadoRegistro> {
+  const tValidacion = await getTranslations("auth.validacion");
   const nombre = String(formData.get("nombre") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
@@ -22,19 +24,19 @@ export async function registrarClub(
   const aceptaTerminos = formData.get("aceptaTerminos") === "on";
 
   if (!nombre) {
-    return { error: "Indica el nombre del club." };
+    return { error: tValidacion("nombreClub") };
   }
   if (!email) {
-    return { error: "Indica un correo electrónico." };
+    return { error: tValidacion("correo") };
   }
   if (password.length < 8) {
-    return { error: "La contraseña debe tener al menos 8 caracteres." };
+    return { error: tValidacion("passwordCorta") };
   }
   if (password !== confirmarPassword) {
-    return { error: "Las contraseñas no coinciden." };
+    return { error: tValidacion("noCoinciden") };
   }
   if (!aceptaTerminos) {
-    return { error: "Debes aceptar las Condiciones de Uso y la Política de Privacidad." };
+    return { error: tValidacion("aceptarCondiciones") };
   }
 
   const origin = (await headers()).get("origin");
@@ -51,7 +53,7 @@ export async function registrarClub(
   });
 
   if (error) {
-    return { error: mensajeErrorAuth(error.message) };
+    return { error: await mensajeErrorAuth(error.message) };
   }
 
   // El rol se guarda en app_metadata (solo modificable con la clave de

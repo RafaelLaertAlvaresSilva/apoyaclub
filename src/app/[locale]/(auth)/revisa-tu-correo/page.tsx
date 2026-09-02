@@ -1,18 +1,21 @@
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
 export default function RevisaTuCorreoPage() {
+  const t = useTranslations("auth.revisaCorreo");
+  const tComun = useTranslations("auth.comun");
+
   return (
     <div className="space-y-4 text-center">
-      <h1 className="text-lg font-semibold text-zinc-900">Revisa tu correo</h1>
+      <h1 className="text-lg font-semibold text-zinc-900">{t("titulo")}</h1>
       <p className="text-sm text-zinc-500">
-        Te hemos enviado un correo para verificar tu cuenta. Abre el enlace
-        que contiene para activarla y poder iniciar sesión.
+        {t("texto")}
       </p>
       <p className="text-xs text-zinc-400">
-        Si no lo encuentras, revisa también la carpeta de spam.
+        {t("spam")}
       </p>
       <Link href="/login" className="inline-block text-sm font-medium text-teal-700 hover:underline">
-        Volver a iniciar sesión
+        {tComun("volverALogin")}
       </Link>
     </div>
   );

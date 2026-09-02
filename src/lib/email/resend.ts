@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+import { routing } from "@/i18n/routing";
 /**
  * Envío de email transaccional con Resend (Fase 8), usando `fetch`
  * directamente contra su API HTTP (https://resend.com/docs/api-reference/emails/send-email)
@@ -71,6 +73,19 @@ export async function enviarEmail({
 }
 
 /**
+ * Traductor de los emails (Fase 14).
+ *
+ * Se pide con el idioma explícito en vez de heredarlo de la petición:
+ * el cron de avisos (`api/cron/subscription-reminders`) no viene de
+ * ninguna URL con prefijo de idioma, así que ahí no hay ninguno del que
+ * heredar. Cuando existan destinatarios en otro idioma, este es el sitio
+ * donde se decidirá cuál usar (por ejemplo, el idioma guardado del club).
+ */
+async function traductorEmails() {
+  return getTranslations({ locale: routing.defaultLocale, namespace: "emails" });
+}
+
+/**
  * Email que recibe el club cuando una empresa solicita contacto (Fase 8).
  * Incluye los datos de la empresa y un enlace a su panel para responder.
  */
@@ -98,11 +113,13 @@ export async function enviarEmailNuevaSolicitudContacto({
   message: string;
   panelUrl: string;
 }): Promise<ResultadoEnvioEmail> {
+  const t = await traductorEmails();
+
   const detalles = [
-    ["Sector", companySector],
-    ["Localidad", companyCity],
-    ["Web", companyWebsite],
-    ["Presupuesto orientativo", presupuestoTexto],
+    [t("solicitudContacto.sector"), companySector],
+    [t("solicitudContacto.localidad"), companyCity],
+    [t("solicitudContacto.web"), companyWebsite],
+    [t("solicitudContacto.presupuesto"), presupuestoTexto],
   ].filter(([, valor]) => Boolean(valor));
 
   const filasDetalle = detalles
@@ -114,25 +131,25 @@ export async function enviarEmailNuevaSolicitudContacto({
 
   const html = `
     <div style="font-family:sans-serif;color:#18181b;max-width:560px;margin:0 auto;">
-      <p style="color:#047857;font-weight:600;font-size:14px;margin:0 0 8px;">Nueva solicitud de contacto en ApoyaClub</p>
-      <h1 style="font-size:20px;margin:0 0 16px;">${companyName} quiere contactar con ${clubName}</h1>
+      <p style="color:#047857;font-weight:600;font-size:14px;margin:0 0 8px;">${t("solicitudContacto.eyebrow")}</p>
+      <h1 style="font-size:20px;margin:0 0 16px;">${t("solicitudContacto.titulo", { empresa: companyName, club: clubName })}</h1>
       ${
         opportunityTitle
-          ? `<p style="margin:0 0 16px;">Sobre la oportunidad: <strong>${opportunityTitle}</strong></p>`
-          : `<p style="margin:0 0 16px;">Sobre tu club en general (sin una oportunidad concreta).</p>`
+          ? `<p style="margin:0 0 16px;">${t("solicitudContacto.sobreOportunidad")} <strong>${opportunityTitle}</strong></p>`
+          : `<p style="margin:0 0 16px;">${t("solicitudContacto.sobreElClub")}</p>`
       }
       ${filasDetalle ? `<table style="border-collapse:collapse;margin:0 0 16px;font-size:14px;">${filasDetalle}</table>` : ""}
       <div style="background:#f4f4f5;border-radius:8px;padding:16px;margin:0 0 24px;white-space:pre-line;">${message}</div>
-      <a href="${panelUrl}" style="display:inline-block;background:#059669;color:#ffffff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:600;">Ver y responder en tu panel</a>
+      <a href="${panelUrl}" style="display:inline-block;background:#059669;color:#ffffff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:600;">${t("solicitudContacto.boton")}</a>
       <p style="color:#a1a1aa;font-size:12px;margin-top:24px;">
-        ApoyaClub solo pone en contacto a las dos partes: la conversación y cualquier acuerdo se gestionan directamente entre el club y la empresa.
+        ${t("solicitudContacto.pie")}
       </p>
     </div>
   `;
 
   return enviarEmail({
     to: clubEmail,
-    subject: `${companyName} quiere contactar contigo en ApoyaClub`,
+    subject: t("solicitudContacto.asunto", { empresa: companyName }),
     html,
   });
 }
@@ -157,24 +174,21 @@ export async function enviarEmailAvisoCaducidadSuscripcion({
   fechaFin: string;
   panelUrl: string;
 }): Promise<ResultadoEnvioEmail> {
-  const dias = diasRestantes === 1 ? "1 día" : `${diasRestantes} días`;
+  const t = await traductorEmails();
 
   const html = `
     <div style="font-family:sans-serif;color:#18181b;max-width:560px;margin:0 auto;">
-      <p style="color:#b91c1c;font-weight:600;font-size:14px;margin:0 0 8px;">Tu suscripción a ApoyaClub caduca pronto</p>
-      <h1 style="font-size:20px;margin:0 0 16px;">Quedan ${dias} para que ${clubName} pierda visibilidad</h1>
-      <p style="margin:0 0 16px;">
-        Has cancelado tu suscripción y el ${fechaFin} perderás el acceso: tu página pública y tus
-        oportunidades dejarán de ser visibles para las empresas (tus datos no se borran).
-      </p>
-      <p style="margin:0 0 24px;">Si ha sido un error o quieres seguir, puedes reactivarla en cualquier momento antes de esa fecha.</p>
-      <a href="${panelUrl}" style="display:inline-block;background:#059669;color:#ffffff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:600;">Gestionar mi suscripción</a>
+      <p style="color:#b91c1c;font-weight:600;font-size:14px;margin:0 0 8px;">${t("caducidadSuscripcion.eyebrow")}</p>
+      <h1 style="font-size:20px;margin:0 0 16px;">${t("caducidadSuscripcion.titulo", { dias: diasRestantes, club: clubName })}</h1>
+      <p style="margin:0 0 16px;">${t("caducidadSuscripcion.texto", { fecha: fechaFin })}</p>
+      <p style="margin:0 0 24px;">${t("caducidadSuscripcion.texto2")}</p>
+      <a href="${panelUrl}" style="display:inline-block;background:#059669;color:#ffffff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:600;">${t("caducidadSuscripcion.boton")}</a>
     </div>
   `;
 
   return enviarEmail({
     to: clubEmail,
-    subject: `Quedan ${dias} para que caduque tu suscripción a ApoyaClub`,
+    subject: t("caducidadSuscripcion.asunto", { dias: diasRestantes }),
     html,
   });
 }
@@ -199,9 +213,11 @@ export async function enviarEmailContactoLanding({
   email: string;
   mensaje: string;
 }): Promise<ResultadoEnvioEmail> {
+  const t = await traductorEmails();
+
   const html = `
     <div style="font-family:sans-serif;color:#18181b;max-width:560px;margin:0 auto;">
-      <p style="color:#047857;font-weight:600;font-size:14px;margin:0 0 8px;">Nuevo mensaje desde el formulario de contacto de ApoyaClub</p>
+      <p style="color:#047857;font-weight:600;font-size:14px;margin:0 0 8px;">${t("contactoLanding.eyebrow")}</p>
       <h1 style="font-size:20px;margin:0 0 16px;">${nombre}</h1>
       <p style="margin:0 0 16px;color:#52525b;">${email}</p>
       <div style="background:#f4f4f5;border-radius:8px;padding:16px;white-space:pre-line;">${mensaje}</div>
@@ -210,7 +226,7 @@ export async function enviarEmailContactoLanding({
 
   return enviarEmail({
     to: destinatario,
-    subject: `Nuevo mensaje de contacto: ${nombre}`,
+    subject: t("contactoLanding.asunto", { nombre }),
     html,
     replyTo: email,
   });
