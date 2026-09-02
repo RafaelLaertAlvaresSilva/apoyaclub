@@ -167,6 +167,22 @@ Desde la Fase 7, el formulario también tiene tres campos opcionales más
 (periodo, forma de colaboración y objetivo) que solo alimentan los
 filtros del buscador: ver la sección siguiente.
 
+## Nivel de patrocinador, exclusividad y equipo (Fase 6, ampliación)
+
+Cada oportunidad puede indicar además:
+
+- **Nivel de patrocinador**: principal, oficial, colaborador o libre
+  (por defecto). Es lo primero que mira una empresa y se puede filtrar
+  por él en `/buscar` (`?patrocinio=principal,oficial`).
+- **Exclusividad de sector**: texto libre ("automoción", "seguros"). Se
+  muestra en la tarjeta pública y en el buscador.
+- **Equipo asociado**: un equipo concreto del club (`club_teams`) o el
+  club entero. Se valida en el servidor contra los equipos del propio
+  club.
+
+Las oportunidades publicadas antes de la migración `0011` quedan en
+nivel "libre", que es exactamente lo que eran.
+
 ## Buscador para empresas (Fase 7)
 
 `/buscar` es el buscador público (sin sesión) de oportunidades y clubes:
@@ -624,14 +640,29 @@ la aplicación.
 - **Textos de interfaz**: en `messages/<locale>/*.json`, repartidos por
   módulo (`common`, `home`, `auth`, `club`, `buscar`, `panel`,
   `empresa`, `admin`, `legal`, `emails`) en vez de un único archivo
-  gigante — `src/i18n/request.ts` los carga y fusiona. **Solo
-  `common.json` → `footer` tiene contenido real por ahora**, como
-  ejemplo del patrón (`Footer.tsx`, migrado con `useTranslations`); el
-  resto de módulos existen como `{}` a la espera de que se vaya
-  extrayendo el texto de cada área en fases sucesivas — el texto en
-  español no ha cambiado en ningún sitio, sigue igual, solo que la
-  mayoría todavía está escrito directamente en el JSX en vez de en su
-  archivo de mensajes.
+  gigante — `src/i18n/request.ts` los carga y fusiona. La extracción
+  **ya está hecha** para toda la interfaz: landing, buscador, página
+  pública del club, registro y acceso, panel del club, área de empresa,
+  panel de administración, componentes compartidos y los emails. El
+  texto en español no ha cambiado en ningún sitio: lo único que cambia
+  es dónde vive.
+  - En componentes de cliente se usa `useTranslations("espacio")`; en
+    componentes de servidor y Server Actions, `await
+    getTranslations("espacio")`. Los emails piden el traductor con el
+    idioma explícito (`routing.defaultLocale`) porque el cron no viene
+    de ninguna URL con prefijo de idioma.
+  - Las claves se generan a partir del propio texto
+    (`guardarPerfil`, `noHayOportunidades`…), así que se leen sin abrir
+    el JSON. Las listas (FAQ, pasos, ejemplos de la landing) se leen con
+    `t.raw`, y el texto con `<strong>` dentro, con `t.rich`.
+  - `tests/unit/i18n-claves.test.ts` recorre el código, encuentra cada
+    traductor y comprueba que todas las claves existen en
+    `messages/es`. Una clave mal escrita falla en los tests en vez de
+    aparecer rota en producción.
+- **Las cuatro páginas legales se quedan fuera a propósito**: sus textos
+  están pendientes de revisión jurídica y, cuando se abra otro país, no
+  se traducen — los reescribe un abogado de ese país. Cuando estén
+  cerrados se extraen a `legal.json` como el resto.
 - **Formato de moneda, fecha y número**: `src/config/locales.ts` (moneda,
   huso horario) y `src/lib/format.ts` (`formatearMoneda`,
   `formatearFecha`, `formatearNumero`), en vez de instancias sueltas de
@@ -666,3 +697,97 @@ la aplicación.
    moneda y huso horario.
 4. Traducir. Nada de rutas, middleware ni componentes debería tener que
    tocarse.
+
+
+## Calidad: tests, datos de prueba y monitorización (Fase 15)
+
+### Tests
+
+```bash
+npm test          # tests unitarios (Vitest)
+npm run test:e2e  # flujos completos (Playwright)
+```
+
+- **Unitarios** (`tests/unit/`): lógica pura, sin base de datos ni red.
+  Cubren el porcentaje de perfil completado, la ida y vuelta entre los
+  filtros del buscador y la URL (incluida la basura que hay que
+  ignorar), la agrupación de resultados por club, los estados de
+  suscripción, el mapeo de oportunidades y las claves de traducción.
+- **Extremo a extremo** (`tests/e2e/`): los cinco flujos críticos
+  (registro de club, alta de oportunidad, búsqueda, solicitud de
+  contacto y suscripción). Se ejecutan contra una instancia real, así
+  que **hay que apuntarlos a un proyecto de Supabase de pruebas, nunca
+  al de producción**. Los tests que necesitan credenciales que no todo
+  el mundo tiene se saltan solos explicando qué falta:
+
+  ```bash
+  # .env.test.local (o variables de entorno)
+  E2E_CLUB_EMAIL=...      # un club de prueba ya confirmado
+  E2E_CLUB_PASSWORD=...
+  E2E_EMPRESA_EMAIL=...   # una empresa de prueba ya confirmada
+  E2E_EMPRESA_PASSWORD=...
+  PLAYWRIGHT_BASE_URL=... # opcional: si no, arranca `npm run dev` solo
+  ```
+
+### Datos de prueba
+
+```bash
+npm run seed          # 15 clubes por toda España, con equipos y ~35 oportunidades
+npm run seed:limpiar  # borra solo lo que creó el script
+```
+
+Se niega a ejecutarse contra producción y marca todos los clubes que
+crea con el sufijo `@seed.apoyaclub.test`. Sirve para ver el buscador con
+volumen: sin datos no se puede comprobar el criterio de la Fase 7 ("con
+10 clubes, una búsqueda de balonmano a 50 km de Valencia hasta 500 €").
+
+### Monitorización
+
+Sentry (opcional) recoge los errores de navegador, servidor y edge. Sin
+`NEXT_PUBLIC_SENTRY_DSN` no se inicializa nada y la aplicación funciona
+igual. Los dos sitios donde un fallo no lo ve nadie —el webhook de
+Stripe y el cron de avisos— pasan por `avisarDeFallo()`
+(`src/lib/monitoring.ts`), que etiqueta el error con `zona`: en Sentry,
+crea una alerta por email para `zona = stripe-webhook` y
+`zona = cron-suscripciones`.
+
+Las variables (`NEXT_PUBLIC_SENTRY_DSN`, y `SENTRY_ORG`,
+`SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` solo en Vercel) están explicadas
+en `.env.local.example`.
+
+## Migraciones nuevas (0010 - 0012)
+
+Ejecútalas en el SQL Editor de Supabase, en orden, como las anteriores:
+
+- `0010_antiabuso_y_geocache.sql`: tabla `rate_limit_hits` y función
+  `consume_rate_limit` (límites de los formularios públicos), y
+  `geocode_cache` (la misma ciudad no se pregunta dos veces a
+  Nominatim). Las dos con RLS y sin políticas: solo las toca el
+  servidor.
+- `0011_sponsor_level.sql`: `sponsor_level` (principal / oficial /
+  colaborador / libre), `exclusivity` y `team_id` en `opportunities`,
+  más la vista del buscador ampliada con esos campos y los del equipo
+  asociado.
+- `0012_endurecer_acceso_publico.sql`: retira a `anon` el permiso de
+  lectura que Supabase concede por defecto sobre las tablas que ningún
+  visitante sin sesión necesita (`clubs`, `companies`,
+  `contact_requests`, favoritos, dossiers, consentimientos). La RLS
+  dejaba de ser el único cerrojo. Las dos vistas públicas siguen siendo
+  `SECURITY DEFINER` a propósito; el motivo está escrito en la propia
+  migración.
+
+## Límites y protección de los formularios públicos
+
+- Formulario de contacto de la landing: 3 envíos por hora y IP, 5 al día
+  por email.
+- Solicitud de contacto de una empresa a un club: 10 por hora y empresa.
+- Campo trampa (honeypot) invisible en los dos formularios: si viene
+  relleno se responde como si todo hubiera ido bien y no se envía nada.
+- Geocodificación: caché en base de datos (180 días, guarda también los
+  fallos) y tope global de 30 llamadas por minuto a Nominatim. Si se
+  supera, la búsqueda sigue funcionando sin filtro de radio en vez de
+  romperse.
+
+Si la comprobación de límite falla (la migración 0010 todavía no está
+aplicada, Supabase no responde), **se deja pasar**: el objetivo es
+frenar ráfagas automáticas, no bloquear a un club real.
