@@ -791,3 +791,68 @@ Ejecútalas en el SQL Editor de Supabase, en orden, como las anteriores:
 Si la comprobación de límite falla (la migración 0010 todavía no está
 aplicada, Supabase no responde), **se deja pasar**: el objetivo es
 frenar ráfagas automáticas, no bloquear a un club real.
+
+
+## Retención: primeros pasos, métricas y emails del ciclo
+
+Tres piezas que responden a la misma pregunta —"¿y esto para qué me
+sirve?"— que un club se hace el día que le llega el recibo.
+
+### Primeros pasos (panel del club)
+
+Un bloque con los tres pasos que dejan la página presentable (identidad,
+equipos, primera oportunidad). Desaparece solo cuando están los tres
+hechos. La lógica es una función pura, `lib/onboarding.ts`, con sus
+tests: qué cuenta como hecho no depende de cómo se pinte.
+
+### Tu mes en ApoyaClub
+
+Cuatro cifras arriba del panel, comparadas con el mismo periodo anterior:
+
+| Métrica | De dónde sale |
+|---|---|
+| Apariciones en búsquedas | `club_search_appearances`, una fila por búsqueda en la que sale el club |
+| Visitas a tu página | `club_page_views`, desde el cliente porque `/club/[slug]` va cacheada |
+| Dossieres abiertos | `dossier_views`, al abrirse el enlace público |
+| Solicitudes recibidas | `contact_requests`, que ya existía |
+
+Las tres tablas nuevas guardan solo club y fecha: ni IP, ni identificador
+de usuario, ni datos de sesión. Las visitas se deduplican por pestaña
+(`sessionStorage`) y, en el servidor, por IP y hora reutilizando
+`consume_rate_limit`. Si el periodo anterior está a cero no se enseña
+porcentaje, y si no hay ningún dato el bloque explica qué hacer en vez de
+enseñar cuatro ceros.
+
+### Emails del ciclo
+
+Además de los tres que ya había (nueva solicitud, caducidad tras
+cancelar, contacto de la landing), el cron diario y el panel mandan:
+
+- **Bienvenida** al club (con los tres pasos) y a la empresa, cuando
+  confirman su cuenta.
+- **Respuesta del club**: aviso a la empresa cuando el club abre la
+  conversación o descarta su solicitud. Solo si el estado cambia de
+  verdad.
+- **Solicitudes sin abrir**: recordatorio al club a las 48 horas, un
+  email por club aunque tenga varias esperando.
+- **Fin del mes gratis**: a 3 y 1 día del primer cobro.
+
+Lo que se manda una sola vez queda apuntado en `email_log`; el
+recordatorio de solicitudes, en `contact_requests.unread_reminder_sent_at`.
+El cálculo de "qué aviso toca hoy" vive en `lib/fechas.ts`, con tests: es
+donde un error se traduce en un email enviado el día que no toca.
+
+### Analítica de producto
+
+`@vercel/analytics` en el layout. No usa cookies ni identifica a nadie,
+así que no depende del banner de consentimiento; solo envía datos en los
+despliegues de Vercel con la analítica activada, en local no hace nada.
+Sirve para lo que la base de datos no puede contar: cuánta gente llega a
+la landing y se va sin registrarse.
+
+## Migraciones 0013 y 0014
+
+- `0013_emails_del_ciclo.sql`: tabla `email_log` y
+  `contact_requests.unread_reminder_sent_at`.
+- `0014_metricas_del_club.sql`: `club_page_views`,
+  `club_search_appearances` y `dossier_views`.

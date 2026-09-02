@@ -183,6 +183,25 @@
     "xTwitter": "X / Twitter",
     "youtube": "YouTube"
   },
+  "primerosPasos": {
+    "titulo": "Empieza por aquí",
+    "subtitulo": "Tres pasos y tu club ya se puede enseñar a una empresa.",
+    "identidad": {
+      "titulo": "Sube tu logo y cuenta quiénes sois",
+      "texto": "Con el logo y cuatro líneas de descripción tu página ya tiene cara.",
+      "accion": "Completar"
+    },
+    "equipos": {
+      "titulo": "Añade tus equipos y tu cantera",
+      "texto": "Es lo primero que mira una empresa: a cuánta gente llega tu club.",
+      "accion": "Añadir equipos"
+    },
+    "oportunidad": {
+      "titulo": "Publica tu primera oportunidad",
+      "texto": "Aunque sea de 50 €. Sin oportunidades no apareces en el buscador.",
+      "accion": "Crear oportunidad"
+    }
+  },
   "privacidad": {
     "descargaUnArchivoCon": "Descarga un archivo con todos los datos de tu cuenta: perfil del club, equipos, patrocinadores, oportunidades, dossier, solicitudes de contacto recibidas y el registro de tus consentimientos.",
     "descargarMisDatos": "Descargar mis datos",

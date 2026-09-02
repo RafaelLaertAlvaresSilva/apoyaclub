@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -66,6 +67,15 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[lo
           {children}
           <Footer />
           <CookieBanner />
+          {/*
+            Analítica de producto: sin ella se sabe cuántos clubes se
+            registran, pero no cuántos llegan a la landing y se van.
+            Vercel Analytics no usa cookies ni identifica a nadie, así
+            que no depende del banner de consentimiento; solo funciona en
+            los despliegues de Vercel con la analítica activada, en local
+            no envía nada.
+          */}
+          <Analytics />
         </NextIntlClientProvider>
       </body>
     </html>

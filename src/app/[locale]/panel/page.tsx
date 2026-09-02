@@ -10,10 +10,12 @@ import {
   type ClubTeamRow,
 } from "@/lib/club-mappers";
 import { obtenerMetricasClub } from "@/lib/club-metrics";
+import { primerosPasos } from "@/lib/onboarding";
 import { calcularPorcentajeCompletado } from "@/lib/profile-completion";
 import { createClient } from "@/lib/supabase/server";
 import { BarraProgreso } from "./components/BarraProgreso";
 import { MetricasClub } from "./components/MetricasClub";
+import { PrimerosPasos } from "./components/PrimerosPasos";
 import { PanelNav } from "./components/PanelNav";
 import { PanelTabs } from "./components/PanelTabs";
 
@@ -31,8 +33,12 @@ export default async function PanelPage() {
     return redirect({ href: "/login", locale });
   }
 
-  const [{ data: filaClub }, { data: filasEquipos }, { data: filasPatrocinadores }] =
-    await Promise.all([
+  const [
+    { data: filaClub },
+    { data: filasEquipos },
+    { data: filasPatrocinadores },
+    { count: oportunidadesPublicadas },
+  ] = await Promise.all([
       supabase.from("clubs").select("*").eq("id", user.id).maybeSingle<ClubRow>(),
       supabase
         .from("club_teams")
@@ -46,6 +52,13 @@ export default async function PanelPage() {
         .eq("club_id", user.id)
         .order("created_at", { ascending: true })
         .returns<ClubSponsorRow[]>(),
+      // Solo el número: es para saber si ya ha publicado alguna, no para
+      // enseñarlas aquí.
+      supabase
+        .from("opportunities")
+        .select("id", { count: "exact", head: true })
+        .eq("club_id", user.id)
+        .is("archived_at", null),
     ]);
 
   // Las métricas se piden aparte porque van con la clave de servicio
@@ -55,6 +68,8 @@ export default async function PanelPage() {
   const perfil = filaClub ? clubRowToProfile(filaClub) : null;
   const equipos = (filasEquipos ?? []).map(clubTeamRowToTeam);
   const patrocinadores = (filasPatrocinadores ?? []).map(clubSponsorRowToSponsor);
+
+  const pasosIniciales = primerosPasos(perfil, equipos, oportunidadesPublicadas ?? 0);
 
   const nombreProvisional = (user.user_metadata?.name as string | undefined) ?? user.email;
   const porcentaje = calcularPorcentajeCompletado(perfil, equipos, patrocinadores);
@@ -72,6 +87,8 @@ export default async function PanelPage() {
       </div>
 
       <PanelNav activo="perfil" />
+
+      <PrimerosPasos pasos={pasosIniciales} />
 
       <MetricasClub metricas={metricas} />
 
