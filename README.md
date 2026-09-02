@@ -856,3 +856,50 @@ la landing y se va sin registrarse.
   `contact_requests.unread_reminder_sent_at`.
 - `0014_metricas_del_club.sql`: `club_page_views`,
   `club_search_appearances` y `dossier_views`.
+
+
+## Servicios que el club necesita (`/servicios`)
+
+La otra dirección de la plataforma. El buscador de patrocinio va de
+dinero: la empresa paga y el club le da visibilidad. Esto va de lo
+contrario, y es la puerta de entrada de la empresa pequeña que no tiene
+presupuesto de patrocinio pero sí una clínica de fisioterapia, una
+furgoneta o una imprenta.
+
+- El club los publica en su panel, en la pestaña **Servicios que
+  buscamos**: categoría, qué necesita y el detalle. Puede marcarlos como
+  cubiertos sin perder el histórico.
+- Aparecen en su ficha pública con un botón "Puedo ofrecerlo", que
+  reutiliza la solicitud de contacto de la Fase 8.
+- `/servicios` es el listado para empresas, filtrable por tipo y
+  provincia, enlazado desde `/buscar` y en el sitemap.
+
+Como el resto de lo público, sale de una vista (`club_service_needs_public`)
+que solo muestra necesidades abiertas de clubes con suscripción activa o
+en prueba y no suspendidos.
+
+## Oportunidades repartidas entre varias empresas
+
+"Buscamos 10 empresas que pongan 100 € cada una para el torneo de
+Navidad". Se activa poniendo el número de plazas en el formulario de la
+oportunidad: a partir de dos, el valor pasa a entenderse **por empresa** y
+tanto el buscador como la ficha del club muestran cuántas plazas quedan.
+
+Las plazas cubiertas las lleva el club a mano: la plataforma no reserva
+plazas ni cobra nada, igual que no interviene en el resto del acuerdo.
+
+## Plantillas de oportunidad
+
+Están en la tabla `opportunity_templates` (migración 0015), sembrada con
+las catorce que antes vivían en el código. Un club puede compartir las
+suyas con el botón **Compartir como plantilla**: se comparte el título y
+la descripción, nunca el valor ni la exclusividad. Si la migración no
+está aplicada, el panel enseña las plantillas del código.
+
+## Migraciones 0015 a 0017
+
+- `0015_plantillas_oportunidad.sql`: `opportunity_templates`.
+- `0016_servicios_que_busca_el_club.sql`: `club_service_needs` y su vista
+  pública.
+- `0017_oportunidades_por_plazas.sql`: `slots_total` y `slots_taken` en
+  `opportunities`.
