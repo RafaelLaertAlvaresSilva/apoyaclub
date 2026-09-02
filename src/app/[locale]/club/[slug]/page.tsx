@@ -16,6 +16,8 @@ import { CompartirBoton } from "./components/CompartirBoton";
 import { GuardarFavoritoBoton } from "./components/GuardarFavoritoBoton";
 import { RegistrarVisita } from "./components/RegistrarVisita";
 import { SolicitarContactoBoton } from "./components/SolicitarContactoBoton";
+import { ETIQUETA_CATEGORIA_SERVICIO, obtenerServiciosDelClub } from "@/lib/service-needs";
+import { createPublicClient } from "@/lib/supabase/public";
 import { deportesDelClub, obtenerClubPublico, obtenerEmailContacto } from "./data";
 
 export const revalidate = 60;
@@ -92,6 +94,10 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
 
   const { perfil, equipos, patrocinadores, oportunidades } = datos;
   const emailContacto = await obtenerEmailContacto(perfil.id);
+  // Servicios que el club busca (migración 0016): la puerta de entrada
+  // de la empresa que no tiene presupuesto de patrocinio pero sí un
+  // servicio que ofrecer.
+  const servicios = await obtenerServiciosDelClub(createPublicClient(), perfil.id);
 
   const deportes = deportesDelClub(equipos);
   const ubicacion = [perfil.city, perfil.province].filter(Boolean).join(", ");
@@ -478,6 +484,33 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                         {patrocinador.website.replace(/^https?:\/\//, "")}
                       </a>
                     )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </Seccion>
+        )}
+
+        {servicios.length > 0 && (
+          <Seccion titulo={t("servicios.titulo")} descripcion={t("servicios.descripcion")}>
+            <ul className="grid gap-3 sm:grid-cols-2">
+              {servicios.map((servicio) => (
+                <li key={servicio.id} className="rounded-xl border border-zinc-200 p-4">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
+                    {ETIQUETA_CATEGORIA_SERVICIO[servicio.category]}
+                  </p>
+                  <p className="mt-1 font-medium text-zinc-900">{servicio.title}</p>
+                  {servicio.description && (
+                    <p className="mt-1 text-sm text-zinc-600">{servicio.description}</p>
+                  )}
+                  <div className="mt-3">
+                    <SolicitarContactoBoton
+                      clubId={perfil.id}
+                      clubName={perfil.name}
+                      variante="secundaria"
+                    >
+                      {t("servicios.ofrecer")}
+                    </SolicitarContactoBoton>
                   </div>
                 </li>
               ))}

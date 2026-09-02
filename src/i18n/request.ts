@@ -25,6 +25,7 @@ const MODULOS = [
   "admin",
   "legal",
   "emails",
+  "servicios",
 ] as const;
 
 export default getRequestConfig(async ({ requestLocale }) => {

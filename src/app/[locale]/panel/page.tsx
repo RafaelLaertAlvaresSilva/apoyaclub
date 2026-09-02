@@ -11,6 +11,7 @@ import {
 } from "@/lib/club-mappers";
 import { obtenerMetricasClub } from "@/lib/club-metrics";
 import { primerosPasos } from "@/lib/onboarding";
+import { filaAServicio, type FilaServicio, type ServiceNeed } from "@/lib/service-needs";
 import { calcularPorcentajeCompletado } from "@/lib/profile-completion";
 import { createClient } from "@/lib/supabase/server";
 import { BarraProgreso } from "./components/BarraProgreso";
@@ -38,6 +39,7 @@ export default async function PanelPage() {
     { data: filasEquipos },
     { data: filasPatrocinadores },
     { count: oportunidadesPublicadas },
+    { data: filasServicios },
   ] = await Promise.all([
       supabase.from("clubs").select("*").eq("id", user.id).maybeSingle<ClubRow>(),
       supabase
@@ -59,6 +61,14 @@ export default async function PanelPage() {
         .select("id", { count: "exact", head: true })
         .eq("club_id", user.id)
         .is("archived_at", null),
+      // Servicios que el club necesita (migración 0016). Si la tabla
+      // todavía no existe, `data` viene null y la pestaña sale vacía.
+      supabase
+        .from("club_service_needs")
+        .select("*")
+        .eq("club_id", user.id)
+        .order("created_at", { ascending: false })
+        .returns<FilaServicio[]>(),
     ]);
 
   // Las métricas se piden aparte porque van con la clave de servicio
@@ -68,6 +78,8 @@ export default async function PanelPage() {
   const perfil = filaClub ? clubRowToProfile(filaClub) : null;
   const equipos = (filasEquipos ?? []).map(clubTeamRowToTeam);
   const patrocinadores = (filasPatrocinadores ?? []).map(clubSponsorRowToSponsor);
+
+  const servicios: ServiceNeed[] = (filasServicios ?? []).map(filaAServicio);
 
   const pasosIniciales = primerosPasos(perfil, equipos, oportunidadesPublicadas ?? 0);
 
@@ -99,6 +111,7 @@ export default async function PanelPage() {
         perfil={perfil}
         equipos={equipos}
         patrocinadores={patrocinadores}
+        servicios={servicios}
       />
     </div>
   );

@@ -5,7 +5,8 @@
   },
   "cabecera": {
     "titulo": "Buscar oportunidades de patrocinio",
-    "texto": "Filtra por deporte, ubicación, presupuesto y objetivo para encontrar el club que mejor encaja con tu marca."
+    "texto": "Filtra por deporte, ubicación, presupuesto y objetivo para encontrar el club que mejor encaja con tu marca.",
+    "verServicios": "¿Ofreces un servicio? Mira qué necesitan los clubes →"
   },
   "filtros": {
     "categoria": "Categoría",

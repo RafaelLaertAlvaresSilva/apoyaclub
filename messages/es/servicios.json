@@ -1,0 +1,18 @@
+{
+  "meta": {
+    "titulo": "Qué necesitan los clubes — ApoyaClub",
+    "descripcion": "Clubes deportivos que buscan fisioterapia, transporte, imprenta, comidas de equipo y otros servicios a cambio de visibilidad. Acceso gratuito para empresas."
+  },
+  "eyebrow": "Para empresas",
+  "titulo": "Qué necesitan los clubes",
+  "texto": "No todo es poner dinero. Muchos clubes buscan servicios —fisioterapia, transporte, imprenta, comidas de equipo— a cambio de visibilidad. Si tu empresa puede cubrir alguno, es la forma más fácil de empezar una colaboración.",
+  "filtroCategoria": "Tipo de servicio",
+  "todasLasCategorias": "Todos",
+  "filtroProvincia": "Provincia",
+  "todaEspana": "Toda España",
+  "filtrar": "Filtrar",
+  "verPatrocinios": "Ver oportunidades de patrocinio →",
+  "verClub": "Ver club",
+  "vacioTitulo": "Todavía no hay servicios publicados con estos filtros.",
+  "vacioTexto": "Prueba con otra provincia u otro tipo de servicio, o mira las oportunidades de patrocinio."
+}

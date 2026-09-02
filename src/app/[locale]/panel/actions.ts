@@ -5,6 +5,8 @@ import type { User } from "@supabase/supabase-js";
 import { registrarConsentimiento } from "@/lib/consent";
 import { geocodificarDireccion } from "@/lib/geocoding";
 import { CONSENT_TYPES, LEGAL_VERSIONS } from "@/lib/legal";
+import { getTranslations } from "next-intl/server";
+import { esCategoriaValida } from "@/lib/service-needs";
 import { createClient } from "@/lib/supabase/server";
 import type { Role, TeamLevel } from "@/lib/types";
 
@@ -438,4 +440,76 @@ export async function eliminarPatrocinador(formData: FormData): Promise<void> {
 
   await supabase.from("club_sponsors").delete().eq("id", id).eq("club_id", user.id);
   revalidatePath(RUTA_PANEL);
+}
+
+// ---------------------------------------------------------------------
+// Servicios que el club necesita (migración 0016)
+// ---------------------------------------------------------------------
+
+/**
+ * Alta de un servicio que el club busca. Es la otra dirección de la
+ * plataforma: no lo que ofrece, sino lo que le hace falta, que es por
+ * donde entra la empresa pequeña sin presupuesto de patrocinio.
+ */
+export async function guardarServicio(
+  _estadoPrevio: EstadoGuardado,
+  formData: FormData,
+): Promise<EstadoGuardado> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return { error: contexto.error };
+  const { supabase, user } = contexto;
+
+  const t = await getTranslations("panel.servicios");
+
+  const title = String(formData.get("title") ?? "").trim();
+  const categoria = String(formData.get("category") ?? "");
+
+  if (!title) return { error: t("errorTitulo") };
+  if (!esCategoriaValida(categoria)) return { error: t("errorCategoria") };
+
+  const descripcion = String(formData.get("description") ?? "").trim();
+
+  const { error } = await supabase.from("club_service_needs").insert({
+    club_id: user.id,
+    category: categoria,
+    title,
+    description: descripcion || null,
+  });
+
+  if (error) return { error: t("errorGuardar") };
+
+  revalidatePath("/panel");
+  return { ok: true };
+}
+
+/** Marca un servicio como cubierto (o lo reabre) sin borrarlo. */
+export async function cambiarEstadoServicio(formData: FormData): Promise<void> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return;
+  const { supabase, user } = contexto;
+
+  const id = String(formData.get("id") ?? "");
+  const estado = String(formData.get("status") ?? "");
+  if (!id || (estado !== "open" && estado !== "covered")) return;
+
+  await supabase
+    .from("club_service_needs")
+    .update({ status: estado })
+    .eq("id", id)
+    .eq("club_id", user.id);
+
+  revalidatePath("/panel");
+}
+
+export async function eliminarServicio(formData: FormData): Promise<void> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return;
+  const { supabase, user } = contexto;
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  await supabase.from("club_service_needs").delete().eq("id", id).eq("club_id", user.id);
+
+  revalidatePath("/panel");
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { ClubProfile, ClubSponsor, ClubTeam } from "@/lib/types";
+import type { ServiceNeed } from "@/lib/service-needs";
 import { AudienciaForm } from "./AudienciaForm";
 import { CanteraForm } from "./CanteraForm";
 import { ComunidadForm } from "./ComunidadForm";
@@ -10,6 +11,7 @@ import { HistoriaForm } from "./HistoriaForm";
 import { IdentidadForm } from "./IdentidadForm";
 import { NivelDeportivoForm } from "./NivelDeportivoForm";
 import { PatrocinadoresForm } from "./PatrocinadoresForm";
+import { ServiciosForm } from "./ServiciosForm";
 
 type Pestana =
   | "identidad"
@@ -19,7 +21,8 @@ type Pestana =
   | "historia"
   | "audiencia"
   | "comunidad"
-  | "patrocinadores";
+  | "patrocinadores"
+  | "servicios";
 
 const PESTANAS: { id: Pestana; etiqueta: string }[] = [
   { id: "identidad", etiqueta: "Identidad" },
@@ -30,6 +33,7 @@ const PESTANAS: { id: Pestana; etiqueta: string }[] = [
   { id: "audiencia", etiqueta: "Audiencia" },
   { id: "comunidad", etiqueta: "Comunidad" },
   { id: "patrocinadores", etiqueta: "Patrocinadores" },
+  { id: "servicios", etiqueta: "Servicios que buscamos" },
 ];
 
 export function PanelTabs({
@@ -37,11 +41,13 @@ export function PanelTabs({
   perfil,
   equipos,
   patrocinadores,
+  servicios = [],
 }: {
   userId: string;
   perfil: ClubProfile | null;
   equipos: ClubTeam[];
   patrocinadores: ClubSponsor[];
+  servicios?: ServiceNeed[];
 }) {
   const [pestanaActiva, setPestanaActiva] = useState<Pestana>("identidad");
 
@@ -91,6 +97,7 @@ export function PanelTabs({
         {pestanaActiva === "patrocinadores" && perfilCreado && (
           <PatrocinadoresForm userId={userId} patrocinadores={patrocinadores} />
         )}
+        {pestanaActiva === "servicios" && perfilCreado && <ServiciosForm servicios={servicios} />}
       </div>
     </div>
   );
