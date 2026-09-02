@@ -3,31 +3,48 @@
 Cinco cosas, con lo que cuesta cada una. Las dos primeras las puedes
 hacer en diez minutos; las otras tres dependen de terceros.
 
+## 0. Antes de nada: ¿tienes ya un proyecto de Supabase?
+
+Tu `.env.local` de local tiene valores de relleno
+(`NEXT_PUBLIC_SUPABASE_URL=https://placeholder...`), puestos en su día
+para poder ver el diseño sin base de datos. Así que hay dos casos:
+
+- **Todavía no hay proyecto de Supabase.** Créalo en supabase.com (es
+  gratis para empezar), y aplica **todas** las migraciones de golpe con
+  [`docs/migraciones-todas.sql`](./migraciones-todas.sql).
+- **Ya tienes el proyecto con las migraciones 0001 a 0009 aplicadas.**
+  Entonces solo faltan las nuevas:
+  [`docs/migraciones-0010-a-0017.sql`](./migraciones-0010-a-0017.sql).
+
 ## 1. Aplicar las migraciones (2 minutos)
 
-Supabase → SQL Editor → pegar el contenido de
-[`docs/migraciones-0010-a-0017.sql`](./migraciones-0010-a-0017.sql) →
-Run.
+Supabase → SQL Editor → pegar el archivo que te toque según el punto
+anterior → Run.
 
-Es el contenido de las ocho migraciones en orden, sin cambios. Todas son
+Es el contenido de las migraciones en orden, sin cambios. Todas son
 idempotentes: si ya habías aplicado alguna suelta, no pasa nada por
 ejecutarlo otra vez.
 
-Hasta que no se apliquen, lo que necesita tabla nueva no aparece (las
-métricas del panel, los servicios, las plazas), pero la aplicación no se
-rompe: está escrita para seguir funcionando sin ellas.
+Después, en Supabase → Authentication → URL Configuration, añade tu URL
+de producción y `…/auth/callback` a las Redirect URLs, y comprueba que
+"Confirm email" sigue activado.
+
+Hasta que no se apliquen las migraciones, lo que necesita tabla nueva no
+aparece (las métricas del panel, los servicios, las plazas), pero la
+aplicación no se rompe: está escrita para seguir funcionando sin ellas.
 
 ## 2. Completar `.env.local` (5 minutos)
 
-Ahora mismo tu `.env.local` solo tiene tres variables: la URL de
-Supabase, la clave anónima y la URL del sitio. Con eso funcionan las
-páginas públicas, pero **no** el panel, los emails, el dossier, la
-suscripción ni las métricas, porque todo eso usa la clave de servicio.
+Ahora mismo tu `.env.local` solo tiene tres variables, y con valores de
+relleno. Con eso se ve el diseño, pero **no** funcionan el login, el
+buscador, el panel, los emails, el dossier, la suscripción ni las
+métricas.
 
 Copia de `.env.local.example` las que faltan y rellena al menos:
 
 | Variable | De dónde sale | Sin ella no funciona |
 |---|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Project Settings → API | absolutamente todo |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API | panel, emails, dossier, métricas, límites |
 | `RESEND_API_KEY` y `RESEND_FROM_EMAIL` | resend.com | todos los emails |
 | `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET` | Stripe | la suscripción |
@@ -76,3 +93,17 @@ reales.
 a quién llamar, qué pedirles exactamente, el mensaje de WhatsApp, el
 email, el guion de la llamada y las cuatro objeciones que te van a
 poner. El producto ya está listo para enseñárselo a un club.
+
+
+## Comprobar que todo está en su sitio
+
+Con el `.env.local` real y las migraciones aplicadas:
+
+```bash
+npm run dev     # la aplicación entera, no solo el diseño
+npm test        # 43 tests, deberían pasar todos
+npm run seed    # opcional: 15 clubes de prueba para ver el buscador con volumen
+```
+
+Si `npm run dev` arranca y puedes registrar un club, crear una
+oportunidad y verla en `/es/buscar`, está todo conectado.

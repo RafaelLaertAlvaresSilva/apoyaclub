@@ -1,14 +1,13 @@
 -- ---------------------------------------------------------------------
--- ApoyaClub — migraciones 0010 a 0017 en un solo archivo.
+-- ApoyaClub — migraciones 0010 a 0017.
 --
--- Para aplicarlas de una vez: Supabase -> SQL Editor -> pegar todo esto
--- -> Run. Es el contenido de supabase/migrations/0010 … 0017 en orden y
--- sin ningún cambio. Todas son idempotentes (create ... if not exists,
--- add column if not exists, create or replace view), así que ejecutarlo
--- dos veces no rompe nada.
+-- Para una base de datos que ya tiene aplicadas las migraciones 0001 a
+-- 0009: Supabase -> SQL Editor -> pegar todo esto -> Run.
 --
--- Generado el 2026-09-02. Las migraciones que vengan después NO se añaden
--- solas a este archivo: esas se aplican por su cuenta.
+-- Generado el 2026-09-02 a partir de
+-- supabase/migrations/. Todas son idempotentes (create ... if not
+-- exists, add column if not exists, create or replace view), así que
+-- ejecutarlo dos veces no rompe nada.
 -- ---------------------------------------------------------------------
 
 
