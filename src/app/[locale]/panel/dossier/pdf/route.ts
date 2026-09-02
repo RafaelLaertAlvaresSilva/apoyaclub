@@ -41,6 +41,7 @@ export async function POST(request: Request) {
         .from("club_sponsors")
         .select("*")
         .eq("club_id", user.id)
+        .order("sort_order", { ascending: true })
         .order("created_at", { ascending: true })
         .returns<ClubSponsorRow[]>(),
       idsOportunidades.length > 0

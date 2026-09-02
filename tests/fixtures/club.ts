@@ -65,6 +65,11 @@ export function patrocinadorDePrueba(cambios: Partial<ClubSponsor> = {}): ClubSp
     name: "Ferretería del barrio",
     logoUrl: null,
     website: null,
+    tier: "colaborador",
+    tierLabel: null,
+    description: null,
+    sinceYear: null,
+    sortOrder: 0,
     ...cambios,
   };
 }

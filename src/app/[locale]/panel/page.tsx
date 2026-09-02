@@ -52,6 +52,7 @@ export default async function PanelPage() {
         .from("club_sponsors")
         .select("*")
         .eq("club_id", user.id)
+        .order("sort_order", { ascending: true })
         .order("created_at", { ascending: true })
         .returns<ClubSponsorRow[]>(),
       // Solo el número: es para saber si ya ha publicado alguna, no para

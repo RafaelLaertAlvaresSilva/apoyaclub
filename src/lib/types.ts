@@ -116,6 +116,20 @@ export type ClubTeam = {
   playerCount: number | null;
 };
 
+/**
+ * Categoría de un patrocinador actual del club (migración 0019). Los
+ * tres primeros son el catálogo común con `opportunities.sponsorLevel`;
+ * "otro" deja que el club use su propia nomenclatura.
+ */
+export type SponsorTier = "principal" | "oficial" | "colaborador" | "otro";
+
+export const NIVELES_PATROCINADOR: SponsorTier[] = [
+  "principal",
+  "oficial",
+  "colaborador",
+  "otro",
+];
+
 /** Fila de la tabla `club_sponsors`. */
 export type ClubSponsor = {
   id: string;
@@ -123,7 +137,29 @@ export type ClubSponsor = {
   name: string;
   logoUrl: string | null;
   website: string | null;
+  tier: SponsorTier;
+  /** Etiqueta propia del club cuando `tier` es "otro". Null en el resto. */
+  tierLabel: string | null;
+  /** Dos líneas sobre la colaboración, escritas por el club. */
+  description: string | null;
+  /** Año en que empezó a patrocinar. */
+  sinceYear: number | null;
+  sortOrder: number;
 };
+
+/** Nombre que se enseña para la categoría de un patrocinador. */
+export function etiquetaNivelPatrocinador(patrocinador: {
+  tier: SponsorTier;
+  tierLabel: string | null;
+}): string {
+  if (patrocinador.tier === "otro") return patrocinador.tierLabel ?? "Colaborador";
+  const nombres: Record<Exclude<SponsorTier, "otro">, string> = {
+    principal: "Patrocinador principal",
+    oficial: "Patrocinador oficial",
+    colaborador: "Colaborador",
+  };
+  return nombres[patrocinador.tier];
+}
 
 // ---------------------------------------------------------------------
 // Fase 6: oportunidades de patrocinio

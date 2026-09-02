@@ -53,6 +53,7 @@ export const obtenerClubPublico = cache(
           .from("club_sponsors")
           .select("*")
           .eq("club_id", filaClub.id)
+          .order("sort_order", { ascending: true })
           .order("created_at", { ascending: true })
           .returns<ClubSponsorRow[]>(),
         // Solo las disponibles y no archivadas: son las únicas que debe

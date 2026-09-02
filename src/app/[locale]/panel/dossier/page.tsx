@@ -38,6 +38,7 @@ export default async function DossierPage() {
         .from("club_sponsors")
         .select("*")
         .eq("club_id", user.id)
+        .order("sort_order", { ascending: true })
         .order("created_at", { ascending: true })
         .returns<ClubSponsorRow[]>(),
       // Todas las no archivadas: a diferencia de la página pública, el

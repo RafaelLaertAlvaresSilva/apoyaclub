@@ -8,7 +8,8 @@ import { CONSENT_TYPES, LEGAL_VERSIONS } from "@/lib/legal";
 import { getTranslations } from "next-intl/server";
 import { esCategoriaValida } from "@/lib/service-needs";
 import { createClient } from "@/lib/supabase/server";
-import type { Role, TeamLevel } from "@/lib/types";
+import { NIVELES_PATROCINADOR } from "@/lib/types";
+import type { Role, SponsorTier, TeamLevel } from "@/lib/types";
 
 export type EstadoGuardado = { error: string; ok?: false } | { ok: true; error?: undefined } | null;
 
@@ -417,17 +418,172 @@ export async function agregarPatrocinador(
   const name = leerTexto(formData, "name");
   if (!name) return { error: "Indica el nombre del patrocinador." };
 
+  const nivel = leerNivelPatrocinador(formData);
+  if ("error" in nivel) return { error: nivel.error };
+
+  const descripcion = leerTexto(formData, "description");
+  if (descripcion && descripcion.length > 400) {
+    return { error: "El texto del patrocinador no puede pasar de 400 caracteres." };
+  }
+
+  // Va al final de su categoría: el club reordena después si quiere.
+  const { data: ultimo } = await supabase
+    .from("club_sponsors")
+    .select("sort_order")
+    .eq("club_id", user.id)
+    .order("sort_order", { ascending: false })
+    .limit(1)
+    .maybeSingle<{ sort_order: number }>();
+
   const { error } = await supabase.from("club_sponsors").insert({
     club_id: user.id,
     name,
     website: leerTexto(formData, "website"),
     logo_url: leerTexto(formData, "logoUrl"),
+    tier: nivel.tier,
+    tier_label: nivel.tierLabel,
+    description: descripcion,
+    since_year: leerAnio(formData, "sinceYear"),
+    sort_order: (ultimo?.sort_order ?? 0) + 1,
   });
 
   if (error) return { error: "No se ha podido añadir el patrocinador." };
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
+}
+
+/**
+ * Edición de un patrocinador ya dado de alta. El logo solo se toca si
+ * viene uno nuevo en el formulario: así el club puede cambiar el texto o
+ * la categoría sin tener que volver a subir la imagen.
+ */
+export async function editarPatrocinador(
+  _estadoPrevio: EstadoGuardado,
+  formData: FormData,
+): Promise<EstadoGuardado> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return { error: contexto.error };
+  const { supabase, user } = contexto;
+
+  const id = leerTexto(formData, "id");
+  if (!id) return { error: "No se ha podido identificar el patrocinador." };
+
+  const name = leerTexto(formData, "name");
+  if (!name) return { error: "Indica el nombre del patrocinador." };
+
+  const nivel = leerNivelPatrocinador(formData);
+  if ("error" in nivel) return { error: nivel.error };
+
+  const descripcion = leerTexto(formData, "description");
+  if (descripcion && descripcion.length > 400) {
+    return { error: "El texto del patrocinador no puede pasar de 400 caracteres." };
+  }
+
+  const logoUrl = leerTexto(formData, "logoUrl");
+
+  const { error } = await supabase
+    .from("club_sponsors")
+    .update({
+      name,
+      website: leerTexto(formData, "website"),
+      tier: nivel.tier,
+      tier_label: nivel.tierLabel,
+      description: descripcion,
+      since_year: leerAnio(formData, "sinceYear"),
+      ...(logoUrl ? { logo_url: logoUrl } : {}),
+    })
+    .eq("id", id)
+    .eq("club_id", user.id);
+
+  if (error) return { error: "No se han podido guardar los cambios." };
+
+  revalidatePath(RUTA_PANEL);
+  return { ok: true };
+}
+
+/**
+ * Sube o baja un patrocinador dentro de la lista. Se intercambia el
+ * `sort_order` con el vecino en la misma dirección, que es lo bastante
+ * simple para no necesitar transacción: si la segunda escritura fallase,
+ * los dos quedarían con el mismo orden y se desempataría por fecha.
+ */
+export async function moverPatrocinador(formData: FormData): Promise<void> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return;
+  const { supabase, user } = contexto;
+
+  const id = String(formData.get("id") ?? "");
+  const direccion = String(formData.get("direccion") ?? "");
+  if (!id || (direccion !== "arriba" && direccion !== "abajo")) return;
+
+  const { data: filas } = await supabase
+    .from("club_sponsors")
+    .select("id, sort_order")
+    .eq("club_id", user.id)
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true })
+    .returns<{ id: string; sort_order: number }[]>();
+
+  if (!filas) return;
+
+  const posicion = filas.findIndex((fila) => fila.id === id);
+  const destino = direccion === "arriba" ? posicion - 1 : posicion + 1;
+  if (posicion === -1 || destino < 0 || destino >= filas.length) return;
+
+  const actual = filas[posicion];
+  const vecino = filas[destino];
+
+  // Si vinieran empatados a 0 (filas antiguas), se usan las posiciones
+  // para que el intercambio tenga efecto igualmente.
+  const ordenActual = actual.sort_order === vecino.sort_order ? posicion : actual.sort_order;
+  const ordenVecino = actual.sort_order === vecino.sort_order ? destino : vecino.sort_order;
+
+  await supabase
+    .from("club_sponsors")
+    .update({ sort_order: ordenVecino })
+    .eq("id", actual.id)
+    .eq("club_id", user.id);
+  await supabase
+    .from("club_sponsors")
+    .update({ sort_order: ordenActual })
+    .eq("id", vecino.id)
+    .eq("club_id", user.id);
+
+  revalidatePath(RUTA_PANEL);
+}
+
+/**
+ * Lee la categoría del patrocinador del formulario. "otro" obliga a
+ * escribir una etiqueta propia; el resto de niveles la dejan a null,
+ * como exige la restricción de la migración 0019.
+ */
+function leerNivelPatrocinador(
+  formData: FormData,
+): { tier: SponsorTier; tierLabel: string | null } | { error: string } {
+  const valor = String(formData.get("tier") ?? "colaborador");
+  const tier = NIVELES_PATROCINADOR.includes(valor as SponsorTier)
+    ? (valor as SponsorTier)
+    : "colaborador";
+
+  if (tier !== "otro") return { tier, tierLabel: null };
+
+  const etiqueta = leerTexto(formData, "tierLabel");
+  if (!etiqueta) {
+    return { error: 'Escribe cómo quieres llamar a esta categoría (por ejemplo, "Patrocinador técnico").' };
+  }
+  if (etiqueta.length > 40) {
+    return { error: "El nombre de la categoría no puede pasar de 40 caracteres." };
+  }
+
+  return { tier, tierLabel: etiqueta };
+}
+
+/** Año de cuatro cifras dentro de un rango razonable, o null. */
+function leerAnio(formData: FormData, campo: string): number | null {
+  const anio = leerEntero(formData, campo);
+  if (anio == null) return null;
+  return anio >= 1900 && anio <= 2100 ? anio : null;
 }
 
 export async function eliminarPatrocinador(formData: FormData): Promise<void> {

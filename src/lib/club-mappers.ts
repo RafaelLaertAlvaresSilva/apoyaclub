@@ -1,3 +1,4 @@
+import { NIVELES_PATROCINADOR, etiquetaNivelPatrocinador } from "@/lib/types";
 import type {
   ClubProfile,
   ClubSponsor,
@@ -6,6 +7,7 @@ import type {
   FollowersByNetwork,
   Milestone,
   SocialLinks,
+  SponsorTier,
   TeamLevel,
 } from "@/lib/types";
 
@@ -70,6 +72,11 @@ export type ClubSponsorRow = {
   name: string;
   logo_url: string | null;
   website: string | null;
+  tier: string | null;
+  tier_label: string | null;
+  description: string | null;
+  since_year: number | null;
+  sort_order: number | null;
 };
 
 export function clubRowToProfile(row: ClubRow): ClubProfile {
@@ -123,11 +130,64 @@ export function clubTeamRowToTeam(row: ClubTeamRow): ClubTeam {
 }
 
 export function clubSponsorRowToSponsor(row: ClubSponsorRow): ClubSponsor {
+  // `tier` viene de una columna con default y constraint, pero las filas
+  // anteriores a la migración 0019 (o una lectura desde una vista que no
+  // la traiga) podrían llegar sin valor: se cae a "colaborador", que es
+  // el nivel neutro.
+  const tier = NIVELES_PATROCINADOR.includes(row.tier as SponsorTier)
+    ? (row.tier as SponsorTier)
+    : "colaborador";
+
   return {
     id: row.id,
     clubId: row.club_id,
     name: row.name,
     logoUrl: row.logo_url,
     website: row.website,
+    tier,
+    tierLabel: tier === "otro" ? row.tier_label : null,
+    description: row.description,
+    sinceYear: row.since_year,
+    sortOrder: row.sort_order ?? 0,
   };
+}
+
+/**
+ * Orden en que se pintan los patrocinadores: primero el principal, luego
+ * oficiales, colaboradores y los de etiqueta libre. Dentro de cada
+ * categoría manda el orden que haya fijado el club.
+ */
+const PESO_NIVEL: Record<SponsorTier, number> = {
+  principal: 0,
+  oficial: 1,
+  colaborador: 2,
+  otro: 3,
+};
+
+export function ordenarPatrocinadores(patrocinadores: ClubSponsor[]): ClubSponsor[] {
+  return [...patrocinadores].sort((a, b) => {
+    const porNivel = PESO_NIVEL[a.tier] - PESO_NIVEL[b.tier];
+    if (porNivel !== 0) return porNivel;
+    return a.sortOrder - b.sortOrder;
+  });
+}
+
+/**
+ * Agrupa los patrocinadores por la etiqueta que se enseña, conservando
+ * el orden de `ordenarPatrocinadores`. Los de nivel "otro" se agrupan por
+ * su etiqueta propia, así que un club puede tener varios grupos libres.
+ */
+export function agruparPatrocinadoresPorNivel(
+  patrocinadores: ClubSponsor[],
+): { etiqueta: string; patrocinadores: ClubSponsor[] }[] {
+  const grupos: { etiqueta: string; patrocinadores: ClubSponsor[] }[] = [];
+
+  for (const patrocinador of ordenarPatrocinadores(patrocinadores)) {
+    const etiqueta = etiquetaNivelPatrocinador(patrocinador);
+    const grupo = grupos.find((candidato) => candidato.etiqueta === etiqueta);
+    if (grupo) grupo.patrocinadores.push(patrocinador);
+    else grupos.push({ etiqueta, patrocinadores: [patrocinador] });
+  }
+
+  return grupos;
 }

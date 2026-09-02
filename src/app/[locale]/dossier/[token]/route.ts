@@ -80,6 +80,7 @@ export async function GET(_request: Request, { params }: ParametrosRuta) {
         .from("club_sponsors")
         .select("*")
         .eq("club_id", filaClub.id)
+        .order("sort_order", { ascending: true })
         .order("created_at", { ascending: true })
         .returns<ClubSponsorRow[]>(),
       configuracion.opportunityIds.length > 0

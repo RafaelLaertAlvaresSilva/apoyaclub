@@ -12,6 +12,7 @@ import {
   formatoValorOportunidad,
   plazasLibres,
 } from "@/lib/opportunities";
+import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
 import { SITE_URL } from "@/lib/site";
 import type { ClubTeam, SocialLinks } from "@/lib/types";
 import { CompartirBoton } from "./components/CompartirBoton";
@@ -468,41 +469,60 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
 
         {patrocinadores.length > 0 && (
           <Seccion titulo={t("secciones.patrocinadores")}>
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {patrocinadores.map((patrocinador) => (
-                <li
-                  key={patrocinador.id}
-                  className="flex items-center gap-3 rounded-xl border border-zinc-200 p-4"
-                >
-                  {patrocinador.logoUrl ? (
-                    <Image
-                      src={patrocinador.logoUrl}
-                      alt={patrocinador.name}
-                      width={40}
-                      height={40}
-                      className="h-10 w-10 shrink-0 rounded object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-zinc-100 text-sm font-semibold text-zinc-500">
-                      {patrocinador.name.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                  <div>
-                    <p className="font-medium text-zinc-900">{patrocinador.name}</p>
-                    {patrocinador.website && (
-                      <a
-                        href={patrocinador.website}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-sm text-teal-700 hover:underline"
+            <div className="space-y-6">
+              {agruparPatrocinadoresPorNivel(patrocinadores).map((grupo) => (
+                <div key={grupo.etiqueta}>
+                  <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                    {grupo.etiqueta}
+                  </h3>
+                  <ul className="grid gap-3 sm:grid-cols-2">
+                    {grupo.patrocinadores.map((patrocinador) => (
+                      <li
+                        key={patrocinador.id}
+                        className="flex items-start gap-3 rounded-xl border border-zinc-200 p-4"
                       >
-                        {patrocinador.website.replace(/^https?:\/\//, "")}
-                      </a>
-                    )}
-                  </div>
-                </li>
+                        {patrocinador.logoUrl ? (
+                          <Image
+                            src={patrocinador.logoUrl}
+                            alt={patrocinador.name}
+                            width={40}
+                            height={40}
+                            className="h-10 w-10 shrink-0 rounded object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-zinc-100 text-sm font-semibold text-zinc-500">
+                            {patrocinador.name.charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                        <div className="min-w-0">
+                          <p className="font-medium text-zinc-900">
+                            {patrocinador.name}
+                            {patrocinador.sinceYear && (
+                              <span className="ml-2 text-xs font-normal text-zinc-500">
+                                desde {patrocinador.sinceYear}
+                              </span>
+                            )}
+                          </p>
+                          {patrocinador.description && (
+                            <p className="mt-1 text-sm text-zinc-600">{patrocinador.description}</p>
+                          )}
+                          {patrocinador.website && (
+                            <a
+                              href={patrocinador.website}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-sm text-teal-700 hover:underline"
+                            >
+                              {patrocinador.website.replace(/^https?:\/\//, "")}
+                            </a>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ))}
-            </ul>
+            </div>
           </Seccion>
         )}
 

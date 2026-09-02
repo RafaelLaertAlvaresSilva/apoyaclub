@@ -1,4 +1,5 @@
 import { Document, Image, Page, StyleSheet, Text, View, renderToBuffer } from "@react-pdf/renderer";
+import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
 import { deportesDelClub, seccionesConContenido } from "@/lib/dossier";
 import { formatoValorOportunidad } from "@/lib/opportunities";
 import { routing } from "@/i18n/routing";
@@ -444,15 +445,33 @@ function DossierDocumento({
 
         {incluir("patrocinadores") && (
           <Seccion titulo="Patrocinadores actuales">
-            <View style={estilos.filaSponsors}>
-              {patrocinadores.map((patrocinador) => (
-                <View key={patrocinador.id} style={estilos.filaSponsor}>
-                  {/* eslint-disable-next-line jsx-a11y/alt-text -- Image de @react-pdf/renderer, no la de HTML: no admite alt. */}
-                  {patrocinador.logoUrl && <Image src={patrocinador.logoUrl} style={estilos.logoPequeno} />}
-                  <Text style={{ fontSize: 9, fontFamily: "Helvetica-Bold" }}>{patrocinador.name}</Text>
+            {agruparPatrocinadoresPorNivel(patrocinadores).map((grupo) => (
+              <View key={grupo.etiqueta} style={{ marginBottom: 8 }}>
+                <Text
+                  style={{
+                    fontSize: 8,
+                    fontFamily: "Helvetica-Bold",
+                    color: "#71717a",
+                    textTransform: "uppercase",
+                    marginBottom: 4,
+                  }}
+                >
+                  {grupo.etiqueta}
+                </Text>
+                <View style={estilos.filaSponsors}>
+                  {grupo.patrocinadores.map((patrocinador) => (
+                    <View key={patrocinador.id} style={estilos.filaSponsor}>
+                      {/* eslint-disable-next-line jsx-a11y/alt-text -- Image de @react-pdf/renderer, no la de HTML: no admite alt. */}
+                      {patrocinador.logoUrl && <Image src={patrocinador.logoUrl} style={estilos.logoPequeno} />}
+                      <Text style={{ fontSize: 9, fontFamily: "Helvetica-Bold" }}>
+                        {patrocinador.name}
+                        {patrocinador.sinceYear ? ` (desde ${patrocinador.sinceYear})` : ""}
+                      </Text>
+                    </View>
+                  ))}
                 </View>
-              ))}
-            </View>
+              </View>
+            ))}
           </Seccion>
         )}
 
