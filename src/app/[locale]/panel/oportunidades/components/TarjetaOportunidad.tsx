@@ -21,7 +21,7 @@ import {
 import { OportunidadForm } from "./OportunidadForm";
 
 const ESTILO_ESTADO: Record<OpportunityStatus, string> = {
-  available: "bg-teal-600 text-white",
+  available: "bg-teal-700 text-white",
   reserved: "bg-amber-500 text-white",
   closed: "bg-zinc-400 text-white",
 };

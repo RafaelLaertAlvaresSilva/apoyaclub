@@ -213,7 +213,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             {emailContacto && (
               <a
                 href={`mailto:${emailContacto}`}
-                className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700"
+                className="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
               >
                 {t("portada.contactar")}
               </a>
@@ -278,7 +278,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     </p>
                   )}
                   {oportunidad.duration && (
-                    <p className="text-xs font-medium text-zinc-400">{oportunidad.duration}</p>
+                    <p className="text-xs font-medium text-zinc-500">{oportunidad.duration}</p>
                   )}
                   <div className="mt-1 flex flex-wrap gap-2">
                     <SolicitarContactoBoton
@@ -498,7 +498,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
               <div className="flex flex-wrap gap-2">
                 <a
                   href={`mailto:${emailContacto}`}
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
                 >
                   {t("secciones.escribirEmail")}
                 </a>
@@ -519,7 +519,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         )}
       </main>
 
-      <footer className="border-t border-zinc-100 py-8 text-center text-xs text-zinc-400">
+      <footer className="border-t border-zinc-100 py-8 text-center text-xs text-zinc-500">
         {t("pie", { club: perfil.name })}
       </footer>
     </div>

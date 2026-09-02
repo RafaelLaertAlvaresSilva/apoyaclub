@@ -149,7 +149,7 @@ function BotonVista({
       type="button"
       onClick={onClick}
       className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-        activo ? "bg-teal-600 text-white" : "text-zinc-600 hover:bg-zinc-100"
+        activo ? "bg-teal-700 text-white" : "text-zinc-600 hover:bg-zinc-100"
       }`}
     >
       {children}
@@ -249,7 +249,7 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
         <p className="text-lg font-bold text-teal-700">{formatoValorOportunidad.format(oportunidad.value)}</p>
         <Link
           href={`/club/${oportunidad.clubSlug}`}
-          className="rounded-lg bg-teal-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-teal-700"
+          className="rounded-lg bg-teal-700 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-teal-800"
         >
           {tTarjeta("verClub")}
         </Link>
@@ -289,7 +289,7 @@ function TarjetaClub({ club }: { club: ResultadoClub }) {
 
       <Link
         href={`/club/${club.clubSlug}`}
-        className="mt-auto rounded-lg bg-teal-600 px-3 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-teal-700"
+        className="mt-auto rounded-lg bg-teal-700 px-3 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-teal-800"
       >
         Ver página del club
       </Link>
@@ -317,7 +317,7 @@ function EstadoVacio({ filtros, vista }: { filtros: FiltrosBusqueda; vista: Vist
             onClick={() =>
               router.push(`/buscar?${filtrosAQueryString({ ...filtros, radioKm: filtros.radioKm! * 2 }, vista)}`)
             }
-            className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700"
+            className="rounded-lg bg-teal-700 px-4 py-2 text-sm font-medium text-white hover:bg-teal-800"
           >
             {tVacio("ampliarRadio", { km: filtros.radioKm! * 2 })}
           </button>

@@ -47,7 +47,7 @@ export function PerfilEmpresaForm({ perfil }: { perfil: CompanyProfile | null })
 
         <fieldset>
           <legend className="mb-1 text-sm font-medium text-zinc-700">{t("presupuestoOrientativo")}</legend>
-          <p className="mb-2 text-xs text-zinc-400">{t("unRangoAproximadoEn")}</p>
+          <p className="mb-2 text-xs text-zinc-500">{t("unRangoAproximadoEn")}</p>
           <div className="grid gap-4 sm:grid-cols-2">
             <input
               name="budgetMin"
@@ -74,7 +74,7 @@ export function PerfilEmpresaForm({ perfil }: { perfil: CompanyProfile | null })
 
         <fieldset>
           <legend className="mb-1 text-sm font-medium text-zinc-700">{t("objetivosDePatrocinio")}</legend>
-          <p className="mb-2 text-xs text-zinc-400">{t("aQuePublicoU")}</p>
+          <p className="mb-2 text-xs text-zinc-500">{t("aQuePublicoU")}</p>
           <div className="grid gap-2 sm:grid-cols-2">
             {OBJETIVOS_OPORTUNIDAD.map((objetivo) => (
               <label key={objetivo.id} className="flex items-center gap-2 text-sm text-zinc-700">

@@ -53,7 +53,7 @@ export default function ErrorEnLaPagina({
         >{t("volverAlInicio")}</Link>
       </div>
       {error.digest ? (
-        <p className="mt-8 font-mono text-xs text-zinc-400">Referencia del error: {error.digest}</p>
+        <p className="mt-8 font-mono text-xs text-zinc-500">Referencia del error: {error.digest}</p>
       ) : null}
     </main>
   );

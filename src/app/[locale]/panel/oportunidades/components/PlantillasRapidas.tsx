@@ -17,12 +17,12 @@ export function PlantillasRapidas({
   const t = useTranslations("panel.oportunidades");
   return (
     <div className="mb-6 rounded-lg border border-dashed border-zinc-300 p-4">
-      <p className="mb-3 text-sm font-medium text-zinc-700">{t("plantillasRapidas")}<span className="font-normal text-zinc-400">(opcional, para no partir de cero)</span>
+      <p className="mb-3 text-sm font-medium text-zinc-700">{t("plantillasRapidas")}<span className="font-normal text-zinc-500">(opcional, para no partir de cero)</span>
       </p>
       <div className="space-y-4">
         {TIPOS_OPORTUNIDAD.map((tipo) => (
           <div key={tipo.id}>
-            <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-400">
+            <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500">
               {tipo.etiqueta}
             </p>
             <div className="flex flex-wrap gap-2">

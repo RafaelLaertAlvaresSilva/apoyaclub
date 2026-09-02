@@ -4,7 +4,7 @@ import type { CompanyProfile, ContactRequest, ContactRequestStatus } from "@/lib
 import { cambiarEstadoSolicitud } from "../actions";
 
 const ESTILO_ESTADO: Record<ContactRequestStatus, string> = {
-  new: "bg-teal-600 text-white",
+  new: "bg-teal-700 text-white",
   seen: "bg-sky-500 text-white",
   in_conversation: "bg-amber-500 text-white",
   closed: "bg-zinc-400 text-white",

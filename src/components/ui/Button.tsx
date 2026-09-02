@@ -8,7 +8,9 @@ const CLASES_BASE =
   "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal disabled:pointer-events-none disabled:opacity-50";
 
 const CLASES_VARIANTE: Record<Variante, string> = {
-  primary: "bg-brand-teal text-white hover:bg-brand-teal-dark",
+  // Teal oscuro y no el claro: con texto blanco encima, el claro se
+  // queda en 2,5:1 de contraste (ver globals.css).
+  primary: "bg-brand-teal-dark text-white hover:bg-brand-navy",
   secondary: "bg-brand-navy text-white hover:bg-brand-navy-dark",
   ghost: "text-brand-navy hover:bg-zinc-100",
 };

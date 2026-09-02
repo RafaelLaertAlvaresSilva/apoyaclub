@@ -61,7 +61,7 @@ export function IdentidadForm({
                 unoptimized
               />
             ) : (
-              <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-dashed border-zinc-300 text-xs text-zinc-400">{t("sinLogo")}</div>
+              <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-dashed border-zinc-300 text-xs text-zinc-500">{t("sinLogo")}</div>
             )}
             <ImageUploader
               userId={userId}
@@ -137,7 +137,7 @@ export function IdentidadForm({
                 }}
               />
             ) : (
-              <p className="self-center text-xs text-zinc-400">{t("marcaLaCasillaDe")}</p>
+              <p className="self-center text-xs text-zinc-500">{t("marcaLaCasillaDe")}</p>
             )}
           </div>
         </Campo>
@@ -252,7 +252,7 @@ export function IdentidadForm({
         <div className="space-y-3 rounded-lg border border-zinc-200 p-4">
           <div>
             <p className="text-sm font-medium text-zinc-700">{t("contactoPublico")}</p>
-            <p className="text-xs text-zinc-400">{t("elCorreoDeTu")}</p>
+            <p className="text-xs text-zinc-500">{t("elCorreoDeTu")}</p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">

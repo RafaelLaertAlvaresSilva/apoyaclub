@@ -302,7 +302,7 @@ export function FiltrosBuscador({
       <div className="flex gap-2 lg:hidden">
         <button
           type="submit"
-          className="flex-1 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700"
+          className="flex-1 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
         >
           {t("verResultados")}
         </button>

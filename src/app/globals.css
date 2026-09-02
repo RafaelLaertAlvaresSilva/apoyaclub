@@ -15,7 +15,11 @@
   --brand-navy: #14304f;
   --brand-navy-dark: #0b1f38;
   --brand-teal: #14b8a6;
-  --brand-teal-dark: #0d9488;
+  /* Teal oscuro = teal-700. Antes era teal-600 (#0d9488), que sobre
+   * blanco se queda en 3,7:1 de contraste: no llega al 4,5:1 que pide
+   * la WCAG AA para texto normal, y es el color de casi todos los
+   * botones y etiquetas de la aplicación. Este llega a 5,5:1. */
+  --brand-teal-dark: #0f766e;
   --brand-teal-light: #ccfbf1;
 }
 

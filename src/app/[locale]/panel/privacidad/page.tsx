@@ -53,7 +53,7 @@ export default async function PrivacidadClubPage() {
         </div>
       </section>
 
-      <p className="text-xs text-zinc-400">
+      <p className="text-xs text-zinc-500">
         Más información sobre cómo tratamos tus datos en nuestra{" "}
         <Link href="/privacidad" className="font-medium text-teal-700 hover:underline">{t("politicaDePrivacidad")}</Link>
         .

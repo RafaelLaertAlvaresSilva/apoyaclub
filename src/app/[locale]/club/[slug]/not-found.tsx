@@ -11,7 +11,7 @@ export default function ClubNoEncontrado() {
       </p>
       <Link
         href="/"
-        className="mt-6 rounded-lg bg-teal-600 px-6 py-3 font-medium text-white transition-colors hover:bg-teal-700"
+        className="mt-6 rounded-lg bg-teal-700 px-6 py-3 font-medium text-white transition-colors hover:bg-teal-800"
       >
         Volver al inicio
       </Link>

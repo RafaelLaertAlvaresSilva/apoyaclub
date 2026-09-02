@@ -11,7 +11,7 @@ export default function RevisaTuCorreoPage() {
       <p className="text-sm text-zinc-500">
         {t("texto")}
       </p>
-      <p className="text-xs text-zinc-400">
+      <p className="text-xs text-zinc-500">
         {t("spam")}
       </p>
       <Link href="/login" className="inline-block text-sm font-medium text-teal-700 hover:underline">

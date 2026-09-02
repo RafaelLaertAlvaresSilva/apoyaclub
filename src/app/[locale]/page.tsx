@@ -96,7 +96,7 @@ export default async function Home() {
             <div className="mt-9 flex flex-col items-center gap-3">
               <Link
                 href="/registro-club"
-                className="inline-flex items-center justify-center rounded-full bg-brand-teal px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-teal-dark"
+                className="inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-navy"
               >
                 {t("hero.cta")}
               </Link>
@@ -149,7 +149,7 @@ export default async function Home() {
             </p>
             <Link
               href="/registro-club"
-              className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-brand-teal px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-teal-dark"
+              className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-brand-teal-dark px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-navy"
             >
               {t("caminos.clubCta")}
             </Link>
@@ -194,7 +194,7 @@ export default async function Home() {
           <div className="mt-14 grid gap-10 sm:grid-cols-3">
             {pasos.map((paso, indice) => (
               <div key={paso.titulo} className="text-center">
-                <div className="text-sm font-extrabold tracking-wide text-zinc-300">0{indice + 1}</div>
+                <div className="text-sm font-extrabold tracking-wide text-zinc-500">0{indice + 1}</div>
                 <div className="mx-auto mt-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-teal-light">
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--brand-teal-dark)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
                     {indice === 0 ? (
@@ -259,24 +259,24 @@ export default async function Home() {
           <div className="mx-auto mt-10 max-w-3xl rounded-3xl border border-zinc-200 bg-white p-5 shadow-lg shadow-brand-navy/5 sm:p-6">
             <div className="grid gap-2.5 sm:grid-cols-[repeat(4,1fr)_auto]">
               <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                <div className="text-[11px] font-semibold text-zinc-400">{t("empresas.filtros.presupuesto")}</div>
+                <div className="text-[11px] font-semibold text-zinc-500">{t("empresas.filtros.presupuesto")}</div>
                 <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.presupuestoValor")}</div>
               </div>
               <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                <div className="text-[11px] font-semibold text-zinc-400">{t("empresas.filtros.ubicacion")}</div>
+                <div className="text-[11px] font-semibold text-zinc-500">{t("empresas.filtros.ubicacion")}</div>
                 <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.ubicacionValor")}</div>
               </div>
               <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                <div className="text-[11px] font-semibold text-zinc-400">{t("empresas.filtros.publico")}</div>
+                <div className="text-[11px] font-semibold text-zinc-500">{t("empresas.filtros.publico")}</div>
                 <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.publicoValor")}</div>
               </div>
               <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                <div className="text-[11px] font-semibold text-zinc-400">{t("empresas.filtros.deporte")}</div>
+                <div className="text-[11px] font-semibold text-zinc-500">{t("empresas.filtros.deporte")}</div>
                 <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.deporteValor")}</div>
               </div>
               <Link
                 href="/buscar"
-                className="flex items-center justify-center rounded-xl bg-brand-teal px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-brand-teal-dark"
+                className="flex items-center justify-center rounded-xl bg-brand-teal-dark px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-brand-navy"
               >
                 {t("empresas.filtros.buscar")}
               </Link>
@@ -291,15 +291,15 @@ export default async function Home() {
               </summary>
               <div className="mt-3 grid gap-2.5 border-t border-zinc-100 pt-4 sm:grid-cols-3">
                 <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                  <div className="text-[11px] font-semibold text-zinc-400">{t("empresas.filtros.tipo")}</div>
+                  <div className="text-[11px] font-semibold text-zinc-500">{t("empresas.filtros.tipo")}</div>
                   <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.tipoValor")}</div>
                 </div>
                 <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                  <div className="text-[11px] font-semibold text-zinc-400">{t("empresas.filtros.categoria")}</div>
+                  <div className="text-[11px] font-semibold text-zinc-500">{t("empresas.filtros.categoria")}</div>
                   <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.categoriaValor")}</div>
                 </div>
                 <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                  <div className="text-[11px] font-semibold text-zinc-400">{t("empresas.filtros.alcance")}</div>
+                  <div className="text-[11px] font-semibold text-zinc-500">{t("empresas.filtros.alcance")}</div>
                   <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.alcanceValor")}</div>
                 </div>
               </div>
@@ -318,7 +318,7 @@ export default async function Home() {
               </div>
             ))}
           </div>
-          <p className="mt-3 text-center text-xs text-zinc-400">{t("empresas.avisoEjemplos")}</p>
+          <p className="mt-3 text-center text-xs text-zinc-500">{t("empresas.avisoEjemplos")}</p>
         </section>
 
         {/* ============ PRESUPUESTO ============ */}
@@ -363,7 +363,7 @@ export default async function Home() {
               <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
               <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
               <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
-              <span className="ml-2 truncate text-xs text-zinc-400">{t("paginaClub.maqueta.url")}</span>
+              <span className="ml-2 truncate text-xs text-zinc-500">{t("paginaClub.maqueta.url")}</span>
             </div>
             <div className="h-32 bg-gradient-to-br from-brand-navy to-brand-teal-dark" />
             <div className="px-6">
@@ -383,19 +383,19 @@ export default async function Home() {
               <div className="mt-4 grid grid-cols-4 gap-2.5 border-t border-zinc-100 pt-4">
                 <div>
                   <div className="text-base font-extrabold text-brand-navy">12,4k</div>
-                  <div className="text-[11px] text-zinc-400">{t("paginaClub.maqueta.seguidores")}</div>
+                  <div className="text-[11px] text-zinc-500">{t("paginaClub.maqueta.seguidores")}</div>
                 </div>
                 <div>
                   <div className="text-base font-extrabold text-brand-navy">48k</div>
-                  <div className="text-[11px] text-zinc-400">{t("paginaClub.maqueta.alcance")}</div>
+                  <div className="text-[11px] text-zinc-500">{t("paginaClub.maqueta.alcance")}</div>
                 </div>
                 <div>
                   <div className="text-base font-extrabold text-brand-navy">9</div>
-                  <div className="text-[11px] text-zinc-400">{t("paginaClub.maqueta.equipos")}</div>
+                  <div className="text-[11px] text-zinc-500">{t("paginaClub.maqueta.equipos")}</div>
                 </div>
                 <div>
                   <div className="text-base font-extrabold text-brand-navy">3</div>
-                  <div className="text-[11px] text-zinc-400">{t("paginaClub.maqueta.oportunidades")}</div>
+                  <div className="text-[11px] text-zinc-500">{t("paginaClub.maqueta.oportunidades")}</div>
                 </div>
               </div>
             </div>
@@ -429,7 +429,7 @@ export default async function Home() {
             <div className="rounded-3xl bg-brand-navy-dark p-9 shadow-lg shadow-brand-navy-dark/30">
               <div className="mb-5 flex items-center justify-between">
                 <h3 className="text-xl font-extrabold text-white">{t("panel.titulo")}</h3>
-                <span className="rounded-full bg-brand-teal px-4 py-2 text-xs font-bold text-white">{t("panel.boton")}</span>
+                <span className="rounded-full bg-brand-teal-dark px-4 py-2 text-xs font-bold text-white">{t("panel.boton")}</span>
               </div>
               <div className="grid grid-cols-3 gap-2.5">
                 {metricasPanel.map((metrica) => (
@@ -453,7 +453,7 @@ export default async function Home() {
               <span className="text-lg text-zinc-500">{t("precio.periodo")}</span>
             </p>
             <p className="mt-1.5 text-sm text-zinc-500">{t("precio.condiciones")}</p>
-            <p className="mt-1 text-sm text-zinc-400">{t("precio.comision")}</p>
+            <p className="mt-1 text-sm text-zinc-500">{t("precio.comision")}</p>
 
             <div className="mt-8 grid gap-3 text-left sm:grid-cols-2">
               {ventajas.map((ventaja) => (
@@ -468,7 +468,7 @@ export default async function Home() {
 
             <Link
               href="/registro-club"
-              className="mt-9 inline-flex w-full items-center justify-center rounded-2xl bg-brand-teal px-6 py-4 text-base font-bold text-white shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-teal-dark"
+              className="mt-9 inline-flex w-full items-center justify-center rounded-2xl bg-brand-teal-dark px-6 py-4 text-base font-bold text-white shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-navy"
             >
               {t("precio.cta")}
             </Link>
@@ -478,7 +478,7 @@ export default async function Home() {
         {/* ============ CONFIANZA ============ */}
         <section className="bg-zinc-50 px-4 py-16 sm:px-6 sm:py-20">
           <div className="mx-auto max-w-6xl">
-            <p className="text-center text-xs font-bold uppercase tracking-wider text-zinc-400">{t("confianza.eyebrow")}</p>
+            <p className="text-center text-xs font-bold uppercase tracking-wider text-zinc-500">{t("confianza.eyebrow")}</p>
             <div className="mt-8 grid gap-5 sm:grid-cols-3">
               {[t("confianza.tipoClub"), t("confianza.tipoEmpresa"), t("confianza.tipoClub")].map((tipo, indice) => (
                 <div key={indice} className="rounded-2xl border border-dashed border-zinc-300 bg-white p-6">
@@ -513,7 +513,7 @@ export default async function Home() {
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-brand-navy marker:content-none">
                   {item.pregunta}
-                  <span className="flex-none text-zinc-400 transition-transform group-open:rotate-45">+</span>
+                  <span className="flex-none text-zinc-500 transition-transform group-open:rotate-45">+</span>
                 </summary>
                 <p className="mt-3 text-sm leading-relaxed text-zinc-600">{item.respuesta}</p>
               </details>
@@ -552,7 +552,7 @@ export default async function Home() {
             </h2>
             <Link
               href="/registro-club"
-              className="mt-8 inline-flex items-center justify-center rounded-full bg-brand-teal px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/40 transition-colors hover:bg-brand-teal-dark"
+              className="mt-8 inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/40 transition-colors hover:bg-brand-navy"
             >
               {t("ctaFinal.cta")}
             </Link>

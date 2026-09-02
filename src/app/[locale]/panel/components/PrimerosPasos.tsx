@@ -31,14 +31,14 @@ export function PrimerosPasos({ pasos }: { pasos: PasoInicial[] }) {
             <span
               aria-hidden
               className={`flex h-6 w-6 flex-none items-center justify-center rounded-full text-xs font-bold ${
-                paso.hecho ? "bg-brand-teal-dark text-white" : "bg-white text-zinc-400 ring-1 ring-zinc-300"
+                paso.hecho ? "bg-brand-teal-dark text-white" : "bg-white text-zinc-500 ring-1 ring-zinc-300"
               }`}
             >
               {paso.hecho ? "✓" : indice + 1}
             </span>
 
             <div className="min-w-0 flex-1">
-              <p className={`text-sm font-medium ${paso.hecho ? "text-zinc-400 line-through" : "text-zinc-900"}`}>
+              <p className={`text-sm font-medium ${paso.hecho ? "text-zinc-500 line-through" : "text-zinc-900"}`}>
                 {t(`${paso.id}.titulo`)}
               </p>
               {!paso.hecho && <p className="text-xs text-zinc-500">{t(`${paso.id}.texto`)}</p>}

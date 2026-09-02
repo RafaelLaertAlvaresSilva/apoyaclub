@@ -99,7 +99,7 @@ export default async function SuscripcionPage({
 
         <dl className="mt-6 grid gap-4 sm:grid-cols-2">
           <div>
-            <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400">{t("estado")}</dt>
+            <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{t("estado")}</dt>
             <dd className="mt-1 text-sm font-medium text-zinc-900">
               {etiquetaEstadoSuscripcion(suscripcion.status)}
             </dd>
@@ -107,7 +107,7 @@ export default async function SuscripcionPage({
 
           {suscripcion.status === "trialing" && suscripcion.currentPeriodEnd && (
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400">{t("finDeLaPrueba")}</dt>
+              <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{t("finDeLaPrueba")}</dt>
               <dd className="mt-1 text-sm text-zinc-700">
                 {formatearFecha(suscripcion.currentPeriodEnd)} — después se cobrarán 29,90 €/mes.
               </dd>
@@ -116,14 +116,14 @@ export default async function SuscripcionPage({
 
           {suscripcion.status === "active" && suscripcion.currentPeriodEnd && !suscripcion.cancelAtPeriodEnd && (
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400">{t("proximaRenovacion")}</dt>
+              <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{t("proximaRenovacion")}</dt>
               <dd className="mt-1 text-sm text-zinc-700">{formatearFecha(suscripcion.currentPeriodEnd)}</dd>
             </div>
           )}
 
           {suscripcion.cancelAtPeriodEnd && suscripcion.currentPeriodEnd && (
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400">
+              <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">
                 Acceso hasta (cancelada)
               </dt>
               <dd className="mt-1 text-sm text-red-700">{formatearFecha(suscripcion.currentPeriodEnd)}</dd>
@@ -131,7 +131,7 @@ export default async function SuscripcionPage({
           )}
 
           <div>
-            <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400">{t("visibilidadPublica")}</dt>
+            <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{t("visibilidadPublica")}</dt>
             <dd className="mt-1 text-sm text-zinc-700">
               {esVisiblePublicamente(suscripcion.status)
                 ? "Tu página pública y tus oportunidades son visibles."
@@ -154,7 +154,7 @@ export default async function SuscripcionPage({
           )}
         </div>
 
-        <p className="mt-4 text-xs text-zinc-400">
+        <p className="mt-4 text-xs text-zinc-500">
           Conservas todos tus datos aunque la suscripción no esté activa: solo se oculta tu página
           pública y tus oportunidades hasta que vuelvas a suscribirte. Desde &quot;Gestionar
           suscripción&quot; puedes cambiar de tarjeta, ver tus facturas o cancelar.

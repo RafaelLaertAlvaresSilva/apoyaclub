@@ -24,7 +24,7 @@ export function FilaClub({ fila }: { fila: ClubAdminRow }) {
       <td className="px-4 py-3">
         <p className="font-medium text-zinc-900">{fila.name}</p>
         <p className="text-xs text-zinc-500">{fila.city}</p>
-        {fila.email && <p className="text-xs text-zinc-400">{fila.email}</p>}
+        {fila.email && <p className="text-xs text-zinc-500">{fila.email}</p>}
       </td>
       <td className="whitespace-nowrap px-4 py-3 text-zinc-600">
         {formatoFecha.format(new Date(fila.createdAt))}
@@ -47,7 +47,7 @@ export function FilaClub({ fila }: { fila: ClubAdminRow }) {
           {fila.suspended && (
             <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">{t("suspendido")}</span>
           )}
-          {!fila.verified && !fila.suspended && <span className="text-xs text-zinc-400">—</span>}
+          {!fila.verified && !fila.suspended && <span className="text-xs text-zinc-500">—</span>}
         </div>
       </td>
       <td className="px-4 py-3">

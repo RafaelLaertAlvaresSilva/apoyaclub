@@ -78,7 +78,7 @@ export default async function AdminEmpresasPage() {
               {filas.map(({ usuario, perfil }) => (
                 <tr key={usuario.id}>
                   <td className="px-4 py-3 font-medium text-zinc-900">
-                    {perfil?.name || <span className="font-normal text-zinc-400">(perfil sin completar)</span>}
+                    {perfil?.name || <span className="font-normal text-zinc-500">(perfil sin completar)</span>}
                   </td>
                   <td className="px-4 py-3 text-zinc-600">{perfil?.sector || "—"}</td>
                   <td className="px-4 py-3 text-zinc-600">{perfil?.city || "—"}</td>

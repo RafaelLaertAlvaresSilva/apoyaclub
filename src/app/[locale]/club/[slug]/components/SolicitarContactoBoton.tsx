@@ -18,7 +18,7 @@ type Props = {
 };
 
 const CLASES_PRIMARIA =
-  "inline-flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700";
+  "inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800";
 const CLASES_SECUNDARIA =
   "inline-flex items-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100";
 
@@ -90,7 +90,7 @@ export function SolicitarContactoBoton({
                 type="button"
                 onClick={() => setAbierto(false)}
                 aria-label="Cerrar"
-                className="text-xl leading-none text-zinc-400 hover:text-zinc-600"
+                className="text-xl leading-none text-zinc-500 hover:text-zinc-600"
               >
                 ×
               </button>
@@ -155,7 +155,7 @@ function BotonEnviarSolicitud() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
+      className="rounded-lg bg-teal-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60"
     >
       {pending ? "Enviando…" : "Enviar solicitud"}
     </button>

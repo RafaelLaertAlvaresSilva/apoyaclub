@@ -138,7 +138,7 @@ export function GuardarFavoritoBoton({ opportunityId }: { opportunityId: string 
           <p className="mb-2 text-xs font-medium text-zinc-500">Guardar en una lista</p>
 
           {cargando && listas === null ? (
-            <p className="text-sm text-zinc-400">Cargando…</p>
+            <p className="text-sm text-zinc-500">Cargando…</p>
           ) : (
             <div className="max-h-40 space-y-1 overflow-y-auto">
               {(listas ?? []).map((lista) => (
@@ -153,7 +153,7 @@ export function GuardarFavoritoBoton({ opportunityId }: { opportunityId: string 
                 </label>
               ))}
               {listas?.length === 0 && (
-                <p className="text-sm text-zinc-400">Todavía no tienes ninguna lista.</p>
+                <p className="text-sm text-zinc-500">Todavía no tienes ninguna lista.</p>
               )}
             </div>
           )}
@@ -170,7 +170,7 @@ export function GuardarFavoritoBoton({ opportunityId }: { opportunityId: string 
               type="button"
               onClick={crearYGuardar}
               disabled={!nombreNuevaLista.trim()}
-              className="whitespace-nowrap rounded-md bg-teal-600 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="whitespace-nowrap rounded-md bg-teal-700 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
               Crear
             </button>

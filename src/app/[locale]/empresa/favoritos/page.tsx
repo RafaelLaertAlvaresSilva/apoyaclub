@@ -116,7 +116,7 @@ export default async function FavoritosPage() {
                 </div>
 
                 {items.length === 0 ? (
-                  <p className="text-sm text-zinc-400">{t("todaviaNoHasGuardado")}</p>
+                  <p className="text-sm text-zinc-500">{t("todaviaNoHasGuardado")}</p>
                 ) : (
                   <ul className="space-y-2">
                     {items.map((favorito) => {
@@ -149,7 +149,7 @@ export default async function FavoritosPage() {
                                 </p>
                               </>
                             ) : (
-                              <p className="text-sm text-zinc-400">{t("estaOportunidadYaNo")}</p>
+                              <p className="text-sm text-zinc-500">{t("estaOportunidadYaNo")}</p>
                             )}
                           </div>
                           <form action={eliminarFavorito}>

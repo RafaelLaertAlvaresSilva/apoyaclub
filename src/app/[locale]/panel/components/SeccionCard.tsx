@@ -44,7 +44,7 @@ export function Campo({
   children: React.ReactNode;
 }) {
   const textoEtiqueta = <span className="mb-1 block text-sm font-medium text-zinc-700">{etiqueta}</span>;
-  const textoAyuda = ayuda ? <span className="mt-1 block text-xs text-zinc-400">{ayuda}</span> : null;
+  const textoAyuda = ayuda ? <span className="mt-1 block text-xs text-zinc-500">{ayuda}</span> : null;
 
   if (grupo) {
     return (
