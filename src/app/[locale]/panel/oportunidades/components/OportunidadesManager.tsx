@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import type { ClubTeam, Opportunity, OpportunityStatus } from "@/lib/types";
 import { ESTADOS_OPORTUNIDAD } from "@/lib/opportunities";
@@ -18,6 +19,7 @@ export function OportunidadesManager({
   oportunidades: Opportunity[];
   equipos?: ClubTeam[];
 }) {
+  const t = useTranslations("panel.oportunidades");
   const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>("todas");
   const [orden, setOrden] = useState<Orden>("recientes");
   const [mostrarArchivadas, setMostrarArchivadas] = useState(false);
@@ -47,13 +49,13 @@ export function OportunidadesManager({
       <div className="rounded-xl border border-zinc-200 bg-white p-4">
         <div className="flex flex-wrap items-end gap-4">
           <div>
-            <label className="mb-1 block text-xs font-medium text-zinc-500">Estado</label>
+            <label className="mb-1 block text-xs font-medium text-zinc-500">{t("estado")}</label>
             <select
               value={filtroEstado}
               onChange={(evento) => setFiltroEstado(evento.target.value as FiltroEstado)}
               className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm"
             >
-              <option value="todas">Todos los estados</option>
+              <option value="todas">{t("todosLosEstados")}</option>
               {ESTADOS_OPORTUNIDAD.map((estadoOpcion) => (
                 <option key={estadoOpcion.id} value={estadoOpcion.id}>
                   {estadoOpcion.etiqueta}
@@ -63,15 +65,15 @@ export function OportunidadesManager({
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-medium text-zinc-500">Ordenar por valor</label>
+            <label className="mb-1 block text-xs font-medium text-zinc-500">{t("ordenarPorValor")}</label>
             <select
               value={orden}
               onChange={(evento) => setOrden(evento.target.value as Orden)}
               className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm"
             >
-              <option value="recientes">Más recientes primero</option>
-              <option value="valor_desc">Valor: de mayor a menor</option>
-              <option value="valor_asc">Valor: de menor a mayor</option>
+              <option value="recientes">{t("masRecientesPrimero")}</option>
+              <option value="valor_desc">{t("valorDeMayorA")}</option>
+              <option value="valor_asc">{t("valorDeMenorA")}</option>
             </select>
           </div>
 
@@ -81,9 +83,7 @@ export function OportunidadesManager({
               checked={mostrarArchivadas}
               onChange={(evento) => setMostrarArchivadas(evento.target.checked)}
               className="h-4 w-4 rounded border-zinc-300"
-            />
-            Mostrar archivadas
-          </label>
+            />{t("mostrarArchivadas")}</label>
         </div>
       </div>
 

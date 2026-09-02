@@ -1,1 +1,44 @@
-{}
+{
+  "perfil": {
+    "aQuePublicoU": "A qué público u objetivo quieres llegar patrocinando un club.",
+    "comoTePresentasA": "Cómo te presentas a los clubes cuando solicitas contacto. Todos los campos son opcionales, pero cuantos más rellenes, más fácil se lo pones al club para responderte.",
+    "ejAlimentacionConstruccionTecnologia": "Ej. alimentación, construcción, tecnología…",
+    "guardarPerfil": "Guardar perfil",
+    "localidad": "Localidad",
+    "nombreDeLaEmpresa": "Nombre de la empresa",
+    "objetivosDePatrocinio": "Objetivos de patrocinio",
+    "perfilDeEmpresa": "Perfil de empresa",
+    "presupuestoOrientativo": "Presupuesto orientativo",
+    "sector": "Sector",
+    "unRangoAproximadoEn": "Un rango aproximado en euros, solo como referencia para el club al leer tu solicitud. Nunca es una oferta cerrada.",
+    "web": "Web"
+  },
+  "favoritos": {
+    "eliminarLista": "Eliminar lista",
+    "estaOportunidadYaNo": "Esta oportunidad ya no está disponible.",
+    "favoritos": "Favoritos",
+    "guardarNombre": "Guardar nombre",
+    "nuevaLista": "+ Nueva lista",
+    "panelDeEmpresa": "Panel de empresa",
+    "quitar": "Quitar",
+    "todaviaNoHasGuardado": "Todavía no has guardado ninguna oportunidad aquí.",
+    "todaviaNoTienesNinguna": "Todavía no tienes ninguna lista. Guarda una oportunidad como favorita desde la página de un club para crear tu primera lista, o crea una aquí arriba."
+  },
+  "privacidad": {
+    "descargaUnArchivoCon": "Descarga un archivo con todos los datos de tu cuenta: perfil de empresa, listas de favoritos, favoritos, solicitudes de contacto enviadas y el registro de tus consentimientos.",
+    "descargarMisDatos": "Descargar mis datos",
+    "eliminaDeFormaPermanente": "Elimina de forma permanente tu cuenta y todos los datos asociados. Esta acción no se puede deshacer.",
+    "eliminar": "ELIMINAR",
+    "eliminarMiCuenta": "Eliminar mi cuenta",
+    "escribeEliminarParaConfirmar": "Escribe ELIMINAR para confirmar",
+    "estaAccionNoSe": "Esta acción no se puede deshacer.",
+    "panelDeEmpresa": "Panel de empresa",
+    "politicaDePrivacidad": "Política de Privacidad",
+    "privacidadYDatos": "Privacidad y datos",
+    "seBorraTuPerfil": "Se borra tu perfil de empresa, tus listas de favoritos y tus favoritos.",
+    "seBorranLasSolicitudes": "Se borran las solicitudes de contacto que has enviado a clubes."
+  },
+  "panel": {
+    "panelDeEmpresa": "Panel de empresa"
+  }
+}

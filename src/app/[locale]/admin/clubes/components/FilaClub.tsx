@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { etiquetaEstadoSuscripcion, type SubscriptionStatus } from "@/lib/subscription-mappers";
 import { quitarVerificacionClub, reactivarClub, suspenderClub, verificarClub } from "../actions";
 import type { ClubAdminRow } from "../types";
@@ -17,6 +18,7 @@ const ESTILO_SUSCRIPCION: Record<Exclude<SubscriptionStatus, null>, string> = {
 
 /** Una fila del listado de clubes del admin (Fase 12), con las acciones de suspender/verificar. */
 export function FilaClub({ fila }: { fila: ClubAdminRow }) {
+  const t = useTranslations("admin.clubes");
   return (
     <tr className="align-top">
       <td className="px-4 py-3">
@@ -40,14 +42,10 @@ export function FilaClub({ fila }: { fila: ClubAdminRow }) {
       <td className="px-4 py-3">
         <div className="flex flex-wrap gap-1">
           {fila.verified && (
-            <span className="rounded-full bg-teal-100 px-2 py-0.5 text-xs font-medium text-teal-700">
-              Verificado
-            </span>
+            <span className="rounded-full bg-teal-100 px-2 py-0.5 text-xs font-medium text-teal-700">{t("verificado")}</span>
           )}
           {fila.suspended && (
-            <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
-              Suspendido
-            </span>
+            <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">{t("suspendido")}</span>
           )}
           {!fila.verified && !fila.suspended && <span className="text-xs text-zinc-400">—</span>}
         </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
@@ -8,19 +9,20 @@ import { guardarAudiencia } from "../actions";
 import { Campo, SeccionCard, clasesInput } from "./SeccionCard";
 
 export function AudienciaForm({ perfil }: { perfil: ClubProfile | null }) {
+  const t = useTranslations("panel.perfil2");
   const [estado, formAction] = useActionState(guardarAudiencia, null);
   const seguidores = perfil?.followersByNetwork ?? {};
 
   return (
     <SeccionCard
-      titulo="Audiencia"
-      descripcion="Seguidores en redes, alcance estimado y asistencia media a los partidos."
+      titulo={t("audiencia")}
+      descripcion={t("seguidoresEnRedesAlcance")}
     >
       <form action={formAction} className="space-y-4">
         <div>
-          <p className="mb-2 text-sm font-medium text-zinc-700">Seguidores por red</p>
+          <p className="mb-2 text-sm font-medium text-zinc-700">{t("seguidoresPorRed")}</p>
           <div className="grid gap-4 sm:grid-cols-3">
-            <Campo etiqueta="Instagram">
+            <Campo etiqueta={t("instagram")}>
               <input
                 name="followersInstagram"
                 type="number"
@@ -29,7 +31,7 @@ export function AudienciaForm({ perfil }: { perfil: ClubProfile | null }) {
                 className={clasesInput}
               />
             </Campo>
-            <Campo etiqueta="Facebook">
+            <Campo etiqueta={t("facebook")}>
               <input
                 name="followersFacebook"
                 type="number"
@@ -38,7 +40,7 @@ export function AudienciaForm({ perfil }: { perfil: ClubProfile | null }) {
                 className={clasesInput}
               />
             </Campo>
-            <Campo etiqueta="X / Twitter">
+            <Campo etiqueta={t("xTwitter")}>
               <input
                 name="followersTwitter"
                 type="number"
@@ -47,7 +49,7 @@ export function AudienciaForm({ perfil }: { perfil: ClubProfile | null }) {
                 className={clasesInput}
               />
             </Campo>
-            <Campo etiqueta="TikTok">
+            <Campo etiqueta={t("tiktok")}>
               <input
                 name="followersTiktok"
                 type="number"
@@ -56,7 +58,7 @@ export function AudienciaForm({ perfil }: { perfil: ClubProfile | null }) {
                 className={clasesInput}
               />
             </Campo>
-            <Campo etiqueta="YouTube">
+            <Campo etiqueta={t("youtube")}>
               <input
                 name="followersYoutube"
                 type="number"
@@ -69,7 +71,7 @@ export function AudienciaForm({ perfil }: { perfil: ClubProfile | null }) {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <Campo etiqueta="Alcance estimado" ayuda="Personas a las que llega la comunicación del club.">
+          <Campo etiqueta={t("alcanceEstimado")} ayuda={t("personasALasQue")}>
             <input
               name="estimatedReach"
               type="number"
@@ -78,7 +80,7 @@ export function AudienciaForm({ perfil }: { perfil: ClubProfile | null }) {
               className={clasesInput}
             />
           </Campo>
-          <Campo etiqueta="Asistencia media a partidos">
+          <Campo etiqueta={t("asistenciaMediaAPartidos")}>
             <input
               name="averageAttendance"
               type="number"
@@ -92,7 +94,7 @@ export function AudienciaForm({ perfil }: { perfil: ClubProfile | null }) {
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
         <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />
 
-        <BotonEnviar>Guardar audiencia</BotonEnviar>
+        <BotonEnviar>{t("guardarAudiencia")}</BotonEnviar>
       </form>
     </SeccionCard>
   );

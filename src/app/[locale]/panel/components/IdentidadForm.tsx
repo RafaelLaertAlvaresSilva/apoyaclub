@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useActionState, useState, useTransition } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
@@ -22,6 +23,7 @@ export function IdentidadForm({
   userId: string;
   perfil: ClubProfile | null;
 }) {
+  const t = useTranslations("panel.perfil");
   const [estado, formAction] = useActionState(guardarIdentidad, null);
   const [errorImagen, setErrorImagen] = useState<string | null>(null);
   const [confirmaSinMenores, setConfirmaSinMenores] = useState(false);
@@ -35,21 +37,19 @@ export function IdentidadForm({
 
   return (
     <SeccionCard
-      titulo="Identidad"
-      descripcion="Cómo se presenta tu club a las empresas. El nombre y la localidad son los únicos campos obligatorios."
+      titulo={t("identidad")}
+      descripcion={t("comoSePresentaTu")}
     >
       {perfil?.slug && (
         <p className="mb-6 rounded-lg border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-800">
           Tu página pública ya está en{" "}
           <a href={`/club/${perfil.slug}`} target="_blank" rel="noreferrer" className="font-medium underline">
             /club/{perfil.slug}
-          </a>
-          . Compártela con las empresas que quieras.
-        </p>
+          </a>{t("compartelaConLasEmpresas")}</p>
       )}
 
       <div className="mb-6 space-y-4">
-        <Campo etiqueta="Logo del club">
+        <Campo etiqueta={t("logoDelClub")}>
           <div className="flex items-center gap-4">
             {perfil?.logoUrl ? (
               <Image
@@ -61,9 +61,7 @@ export function IdentidadForm({
                 unoptimized
               />
             ) : (
-              <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-dashed border-zinc-300 text-xs text-zinc-400">
-                Sin logo
-              </div>
+              <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-dashed border-zinc-300 text-xs text-zinc-400">{t("sinLogo")}</div>
             )}
             <ImageUploader
               userId={userId}
@@ -77,7 +75,7 @@ export function IdentidadForm({
           </div>
         </Campo>
 
-        <Campo etiqueta="Fotos del club" ayuda="Instalaciones, afición, equipos… lo que mejor represente al club.">
+        <Campo etiqueta={t("fotosDelClub")} ayuda={t("instalacionesAficionEquiposLo")}>
           <div className="mb-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
             No subas fotos en las que se identifique con claridad a menores de edad (por
             ejemplo, primeros planos con el rostro visible) sin el consentimiento de sus
@@ -100,10 +98,7 @@ export function IdentidadForm({
                 }
               }}
               className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
-            />
-            Confirmo que las fotos que subo no incluyen menores identificables sin
-            consentimiento, o que dispongo de dicho consentimiento.
-          </label>
+            />{t("confirmoQueLasFotos")}</label>
 
           <div className="flex flex-wrap gap-3">
             {fotos.map((foto) => (
@@ -142,9 +137,7 @@ export function IdentidadForm({
                 }}
               />
             ) : (
-              <p className="self-center text-xs text-zinc-400">
-                Marca la casilla de arriba para poder añadir fotos.
-              </p>
+              <p className="self-center text-xs text-zinc-400">{t("marcaLaCasillaDe")}</p>
             )}
           </div>
         </Campo>
@@ -154,7 +147,7 @@ export function IdentidadForm({
 
       <form action={formAction} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          <Campo etiqueta="Nombre del club *">
+          <Campo etiqueta={t("nombreDelClub")}>
             <input
               name="name"
               defaultValue={perfil?.name ?? ""}
@@ -162,7 +155,7 @@ export function IdentidadForm({
               className={clasesInput}
             />
           </Campo>
-          <Campo etiqueta="Localidad *">
+          <Campo etiqueta={t("localidad")}>
             <input
               name="city"
               defaultValue={perfil?.city ?? ""}
@@ -170,10 +163,10 @@ export function IdentidadForm({
               className={clasesInput}
             />
           </Campo>
-          <Campo etiqueta="Provincia">
+          <Campo etiqueta={t("provincia")}>
             <input name="province" defaultValue={perfil?.province ?? ""} className={clasesInput} />
           </Campo>
-          <Campo etiqueta="Código postal">
+          <Campo etiqueta={t("codigoPostal")}>
             <input
               name="postalCode"
               defaultValue={perfil?.postalCode ?? ""}
@@ -182,17 +175,17 @@ export function IdentidadForm({
           </Campo>
         </div>
 
-        <Campo etiqueta="Instalaciones">
+        <Campo etiqueta={t("instalaciones")}>
           <input
             name="facilities"
             defaultValue={perfil?.facilities ?? ""}
-            placeholder="Campo, pabellón, capacidad…"
+            placeholder={t("campoPabellonCapacidad")}
             className={clasesInput}
           />
         </Campo>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <Campo etiqueta="Web">
+          <Campo etiqueta={t("web")}>
             <input
               name="website"
               type="url"
@@ -201,7 +194,7 @@ export function IdentidadForm({
               className={clasesInput}
             />
           </Campo>
-          <Campo etiqueta="Vídeo de presentación" ayuda="Enlace a YouTube, Vimeo…">
+          <Campo etiqueta="Vídeo de presentación" ayuda={t("enlaceAYoutubeVimeo")}>
             <input
               name="videoUrl"
               type="url"
@@ -221,7 +214,7 @@ export function IdentidadForm({
         </Campo>
 
         <div>
-          <p className="mb-2 text-sm font-medium text-zinc-700">Redes sociales</p>
+          <p className="mb-2 text-sm font-medium text-zinc-700">{t("redesSociales")}</p>
           <div className="grid gap-4 sm:grid-cols-2">
             <input
               name="instagram"
@@ -258,29 +251,25 @@ export function IdentidadForm({
 
         <div className="space-y-3 rounded-lg border border-zinc-200 p-4">
           <div>
-            <p className="text-sm font-medium text-zinc-700">Contacto público</p>
-            <p className="text-xs text-zinc-400">
-              El correo de tu cuenta siempre aparece en el botón de contacto de tu página
-              pública. El teléfono y el nombre de contacto son opcionales y solo se
-              muestran si lo autorizas.
-            </p>
+            <p className="text-sm font-medium text-zinc-700">{t("contactoPublico")}</p>
+            <p className="text-xs text-zinc-400">{t("elCorreoDeTu")}</p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Campo etiqueta="Nombre de contacto">
+            <Campo etiqueta={t("nombreDeContacto")}>
               <input
                 name="contactName"
                 defaultValue={perfil?.contactName ?? ""}
-                placeholder="Persona a la que escribir"
+                placeholder={t("personaALaQue")}
                 className={clasesInput}
               />
             </Campo>
-            <Campo etiqueta="Teléfono de contacto">
+            <Campo etiqueta={t("telefonoDeContacto")}>
               <input
                 name="contactPhone"
                 type="tel"
                 defaultValue={perfil?.contactPhone ?? ""}
-                placeholder="Ej. 600 000 000"
+                placeholder={t("ej600000000")}
                 className={clasesInput}
               />
             </Campo>
@@ -292,16 +281,13 @@ export function IdentidadForm({
               name="contactPublicConsent"
               defaultChecked={perfil?.contactPublicConsent ?? false}
               className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
-            />
-            Autorizo mostrar el teléfono y el nombre de contacto en la página pública del
-            club.
-          </label>
+            />{t("autorizoMostrarElTelefono")}</label>
         </div>
 
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
         <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />
 
-        <BotonEnviar>Guardar identidad</BotonEnviar>
+        <BotonEnviar>{t("guardarIdentidad")}</BotonEnviar>
       </form>
     </SeccionCard>
   );

@@ -40,7 +40,7 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 border-b border-white/10 pb-11 sm:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <div>
-            <p className="text-lg font-extrabold text-white">ApoyaClub</p>
+            <p className="text-lg font-extrabold text-white">{t("apoyaclub")}</p>
             <p className="mt-3 max-w-xs text-sm text-white/55">{t("descripcion")}</p>
             <Link href="/#contacto" className="mt-4 inline-block text-sm font-medium text-white/70 hover:text-white">
               {t("contacto")}
@@ -82,7 +82,7 @@ export function Footer() {
         </div>
 
         <p className="pt-6 text-xs text-white/40">
-          © {new Date().getFullYear()} {t("derechos")}. Todos los derechos reservados.
+          © {new Date().getFullYear()} {t("derechos")}. {t("derechosReservados")}
         </p>
       </div>
     </footer>

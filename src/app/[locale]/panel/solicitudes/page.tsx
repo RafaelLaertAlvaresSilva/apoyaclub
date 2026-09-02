@@ -1,5 +1,5 @@
 import { redirect } from "@/i18n/navigation";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { companyRowToProfile, type CompanyRow } from "@/lib/company-mappers";
 import { contactRequestRowToContactRequest, type ContactRequestRow } from "@/lib/contact-request-mappers";
@@ -14,6 +14,7 @@ type ContactRequestConOportunidad = ContactRequestRow & {
 
 /** Panel del club: solicitudes de contacto recibidas (Fase 8). */
 export default async function SolicitudesPage() {
+  const t = await getTranslations("panel.solicitudes");
   const supabase = await createClient();
   const {
     data: { user },
@@ -58,8 +59,8 @@ export default async function SolicitudesPage() {
     <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel del club</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Solicitudes de contacto</h1>
+          <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("solicitudesDeContacto")}</h1>
         </div>
         <CerrarSesionBoton />
       </div>
@@ -67,10 +68,7 @@ export default async function SolicitudesPage() {
       <PanelNav activo="solicitudes" />
 
       {solicitudes.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-zinc-300 bg-white p-6 text-center text-sm text-zinc-500">
-          Todavía no has recibido ninguna solicitud de contacto. Cuando una empresa te escriba desde
-          tu página pública, aparecerá aquí y también recibirás un email.
-        </p>
+        <p className="rounded-xl border border-dashed border-zinc-300 bg-white p-6 text-center text-sm text-zinc-500">{t("todaviaNoHasRecibido")}</p>
       ) : (
         <ul className="space-y-4">
           {solicitudes.map(({ solicitud, opportunityTitle, empresa, empresaEmail }) => (

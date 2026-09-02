@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 import type { ClubTeam, Opportunity, OpportunityStatus } from "@/lib/types";
 import {
@@ -32,6 +33,7 @@ export function TarjetaOportunidad({
   oportunidad: Opportunity;
   equipos?: ClubTeam[];
 }) {
+  const t = useTranslations("panel.oportunidades");
   const [enEdicion, setEnEdicion] = useState(false);
 
   if (enEdicion) {
@@ -62,9 +64,7 @@ export function TarjetaOportunidad({
               </span>
             )}
             {oportunidad.archivedAt && (
-              <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-500">
-                Archivada
-              </span>
+              <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-500">{t("archivada")}</span>
             )}
           </div>
           <p className="mt-0.5 text-sm text-zinc-500">
@@ -114,18 +114,14 @@ export function TarjetaOportunidad({
           type="button"
           onClick={() => setEnEdicion(true)}
           className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
-        >
-          Editar
-        </button>
+        >{t("editar")}</button>
 
         <form action={duplicarOportunidad}>
           <input type="hidden" name="id" value={oportunidad.id} />
           <button
             type="submit"
             className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
-          >
-            Duplicar
-          </button>
+          >{t("duplicar")}</button>
         </form>
 
         {oportunidad.archivedAt ? (
@@ -134,9 +130,7 @@ export function TarjetaOportunidad({
             <button
               type="submit"
               className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
-            >
-              Restaurar
-            </button>
+            >{t("restaurar")}</button>
           </form>
         ) : (
           <form action={archivarOportunidad}>
@@ -144,9 +138,7 @@ export function TarjetaOportunidad({
             <button
               type="submit"
               className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
-            >
-              Archivar
-            </button>
+            >{t("archivar")}</button>
           </form>
         )}
 
@@ -155,9 +147,7 @@ export function TarjetaOportunidad({
           <button
             type="submit"
             className="rounded-lg px-3 py-1.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50"
-          >
-            Eliminar
-          </button>
+          >{t("eliminar")}</button>
         </form>
       </div>
     </li>

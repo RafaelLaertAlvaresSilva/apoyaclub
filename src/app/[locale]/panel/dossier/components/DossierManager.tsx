@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useActionState, useRef, useState } from "react";
@@ -40,6 +41,7 @@ export function DossierManager({
   configuracion: DossierConfig | null;
   seccionesPorDefecto: DossierSectionKey[];
 }) {
+  const t = useTranslations("panel.dossier");
   const formRef = useRef<HTMLFormElement>(null);
   const [estado, accion] = useActionState<EstadoDossier, FormData>(guardarConfiguracionDossier, null);
   const [descargando, setDescargando] = useState(false);
@@ -102,8 +104,8 @@ export function DossierManager({
   return (
     <form ref={formRef} action={accion} className="flex flex-col gap-6">
       <SeccionCard
-        titulo="Secciones a incluir"
-        descripcion="La portada con tu marca y el pie de ApoyaClub aparecen siempre, elijas lo que elijas aquí."
+        titulo={t("seccionesAIncluir")}
+        descripcion={t("laPortadaConTu")}
       >
         <div className="grid gap-3 sm:grid-cols-2">
           {SECCIONES_DOSSIER.map((seccion) => {
@@ -136,15 +138,13 @@ export function DossierManager({
       </SeccionCard>
 
       <SeccionCard
-        titulo="Oportunidades a incluir"
-        descripcion="Además de las disponibles, puedes incluir oportunidades reservadas: es tu documento comercial."
+        titulo={t("oportunidadesAIncluir")}
+        descripcion={t("ademasDeLasDisponibles")}
       >
         {oportunidades.length === 0 ? (
           <p className="text-sm text-zinc-500">
             Todavía no tienes oportunidades publicadas. Puedes crearlas en{" "}
-            <Link href="/panel/oportunidades" className="font-medium text-teal-700 hover:underline">
-              Oportunidades
-            </Link>
+            <Link href="/panel/oportunidades" className="font-medium text-teal-700 hover:underline">{t("oportunidades")}</Link>
             .
           </p>
         ) : (
@@ -173,7 +173,7 @@ export function DossierManager({
         )}
       </SeccionCard>
 
-      <SeccionCard titulo="Descargar" descripcion="Genera el PDF al momento con la selección de arriba.">
+      <SeccionCard titulo={t("descargar")} descripcion={t("generaElPdfAl")}>
         <div className="flex flex-col gap-3">
           <AvisoError mensaje={errorDescarga} />
           <button
@@ -194,8 +194,8 @@ export function DossierManager({
       </SeccionCard>
 
       <SeccionCard
-        titulo="Compartir con un enlace público"
-        descripcion="Se abre directamente en el navegador, sin necesidad de sesión: ideal para enviarlo por email o WhatsApp."
+        titulo={t("compartirConUnEnlace")}
+        descripcion={t("seAbreDirectamenteEn")}
       >
         <div className="flex flex-col gap-4">
           <label className="flex items-center gap-2 text-sm font-medium text-zinc-700">
@@ -204,11 +204,9 @@ export function DossierManager({
               name="shareEnabled"
               defaultChecked={configuracion?.shareEnabled ?? false}
               className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
-            />
-            Activar enlace público
-          </label>
+            />{t("activarEnlacePublico")}</label>
 
-          <Campo etiqueta="Caducidad (opcional)" ayuda="Déjalo en blanco para que el enlace no caduque nunca.">
+          <Campo etiqueta="Caducidad (opcional)" ayuda={t("dejaloEnBlancoPara")}>
             <input
               type="date"
               name="shareExpiresAt"
@@ -233,7 +231,7 @@ export function DossierManager({
             </div>
           )}
 
-          <BotonEnviar>Guardar selección</BotonEnviar>
+          <BotonEnviar>{t("guardarSeleccion")}</BotonEnviar>
         </div>
       </SeccionCard>
     </form>

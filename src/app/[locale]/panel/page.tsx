@@ -1,5 +1,5 @@
 import { redirect } from "@/i18n/navigation";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import {
   clubRowToProfile,
@@ -16,6 +16,7 @@ import { PanelNav } from "./components/PanelNav";
 import { PanelTabs } from "./components/PanelTabs";
 
 export default async function PanelPage() {
+  const t = await getTranslations("panel.perfil");
   const supabase = await createClient();
   const {
     data: { user },
@@ -56,7 +57,7 @@ export default async function PanelPage() {
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel del club</p>
+          <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">
             {perfil?.name ?? nombreProvisional}
           </h1>

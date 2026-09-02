@@ -22,6 +22,29 @@
       "privacidad": "Privacidad",
       "cookies": "Cookies",
       "condicionesDeUso": "Condiciones de uso"
-    }
+    },
+    "apoyaclub": "ApoyaClub",
+    "derechosReservados": "Todos los derechos reservados."
+  },
+  "componentes": {
+    "aceptar": "Aceptar",
+    "algoHaFallado": "Algo ha fallado",
+    "buscarClubes": "Buscar clubes",
+    "cerrarSesion": "Cerrar sesión",
+    "cuentanosSiEscribesComo": "Cuéntanos si escribes como club, como empresa, o cualquier otra duda…",
+    "email": "Email",
+    "enviarMensaje": "Enviar mensaje",
+    "estaPaginaNoExiste": "Esta página no existe",
+    "esteTextoEsUn": "Este texto es un borrador de partida y todavía no ha sido revisado por un abogado. No lo publiques como definitivo ni lo utilices como base legal real hasta contar con esa revisión.",
+    "mensaje": "Mensaje",
+    "noHemosPodidoCargar": "No hemos podido cargar esta página",
+    "nombre": "Nombre",
+    "plantillaPendienteDeRevision": "⚠️ Plantilla pendiente de revisión jurídica",
+    "politicaDeCookies": "Política de Cookies",
+    "puedeQueElEnlace": "Puede que el enlace esté mal copiado o que la página haya cambiado de sitio.",
+    "rechazar": "Rechazar",
+    "reintentar": "Reintentar",
+    "volverAApoyaclub": "← Volver a ApoyaClub",
+    "volverAlInicio": "Volver al inicio"
   }
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
@@ -13,12 +14,13 @@ const ETIQUETA_NIVEL: Record<ClubTeam["teamLevel"], string> = {
 };
 
 export function EquiposForm({ equipos }: { equipos: ClubTeam[] }) {
+  const t = useTranslations("panel.perfil");
   const [estado, formAction] = useActionState(agregarEquipo, null);
 
   return (
     <SeccionCard
-      titulo="Equipos"
-      descripcion="Añade cada equipo del club: deporte, categoría, género y si es primer equipo o cantera."
+      titulo={t("equipos")}
+      descripcion={t("anadeCadaEquipoDel")}
     >
       {equipos.length > 0 && (
         <ul className="mb-6 divide-y divide-zinc-100 rounded-lg border border-zinc-200">
@@ -40,9 +42,7 @@ export function EquiposForm({ equipos }: { equipos: ClubTeam[] }) {
                 <button
                   type="submit"
                   className="text-sm font-medium text-red-600 hover:underline"
-                >
-                  Eliminar
-                </button>
+                >{t("eliminar")}</button>
               </form>
             </li>
           ))}
@@ -53,31 +53,31 @@ export function EquiposForm({ equipos }: { equipos: ClubTeam[] }) {
           `equipos`), lo que remonta el formulario y limpia sus campos. */}
       <form key={equipos.length} action={formAction} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          <Campo etiqueta="Deporte *">
-            <input name="sport" required placeholder="Fútbol, baloncesto…" className={clasesInput} />
+          <Campo etiqueta={t("deporte")}>
+            <input name="sport" required placeholder={t("futbolBaloncesto")} className={clasesInput} />
           </Campo>
-          <Campo etiqueta="Categoría">
-            <input name="category" placeholder="Cadete, senior…" className={clasesInput} />
+          <Campo etiqueta={t("categoria")}>
+            <input name="category" placeholder={t("cadeteSenior")} className={clasesInput} />
           </Campo>
-          <Campo etiqueta="Género">
-            <input name="gender" placeholder="Masculino, femenino, mixto…" className={clasesInput} />
+          <Campo etiqueta={t("genero")}>
+            <input name="gender" placeholder={t("masculinoFemeninoMixto")} className={clasesInput} />
           </Campo>
-          <Campo etiqueta="Número de jugadores">
+          <Campo etiqueta={t("numeroDeJugadores")}>
             <input name="playerCount" type="number" min={0} className={clasesInput} />
           </Campo>
         </div>
 
-        <Campo etiqueta="Tipo de equipo">
+        <Campo etiqueta={t("tipoDeEquipo")}>
           <select name="teamLevel" defaultValue="primer_equipo" className={clasesInput}>
-            <option value="primer_equipo">Primer equipo</option>
-            <option value="cantera">Cantera</option>
+            <option value="primer_equipo">{t("primerEquipo")}</option>
+            <option value="cantera">{t("cantera")}</option>
           </select>
         </Campo>
 
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
         <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Equipo añadido." : null} />
 
-        <BotonEnviar>Añadir equipo</BotonEnviar>
+        <BotonEnviar>{t("anadirEquipo")}</BotonEnviar>
       </form>
     </SeccionCard>
   );

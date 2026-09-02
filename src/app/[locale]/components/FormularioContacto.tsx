@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
@@ -8,6 +9,7 @@ import { enviarConsultaContacto, type EstadoContacto } from "../contact-actions"
 
 /** Formulario de contacto de la landing (Fase 13). Ver `contact-actions.ts`. */
 export function FormularioContacto() {
+  const t = useTranslations("common.componentes");
   const [estado, formAction] = useActionState<EstadoContacto, FormData>(enviarConsultaContacto, null);
 
   if (estado && "ok" in estado && estado.ok) {
@@ -19,9 +21,7 @@ export function FormularioContacto() {
       <CampoTrampa />
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="name" className="mb-1 block text-sm font-medium text-zinc-700">
-            Nombre
-          </label>
+          <label htmlFor="name" className="mb-1 block text-sm font-medium text-zinc-700">{t("nombre")}</label>
           <input
             id="name"
             name="name"
@@ -32,9 +32,7 @@ export function FormularioContacto() {
           />
         </div>
         <div>
-          <label htmlFor="email" className="mb-1 block text-sm font-medium text-zinc-700">
-            Email
-          </label>
+          <label htmlFor="email" className="mb-1 block text-sm font-medium text-zinc-700">{t("email")}</label>
           <input
             id="email"
             name="email"
@@ -47,23 +45,21 @@ export function FormularioContacto() {
       </div>
 
       <div>
-        <label htmlFor="message" className="mb-1 block text-sm font-medium text-zinc-700">
-          Mensaje
-        </label>
+        <label htmlFor="message" className="mb-1 block text-sm font-medium text-zinc-700">{t("mensaje")}</label>
         <textarea
           id="message"
           name="message"
           required
           minLength={10}
           rows={5}
-          placeholder="Cuéntanos si escribes como club, como empresa, o cualquier otra duda…"
+          placeholder={t("cuentanosSiEscribesComo")}
           className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
         />
       </div>
 
       <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
 
-      <BotonEnviar>Enviar mensaje</BotonEnviar>
+      <BotonEnviar>{t("enviarMensaje")}</BotonEnviar>
     </form>
   );
 }

@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { AvisoRevisionJuridica } from "./AvisoRevisionJuridica";
@@ -19,14 +20,13 @@ export function LegalPageShell({
   actualizado: string;
   children: React.ReactNode;
 }) {
+  const t = useTranslations("common.componentes");
   return (
     <>
       <Header />
 
       <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-        <Link href="/" className="text-sm font-medium text-teal-700 hover:underline">
-          ← Volver a ApoyaClub
-        </Link>
+        <Link href="/" className="text-sm font-medium text-teal-700 hover:underline">{t("volverAApoyaclub")}</Link>
 
         <h1 className="mt-4 text-2xl font-semibold text-zinc-900">{titulo}</h1>
         <p className="mt-1 text-sm text-zinc-500">Última actualización: {actualizado}</p>

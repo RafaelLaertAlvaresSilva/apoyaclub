@@ -1,5 +1,5 @@
 import { redirect } from "@/i18n/navigation";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
@@ -33,6 +33,7 @@ export default async function SuscripcionPage({
 }: {
   searchParams: Promise<{ error?: string; checkout?: string }>;
 }) {
+  const t = await getTranslations("panel.suscripcion");
   const { error, checkout } = await searchParams;
 
   const supabase = await createClient();
@@ -73,8 +74,8 @@ export default async function SuscripcionPage({
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel del club</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Suscripción</h1>
+          <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("suscripcion")}</h1>
         </div>
         <CerrarSesionBoton />
       </div>
@@ -93,14 +94,12 @@ export default async function SuscripcionPage({
           </div>
         )}
 
-        <h2 className="text-base font-semibold text-zinc-900">Plan único</h2>
-        <p className="mt-1 text-sm text-zinc-500">
-          29,90 €/mes, IVA incluido. 30 días de prueba gratuita la primera vez, sin cobro inicial.
-        </p>
+        <h2 className="text-base font-semibold text-zinc-900">{t("planUnico")}</h2>
+        <p className="mt-1 text-sm text-zinc-500">{t("t2990mesiva")}</p>
 
         <dl className="mt-6 grid gap-4 sm:grid-cols-2">
           <div>
-            <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400">Estado</dt>
+            <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400">{t("estado")}</dt>
             <dd className="mt-1 text-sm font-medium text-zinc-900">
               {etiquetaEstadoSuscripcion(suscripcion.status)}
             </dd>
@@ -108,9 +107,7 @@ export default async function SuscripcionPage({
 
           {suscripcion.status === "trialing" && suscripcion.currentPeriodEnd && (
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400">
-                Fin de la prueba gratuita
-              </dt>
+              <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400">{t("finDeLaPrueba")}</dt>
               <dd className="mt-1 text-sm text-zinc-700">
                 {formatearFecha(suscripcion.currentPeriodEnd)} — después se cobrarán 29,90 €/mes.
               </dd>
@@ -119,7 +116,7 @@ export default async function SuscripcionPage({
 
           {suscripcion.status === "active" && suscripcion.currentPeriodEnd && !suscripcion.cancelAtPeriodEnd && (
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400">Próxima renovación</dt>
+              <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400">{t("proximaRenovacion")}</dt>
               <dd className="mt-1 text-sm text-zinc-700">{formatearFecha(suscripcion.currentPeriodEnd)}</dd>
             </div>
           )}
@@ -134,9 +131,7 @@ export default async function SuscripcionPage({
           )}
 
           <div>
-            <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400">
-              Visibilidad pública
-            </dt>
+            <dt className="text-xs font-medium uppercase tracking-wide text-zinc-400">{t("visibilidadPublica")}</dt>
             <dd className="mt-1 text-sm text-zinc-700">
               {esVisiblePublicamente(suscripcion.status)
                 ? "Tu página pública y tus oportunidades son visibles."
@@ -148,7 +143,7 @@ export default async function SuscripcionPage({
         <div className="mt-6 max-w-xs">
           {puedeGestionar ? (
             <form action={abrirPortalCliente}>
-              <BotonEnviar>Gestionar suscripción</BotonEnviar>
+              <BotonEnviar>{t("gestionarSuscripcion")}</BotonEnviar>
             </form>
           ) : (
             <form action={iniciarSuscripcion}>

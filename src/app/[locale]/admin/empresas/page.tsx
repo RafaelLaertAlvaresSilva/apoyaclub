@@ -1,5 +1,5 @@
 import { redirect } from "@/i18n/navigation";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { obtenerUsuariosPorRol } from "@/lib/admin-users";
 import { companyRowToProfile, type CompanyRow } from "@/lib/company-mappers";
@@ -20,6 +20,7 @@ const formatoFecha = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "
  * ha tocado su panel tiene que aparecer igualmente en este listado.
  */
 export default async function AdminEmpresasPage() {
+  const t = await getTranslations("admin.empresas");
   const supabase = await createClient();
   const {
     data: { user },
@@ -51,8 +52,8 @@ export default async function AdminEmpresasPage() {
     <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel de administración</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Empresas</h1>
+          <p className="text-sm font-medium text-teal-700">{t("panelDeAdministracion")}</p>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("empresas")}</h1>
         </div>
         <CerrarSesionBoton />
       </div>
@@ -60,17 +61,17 @@ export default async function AdminEmpresasPage() {
       <AdminNav activo="empresas" />
 
       {filas.length === 0 ? (
-        <p className="text-sm text-zinc-500">Todavía no se ha registrado ninguna empresa.</p>
+        <p className="text-sm text-zinc-500">{t("todaviaNoSeHa")}</p>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500">
               <tr>
-                <th className="px-4 py-3 font-medium">Empresa</th>
-                <th className="px-4 py-3 font-medium">Sector</th>
-                <th className="px-4 py-3 font-medium">Localidad</th>
-                <th className="px-4 py-3 font-medium">Email</th>
-                <th className="px-4 py-3 font-medium">Alta</th>
+                <th className="px-4 py-3 font-medium">{t("empresa")}</th>
+                <th className="px-4 py-3 font-medium">{t("sector")}</th>
+                <th className="px-4 py-3 font-medium">{t("localidad")}</th>
+                <th className="px-4 py-3 font-medium">{t("email")}</th>
+                <th className="px-4 py-3 font-medium">{t("alta")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-100">

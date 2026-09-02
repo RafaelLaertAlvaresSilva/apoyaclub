@@ -1,6 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { clubRowToProfile, clubSponsorRowToSponsor, clubTeamRowToTeam } from "@/lib/club-mappers";
 import type { ClubRow, ClubSponsorRow, ClubTeamRow } from "@/lib/club-mappers";
@@ -12,6 +12,7 @@ import { PanelNav } from "../components/PanelNav";
 import { DossierManager } from "./components/DossierManager";
 
 export default async function DossierPage() {
+  const t = await getTranslations("panel.dossier");
   const supabase = await createClient();
   const {
     data: { user },
@@ -62,8 +63,8 @@ export default async function DossierPage() {
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel del club</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Dossier comercial en PDF</h1>
+          <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("dossierComercialEnPdf")}</h1>
         </div>
         <CerrarSesionBoton />
       </div>
@@ -73,9 +74,7 @@ export default async function DossierPage() {
       {!perfil ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
           Completa primero la identidad del club (nombre y localidad) en{" "}
-          <Link href="/panel" className="font-medium text-teal-700 hover:underline">
-            tu perfil
-          </Link>{" "}
+          <Link href="/panel" className="font-medium text-teal-700 hover:underline">{t("tuPerfil")}</Link>{" "}
           para poder generar tu dossier de patrocinio.
         </div>
       ) : (

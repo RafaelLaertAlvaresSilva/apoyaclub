@@ -1,1 +1,46 @@
-{}
+{
+  "clubes": {
+    "acciones": "Acciones",
+    "alta": "Alta",
+    "club": "Club",
+    "clubes": "Clubes",
+    "estado": "Estado",
+    "panelDeAdministracion": "Panel de administración",
+    "perfil": "Perfil",
+    "suscripcion": "Suscripción",
+    "suspendido": "Suspendido",
+    "todaviaNoSeHa": "Todavía no se ha registrado ningún club.",
+    "verificado": "Verificado"
+  },
+  "empresas": {
+    "alta": "Alta",
+    "email": "Email",
+    "empresa": "Empresa",
+    "empresas": "Empresas",
+    "localidad": "Localidad",
+    "panelDeAdministracion": "Panel de administración",
+    "sector": "Sector",
+    "todaviaNoSeHa": "Todavía no se ha registrado ninguna empresa."
+  },
+  "panel": {
+    "actividad": "Actividad",
+    "busquedasRealizadas": "Búsquedas realizadas",
+    "cancelados": "Cancelados",
+    "clubesDePago": "Clubes de pago",
+    "clubesEnPrueba": "Clubes en prueba",
+    "clubesRegistrados": "Clubes registrados",
+    "clubesSuspendidos": "Clubes suspendidos",
+    "clubesVerificados": "Clubes verificados",
+    "clubesYEmpresas": "Clubes y empresas",
+    "conversionDePruebaA": "Conversión de prueba a pago",
+    "empresasRegistradas": "Empresas registradas",
+    "moderacion": "Moderación",
+    "nuncaHanEmpezado": "Nunca han empezado",
+    "oportunidadesPublicadas": "Oportunidades publicadas",
+    "pagoPendiente": "Pago pendiente",
+    "panelDeAdministracion": "Panel de administración",
+    "resumen": "Resumen",
+    "solicitudesDeContactoEnviadas": "Solicitudes de contacto enviadas",
+    "suscripcion": "Suscripción"
+  }
+}

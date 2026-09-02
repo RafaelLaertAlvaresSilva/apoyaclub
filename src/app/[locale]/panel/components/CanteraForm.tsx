@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
@@ -8,16 +9,17 @@ import { guardarCantera } from "../actions";
 import { Campo, SeccionCard, clasesInput } from "./SeccionCard";
 
 export function CanteraForm({ perfil }: { perfil: ClubProfile | null }) {
+  const t = useTranslations("panel.perfil");
   const [estado, formAction] = useActionState(guardarCantera, null);
 
   return (
     <SeccionCard
-      titulo="Cantera"
-      descripcion="Solo datos agregados: no hace falta detallar cada equipo, basta con los totales."
+      titulo={t("cantera")}
+      descripcion={t("soloDatosAgregadosNo")}
     >
       <form action={formAction} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-3">
-          <Campo etiqueta="Equipos de cantera">
+          <Campo etiqueta={t("equiposDeCantera")}>
             <input
               name="youthTeamsCount"
               type="number"
@@ -26,7 +28,7 @@ export function CanteraForm({ perfil }: { perfil: ClubProfile | null }) {
               className={clasesInput}
             />
           </Campo>
-          <Campo etiqueta="Jugadores">
+          <Campo etiqueta={t("jugadores")}>
             <input
               name="youthPlayersCount"
               type="number"
@@ -35,7 +37,7 @@ export function CanteraForm({ perfil }: { perfil: ClubProfile | null }) {
               className={clasesInput}
             />
           </Campo>
-          <Campo etiqueta="Familias">
+          <Campo etiqueta={t("familias")}>
             <input
               name="youthFamiliesCount"
               type="number"
@@ -49,7 +51,7 @@ export function CanteraForm({ perfil }: { perfil: ClubProfile | null }) {
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
         <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />
 
-        <BotonEnviar>Guardar cantera</BotonEnviar>
+        <BotonEnviar>{t("guardarCantera")}</BotonEnviar>
       </form>
     </SeccionCard>
   );

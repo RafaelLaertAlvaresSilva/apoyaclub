@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
@@ -9,30 +10,31 @@ import type { CompanyProfile } from "@/lib/types";
 import { guardarPerfilEmpresa } from "../actions";
 
 export function PerfilEmpresaForm({ perfil }: { perfil: CompanyProfile | null }) {
+  const t = useTranslations("empresa.perfil");
   const [estado, formAction] = useActionState(guardarPerfilEmpresa, null);
 
   return (
     <SeccionCard
-      titulo="Perfil de empresa"
-      descripcion="Cómo te presentas a los clubes cuando solicitas contacto. Todos los campos son opcionales, pero cuantos más rellenes, más fácil se lo pones al club para responderte."
+      titulo={t("perfilDeEmpresa")}
+      descripcion={t("comoTePresentasA")}
     >
       <form action={formAction} className="space-y-6">
         <div className="grid gap-4 sm:grid-cols-2">
-          <Campo etiqueta="Nombre de la empresa">
+          <Campo etiqueta={t("nombreDeLaEmpresa")}>
             <input name="name" defaultValue={perfil?.name ?? ""} className={clasesInput} />
           </Campo>
-          <Campo etiqueta="Sector">
+          <Campo etiqueta={t("sector")}>
             <input
               name="sector"
               defaultValue={perfil?.sector ?? ""}
-              placeholder="Ej. alimentación, construcción, tecnología…"
+              placeholder={t("ejAlimentacionConstruccionTecnologia")}
               className={clasesInput}
             />
           </Campo>
-          <Campo etiqueta="Localidad">
+          <Campo etiqueta={t("localidad")}>
             <input name="city" defaultValue={perfil?.city ?? ""} className={clasesInput} />
           </Campo>
-          <Campo etiqueta="Web">
+          <Campo etiqueta={t("web")}>
             <input
               name="website"
               type="url"
@@ -44,11 +46,8 @@ export function PerfilEmpresaForm({ perfil }: { perfil: CompanyProfile | null })
         </div>
 
         <div>
-          <p className="mb-1 text-sm font-medium text-zinc-700">Presupuesto orientativo</p>
-          <p className="mb-2 text-xs text-zinc-400">
-            Un rango aproximado en euros, solo como referencia para el club al leer tu solicitud.
-            Nunca es una oferta cerrada.
-          </p>
+          <p className="mb-1 text-sm font-medium text-zinc-700">{t("presupuestoOrientativo")}</p>
+          <p className="mb-2 text-xs text-zinc-400">{t("unRangoAproximadoEn")}</p>
           <div className="grid gap-4 sm:grid-cols-2">
             <input
               name="budgetMin"
@@ -72,10 +71,8 @@ export function PerfilEmpresaForm({ perfil }: { perfil: CompanyProfile | null })
         </div>
 
         <div>
-          <p className="mb-1 text-sm font-medium text-zinc-700">Objetivos de patrocinio</p>
-          <p className="mb-2 text-xs text-zinc-400">
-            A qué público u objetivo quieres llegar patrocinando un club.
-          </p>
+          <p className="mb-1 text-sm font-medium text-zinc-700">{t("objetivosDePatrocinio")}</p>
+          <p className="mb-2 text-xs text-zinc-400">{t("aQuePublicoU")}</p>
           <div className="grid gap-2 sm:grid-cols-2">
             {OBJETIVOS_OPORTUNIDAD.map((objetivo) => (
               <label key={objetivo.id} className="flex items-center gap-2 text-sm text-zinc-700">
@@ -95,7 +92,7 @@ export function PerfilEmpresaForm({ perfil }: { perfil: CompanyProfile | null })
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
         <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />
 
-        <BotonEnviar>Guardar perfil</BotonEnviar>
+        <BotonEnviar>{t("guardarPerfil")}</BotonEnviar>
       </form>
     </SeccionCard>
   );

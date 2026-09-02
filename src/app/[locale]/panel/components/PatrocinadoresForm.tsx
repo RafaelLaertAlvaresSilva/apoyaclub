@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useActionState, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
@@ -16,12 +17,13 @@ export function PatrocinadoresForm({
   userId: string;
   patrocinadores: ClubSponsor[];
 }) {
+  const t = useTranslations("panel.perfil2");
   const [estado, formAction] = useActionState(agregarPatrocinador, null);
 
   return (
     <SeccionCard
-      titulo="Patrocinadores actuales"
-      descripcion="Las empresas que ya patrocinan al club, para dar confianza a las nuevas."
+      titulo={t("patrocinadoresActuales")}
+      descripcion={t("lasEmpresasQueYa")}
     >
       {patrocinadores.length > 0 && (
         <ul className="mb-6 divide-y divide-zinc-100 rounded-lg border border-zinc-200">
@@ -50,9 +52,7 @@ export function PatrocinadoresForm({
               </div>
               <form action={eliminarPatrocinador}>
                 <input type="hidden" name="id" value={patrocinador.id} />
-                <button type="submit" className="text-sm font-medium text-red-600 hover:underline">
-                  Eliminar
-                </button>
+                <button type="submit" className="text-sm font-medium text-red-600 hover:underline">{t("eliminar")}</button>
               </form>
             </li>
           ))}
@@ -81,15 +81,16 @@ function FormularioNuevoPatrocinador({
   formAction: (formData: FormData) => void;
   estado: EstadoGuardado;
 }) {
+  const t = useTranslations("panel.perfil2");
   const [logoUrl, setLogoUrl] = useState("");
 
   return (
     <form action={formAction} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
-        <Campo etiqueta="Nombre *">
+        <Campo etiqueta={t("nombre")}>
           <input name="name" required className={clasesInput} />
         </Campo>
-        <Campo etiqueta="Web">
+        <Campo etiqueta={t("web")}>
           <input name="website" type="url" placeholder="https://" className={clasesInput} />
         </Campo>
       </div>
@@ -119,7 +120,7 @@ function FormularioNuevoPatrocinador({
       <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
       <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Patrocinador añadido." : null} />
 
-      <BotonEnviar>Añadir patrocinador</BotonEnviar>
+      <BotonEnviar>{t("anadirPatrocinador")}</BotonEnviar>
     </form>
   );
 }

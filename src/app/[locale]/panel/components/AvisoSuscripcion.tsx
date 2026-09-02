@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { ClubSubscription } from "@/lib/subscription-mappers";
 
@@ -17,6 +18,7 @@ function formatearFecha(fechaIso: string): string {
  * pendiente (ese caso ya se ve con detalle en "Suscripción").
  */
 export function AvisoSuscripcion({ suscripcion }: { suscripcion: ClubSubscription }) {
+  const t = useTranslations("panel.perfil2");
   const { status, cancelAtPeriodEnd, currentPeriodEnd } = suscripcion;
 
   let mensaje: string | null = null;
@@ -50,9 +52,7 @@ export function AvisoSuscripcion({ suscripcion }: { suscripcion: ClubSubscriptio
       }`}
     >
       {mensaje}{" "}
-      <Link href="/panel/suscripcion" className="underline underline-offset-2">
-        Ver suscripción
-      </Link>
+      <Link href="/panel/suscripcion" className="underline underline-offset-2">{t("verSuscripcion")}</Link>
     </div>
   );
 }

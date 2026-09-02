@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { AvisoError } from "@/components/AvisoError";
@@ -27,27 +28,26 @@ function BotonEliminar() {
 
 /** Formulario de baja definitiva de la empresa (Fase 11). Ver `eliminarCuentaEmpresa`. */
 export function EliminarCuentaForm() {
+  const t = useTranslations("empresa.privacidad");
   const [estado, formAction] = useActionState(eliminarCuentaEmpresa, null);
 
   return (
     <form action={formAction} className="space-y-4">
       <ul className="list-disc space-y-1 pl-5 text-sm text-zinc-600">
-        <li>Se borra tu perfil de empresa, tus listas de favoritos y tus favoritos.</li>
-        <li>Se borran las solicitudes de contacto que has enviado a clubes.</li>
-        <li>Esta acción no se puede deshacer.</li>
+        <li>{t("seBorraTuPerfil")}</li>
+        <li>{t("seBorranLasSolicitudes")}</li>
+        <li>{t("estaAccionNoSe")}</li>
       </ul>
 
       <div>
-        <label htmlFor="confirmacion" className="mb-1 block text-sm font-medium text-zinc-700">
-          Escribe ELIMINAR para confirmar
-        </label>
+        <label htmlFor="confirmacion" className="mb-1 block text-sm font-medium text-zinc-700">{t("escribeEliminarParaConfirmar")}</label>
         <input
           id="confirmacion"
           name="confirmacion"
           type="text"
           required
           autoComplete="off"
-          placeholder="ELIMINAR"
+          placeholder={t("eliminar")}
           className="w-full max-w-xs rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
         />
       </div>

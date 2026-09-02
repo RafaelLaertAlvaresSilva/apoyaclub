@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useState, useSyncExternalStore } from "react";
 
@@ -60,6 +61,7 @@ function leerSnapshotServidor(): boolean {
  * se añadan cookies que sí requieran consentimiento.
  */
 export function CookieBanner() {
+  const t = useTranslations("common.componentes");
   const yaElegido = useSyncExternalStore(suscribirse, leerSnapshotCliente, leerSnapshotServidor);
   const [descartado, setDescartado] = useState(false);
 
@@ -80,9 +82,7 @@ export function CookieBanner() {
         <p className="text-sm text-zinc-600">
           Usamos cookies técnicas necesarias para que ApoyaClub funcione. Puedes aceptar o
           rechazar las cookies no técnicas; más información en nuestra{" "}
-          <Link href="/cookies" className="font-medium text-teal-700 hover:underline">
-            Política de Cookies
-          </Link>
+          <Link href="/cookies" className="font-medium text-teal-700 hover:underline">{t("politicaDeCookies")}</Link>
           .
         </p>
         <div className="flex shrink-0 gap-2">
@@ -90,16 +90,12 @@ export function CookieBanner() {
             type="button"
             onClick={() => elegir("rejected")}
             className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
-          >
-            Rechazar
-          </button>
+          >{t("rechazar")}</button>
           <button
             type="button"
             onClick={() => elegir("accepted")}
             className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-700"
-          >
-            Aceptar
-          </button>
+          >{t("aceptar")}</button>
         </div>
       </div>
     </div>

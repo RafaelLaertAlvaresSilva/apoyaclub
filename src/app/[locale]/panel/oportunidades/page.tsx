@@ -1,6 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { clubRowToProfile, clubTeamRowToTeam, type ClubRow, type ClubTeamRow } from "@/lib/club-mappers";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
@@ -9,6 +9,7 @@ import { PanelNav } from "../components/PanelNav";
 import { OportunidadesManager } from "./components/OportunidadesManager";
 
 export default async function OportunidadesPage() {
+  const t = await getTranslations("panel.oportunidades");
   const supabase = await createClient();
   const {
     data: { user },
@@ -47,8 +48,8 @@ export default async function OportunidadesPage() {
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel del club</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Oportunidades de patrocinio</h1>
+          <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("oportunidadesDePatrocinio")}</h1>
         </div>
         <CerrarSesionBoton />
       </div>
@@ -58,9 +59,7 @@ export default async function OportunidadesPage() {
       {!perfil ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
           Completa primero la identidad del club (nombre y localidad) en{" "}
-          <Link href="/panel" className="font-medium text-teal-700 hover:underline">
-            tu perfil
-          </Link>{" "}
+          <Link href="/panel" className="font-medium text-teal-700 hover:underline">{t("tuPerfil")}</Link>{" "}
           para poder publicar oportunidades de patrocinio.
         </div>
       ) : (

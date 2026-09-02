@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
@@ -8,6 +9,7 @@ import { guardarComunidad } from "../actions";
 import { SeccionCard, clasesInput, clasesTextarea } from "./SeccionCard";
 
 export function ComunidadForm({ perfil }: { perfil: ClubProfile | null }) {
+  const t = useTranslations("panel.perfil2");
   const [estado, formAction] = useActionState(guardarComunidad, null);
   const [acciones, setAcciones] = useState<CommunityAction[]>(perfil?.communityActions ?? []);
   const [tituloNuevo, setTituloNuevo] = useState("");
@@ -29,8 +31,8 @@ export function ComunidadForm({ perfil }: { perfil: ClubProfile | null }) {
 
   return (
     <SeccionCard
-      titulo="Comunidad"
-      descripcion="Acciones sociales, educativas o benéficas del club: lo que lo hace más que un resultado deportivo."
+      titulo={t("comunidad")}
+      descripcion={t("accionesSocialesEducativasO")}
     >
       <form action={formAction} className="space-y-4">
         {acciones.length > 0 && (
@@ -48,9 +50,7 @@ export function ComunidadForm({ perfil }: { perfil: ClubProfile | null }) {
                   type="button"
                   onClick={() => quitarAccion(indice)}
                   className="shrink-0 text-red-600 hover:underline"
-                >
-                  Quitar
-                </button>
+                >{t("quitar")}</button>
               </li>
             ))}
           </ul>
@@ -59,7 +59,7 @@ export function ComunidadForm({ perfil }: { perfil: ClubProfile | null }) {
         <div className="space-y-2 rounded-lg border border-dashed border-zinc-300 p-3">
           <input
             type="text"
-            placeholder="Título de la acción"
+            placeholder={t("tituloDeLaAccion")}
             value={tituloNuevo}
             onChange={(evento) => setTituloNuevo(evento.target.value)}
             className={clasesInput}
@@ -74,9 +74,7 @@ export function ComunidadForm({ perfil }: { perfil: ClubProfile | null }) {
             type="button"
             onClick={anadirAccion}
             className="rounded-lg border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
-          >
-            Añadir acción
-          </button>
+          >{t("anadirAccion")}</button>
         </div>
 
         <input type="hidden" name="communityActions" value={JSON.stringify(acciones)} />
@@ -84,7 +82,7 @@ export function ComunidadForm({ perfil }: { perfil: ClubProfile | null }) {
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
         <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />
 
-        <BotonEnviar>Guardar comunidad</BotonEnviar>
+        <BotonEnviar>{t("guardarComunidad")}</BotonEnviar>
       </form>
     </SeccionCard>
   );

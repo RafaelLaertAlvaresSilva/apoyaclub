@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
@@ -8,6 +9,7 @@ import { guardarHistoria } from "../actions";
 import { Campo, SeccionCard, clasesInput } from "./SeccionCard";
 
 export function HistoriaForm({ perfil }: { perfil: ClubProfile | null }) {
+  const t = useTranslations("panel.perfil2");
   const [estado, formAction] = useActionState(guardarHistoria, null);
   const [hitos, setHitos] = useState<Milestone[]>(perfil?.milestones ?? []);
   const [anioNuevo, setAnioNuevo] = useState("");
@@ -26,9 +28,9 @@ export function HistoriaForm({ perfil }: { perfil: ClubProfile | null }) {
   }
 
   return (
-    <SeccionCard titulo="Historia" descripcion="Fundación e hitos destacados de la trayectoria del club.">
+    <SeccionCard titulo={t("historia")} descripcion={t("fundacionEHitosDestacados")}>
       <form action={formAction} className="space-y-4">
-        <Campo etiqueta="Año de fundación">
+        <Campo etiqueta={t("anoDeFundacion")}>
           <input
             name="foundingYear"
             type="number"
@@ -40,7 +42,7 @@ export function HistoriaForm({ perfil }: { perfil: ClubProfile | null }) {
         </Campo>
 
         <div>
-          <p className="mb-2 text-sm font-medium text-zinc-700">Hitos</p>
+          <p className="mb-2 text-sm font-medium text-zinc-700">{t("hitos")}</p>
 
           {hitos.length > 0 && (
             <ul className="mb-3 space-y-2">
@@ -60,9 +62,7 @@ export function HistoriaForm({ perfil }: { perfil: ClubProfile | null }) {
                       type="button"
                       onClick={() => quitarHito(indice)}
                       className="shrink-0 text-red-600 hover:underline"
-                    >
-                      Quitar
-                    </button>
+                    >{t("quitar")}</button>
                   </li>
                 ))}
             </ul>
@@ -72,7 +72,7 @@ export function HistoriaForm({ perfil }: { perfil: ClubProfile | null }) {
             <div className="w-24">
               <input
                 type="number"
-                placeholder="Año"
+                placeholder={t("ano")}
                 value={anioNuevo}
                 onChange={(evento) => setAnioNuevo(evento.target.value)}
                 className={clasesInput}
@@ -81,7 +81,7 @@ export function HistoriaForm({ perfil }: { perfil: ClubProfile | null }) {
             <div className="flex-1 min-w-48">
               <input
                 type="text"
-                placeholder="Descripción del hito"
+                placeholder={t("descripcionDelHito")}
                 value={textoNuevo}
                 onChange={(evento) => setTextoNuevo(evento.target.value)}
                 className={clasesInput}
@@ -91,9 +91,7 @@ export function HistoriaForm({ perfil }: { perfil: ClubProfile | null }) {
               type="button"
               onClick={anadirHito}
               className="rounded-lg border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
-            >
-              Añadir hito
-            </button>
+            >{t("anadirHito")}</button>
           </div>
         </div>
 
@@ -102,7 +100,7 @@ export function HistoriaForm({ perfil }: { perfil: ClubProfile | null }) {
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
         <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />
 
-        <BotonEnviar>Guardar historia</BotonEnviar>
+        <BotonEnviar>{t("guardarHistoria")}</BotonEnviar>
       </form>
     </SeccionCard>
   );

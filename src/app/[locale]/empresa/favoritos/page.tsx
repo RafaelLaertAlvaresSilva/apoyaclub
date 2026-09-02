@@ -1,6 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import type { ClubRow } from "@/lib/club-mappers";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
@@ -23,6 +23,7 @@ type FavoritoConOportunidad = {
 
 /** Panel de empresa: listas de favoritos (Fase 8). */
 export default async function FavoritosPage() {
+  const t = await getTranslations("empresa.favoritos");
   const supabase = await createClient();
   const {
     data: { user },
@@ -80,8 +81,8 @@ export default async function FavoritosPage() {
     <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel de empresa</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Favoritos</h1>
+          <p className="text-sm font-medium text-teal-700">{t("panelDeEmpresa")}</p>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("favoritos")}</h1>
         </div>
         <CerrarSesionBoton />
       </div>
@@ -91,10 +92,7 @@ export default async function FavoritosPage() {
       <NuevaListaForm />
 
       {listas.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-zinc-300 bg-white p-6 text-center text-sm text-zinc-500">
-          Todavía no tienes ninguna lista. Guarda una oportunidad como favorita desde la página de
-          un club para crear tu primera lista, o crea una aquí arriba.
-        </p>
+        <p className="rounded-xl border border-dashed border-zinc-300 bg-white p-6 text-center text-sm text-zinc-500">{t("todaviaNoTienesNinguna")}</p>
       ) : (
         <div className="space-y-4">
           {listas.map((lista) => {
@@ -109,20 +107,16 @@ export default async function FavoritosPage() {
                       defaultValue={lista.name}
                       className="rounded-lg border border-transparent px-2 py-1 text-base font-semibold text-zinc-900 hover:border-zinc-200 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
                     />
-                    <button type="submit" className="text-xs font-medium text-teal-700 hover:underline">
-                      Guardar nombre
-                    </button>
+                    <button type="submit" className="text-xs font-medium text-teal-700 hover:underline">{t("guardarNombre")}</button>
                   </form>
                   <form action={eliminarListaFavoritos}>
                     <input type="hidden" name="id" value={lista.id} />
-                    <button type="submit" className="text-xs font-medium text-red-600 hover:underline">
-                      Eliminar lista
-                    </button>
+                    <button type="submit" className="text-xs font-medium text-red-600 hover:underline">{t("eliminarLista")}</button>
                   </form>
                 </div>
 
                 {items.length === 0 ? (
-                  <p className="text-sm text-zinc-400">Todavía no has guardado ninguna oportunidad aquí.</p>
+                  <p className="text-sm text-zinc-400">{t("todaviaNoHasGuardado")}</p>
                 ) : (
                   <ul className="space-y-2">
                     {items.map((favorito) => {
@@ -155,7 +149,7 @@ export default async function FavoritosPage() {
                                 </p>
                               </>
                             ) : (
-                              <p className="text-sm text-zinc-400">Esta oportunidad ya no está disponible.</p>
+                              <p className="text-sm text-zinc-400">{t("estaOportunidadYaNo")}</p>
                             )}
                           </div>
                           <form action={eliminarFavorito}>
@@ -163,9 +157,7 @@ export default async function FavoritosPage() {
                             <button
                               type="submit"
                               className="shrink-0 text-xs font-medium text-zinc-500 hover:text-red-600 hover:underline"
-                            >
-                              Quitar
-                            </button>
+                            >{t("quitar")}</button>
                           </form>
                         </li>
                       );

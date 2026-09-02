@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { AvisoError } from "@/components/AvisoError";
@@ -27,28 +28,27 @@ function BotonEliminar() {
 
 /** Formulario de baja definitiva del club (Fase 11). Ver `eliminarCuentaClub`. */
 export function EliminarCuentaForm() {
+  const t = useTranslations("panel.privacidad");
   const [estado, formAction] = useActionState(eliminarCuentaClub, null);
 
   return (
     <form action={formAction} className="space-y-4">
       <ul className="list-disc space-y-1 pl-5 text-sm text-zinc-600">
-        <li>Se cancela de inmediato cualquier suscripción activa en Stripe.</li>
-        <li>Se borran tu perfil, equipos, patrocinadores, oportunidades, logo y fotos.</li>
-        <li>Se borran tus solicitudes de contacto y tu dossier comercial.</li>
-        <li>Tu página pública deja de existir. Esta acción no se puede deshacer.</li>
+        <li>{t("seCancelaDeInmediato")}</li>
+        <li>{t("seBorranTuPerfil")}</li>
+        <li>{t("seBorranTusSolicitudes")}</li>
+        <li>{t("tuPaginaPublicaDeja")}</li>
       </ul>
 
       <div>
-        <label htmlFor="confirmacion" className="mb-1 block text-sm font-medium text-zinc-700">
-          Escribe ELIMINAR para confirmar
-        </label>
+        <label htmlFor="confirmacion" className="mb-1 block text-sm font-medium text-zinc-700">{t("escribeEliminarParaConfirmar")}</label>
         <input
           id="confirmacion"
           name="confirmacion"
           type="text"
           required
           autoComplete="off"
-          placeholder="ELIMINAR"
+          placeholder={t("eliminar")}
           className="w-full max-w-xs rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
         />
       </div>

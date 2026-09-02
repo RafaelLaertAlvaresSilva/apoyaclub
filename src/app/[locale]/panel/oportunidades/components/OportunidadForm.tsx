@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { Campo, SeccionCard, clasesInput, clasesTextarea } from "@/app/[locale]/panel/components/SeccionCard";
@@ -68,13 +69,14 @@ export function OportunidadForm({
   /** Equipos del club, para poder asociar la oportunidad a uno concreto. */
   equipos?: ClubTeam[];
 }) {
+  const t = useTranslations("panel.oportunidades");
   const contenidoFormulario = (
     <form action={accion} className="space-y-4">
       {idOportunidad && <input type="hidden" name="id" value={idOportunidad} />}
 
       <Campo
-        etiqueta="Nombre de la oportunidad *"
-        ayuda='Ejemplos: "Patrocinio del descanso de los partidos de casa", "Camiseta de entrenamiento de la cantera".'
+        etiqueta={t("nombreDeLaOportunidad")}
+        ayuda={t("ejemplosPatrocinioDelDescanso")}
       >
         <input
           name="title"
@@ -84,16 +86,14 @@ export function OportunidadForm({
         />
       </Campo>
 
-      <Campo etiqueta="Tipo *" ayuda="Agrupa la oportunidad dentro del catálogo del club.">
+      <Campo etiqueta={t("tipo")} ayuda={t("agrupaLaOportunidadDentro")}>
         <select
           name="opportunityType"
           required
           defaultValue={valoresIniciales?.opportunityType ?? ""}
           className={clasesInput}
         >
-          <option value="" disabled>
-            Elige un tipo…
-          </option>
+          <option value="" disabled>{t("eligeUnTipo")}</option>
           {TIPOS_OPORTUNIDAD.map((tipo) => (
             <option key={tipo.id} value={tipo.id}>
               {tipo.etiqueta}
@@ -103,8 +103,8 @@ export function OportunidadForm({
       </Campo>
 
       <Campo
-        etiqueta="Qué incluye"
-        ayuda="Describe con detalle qué recibe la empresa a cambio de su patrocinio."
+        etiqueta={t("queIncluye")}
+        ayuda={t("describeConDetalleQue")}
       >
         <textarea
           name="description"
@@ -114,7 +114,7 @@ export function OportunidadForm({
       </Campo>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Campo etiqueta="Duración" ayuda='Ejemplos: "Toda la temporada", "Un partido", "3 meses".'>
+        <Campo etiqueta={t("duracion")} ayuda={t("ejemplosTodaLaTemporada")}>
           <input
             name="duration"
             defaultValue={valoresIniciales?.duration ?? ""}
@@ -122,7 +122,7 @@ export function OportunidadForm({
           />
         </Campo>
 
-        <Campo etiqueta="Valor (€) *" ayuda="Lo fijas tú: la plataforma no sugiere ni impone precios.">
+        <Campo etiqueta="Valor (€) *" ayuda={t("loFijasTuLa")}>
           <input
             name="value"
             type="number"
@@ -137,15 +137,15 @@ export function OportunidadForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Campo
-          etiqueta="Periodo"
-          ayuda="A qué se refiere el valor. Ayuda a las empresas a comparar presupuestos en el buscador."
+          etiqueta={t("periodo")}
+          ayuda={t("aQueSeRefiere")}
         >
           <select
             name="period"
             defaultValue={valoresIniciales?.period ?? ""}
             className={clasesInput}
           >
-            <option value="">Sin especificar</option>
+            <option value="">{t("sinEspecificar")}</option>
             {PERIODOS_OPORTUNIDAD.map((periodo) => (
               <option key={periodo.id} value={periodo.id}>
                 {periodo.etiqueta}
@@ -154,13 +154,13 @@ export function OportunidadForm({
           </select>
         </Campo>
 
-        <Campo etiqueta="Forma de colaboración" ayuda="Cómo puede aportar la empresa, además del dinero.">
+        <Campo etiqueta={t("formaDeColaboracion")} ayuda={t("comoPuedeAportarLa")}>
           <select
             name="collaborationType"
             defaultValue={valoresIniciales?.collaborationType ?? ""}
             className={clasesInput}
           >
-            <option value="">Sin especificar</option>
+            <option value="">{t("sinEspecificar")}</option>
             {FORMAS_COLABORACION.map((forma) => (
               <option key={forma.id} value={forma.id}>
                 {forma.etiqueta}
@@ -172,8 +172,8 @@ export function OportunidadForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Campo
-          etiqueta="Nivel de patrocinador"
-          ayuda="Es lo primero que mira una empresa: si esto es el patrocinio principal del club o una colaboración pequeña. Se puede filtrar por él en el buscador."
+          etiqueta={t("nivelDePatrocinador")}
+          ayuda={t("esLoPrimeroQue")}
         >
           <select
             name="sponsorLevel"
@@ -189,8 +189,8 @@ export function OportunidadForm({
         </Campo>
 
         <Campo
-          etiqueta="Exclusividad de sector"
-          ayuda='Si la empresa que lo contrate será la única de su sector. Ejemplos: "automoción", "seguros", "supermercados". Déjalo vacío si no hay exclusividad.'
+          etiqueta={t("exclusividadDeSector")}
+          ayuda={t("siLaEmpresaQue")}
         >
           <input
             name="exclusivity"
@@ -202,11 +202,11 @@ export function OportunidadForm({
 
       {equipos.length > 0 && (
         <Campo
-          etiqueta="Equipo asociado"
+          etiqueta={t("equipoAsociado")}
           ayuda="Si la oportunidad es de un equipo concreto (el primer equipo, un equipo de cantera). Déjalo en blanco si es del club entero."
         >
           <select name="teamId" defaultValue={valoresIniciales?.teamId ?? ""} className={clasesInput}>
-            <option value="">Todo el club</option>
+            <option value="">{t("todoElClub")}</option>
             {equipos.map((equipo) => (
               <option key={equipo.id} value={equipo.id}>
                 {etiquetaEquipo(equipo) ?? equipo.sport}
@@ -217,8 +217,8 @@ export function OportunidadForm({
       )}
 
       <Campo
-        etiqueta="Objetivo"
-        ayuda="A qué público o objetivo apela esta oportunidad. Puedes marcar varios."
+        etiqueta={t("objetivo")}
+        ayuda={t("aQuePublicoO")}
       >
         <div className="grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-3">
           {OBJETIVOS_OPORTUNIDAD.map((objetivo) => (
@@ -237,7 +237,7 @@ export function OportunidadForm({
       </Campo>
 
       {mostrarEstado && (
-        <Campo etiqueta="Estado">
+        <Campo etiqueta={t("estado")}>
           <select
             name="status"
             defaultValue={valoresIniciales?.status ?? "available"}
@@ -262,9 +262,7 @@ export function OportunidadForm({
             type="button"
             onClick={onCancelar}
             className="rounded-lg border border-zinc-300 px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
-          >
-            Cancelar
-          </button>
+          >{t("cancelar")}</button>
         )}
       </div>
     </form>

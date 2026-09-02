@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { PLANTILLAS_OPORTUNIDAD, TIPOS_OPORTUNIDAD, type PlantillaOportunidad } from "@/lib/opportunities";
 import type { OpportunityType } from "@/lib/types";
 
@@ -13,10 +14,10 @@ export function PlantillasRapidas({
 }: {
   onElegir: (tipo: OpportunityType, plantilla: PlantillaOportunidad) => void;
 }) {
+  const t = useTranslations("panel.oportunidades");
   return (
     <div className="mb-6 rounded-lg border border-dashed border-zinc-300 p-4">
-      <p className="mb-3 text-sm font-medium text-zinc-700">
-        Plantillas rápidas <span className="font-normal text-zinc-400">(opcional, para no partir de cero)</span>
+      <p className="mb-3 text-sm font-medium text-zinc-700">{t("plantillasRapidas")}<span className="font-normal text-zinc-400">(opcional, para no partir de cero)</span>
       </p>
       <div className="space-y-4">
         {TIPOS_OPORTUNIDAD.map((tipo) => (

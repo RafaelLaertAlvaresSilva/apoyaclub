@@ -1,5 +1,5 @@
 import { redirect } from "@/i18n/navigation";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { obtenerUsuariosPorRol } from "@/lib/admin-users";
 import {
@@ -36,6 +36,7 @@ type ClubRowConAdmin = ClubRow & {
  * 0% de perfil y sin suscripción).
  */
 export default async function AdminClubesPage() {
+  const t = await getTranslations("admin.clubes");
   const supabase = await createClient();
   const {
     data: { user },
@@ -109,8 +110,8 @@ export default async function AdminClubesPage() {
     <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel de administración</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Clubes</h1>
+          <p className="text-sm font-medium text-teal-700">{t("panelDeAdministracion")}</p>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("clubes")}</h1>
         </div>
         <CerrarSesionBoton />
       </div>
@@ -118,18 +119,18 @@ export default async function AdminClubesPage() {
       <AdminNav activo="clubes" />
 
       {filas.length === 0 ? (
-        <p className="text-sm text-zinc-500">Todavía no se ha registrado ningún club.</p>
+        <p className="text-sm text-zinc-500">{t("todaviaNoSeHa")}</p>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
           <table className="w-full min-w-[840px] text-left text-sm">
             <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500">
               <tr>
-                <th className="px-4 py-3 font-medium">Club</th>
-                <th className="px-4 py-3 font-medium">Alta</th>
-                <th className="px-4 py-3 font-medium">Perfil</th>
-                <th className="px-4 py-3 font-medium">Suscripción</th>
-                <th className="px-4 py-3 font-medium">Estado</th>
-                <th className="px-4 py-3 font-medium">Acciones</th>
+                <th className="px-4 py-3 font-medium">{t("club")}</th>
+                <th className="px-4 py-3 font-medium">{t("alta")}</th>
+                <th className="px-4 py-3 font-medium">{t("perfil")}</th>
+                <th className="px-4 py-3 font-medium">{t("suscripcion")}</th>
+                <th className="px-4 py-3 font-medium">{t("estado")}</th>
+                <th className="px-4 py-3 font-medium">{t("acciones")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-100">
