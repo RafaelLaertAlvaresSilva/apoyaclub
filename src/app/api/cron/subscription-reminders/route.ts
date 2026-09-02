@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { enviarEmailAvisoCaducidadSuscripcion } from "@/lib/email/resend";
 import {
   avisarFinDePrueba,
+  cerrarPruebasVencidas,
   enviarBienvenidas,
   recordarSolicitudesSinAbrir,
 } from "@/lib/emails-ciclo";
@@ -125,7 +126,7 @@ export async function GET(request: Request) {
   // Los tres avisos de la migración 0013. Cada uno atrapa sus propios
   // errores y devuelve cuántos emails ha mandado, así que un fallo en
   // uno no deja a los otros sin enviarse.
-  const [bienvenidas, finDePrueba, sinAbrir] = await Promise.all([
+  const [bienvenidas, finDePrueba, sinAbrir, pruebasCerradas] = await Promise.all([
     enviarBienvenidas(admin).catch((excepcion) => {
       avisarDeFallo("cron-suscripciones", "Fallo enviando las bienvenidas", excepcion);
       return 0;
@@ -138,6 +139,10 @@ export async function GET(request: Request) {
       avisarDeFallo("cron-suscripciones", "Fallo recordando las solicitudes sin abrir", excepcion);
       return 0;
     }),
+    cerrarPruebasVencidas(admin).catch((excepcion) => {
+      avisarDeFallo("cron-suscripciones", "Fallo cerrando las pruebas vencidas", excepcion);
+      return 0;
+    }),
   ]);
 
   return NextResponse.json({
@@ -146,5 +151,6 @@ export async function GET(request: Request) {
     bienvenidas,
     finDePrueba,
     sinAbrir,
+    pruebasCerradas,
   });
 }

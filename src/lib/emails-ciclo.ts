@@ -247,3 +247,54 @@ export async function recordarSolicitudesSinAbrir(
 
   return total;
 }
+
+// ---------------------------------------------------------------------
+// 4. Cerrar las pruebas gratuitas que ya han terminado
+// ---------------------------------------------------------------------
+type FilaPruebaVencida = { id: string; trial_ends_at: string | null };
+
+/**
+ * Cierra el mes gratis de los clubes que no han llegado a suscribirse
+ * (migración 0018).
+ *
+ * El mes gratis empieza solo, sin tarjeta, al crear la ficha del club.
+ * Alguien tiene que terminarlo: sin esto, una prueba local no caducaría
+ * nunca y el club se quedaría publicado gratis para siempre.
+ *
+ * Solo afecta a quien nunca pasó por Stripe (`stripe_subscription_id` a
+ * null): si hay suscripción real, manda el webhook y aquí no se toca
+ * nada. Los datos del club no se borran; solo deja de estar publicado,
+ * y vuelve en cuanto se suscriba.
+ */
+export async function cerrarPruebasVencidas(admin: ClienteAdmin, ahora = new Date()): Promise<number> {
+  const { data, error } = await admin
+    .from("clubs")
+    .select("id, trial_ends_at")
+    .eq("subscription_status", "trialing")
+    .is("stripe_subscription_id", null)
+    .lt("trial_ends_at", ahora.toISOString())
+    .returns<FilaPruebaVencida[]>();
+
+  if (error) {
+    avisarDeFallo("cron-suscripciones", "No se han podido leer las pruebas vencidas", error);
+    return 0;
+  }
+
+  const vencidas = data ?? [];
+  if (vencidas.length === 0) return 0;
+
+  const { error: errorActualizando } = await admin
+    .from("clubs")
+    .update({ subscription_status: "canceled" })
+    .in(
+      "id",
+      vencidas.map((club) => club.id),
+    );
+
+  if (errorActualizando) {
+    avisarDeFallo("cron-suscripciones", "No se han podido cerrar las pruebas vencidas", errorActualizando);
+    return 0;
+  }
+
+  return vencidas.length;
+}
