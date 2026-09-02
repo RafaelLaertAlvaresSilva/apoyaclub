@@ -323,6 +323,7 @@ function DossierDocumento({
       {/* Portada: marca del club, siempre presente. */}
       <Page size="A4" style={estilos.paginaPortada}>
         <View>
+          {/* eslint-disable-next-line jsx-a11y/alt-text -- Image de @react-pdf/renderer, no la de HTML: no admite alt. */}
           {perfil.logoUrl && <Image src={perfil.logoUrl} style={estilos.logo} />}
           <Text style={estilos.portadaEtiqueta}>Dossier de patrocinio</Text>
           <Text style={estilos.portadaNombre}>{perfil.name}</Text>
@@ -446,6 +447,7 @@ function DossierDocumento({
             <View style={estilos.filaSponsors}>
               {patrocinadores.map((patrocinador) => (
                 <View key={patrocinador.id} style={estilos.filaSponsor}>
+                  {/* eslint-disable-next-line jsx-a11y/alt-text -- Image de @react-pdf/renderer, no la de HTML: no admite alt. */}
                   {patrocinador.logoUrl && <Image src={patrocinador.logoUrl} style={estilos.logoPequeno} />}
                   <Text style={{ fontSize: 9, fontFamily: "Helvetica-Bold" }}>{patrocinador.name}</Text>
                 </View>

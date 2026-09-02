@@ -1,4 +1,4 @@
-import { redirect } from "@/i18n/navigation";
+import { Link, redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { createClient } from "@/lib/supabase/server";
@@ -36,6 +36,10 @@ export default async function PrivacidadEmpresaPage() {
           favoritos, favoritos, solicitudes de contacto enviadas y el registro de tus
           consentimientos.
         </p>
+        {/* Descarga de un fichero servido por un Route Handler, no una
+            navegación entre páginas: aquí <a> es lo correcto (con <Link>
+            Next.js precargaría la exportación entera al pasar el ratón). */}
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a
           href="/empresa/exportar"
           className="mt-4 inline-block rounded-lg border border-zinc-300 px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
@@ -57,9 +61,9 @@ export default async function PrivacidadEmpresaPage() {
 
       <p className="text-xs text-zinc-400">
         Más información sobre cómo tratamos tus datos en nuestra{" "}
-        <a href="/privacidad" className="font-medium text-teal-700 hover:underline">
+        <Link href="/privacidad" className="font-medium text-teal-700 hover:underline">
           Política de Privacidad
-        </a>
+        </Link>
         .
       </p>
     </div>

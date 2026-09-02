@@ -1,5 +1,6 @@
 "use client";
 
+import { Link } from "@/i18n/navigation";
 import { useState, useSyncExternalStore } from "react";
 
 const CLAVE_ALMACENAMIENTO = "apoyaclub_cookie_consent";
@@ -79,9 +80,9 @@ export function CookieBanner() {
         <p className="text-sm text-zinc-600">
           Usamos cookies técnicas necesarias para que ApoyaClub funcione. Puedes aceptar o
           rechazar las cookies no técnicas; más información en nuestra{" "}
-          <a href="/cookies" className="font-medium text-teal-700 hover:underline">
+          <Link href="/cookies" className="font-medium text-teal-700 hover:underline">
             Política de Cookies
-          </a>
+          </Link>
           .
         </p>
         <div className="flex shrink-0 gap-2">

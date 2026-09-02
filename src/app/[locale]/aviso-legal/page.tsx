@@ -1,3 +1,4 @@
+import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
 import { LegalPageShell } from "@/components/LegalPageShell";
 import { LEGAL_VERSIONS, formatearFechaLegal } from "@/lib/legal";
@@ -47,13 +48,13 @@ export default function AvisoLegalPage() {
         <p>
           El acceso y uso de la Plataforma atribuye la condición de usuario y implica la
           aceptación de este aviso legal, de las{" "}
-          <a href="/condiciones-de-uso" className="font-medium text-teal-700 hover:underline">
+          <Link href="/condiciones-de-uso" className="font-medium text-teal-700 hover:underline">
             Condiciones de Uso
-          </a>{" "}
+          </Link>{" "}
           y de la{" "}
-          <a href="/privacidad" className="font-medium text-teal-700 hover:underline">
+          <Link href="/privacidad" className="font-medium text-teal-700 hover:underline">
             Política de Privacidad
-          </a>
+          </Link>
           .
         </p>
       </section>

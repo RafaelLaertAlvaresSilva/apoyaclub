@@ -1,3 +1,4 @@
+import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
 import { LegalPageShell } from "@/components/LegalPageShell";
 import { LEGAL_VERSIONS, formatearFechaLegal } from "@/lib/legal";
@@ -80,9 +81,9 @@ export default function CondicionesDeUsoPage() {
           agregados, y consentimiento antes de subir cualquier foto en la que se pueda
           identificar a un menor) y a contar con el consentimiento necesario de los padres
           o tutores legales cuando corresponda. Más detalle en la{" "}
-          <a href="/privacidad" className="font-medium text-teal-700 hover:underline">
+          <Link href="/privacidad" className="font-medium text-teal-700 hover:underline">
             Política de Privacidad
-          </a>
+          </Link>
           .
         </p>
       </section>
