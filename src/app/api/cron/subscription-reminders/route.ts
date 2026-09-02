@@ -1,18 +1,29 @@
 import { avisarDeFallo } from "@/lib/monitoring";
 import { NextResponse } from "next/server";
 import { enviarEmailAvisoCaducidadSuscripcion } from "@/lib/email/resend";
+import {
+  avisarFinDePrueba,
+  enviarBienvenidas,
+  recordarSolicitudesSinAbrir,
+} from "@/lib/emails-ciclo";
 import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
- * Cron diario (Fase 10, ver `vercel.json`) que avisa por email a los
- * clubes que han cancelado su suscripción, 7, 3 y 1 día antes de que
- * pierdan el acceso (`current_period_end`). Solo se avisa de
- * cancelaciones programadas por el club (`cancel_at_period_end`): es la
- * única fecha de caducidad que se conoce con certeza de antemano; un
- * cobro fallido ya se refleja como estado "impagada" en el panel sin
- * una fecha de caducidad fija.
+ * Cron diario (ver `vercel.json`) de todos los avisos por email.
+ *
+ * 1. Caducidad tras cancelar (Fase 10): 7, 3 y 1 día antes de perder el
+ *    acceso (`current_period_end`). Solo para cancelaciones programadas
+ *    por el club (`cancel_at_period_end`): es la única fecha de
+ *    caducidad que se conoce de antemano; un cobro fallido ya se refleja
+ *    como "impagada" en el panel sin fecha fija.
+ * 2. Bienvenida a quien acaba de confirmar su cuenta.
+ * 3. Fin del mes gratis, antes del primer cobro.
+ * 4. Solicitudes que el club lleva 48 horas sin abrir.
+ *
+ * Los tres últimos viven en `lib/emails-ciclo.ts`. Cada bloque va por su
+ * cuenta: si uno falla, los demás se envían igual.
  *
  * Protegido con `CRON_SECRET` (ver `.env.local.example`): Vercel Cron
  * llama a esta URL con la cabecera `Authorization: Bearer $CRON_SECRET`
@@ -111,5 +122,29 @@ export async function GET(request: Request) {
     if (resultado.ok) enviados += 1;
   }
 
-  return NextResponse.json({ revisados: clubes?.length ?? 0, enviados });
+  // Los tres avisos de la migración 0013. Cada uno atrapa sus propios
+  // errores y devuelve cuántos emails ha mandado, así que un fallo en
+  // uno no deja a los otros sin enviarse.
+  const [bienvenidas, finDePrueba, sinAbrir] = await Promise.all([
+    enviarBienvenidas(admin).catch((excepcion) => {
+      avisarDeFallo("cron-suscripciones", "Fallo enviando las bienvenidas", excepcion);
+      return 0;
+    }),
+    avisarFinDePrueba(admin).catch((excepcion) => {
+      avisarDeFallo("cron-suscripciones", "Fallo avisando del fin de la prueba", excepcion);
+      return 0;
+    }),
+    recordarSolicitudesSinAbrir(admin).catch((excepcion) => {
+      avisarDeFallo("cron-suscripciones", "Fallo recordando las solicitudes sin abrir", excepcion);
+      return 0;
+    }),
+  ]);
+
+  return NextResponse.json({
+    revisados: clubes?.length ?? 0,
+    caducidad: enviados,
+    bienvenidas,
+    finDePrueba,
+    sinAbrir,
+  });
 }

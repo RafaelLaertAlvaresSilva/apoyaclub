@@ -2,6 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
+import { enviarEmailRespuestaDelClub } from "@/lib/email/resend";
+import { routing } from "@/i18n/routing";
+import { SITE_URL } from "@/lib/site";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import type { ContactRequestStatus, Role } from "@/lib/types";
 
@@ -50,6 +54,17 @@ export async function cambiarEstadoSolicitud(formData: FormData): Promise<void> 
   const status = String(formData.get("status") ?? "");
   if (!id || !(ESTADOS_VALIDOS as string[]).includes(status)) return;
 
+  // Se lee el estado anterior para no volver a avisar a la empresa si el
+  // club pulsa dos veces el mismo botón.
+  const { data: anterior } = await supabase
+    .from("contact_requests")
+    .select("status, company_id, opportunity_id")
+    .eq("id", id)
+    .eq("club_id", user.id)
+    .maybeSingle<{ status: ContactRequestStatus; company_id: string; opportunity_id: string | null }>();
+
+  if (!anterior) return;
+
   await supabase
     .from("contact_requests")
     .update({ status: status as ContactRequestStatus })
@@ -57,4 +72,70 @@ export async function cambiarEstadoSolicitud(formData: FormData): Promise<void> 
     .eq("club_id", user.id);
 
   revalidatePath(RUTA_SOLICITUDES);
+
+  const nuevoEstado = status as ContactRequestStatus;
+  const hayNovedadParaLaEmpresa =
+    nuevoEstado !== anterior.status &&
+    (nuevoEstado === "in_conversation" || nuevoEstado === "discarded");
+
+  if (hayNovedadParaLaEmpresa) {
+    await avisarEmpresaPorEmail({
+      companyId: anterior.company_id,
+      clubId: user.id,
+      opportunityId: anterior.opportunity_id,
+      aceptada: nuevoEstado === "in_conversation",
+    });
+  }
+}
+
+/**
+ * Aviso a la empresa de que el club ha movido su solicitud: abierta la
+ * conversación o descartada. Sin esto, la empresa se quedaba esperando
+ * una respuesta que solo existía dentro del panel del club.
+ *
+ * Es un extra: si falla, el cambio de estado ya está guardado.
+ */
+async function avisarEmpresaPorEmail({
+  companyId,
+  clubId,
+  opportunityId,
+  aceptada,
+}: {
+  companyId: string;
+  clubId: string;
+  opportunityId: string | null;
+  aceptada: boolean;
+}): Promise<void> {
+  try {
+    const admin = createAdminClient();
+
+    const [empresa, { data: club }] = await Promise.all([
+      admin.auth.admin.getUserById(companyId),
+      admin.from("clubs").select("name, slug").eq("id", clubId).maybeSingle<{ name: string; slug: string }>(),
+    ]);
+
+    const companyEmail = empresa.data.user?.email;
+    if (!companyEmail || !club) return;
+
+    let opportunityTitle: string | null = null;
+    if (opportunityId) {
+      const { data } = await admin
+        .from("opportunities")
+        .select("title")
+        .eq("id", opportunityId)
+        .maybeSingle<{ title: string }>();
+      opportunityTitle = data?.title ?? null;
+    }
+
+    await enviarEmailRespuestaDelClub({
+      companyEmail,
+      clubName: club.name,
+      clubUrl: `${SITE_URL}/${routing.defaultLocale}/club/${club.slug}`,
+      buscarUrl: `${SITE_URL}/${routing.defaultLocale}/buscar`,
+      opportunityTitle,
+      aceptada,
+    });
+  } catch (excepcion) {
+    console.error("[contact-requests] No se ha podido avisar a la empresa:", excepcion);
+  }
 }

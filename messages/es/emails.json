@@ -26,5 +26,50 @@
   },
   "errores": {
     "envio": "No se ha podido enviar el email."
+  },
+  "bienvenidaClub": {
+    "asunto": "Bienvenido a ApoyaClub, {club}",
+    "eyebrow": "Tu cuenta ya está activa",
+    "titulo": "Vamos a preparar la página de {club}",
+    "texto": "Tienes un mes gratis para dejarlo todo listo. Con tres pasos ya tienes algo que enseñar a una empresa:",
+    "paso1": "Sube el logo y una foto, y cuenta en dos líneas quién sois.",
+    "paso2": "Añade tus equipos y los datos de cantera y audiencia: es lo que una empresa mira.",
+    "paso3": "Crea tu primera oportunidad de patrocinio, aunque sea de 50 €.",
+    "boton": "Completar mi página",
+    "pie": "Cuando esté lista, comparte tu enlace por WhatsApp con las empresas de tu zona: ese es el uso que mejor funciona."
+  },
+  "bienvenidaEmpresa": {
+    "asunto": "Bienvenido a ApoyaClub",
+    "eyebrow": "Tu cuenta ya está activa",
+    "titulo": "Busca clubes de tu zona y patrocina desde 50 €",
+    "texto": "El acceso es gratuito y no cobramos comisión: hablas directamente con el club. Puedes filtrar por deporte, distancia, presupuesto y objetivo.",
+    "boton": "Explorar clubes",
+    "pie": "Si completas el perfil de tu empresa, al club le resulta mucho más fácil responderte."
+  },
+  "respuestaDelClub": {
+    "asuntoConversacion": "{club} quiere hablar contigo",
+    "asuntoDescartada": "{club} ha revisado tu solicitud",
+    "eyebrow": "Novedades sobre tu solicitud en ApoyaClub",
+    "tituloConversacion": "{club} ha abierto la conversación",
+    "tituloDescartada": "{club} ha cerrado tu solicitud por ahora",
+    "textoConversacion": "El club ha marcado tu solicitud como \"en conversación\". A partir de aquí seguís por vuestra cuenta: ApoyaClub no interviene en el acuerdo.",
+    "textoDescartada": "No siempre encaja: puede ser cuestión de fechas, de presupuesto o de que ya tengan cubierta esa oportunidad. Hay más clubes buscando patrocinador en tu zona.",
+    "sobreOportunidad": "Sobre la oportunidad:",
+    "botonConversacion": "Ver el club",
+    "botonDescartada": "Buscar otros clubes"
+  },
+  "solicitudSinAbrir": {
+    "asunto": "{total, plural, one {Tienes # solicitud sin abrir} other {Tienes # solicitudes sin abrir}}",
+    "eyebrow": "Una empresa está esperando",
+    "titulo": "{total, plural, one {# empresa te ha escrito y sigue sin respuesta} other {# empresas te han escrito y siguen sin respuesta}}",
+    "texto": "La más antigua lleva {dias, plural, one {# día} other {# días}} esperando. Responder rápido es la diferencia entre un patrocinio y un correo olvidado.",
+    "boton": "Ver mis solicitudes"
+  },
+  "finDePrueba": {
+    "asunto": "{dias, plural, one {Queda # día} other {Quedan # días}} de tu mes gratis en ApoyaClub",
+    "eyebrow": "Tu mes gratis termina pronto",
+    "titulo": "{dias, plural, one {Queda # día} other {Quedan # días}} de prueba para {club}",
+    "texto": "El {fecha} empezará la suscripción de 29,90 €/mes con IVA incluido. No tienes que hacer nada para continuar; si prefieres no seguir, puedes cancelar desde tu panel antes de esa fecha y no se te cobrará.",
+    "boton": "Ver mi suscripción"
   }
 }

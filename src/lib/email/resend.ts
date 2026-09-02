@@ -231,3 +231,218 @@ export async function enviarEmailContactoLanding({
     replyTo: email,
   });
 }
+
+// ---------------------------------------------------------------------
+// Emails del ciclo de vida (migración 0013)
+//
+// Los cuatro que faltaban para que el ciclo se sostenga solo: dar la
+// bienvenida, avisar a la empresa de que el club ha respondido,
+// recordar al club las solicitudes que se le quedan sin abrir, y avisar
+// de que se acaba el mes gratis. Todos comparten la misma plantilla
+// mínima en HTML del resto del archivo.
+// ---------------------------------------------------------------------
+
+/** Envoltura común: eyebrow de color, titular, cuerpo y un botón. */
+function plantilla({
+  color,
+  eyebrow,
+  titulo,
+  cuerpo,
+  botonTexto,
+  botonUrl,
+  pie,
+}: {
+  color: string;
+  eyebrow: string;
+  titulo: string;
+  cuerpo: string;
+  botonTexto: string;
+  botonUrl: string;
+  pie?: string;
+}): string {
+  return `
+    <div style="font-family:sans-serif;color:#18181b;max-width:560px;margin:0 auto;">
+      <p style="color:${color};font-weight:600;font-size:14px;margin:0 0 8px;">${eyebrow}</p>
+      <h1 style="font-size:20px;margin:0 0 16px;">${titulo}</h1>
+      ${cuerpo}
+      <a href="${botonUrl}" style="display:inline-block;background:#059669;color:#ffffff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:600;">${botonTexto}</a>
+      ${pie ? `<p style="color:#a1a1aa;font-size:12px;margin-top:24px;">${pie}</p>` : ""}
+    </div>
+  `;
+}
+
+/** Bienvenida al club, con los tres pasos que dejan su página presentable. */
+export async function enviarEmailBienvenidaClub({
+  clubEmail,
+  clubName,
+  panelUrl,
+}: {
+  clubEmail: string;
+  clubName: string;
+  panelUrl: string;
+}): Promise<ResultadoEnvioEmail> {
+  const t = await traductorEmails();
+
+  const cuerpo = `
+    <p style="margin:0 0 16px;">${t("bienvenidaClub.texto")}</p>
+    <ol style="margin:0 0 24px;padding-left:20px;color:#3f3f46;line-height:1.7;">
+      <li>${t("bienvenidaClub.paso1")}</li>
+      <li>${t("bienvenidaClub.paso2")}</li>
+      <li>${t("bienvenidaClub.paso3")}</li>
+    </ol>
+  `;
+
+  return enviarEmail({
+    to: clubEmail,
+    subject: t("bienvenidaClub.asunto", { club: clubName }),
+    html: plantilla({
+      color: "#047857",
+      eyebrow: t("bienvenidaClub.eyebrow"),
+      titulo: t("bienvenidaClub.titulo", { club: clubName }),
+      cuerpo,
+      botonTexto: t("bienvenidaClub.boton"),
+      botonUrl: panelUrl,
+      pie: t("bienvenidaClub.pie"),
+    }),
+  });
+}
+
+/** Bienvenida a la empresa: acceso gratuito y buscador. */
+export async function enviarEmailBienvenidaEmpresa({
+  companyEmail,
+  buscarUrl,
+}: {
+  companyEmail: string;
+  buscarUrl: string;
+}): Promise<ResultadoEnvioEmail> {
+  const t = await traductorEmails();
+
+  return enviarEmail({
+    to: companyEmail,
+    subject: t("bienvenidaEmpresa.asunto"),
+    html: plantilla({
+      color: "#047857",
+      eyebrow: t("bienvenidaEmpresa.eyebrow"),
+      titulo: t("bienvenidaEmpresa.titulo"),
+      cuerpo: `<p style="margin:0 0 24px;">${t("bienvenidaEmpresa.texto")}</p>`,
+      botonTexto: t("bienvenidaEmpresa.boton"),
+      botonUrl: buscarUrl,
+      pie: t("bienvenidaEmpresa.pie"),
+    }),
+  });
+}
+
+/**
+ * Aviso a la empresa de que el club ha movido su solicitud. Solo se
+ * manda en los dos cambios que le importan: cuando el club abre la
+ * conversación y cuando la descarta. Que te digan que no también es una
+ * respuesta, y evita que la empresa se quede esperando.
+ */
+export async function enviarEmailRespuestaDelClub({
+  companyEmail,
+  clubName,
+  clubUrl,
+  buscarUrl,
+  opportunityTitle,
+  aceptada,
+}: {
+  companyEmail: string;
+  clubName: string;
+  clubUrl: string;
+  buscarUrl: string;
+  opportunityTitle: string | null;
+  /** true = el club ha abierto la conversación; false = la ha descartado. */
+  aceptada: boolean;
+}): Promise<ResultadoEnvioEmail> {
+  const t = await traductorEmails();
+
+  const cuerpo = `
+    ${
+      opportunityTitle
+        ? `<p style="margin:0 0 16px;">${t("respuestaDelClub.sobreOportunidad")} <strong>${opportunityTitle}</strong></p>`
+        : ""
+    }
+    <p style="margin:0 0 24px;">${
+      aceptada ? t("respuestaDelClub.textoConversacion") : t("respuestaDelClub.textoDescartada")
+    }</p>
+  `;
+
+  return enviarEmail({
+    to: companyEmail,
+    subject: aceptada
+      ? t("respuestaDelClub.asuntoConversacion", { club: clubName })
+      : t("respuestaDelClub.asuntoDescartada", { club: clubName }),
+    html: plantilla({
+      color: aceptada ? "#047857" : "#b45309",
+      eyebrow: t("respuestaDelClub.eyebrow"),
+      titulo: aceptada
+        ? t("respuestaDelClub.tituloConversacion", { club: clubName })
+        : t("respuestaDelClub.tituloDescartada", { club: clubName }),
+      cuerpo,
+      botonTexto: aceptada ? t("respuestaDelClub.botonConversacion") : t("respuestaDelClub.botonDescartada"),
+      botonUrl: aceptada ? clubUrl : buscarUrl,
+    }),
+  });
+}
+
+/** Recordatorio al club de las solicitudes que lleva sin abrir. */
+export async function enviarEmailSolicitudSinAbrir({
+  clubEmail,
+  total,
+  diasDeLaMasAntigua,
+  panelUrl,
+}: {
+  clubEmail: string;
+  total: number;
+  diasDeLaMasAntigua: number;
+  panelUrl: string;
+}): Promise<ResultadoEnvioEmail> {
+  const t = await traductorEmails();
+
+  return enviarEmail({
+    to: clubEmail,
+    subject: t("solicitudSinAbrir.asunto", { total }),
+    html: plantilla({
+      color: "#b45309",
+      eyebrow: t("solicitudSinAbrir.eyebrow"),
+      titulo: t("solicitudSinAbrir.titulo", { total }),
+      cuerpo: `<p style="margin:0 0 24px;">${t("solicitudSinAbrir.texto", { dias: diasDeLaMasAntigua })}</p>`,
+      botonTexto: t("solicitudSinAbrir.boton"),
+      botonUrl: panelUrl,
+    }),
+  });
+}
+
+/**
+ * Aviso de que se acaba el mes gratis. Distinto del de caducidad: aquí
+ * el club no ha cancelado nada, simplemente va a empezar a pagar, y lo
+ * honesto es decírselo antes de cobrar.
+ */
+export async function enviarEmailFinDePrueba({
+  clubEmail,
+  clubName,
+  diasRestantes,
+  fechaFin,
+  panelUrl,
+}: {
+  clubEmail: string;
+  clubName: string;
+  diasRestantes: number;
+  fechaFin: string;
+  panelUrl: string;
+}): Promise<ResultadoEnvioEmail> {
+  const t = await traductorEmails();
+
+  return enviarEmail({
+    to: clubEmail,
+    subject: t("finDePrueba.asunto", { dias: diasRestantes }),
+    html: plantilla({
+      color: "#047857",
+      eyebrow: t("finDePrueba.eyebrow"),
+      titulo: t("finDePrueba.titulo", { dias: diasRestantes, club: clubName }),
+      cuerpo: `<p style="margin:0 0 24px;">${t("finDePrueba.texto", { fecha: fechaFin })}</p>`,
+      botonTexto: t("finDePrueba.boton"),
+      botonUrl: panelUrl,
+    }),
+  });
+}
