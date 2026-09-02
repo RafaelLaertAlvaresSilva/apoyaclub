@@ -1,1 +1,230 @@
-{}
+{
+  "meta": {
+    "titulo": "ApoyaClub — Conecta tu club deportivo con empresas patrocinadoras",
+    "descripcion": "Conecta tu club con empresas interesadas en colaborar. Publica tus oportunidades de patrocinio, desde 50 € hasta el patrocinio principal, y deja que te encuentren y contacten directamente. Sin comisiones."
+  },
+  "hero": {
+    "etiqueta": "LA PLATAFORMA DE PATROCINIO DEPORTIVO",
+    "tituloParte1": "Cada club tiene algo que ofrecer.",
+    "tituloParte2": "Nosotros ayudamos a encontrar quién quiere apoyarlo.",
+    "subtitulo": "Conecta tu club con empresas interesadas en colaborar. Publica tus oportunidades y deja que ellas te encuentren y contacten directamente. Sin comisiones.",
+    "cta": "Prueba 1 mes gratis",
+    "condiciones": "Sin permanencia · 29,90 €/mes después del primer mes · IVA incluido",
+    "cadenaClub": "Club",
+    "cadenaOportunidad": "Oportunidad",
+    "cadenaEmpresa": "Empresa"
+  },
+  "caminos": {
+    "clubTitulo": "Soy un club",
+    "clubTexto": "Crea tu página, publica tus oportunidades de patrocinio y que las empresas te encuentren.",
+    "clubCta": "Crea la página de tu club →",
+    "empresaTitulo": "Soy una empresa",
+    "empresaTexto": "Busca clubes de tu zona y patrocina desde 50 €. Acceso gratuito, sin intermediarios.",
+    "empresaCta": "Explorar clubes →"
+  },
+  "problema": {
+    "eyebrow": "Para clubes",
+    "titulo": "Un patrocinio no tiene por qué ser solo poner un logo en una camiseta",
+    "texto": "Tu club tiene mucho más que ofrecer de lo que crees. Esto es lo que las empresas valoran:",
+    "tags": [
+      "Equipaciones",
+      "Equipos",
+      "Cantera",
+      "Redes sociales",
+      "Jugadores",
+      "Eventos",
+      "Torneos",
+      "Instalaciones",
+      "Familias",
+      "Visibilidad local",
+      "Servicios",
+      "Contenido"
+    ]
+  },
+  "comoFunciona": {
+    "titulo": "Cómo funciona",
+    "pasos": [
+      {
+        "titulo": "Crea tu perfil",
+        "texto": "Equipos, cantera, audiencia, instalaciones y comunidad: todo lo que hace valioso a tu club."
+      },
+      {
+        "titulo": "Publica tus oportunidades",
+        "texto": "Desde 50 € hasta el patrocinio principal: tú decides qué ofreces y a qué precio."
+      },
+      {
+        "titulo": "Encuentra empresas",
+        "texto": "Las empresas te encuentran y te contactan directamente. Vosotros negociáis el acuerdo."
+      }
+    ]
+  },
+  "oportunidades": {
+    "eyebrow": "Oportunidades de patrocinio",
+    "titulo": "Cada club crea las suyas, a su medida",
+    "texto": "Algunos ejemplos de lo que un club puede publicar en su página:",
+    "ejemplos": [
+      { "titulo": "Patrocinador principal", "texto": "Máxima visibilidad: naming, equipación y comunicación oficial." },
+      { "titulo": "Equipo femenino", "texto": "Impulsa una sección concreta con su propio patrocinio." },
+      { "titulo": "Cantera", "texto": "Apoya a las categorías base y su formación." },
+      { "titulo": "Equipación", "texto": "Tu marca en la camiseta, en cada partido." },
+      { "titulo": "Torneo", "texto": "Patrocina un evento puntual de alto impacto." },
+      { "titulo": "Redes sociales", "texto": "Contenido y menciones en los canales del club." },
+      { "titulo": "Instalaciones", "texto": "Tu marca en el pabellón, campo o vestuarios." },
+      { "titulo": "Jugador", "texto": "Patrocinio individual a una figura del equipo." },
+      { "titulo": "Transporte", "texto": "Cubre los desplazamientos del equipo." },
+      { "titulo": "Fisioterapia", "texto": "Servicios de recuperación para la plantilla." },
+      { "titulo": "Restaurante", "texto": "Colaboración con comidas de equipo y eventos." },
+      { "titulo": "Hotel", "texto": "Alojamiento en desplazamientos y concentraciones." },
+      { "titulo": "Material deportivo", "texto": "Balones, material de entrenamiento y más." },
+      { "titulo": "Producto o servicio", "texto": "Colaboraciones a medida con tu negocio." }
+    ]
+  },
+  "empresas": {
+    "eyebrow": "Para empresas",
+    "titulo": "Descubre qué puedes patrocinar",
+    "filtros": {
+      "presupuesto": "PRESUPUESTO",
+      "presupuestoValor": "500 €",
+      "ubicacion": "UBICACIÓN",
+      "ubicacionValor": "Alicante",
+      "publico": "PÚBLICO",
+      "publicoValor": "Familias",
+      "deporte": "DEPORTE",
+      "deporteValor": "Todos",
+      "buscar": "Buscar",
+      "masFiltros": "Más filtros",
+      "tipo": "TIPO DE OPORTUNIDAD",
+      "tipoValor": "Equipación",
+      "categoria": "CATEGORÍA",
+      "categoriaValor": "Cantera",
+      "alcance": "ALCANCE",
+      "alcanceValor": "Local"
+    },
+    "resultados": [
+      {
+        "categoria": "Equipación",
+        "titulo": "Club de fútbol · Cantera · Alicante",
+        "texto": "Patrocinio de equipación para la temporada.",
+        "precio": "450 €"
+      },
+      {
+        "categoria": "Redes sociales",
+        "titulo": "Club de baloncesto · Familias · Alicante",
+        "texto": "Menciones y contenido en redes durante la liga.",
+        "precio": "500 €"
+      },
+      {
+        "categoria": "Instalaciones",
+        "titulo": "Club de pádel · Todos los públicos · Alicante",
+        "texto": "Presencia de marca en pistas y vestuarios.",
+        "precio": "480 €"
+      }
+    ],
+    "avisoEjemplos": "Resultados de ejemplo — ilustrativos, no clubes reales."
+  },
+  "presupuesto": {
+    "titulo": "¿Cuánto quieres invertir?",
+    "texto": "Encuentra oportunidades que encajan con tu presupuesto.",
+    "importes": ["250 €", "500 €", "1.000 €", "2.500 €", "Personalizado"]
+  },
+  "paginaClub": {
+    "eyebrow": "La página de tu club",
+    "titulo": "Un perfil profesional, no una simple ficha",
+    "texto": "Logo, portada, fotos, vídeos, equipos, jugadores, seguidores, alcance, cantera, palmarés, instalaciones, eventos y patrocinadores actuales — todo lo que hace valioso a tu club, en un solo lugar.",
+    "texto2": "Y siempre visibles, tus oportunidades de patrocinio disponibles.",
+    "maqueta": {
+      "url": "apoyaclub.com/club/tu-club",
+      "nombre": "Nombre del club",
+      "etiqueta1": "Fútbol",
+      "etiqueta2": "Cantera",
+      "etiqueta3": "3ª RFEF",
+      "seguidores": "Seguidores",
+      "alcance": "Alcance",
+      "equipos": "Equipos",
+      "oportunidades": "Oportunidades"
+    }
+  },
+  "dossier": {
+    "titulo": "Tu dossier de patrocinio, listo en segundos",
+    "texto": "Generado automáticamente con los datos de tu página. Sin diseñarlo tú mismo.",
+    "boton": "Generar dossier"
+  },
+  "panel": {
+    "titulo": "Tu panel, siempre a mano",
+    "boton": "+ Crear oportunidad",
+    "metricas": [
+      { "numero": "4", "etiqueta": "Oportunidades activas" },
+      { "numero": "12", "etiqueta": "Nuevos contactos" },
+      { "numero": "7", "etiqueta": "Empresas interesadas" },
+      { "numero": "3", "etiqueta": "Negociaciones" },
+      { "numero": "1", "etiqueta": "Renovaciones" }
+    ]
+  },
+  "precio": {
+    "titulo": "Precio transparente",
+    "eyebrow": "Primer mes gratis",
+    "importe": "29,90 €",
+    "periodo": "/mes",
+    "condiciones": "IVA incluido · Sin permanencia",
+    "comision": "Comisión: 0 % — tú y la empresa negociáis directamente.",
+    "ventajas": [
+      "Página profesional",
+      "Oportunidades ilimitadas",
+      "Dossier automático",
+      "Buscador de empresas",
+      "Gestión de contactos",
+      "Estadísticas",
+      "Herramientas de prospección",
+      "Soporte"
+    ],
+    "cta": "Prueba 1 mes gratis"
+  },
+  "confianza": {
+    "eyebrow": "Ejemplos ilustrativos",
+    "tipoClub": "un club",
+    "tipoEmpresa": "una empresa",
+    "testimonio": "“[Espacio para un testimonio real de {tipo} cuando esté disponible.]”",
+    "autorClub": "[Nombre del club]",
+    "autorEmpresa": "[Nombre de la empresa]"
+  },
+  "faq": {
+    "titulo": "Preguntas frecuentes",
+    "preguntas": [
+      {
+        "pregunta": "¿Qué es exactamente ApoyaClub?",
+        "respuesta": "Una plataforma que conecta clubes deportivos con empresas que quieren patrocinarlos. El club publica una página con su valor real y un catálogo de oportunidades de patrocinio; la empresa busca, filtra y contacta directamente con el club."
+      },
+      {
+        "pregunta": "¿Cuánto cuesta para un club?",
+        "respuesta": "El primer mes es gratis. Después, 29,90 €/mes con el IVA incluido, sin sorpresas en el precio."
+      },
+      {
+        "pregunta": "¿Es gratis para las empresas?",
+        "respuesta": "Sí. Buscar clubes, ver sus páginas y contactar con ellos no tiene ningún coste para la empresa."
+      },
+      {
+        "pregunta": "¿ApoyaClub cobra alguna comisión sobre el patrocinio?",
+        "respuesta": "No, la comisión es del 0 %. El club y la empresa negocian y acuerdan las condiciones directamente entre ellos."
+      },
+      {
+        "pregunta": "¿Cómo se paga el patrocinio?",
+        "respuesta": "ApoyaClub no gestiona el cobro ni actúa como agencia: el pago y el resto del acuerdo se gestionan directamente entre el club y la empresa, por el medio que ambos decidáis."
+      },
+      {
+        "pregunta": "¿Puedo cancelar cuando quiera?",
+        "respuesta": "Sí. Desde el panel del club puedes cancelar tu suscripción cuando quieras y seguirás teniendo acceso hasta el final del periodo ya pagado."
+      }
+    ],
+    "fiscalidadTitulo": "Sobre la fiscalidad del patrocinio",
+    "fiscalidadTexto": "Un acuerdo de patrocinio entre un club y una empresa puede tener implicaciones fiscales (IVA, facturación, deducciones…) para ambas partes. ApoyaClub no gestiona el cobro ni actúa como agencia, y <fuerte>no ofrece asesoramiento fiscal</fuerte>: te recomendamos consultar con un asesor fiscal o gestoría antes de cerrar cualquier acuerdo."
+  },
+  "ctaFinal": {
+    "tituloLinea1": "Tu club ya tiene valor.",
+    "tituloLinea2": "Ahora toca mostrarlo.",
+    "cta": "Empieza tu mes gratis"
+  },
+  "contacto": {
+    "titulo": "¿Tienes dudas? Escríbenos",
+    "texto": "Ya seas un club, una empresa o simplemente tengas una pregunta, cuéntanoslo y te respondemos por email."
+  }
+}

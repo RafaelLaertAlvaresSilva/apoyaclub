@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { Badge } from "@/components/ui/Badge";
@@ -16,110 +17,52 @@ import { FormularioContacto } from "./components/FormularioContacto";
  * maquetas (página de club, dossier, panel) usan datos de ejemplo,
  * marcados como tales, en vez de datos inventados que parezcan reales.
  */
-export const metadata: Metadata = {
-  title: "ApoyaClub — Conecta tu club deportivo con empresas patrocinadoras",
-  description:
-    "Conecta tu club con empresas interesadas en colaborar. Publica tus oportunidades de patrocinio, desde 50 € hasta el patrocinio principal, y deja que te encuentren y contacten directamente. Sin comisiones.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const tMeta = await getTranslations("home.meta");
+  return { title: tMeta("titulo"), description: tMeta("descripcion") };
+}
 
-const PROBLEMA_TAGS = [
-  "Equipaciones",
-  "Equipos",
-  "Cantera",
-  "Redes sociales",
-  "Jugadores",
-  "Eventos",
-  "Torneos",
-  "Instalaciones",
-  "Familias",
-  "Visibilidad local",
-  "Servicios",
-  "Contenido",
+/** Colores del filo superior de cada tarjeta de ejemplo. Van por
+ * posición, junto a los textos de `home.oportunidades.ejemplos`. */
+const ACENTOS_OPORTUNIDAD = [
+  "bg-brand-navy",
+  "bg-brand-teal-dark",
+  "bg-brand-teal",
+  "bg-brand-navy-dark",
+  "bg-brand-navy",
+  "bg-brand-teal-dark",
+  "bg-brand-teal",
+  "bg-brand-navy-dark",
+  "bg-brand-navy",
+  "bg-brand-teal-dark",
+  "bg-brand-teal",
+  "bg-brand-navy-dark",
+  "bg-brand-navy",
+  "bg-brand-teal-dark",
 ] as const;
 
-const PASOS = [
-  {
-    titulo: "Crea tu perfil",
-    texto: "Equipos, cantera, audiencia, instalaciones y comunidad: todo lo que hace valioso a tu club.",
-  },
-  {
-    titulo: "Publica tus oportunidades",
-    texto: "Desde 50 € hasta el patrocinio principal: tú decides qué ofreces y a qué precio.",
-  },
-  {
-    titulo: "Encuentra empresas",
-    texto: "Las empresas te encuentran y te contactan directamente. Vosotros negociáis el acuerdo.",
-  },
-] as const;
-
-const OPORTUNIDADES_EJEMPLO = [
-  { titulo: "Patrocinador principal", texto: "Máxima visibilidad: naming, equipación y comunicación oficial.", accent: "bg-brand-navy" },
-  { titulo: "Equipo femenino", texto: "Impulsa una sección concreta con su propio patrocinio.", accent: "bg-brand-teal-dark" },
-  { titulo: "Cantera", texto: "Apoya a las categorías base y su formación.", accent: "bg-brand-teal" },
-  { titulo: "Equipación", texto: "Tu marca en la camiseta, en cada partido.", accent: "bg-brand-navy-dark" },
-  { titulo: "Torneo", texto: "Patrocina un evento puntual de alto impacto.", accent: "bg-brand-navy" },
-  { titulo: "Redes sociales", texto: "Contenido y menciones en los canales del club.", accent: "bg-brand-teal-dark" },
-  { titulo: "Instalaciones", texto: "Tu marca en el pabellón, campo o vestuarios.", accent: "bg-brand-teal" },
-  { titulo: "Jugador", texto: "Patrocinio individual a una figura del equipo.", accent: "bg-brand-navy-dark" },
-  { titulo: "Transporte", texto: "Cubre los desplazamientos del equipo.", accent: "bg-brand-navy" },
-  { titulo: "Fisioterapia", texto: "Servicios de recuperación para la plantilla.", accent: "bg-brand-teal-dark" },
-  { titulo: "Restaurante", texto: "Colaboración con comidas de equipo y eventos.", accent: "bg-brand-teal" },
-  { titulo: "Hotel", texto: "Alojamiento en desplazamientos y concentraciones.", accent: "bg-brand-navy-dark" },
-  { titulo: "Material deportivo", texto: "Balones, material de entrenamiento y más.", accent: "bg-brand-navy" },
-  { titulo: "Producto o servicio", texto: "Colaboraciones a medida con tu negocio.", accent: "bg-brand-teal-dark" },
-] as const;
-
-const RESULTADOS_EJEMPLO = [
-  { categoria: "Equipación", titulo: "Club de fútbol · Cantera · Alicante", texto: "Patrocinio de equipación para la temporada.", precio: "450 €" },
-  { categoria: "Redes sociales", titulo: "Club de baloncesto · Familias · Alicante", texto: "Menciones y contenido en redes durante la liga.", precio: "500 €" },
-  { categoria: "Instalaciones", titulo: "Club de pádel · Todos los públicos · Alicante", texto: "Presencia de marca en pistas y vestuarios.", precio: "480 €" },
-] as const;
-
-const PRESUPUESTOS_EJEMPLO = ["250 €", "500 €", "1.000 €", "2.500 €", "Personalizado"] as const;
-
-const VENTAJAS_PRECIO = [
-  "Página profesional",
-  "Oportunidades ilimitadas",
-  "Dossier automático",
-  "Buscador de empresas",
-  "Gestión de contactos",
-  "Estadísticas",
-  "Herramientas de prospección",
-  "Soporte",
-] as const;
-
-const PREGUNTAS_FRECUENTES = [
-  {
-    pregunta: "¿Qué es exactamente ApoyaClub?",
-    respuesta:
-      "Una plataforma que conecta clubes deportivos con empresas que quieren patrocinarlos. El club publica una página con su valor real y un catálogo de oportunidades de patrocinio; la empresa busca, filtra y contacta directamente con el club.",
-  },
-  {
-    pregunta: "¿Cuánto cuesta para un club?",
-    respuesta: "El primer mes es gratis. Después, 29,90 €/mes con el IVA incluido, sin sorpresas en el precio.",
-  },
-  {
-    pregunta: "¿Es gratis para las empresas?",
-    respuesta: "Sí. Buscar clubes, ver sus páginas y contactar con ellos no tiene ningún coste para la empresa.",
-  },
-  {
-    pregunta: "¿ApoyaClub cobra alguna comisión sobre el patrocinio?",
-    respuesta:
-      "No, la comisión es del 0 %. El club y la empresa negocian y acuerdan las condiciones directamente entre ellos.",
-  },
-  {
-    pregunta: "¿Cómo se paga el patrocinio?",
-    respuesta:
-      "ApoyaClub no gestiona el cobro ni actúa como agencia: el pago y el resto del acuerdo se gestionan directamente entre el club y la empresa, por el medio que ambos decidáis.",
-  },
-  {
-    pregunta: "¿Puedo cancelar cuando quiera?",
-    respuesta:
-      "Sí. Desde el panel del club puedes cancelar tu suscripción cuando quieras y seguirás teniendo acceso hasta el final del periodo ya pagado.",
-  },
-] as const;
+type TextoConTitulo = { titulo: string; texto: string };
 
 export default async function Home() {
+  const t = await getTranslations("home");
+
+  // Los textos que son listas viven en `messages/es/home.json` como
+  // arrays; `t.raw` los devuelve tal cual (next-intl solo interpola
+  // cadenas sueltas).
+  const tags = t.raw("problema.tags") as string[];
+  const pasos = t.raw("comoFunciona.pasos") as TextoConTitulo[];
+  const ejemplosOportunidad = t.raw("oportunidades.ejemplos") as TextoConTitulo[];
+  const resultadosEjemplo = t.raw("empresas.resultados") as {
+    categoria: string;
+    titulo: string;
+    texto: string;
+    precio: string;
+  }[];
+  const importes = t.raw("presupuesto.importes") as string[];
+  const metricasPanel = t.raw("panel.metricas") as { numero: string; etiqueta: string }[];
+  const ventajas = t.raw("precio.ventajas") as string[];
+  const preguntas = t.raw("faq.preguntas") as { pregunta: string; respuesta: string }[];
+
   return (
     <div className="flex flex-1 flex-col bg-white">
       <Header />
@@ -138,17 +81,16 @@ export default async function Home() {
 
           <div className="relative mx-auto max-w-3xl text-center">
             <span className="mb-7 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-brand-teal-dark">
-              LA PLATAFORMA DE PATROCINIO DEPORTIVO
+              {t("hero.etiqueta")}
             </span>
 
             <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-5xl lg:text-6xl">
-              Cada club tiene algo que ofrecer.{" "}
-              <span className="text-brand-teal-dark">Nosotros ayudamos a encontrar quién quiere apoyarlo.</span>
+              {t("hero.tituloParte1")}{" "}
+              <span className="text-brand-teal-dark">{t("hero.tituloParte2")}</span>
             </h1>
 
             <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-zinc-600 sm:text-xl">
-              Conecta tu club con empresas interesadas en colaborar. Publica tus oportunidades y deja que ellas te
-              encuentren y contacten directamente. Sin comisiones.
+              {t("hero.subtitulo")}
             </p>
 
             <div className="mt-9 flex flex-col items-center gap-3">
@@ -156,9 +98,9 @@ export default async function Home() {
                 href="/registro-club"
                 className="inline-flex items-center justify-center rounded-full bg-brand-teal px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-teal-dark"
               >
-                Prueba 1 mes gratis
+                {t("hero.cta")}
               </Link>
-              <p className="text-sm text-zinc-500">Sin permanencia · 29,90 €/mes después del primer mes · IVA incluido</p>
+              <p className="text-sm text-zinc-500">{t("hero.condiciones")}</p>
             </div>
 
             {/* CLUB -> OPORTUNIDAD -> EMPRESA */}
@@ -169,7 +111,7 @@ export default async function Home() {
                     <path d="M12 2l3 7h7l-5.5 4.2L18.5 21 12 16.8 5.5 21l2-7.8L2 9h7z" />
                   </svg>
                 </span>
-                <span className="text-sm font-bold text-brand-navy">Club</span>
+                <span className="text-sm font-bold text-brand-navy">{t("hero.cadenaClub")}</span>
               </div>
               <svg aria-hidden="true" width="22" height="14" viewBox="0 0 24 14" fill="none" className="text-zinc-300">
                 <path d="M1 7h20M15 1l6 6-6 6" stroke="currentColor" strokeWidth="2" />
@@ -180,7 +122,7 @@ export default async function Home() {
                     <path d="M13 2L3 14h7l-1 8 10-12h-7z" />
                   </svg>
                 </span>
-                <span className="text-sm font-bold text-brand-navy">Oportunidad</span>
+                <span className="text-sm font-bold text-brand-navy">{t("hero.cadenaOportunidad")}</span>
               </div>
               <svg aria-hidden="true" width="22" height="14" viewBox="0 0 24 14" fill="none" className="text-zinc-300">
                 <path d="M1 7h20M15 1l6 6-6 6" stroke="currentColor" strokeWidth="2" />
@@ -192,7 +134,7 @@ export default async function Home() {
                     <path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                   </svg>
                 </span>
-                <span className="text-sm font-bold text-brand-navy">Empresa</span>
+                <span className="text-sm font-bold text-brand-navy">{t("hero.cadenaEmpresa")}</span>
               </div>
             </div>
           </div>
@@ -201,27 +143,27 @@ export default async function Home() {
         {/* ============ SOY CLUB / SOY EMPRESA ============ */}
         <section className="mx-auto grid max-w-6xl gap-6 px-4 py-16 sm:grid-cols-2 sm:px-6 sm:py-20">
           <div className="rounded-3xl bg-gradient-to-br from-brand-navy to-brand-navy-dark p-10 text-white shadow-xl shadow-brand-navy/20">
-            <h3 className="text-2xl font-extrabold">Soy un club</h3>
+            <h3 className="text-2xl font-extrabold">{t("caminos.clubTitulo")}</h3>
             <p className="mt-2.5 text-[15px] leading-relaxed text-white/80">
-              Crea tu página, publica tus oportunidades de patrocinio y que las empresas te encuentren.
+              {t("caminos.clubTexto")}
             </p>
             <Link
               href="/registro-club"
               className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-brand-teal px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-teal-dark"
             >
-              Crea la página de tu club →
+              {t("caminos.clubCta")}
             </Link>
           </div>
           <div className="rounded-3xl border border-zinc-200 bg-white p-10 shadow-sm">
-            <h3 className="text-2xl font-extrabold text-brand-navy">Soy una empresa</h3>
+            <h3 className="text-2xl font-extrabold text-brand-navy">{t("caminos.empresaTitulo")}</h3>
             <p className="mt-2.5 text-[15px] leading-relaxed text-zinc-600">
-              Busca clubes de tu zona y patrocina desde 50 €. Acceso gratuito, sin intermediarios.
+              {t("caminos.empresaTexto")}
             </p>
             <Link
               href="/buscar"
               className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-brand-navy px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-navy-dark"
             >
-              Explorar clubes →
+              {t("caminos.empresaCta")}
             </Link>
           </div>
         </section>
@@ -229,16 +171,16 @@ export default async function Home() {
         {/* ============ PROBLEMA / VALOR ============ */}
         <section id="clubes" className="bg-zinc-50 px-4 py-20 sm:px-6 sm:py-24">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">Para clubes</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">{t("problema.eyebrow")}</p>
             <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
-              Un patrocinio no tiene por qué ser solo poner un logo en una camiseta
+              {t("problema.titulo")}
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-zinc-600">
-              Tu club tiene mucho más que ofrecer de lo que crees. Esto es lo que las empresas valoran:
+              {t("problema.texto")}
             </p>
           </div>
           <div className="mx-auto mt-11 flex max-w-3xl flex-wrap justify-center gap-3">
-            {PROBLEMA_TAGS.map((tag) => (
+            {tags.map((tag) => (
               <Badge key={tag} tone="navy" className="rounded-full border border-zinc-200 bg-white px-5 py-3 text-sm font-semibold text-brand-navy">
                 {tag}
               </Badge>
@@ -248,9 +190,9 @@ export default async function Home() {
 
         {/* ============ CÓMO FUNCIONA ============ */}
         <section id="como-funciona" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-          <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">Cómo funciona</h2>
+          <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">{t("comoFunciona.titulo")}</h2>
           <div className="mt-14 grid gap-10 sm:grid-cols-3">
-            {PASOS.map((paso, indice) => (
+            {pasos.map((paso, indice) => (
               <div key={paso.titulo} className="text-center">
                 <div className="text-sm font-extrabold tracking-wide text-zinc-300">0{indice + 1}</div>
                 <div className="mx-auto mt-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-teal-light">
@@ -285,16 +227,16 @@ export default async function Home() {
         <section className="bg-zinc-50 px-4 py-20 sm:px-6 sm:py-24">
           <div className="mx-auto max-w-6xl">
             <div className="mx-auto max-w-2xl text-center">
-              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">Oportunidades de patrocinio</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">{t("oportunidades.eyebrow")}</p>
               <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
-                Cada club crea las suyas, a su medida
+                {t("oportunidades.titulo")}
               </h2>
-              <p className="mx-auto mt-4 text-zinc-600">Algunos ejemplos de lo que un club puede publicar en su página:</p>
+              <p className="mx-auto mt-4 text-zinc-600">{t("oportunidades.texto")}</p>
             </div>
             <div className="mt-11 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {OPORTUNIDADES_EJEMPLO.map((oportunidad) => (
+              {ejemplosOportunidad.map((oportunidad, indice) => (
                 <div key={oportunidad.titulo} className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
-                  <div className={`h-1.5 ${oportunidad.accent}`} />
+                  <div className={`h-1.5 ${ACENTOS_OPORTUNIDAD[indice % ACENTOS_OPORTUNIDAD.length]}`} />
                   <div className="p-5">
                     <h4 className="text-[15px] font-bold text-brand-navy">{oportunidad.titulo}</h4>
                     <p className="mt-1.5 text-sm text-zinc-500">{oportunidad.texto}</p>
@@ -308,64 +250,64 @@ export default async function Home() {
         {/* ============ PARA EMPRESAS: BUSCADOR ============ */}
         <section id="empresas" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">Para empresas</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">{t("empresas.eyebrow")}</p>
             <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
-              Descubre qué puedes patrocinar
+              {t("empresas.titulo")}
             </h2>
           </div>
 
           <div className="mx-auto mt-10 max-w-3xl rounded-3xl border border-zinc-200 bg-white p-5 shadow-lg shadow-brand-navy/5 sm:p-6">
             <div className="grid gap-2.5 sm:grid-cols-[repeat(4,1fr)_auto]">
               <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                <div className="text-[11px] font-semibold text-zinc-400">PRESUPUESTO</div>
-                <div className="text-sm font-semibold text-brand-navy">500 €</div>
+                <div className="text-[11px] font-semibold text-zinc-400">{t("empresas.filtros.presupuesto")}</div>
+                <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.presupuestoValor")}</div>
               </div>
               <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                <div className="text-[11px] font-semibold text-zinc-400">UBICACIÓN</div>
-                <div className="text-sm font-semibold text-brand-navy">Alicante</div>
+                <div className="text-[11px] font-semibold text-zinc-400">{t("empresas.filtros.ubicacion")}</div>
+                <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.ubicacionValor")}</div>
               </div>
               <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                <div className="text-[11px] font-semibold text-zinc-400">PÚBLICO</div>
-                <div className="text-sm font-semibold text-brand-navy">Familias</div>
+                <div className="text-[11px] font-semibold text-zinc-400">{t("empresas.filtros.publico")}</div>
+                <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.publicoValor")}</div>
               </div>
               <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                <div className="text-[11px] font-semibold text-zinc-400">DEPORTE</div>
-                <div className="text-sm font-semibold text-brand-navy">Todos</div>
+                <div className="text-[11px] font-semibold text-zinc-400">{t("empresas.filtros.deporte")}</div>
+                <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.deporteValor")}</div>
               </div>
               <Link
                 href="/buscar"
                 className="flex items-center justify-center rounded-xl bg-brand-teal px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-brand-teal-dark"
               >
-                Buscar
+                {t("empresas.filtros.buscar")}
               </Link>
             </div>
 
             <details className="group mt-3">
               <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm font-semibold text-brand-teal-dark marker:content-none">
-                Más filtros
+                {t("empresas.filtros.masFiltros")}
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="transition-transform group-open:rotate-180">
                   <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </summary>
               <div className="mt-3 grid gap-2.5 border-t border-zinc-100 pt-4 sm:grid-cols-3">
                 <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                  <div className="text-[11px] font-semibold text-zinc-400">TIPO DE OPORTUNIDAD</div>
-                  <div className="text-sm font-semibold text-brand-navy">Equipación</div>
+                  <div className="text-[11px] font-semibold text-zinc-400">{t("empresas.filtros.tipo")}</div>
+                  <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.tipoValor")}</div>
                 </div>
                 <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                  <div className="text-[11px] font-semibold text-zinc-400">CATEGORÍA</div>
-                  <div className="text-sm font-semibold text-brand-navy">Cantera</div>
+                  <div className="text-[11px] font-semibold text-zinc-400">{t("empresas.filtros.categoria")}</div>
+                  <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.categoriaValor")}</div>
                 </div>
                 <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                  <div className="text-[11px] font-semibold text-zinc-400">ALCANCE</div>
-                  <div className="text-sm font-semibold text-brand-navy">Local</div>
+                  <div className="text-[11px] font-semibold text-zinc-400">{t("empresas.filtros.alcance")}</div>
+                  <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.alcanceValor")}</div>
                 </div>
               </div>
             </details>
           </div>
 
           <div className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-3">
-            {RESULTADOS_EJEMPLO.map((resultado) => (
+            {resultadosEjemplo.map((resultado) => (
               <div key={resultado.titulo} className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
                 <Badge tone="teal" className="mb-3">
                   {resultado.categoria.toUpperCase()}
@@ -376,16 +318,16 @@ export default async function Home() {
               </div>
             ))}
           </div>
-          <p className="mt-3 text-center text-xs text-zinc-400">Resultados de ejemplo — ilustrativos, no clubes reales.</p>
+          <p className="mt-3 text-center text-xs text-zinc-400">{t("empresas.avisoEjemplos")}</p>
         </section>
 
         {/* ============ PRESUPUESTO ============ */}
         <section className="bg-brand-navy px-4 py-16 sm:px-6 sm:py-20">
           <div className="mx-auto max-w-xl text-center">
-            <h2 className="text-2xl font-extrabold text-white sm:text-3xl">¿Cuánto quieres invertir?</h2>
-            <p className="mt-2.5 text-white/70">Encuentra oportunidades que encajan con tu presupuesto.</p>
+            <h2 className="text-2xl font-extrabold text-white sm:text-3xl">{t("presupuesto.titulo")}</h2>
+            <p className="mt-2.5 text-white/70">{t("presupuesto.texto")}</p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
-              {PRESUPUESTOS_EJEMPLO.map((importe, indice) => (
+              {importes.map((importe, indice) => (
                 <span
                   key={importe}
                   className={`rounded-full border px-6 py-3 text-sm font-bold ${
@@ -404,16 +346,15 @@ export default async function Home() {
         {/* ============ PÁGINA PROFESIONAL DEL CLUB ============ */}
         <section className="mx-auto grid max-w-6xl items-center gap-14 px-4 py-24 sm:px-6 lg:grid-cols-[0.85fr_1.15fr]">
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">La página de tu club</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">{t("paginaClub.eyebrow")}</p>
             <h2 className="mt-3 text-[28px] font-extrabold leading-tight tracking-tight text-brand-navy sm:text-3xl">
-              Un perfil profesional, no una simple ficha
+              {t("paginaClub.titulo")}
             </h2>
             <p className="mt-4 leading-relaxed text-zinc-600">
-              Logo, portada, fotos, vídeos, equipos, jugadores, seguidores, alcance, cantera, palmarés, instalaciones,
-              eventos y patrocinadores actuales — todo lo que hace valioso a tu club, en un solo lugar.
+              {t("paginaClub.texto")}
             </p>
             <p className="mt-4 leading-relaxed text-zinc-600">
-              Y siempre visibles, tus oportunidades de patrocinio disponibles.
+              {t("paginaClub.texto2")}
             </p>
           </div>
 
@@ -422,7 +363,7 @@ export default async function Home() {
               <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
               <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
               <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
-              <span className="ml-2 truncate text-xs text-zinc-400">apoyaclub.com/club/tu-club</span>
+              <span className="ml-2 truncate text-xs text-zinc-400">{t("paginaClub.maqueta.url")}</span>
             </div>
             <div className="h-32 bg-gradient-to-br from-brand-navy to-brand-teal-dark" />
             <div className="px-6">
@@ -433,28 +374,28 @@ export default async function Home() {
               </div>
             </div>
             <div className="px-6 pb-6 pt-3.5">
-              <div className="text-[17px] font-extrabold text-brand-navy">Nombre del club</div>
+              <div className="text-[17px] font-extrabold text-brand-navy">{t("paginaClub.maqueta.nombre")}</div>
               <div className="mt-2 flex flex-wrap gap-2">
-                <Badge tone="teal">Fútbol</Badge>
-                <Badge tone="teal">Cantera</Badge>
-                <Badge tone="neutral">3ª RFEF</Badge>
+                <Badge tone="teal">{t("paginaClub.maqueta.etiqueta1")}</Badge>
+                <Badge tone="teal">{t("paginaClub.maqueta.etiqueta2")}</Badge>
+                <Badge tone="neutral">{t("paginaClub.maqueta.etiqueta3")}</Badge>
               </div>
               <div className="mt-4 grid grid-cols-4 gap-2.5 border-t border-zinc-100 pt-4">
                 <div>
                   <div className="text-base font-extrabold text-brand-navy">12,4k</div>
-                  <div className="text-[11px] text-zinc-400">Seguidores</div>
+                  <div className="text-[11px] text-zinc-400">{t("paginaClub.maqueta.seguidores")}</div>
                 </div>
                 <div>
                   <div className="text-base font-extrabold text-brand-navy">48k</div>
-                  <div className="text-[11px] text-zinc-400">Alcance</div>
+                  <div className="text-[11px] text-zinc-400">{t("paginaClub.maqueta.alcance")}</div>
                 </div>
                 <div>
                   <div className="text-base font-extrabold text-brand-navy">9</div>
-                  <div className="text-[11px] text-zinc-400">Equipos</div>
+                  <div className="text-[11px] text-zinc-400">{t("paginaClub.maqueta.equipos")}</div>
                 </div>
                 <div>
                   <div className="text-base font-extrabold text-brand-navy">3</div>
-                  <div className="text-[11px] text-zinc-400">Oportunidades</div>
+                  <div className="text-[11px] text-zinc-400">{t("paginaClub.maqueta.oportunidades")}</div>
                 </div>
               </div>
             </div>
@@ -465,9 +406,9 @@ export default async function Home() {
         <section className="bg-zinc-50 px-4 py-20 sm:px-6 sm:py-24">
           <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2">
             <div className="rounded-3xl border border-zinc-200 bg-white p-9 shadow-sm">
-              <h3 className="text-xl font-extrabold text-brand-navy">Tu dossier de patrocinio, listo en segundos</h3>
+              <h3 className="text-xl font-extrabold text-brand-navy">{t("dossier.titulo")}</h3>
               <p className="mt-2 text-sm text-zinc-600">
-                Generado automáticamente con los datos de tu página. Sin diseñarlo tú mismo.
+                {t("dossier.texto")}
               </p>
               <div className="mt-6 flex items-center gap-5">
                 <div className="w-24 flex-none rounded-lg border border-zinc-200 bg-white p-2.5 shadow-md shadow-brand-navy/10">
@@ -480,27 +421,21 @@ export default async function Home() {
                   <div className="h-0.5 w-5/6 rounded bg-zinc-200" />
                 </div>
                 <span className="inline-flex items-center rounded-full bg-brand-navy px-5 py-3 text-sm font-bold text-white">
-                  Generar dossier
+                  {t("dossier.boton")}
                 </span>
               </div>
             </div>
 
             <div className="rounded-3xl bg-brand-navy-dark p-9 shadow-lg shadow-brand-navy-dark/30">
               <div className="mb-5 flex items-center justify-between">
-                <h3 className="text-xl font-extrabold text-white">Tu panel, siempre a mano</h3>
-                <span className="rounded-full bg-brand-teal px-4 py-2 text-xs font-bold text-white">+ Crear oportunidad</span>
+                <h3 className="text-xl font-extrabold text-white">{t("panel.titulo")}</h3>
+                <span className="rounded-full bg-brand-teal px-4 py-2 text-xs font-bold text-white">{t("panel.boton")}</span>
               </div>
               <div className="grid grid-cols-3 gap-2.5">
-                {[
-                  ["4", "Oportunidades activas"],
-                  ["12", "Nuevos contactos"],
-                  ["7", "Empresas interesadas"],
-                  ["3", "Negociaciones"],
-                  ["1", "Renovaciones"],
-                ].map(([numero, etiqueta]) => (
-                  <div key={etiqueta} className="rounded-xl bg-white/[0.06] p-3.5">
-                    <div className="text-xl font-extrabold text-white">{numero}</div>
-                    <div className="text-[11px] text-white/60">{etiqueta}</div>
+                {metricasPanel.map((metrica) => (
+                  <div key={metrica.etiqueta} className="rounded-xl bg-white/[0.06] p-3.5">
+                    <div className="text-xl font-extrabold text-white">{metrica.numero}</div>
+                    <div className="text-[11px] text-white/60">{metrica.etiqueta}</div>
                   </div>
                 ))}
               </div>
@@ -510,18 +445,18 @@ export default async function Home() {
 
         {/* ============ PRECIO ============ */}
         <section id="precio" className="mx-auto max-w-xl px-4 py-24 text-center sm:px-6">
-          <h2 className="text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">Precio transparente</h2>
+          <h2 className="text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">{t("precio.titulo")}</h2>
           <div className="mt-11 rounded-3xl border-2 border-brand-teal bg-white p-10 shadow-xl shadow-brand-teal/15">
-            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">Primer mes gratis</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">{t("precio.eyebrow")}</p>
             <p className="mt-3">
-              <span className="text-5xl font-extrabold tracking-tight text-brand-navy">29,90 €</span>
-              <span className="text-lg text-zinc-500">/mes</span>
+              <span className="text-5xl font-extrabold tracking-tight text-brand-navy">{t("precio.importe")}</span>
+              <span className="text-lg text-zinc-500">{t("precio.periodo")}</span>
             </p>
-            <p className="mt-1.5 text-sm text-zinc-500">IVA incluido · Sin permanencia</p>
-            <p className="mt-1 text-sm text-zinc-400">Comisión: 0 % — tú y la empresa negociáis directamente.</p>
+            <p className="mt-1.5 text-sm text-zinc-500">{t("precio.condiciones")}</p>
+            <p className="mt-1 text-sm text-zinc-400">{t("precio.comision")}</p>
 
             <div className="mt-8 grid gap-3 text-left sm:grid-cols-2">
-              {VENTAJAS_PRECIO.map((ventaja) => (
+              {ventajas.map((ventaja) => (
                 <div key={ventaja} className="flex items-center gap-2.5">
                   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" className="flex-none text-brand-teal">
                     <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
@@ -535,7 +470,7 @@ export default async function Home() {
               href="/registro-club"
               className="mt-9 inline-flex w-full items-center justify-center rounded-2xl bg-brand-teal px-6 py-4 text-base font-bold text-white shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-teal-dark"
             >
-              Prueba 1 mes gratis
+              {t("precio.cta")}
             </Link>
           </div>
         </section>
@@ -543,9 +478,9 @@ export default async function Home() {
         {/* ============ CONFIANZA ============ */}
         <section className="bg-zinc-50 px-4 py-16 sm:px-6 sm:py-20">
           <div className="mx-auto max-w-6xl">
-            <p className="text-center text-xs font-bold uppercase tracking-wider text-zinc-400">Ejemplos ilustrativos</p>
+            <p className="text-center text-xs font-bold uppercase tracking-wider text-zinc-400">{t("confianza.eyebrow")}</p>
             <div className="mt-8 grid gap-5 sm:grid-cols-3">
-              {["un club", "una empresa", "un club"].map((tipo, indice) => (
+              {[t("confianza.tipoClub"), t("confianza.tipoEmpresa"), t("confianza.tipoClub")].map((tipo, indice) => (
                 <div key={indice} className="rounded-2xl border border-dashed border-zinc-300 bg-white p-6">
                   <div className="mb-3 flex gap-0.5">
                     {[0, 1, 2, 3, 4].map((i) => (
@@ -554,11 +489,9 @@ export default async function Home() {
                       </svg>
                     ))}
                   </div>
-                  <p className="text-sm italic leading-relaxed text-zinc-600">
-                    &ldquo;[Espacio para un testimonio real de {tipo} cuando esté disponible.]&rdquo;
-                  </p>
+                  <p className="text-sm italic leading-relaxed text-zinc-600">{t("confianza.testimonio", { tipo })}</p>
                   <div className="mt-3.5 text-sm font-bold text-brand-navy">
-                    [Nombre {tipo === "una empresa" ? "de la empresa" : "del club"}]
+                    {tipo === t("confianza.tipoEmpresa") ? t("confianza.autorEmpresa") : t("confianza.autorClub")}
                   </div>
                 </div>
               ))}
@@ -569,11 +502,11 @@ export default async function Home() {
         {/* ============ FAQ ============ */}
         <section id="faq" className="mx-auto max-w-3xl px-4 py-24 sm:px-6">
           <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
-            Preguntas frecuentes
+            {t("faq.titulo")}
           </h2>
 
           <div className="mt-11 space-y-3">
-            {PREGUNTAS_FRECUENTES.map((item) => (
+            {preguntas.map((item) => (
               <details
                 key={item.pregunta}
                 className="group rounded-2xl border border-zinc-200 bg-white p-5 open:border-brand-teal/40"
@@ -595,12 +528,11 @@ export default async function Home() {
               </svg>
             </span>
             <div>
-              <p className="font-semibold text-amber-900">Sobre la fiscalidad del patrocinio</p>
+              <p className="font-semibold text-amber-900">{t("faq.fiscalidadTitulo")}</p>
               <p className="mt-1 text-sm leading-relaxed text-amber-800">
-                Un acuerdo de patrocinio entre un club y una empresa puede tener implicaciones fiscales (IVA,
-                facturación, deducciones…) para ambas partes. ApoyaClub no gestiona el cobro ni actúa como agencia, y{" "}
-                <strong>no ofrece asesoramiento fiscal</strong>: te recomendamos consultar con un asesor fiscal o
-                gestoría antes de cerrar cualquier acuerdo.
+                {t.rich("faq.fiscalidadTexto", {
+                  fuerte: (contenido) => <strong>{contenido}</strong>,
+                })}
               </p>
             </div>
           </div>
@@ -614,15 +546,15 @@ export default async function Home() {
           />
           <div className="relative mx-auto max-w-xl">
             <h2 className="text-3xl font-extrabold leading-tight text-white sm:text-4xl">
-              Tu club ya tiene valor.
+              {t("ctaFinal.tituloLinea1")}
               <br />
-              Ahora toca mostrarlo.
+              {t("ctaFinal.tituloLinea2")}
             </h2>
             <Link
               href="/registro-club"
               className="mt-8 inline-flex items-center justify-center rounded-full bg-brand-teal px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/40 transition-colors hover:bg-brand-teal-dark"
             >
-              Empieza tu mes gratis
+              {t("ctaFinal.cta")}
             </Link>
           </div>
         </section>
@@ -630,10 +562,10 @@ export default async function Home() {
         {/* ============ CONTACTO ============ */}
         <section id="contacto" className="mx-auto max-w-xl px-4 py-24 sm:px-6">
           <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
-            ¿Tienes dudas? Escríbenos
+            {t("contacto.titulo")}
           </h2>
           <p className="mt-3 text-center text-zinc-600">
-            Ya seas un club, una empresa o simplemente tengas una pregunta, cuéntanoslo y te respondemos por email.
+            {t("contacto.texto")}
           </p>
 
           <div className="mt-9 rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm">
