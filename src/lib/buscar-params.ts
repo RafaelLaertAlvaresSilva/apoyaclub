@@ -1,4 +1,10 @@
-import { FORMAS_COLABORACION, OBJETIVOS_OPORTUNIDAD, PERIODOS_OPORTUNIDAD, TIPOS_OPORTUNIDAD } from "@/lib/opportunities";
+import {
+  FORMAS_COLABORACION,
+  NIVELES_PATROCINIO,
+  OBJETIVOS_OPORTUNIDAD,
+  PERIODOS_OPORTUNIDAD,
+  TIPOS_OPORTUNIDAD,
+} from "@/lib/opportunities";
 import type { FiltrosBusqueda, OrdenBusqueda, VistaBusqueda } from "@/lib/search-types";
 import type { TeamLevel } from "@/lib/types";
 
@@ -16,6 +22,7 @@ const IDS_TIPO = new Set(TIPOS_OPORTUNIDAD.map((t) => t.id as string));
 const IDS_FORMA = new Set(FORMAS_COLABORACION.map((f) => f.id as string));
 const IDS_OBJETIVO = new Set(OBJETIVOS_OPORTUNIDAD.map((o) => o.id as string));
 const IDS_PERIODO = new Set(PERIODOS_OPORTUNIDAD.map((p) => p.id as string));
+const IDS_NIVEL_PATROCINIO = new Set(NIVELES_PATROCINIO.map((n) => n.id as string));
 const NIVELES_VALIDOS = new Set<TeamLevel>(["primer_equipo", "cantera"]);
 const ORDENES_VALIDOS = new Set<OrdenBusqueda>(["cercania", "valor", "novedad"]);
 
@@ -70,6 +77,7 @@ export function parametrosAFiltros(params: ParametrosURL): { filtros: FiltrosBus
     })(),
     formasColaboracion: listaDesdeParametro(params.forma, IDS_FORMA),
     objetivos: listaDesdeParametro(params.objetivo, IDS_OBJETIVO),
+    niveles: listaDesdeParametro(params.patrocinio, IDS_NIVEL_PATROCINIO),
     orden: orden && ORDENES_VALIDOS.has(orden as OrdenBusqueda) ? (orden as OrdenBusqueda) : "novedad",
   };
 
@@ -97,6 +105,7 @@ export function filtrosAQueryString(filtros: FiltrosBusqueda, vista: VistaBusque
     qs.set("forma", filtros.formasColaboracion.join(","));
   }
   if (filtros.objetivos && filtros.objetivos.length > 0) qs.set("objetivo", filtros.objetivos.join(","));
+  if (filtros.niveles && filtros.niveles.length > 0) qs.set("patrocinio", filtros.niveles.join(","));
   if (filtros.orden && filtros.orden !== "novedad") qs.set("orden", filtros.orden);
   if (vista !== "oportunidad") qs.set("vista", vista);
 

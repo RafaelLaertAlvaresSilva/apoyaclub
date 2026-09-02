@@ -9,6 +9,8 @@ import {
   ETIQUETA_FORMA_COLABORACION,
   ETIQUETA_OBJETIVO,
   ETIQUETA_PERIODO,
+  CLASES_NIVEL_PATROCINIO,
+  ETIQUETA_NIVEL_PATROCINIO,
   ETIQUETA_TIPO_OPORTUNIDAD,
   formatoValorOportunidad,
 } from "@/lib/opportunities";
@@ -200,8 +202,25 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
       </div>
 
       <div>
-        <p className="font-semibold text-zinc-900">{oportunidad.title}</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="font-semibold text-zinc-900">{oportunidad.title}</p>
+          {oportunidad.sponsorLevel !== "libre" && (
+            <span
+              className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                CLASES_NIVEL_PATROCINIO[oportunidad.sponsorLevel]
+              }`}
+            >
+              {ETIQUETA_NIVEL_PATROCINIO[oportunidad.sponsorLevel]}
+            </span>
+          )}
+        </div>
+        {oportunidad.teamLabel && <p className="mt-0.5 text-xs text-zinc-500">{oportunidad.teamLabel}</p>}
         {oportunidad.description && <p className="mt-1 line-clamp-2 text-sm text-zinc-600">{oportunidad.description}</p>}
+        {oportunidad.exclusivity && (
+          <p className="mt-1 text-xs font-medium text-brand-teal-dark">
+            Exclusiva de sector: {oportunidad.exclusivity}
+          </p>
+        )}
       </div>
 
       <div className="flex flex-wrap gap-1.5">

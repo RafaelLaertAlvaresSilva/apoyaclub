@@ -164,6 +164,20 @@ export type OpportunityType =
 
 export type OpportunityStatus = "available" | "reserved" | "closed";
 
+/**
+ * Nivel de patrocinador de una oportunidad (Fase 2, implementado al
+ * cerrar la auditoría de la Fase 15). Es la primera pregunta que se hace
+ * una empresa: "¿esto es el patrocinio principal del club o una
+ * colaboración pequeña?".
+ *
+ * - principal: el patrocinio de mayor visibilidad del club.
+ * - oficial: patrocinador oficial, normalmente con exclusividad de sector.
+ * - colaborador: colaboración de menor tamaño.
+ * - libre: sin categoría (el valor por defecto y el de todo lo publicado
+ *   antes de que existiera este campo).
+ */
+export type SponsorLevel = "principal" | "oficial" | "colaborador" | "libre";
+
 /** Fila de la tabla `opportunities`: una oportunidad de patrocinio del club. */
 export type Opportunity = {
   id: string;
@@ -181,6 +195,12 @@ export type Opportunity = {
   collaborationType: CollaborationType | null;
   /** A qué público u objetivo apela (Fase 7). Puede estar vacío. */
   objectives: ObjectiveTag[];
+  /** Nivel de patrocinador. Por defecto "libre". */
+  sponsorLevel: SponsorLevel;
+  /** Sector en exclusiva, en texto libre. Null = sin exclusividad. */
+  exclusivity: string | null;
+  /** Equipo del club al que va asociada. Null = al club entero. */
+  teamId: string | null;
   /** Fecha en la que se archivó (null = activa). Archivar no borra la oportunidad, solo la oculta. */
   archivedAt: string | null;
   createdAt: string;

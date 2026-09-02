@@ -5,6 +5,7 @@ import type {
   Opportunity,
   OpportunityStatus,
   OpportunityType,
+  SponsorLevel,
 } from "@/lib/types";
 
 /**
@@ -25,6 +26,9 @@ export type OpportunityRow = {
   period: BudgetPeriod | null;
   collaboration_type: CollaborationType | null;
   objectives: ObjectiveTag[] | null;
+  sponsor_level: SponsorLevel | null;
+  exclusivity: string | null;
+  team_id: string | null;
   archived_at: string | null;
   created_at: string;
   updated_at: string;
@@ -43,6 +47,12 @@ export function opportunityRowToOpportunity(row: OpportunityRow): Opportunity {
     period: row.period,
     collaborationType: row.collaboration_type,
     objectives: row.objectives ?? [],
+    // `sponsor_level` es NOT NULL en base de datos, pero se acepta null
+    // aquí por si la fila viene de una consulta hecha antes de aplicar la
+    // migración 0011.
+    sponsorLevel: row.sponsor_level ?? "libre",
+    exclusivity: row.exclusivity,
+    teamId: row.team_id,
     archivedAt: row.archived_at,
     createdAt: row.created_at,
     updatedAt: row.updated_at,

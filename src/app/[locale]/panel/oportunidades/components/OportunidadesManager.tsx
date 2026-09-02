@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { Opportunity, OpportunityStatus } from "@/lib/types";
+import type { ClubTeam, Opportunity, OpportunityStatus } from "@/lib/types";
 import { ESTADOS_OPORTUNIDAD } from "@/lib/opportunities";
 import { NuevaOportunidad } from "./NuevaOportunidad";
 import { TarjetaOportunidad } from "./TarjetaOportunidad";
@@ -11,7 +11,13 @@ type Orden = "recientes" | "valor_desc" | "valor_asc";
 
 /** Panel principal de la Fase 6: alta de oportunidades + catálogo del
  * club con filtros por estado y valor. */
-export function OportunidadesManager({ oportunidades }: { oportunidades: Opportunity[] }) {
+export function OportunidadesManager({
+  oportunidades,
+  equipos = [],
+}: {
+  oportunidades: Opportunity[];
+  equipos?: ClubTeam[];
+}) {
   const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>("todas");
   const [orden, setOrden] = useState<Orden>("recientes");
   const [mostrarArchivadas, setMostrarArchivadas] = useState(false);
@@ -36,7 +42,7 @@ export function OportunidadesManager({ oportunidades }: { oportunidades: Opportu
 
   return (
     <div className="space-y-6">
-      <NuevaOportunidad key={oportunidades.length} />
+      <NuevaOportunidad key={oportunidades.length} equipos={equipos} />
 
       <div className="rounded-xl border border-zinc-200 bg-white p-4">
         <div className="flex flex-wrap items-end gap-4">
@@ -90,7 +96,7 @@ export function OportunidadesManager({ oportunidades }: { oportunidades: Opportu
       ) : (
         <ul className="space-y-3">
           {visibles.map((oportunidad) => (
-            <TarjetaOportunidad key={oportunidad.id} oportunidad={oportunidad} />
+            <TarjetaOportunidad key={oportunidad.id} oportunidad={oportunidad} equipos={equipos} />
           ))}
         </ul>
       )}

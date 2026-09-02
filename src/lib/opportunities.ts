@@ -1,4 +1,11 @@
-import type { BudgetPeriod, CollaborationType, ObjectiveTag, OpportunityStatus, OpportunityType } from "@/lib/types";
+import type {
+  BudgetPeriod,
+  CollaborationType,
+  ObjectiveTag,
+  OpportunityStatus,
+  OpportunityType,
+  SponsorLevel,
+} from "@/lib/types";
 
 /**
  * Constantes, plantillas y helpers compartidos por el panel del club
@@ -30,6 +37,55 @@ export const ETIQUETA_ESTADO_OPORTUNIDAD: Record<OpportunityStatus, string> = ES
   (acumulado, estado) => ({ ...acumulado, [estado.id]: estado.etiqueta }),
   {} as Record<OpportunityStatus, string>,
 );
+
+// ---------------------------------------------------------------------
+// Nivel de patrocinador y exclusividad
+// ---------------------------------------------------------------------
+
+export const NIVELES_PATROCINIO: { id: SponsorLevel; etiqueta: string; ayuda: string }[] = [
+  {
+    id: "principal",
+    etiqueta: "Patrocinador principal",
+    ayuda: "El patrocinio de mayor visibilidad del club.",
+  },
+  {
+    id: "oficial",
+    etiqueta: "Patrocinador oficial",
+    ayuda: "Patrocinador destacado, normalmente en exclusiva dentro de su sector.",
+  },
+  {
+    id: "colaborador",
+    etiqueta: "Colaborador",
+    ayuda: "Colaboración de menor tamaño, sin exclusividad.",
+  },
+  { id: "libre", etiqueta: "Sin categoría", ayuda: "No encaja en ninguno de los niveles anteriores." },
+];
+
+export const ETIQUETA_NIVEL_PATROCINIO: Record<SponsorLevel, string> = NIVELES_PATROCINIO.reduce(
+  (acumulado, nivel) => ({ ...acumulado, [nivel.id]: nivel.etiqueta }),
+  {} as Record<SponsorLevel, string>,
+);
+
+/** Colores de la etiqueta de nivel, del más destacado al más discreto. */
+export const CLASES_NIVEL_PATROCINIO: Record<SponsorLevel, string> = {
+  principal: "bg-brand-navy text-white",
+  oficial: "bg-brand-teal-light text-brand-teal-dark",
+  colaborador: "bg-zinc-100 text-zinc-700",
+  libre: "bg-zinc-100 text-zinc-500",
+};
+
+/** Descripción corta de un equipo asociado, para mostrarla en una tarjeta. */
+export function etiquetaEquipo(partes: {
+  sport?: string | null;
+  category?: string | null;
+  gender?: string | null;
+}): string | null {
+  const texto = [partes.sport, partes.category, partes.gender]
+    .map((parte) => parte?.trim())
+    .filter((parte): parte is string => !!parte)
+    .join(" · ");
+  return texto || null;
+}
 
 // ---------------------------------------------------------------------
 // Fase 7: buscador (forma de colaboración, objetivo y periodo)

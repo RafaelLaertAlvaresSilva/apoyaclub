@@ -4,7 +4,11 @@ import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { LOCALE_CONFIG } from "@/config/locales";
 import type { AppLocale } from "@/i18n/routing";
-import { formatoValorOportunidad } from "@/lib/opportunities";
+import {
+  CLASES_NIVEL_PATROCINIO,
+  ETIQUETA_NIVEL_PATROCINIO,
+  formatoValorOportunidad,
+} from "@/lib/opportunities";
 import { SITE_URL } from "@/lib/site";
 import type { ClubTeam, SocialLinks } from "@/lib/types";
 import { CompartirBoton } from "./components/CompartirBoton";
@@ -241,13 +245,29 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                   className="flex flex-col gap-2 rounded-xl border border-teal-100 bg-white p-4"
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <p className="font-semibold text-zinc-900">{oportunidad.title}</p>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="font-semibold text-zinc-900">{oportunidad.title}</p>
+                      {oportunidad.sponsorLevel !== "libre" && (
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                            CLASES_NIVEL_PATROCINIO[oportunidad.sponsorLevel]
+                          }`}
+                        >
+                          {ETIQUETA_NIVEL_PATROCINIO[oportunidad.sponsorLevel]}
+                        </span>
+                      )}
+                    </div>
                     <p className="whitespace-nowrap text-lg font-bold text-teal-700">
                       {formatoValorOportunidad.format(oportunidad.value)}
                     </p>
                   </div>
                   {oportunidad.description && (
                     <p className="text-sm text-zinc-600">{oportunidad.description}</p>
+                  )}
+                  {oportunidad.exclusivity && (
+                    <p className="text-xs font-medium text-brand-teal-dark">
+                      En exclusiva para el sector: {oportunidad.exclusivity}
+                    </p>
                   )}
                   {oportunidad.duration && (
                     <p className="text-xs font-medium text-zinc-400">{oportunidad.duration}</p>

@@ -4,13 +4,20 @@ import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 import { clasesInput } from "@/app/[locale]/panel/components/SeccionCard";
 import { filtrosAQueryString, RADIOS_KM } from "@/lib/buscar-params";
-import { FORMAS_COLABORACION, OBJETIVOS_OPORTUNIDAD, PERIODOS_OPORTUNIDAD, TIPOS_OPORTUNIDAD } from "@/lib/opportunities";
+import {
+  FORMAS_COLABORACION,
+  NIVELES_PATROCINIO,
+  OBJETIVOS_OPORTUNIDAD,
+  PERIODOS_OPORTUNIDAD,
+  TIPOS_OPORTUNIDAD,
+} from "@/lib/opportunities";
 import type { FiltrosBusqueda, VistaBusqueda } from "@/lib/search-types";
 import type {
   BudgetPeriod,
   CollaborationType,
   ObjectiveTag,
   OpportunityType,
+  SponsorLevel,
   TeamLevel,
 } from "@/lib/types";
 
@@ -49,6 +56,7 @@ function leerFiltrosDelFormulario(formData: FormData): FiltrosBusqueda {
     periodo: texto("periodo") as BudgetPeriod | undefined,
     formasColaboracion: leerListaMarcada<CollaborationType>(formData, "forma"),
     objetivos: leerListaMarcada<ObjectiveTag>(formData, "objetivo"),
+    niveles: leerListaMarcada<SponsorLevel>(formData, "patrocinio"),
     orden: (texto("orden") as FiltrosBusqueda["orden"]) ?? "novedad",
   };
 }
@@ -224,6 +232,25 @@ export function FiltrosBuscador({
                 className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
               />
               {forma.etiqueta}
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <p className={clasesEtiquetaGrupo}>Nivel de patrocinador</p>
+        <div className="grid grid-cols-1 gap-2">
+          {NIVELES_PATROCINIO.map((nivel) => (
+            <label key={nivel.id} className={clasesCheckbox} title={nivel.ayuda}>
+              <input
+                type="checkbox"
+                name="patrocinio"
+                value={nivel.id}
+                defaultChecked={filtrosIniciales.niveles?.includes(nivel.id) ?? false}
+                onChange={(evento) => aplicar(evento.currentTarget.form!)}
+                className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
+              />
+              {nivel.etiqueta}
             </label>
           ))}
         </div>

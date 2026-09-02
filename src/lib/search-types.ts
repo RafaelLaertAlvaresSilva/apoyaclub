@@ -1,4 +1,11 @@
-import type { BudgetPeriod, CollaborationType, ObjectiveTag, OpportunityType, TeamLevel } from "@/lib/types";
+import type {
+  BudgetPeriod,
+  CollaborationType,
+  ObjectiveTag,
+  OpportunityType,
+  SponsorLevel,
+  TeamLevel,
+} from "@/lib/types";
 
 /**
  * Tipos y funciones puras del buscador (Fase 7), separados de
@@ -26,6 +33,8 @@ export type FiltrosBusqueda = {
   periodo?: BudgetPeriod;
   formasColaboracion?: CollaborationType[];
   objetivos?: ObjectiveTag[];
+  /** Nivel de patrocinador: principal, oficial, colaborador o libre. */
+  niveles?: SponsorLevel[];
   orden?: OrdenBusqueda;
 };
 
@@ -45,6 +54,11 @@ export type ResultadoOportunidad = {
   period: BudgetPeriod | null;
   collaborationType: CollaborationType | null;
   objectives: ObjectiveTag[];
+  sponsorLevel: SponsorLevel;
+  /** Sector en exclusiva, si la oportunidad la lleva. */
+  exclusivity: string | null;
+  /** Equipo asociado ya formateado ("Balonmano · Cadete · Masculino"), o null. */
+  teamLabel: string | null;
   createdAt: string;
   /** Distancia al centro de búsqueda, o null si no había radio activo o el club no está geocodificado. */
   distanceKm: number | null;

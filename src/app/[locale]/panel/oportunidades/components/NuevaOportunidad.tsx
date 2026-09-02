@@ -1,13 +1,13 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import type { OpportunityType } from "@/lib/types";
+import type { ClubTeam, OpportunityType } from "@/lib/types";
 import type { PlantillaOportunidad } from "@/lib/opportunities";
 import { crearOportunidad } from "../actions";
 import { OportunidadForm } from "./OportunidadForm";
 import { PlantillasRapidas } from "./PlantillasRapidas";
 
-export function NuevaOportunidad() {
+export function NuevaOportunidad({ equipos = [] }: { equipos?: ClubTeam[] }) {
   const [abierto, setAbierto] = useState(false);
   const [plantilla, setPlantilla] = useState<{ tipo: OpportunityType; datos: PlantillaOportunidad } | null>(
     null,
@@ -48,6 +48,7 @@ export function NuevaOportunidad() {
         key={plantilla ? `${plantilla.tipo}-${plantilla.datos.title}` : "en-blanco"}
         accion={formAction}
         estado={estado}
+        equipos={equipos}
         textoBoton="Crear oportunidad"
         valoresIniciales={
           plantilla

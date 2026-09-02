@@ -6,11 +6,21 @@ import { Campo, SeccionCard, clasesInput, clasesTextarea } from "@/app/[locale]/
 import {
   ESTADOS_OPORTUNIDAD,
   FORMAS_COLABORACION,
+  NIVELES_PATROCINIO,
   OBJETIVOS_OPORTUNIDAD,
   PERIODOS_OPORTUNIDAD,
   TIPOS_OPORTUNIDAD,
+  etiquetaEquipo,
 } from "@/lib/opportunities";
-import type { BudgetPeriod, CollaborationType, ObjectiveTag, OpportunityStatus, OpportunityType } from "@/lib/types";
+import type {
+  BudgetPeriod,
+  ClubTeam,
+  CollaborationType,
+  ObjectiveTag,
+  OpportunityStatus,
+  OpportunityType,
+  SponsorLevel,
+} from "@/lib/types";
 import type { EstadoGuardado } from "../actions";
 
 export type ValoresOportunidad = {
@@ -24,6 +34,11 @@ export type ValoresOportunidad = {
   period?: BudgetPeriod | null;
   collaborationType?: CollaborationType | null;
   objectives?: ObjectiveTag[];
+  // Campos de la Fase 2 que faltaban: nivel de patrocinador,
+  // exclusividad de sector y equipo asociado.
+  sponsorLevel?: SponsorLevel;
+  exclusivity?: string | null;
+  teamId?: string | null;
 };
 
 /**
@@ -40,6 +55,7 @@ export function OportunidadForm({
   mostrarEstado = false,
   textoBoton,
   onCancelar,
+  equipos = [],
 }: {
   titulo?: string;
   idOportunidad?: string;
@@ -49,6 +65,8 @@ export function OportunidadForm({
   mostrarEstado?: boolean;
   textoBoton: string;
   onCancelar?: () => void;
+  /** Equipos del club, para poder asociar la oportunidad a uno concreto. */
+  equipos?: ClubTeam[];
 }) {
   const contenidoFormulario = (
     <form action={accion} className="space-y-4">
@@ -151,6 +169,52 @@ export function OportunidadForm({
           </select>
         </Campo>
       </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Campo
+          etiqueta="Nivel de patrocinador"
+          ayuda="Es lo primero que mira una empresa: si esto es el patrocinio principal del club o una colaboración pequeña. Se puede filtrar por él en el buscador."
+        >
+          <select
+            name="sponsorLevel"
+            defaultValue={valoresIniciales?.sponsorLevel ?? "libre"}
+            className={clasesInput}
+          >
+            {NIVELES_PATROCINIO.map((nivel) => (
+              <option key={nivel.id} value={nivel.id}>
+                {nivel.etiqueta}
+              </option>
+            ))}
+          </select>
+        </Campo>
+
+        <Campo
+          etiqueta="Exclusividad de sector"
+          ayuda='Si la empresa que lo contrate será la única de su sector. Ejemplos: "automoción", "seguros", "supermercados". Déjalo vacío si no hay exclusividad.'
+        >
+          <input
+            name="exclusivity"
+            defaultValue={valoresIniciales?.exclusivity ?? ""}
+            className={clasesInput}
+          />
+        </Campo>
+      </div>
+
+      {equipos.length > 0 && (
+        <Campo
+          etiqueta="Equipo asociado"
+          ayuda="Si la oportunidad es de un equipo concreto (el primer equipo, un equipo de cantera). Déjalo en blanco si es del club entero."
+        >
+          <select name="teamId" defaultValue={valoresIniciales?.teamId ?? ""} className={clasesInput}>
+            <option value="">Todo el club</option>
+            {equipos.map((equipo) => (
+              <option key={equipo.id} value={equipo.id}>
+                {etiquetaEquipo(equipo) ?? equipo.sport}
+              </option>
+            ))}
+          </select>
+        </Campo>
+      )}
 
       <Campo
         etiqueta="Objetivo"

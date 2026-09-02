@@ -1,7 +1,14 @@
 import { cajaDelimitadora, distanciaKm, geocodificarDireccion, type Coordenadas } from "@/lib/geocoding";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createPublicClient } from "@/lib/supabase/public";
-import type { BudgetPeriod, CollaborationType, ObjectiveTag, OpportunityType } from "@/lib/types";
+import { etiquetaEquipo } from "@/lib/opportunities";
+import type {
+  BudgetPeriod,
+  CollaborationType,
+  ObjectiveTag,
+  OpportunityType,
+  SponsorLevel,
+} from "@/lib/types";
 import {
   agruparPorClub,
   type FiltrosBusqueda,
@@ -64,6 +71,11 @@ type FilaBusqueda = {
   club_logo_url: string | null;
   club_latitude: number | null;
   club_longitude: number | null;
+  sponsor_level: SponsorLevel | null;
+  exclusivity: string | null;
+  team_sport: string | null;
+  team_category: string | null;
+  team_gender: string | null;
 };
 
 function filaAResultado(fila: FilaBusqueda, centro: Coordenadas | null): ResultadoOportunidad {
@@ -83,6 +95,13 @@ function filaAResultado(fila: FilaBusqueda, centro: Coordenadas | null): Resulta
     period: fila.period,
     collaborationType: fila.collaboration_type,
     objectives: fila.objectives ?? [],
+    sponsorLevel: fila.sponsor_level ?? "libre",
+    exclusivity: fila.exclusivity,
+    teamLabel: etiquetaEquipo({
+      sport: fila.team_sport,
+      category: fila.team_category,
+      gender: fila.team_gender,
+    }),
     createdAt: fila.opportunity_created_at,
     distanceKm:
       centro && fila.club_latitude != null && fila.club_longitude != null
@@ -176,6 +195,9 @@ export async function buscarOportunidades(
   }
   if (filtros.objetivos && filtros.objetivos.length > 0) {
     consulta = consulta.overlaps("objectives", filtros.objetivos);
+  }
+  if (filtros.niveles && filtros.niveles.length > 0) {
+    consulta = consulta.in("sponsor_level", filtros.niveles);
   }
 
   if (usaRadio && centro) {

@@ -2,7 +2,7 @@ import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
-import { clubRowToProfile, type ClubRow } from "@/lib/club-mappers";
+import { clubRowToProfile, clubTeamRowToTeam, type ClubRow, type ClubTeamRow } from "@/lib/club-mappers";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
 import { createClient } from "@/lib/supabase/server";
 import { PanelNav } from "../components/PanelNav";
@@ -21,7 +21,7 @@ export default async function OportunidadesPage() {
     return redirect({ href: "/login", locale });
   }
 
-  const [{ data: filaClub }, { data: filasOportunidades }] = await Promise.all([
+  const [{ data: filaClub }, { data: filasOportunidades }, { data: filasEquipos }] = await Promise.all([
     supabase.from("clubs").select("*").eq("id", user.id).maybeSingle<ClubRow>(),
     supabase
       .from("opportunities")
@@ -29,10 +29,19 @@ export default async function OportunidadesPage() {
       .eq("club_id", user.id)
       .order("created_at", { ascending: false })
       .returns<OpportunityRow[]>(),
+    // Los equipos del club se cargan aquí para poder asociar una
+    // oportunidad a uno concreto (primer equipo, un equipo de cantera).
+    supabase
+      .from("club_teams")
+      .select("*")
+      .eq("club_id", user.id)
+      .order("created_at", { ascending: true })
+      .returns<ClubTeamRow[]>(),
   ]);
 
   const perfil = filaClub ? clubRowToProfile(filaClub) : null;
   const oportunidades = (filasOportunidades ?? []).map(opportunityRowToOpportunity);
+  const equipos = (filasEquipos ?? []).map(clubTeamRowToTeam);
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
@@ -55,7 +64,7 @@ export default async function OportunidadesPage() {
           para poder publicar oportunidades de patrocinio.
         </div>
       ) : (
-        <OportunidadesManager oportunidades={oportunidades} />
+        <OportunidadesManager oportunidades={oportunidades} equipos={equipos} />
       )}
     </div>
   );

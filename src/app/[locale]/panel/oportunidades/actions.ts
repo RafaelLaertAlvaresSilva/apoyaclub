@@ -10,6 +10,7 @@ import type {
   OpportunityStatus,
   OpportunityType,
   Role,
+  SponsorLevel,
 } from "@/lib/types";
 
 export type EstadoGuardado = { error: string; ok?: false } | { ok: true; error?: undefined } | null;
@@ -42,6 +43,8 @@ const OBJETIVOS_VALIDOS: ObjectiveTag[] = [
   "empleados",
   "rsc",
 ];
+
+const NIVELES_VALIDOS: SponsorLevel[] = ["principal", "oficial", "colaborador", "libre"];
 
 /**
  * Igual que `obtenerClubActual` de `app/panel/actions.ts`: recupera el
@@ -104,6 +107,34 @@ function leerPeriodo(formData: FormData): BudgetPeriod | null {
   return (PERIODOS_VALIDOS as string[]).includes(valor) ? (valor as BudgetPeriod) : null;
 }
 
+function leerNivelPatrocinio(formData: FormData): SponsorLevel {
+  const valor = String(formData.get("sponsorLevel") ?? "");
+  return (NIVELES_VALIDOS as string[]).includes(valor) ? (valor as SponsorLevel) : "libre";
+}
+
+/**
+ * El equipo asociado tiene que ser un equipo del propio club: si no, se
+ * guarda como null. Se comprueba contra la base de datos porque el valor
+ * llega de un formulario y un `select` se puede manipular.
+ */
+async function leerEquipo(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  clubId: string,
+  formData: FormData,
+): Promise<string | null> {
+  const valor = String(formData.get("teamId") ?? "").trim();
+  if (!valor) return null;
+
+  const { data } = await supabase
+    .from("club_teams")
+    .select("id")
+    .eq("id", valor)
+    .eq("club_id", clubId)
+    .maybeSingle();
+
+  return data ? valor : null;
+}
+
 function leerObjetivos(formData: FormData): ObjectiveTag[] {
   return formData
     .getAll("objectives")
@@ -141,6 +172,9 @@ export async function crearOportunidad(
     period: leerPeriodo(formData),
     collaboration_type: leerFormaColaboracion(formData),
     objectives: leerObjetivos(formData),
+    sponsor_level: leerNivelPatrocinio(formData),
+    exclusivity: leerTexto(formData, "exclusivity"),
+    team_id: await leerEquipo(supabase, user.id, formData),
   });
 
   if (error) return { error: "No se ha podido crear la oportunidad." };
@@ -185,6 +219,9 @@ export async function actualizarOportunidad(
       period: leerPeriodo(formData),
       collaboration_type: leerFormaColaboracion(formData),
       objectives: leerObjetivos(formData),
+      sponsor_level: leerNivelPatrocinio(formData),
+      exclusivity: leerTexto(formData, "exclusivity"),
+      team_id: await leerEquipo(supabase, user.id, formData),
       status,
     })
     .eq("id", id)
@@ -230,7 +267,9 @@ export async function duplicarOportunidad(formData: FormData): Promise<void> {
 
   const { data: original } = await supabase
     .from("opportunities")
-    .select("title, description, opportunity_type, value, duration, period, collaboration_type, objectives")
+    .select(
+      "title, description, opportunity_type, value, duration, period, collaboration_type, objectives, sponsor_level, exclusivity, team_id",
+    )
     .eq("id", id)
     .eq("club_id", user.id)
     .maybeSingle();
@@ -247,6 +286,9 @@ export async function duplicarOportunidad(formData: FormData): Promise<void> {
     period: original.period,
     collaboration_type: original.collaboration_type,
     objectives: original.objectives,
+    sponsor_level: original.sponsor_level,
+    exclusivity: original.exclusivity,
+    team_id: original.team_id,
   });
 
   revalidatePath(RUTA_OPORTUNIDADES);

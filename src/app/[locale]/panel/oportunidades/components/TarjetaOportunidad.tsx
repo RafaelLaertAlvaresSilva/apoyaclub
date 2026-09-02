@@ -1,8 +1,14 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import type { Opportunity, OpportunityStatus } from "@/lib/types";
-import { ESTADOS_OPORTUNIDAD, ETIQUETA_TIPO_OPORTUNIDAD, formatoValorOportunidad } from "@/lib/opportunities";
+import type { ClubTeam, Opportunity, OpportunityStatus } from "@/lib/types";
+import {
+  CLASES_NIVEL_PATROCINIO,
+  ESTADOS_OPORTUNIDAD,
+  ETIQUETA_NIVEL_PATROCINIO,
+  ETIQUETA_TIPO_OPORTUNIDAD,
+  formatoValorOportunidad,
+} from "@/lib/opportunities";
 import {
   actualizarOportunidad,
   archivarOportunidad,
@@ -19,12 +25,26 @@ const ESTILO_ESTADO: Record<OpportunityStatus, string> = {
   closed: "bg-zinc-400 text-white",
 };
 
-export function TarjetaOportunidad({ oportunidad }: { oportunidad: Opportunity }) {
+export function TarjetaOportunidad({
+  oportunidad,
+  equipos = [],
+}: {
+  oportunidad: Opportunity;
+  equipos?: ClubTeam[];
+}) {
   const [enEdicion, setEnEdicion] = useState(false);
 
   if (enEdicion) {
-    return <EditorOportunidad oportunidad={oportunidad} onCerrar={() => setEnEdicion(false)} />;
+    return (
+      <EditorOportunidad
+        oportunidad={oportunidad}
+        equipos={equipos}
+        onCerrar={() => setEnEdicion(false)}
+      />
+    );
   }
+
+  const equipoAsociado = equipos.find((equipo) => equipo.id === oportunidad.teamId) ?? null;
 
   return (
     <li className="rounded-xl border border-zinc-200 bg-white p-5">
@@ -32,6 +52,15 @@ export function TarjetaOportunidad({ oportunidad }: { oportunidad: Opportunity }
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="font-semibold text-zinc-900">{oportunidad.title}</h3>
+            {oportunidad.sponsorLevel !== "libre" && (
+              <span
+                className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                  CLASES_NIVEL_PATROCINIO[oportunidad.sponsorLevel]
+                }`}
+              >
+                {ETIQUETA_NIVEL_PATROCINIO[oportunidad.sponsorLevel]}
+              </span>
+            )}
             {oportunidad.archivedAt && (
               <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-500">
                 Archivada
@@ -41,7 +70,13 @@ export function TarjetaOportunidad({ oportunidad }: { oportunidad: Opportunity }
           <p className="mt-0.5 text-sm text-zinc-500">
             {ETIQUETA_TIPO_OPORTUNIDAD[oportunidad.opportunityType]}
             {oportunidad.duration ? ` · ${oportunidad.duration}` : ""}
+            {equipoAsociado ? ` · ${equipoAsociado.sport} ${equipoAsociado.category ?? ""}`.trimEnd() : ""}
           </p>
+          {oportunidad.exclusivity && (
+            <p className="mt-1 text-xs font-medium text-brand-teal-dark">
+              En exclusiva para el sector: {oportunidad.exclusivity}
+            </p>
+          )}
           {oportunidad.description && (
             <p className="mt-2 text-sm text-zinc-600">{oportunidad.description}</p>
           )}
@@ -137,9 +172,11 @@ export function TarjetaOportunidad({ oportunidad }: { oportunidad: Opportunity }
 function EditorOportunidad({
   oportunidad,
   onCerrar,
+  equipos,
 }: {
   oportunidad: Opportunity;
   onCerrar: () => void;
+  equipos: ClubTeam[];
 }) {
   const [estado, formAction] = useActionState(actualizarOportunidad, null);
 
@@ -150,6 +187,7 @@ function EditorOportunidad({
         accion={formAction}
         estado={estado}
         mostrarEstado
+        equipos={equipos}
         textoBoton="Guardar cambios"
         onCancelar={onCerrar}
         valoresIniciales={{
@@ -162,6 +200,9 @@ function EditorOportunidad({
           period: oportunidad.period,
           collaborationType: oportunidad.collaborationType,
           objectives: oportunidad.objectives,
+          sponsorLevel: oportunidad.sponsorLevel,
+          exclusivity: oportunidad.exclusivity,
+          teamId: oportunidad.teamId,
         }}
       />
     </li>
