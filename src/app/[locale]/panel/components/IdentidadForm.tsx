@@ -11,6 +11,8 @@ import {
   eliminarFoto,
   guardarIdentidad,
   guardarLogo,
+  guardarPortada,
+  quitarPortada,
   registrarConfirmacionMenores,
 } from "../actions";
 import { Campo, SeccionCard, clasesInput, clasesTextarea } from "./SeccionCard";
@@ -49,6 +51,49 @@ export function IdentidadForm({
       )}
 
       <div className="mb-6 space-y-4">
+        <Campo
+          etiqueta="Imagen de portada"
+          ayuda="La foto ancha de arriba del todo de tu página. Apaisada y de buena calidad: es lo primero que ve una empresa."
+        >
+          <div className="space-y-3">
+            {perfil?.coverUrl ? (
+              <div className="relative">
+                <Image
+                  src={perfil.coverUrl}
+                  alt="Portada del club"
+                  width={640}
+                  height={180}
+                  className="h-28 w-full rounded-lg border border-zinc-200 object-cover sm:h-36"
+                  unoptimized
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    iniciarTransicion(async () => {
+                      manejarErrorAccion(await quitarPortada());
+                    })
+                  }
+                  className="absolute right-2 top-2 rounded-lg bg-white/90 px-2 py-1 text-xs font-medium text-red-600 shadow-sm"
+                >
+                  Quitar
+                </button>
+              </div>
+            ) : (
+              <div className="flex h-28 w-full items-center justify-center rounded-lg border border-dashed border-zinc-300 text-xs text-zinc-500 sm:h-36">
+                Sin portada
+              </div>
+            )}
+            <ImageUploader
+              userId={userId}
+              carpeta="fotos"
+              label={perfil?.coverUrl ? "Cambiar portada" : "Subir portada"}
+              onSubido={async (url) => {
+                manejarErrorAccion(await guardarPortada(url));
+              }}
+            />
+          </div>
+        </Campo>
+
         <Campo etiqueta={t("logoDelClub")}>
           <div className="flex items-center gap-4">
             {perfil?.logoUrl ? (
@@ -175,15 +220,6 @@ export function IdentidadForm({
           </Campo>
         </div>
 
-        <Campo etiqueta={t("instalaciones")}>
-          <input
-            name="facilities"
-            defaultValue={perfil?.facilities ?? ""}
-            placeholder={t("campoPabellonCapacidad")}
-            className={clasesInput}
-          />
-        </Campo>
-
         <div className="grid gap-4 sm:grid-cols-2">
           <Campo etiqueta={t("web")}>
             <input
@@ -284,6 +320,19 @@ export function IdentidadForm({
               type="email"
               defaultValue={perfil?.contactEmail ?? ""}
               placeholder="patrocinios@tuclub.es"
+              className={clasesInput}
+            />
+          </Campo>
+
+          <Campo
+            etiqueta="Horario de atención"
+            ayuda="Cuándo se os puede llamar. Ahorra llamadas perdidas por las dos partes."
+          >
+            <input
+              name="contactHours"
+              defaultValue={perfil?.contactHours ?? ""}
+              placeholder="De lunes a viernes, de 17:00 a 21:00"
+              maxLength={200}
               className={clasesInput}
             />
           </Campo>

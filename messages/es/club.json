@@ -45,7 +45,10 @@
     "escribirEmail": "Escribir email",
     "llamar": "Llamar",
     "verContacto": "Ver datos de contacto",
-    "verVideo": "Ver vídeo"
+    "verVideo": "Ver vídeo",
+    "contactoPersona": "Persona de contacto",
+    "contactoTelefono": "Teléfono",
+    "contactoHorario": "Horario de atención"
   },
   "pie": "Página de {club} en ApoyaClub — la plataforma que conecta clubes deportivos con empresas patrocinadoras.",
   "servicios": {

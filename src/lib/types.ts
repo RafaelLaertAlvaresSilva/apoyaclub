@@ -64,10 +64,16 @@ export type ClubProfile = {
   latitude: number | null;
   longitude: number | null;
   facilities: string | null;
+  /** Dónde juega el club (migración 0025). */
+  facilitiesAddress: string | null;
+  /** Fotos de las instalaciones, aparte de la galería del club. */
+  facilitiesPhotos: string[];
   website: string | null;
   socialLinks: SocialLinks;
   description: string | null;
   logoUrl: string | null;
+  /** Imagen de cabecera de la ficha, de lado a lado (migración 0025). */
+  coverUrl: string | null;
   photoUrls: string[];
   videoUrl: string | null;
 
@@ -78,6 +84,8 @@ export type ClubProfile = {
   contactPhone: string | null;
   /** Correo que el club publica. Si es null se usa el de su cuenta. */
   contactEmail: string | null;
+  /** Cuándo atiende el club. Texto libre: "L-V de 17 a 21 h". */
+  contactHours: string | null;
   contactPublicConsent: boolean;
 
   // Fase 12: insignia pública de "verificado", la decide un admin.

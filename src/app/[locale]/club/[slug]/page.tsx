@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
@@ -22,7 +23,7 @@ import { RegistrarVisita } from "./components/RegistrarVisita";
 import { SolicitarContactoBoton } from "./components/SolicitarContactoBoton";
 import { ETIQUETA_CATEGORIA_SERVICIO, obtenerServiciosDelClub } from "@/lib/service-needs";
 import { createPublicClient } from "@/lib/supabase/public";
-import { deportesDelClub, obtenerClubPublico, obtenerEmailContacto } from "./data";
+import { deportesDelClub, obtenerClubPublico } from "./data";
 
 export const revalidate = 60;
 
@@ -97,9 +98,6 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   if (!datos) notFound();
 
   const { perfil, equipos, patrocinadores, oportunidades } = datos;
-  // Solo interesa SI hay contacto, para decidir si se pinta la sección.
-  // El dato en sí lo pide el navegador al pulsar (ver DatosDeContacto).
-  const hayContacto = (await obtenerEmailContacto(perfil.id)) !== null;
   // Servicios que el club busca (migración 0016): la puerta de entrada
   // de la empresa que no tiene presupuesto de patrocinio pero sí un
   // servicio que ofrecer.
@@ -109,11 +107,27 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   const ubicacion = [perfil.city, perfil.province].filter(Boolean).join(", ");
   const urlPublica = `${SITE_URL}/${locale}/club/${perfil.slug}`;
 
-  const portada = perfil.photoUrls[0] ?? null;
-  const galeria = perfil.photoUrls.slice(1);
+  // La portada es ahora un campo propio (migración 0025). Si el club
+  // todavía no ha subido ninguna, se sigue usando la primera foto de la
+  // galería, como hasta ahora, para que ninguna ficha se quede sin
+  // cabecera de un día para otro.
+  const portada = perfil.coverUrl ?? perfil.photoUrls[0] ?? null;
+  const galeria = perfil.coverUrl ? perfil.photoUrls : perfil.photoUrls.slice(1);
 
   const redesSociales = (Object.entries(perfil.socialLinks) as [keyof SocialLinks, string | undefined][])
     .filter((entrada): entrada is [keyof SocialLinks, string] => !!entrada[1]);
+
+  // Cada red con lo que se sepa de ella: el enlace, los seguidores o
+  // ambos. Antes los enlaces vivían en la cabecera y los seguidores en
+  // "Audiencia", así que la empresa tenía que cruzar dos sitios para
+  // saber si el Instagram de 4.000 seguidores era el del club.
+  const redes = (Object.keys(ETIQUETA_RED) as (keyof SocialLinks)[])
+    .map((red) => ({
+      red,
+      url: perfil.socialLinks[red] ?? null,
+      seguidores: perfil.followersByNetwork[red] ?? null,
+    }))
+    .filter((entrada) => !!entrada.url || entrada.seguidores != null);
 
   const mostrarEnlaces = !!perfil.website || !!perfil.videoUrl || redesSociales.length > 0;
   const mostrarQuienesSomos = !!perfil.description || galeria.length > 0;
@@ -121,6 +135,8 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
     perfil.youthTeamsCount != null || perfil.youthPlayersCount != null || perfil.youthFamiliesCount != null;
   const mostrarPalmares = !!perfil.topCategory || !!perfil.competitions || !!perfil.achievements;
   const mostrarHistoria = perfil.foundingYear != null || perfil.milestones.length > 0;
+  const mostrarInstalaciones =
+    !!perfil.facilities || !!perfil.facilitiesAddress || perfil.facilitiesPhotos.length > 0;
 
   const estadisticasAudiencia = [
     perfil.estimatedReach != null
@@ -129,12 +145,6 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
     perfil.averageAttendance != null
       ? { etiqueta: t("secciones.asistenciaMedia"), valor: formatoNumero.format(perfil.averageAttendance) }
       : null,
-    ...(Object.entries(perfil.followersByNetwork) as [keyof SocialLinks, number | undefined][])
-      .filter((entrada): entrada is [keyof SocialLinks, number] => entrada[1] != null)
-      .map(([red, valor]) => ({
-        etiqueta: t("secciones.seguidoresEn", { red: ETIQUETA_RED[red] }),
-        valor: formatoNumero.format(valor),
-      })),
   ].filter((estadistica): estadistica is { etiqueta: string; valor: string } => estadistica !== null);
 
   const datosEstructurados = {
@@ -156,107 +166,28 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
     sameAs: redesSociales.map(([, url]) => url),
   };
 
-  return (
-    <div className="flex flex-1 flex-col bg-white">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados) }}
-      />
+  /**
+   * Las secciones de la ficha, en el orden en que se leen y solo las que
+   * este club tiene rellenadas.
+   *
+   * Está en una lista y no escrito a mano en el JSX porque el índice de
+   * botones de la cabecera se construye de aquí: así ningún botón puede
+   * llevar a una sección que no existe, y cambiar el orden es mover una
+   * línea en vez de mover cien de maquetación.
+   */
+  const secciones: { id: string; etiqueta: string; nodo: React.ReactNode }[] = [];
 
-      <RegistrarVisita slug={perfil.slug} />
-
-      <Header />
-
-      <header className="relative">
-        <div className="relative h-56 w-full overflow-hidden bg-gradient-to-br from-teal-600 to-teal-800 sm:h-72">
-          {portada && (
-            <Image
-              src={portada}
-              alt=""
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-            />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent" />
-        </div>
-
-        <div className="mx-auto -mt-14 flex max-w-4xl flex-col gap-4 px-4 sm:-mt-16 sm:flex-row sm:items-end sm:justify-between">
-          <div className="flex items-end gap-4">
-            <div className="h-24 w-24 shrink-0 overflow-hidden rounded-2xl border-4 border-white bg-white shadow-md sm:h-32 sm:w-32">
-              {perfil.logoUrl ? (
-                <Image
-                  src={perfil.logoUrl}
-                  alt={`Logo de ${perfil.name}`}
-                  width={128}
-                  height={128}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-teal-50 text-3xl font-bold text-teal-700">
-                  {perfil.name.charAt(0).toUpperCase()}
-                </div>
-              )}
-            </div>
-            <div className="pb-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl">{perfil.name}</h1>
-                {perfil.verified && (
-                  <span
-                    className="inline-flex items-center gap-1 rounded-full bg-teal-100 px-2.5 py-1 text-xs font-semibold text-teal-700"
-                    title={t("portada.verificadoAyuda")}
-                  >
-                    <span aria-hidden="true">&#10003;</span> {t("portada.verificado")}
-                  </span>
-                )}
-              </div>
-              <p className="mt-1 text-sm text-zinc-600 sm:text-base">
-                {[deportes.join(" · "), ubicacion].filter(Boolean).join(" · ")}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-2 pb-1">
-            <CompartirBoton url={urlPublica} titulo={t("portada.compartirTitulo", { club: perfil.name })} />
-            <SolicitarContactoBoton clubId={perfil.id} clubName={perfil.name}>
-              {t("portada.solicitarContacto")}
-            </SolicitarContactoBoton>
-            {hayContacto && (
-              <a
-                href="#contacto"
-                className="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
-              >
-                {t("portada.contactar")}
-              </a>
-            )}
-          </div>
-        </div>
-
-        {mostrarEnlaces && (
-          <div className="mx-auto mt-4 max-w-4xl px-4">
-            <div className="flex flex-wrap gap-2">
-              {perfil.website && <EnlaceSecundario href={perfil.website}>Sitio web</EnlaceSecundario>}
-              {perfil.videoUrl && <EnlaceSecundario href={perfil.videoUrl}>Vídeo de presentación</EnlaceSecundario>}
-              {redesSociales.map(([red, url]) => (
-                <EnlaceSecundario key={red} href={url}>
-                  {ETIQUETA_RED[red]}
-                </EnlaceSecundario>
-              ))}
-            </div>
-          </div>
-        )}
-      </header>
-
-      <section className="mx-auto w-full max-w-4xl px-4 pt-8">
+  secciones.push({
+    id: "oportunidades",
+    etiqueta: t("oportunidades.titulo"),
+    nodo: (
+      <section id="oportunidades" className="scroll-mt-24 pt-8">
         <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">
             {t("oportunidades.titulo")}
           </p>
           {oportunidades.length === 0 ? (
-            <p className="mt-2 text-zinc-700">
-              {t("oportunidades.vacio")}
-            </p>
+            <p className="mt-2 text-zinc-700">{t("oportunidades.vacio")}</p>
           ) : (
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {oportunidades.map((oportunidad) => (
@@ -323,283 +254,557 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
           )}
         </div>
       </section>
+    ),
+  });
 
-      <main className="mx-auto w-full max-w-4xl px-4 pb-16">
-        {mostrarQuienesSomos && (
-          <Seccion titulo={t("secciones.quienesSomos")}>
-            {perfil.description && (
-              <p className="whitespace-pre-line text-zinc-700">{perfil.description}</p>
+  if (mostrarQuienesSomos) {
+    secciones.push({
+      id: "quienes-somos",
+      etiqueta: t("secciones.quienesSomos"),
+      nodo: (
+        <Seccion id="quienes-somos" titulo={t("secciones.quienesSomos")}>
+          {perfil.description && (
+            <p className="whitespace-pre-line text-zinc-700">{perfil.description}</p>
+          )}
+          {galeria.length > 0 && (
+            <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {galeria.map((foto) => (
+                <div key={foto} className="relative aspect-square overflow-hidden rounded-lg bg-zinc-100">
+                  <Image
+                    src={foto}
+                    alt={`Foto de ${perfil.name}`}
+                    fill
+                    sizes="(min-width: 640px) 33vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </Seccion>
+      ),
+    });
+  }
+
+  if (equipos.length > 0) {
+    secciones.push({
+      id: "equipos",
+      etiqueta: t("secciones.equipos"),
+      nodo: (
+        <Seccion id="equipos" titulo={t("secciones.equipos")}>
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {equipos.map((equipo) => (
+              <li key={equipo.id} className="rounded-xl border border-zinc-200 p-4">
+                <p className="font-medium text-zinc-900">
+                  {equipo.sport}
+                  {equipo.category ? ` · ${equipo.category}` : ""}
+                </p>
+                <p className="mt-1 text-sm text-zinc-500">
+                  {ETIQUETA_NIVEL_EQUIPO[equipo.teamLevel]}
+                  {equipo.gender ? ` · ${equipo.gender}` : ""}
+                  {equipo.playerCount != null
+                    ? ` · ${formatoNumero.format(equipo.playerCount)} jugadores`
+                    : ""}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </Seccion>
+      ),
+    });
+  }
+
+  if (redes.length > 0) {
+    secciones.push({
+      id: "redes-sociales",
+      etiqueta: "Redes sociales",
+      nodo: (
+        <Seccion
+          id="redes-sociales"
+          titulo="Redes sociales"
+          descripcion="Dónde y a cuánta gente llega el club."
+        >
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {redes.map(({ red, url, seguidores }) => (
+              <li
+                key={red}
+                className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200 p-4"
+              >
+                <div className="min-w-0">
+                  <p className="font-medium text-zinc-900">{ETIQUETA_RED[red]}</p>
+                  {seguidores != null && (
+                    <p className="text-sm text-zinc-600">
+                      {formatoNumero.format(seguidores)} seguidores
+                    </p>
+                  )}
+                </div>
+                {url && (
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="shrink-0 rounded-lg border border-zinc-300 px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
+                  >
+                    Ver perfil ↗
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </Seccion>
+      ),
+    });
+  }
+
+  if (mostrarInstalaciones) {
+    secciones.push({
+      id: "instalaciones",
+      etiqueta: t("secciones.instalaciones"),
+      nodo: (
+        <Seccion id="instalaciones" titulo={t("secciones.instalaciones")}>
+          {perfil.facilitiesAddress && (
+            <p className="font-medium text-zinc-900">{perfil.facilitiesAddress}</p>
+          )}
+          {perfil.facilities && (
+            <p className="mt-2 whitespace-pre-line text-zinc-700">{perfil.facilities}</p>
+          )}
+          {perfil.facilitiesPhotos.length > 0 && (
+            <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {perfil.facilitiesPhotos.map((foto) => (
+                <div key={foto} className="relative aspect-video overflow-hidden rounded-lg bg-zinc-100">
+                  <Image
+                    src={foto}
+                    alt={`Instalaciones de ${perfil.name}`}
+                    fill
+                    sizes="(min-width: 640px) 33vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </Seccion>
+      ),
+    });
+  }
+
+  if (mostrarCantera) {
+    secciones.push({
+      id: "cantera",
+      etiqueta: t("secciones.cantera"),
+      nodo: (
+        <Seccion id="cantera" titulo={t("secciones.cantera")} descripcion={t("secciones.canteraDescripcion")}>
+          <div className="flex flex-wrap gap-3">
+            {perfil.youthTeamsCount != null && (
+              <TarjetaEstadistica etiqueta={t("secciones.canteraEquipos")} valor={formatoNumero.format(perfil.youthTeamsCount)} />
             )}
-            {galeria.length > 0 && (
-              <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                {galeria.map((foto) => (
-                  <div key={foto} className="relative aspect-square overflow-hidden rounded-lg bg-zinc-100">
-                    <Image
-                      src={foto}
-                      alt={`Foto de ${perfil.name}`}
-                      fill
-                      sizes="(min-width: 640px) 33vw, 50vw"
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
+            {perfil.youthPlayersCount != null && (
+              <TarjetaEstadistica etiqueta={t("secciones.canteraJugadores")} valor={formatoNumero.format(perfil.youthPlayersCount)} />
+            )}
+            {perfil.youthFamiliesCount != null && (
+              <TarjetaEstadistica etiqueta={t("secciones.canteraFamilias")} valor={formatoNumero.format(perfil.youthFamiliesCount)} />
+            )}
+          </div>
+        </Seccion>
+      ),
+    });
+  }
+
+  if (mostrarPalmares) {
+    secciones.push({
+      id: "palmares",
+      etiqueta: t("secciones.palmares"),
+      nodo: (
+        <Seccion id="palmares" titulo={t("secciones.palmares")}>
+          <div className="space-y-4">
+            {perfil.topCategory && (
+              <div>
+                <p className="text-sm font-medium text-zinc-500">{t("secciones.maximaCategoria")}</p>
+                <p className="text-zinc-900">{perfil.topCategory}</p>
               </div>
             )}
-          </Seccion>
-        )}
-
-        {equipos.length > 0 && (
-          <Seccion titulo={t("secciones.equipos")}>
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {equipos.map((equipo) => (
-                <li key={equipo.id} className="rounded-xl border border-zinc-200 p-4">
-                  <p className="font-medium text-zinc-900">
-                    {equipo.sport}
-                    {equipo.category ? ` · ${equipo.category}` : ""}
-                  </p>
-                  <p className="mt-1 text-sm text-zinc-500">
-                    {ETIQUETA_NIVEL_EQUIPO[equipo.teamLevel]}
-                    {equipo.gender ? ` · ${equipo.gender}` : ""}
-                    {equipo.playerCount != null
-                      ? ` · ${formatoNumero.format(equipo.playerCount)} jugadores`
-                      : ""}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </Seccion>
-        )}
-
-        {mostrarCantera && (
-          <Seccion titulo={t("secciones.cantera")} descripcion={t("secciones.canteraDescripcion")}>
-            <div className="flex flex-wrap gap-3">
-              {perfil.youthTeamsCount != null && (
-                <TarjetaEstadistica etiqueta={t("secciones.canteraEquipos")} valor={formatoNumero.format(perfil.youthTeamsCount)} />
-              )}
-              {perfil.youthPlayersCount != null && (
-                <TarjetaEstadistica etiqueta={t("secciones.canteraJugadores")} valor={formatoNumero.format(perfil.youthPlayersCount)} />
-              )}
-              {perfil.youthFamiliesCount != null && (
-                <TarjetaEstadistica etiqueta={t("secciones.canteraFamilias")} valor={formatoNumero.format(perfil.youthFamiliesCount)} />
-              )}
-            </div>
-          </Seccion>
-        )}
-
-        {mostrarPalmares && (
-          <Seccion titulo={t("secciones.palmares")}>
-            <div className="space-y-4">
-              {perfil.topCategory && (
-                <div>
-                  <p className="text-sm font-medium text-zinc-500">{t("secciones.maximaCategoria")}</p>
-                  <p className="text-zinc-900">{perfil.topCategory}</p>
-                </div>
-              )}
-              {perfil.competitions && (
-                <div>
-                  <p className="text-sm font-medium text-zinc-500">{t("secciones.competiciones")}</p>
-                  <p className="whitespace-pre-line text-zinc-900">{perfil.competitions}</p>
-                </div>
-              )}
-              {perfil.achievements && (
-                <div>
-                  <p className="text-sm font-medium text-zinc-500">{t("secciones.logros")}</p>
-                  <p className="whitespace-pre-line text-zinc-900">{perfil.achievements}</p>
-                </div>
-              )}
-            </div>
-          </Seccion>
-        )}
-
-        {mostrarHistoria && (
-          <Seccion titulo={t("secciones.historia")}>
-            {perfil.foundingYear != null && (
-              <p className="text-zinc-700">
-                {t("secciones.fundadoEn")}{" "}
-                <span className="font-medium text-zinc-900">{perfil.foundingYear}</span>.
-              </p>
+            {perfil.competitions && (
+              <div>
+                <p className="text-sm font-medium text-zinc-500">{t("secciones.competiciones")}</p>
+                <p className="whitespace-pre-line text-zinc-900">{perfil.competitions}</p>
+              </div>
             )}
-            {perfil.milestones.length > 0 && (
-              <ul className="mt-4 space-y-3 border-l-2 border-teal-200 pl-4">
-                {perfil.milestones
-                  .slice()
-                  .sort((a, b) => a.year - b.year)
-                  .map((hito, indice) => (
-                    <li key={`${hito.year}-${indice}`} className="flex items-start gap-3">
-                      {hito.photoUrl && (
+            {perfil.achievements && (
+              <div>
+                <p className="text-sm font-medium text-zinc-500">{t("secciones.logros")}</p>
+                <p className="whitespace-pre-line text-zinc-900">{perfil.achievements}</p>
+              </div>
+            )}
+          </div>
+        </Seccion>
+      ),
+    });
+  }
+
+  if (mostrarHistoria) {
+    secciones.push({
+      id: "historia",
+      etiqueta: t("secciones.historia"),
+      nodo: (
+        <Seccion id="historia" titulo={t("secciones.historia")}>
+          {perfil.foundingYear != null && (
+            <p className="text-zinc-700">
+              {t("secciones.fundadoEn")}{" "}
+              <span className="font-medium text-zinc-900">{perfil.foundingYear}</span>.
+            </p>
+          )}
+          {perfil.milestones.length > 0 && (
+            <ul className="mt-4 space-y-3 border-l-2 border-teal-200 pl-4">
+              {perfil.milestones
+                .slice()
+                .sort((a, b) => a.year - b.year)
+                .map((hito, indice) => (
+                  <li key={`${hito.year}-${indice}`} className="flex items-start gap-3">
+                    {hito.photoUrl && (
+                      <Image
+                        src={hito.photoUrl}
+                        alt=""
+                        width={72}
+                        height={72}
+                        className="h-18 w-18 shrink-0 rounded-lg object-cover"
+                      />
+                    )}
+                    <div className="min-w-0">
+                      <p>
+                        <span className="font-semibold text-teal-700">{hito.year}</span>{" "}
+                        <span className="text-zinc-700">{hito.text}</span>
+                      </p>
+                      {hito.videoUrl && (
+                        <a
+                          href={hito.videoUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-sm font-medium text-teal-700 hover:underline"
+                        >
+                          {t("secciones.verVideo")}
+                        </a>
+                      )}
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          )}
+        </Seccion>
+      ),
+    });
+  }
+
+  if (estadisticasAudiencia.length > 0) {
+    secciones.push({
+      id: "audiencia",
+      etiqueta: t("secciones.audiencia"),
+      nodo: (
+        <Seccion id="audiencia" titulo={t("secciones.audiencia")}>
+          <div className="flex flex-wrap gap-3">
+            {estadisticasAudiencia.map((estadistica) => (
+              <TarjetaEstadistica
+                key={estadistica.etiqueta}
+                etiqueta={estadistica.etiqueta}
+                valor={estadistica.valor}
+              />
+            ))}
+          </div>
+        </Seccion>
+      ),
+    });
+  }
+
+  if (perfil.communityActions.length > 0) {
+    secciones.push({
+      id: "comunidad",
+      etiqueta: t("secciones.comunidad"),
+      nodo: (
+        <Seccion id="comunidad" titulo={t("secciones.comunidad")} descripcion={t("secciones.comunidadDescripcion")}>
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {perfil.communityActions.map((accion, indice) => (
+              <li key={`${accion.title}-${indice}`} className="rounded-xl border border-zinc-200 p-4">
+                <p className="font-medium text-zinc-900">{accion.title}</p>
+                {accion.description && (
+                  <p className="mt-1 text-sm text-zinc-600">{accion.description}</p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </Seccion>
+      ),
+    });
+  }
+
+  if (patrocinadores.length > 0) {
+    secciones.push({
+      id: "patrocinadores",
+      etiqueta: t("secciones.patrocinadores"),
+      nodo: (
+        <Seccion id="patrocinadores" titulo={t("secciones.patrocinadores")}>
+          <div className="space-y-6">
+            {agruparPatrocinadoresPorNivel(patrocinadores).map((grupo) => (
+              <div key={grupo.etiqueta}>
+                <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                  {grupo.etiqueta}
+                </h3>
+                <ul className="grid gap-3 sm:grid-cols-2">
+                  {grupo.patrocinadores.map((patrocinador) => (
+                    <li
+                      key={patrocinador.id}
+                      className="flex items-start gap-3 rounded-xl border border-zinc-200 p-4"
+                    >
+                      {patrocinador.logoUrl ? (
                         <Image
-                          src={hito.photoUrl}
-                          alt=""
-                          width={72}
-                          height={72}
-                          className="h-18 w-18 shrink-0 rounded-lg object-cover"
+                          src={patrocinador.logoUrl}
+                          alt={patrocinador.name}
+                          width={40}
+                          height={40}
+                          className="h-10 w-10 shrink-0 rounded object-cover"
                         />
+                      ) : (
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-zinc-100 text-sm font-semibold text-zinc-500">
+                          {patrocinador.name.charAt(0).toUpperCase()}
+                        </div>
                       )}
                       <div className="min-w-0">
-                        <p>
-                          <span className="font-semibold text-teal-700">{hito.year}</span>{" "}
-                          <span className="text-zinc-700">{hito.text}</span>
+                        <p className="font-medium text-zinc-900">
+                          {patrocinador.name}
+                          {patrocinador.sinceYear && (
+                            <span className="ml-2 text-xs font-normal text-zinc-500">
+                              desde {patrocinador.sinceYear}
+                            </span>
+                          )}
                         </p>
-                        {hito.videoUrl && (
+                        {patrocinador.description && (
+                          <p className="mt-1 text-sm text-zinc-600">{patrocinador.description}</p>
+                        )}
+                        {patrocinador.website && (
                           <a
-                            href={hito.videoUrl}
+                            href={patrocinador.website}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-sm font-medium text-teal-700 hover:underline"
+                            className="text-sm text-teal-700 hover:underline"
                           >
-                            {t("secciones.verVideo")}
+                            {patrocinador.website.replace(/^https?:\/\//, "")}
                           </a>
                         )}
                       </div>
                     </li>
                   ))}
-              </ul>
-            )}
-          </Seccion>
-        )}
-
-        {estadisticasAudiencia.length > 0 && (
-          <Seccion titulo={t("secciones.audiencia")}>
-            <div className="flex flex-wrap gap-3">
-              {estadisticasAudiencia.map((estadistica) => (
-                <TarjetaEstadistica
-                  key={estadistica.etiqueta}
-                  etiqueta={estadistica.etiqueta}
-                  valor={estadistica.valor}
-                />
-              ))}
-            </div>
-          </Seccion>
-        )}
-
-        {perfil.communityActions.length > 0 && (
-          <Seccion titulo={t("secciones.comunidad")} descripcion={t("secciones.comunidadDescripcion")}>
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {perfil.communityActions.map((accion, indice) => (
-                <li key={`${accion.title}-${indice}`} className="rounded-xl border border-zinc-200 p-4">
-                  <p className="font-medium text-zinc-900">{accion.title}</p>
-                  {accion.description && (
-                    <p className="mt-1 text-sm text-zinc-600">{accion.description}</p>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </Seccion>
-        )}
-
-        {perfil.facilities && (
-          <Seccion titulo={t("secciones.instalaciones")}>
-            <p className="whitespace-pre-line text-zinc-700">{perfil.facilities}</p>
-          </Seccion>
-        )}
-
-        {patrocinadores.length > 0 && (
-          <Seccion titulo={t("secciones.patrocinadores")}>
-            <div className="space-y-6">
-              {agruparPatrocinadoresPorNivel(patrocinadores).map((grupo) => (
-                <div key={grupo.etiqueta}>
-                  <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                    {grupo.etiqueta}
-                  </h3>
-                  <ul className="grid gap-3 sm:grid-cols-2">
-                    {grupo.patrocinadores.map((patrocinador) => (
-                      <li
-                        key={patrocinador.id}
-                        className="flex items-start gap-3 rounded-xl border border-zinc-200 p-4"
-                      >
-                        {patrocinador.logoUrl ? (
-                          <Image
-                            src={patrocinador.logoUrl}
-                            alt={patrocinador.name}
-                            width={40}
-                            height={40}
-                            className="h-10 w-10 shrink-0 rounded object-cover"
-                          />
-                        ) : (
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-zinc-100 text-sm font-semibold text-zinc-500">
-                            {patrocinador.name.charAt(0).toUpperCase()}
-                          </div>
-                        )}
-                        <div className="min-w-0">
-                          <p className="font-medium text-zinc-900">
-                            {patrocinador.name}
-                            {patrocinador.sinceYear && (
-                              <span className="ml-2 text-xs font-normal text-zinc-500">
-                                desde {patrocinador.sinceYear}
-                              </span>
-                            )}
-                          </p>
-                          {patrocinador.description && (
-                            <p className="mt-1 text-sm text-zinc-600">{patrocinador.description}</p>
-                          )}
-                          {patrocinador.website && (
-                            <a
-                              href={patrocinador.website}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="text-sm text-teal-700 hover:underline"
-                            >
-                              {patrocinador.website.replace(/^https?:\/\//, "")}
-                            </a>
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </Seccion>
-        )}
-
-        {servicios.length > 0 && (
-          <Seccion titulo={t("servicios.titulo")} descripcion={t("servicios.descripcion")}>
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {servicios.map((servicio) => (
-                <li key={servicio.id} className="rounded-xl border border-zinc-200 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
-                    {ETIQUETA_CATEGORIA_SERVICIO[servicio.category]}
-                  </p>
-                  <p className="mt-1 font-medium text-zinc-900">{servicio.title}</p>
-                  {servicio.description && (
-                    <p className="mt-1 text-sm text-zinc-600">{servicio.description}</p>
-                  )}
-                  <div className="mt-3">
-                    <SolicitarContactoBoton
-                      clubId={perfil.id}
-                      clubName={perfil.name}
-                      variante="secundaria"
-                    >
-                      {t("servicios.ofrecer")}
-                    </SolicitarContactoBoton>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </Seccion>
-        )}
-
-        {hayContacto && (
-          <Seccion id="contacto" titulo={t("secciones.contacto")}>
-            <div className="rounded-xl border border-zinc-200 p-5">
-              {/* Los datos no se escriben en el HTML: se piden al pulsar
-                  (migración 0022). Así el correo del club no queda a la
-                  vista de los robots que recolectan direcciones, y el
-                  club puede ver cuántas empresas llegan hasta aquí. */}
-              <DatosDeContacto
-                slug={perfil.slug}
-                textoBoton={t("secciones.verContacto")}
-                textoEmail={t("secciones.escribirEmail")}
-                textoLlamar={t("secciones.llamar")}
-              />
-              <div className="mt-4 border-t border-zinc-100 pt-4">
-                <SolicitarContactoBoton clubId={perfil.id} clubName={perfil.name} variante="secundaria">
-                  {t("portada.solicitarContacto")}
-                </SolicitarContactoBoton>
+                </ul>
               </div>
+            ))}
+          </div>
+        </Seccion>
+      ),
+    });
+  }
+
+  if (servicios.length > 0) {
+    secciones.push({
+      id: "servicios",
+      etiqueta: t("servicios.titulo"),
+      nodo: (
+        <Seccion id="servicios" titulo={t("servicios.titulo")} descripcion={t("servicios.descripcion")}>
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {servicios.map((servicio) => (
+              <li key={servicio.id} className="rounded-xl border border-zinc-200 p-4">
+                <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
+                  {ETIQUETA_CATEGORIA_SERVICIO[servicio.category]}
+                </p>
+                <p className="mt-1 font-medium text-zinc-900">{servicio.title}</p>
+                {servicio.description && (
+                  <p className="mt-1 text-sm text-zinc-600">{servicio.description}</p>
+                )}
+                <div className="mt-3">
+                  <SolicitarContactoBoton
+                    clubId={perfil.id}
+                    clubName={perfil.name}
+                    variante="secundaria"
+                  >
+                    {t("servicios.ofrecer")}
+                  </SolicitarContactoBoton>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Seccion>
+      ),
+    });
+  }
+
+  // El contacto va siempre y va el último: es el final del recorrido.
+  secciones.push({
+    id: "contacto",
+    etiqueta: t("secciones.contacto"),
+    nodo: (
+      <Seccion id="contacto" titulo={t("secciones.contacto")}>
+        <div className="rounded-xl border border-zinc-200 p-5">
+          {/* Nombre, teléfono y horario salen directos: la vista pública
+              ya los oculta si el club no ha autorizado publicarlos. El
+              correo no, se pide al pulsar (migración 0022), para que no
+              quede escrito en el HTML al alcance de los robots que
+              recolectan direcciones. */}
+          {(perfil.contactName || perfil.contactPhone || perfil.contactHours) && (
+            <dl className="mb-4 space-y-2 text-sm">
+              {perfil.contactName && (
+                <div>
+                  <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                    {t("secciones.contactoPersona")}
+                  </dt>
+                  <dd className="text-zinc-900">{perfil.contactName}</dd>
+                </div>
+              )}
+              {perfil.contactPhone && (
+                <div>
+                  <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                    {t("secciones.contactoTelefono")}
+                  </dt>
+                  <dd>
+                    <a
+                      href={`tel:${perfil.contactPhone.replace(/\s+/g, "")}`}
+                      className="font-medium text-teal-700 hover:underline"
+                    >
+                      {perfil.contactPhone}
+                    </a>
+                  </dd>
+                </div>
+              )}
+              {perfil.contactHours && (
+                <div>
+                  <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                    {t("secciones.contactoHorario")}
+                  </dt>
+                  <dd className="text-zinc-900">{perfil.contactHours}</dd>
+                </div>
+              )}
+            </dl>
+          )}
+
+          <DatosDeContacto
+            slug={perfil.slug}
+            textoBoton={t("secciones.verContacto")}
+            textoEmail={t("secciones.escribirEmail")}
+            textoLlamar={t("secciones.llamar")}
+          />
+
+          <div className="mt-4 border-t border-zinc-100 pt-4">
+            <SolicitarContactoBoton clubId={perfil.id} clubName={perfil.name} variante="secundaria">
+              {t("portada.solicitarContacto")}
+            </SolicitarContactoBoton>
+          </div>
+        </div>
+      </Seccion>
+    ),
+  });
+
+  return (
+    <div className="flex flex-1 flex-col bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados) }}
+      />
+
+      <RegistrarVisita slug={perfil.slug} />
+
+      <Header />
+
+      <header className="relative">
+        {/* Portada de lado a lado. Más alta que antes: es lo primero que
+            ve una empresa y con 224 px apenas se distinguía la foto. */}
+        <div className="relative h-64 w-full overflow-hidden bg-gradient-to-br from-teal-600 to-teal-800 sm:h-80">
+          {portada && (
+            <Image src={portada} alt="" fill priority sizes="100vw" className="object-cover" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent" />
+        </div>
+
+        <div className="mx-auto -mt-16 flex max-w-4xl flex-col gap-4 px-4 sm:-mt-20 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex items-end gap-4">
+            <div className="h-28 w-28 shrink-0 overflow-hidden rounded-2xl border-4 border-white bg-white shadow-md sm:h-40 sm:w-40">
+              {perfil.logoUrl ? (
+                <Image
+                  src={perfil.logoUrl}
+                  alt={`Logo de ${perfil.name}`}
+                  width={160}
+                  height={160}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-teal-50 text-4xl font-bold text-teal-700">
+                  {perfil.name.charAt(0).toUpperCase()}
+                </div>
+              )}
             </div>
-          </Seccion>
+            <div className="pb-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl">{perfil.name}</h1>
+                {perfil.verified && (
+                  <span
+                    className="inline-flex items-center gap-1 rounded-full bg-teal-100 px-2.5 py-1 text-xs font-semibold text-teal-700"
+                    title={t("portada.verificadoAyuda")}
+                  >
+                    <span aria-hidden="true">&#10003;</span> {t("portada.verificado")}
+                  </span>
+                )}
+              </div>
+              <p className="mt-1 text-sm text-zinc-600 sm:text-base">
+                {[deportes.join(" · "), ubicacion].filter(Boolean).join(" · ")}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2 pb-1">
+            <CompartirBoton url={urlPublica} titulo={t("portada.compartirTitulo", { club: perfil.name })} />
+            <SolicitarContactoBoton clubId={perfil.id} clubName={perfil.name}>
+              {t("portada.solicitarContacto")}
+            </SolicitarContactoBoton>
+            <a
+              href="#contacto"
+              className="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
+            >
+              {t("portada.contactar")}
+            </a>
+          </div>
+        </div>
+
+        {mostrarEnlaces && (
+          <div className="mx-auto mt-4 max-w-4xl px-4">
+            <div className="flex flex-wrap gap-2">
+              {perfil.website && <EnlaceSecundario href={perfil.website}>Sitio web</EnlaceSecundario>}
+              {perfil.videoUrl && <EnlaceSecundario href={perfil.videoUrl}>Vídeo de presentación</EnlaceSecundario>}
+            </div>
+          </div>
         )}
+
+        {/* Índice de la ficha, entre el logo y el contenido. Se construye
+            a partir de las secciones que este club tiene rellenadas, así
+            que ningún botón lleva a un sitio vacío. Son anclas normales:
+            el salto lo hace el propio navegador. */}
+        {secciones.length > 1 && (
+          <nav
+            aria-label="Secciones de la ficha"
+            className="mx-auto mt-6 max-w-4xl px-4"
+          >
+            <div className="flex gap-2 overflow-x-auto pb-1">
+              {secciones.map((seccion) => (
+                <a
+                  key={seccion.id}
+                  href={`#${seccion.id}`}
+                  className="whitespace-nowrap rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:border-teal-600 hover:text-teal-700"
+                >
+                  {seccion.etiqueta}
+                </a>
+              ))}
+            </div>
+          </nav>
+        )}
+      </header>
+
+      <main className="mx-auto w-full max-w-4xl px-4 pb-16">
+        {secciones.map((seccion) => (
+          <Fragment key={seccion.id}>{seccion.nodo}</Fragment>
+        ))}
       </main>
 
       <footer className="border-t border-zinc-100 py-8 text-center text-xs text-zinc-500">
@@ -621,7 +826,7 @@ function Seccion({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="border-t border-zinc-100 py-8 first:border-t-0 first:pt-8">
+    <section id={id} className="scroll-mt-24 border-t border-zinc-100 py-8">
       <h2 className="text-xl font-semibold text-zinc-900 sm:text-2xl">{titulo}</h2>
       {descripcion && <p className="mt-1 text-sm text-zinc-500">{descripcion}</p>}
       <div className="mt-4">{children}</div>

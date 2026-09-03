@@ -30,16 +30,20 @@ export type ClubRow = {
   latitude: number | null;
   longitude: number | null;
   facilities: string | null;
+  facilities_address?: string | null;
+  facilities_photos?: string[] | null;
   website: string | null;
   social_links: SocialLinks | null;
   description: string | null;
   logo_url: string | null;
+  cover_url?: string | null;
   photo_urls: string[] | null;
   video_url: string | null;
   contact_name: string | null;
   contact_phone: string | null;
   /** Opcional: la vista pública no lo expone (migración 0024). */
   contact_email?: string | null;
+  contact_hours?: string | null;
   contact_public_consent: boolean | null;
   verified: boolean | null;
   top_category: string | null;
@@ -98,15 +102,19 @@ export function clubRowToProfile(row: ClubRow): ClubProfile {
     latitude: row.latitude,
     longitude: row.longitude,
     facilities: row.facilities,
+    facilitiesAddress: row.facilities_address ?? null,
+    facilitiesPhotos: row.facilities_photos ?? [],
     website: row.website,
     socialLinks: row.social_links ?? {},
     description: row.description,
     logoUrl: row.logo_url,
+    coverUrl: row.cover_url ?? null,
     photoUrls: row.photo_urls ?? [],
     videoUrl: row.video_url,
     contactName: row.contact_name,
     contactPhone: row.contact_phone,
     contactEmail: row.contact_email ?? null,
+    contactHours: row.contact_hours ?? null,
     contactPublicConsent: row.contact_public_consent ?? false,
     verified: row.verified ?? false,
     topCategory: row.top_category,

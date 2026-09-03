@@ -9,6 +9,7 @@ import { ComunidadForm } from "./ComunidadForm";
 import { EquiposForm } from "./EquiposForm";
 import { HistoriaForm } from "./HistoriaForm";
 import { IdentidadForm } from "./IdentidadForm";
+import { InstalacionesForm } from "./InstalacionesForm";
 import { NivelDeportivoForm } from "./NivelDeportivoForm";
 import { PatrocinadoresForm } from "./PatrocinadoresForm";
 import { ServiciosForm } from "./ServiciosForm";
@@ -17,6 +18,7 @@ type Pestana =
   | "identidad"
   | "nivel"
   | "equipos"
+  | "instalaciones"
   | "cantera"
   | "historia"
   | "audiencia"
@@ -28,6 +30,7 @@ const IDS_PESTANA = new Set<string>([
   "identidad",
   "nivel",
   "equipos",
+  "instalaciones",
   "cantera",
   "historia",
   "audiencia",
@@ -40,6 +43,7 @@ const PESTANAS: { id: Pestana; etiqueta: string }[] = [
   { id: "identidad", etiqueta: "Identidad" },
   { id: "nivel", etiqueta: "Nivel deportivo" },
   { id: "equipos", etiqueta: "Equipos" },
+  { id: "instalaciones", etiqueta: "Instalaciones" },
   { id: "cantera", etiqueta: "Cantera" },
   { id: "historia", etiqueta: "Historia" },
   { id: "audiencia", etiqueta: "Audiencia" },
@@ -139,6 +143,9 @@ export function PanelTabs({
         {pestanaActiva === "identidad" && <IdentidadForm userId={userId} perfil={perfil} />}
         {pestanaActiva === "nivel" && perfilCreado && <NivelDeportivoForm perfil={perfil} />}
         {pestanaActiva === "equipos" && perfilCreado && <EquiposForm equipos={equipos} />}
+        {pestanaActiva === "instalaciones" && perfilCreado && (
+          <InstalacionesForm userId={userId} perfil={perfil} />
+        )}
         {pestanaActiva === "cantera" && perfilCreado && <CanteraForm perfil={perfil} />}
         {pestanaActiva === "historia" && perfilCreado && (
           <HistoriaForm userId={userId} perfil={perfil} />

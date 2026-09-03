@@ -158,7 +158,6 @@ export async function guardarIdentidad(
     city,
     province,
     postal_code: postalCode,
-    facilities: leerTexto(formData, "facilities"),
     website: leerTexto(formData, "website"),
     description: leerTexto(formData, "description"),
     video_url: leerTexto(formData, "videoUrl"),
@@ -166,6 +165,7 @@ export async function guardarIdentidad(
     contact_name: contactName,
     contact_phone: contactPhone,
     contact_email: contactEmail,
+    contact_hours: leerTexto(formData, "contactHours"),
     contact_public_consent: contactPublicConsent,
   };
 
@@ -204,6 +204,34 @@ export async function guardarLogo(url: string): Promise<EstadoGuardado> {
     .eq("id", user.id);
 
   if (error) return fallo("guardarLogo", error, "No se ha podido guardar el logo.");
+
+  revalidatePath(RUTA_PANEL);
+  return { ok: true };
+}
+
+/** Guarda la imagen de cabecera de la ficha (migración 0025). */
+export async function guardarPortada(url: string): Promise<EstadoGuardado> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return { error: contexto.error };
+  const { supabase, user } = contexto;
+
+  const { error } = await supabase.from("clubs").update({ cover_url: url }).eq("id", user.id);
+
+  if (error) return fallo("guardarPortada", error, "No se ha podido guardar la portada.");
+
+  revalidatePath(RUTA_PANEL);
+  return { ok: true };
+}
+
+/** Quita la imagen de cabecera (no borra el archivo de Storage). */
+export async function quitarPortada(): Promise<EstadoGuardado> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return { error: contexto.error };
+  const { supabase, user } = contexto;
+
+  const { error } = await supabase.from("clubs").update({ cover_url: null }).eq("id", user.id);
+
+  if (error) return fallo("quitarPortada", error, "No se ha podido quitar la portada.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -368,6 +396,87 @@ export async function guardarCantera(
     .eq("id", user.id);
 
   if (error) return fallo("guardarCantera", error, "No se ha podido guardar. Inténtalo de nuevo.");
+
+  revalidatePath(RUTA_PANEL);
+  return { ok: true };
+}
+
+// ---------------------------------------------------------------------
+// 4 bis. Instalaciones (migración 0025)
+// ---------------------------------------------------------------------
+/**
+ * Dónde juega el club: dirección, descripción y fotos.
+ *
+ * Antes era un único campo de texto suelto dentro de Identidad. Para una
+ * empresa que se plantea poner una lona, dónde está el pabellón y qué
+ * pinta tiene es justo lo que quiere saber, así que se le da sitio
+ * propio.
+ */
+export async function guardarInstalaciones(
+  _estadoPrevio: EstadoGuardado,
+  formData: FormData,
+): Promise<EstadoGuardado> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return { error: contexto.error };
+  const { supabase, user } = contexto;
+
+  const { error } = await supabase
+    .from("clubs")
+    .update({
+      facilities: leerTexto(formData, "facilities"),
+      facilities_address: leerTexto(formData, "facilitiesAddress"),
+    })
+    .eq("id", user.id);
+
+  if (error) return fallo("guardarInstalaciones", error, "No se ha podido guardar. Inténtalo de nuevo.");
+
+  revalidatePath(RUTA_PANEL);
+  return { ok: true };
+}
+
+/** Añade una foto de las instalaciones (ya subida a Storage). */
+export async function agregarFotoInstalacion(url: string): Promise<EstadoGuardado> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return { error: contexto.error };
+  const { supabase, user } = contexto;
+
+  const { data: fila } = await supabase
+    .from("clubs")
+    .select("facilities_photos")
+    .eq("id", user.id)
+    .single();
+
+  const actuales: string[] = fila?.facilities_photos ?? [];
+  const { error } = await supabase
+    .from("clubs")
+    .update({ facilities_photos: [...actuales, url] })
+    .eq("id", user.id);
+
+  if (error) return fallo("agregarFotoInstalacion", error, "No se ha podido guardar la foto.");
+
+  revalidatePath(RUTA_PANEL);
+  return { ok: true };
+}
+
+/** Quita una foto de las instalaciones (no borra el archivo de Storage). */
+export async function eliminarFotoInstalacion(url: string): Promise<EstadoGuardado> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return { error: contexto.error };
+  const { supabase, user } = contexto;
+
+  const { data: fila } = await supabase
+    .from("clubs")
+    .select("facilities_photos")
+    .eq("id", user.id)
+    .single();
+
+  const actuales: string[] = fila?.facilities_photos ?? [];
+  const { error } = await supabase
+    .from("clubs")
+    .update({ facilities_photos: actuales.filter((foto) => foto !== url) })
+    .eq("id", user.id);
+
+  if (error) return fallo("eliminarFotoInstalacion", error, "No se ha podido quitar la foto.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
