@@ -30,6 +30,19 @@ export function FilaClub({ fila }: { fila: ClubAdminRow }) {
         {formatoFecha.format(new Date(fila.createdAt))}
       </td>
       <td className="px-4 py-3 text-zinc-600">{fila.profileCompletion}%</td>
+      <td className="whitespace-nowrap px-4 py-3 text-xs text-zinc-600">
+        <p className="tabular-nums">
+          {fila.visitas} {fila.visitas === 1 ? "visita" : "visitas"}
+        </p>
+        <p className="tabular-nums text-zinc-500">
+          {fila.empresas} {fila.empresas === 1 ? "empresa" : "empresas"}
+        </p>
+        <p
+          className={`tabular-nums ${fila.contactos > 0 ? "font-medium text-teal-700" : "text-zinc-400"}`}
+        >
+          {fila.contactos} {fila.contactos === 1 ? "contacto visto" : "contactos vistos"}
+        </p>
+      </td>
       <td className="px-4 py-3">
         <span
           className={`rounded-full px-2 py-0.5 text-xs font-medium ${

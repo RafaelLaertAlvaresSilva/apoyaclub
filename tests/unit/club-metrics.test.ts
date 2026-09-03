@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { sinDatos, variacion, type MetricasClub } from "@/lib/club-metrics";
 
-function metricas(cambios: Partial<Record<"apariciones" | "visitas" | "dossieres" | "solicitudes", number>> = {}): MetricasClub {
+function metricas(
+  cambios: Partial<
+    Record<"apariciones" | "visitas" | "dossieres" | "solicitudes" | "contactos", number>
+  > = {},
+): MetricasClub {
   const vacia = { actual: 0, anterior: 0 };
   return {
     dias: 30,
@@ -9,6 +13,7 @@ function metricas(cambios: Partial<Record<"apariciones" | "visitas" | "dossieres
     visitas: { ...vacia, actual: cambios.visitas ?? 0 },
     dossieres: { ...vacia, actual: cambios.dossieres ?? 0 },
     solicitudes: { ...vacia, actual: cambios.solicitudes ?? 0 },
+    contactos: { ...vacia, actual: cambios.contactos ?? 0 },
   };
 }
 
@@ -30,5 +35,6 @@ describe("sinDatos", () => {
     expect(sinDatos(metricas())).toBe(true);
     expect(sinDatos(metricas({ visitas: 1 }))).toBe(false);
     expect(sinDatos(metricas({ solicitudes: 2 }))).toBe(false);
+    expect(sinDatos(metricas({ contactos: 1 }))).toBe(false);
   });
 });

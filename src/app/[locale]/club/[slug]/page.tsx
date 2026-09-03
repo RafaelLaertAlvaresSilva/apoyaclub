@@ -16,6 +16,7 @@ import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
 import { SITE_URL } from "@/lib/site";
 import type { ClubTeam, SocialLinks } from "@/lib/types";
 import { CompartirBoton } from "./components/CompartirBoton";
+import { DatosDeContacto } from "./components/DatosDeContacto";
 import { GuardarFavoritoBoton } from "./components/GuardarFavoritoBoton";
 import { RegistrarVisita } from "./components/RegistrarVisita";
 import { SolicitarContactoBoton } from "./components/SolicitarContactoBoton";
@@ -96,7 +97,9 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   if (!datos) notFound();
 
   const { perfil, equipos, patrocinadores, oportunidades } = datos;
-  const emailContacto = await obtenerEmailContacto(perfil.id);
+  // Solo interesa SI hay contacto, para decidir si se pinta la sección.
+  // El dato en sí lo pide el navegador al pulsar (ver DatosDeContacto).
+  const hayContacto = (await obtenerEmailContacto(perfil.id)) !== null;
   // Servicios que el club busca (migración 0016): la puerta de entrada
   // de la empresa que no tiene presupuesto de patrocinio pero sí un
   // servicio que ofrecer.
@@ -219,9 +222,9 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             <SolicitarContactoBoton clubId={perfil.id} clubName={perfil.name}>
               {t("portada.solicitarContacto")}
             </SolicitarContactoBoton>
-            {emailContacto && (
+            {hayContacto && (
               <a
-                href={`mailto:${emailContacto}`}
+                href="#contacto"
                 className="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
               >
                 {t("portada.contactar")}
@@ -553,34 +556,23 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
           </Seccion>
         )}
 
-        {emailContacto && (
+        {hayContacto && (
           <Seccion id="contacto" titulo={t("secciones.contacto")}>
-            <div className="flex flex-col gap-4 rounded-xl border border-zinc-200 p-5 sm:flex-row sm:items-center sm:justify-between">
-              <div className="text-sm text-zinc-600">
-                {perfil.contactName && (
-                  <p className="font-medium text-zinc-900">{perfil.contactName}</p>
-                )}
-                <p>{emailContacto}</p>
-                {perfil.contactPhone && <p>{perfil.contactPhone}</p>}
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <a
-                  href={`mailto:${emailContacto}`}
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
-                >
-                  {t("secciones.escribirEmail")}
-                </a>
+            <div className="rounded-xl border border-zinc-200 p-5">
+              {/* Los datos no se escriben en el HTML: se piden al pulsar
+                  (migración 0022). Así el correo del club no queda a la
+                  vista de los robots que recolectan direcciones, y el
+                  club puede ver cuántas empresas llegan hasta aquí. */}
+              <DatosDeContacto
+                slug={perfil.slug}
+                textoBoton={t("secciones.verContacto")}
+                textoEmail={t("secciones.escribirEmail")}
+                textoLlamar={t("secciones.llamar")}
+              />
+              <div className="mt-4 border-t border-zinc-100 pt-4">
                 <SolicitarContactoBoton clubId={perfil.id} clubName={perfil.name} variante="secundaria">
                   {t("portada.solicitarContacto")}
                 </SolicitarContactoBoton>
-                {perfil.contactPhone && (
-                  <a
-                    href={`tel:${perfil.contactPhone.replace(/\s+/g, "")}`}
-                    className="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
-                  >
-                    {t("secciones.llamar")}
-                  </a>
-                )}
               </div>
             </div>
           </Seccion>

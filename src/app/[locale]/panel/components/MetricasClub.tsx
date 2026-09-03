@@ -1,10 +1,16 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { variacion, sinDatos, type MetricaClub, type MetricasClub as Metricas } from "@/lib/club-metrics";
+import {
+  variacion,
+  sinDatos,
+  type EmpresaInteresada,
+  type MetricaClub,
+  type MetricasClub as Metricas,
+} from "@/lib/club-metrics";
 
 /**
- * "Tu mes en ApoyaClub" (migración 0014): lo que el club recibe a cambio
- * de su cuota, en cuatro cifras.
+ * "Tu mes en ApoyaClub" (migraciones 0014 y 0022): lo que el club recibe
+ * a cambio de su cuota, en cinco cifras.
  *
  * Está en lo alto del panel a propósito. El riesgo del negocio no es que
  * un club no se registre, es que pague tres meses sin ver nada y se dé
@@ -14,8 +20,18 @@ import { variacion, sinDatos, type MetricaClub, type MetricasClub as Metricas } 
  * Cada cifra se compara con el mismo periodo anterior. Cuando no hay con
  * qué comparar no se enseña ningún porcentaje: un "+100 %" sacado de un
  * mes a cero es ruido, no información.
+ *
+ * Debajo, las empresas concretas que han pasado por la ficha: es lo que
+ * hace la métrica accionable, porque un nombre se puede llamar por
+ * teléfono y una cifra no.
  */
-export function MetricasClub({ metricas }: { metricas: Metricas }) {
+export function MetricasClub({
+  metricas,
+  empresas,
+}: {
+  metricas: Metricas;
+  empresas: EmpresaInteresada[];
+}) {
   const t = useTranslations("panel.metricas");
 
   const tarjetas: { clave: string; etiqueta: string; ayuda: string; dato: MetricaClub }[] = [
@@ -31,6 +47,12 @@ export function MetricasClub({ metricas }: { metricas: Metricas }) {
       etiqueta: t("dossieres"),
       ayuda: t("dossieresAyuda"),
       dato: metricas.dossieres,
+    },
+    {
+      clave: "contactos",
+      etiqueta: t("contactos"),
+      ayuda: t("contactosAyuda"),
+      dato: metricas.contactos,
     },
     {
       clave: "solicitudes",
@@ -61,7 +83,7 @@ export function MetricasClub({ metricas }: { metricas: Metricas }) {
           </div>
         </div>
       ) : (
-        <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {tarjetas.map((tarjeta) => (
             <Tarjeta
               key={tarjeta.clave}
@@ -77,7 +99,48 @@ export function MetricasClub({ metricas }: { metricas: Metricas }) {
           ))}
         </dl>
       )}
+
+      <ListaDeEmpresas empresas={empresas} />
     </section>
+  );
+}
+
+/**
+ * Las empresas registradas que han pasado por la ficha, con la que vio
+ * el contacto arriba del todo. Solo se enseña si hay alguna: un bloque
+ * vacío en el panel de un club recién llegado solo desanima.
+ */
+function ListaDeEmpresas({ empresas }: { empresas: EmpresaInteresada[] }) {
+  const t = useTranslations("panel.metricas");
+
+  if (empresas.length === 0) return null;
+
+  return (
+    <div className="mt-6 border-t border-zinc-100 pt-5">
+      <h3 className="text-sm font-semibold text-zinc-900">{t("empresasTitulo")}</h3>
+      <p className="mt-1 text-xs text-zinc-500">{t("empresasTexto")}</p>
+
+      <ul className="mt-3 divide-y divide-zinc-100 rounded-lg border border-zinc-200">
+        {empresas.map((empresa) => (
+          <li
+            key={empresa.companyId}
+            className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm"
+          >
+            <div>
+              <p className="font-medium text-zinc-900">{empresa.nombre}</p>
+              <p className="text-zinc-500">
+                {[empresa.sector, empresa.ciudad].filter(Boolean).join(" · ") || "—"}
+              </p>
+            </div>
+            {empresa.vioElContacto && (
+              <span className="rounded-full bg-teal-50 px-2.5 py-1 text-xs font-medium text-teal-700">
+                {t("empresasVioContacto")}
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

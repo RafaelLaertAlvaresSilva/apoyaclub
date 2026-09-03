@@ -9,7 +9,7 @@ import {
   type ClubSponsorRow,
   type ClubTeamRow,
 } from "@/lib/club-mappers";
-import { obtenerMetricasClub } from "@/lib/club-metrics";
+import { obtenerEmpresasInteresadas, obtenerMetricasClub } from "@/lib/club-metrics";
 import { primerosPasos } from "@/lib/onboarding";
 import { filaAServicio, type FilaServicio, type ServiceNeed } from "@/lib/service-needs";
 import { huecosDelPerfil } from "@/lib/profile-completion";
@@ -74,7 +74,10 @@ export default async function PanelPage() {
 
   // Las métricas se piden aparte porque van con la clave de servicio
   // (el club no lee las tablas de eventos, solo sus números agregados).
-  const metricas = await obtenerMetricasClub(user.id);
+  const [metricas, empresasInteresadas] = await Promise.all([
+    obtenerMetricasClub(user.id),
+    obtenerEmpresasInteresadas(user.id),
+  ]);
 
   const perfil = filaClub ? clubRowToProfile(filaClub) : null;
   const equipos = (filasEquipos ?? []).map(clubTeamRowToTeam);
@@ -106,7 +109,7 @@ export default async function PanelPage() {
 
       <PrimerosPasos pasos={pasosIniciales} />
 
-      <MetricasClub metricas={metricas} />
+      <MetricasClub metricas={metricas} empresas={empresasInteresadas} />
 
       <BarraProgreso porcentaje={porcentaje} huecos={huecos} />
 

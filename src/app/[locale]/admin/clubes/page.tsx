@@ -2,6 +2,7 @@ import { redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { obtenerUsuariosPorRol } from "@/lib/admin-users";
+import { obtenerActividadPorClub } from "@/lib/admin-actividad-clubes";
 import { clubRowToProfile, type ClubRow } from "@/lib/club-mappers";
 import type { SubscriptionStatus } from "@/lib/subscription-mappers";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -54,6 +55,7 @@ export default async function AdminClubesPage() {
       : { data: [] as ClubRowConAdmin[] };
 
   const clubesPorId = new Map((filasClubes ?? []).map((fila) => [fila.id, fila]));
+  const actividad = await obtenerActividadPorClub(ids);
 
   const filas: ClubAdminRow[] = usuarios
     .map((usuario) => {
@@ -72,6 +74,9 @@ export default async function AdminClubesPage() {
         profileCompletion: perfil?.profileScore ?? 0,
         verified: perfil?.verified ?? false,
         suspended: filaClub?.admin_suspended ?? false,
+        visitas: actividad.get(usuario.id)?.visitas ?? 0,
+        empresas: actividad.get(usuario.id)?.empresas ?? 0,
+        contactos: actividad.get(usuario.id)?.contactos ?? 0,
       } satisfies ClubAdminRow;
     })
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -98,6 +103,7 @@ export default async function AdminClubesPage() {
                 <th className="px-4 py-3 font-medium">{t("club")}</th>
                 <th className="px-4 py-3 font-medium">{t("alta")}</th>
                 <th className="px-4 py-3 font-medium">{t("perfil")}</th>
+                <th className="px-4 py-3 font-medium">Actividad 90d</th>
                 <th className="px-4 py-3 font-medium">{t("suscripcion")}</th>
                 <th className="px-4 py-3 font-medium">{t("estado")}</th>
                 <th className="px-4 py-3 font-medium">{t("acciones")}</th>

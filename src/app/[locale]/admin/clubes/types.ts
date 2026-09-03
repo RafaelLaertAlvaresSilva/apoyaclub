@@ -11,4 +11,8 @@ export type ClubAdminRow = {
   profileCompletion: number;
   verified: boolean;
   suspended: boolean;
+  /** Actividad de los últimos 90 días (migración 0022). */
+  visitas: number;
+  empresas: number;
+  contactos: number;
 };

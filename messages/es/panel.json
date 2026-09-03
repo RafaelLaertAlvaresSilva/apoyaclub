@@ -42,7 +42,13 @@
     "vacioTitulo": "Todavía no hay movimiento este mes",
     "vacioTexto": "Las empresas encuentran a los clubes por sus oportunidades publicadas. Publica al menos una y comparte tu enlace: es lo que más mueve la aguja.",
     "vacioOportunidades": "Crear una oportunidad",
-    "vacioDossier": "Preparar mi dossier"
+    "vacioDossier": "Preparar mi dossier",
+    "contactos": "Contactos vistos",
+    "contactosAyuda": "Veces que alguien ha abierto tus datos de contacto. Es el paso justo antes de escribirte.",
+    "empresasTitulo": "Empresas que se han fijado en ti",
+    "empresasTexto": "Empresas registradas que han entrado en tu ficha en los últimos 90 días.",
+    "empresasVioContacto": "Vio tu contacto",
+    "empresasVacio": "Todavía no ha entrado ninguna empresa registrada. Comparte tu página y tu dossier para que empiecen a llegar."
   },
   "oportunidades": {
     "aQuePublicoO": "A qué público o objetivo apela esta oportunidad. Puedes marcar varios.",

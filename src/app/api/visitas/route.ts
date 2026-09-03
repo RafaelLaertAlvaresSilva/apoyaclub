@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { consumirLimite, ipDelVisitante } from "@/lib/rate-limit";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
+import type { Role } from "@/lib/types";
 
 /**
  * Registra una visita a la página pública de un club (migración 0014).
@@ -46,7 +48,22 @@ export async function POST(request: Request) {
 
     if (!club) return NextResponse.json({ ok: false }, { status: 404 });
 
-    await admin.from("club_page_views").insert({ club_id: club.id });
+    // Si quien visita es una empresa registrada, se apunta cuál: es la
+    // diferencia entre "12 visitas" y "3 empresas han mirado tu ficha"
+    // (migración 0022).
+    let companyId: string | null = null;
+    try {
+      const supabase = await createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const rol = user?.app_metadata?.role as Role | undefined;
+      if (user && rol === "empresa") companyId = user.id;
+    } catch {
+      // Visita anónima: se cuenta igual, sin nombre.
+    }
+
+    await admin.from("club_page_views").insert({ club_id: club.id, company_id: companyId });
   } catch {
     // La métrica nunca puede romper la página que la dispara.
     return NextResponse.json({ ok: true, contada: false });
