@@ -425,9 +425,32 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                   .slice()
                   .sort((a, b) => a.year - b.year)
                   .map((hito, indice) => (
-                    <li key={`${hito.year}-${indice}`}>
-                      <span className="font-semibold text-teal-700">{hito.year}</span>{" "}
-                      <span className="text-zinc-700">{hito.text}</span>
+                    <li key={`${hito.year}-${indice}`} className="flex items-start gap-3">
+                      {hito.photoUrl && (
+                        <Image
+                          src={hito.photoUrl}
+                          alt=""
+                          width={72}
+                          height={72}
+                          className="h-18 w-18 shrink-0 rounded-lg object-cover"
+                        />
+                      )}
+                      <div className="min-w-0">
+                        <p>
+                          <span className="font-semibold text-teal-700">{hito.year}</span>{" "}
+                          <span className="text-zinc-700">{hito.text}</span>
+                        </p>
+                        {hito.videoUrl && (
+                          <a
+                            href={hito.videoUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-sm font-medium text-teal-700 hover:underline"
+                          >
+                            {t("secciones.verVideo")}
+                          </a>
+                        )}
+                      </div>
                     </li>
                   ))}
               </ul>

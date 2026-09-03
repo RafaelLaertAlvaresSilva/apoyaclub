@@ -24,6 +24,10 @@ export type SocialLinks = {
 export type Milestone = {
   year: number;
   text: string;
+  /** Foto del hito (subida al almacén del club). Opcional. */
+  photoUrl?: string | null;
+  /** Enlace a un vídeo del hito: YouTube, Vimeo o cualquier otro. */
+  videoUrl?: string | null;
 };
 
 /** Seguidores por red social (sección Audiencia). Solo números. */
@@ -72,6 +76,8 @@ export type ClubProfile = {
   // ocultar `contactName`/`contactPhone` cuando no hay autorización).
   contactName: string | null;
   contactPhone: string | null;
+  /** Correo que el club publica. Si es null se usa el de su cuenta. */
+  contactEmail: string | null;
   contactPublicConsent: boolean;
 
   // Fase 12: insignia pública de "verificado", la decide un admin.

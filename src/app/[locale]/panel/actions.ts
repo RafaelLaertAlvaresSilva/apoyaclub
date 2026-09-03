@@ -9,7 +9,7 @@ import { getTranslations } from "next-intl/server";
 import { esCategoriaValida } from "@/lib/service-needs";
 import { createClient } from "@/lib/supabase/server";
 import { NIVELES_PATROCINADOR } from "@/lib/types";
-import type { Role, SponsorTier, TeamLevel } from "@/lib/types";
+import type { Milestone, Role, SponsorTier, TeamLevel } from "@/lib/types";
 
 export type EstadoGuardado = { error: string; ok?: false } | { ok: true; error?: undefined } | null;
 
@@ -140,6 +140,13 @@ export async function guardarIdentidad(
 
   const contactName = leerTexto(formData, "contactName");
   const contactPhone = leerTexto(formData, "contactPhone");
+  const contactEmail = leerTexto(formData, "contactEmail");
+
+  // Se comprueba aquí además de en la base de datos para poder decir qué
+  // pasa: un fallo de restricción llegaría como "no se ha podido guardar".
+  if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(contactEmail)) {
+    return { error: "El correo de contacto no parece válido." };
+  }
   const contactPublicConsent = leerBooleano(formData, "contactPublicConsent");
 
   const province = leerTexto(formData, "province");
@@ -158,6 +165,7 @@ export async function guardarIdentidad(
     social_links: socialLinks,
     contact_name: contactName,
     contact_phone: contactPhone,
+    contact_email: contactEmail,
     contact_public_consent: contactPublicConsent,
   };
 
@@ -172,6 +180,10 @@ export async function guardarIdentidad(
     datosClub.geocoded_at = new Date().toISOString();
   }
 
+  // Esta es la única sección que puede crear la fila del club (nombre y
+  // localidad son obligatorios). El resto usan `update` a propósito: un
+  // `upsert` intenta primero un INSERT, que revienta contra el NOT NULL
+  // de `name` antes siquiera de darse cuenta de que la fila ya existía.
   const { error } = await supabase.from("clubs").upsert(datosClub, { onConflict: "id" });
 
   if (error) return fallo("guardarIdentidad", error, "No se ha podido guardar. Inténtalo de nuevo.");
@@ -276,15 +288,14 @@ export async function guardarNivelDeportivo(
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
-  const { error } = await supabase.from("clubs").upsert(
-    {
-      id: user.id,
+  const { error } = await supabase
+    .from("clubs")
+    .update({
       top_category: leerTexto(formData, "topCategory"),
       competitions: leerTexto(formData, "competitions"),
       achievements: leerTexto(formData, "achievements"),
-    },
-    { onConflict: "id" },
-  );
+    })
+    .eq("id", user.id);
 
   if (error) return fallo("guardarNivelDeportivo", error, "No se ha podido guardar. Inténtalo de nuevo.");
 
@@ -347,15 +358,14 @@ export async function guardarCantera(
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
-  const { error } = await supabase.from("clubs").upsert(
-    {
-      id: user.id,
+  const { error } = await supabase
+    .from("clubs")
+    .update({
       youth_teams_count: leerEntero(formData, "youthTeamsCount"),
       youth_players_count: leerEntero(formData, "youthPlayersCount"),
       youth_families_count: leerEntero(formData, "youthFamiliesCount"),
-    },
-    { onConflict: "id" },
-  );
+    })
+    .eq("id", user.id);
 
   if (error) return fallo("guardarCantera", error, "No se ha podido guardar. Inténtalo de nuevo.");
 
@@ -374,26 +384,72 @@ export async function guardarHistoria(
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
-  let milestones: unknown = [];
+  let milestones: Milestone[];
   try {
-    milestones = JSON.parse(String(formData.get("milestones") ?? "[]"));
+    milestones = sanearHitos(JSON.parse(String(formData.get("milestones") ?? "[]")));
   } catch {
     return { error: "Los hitos no tienen un formato válido." };
   }
 
-  const { error } = await supabase.from("clubs").upsert(
-    {
-      id: user.id,
+  const { error } = await supabase
+    .from("clubs")
+    .update({
       founding_year: leerEntero(formData, "foundingYear"),
       milestones,
-    },
-    { onConflict: "id" },
-  );
+    })
+    .eq("id", user.id);
 
   if (error) return fallo("guardarHistoria", error, "No se ha podido guardar. Inténtalo de nuevo.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
+}
+
+/**
+ * Deja los hitos en una forma conocida antes de guardarlos.
+ *
+ * Vienen del navegador como un JSON que ha construido el propio
+ * formulario, así que nada impide que llegue otra cosa. Y los enlaces de
+ * vídeo se pintan después como enlaces en la ficha pública: sin filtrar
+ * el esquema, un `javascript:...` guardado aquí se ejecutaría en el
+ * navegador de quien visite la página. Solo se aceptan http y https.
+ */
+function sanearHitos(valor: unknown): Milestone[] {
+  if (!Array.isArray(valor)) return [];
+
+  return valor
+    .slice(0, 50)
+    .map((bruto): Milestone | null => {
+      if (typeof bruto !== "object" || bruto === null) return null;
+      const hito = bruto as Record<string, unknown>;
+
+      const year = Number.parseInt(String(hito.year ?? ""), 10);
+      const text = typeof hito.text === "string" ? hito.text.trim().slice(0, 300) : "";
+
+      if (!Number.isFinite(year) || year < 1800 || year > 2100 || !text) return null;
+
+      return {
+        year,
+        text,
+        photoUrl: enlaceSeguro(hito.photoUrl),
+        videoUrl: enlaceSeguro(hito.videoUrl),
+      };
+    })
+    .filter((hito): hito is Milestone => hito !== null);
+}
+
+/** Devuelve la URL si es http(s) y de longitud razonable; null si no. */
+function enlaceSeguro(valor: unknown): string | null {
+  if (typeof valor !== "string") return null;
+  const texto = valor.trim();
+  if (!texto || texto.length > 2048) return null;
+
+  try {
+    const url = new URL(texto);
+    return url.protocol === "http:" || url.protocol === "https:" ? texto : null;
+  } catch {
+    return null;
+  }
 }
 
 // ---------------------------------------------------------------------
@@ -415,15 +471,14 @@ export async function guardarAudiencia(
     youtube: leerEntero(formData, "followersYoutube") ?? undefined,
   };
 
-  const { error } = await supabase.from("clubs").upsert(
-    {
-      id: user.id,
+  const { error } = await supabase
+    .from("clubs")
+    .update({
       followers_by_network: followersByNetwork,
       estimated_reach: leerEntero(formData, "estimatedReach"),
       average_attendance: leerEntero(formData, "averageAttendance"),
-    },
-    { onConflict: "id" },
-  );
+    })
+    .eq("id", user.id);
 
   if (error) return fallo("guardarAudiencia", error, "No se ha podido guardar. Inténtalo de nuevo.");
 
@@ -449,10 +504,10 @@ export async function guardarComunidad(
     return { error: "Las acciones no tienen un formato válido." };
   }
 
-  const { error } = await supabase.from("clubs").upsert(
-    { id: user.id, community_actions: communityActions },
-    { onConflict: "id" },
-  );
+  const { error } = await supabase
+    .from("clubs")
+    .update({ community_actions: communityActions })
+    .eq("id", user.id);
 
   if (error) return fallo("guardarComunidad", error, "No se ha podido guardar. Inténtalo de nuevo.");
 

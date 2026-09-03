@@ -38,6 +38,8 @@ export type ClubRow = {
   video_url: string | null;
   contact_name: string | null;
   contact_phone: string | null;
+  /** Opcional: la vista pública no lo expone (migración 0024). */
+  contact_email?: string | null;
   contact_public_consent: boolean | null;
   verified: boolean | null;
   top_category: string | null;
@@ -104,6 +106,7 @@ export function clubRowToProfile(row: ClubRow): ClubProfile {
     videoUrl: row.video_url,
     contactName: row.contact_name,
     contactPhone: row.contact_phone,
+    contactEmail: row.contact_email ?? null,
     contactPublicConsent: row.contact_public_consent ?? false,
     verified: row.verified ?? false,
     topCategory: row.top_category,

@@ -140,7 +140,9 @@ export function PanelTabs({
         {pestanaActiva === "nivel" && perfilCreado && <NivelDeportivoForm perfil={perfil} />}
         {pestanaActiva === "equipos" && perfilCreado && <EquiposForm equipos={equipos} />}
         {pestanaActiva === "cantera" && perfilCreado && <CanteraForm perfil={perfil} />}
-        {pestanaActiva === "historia" && perfilCreado && <HistoriaForm perfil={perfil} />}
+        {pestanaActiva === "historia" && perfilCreado && (
+          <HistoriaForm userId={userId} perfil={perfil} />
+        )}
         {pestanaActiva === "audiencia" && perfilCreado && <AudienciaForm perfil={perfil} />}
         {pestanaActiva === "comunidad" && perfilCreado && <ComunidadForm perfil={perfil} />}
         {pestanaActiva === "patrocinadores" && perfilCreado && (

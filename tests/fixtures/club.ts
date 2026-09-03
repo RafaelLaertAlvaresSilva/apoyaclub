@@ -23,6 +23,7 @@ const CLUB_VACIO: ClubProfile = {
   videoUrl: null,
   contactName: null,
   contactPhone: null,
+  contactEmail: null,
   contactPublicConsent: false,
   verified: false,
   topCategory: null,

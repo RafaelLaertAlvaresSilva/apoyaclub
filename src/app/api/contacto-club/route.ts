@@ -55,12 +55,13 @@ export async function POST(request: Request) {
 
   const { data: club } = await admin
     .from("clubs")
-    .select("id, contact_name, contact_phone, contact_public_consent, subscription_status, admin_suspended")
+    .select("id, contact_name, contact_phone, contact_email, contact_public_consent, subscription_status, admin_suspended")
     .eq("slug", slug)
     .maybeSingle<{
       id: string;
       contact_name: string | null;
       contact_phone: string | null;
+      contact_email: string | null;
       contact_public_consent: boolean | null;
       subscription_status: string | null;
       admin_suspended: boolean | null;
@@ -77,8 +78,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Club no disponible." }, { status: 404 });
   }
 
-  const { data: usuario } = await admin.auth.admin.getUserById(club.id);
-  const email = usuario.user?.email ?? null;
+  // El correo que el club ha decidido publicar manda sobre el de su
+  // cuenta (migración 0024). Solo se consulta la cuenta si no hay uno.
+  let email = club.contact_email;
+  if (!email) {
+    const { data: usuario } = await admin.auth.admin.getUserById(club.id);
+    email = usuario.user?.email ?? null;
+  }
 
   // Quién lo está mirando, si es una empresa con sesión iniciada.
   let companyId: string | null = null;

@@ -275,6 +275,19 @@ export function IdentidadForm({
             </Campo>
           </div>
 
+          <Campo
+            etiqueta="Correo de contacto"
+            ayuda="El que quieres que usen las empresas. Si lo dejas vacío se usa el correo con el que te registraste."
+          >
+            <input
+              name="contactEmail"
+              type="email"
+              defaultValue={perfil?.contactEmail ?? ""}
+              placeholder="patrocinios@tuclub.es"
+              className={clasesInput}
+            />
+          </Campo>
+
           <label className="flex items-start gap-2 text-sm text-zinc-700">
             <input
               type="checkbox"
