@@ -1,47 +1,64 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { obtenerRecomendaciones } from "@/lib/recomendaciones";
 
+const ENLACE = "https://prospectpro.app/?ref=apoyaclub";
+
 /**
- * Una recomendación sin enlace configurado no debe existir: enseñarle al
- * club una herramienta que no puede contratar es ruido, y dejar el
- * bloque puesto "para cuando haya acuerdo" acaba en una web que
- * recomienda algo con un enlace roto.
+ * Dos cosas que no pueden fallar aquí, y las dos son de confianza, no de
+ * funcionamiento: que no se anuncie una herramienta que el club no puede
+ * usar, y que no se le cobre comisión a su espalda.
  */
-describe("recomendaciones", () => {
+describe("herramientas del panel", () => {
   const entornoOriginal = { ...process.env };
 
   beforeEach(() => {
     delete process.env.NEXT_PUBLIC_PROSPECTPRO_URL;
+    delete process.env.NEXT_PUBLIC_PROSPECTPRO_MODO;
   });
 
   afterEach(() => {
     process.env = { ...entornoOriginal };
   });
 
-  it("no recomienda nada si no hay enlace configurado", () => {
+  it("no enseña nada si no hay enlace configurado", () => {
     expect(obtenerRecomendaciones()).toEqual([]);
   });
 
-  it("recomienda ProspectPro cuando hay enlace", () => {
-    process.env.NEXT_PUBLIC_PROSPECTPRO_URL = "https://prospectpro.app/?ref=apoyaclub";
-    const recomendaciones = obtenerRecomendaciones();
+  it("por defecto es una recomendación, y declara la comisión", () => {
+    process.env.NEXT_PUBLIC_PROSPECTPRO_URL = ENLACE;
+    const [herramienta] = obtenerRecomendaciones();
 
-    expect(recomendaciones).toHaveLength(1);
-    expect(recomendaciones[0].url).toBe("https://prospectpro.app/?ref=apoyaclub");
+    expect(herramienta.modo).toBe("recomendada");
+    expect(herramienta.conComision).toBe(true);
+    expect(herramienta.precio).toBeTruthy();
   });
 
-  it("declara la comisión: el club tiene derecho a saber si la recomendación es interesada", () => {
-    process.env.NEXT_PUBLIC_PROSPECTPRO_URL = "https://prospectpro.app/?ref=apoyaclub";
-    expect(obtenerRecomendaciones()[0].conComision).toBe(true);
+  it("en modo incluida no hay comisión que declarar ni precio que enseñar", () => {
+    process.env.NEXT_PUBLIC_PROSPECTPRO_URL = ENLACE;
+    process.env.NEXT_PUBLIC_PROSPECTPRO_MODO = "incluida";
+    const [herramienta] = obtenerRecomendaciones();
+
+    expect(herramienta.modo).toBe("incluida");
+    // Si ApoyaClub compra la licencia, no cobra comisión: anunciar las
+    // dos cosas a la vez sería mentirle al club en una de ellas.
+    expect(herramienta.conComision).toBe(false);
+    expect(herramienta.precio).toBeNull();
+    expect(herramienta.comoSeActiva).toBeTruthy();
   });
 
-  it("cada recomendación explica qué es y para qué le sirve al club", () => {
-    process.env.NEXT_PUBLIC_PROSPECTPRO_URL = "https://prospectpro.app/?ref=apoyaclub";
+  it("un modo desconocido no se cuela como incluida", () => {
+    process.env.NEXT_PUBLIC_PROSPECTPRO_URL = ENLACE;
+    process.env.NEXT_PUBLIC_PROSPECTPRO_MODO = "gratis-total";
 
-    for (const recomendacion of obtenerRecomendaciones()) {
-      expect(recomendacion.queEs.length).toBeGreaterThan(20);
-      expect(recomendacion.paraQue.length).toBeGreaterThan(20);
-      expect(recomendacion.precio).toBeTruthy();
+    expect(obtenerRecomendaciones()[0].modo).toBe("recomendada");
+  });
+
+  it("cada herramienta explica qué es y para qué le sirve al club", () => {
+    process.env.NEXT_PUBLIC_PROSPECTPRO_URL = ENLACE;
+
+    for (const herramienta of obtenerRecomendaciones()) {
+      expect(herramienta.queEs.length).toBeGreaterThan(20);
+      expect(herramienta.paraQue.length).toBeGreaterThan(20);
     }
   });
 });

@@ -1,26 +1,31 @@
 /**
- * Herramientas de terceros que se le recomiendan al club.
+ * Herramientas de terceros que el club tiene a mano desde su panel.
  *
  * El principio de negocio de ApoyaClub es que el club sale a buscar
  * empresas y la plataforma le da las herramientas para enseñarse. Pero
- * hasta ahora le dábamos con qué enseñarse (página, dossier, catálogo) y
- * nada con qué *encontrar* a quién enseñárselo: un directivo mira su
- * lista de solicitudes vacía y no sabe por dónde empezar. Aquí es donde
- * encaja una herramienta de prospección ajena.
+ * le dábamos con qué enseñarse (página, dossier, catálogo) y nada con
+ * qué *encontrar* a quién enseñárselo: un directivo mira su lista de
+ * solicitudes vacía y no sabe por dónde empezar.
  *
- * Tres decisiones de diseño, y las tres son deliberadas:
+ * Hay dos formas muy distintas de resolver eso, y la diferencia no es de
+ * matiz:
  *
- *   1. Es un enlace, no una integración. No se comparte ningún dato del
- *      club con el tercero, así que no hay ninguna cesión que declarar
- *      en la política de privacidad ni nada que mantener si el acuerdo
- *      se rompe.
- *   2. Cada recomendación dice si ApoyaClub cobra comisión. Esconderlo
- *      sería engañar al club que paga la cuota, que es exactamente la
- *      confianza sobre la que se sostiene el negocio.
- *   3. Sin enlace configurado, la recomendación no existe. Nada de
- *      dejar el bloque puesto "para cuando haya acuerdo": mientras no
- *      lo haya, el club no ve nada.
+ *   - "recomendada": ApoyaClub la sugiere y el club la contrata aparte.
+ *     Si hay comisión de por medio, se dice. Un club que paga una cuota
+ *     tiene derecho a saber si la recomendación de su proveedor es
+ *     interesada, y esa confianza es sobre lo que se sostiene el negocio.
+ *
+ *   - "incluida": ApoyaClub compra las licencias y el club la usa sin
+ *     pagar nada más. Aquí no hay comisión que declarar, pero sí algo
+ *     más serio: para dar de alta al club en la herramienta hay que
+ *     pasarle sus datos, y eso es una cesión a un tercero que tiene que
+ *     estar en la política de privacidad y en un contrato con él.
+ *
+ * Nada se enseña sin enlace configurado: no se deja el bloque puesto
+ * "para cuando haya acuerdo".
  */
+
+export type ModoHerramienta = "recomendada" | "incluida";
 
 export type Recomendacion = {
   id: string;
@@ -29,24 +34,30 @@ export type Recomendacion = {
   queEs: string;
   /** Por qué le sirve a un club concreto, no en abstracto. */
   paraQue: string;
-  /** Referencia de precio, tal y como la anuncia el tercero. */
-  precio: string;
+  modo: ModoHerramienta;
+  /** Referencia de precio. Null cuando va incluida en la cuota. */
+  precio: string | null;
   url: string;
-  /** true si ApoyaClub percibe una comisión por las altas desde el enlace. */
+  /** Solo tiene sentido en modo "recomendada". */
   conComision: boolean;
+  /** Qué tiene que hacer el club para empezar a usarla, si hace falta algo. */
+  comoSeActiva?: string;
 };
 
 /**
- * Las recomendaciones activas.
+ * Las herramientas activas.
  *
- * El enlace vive en una variable de entorno porque lleva el código de
- * afiliado, que cambia sin tocar el código y no tiene por qué estar en
- * el repositorio.
+ * El enlace vive en una variable de entorno porque cambia sin tocar el
+ * código (lleva el código de afiliado, o la dirección de alta que dé el
+ * proveedor), y el modo también: el mismo acuerdo puede empezar siendo
+ * una recomendación y acabar en licencias compradas.
  */
 export function obtenerRecomendaciones(): Recomendacion[] {
   const prospectPro = process.env.NEXT_PUBLIC_PROSPECTPRO_URL;
+  const modoProspectPro: ModoHerramienta =
+    process.env.NEXT_PUBLIC_PROSPECTPRO_MODO === "incluida" ? "incluida" : "recomendada";
 
-  return [
+  const herramientas: (Recomendacion | null)[] = [
     prospectPro
       ? {
           id: "prospectpro",
@@ -55,10 +66,19 @@ export function obtenerRecomendaciones(): Recomendacion[] {
             "Una herramienta para sacar listas de empresas por zona y por sector, con su web y su teléfono.",
           paraQue:
             "Tu página y tu dossier ya están listos, pero hay que mandárselos a alguien. Esto te da a quién: las empresas de tu provincia que encajan con lo que ofreces.",
-          precio: "Menos de 5 € al mes",
+          modo: modoProspectPro,
+          precio: modoProspectPro === "incluida" ? null : "Menos de 5 € al mes",
           url: prospectPro,
-          conComision: true,
+          conComision: modoProspectPro === "recomendada",
+          comoSeActiva:
+            modoProspectPro === "incluida"
+              ? "Escríbenos y te damos de alta. Va dentro de tu cuota, no pagas nada más."
+              : undefined,
         }
       : null,
-  ].filter((recomendacion): recomendacion is Recomendacion => recomendacion !== null);
+  ];
+
+  return herramientas.filter(
+    (herramienta): herramienta is Recomendacion => herramienta !== null,
+  );
 }
