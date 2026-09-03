@@ -78,12 +78,28 @@ export function PanelTabs({
   const solicitada = IDS_PESTANA.has(ancla) ? (ancla as Pestana) : "identidad";
   const pestanaActiva: Pestana = solicitada !== "identidad" && !perfilCreado ? "identidad" : solicitada;
 
-  // Al llegar desde uno de esos enlaces, la pestaña queda más abajo de
-  // lo que se ve: sin esto parecería que tampoco ha pasado nada.
+  // Al llegar desde uno de esos enlaces, la sección queda más abajo de
+  // lo que se ve, así que hay que bajar hasta ella y dejar el cursor
+  // puesto en el primer campo.
+  //
+  // Depende del ancla y no de la pestaña activa a propósito: el paso 1
+  // de "Empieza aquí" apunta a Identidad, que es la pestaña que ya está
+  // abierta, así que la pestaña no cambia y el efecto no llegaba a
+  // ejecutarse nunca. Desde fuera eso se ve exactamente igual que un
+  // botón roto.
   useEffect(() => {
-    if (!window.location.hash) return;
+    if (!ancla) return;
+
     contenedor.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [pestanaActiva]);
+
+    // Dejar el cursor en el primer campo ahorra al club el paso de
+    // buscar por dónde empezar. `preventScroll` para no pelearse con el
+    // desplazamiento suave de la línea de arriba.
+    const primerCampo = contenedor.current?.querySelector<HTMLElement>(
+      "input:not([type=hidden]), textarea, select",
+    );
+    primerCampo?.focus({ preventScroll: true });
+  }, [ancla]);
 
   return (
     <div ref={contenedor} className="grid gap-6 lg:grid-cols-[200px_1fr]">
