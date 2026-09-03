@@ -25,7 +25,11 @@ export async function subirImagenClub(
   });
 
   if (error) {
-    throw new Error("No se ha podido subir la imagen. Inténtalo de nuevo.");
+    // El motivo real importa: casi siempre es el bucket "club-media" sin
+    // crear o una política de Storage que no deja escribir, y sin el
+    // mensaje no hay forma de distinguir uno de otro.
+    console.error("[storage] No se ha podido subir la imagen:", error);
+    throw new Error(`No se ha podido subir la imagen: ${error.message}`);
   }
 
   const { data } = supabase.storage.from(BUCKET_MEDIA_CLUB).getPublicUrl(ruta);

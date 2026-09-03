@@ -60,6 +60,41 @@ function leerBooleano(formData: FormData, campo: string): boolean {
 // ---------------------------------------------------------------------
 // 1. Identidad
 // ---------------------------------------------------------------------
+/**
+ * Convierte un error de Supabase en el mensaje que ve el club, sin
+ * perder por el camino lo que de verdad ha pasado.
+ *
+ * Hasta ahora estas acciones devolvían "No se ha podido guardar" y
+ * tiraban el error a la basura, así que cuando algo fallaba no había
+ * absolutamente nada con lo que averiguar por qué. Ahora queda escrito
+ * en el servidor siempre, y en desarrollo se enseña también en pantalla:
+ * cuando el que prueba la web es el que la ha encargado, esconderle la
+ * causa no protege a nadie.
+ */
+function fallo(operacion: string, error: unknown, mensaje: string): { error: string } {
+  const detalle = error as { message?: string; code?: string; details?: string; hint?: string } | null;
+
+  console.error(
+    `[panel] ${operacion} ha fallado:`,
+    JSON.stringify(
+      {
+        code: detalle?.code,
+        message: detalle?.message,
+        details: detalle?.details,
+        hint: detalle?.hint,
+      },
+      null,
+      2,
+    ),
+  );
+
+  if (process.env.NODE_ENV !== "production" && detalle?.message) {
+    return { error: `${mensaje} (motivo técnico: ${detalle.message})` };
+  }
+
+  return { error: mensaje };
+}
+
 export async function guardarIdentidad(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
@@ -118,7 +153,7 @@ export async function guardarIdentidad(
 
   const { error } = await supabase.from("clubs").upsert(datosClub, { onConflict: "id" });
 
-  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+  if (error) return fallo("guardarIdentidad", error, "No se ha podido guardar. Inténtalo de nuevo.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -135,7 +170,7 @@ export async function guardarLogo(url: string): Promise<EstadoGuardado> {
     .update({ logo_url: url })
     .eq("id", user.id);
 
-  if (error) return { error: "No se ha podido guardar el logo." };
+  if (error) return fallo("guardarLogo", error, "No se ha podido guardar el logo.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -159,7 +194,7 @@ export async function agregarFoto(url: string): Promise<EstadoGuardado> {
     .update({ photo_urls: [...fotosActuales, url] })
     .eq("id", user.id);
 
-  if (error) return { error: "No se ha podido guardar la foto." };
+  if (error) return fallo("guardarFoto", error, "No se ha podido guardar la foto.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -183,7 +218,7 @@ export async function eliminarFoto(url: string): Promise<EstadoGuardado> {
     .update({ photo_urls: fotosActuales.filter((foto) => foto !== url) })
     .eq("id", user.id);
 
-  if (error) return { error: "No se ha podido quitar la foto." };
+  if (error) return fallo("quitarFoto", error, "No se ha podido quitar la foto.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -230,7 +265,7 @@ export async function guardarNivelDeportivo(
     { onConflict: "id" },
   );
 
-  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+  if (error) return fallo("guardarNivelDeportivo", error, "No se ha podido guardar. Inténtalo de nuevo.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -262,7 +297,7 @@ export async function agregarEquipo(
     player_count: leerEntero(formData, "playerCount"),
   });
 
-  if (error) return { error: "No se ha podido añadir el equipo." };
+  if (error) return fallo("agregarEquipo", error, "No se ha podido añadir el equipo.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -301,7 +336,7 @@ export async function guardarCantera(
     { onConflict: "id" },
   );
 
-  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+  if (error) return fallo("guardarCantera", error, "No se ha podido guardar. Inténtalo de nuevo.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -334,7 +369,7 @@ export async function guardarHistoria(
     { onConflict: "id" },
   );
 
-  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+  if (error) return fallo("guardarHistoria", error, "No se ha podido guardar. Inténtalo de nuevo.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -369,7 +404,7 @@ export async function guardarAudiencia(
     { onConflict: "id" },
   );
 
-  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+  if (error) return fallo("guardarAudiencia", error, "No se ha podido guardar. Inténtalo de nuevo.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -398,7 +433,7 @@ export async function guardarComunidad(
     { onConflict: "id" },
   );
 
-  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+  if (error) return fallo("guardarComunidad", error, "No se ha podido guardar. Inténtalo de nuevo.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -447,7 +482,7 @@ export async function agregarPatrocinador(
     sort_order: (ultimo?.sort_order ?? 0) + 1,
   });
 
-  if (error) return { error: "No se ha podido añadir el patrocinador." };
+  if (error) return fallo("agregarPatrocinador", error, "No se ha podido añadir el patrocinador.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -496,7 +531,7 @@ export async function editarPatrocinador(
     .eq("id", id)
     .eq("club_id", user.id);
 
-  if (error) return { error: "No se han podido guardar los cambios." };
+  if (error) return fallo("editarPatrocinador", error, "No se han podido guardar los cambios.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };

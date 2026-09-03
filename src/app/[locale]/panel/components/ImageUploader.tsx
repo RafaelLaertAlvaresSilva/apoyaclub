@@ -36,6 +36,9 @@ export function ImageUploader({ userId, carpeta, label, onSubido }: Props) {
     } catch (excepcion) {
       if (excepcion instanceof ErrorImagenInvalida) {
         setError(excepcion.message);
+      } else if (excepcion instanceof Error) {
+        // `subirImagenClub` ya trae el motivo dentro del mensaje.
+        setError(excepcion.message);
       } else {
         setError("No se ha podido subir la imagen. Inténtalo de nuevo.");
       }
