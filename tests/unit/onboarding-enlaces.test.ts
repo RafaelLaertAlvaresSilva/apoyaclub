@@ -25,14 +25,22 @@ describe("enlaces de los primeros pasos", () => {
   const pasos = primerosPasos(perfilDePrueba(), [], 0);
 
   it("los pasos que se quedan en el panel llevan ancla de pestaña", () => {
-    for (const paso of pasos.filter((candidato) => candidato.href.startsWith("/panel#"))) {
-      const ancla = paso.href.split("#")[1];
-      expect(PESTANAS_DEL_PANEL.has(ancla)).toBe(true);
+    for (const paso of pasos.filter((candidato) => candidato.anclaDelPanel !== null)) {
+      expect(PESTANAS_DEL_PANEL.has(paso.anclaDelPanel!)).toBe(true);
+      // El href tiene que ir de la mano del ancla: si se separan, el
+      // botón lleva a un sitio y abre otro.
+      expect(paso.href).toBe(`/panel#${paso.anclaDelPanel}`);
     }
   });
 
   it("ningún paso apunta al panel pelado, que no haría nada", () => {
     expect(pasos.map((paso) => paso.href)).not.toContain("/panel");
+  });
+
+  it("el paso que sale del panel no lleva ancla", () => {
+    const oportunidad = pasos.find((paso) => paso.id === "oportunidad");
+    expect(oportunidad?.anclaDelPanel).toBeNull();
+    expect(oportunidad?.href).toBe("/panel/oportunidades");
   });
 });
 

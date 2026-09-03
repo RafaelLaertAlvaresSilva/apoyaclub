@@ -141,8 +141,15 @@ function leerAncla(): string {
   return window.location.hash.replace("#", "");
 }
 
-/** Avisa cuando cambia el ancla (pulsar un enlace a `/panel#loquesea`). */
+/**
+ * Avisa cuando cambia el ancla: al pulsar un enlace `#loquesea` y también
+ * al usar el atrás/adelante del navegador.
+ */
 function suscribirseAlAncla(alCambiar: () => void): () => void {
   window.addEventListener("hashchange", alCambiar);
-  return () => window.removeEventListener("hashchange", alCambiar);
+  window.addEventListener("popstate", alCambiar);
+  return () => {
+    window.removeEventListener("hashchange", alCambiar);
+    window.removeEventListener("popstate", alCambiar);
+  };
 }

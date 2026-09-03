@@ -44,14 +44,27 @@ export function PrimerosPasos({ pasos }: { pasos: PasoInicial[] }) {
               {!paso.hecho && <p className="text-xs text-zinc-500">{t(`${paso.id}.texto`)}</p>}
             </div>
 
-            {indice === indicePendiente && (
-              <Link
-                href={paso.href}
-                className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-brand-navy"
-              >
-                {t(`${paso.id}.accion`)}
-              </Link>
-            )}
+            {indice === indicePendiente &&
+              (paso.anclaDelPanel ? (
+                // Enlace normal a propósito, no el <Link> de Next: este
+                // salto se queda en la misma página, y el <Link> cambia
+                // la dirección de una forma que el navegador no anuncia,
+                // así que la pestaña no llegaba a abrirse y el botón
+                // parecía muerto.
+                <a
+                  href={`#${paso.anclaDelPanel}`}
+                  className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-brand-navy"
+                >
+                  {t(`${paso.id}.accion`)}
+                </a>
+              ) : (
+                <Link
+                  href={paso.href}
+                  className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-brand-navy"
+                >
+                  {t(`${paso.id}.accion`)}
+                </Link>
+              ))}
           </li>
         ))}
       </ol>

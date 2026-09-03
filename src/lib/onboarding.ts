@@ -16,15 +16,19 @@ import type { ClubProfile, ClubTeam } from "@/lib/types";
 export type PasoInicial = {
   id: "identidad" | "equipos" | "oportunidad";
   hecho: boolean;
-  /**
-   * Ruta a la que lleva el paso cuando está pendiente.
-   *
-   * Los dos primeros apuntan a una pestaña concreta del propio panel
-   * (`/panel#equipos`). El ancla no es decorativa: `PanelTabs` la lee
-   * para abrir esa pestaña. Sin ella el botón llevaba a `/panel` estando
-   * ya en `/panel`, así que al pulsarlo no ocurría nada.
-   */
+  /** Ruta a la que lleva el paso cuando está pendiente. */
   href: string;
+  /**
+   * Pestaña del propio panel que abre el paso, o null si lleva a otra
+   * página.
+   *
+   * Se distingue de `href` porque el botón tiene que pintarse distinto:
+   * un enlace de Next navega cambiando el historial sin avisar al
+   * navegador, y un salto dentro de la misma página no se entera. Los
+   * pasos con ancla se pintan como enlace normal (`<a href="#equipos">`),
+   * que sí dispara el aviso que `PanelTabs` escucha.
+   */
+  anclaDelPanel: "identidad" | "equipos" | null;
 };
 
 export function primerosPasos(
@@ -39,16 +43,19 @@ export function primerosPasos(
       // del perfil suma, pero no bloquea.
       hecho: !!perfil?.logoUrl && !!perfil?.description,
       href: "/panel#identidad",
+      anclaDelPanel: "identidad",
     },
     {
       id: "equipos",
       hecho: equipos.length > 0 || perfil?.youthTeamsCount != null,
       href: "/panel#equipos",
+      anclaDelPanel: "equipos",
     },
     {
       id: "oportunidad",
       hecho: oportunidadesPublicadas > 0,
       href: "/panel/oportunidades",
+      anclaDelPanel: null,
     },
   ];
 }
