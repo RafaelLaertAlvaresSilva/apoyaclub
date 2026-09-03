@@ -111,7 +111,7 @@ function FilaPatrocinador({
               alt={patrocinador.name}
               width={32}
               height={32}
-              className="h-8 w-8 shrink-0 rounded object-cover"
+              className="h-8 w-8 shrink-0 rounded bg-white object-contain"
               unoptimized
             />
           ) : (
@@ -304,7 +304,7 @@ function CamposPatrocinador({
               alt="Logo del patrocinador"
               width={40}
               height={40}
-              className="h-10 w-10 rounded object-cover"
+              className="h-10 w-10 rounded bg-white object-contain"
               unoptimized
             />
           )}

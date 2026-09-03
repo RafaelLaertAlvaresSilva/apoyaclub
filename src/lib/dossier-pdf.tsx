@@ -68,7 +68,9 @@ const estilos = StyleSheet.create({
     width: 88,
     height: 88,
     borderRadius: 8,
-    objectFit: "cover",
+    // Entero, sin recortar: un escudo alto o una marca apaisada perdían
+    // el nombre al ajustarlos a un cuadrado.
+    objectFit: "contain",
     marginBottom: 20,
   },
   portadaEtiqueta: {
@@ -194,7 +196,9 @@ const estilos = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 4,
-    objectFit: "cover",
+    // Mismo motivo que el logo del club: el de un patrocinador suele ser
+    // una marca apaisada y recortarla a un cuadrado se come el nombre.
+    objectFit: "contain",
     marginRight: 8,
   },
   filaSponsor: {

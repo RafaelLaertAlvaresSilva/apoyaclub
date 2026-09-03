@@ -22,6 +22,7 @@ const CLUB_VACIO: ClubProfile = {
   description: null,
   logoUrl: null,
   coverUrl: null,
+  coverPosition: 50,
   photoUrls: [],
   videoUrl: null,
   contactName: null,

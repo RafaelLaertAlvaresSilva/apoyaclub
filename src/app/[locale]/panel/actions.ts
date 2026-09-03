@@ -223,6 +223,32 @@ export async function guardarPortada(url: string): Promise<EstadoGuardado> {
   return { ok: true };
 }
 
+/**
+ * Guarda a qué altura se corta la portada (migración 0026).
+ *
+ * La portada es una franja muy baja de una foto apaisada: por defecto se
+ * coge la del centro, y eso deja fuera justo lo que importa la mitad de
+ * las veces.
+ */
+export async function guardarPosicionPortada(posicion: number): Promise<EstadoGuardado> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return { error: contexto.error };
+  const { supabase, user } = contexto;
+
+  if (!Number.isFinite(posicion)) return { error: "Posición no válida." };
+  const acotada = Math.min(100, Math.max(0, Math.round(posicion)));
+
+  const { error } = await supabase
+    .from("clubs")
+    .update({ cover_position: acotada })
+    .eq("id", user.id);
+
+  if (error) return fallo("guardarPosicionPortada", error, "No se ha podido guardar el encuadre.");
+
+  revalidatePath(RUTA_PANEL);
+  return { ok: true };
+}
+
 /** Quita la imagen de cabecera (no borra el archivo de Storage). */
 export async function quitarPortada(): Promise<EstadoGuardado> {
   const contexto = await obtenerClubActual();

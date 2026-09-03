@@ -11,12 +11,11 @@ import {
   eliminarFoto,
   guardarIdentidad,
   guardarLogo,
-  guardarPortada,
-  quitarPortada,
   registrarConfirmacionMenores,
 } from "../actions";
 import { Campo, SeccionCard, clasesInput, clasesTextarea } from "./SeccionCard";
 import { ImageUploader } from "./ImageUploader";
+import { PortadaEditor } from "./PortadaEditor";
 
 export function IdentidadForm({
   userId,
@@ -51,48 +50,11 @@ export function IdentidadForm({
       )}
 
       <div className="mb-6 space-y-4">
-        <Campo
-          etiqueta="Imagen de portada"
-          ayuda="La foto ancha de arriba del todo de tu página. Apaisada y de buena calidad: es lo primero que ve una empresa."
-        >
-          <div className="space-y-3">
-            {perfil?.coverUrl ? (
-              <div className="relative">
-                <Image
-                  src={perfil.coverUrl}
-                  alt="Portada del club"
-                  width={640}
-                  height={180}
-                  className="h-28 w-full rounded-lg border border-zinc-200 object-cover sm:h-36"
-                  unoptimized
-                />
-                <button
-                  type="button"
-                  onClick={() =>
-                    iniciarTransicion(async () => {
-                      manejarErrorAccion(await quitarPortada());
-                    })
-                  }
-                  className="absolute right-2 top-2 rounded-lg bg-white/90 px-2 py-1 text-xs font-medium text-red-600 shadow-sm"
-                >
-                  Quitar
-                </button>
-              </div>
-            ) : (
-              <div className="flex h-28 w-full items-center justify-center rounded-lg border border-dashed border-zinc-300 text-xs text-zinc-500 sm:h-36">
-                Sin portada
-              </div>
-            )}
-            <ImageUploader
-              userId={userId}
-              carpeta="fotos"
-              label={perfil?.coverUrl ? "Cambiar portada" : "Subir portada"}
-              onSubido={async (url) => {
-                manejarErrorAccion(await guardarPortada(url));
-              }}
-            />
-          </div>
-        </Campo>
+        <PortadaEditor
+          userId={userId}
+          coverUrl={perfil?.coverUrl ?? null}
+          coverPosition={perfil?.coverPosition ?? 50}
+        />
 
         <Campo etiqueta={t("logoDelClub")}>
           <div className="flex items-center gap-4">
@@ -102,7 +64,7 @@ export function IdentidadForm({
                 alt="Logo del club"
                 width={64}
                 height={64}
-                className="h-16 w-16 rounded-lg border border-zinc-200 object-cover"
+                className="h-16 w-16 rounded-lg border border-zinc-200 bg-white object-contain p-1"
                 unoptimized
               />
             ) : (

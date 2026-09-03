@@ -559,7 +559,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                           alt={patrocinador.name}
                           width={40}
                           height={40}
-                          className="h-10 w-10 shrink-0 rounded object-cover"
+                          className="h-10 w-10 shrink-0 rounded bg-white object-contain"
                         />
                       ) : (
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-zinc-100 text-sm font-semibold text-zinc-500">
@@ -714,21 +714,35 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             ve una empresa y con 224 px apenas se distinguía la foto. */}
         <div className="relative h-64 w-full overflow-hidden bg-gradient-to-br from-teal-600 to-teal-800 sm:h-80">
           {portada && (
-            <Image src={portada} alt="" fill priority sizes="100vw" className="object-cover" />
+            <Image
+              src={portada}
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+              // Qué franja de la foto se ve, la que haya elegido el club
+              // (migración 0026). 50 % es el centro de siempre.
+              style={{ objectPosition: `50% ${perfil.coverPosition}%` }}
+            />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent" />
         </div>
 
         <div className="mx-auto -mt-16 flex max-w-4xl flex-col gap-4 px-4 sm:-mt-20 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex items-end gap-4">
-            <div className="h-28 w-28 shrink-0 overflow-hidden rounded-2xl border-4 border-white bg-white shadow-md sm:h-40 sm:w-40">
+            {/* `object-contain` y no `object-cover`: el logo de un club
+                suele ser un escudo alto o una marca apaisada, y recortarlo
+                a un cuadrado le corta el nombre o la mitad del escudo. Se
+                enseña entero, con relleno blanco alrededor. */}
+            <div className="h-28 w-28 shrink-0 overflow-hidden rounded-2xl border-4 border-white bg-white p-2 shadow-md sm:h-40 sm:w-40">
               {perfil.logoUrl ? (
                 <Image
                   src={perfil.logoUrl}
                   alt={`Logo de ${perfil.name}`}
                   width={160}
                   height={160}
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-contain"
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-teal-50 text-4xl font-bold text-teal-700">

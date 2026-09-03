@@ -74,6 +74,8 @@ export type ClubProfile = {
   logoUrl: string | null;
   /** Imagen de cabecera de la ficha, de lado a lado (migración 0025). */
   coverUrl: string | null;
+  /** Altura del recorte de la portada, en porcentaje: 0 arriba, 100 abajo. */
+  coverPosition: number;
   photoUrls: string[];
   videoUrl: string | null;
 

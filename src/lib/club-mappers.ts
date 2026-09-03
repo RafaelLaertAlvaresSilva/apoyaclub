@@ -37,6 +37,7 @@ export type ClubRow = {
   description: string | null;
   logo_url: string | null;
   cover_url?: string | null;
+  cover_position?: number | null;
   photo_urls: string[] | null;
   video_url: string | null;
   contact_name: string | null;
@@ -109,6 +110,7 @@ export function clubRowToProfile(row: ClubRow): ClubProfile {
     description: row.description,
     logoUrl: row.logo_url,
     coverUrl: row.cover_url ?? null,
+    coverPosition: row.cover_position ?? 50,
     photoUrls: row.photo_urls ?? [],
     videoUrl: row.video_url,
     contactName: row.contact_name,

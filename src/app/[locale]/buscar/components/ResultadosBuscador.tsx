@@ -161,7 +161,7 @@ function BotonVista({
 
 function Logo({ url, nombre }: { url: string | null; nombre: string }) {
   return url ? (
-    <Image src={url} alt={nombre} width={40} height={40} className="h-10 w-10 shrink-0 rounded-lg object-cover" />
+    <Image src={url} alt={nombre} width={40} height={40} className="h-10 w-10 shrink-0 rounded-lg border border-zinc-200 bg-white object-contain p-0.5" />
   ) : (
     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-sm font-bold text-teal-700">
       {nombre.charAt(0).toUpperCase()}

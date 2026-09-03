@@ -54,7 +54,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             alt=""
             width={104}
             height={104}
-            style={{ borderRadius: 20, marginBottom: 32, objectFit: "cover" }}
+            style={{ borderRadius: 20, marginBottom: 32, objectFit: "contain" }}
           />
         )}
         <div style={{ display: "flex", fontSize: 30, color: "#a7f3d0", letterSpacing: 1 }}>
