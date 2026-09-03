@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
+import { direccionDe, limpiarCabecera } from "@/lib/email/cabeceras";
 /**
  * Envío de email transaccional con Resend (Fase 8), usando `fetch`
  * directamente contra su API HTTP (https://resend.com/docs/api-reference/emails/send-email)
@@ -29,10 +30,18 @@ export async function enviarEmail({
   subject,
   html,
   replyTo,
+  remitenteNombre,
 }: {
   to: string;
   subject: string;
   html: string;
+  /**
+   * Nombre que se ve como remitente, manteniendo la dirección de envío.
+   * Lo usa el aviso al patrocinador, que sale a nombre del club: la
+   * relación previa es entre el club y su empresa, no entre la empresa y
+   * ApoyaClub, y el correo tiene que reflejar eso.
+   */
+  remitenteNombre?: string;
   /** Fase 13: para que quien recibe el email (p. ej. el equipo de
    * ApoyaClub al leer el formulario de contacto de la landing) pueda
    * responder directamente a la persona que escribió, en vez de a
@@ -40,14 +49,18 @@ export async function enviarEmail({
   replyTo?: string;
 }): Promise<ResultadoEnvioEmail> {
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM_EMAIL;
+  const fromConfigurado = process.env.RESEND_FROM_EMAIL;
 
-  if (!apiKey || !from) {
+  if (!apiKey || !fromConfigurado) {
     console.warn(
       "[email] RESEND_API_KEY o RESEND_FROM_EMAIL no configuradas: el email no se ha enviado (pendiente de configurar).",
     );
     return { ok: false, error: "Envío de email no configurado todavía." };
   }
+
+  const from = remitenteNombre
+    ? `${limpiarCabecera(remitenteNombre)} <${direccionDe(fromConfigurado)}>`
+    : fromConfigurado;
 
   try {
     const respuesta = await fetch("https://api.resend.com/emails", {
@@ -409,6 +422,49 @@ export async function enviarEmailSolicitudSinAbrir({
       cuerpo: `<p style="margin:0 0 24px;">${t("solicitudSinAbrir.texto", { dias: diasDeLaMasAntigua })}</p>`,
       botonTexto: t("solicitudSinAbrir.boton"),
       botonUrl: panelUrl,
+    }),
+  });
+}
+
+/**
+ * Agradecimiento del club a una empresa que ya le patrocina, con el
+ * enlace a su página (migración 0027).
+ *
+ * Sale a nombre del club y con su correo para responder, no a nombre de
+ * ApoyaClub: la relación previa que lo justifica es la del club con su
+ * patrocinador. El pie dice quién escribe, por qué llega y que no habrá
+ * un segundo correo.
+ */
+export async function enviarEmailAvisoPatrocinador({
+  empresaEmail,
+  clubNombre,
+  urlFicha,
+  responderA,
+}: {
+  empresaEmail: string;
+  clubNombre: string;
+  urlFicha: string;
+  /** Correo del club, para que la empresa le conteste a él. */
+  responderA?: string;
+}): Promise<ResultadoEnvioEmail> {
+  const t = await traductorEmails();
+
+  return enviarEmail({
+    to: empresaEmail,
+    replyTo: responderA,
+    remitenteNombre: clubNombre,
+    subject: t("avisoPatrocinador.asunto", { club: clubNombre }),
+    html: plantilla({
+      color: "#047857",
+      eyebrow: t("avisoPatrocinador.eyebrow"),
+      titulo: t("avisoPatrocinador.titulo", { club: clubNombre }),
+      cuerpo: [
+        `<p style="margin:0 0 16px;">${t("avisoPatrocinador.texto", { club: clubNombre })}</p>`,
+        `<p style="margin:0 0 24px;">${t("avisoPatrocinador.texto2")}</p>`,
+      ].join(""),
+      botonTexto: t("avisoPatrocinador.boton"),
+      botonUrl: urlFicha,
+      pie: t("avisoPatrocinador.pieMotivo", { club: clubNombre }),
     }),
   });
 }

@@ -3,7 +3,11 @@
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
 import { registrarConsentimiento } from "@/lib/consent";
+import { enviarEmailAvisoPatrocinador } from "@/lib/email/resend";
 import { geocodificarDireccion } from "@/lib/geocoding";
+import { consumirLimite } from "@/lib/rate-limit";
+import { SITE_URL } from "@/lib/site";
+import { routing } from "@/i18n/routing";
 import { CONSENT_TYPES, LEGAL_VERSIONS } from "@/lib/legal";
 import { getTranslations } from "next-intl/server";
 import { esCategoriaValida } from "@/lib/service-needs";
@@ -14,6 +18,9 @@ import type { Milestone, Role, SponsorTier, TeamLevel } from "@/lib/types";
 export type EstadoGuardado = { error: string; ok?: false } | { ok: true; error?: undefined } | null;
 
 const RUTA_PANEL = "/panel";
+
+/** Tope de avisos a patrocinadores que puede mandar un club en un día. */
+const AVISOS_PATROCINADOR_AL_DIA = 20;
 
 /**
  * Recupera el cliente de Supabase y el usuario autenticado, comprobando
@@ -672,6 +679,9 @@ export async function agregarPatrocinador(
     return { error: "El texto del patrocinador no puede pasar de 400 caracteres." };
   }
 
+  const correoEmpresa = leerCorreoEmpresa(formData);
+  if ("error" in correoEmpresa) return { error: correoEmpresa.error };
+
   // Va al final de su categoría: el club reordena después si quiere.
   const { data: ultimo } = await supabase
     .from("club_sponsors")
@@ -690,6 +700,7 @@ export async function agregarPatrocinador(
     tier_label: nivel.tierLabel,
     description: descripcion,
     since_year: leerAnio(formData, "sinceYear"),
+    contact_email: correoEmpresa.valor,
     sort_order: (ultimo?.sort_order ?? 0) + 1,
   });
 
@@ -726,6 +737,9 @@ export async function editarPatrocinador(
     return { error: "El texto del patrocinador no puede pasar de 400 caracteres." };
   }
 
+  const correoEmpresa = leerCorreoEmpresa(formData);
+  if ("error" in correoEmpresa) return { error: correoEmpresa.error };
+
   const logoUrl = leerTexto(formData, "logoUrl");
 
   const { error } = await supabase
@@ -737,6 +751,7 @@ export async function editarPatrocinador(
       tier_label: nivel.tierLabel,
       description: descripcion,
       since_year: leerAnio(formData, "sinceYear"),
+      contact_email: correoEmpresa.valor,
       ...(logoUrl ? { logo_url: logoUrl } : {}),
     })
     .eq("id", id)
@@ -797,6 +812,132 @@ export async function moverPatrocinador(formData: FormData): Promise<void> {
     .eq("club_id", user.id);
 
   revalidatePath(RUTA_PANEL);
+}
+
+/** Correo de la empresa patrocinadora, validado o vacío. */
+function leerCorreoEmpresa(formData: FormData): { valor: string | null } | { error: string } {
+  const correo = leerTexto(formData, "contactEmail");
+  if (!correo) return { valor: null };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(correo)) {
+    return { error: "El correo de la empresa no parece válido." };
+  }
+  return { valor: correo };
+}
+
+/**
+ * Manda a un patrocinador el agradecimiento del club, con el enlace a su
+ * página (migración 0027).
+ *
+ * Cuatro condiciones, y ninguna es opcional:
+ *
+ *   1. Lo manda el CLUB, a su nombre y con su correo para responder. La
+ *      relación previa que justifica escribir a esa empresa es la suya,
+ *      no la de ApoyaClub.
+ *   2. El club confirma, y queda con fecha, que esa empresa colabora con
+ *      él y que tiene relación con esa dirección.
+ *   3. Un solo correo por empresa. Nunca un segundo.
+ *   4. Un tope diario por club, porque sin él esto es una máquina de
+ *      spam regalada.
+ *
+ * Escribir a una empresa que no ha dado su dirección a nadie es spam en
+ * el sentido legal, y la consecuencia práctica más probable no es una
+ * multa: es que el dominio se queme y dejen de llegar los correos que sí
+ * importan, que son las solicitudes de contacto.
+ */
+export async function avisarPatrocinador(
+  _estadoPrevio: EstadoGuardado,
+  formData: FormData,
+): Promise<EstadoGuardado> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return { error: contexto.error };
+  const { supabase, user } = contexto;
+
+  const id = leerTexto(formData, "id");
+  if (!id) return { error: "No se ha podido identificar el patrocinador." };
+
+  if (!leerBooleano(formData, "confirmaRelacion")) {
+    return {
+      error:
+        "Marca la confirmación: hace falta que declares que esta empresa colabora contigo y que tienes relación con esa dirección.",
+    };
+  }
+
+  const { data: patrocinador } = await supabase
+    .from("club_sponsors")
+    .select("id, name, contact_email, notified_at")
+    .eq("id", id)
+    .eq("club_id", user.id)
+    .maybeSingle<{
+      id: string;
+      name: string;
+      contact_email: string | null;
+      notified_at: string | null;
+    }>();
+
+  if (!patrocinador) return { error: "No se ha encontrado ese patrocinador." };
+  if (!patrocinador.contact_email) {
+    return { error: "Añade primero el correo de la empresa." };
+  }
+  if (patrocinador.notified_at) {
+    return { error: "A esta empresa ya se le avisó. Solo se le escribe una vez." };
+  }
+
+  const dentroDelCupo = await consumirLimite({
+    bucket: "aviso-patrocinador",
+    identificador: user.id,
+    limite: AVISOS_PATROCINADOR_AL_DIA,
+    ventanaSegundos: 24 * 60 * 60,
+  });
+
+  if (!dentroDelCupo) {
+    return {
+      error: `Has avisado a ${AVISOS_PATROCINADOR_AL_DIA} empresas hoy. Continúa mañana.`,
+    };
+  }
+
+  const { data: club } = await supabase
+    .from("clubs")
+    .select("name, slug, contact_email")
+    .eq("id", user.id)
+    .maybeSingle<{ name: string; slug: string; contact_email: string | null }>();
+
+  if (!club?.slug) {
+    return { error: "Completa antes la identidad de tu club: el correo lleva el enlace a tu página." };
+  }
+
+  // La confirmación se guarda ANTES de enviar. Si el envío fallara, lo
+  // que no puede quedar es un correo salido sin su confirmación guardada.
+  const ahora = new Date().toISOString();
+  await supabase
+    .from("club_sponsors")
+    .update({ relationship_confirmed_at: ahora })
+    .eq("id", patrocinador.id)
+    .eq("club_id", user.id);
+
+  const resultado = await enviarEmailAvisoPatrocinador({
+    empresaEmail: patrocinador.contact_email,
+    clubNombre: club.name,
+    urlFicha: `${SITE_URL}/${routing.defaultLocale}/club/${club.slug}`,
+    responderA: club.contact_email ?? user.email ?? undefined,
+  });
+
+  if (!resultado.ok) {
+    return {
+      error:
+        resultado.error === "Envío de email no configurado todavía."
+          ? "El envío de correos todavía no está configurado en la plataforma."
+          : "No se ha podido enviar el aviso. Inténtalo más tarde.",
+    };
+  }
+
+  await supabase
+    .from("club_sponsors")
+    .update({ notified_at: ahora })
+    .eq("id", patrocinador.id)
+    .eq("club_id", user.id);
+
+  revalidatePath(RUTA_PANEL);
+  return { ok: true };
 }
 
 /**

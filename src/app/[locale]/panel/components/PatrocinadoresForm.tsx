@@ -9,6 +9,7 @@ import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
 import { NIVELES_PATROCINADOR, type ClubSponsor, type SponsorTier } from "@/lib/types";
 import {
   agregarPatrocinador,
+  avisarPatrocinador,
   editarPatrocinador,
   eliminarPatrocinador,
   moverPatrocinador,
@@ -159,11 +160,81 @@ function FilaPatrocinador({
       </div>
 
       {editando && (
-        <div className="mt-4 border-t border-zinc-100 pt-4">
+        <div className="mt-4 space-y-4 border-t border-zinc-100 pt-4">
           <FormularioEditarPatrocinador userId={userId} patrocinador={patrocinador} />
+          <AvisoAlPatrocinador patrocinador={patrocinador} />
         </div>
       )}
     </li>
+  );
+}
+
+/**
+ * Mandar a la empresa el agradecimiento del club con el enlace a su
+ * página (migración 0027).
+ *
+ * El correo sale a nombre del club, no de ApoyaClub, y solo se manda una
+ * vez. La casilla no es un trámite: escribir a una empresa que no ha
+ * dado su dirección a nadie es spam en el sentido legal, y lo que
+ * sostiene este envío es que el club sí tiene relación con ella.
+ */
+function AvisoAlPatrocinador({ patrocinador }: { patrocinador: ClubSponsor }) {
+  const [estado, formAction] = useActionState(avisarPatrocinador, null);
+
+  if (patrocinador.notifiedAt) {
+    return (
+      <p className="rounded-lg bg-zinc-50 px-3 py-2 text-xs text-zinc-600">
+        Avisada el{" "}
+        {new Date(patrocinador.notifiedAt).toLocaleDateString("es-ES", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })}
+        . Solo se escribe una vez a cada empresa.
+      </p>
+    );
+  }
+
+  if (!patrocinador.contactEmail) {
+    return (
+      <p className="rounded-lg bg-zinc-50 px-3 py-2 text-xs text-zinc-600">
+        Añade el correo de la empresa aquí arriba y podrás mandarle un agradecimiento con el
+        enlace a tu página.
+      </p>
+    );
+  }
+
+  return (
+    <form action={formAction} className="rounded-lg border border-teal-200 bg-teal-50 p-4">
+      <input type="hidden" name="id" value={patrocinador.id} />
+
+      <p className="text-sm font-medium text-zinc-900">Avisar a {patrocinador.name}</p>
+      <p className="mt-1 text-xs text-zinc-600">
+        Le llegará un correo <strong>a nombre de tu club</strong> dándole las gracias por
+        apoyaros, con el enlace a tu página para que vea cómo aparece. Se manda una sola vez.
+      </p>
+
+      <label className="mt-3 flex items-start gap-2 text-xs text-zinc-700">
+        <input
+          type="checkbox"
+          name="confirmaRelacion"
+          className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
+        />
+        <span>
+          Confirmo que esta empresa colabora con mi club y que tengo relación con esa dirección
+          de correo.
+        </span>
+      </label>
+
+      <div className="mt-3">
+        <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
+        <AvisoExito
+          mensaje={estado && "ok" in estado && estado.ok ? "Aviso enviado." : null}
+        />
+      </div>
+
+      <BotonEnviar>Enviar agradecimiento</BotonEnviar>
+    </form>
   );
 }
 
@@ -224,6 +295,19 @@ function CamposPatrocinador({
           />
         </Campo>
       </div>
+
+      <Campo
+        etiqueta="Correo de la empresa (opcional)"
+        ayuda="Solo lo ves tú: nunca se publica. Sirve para poder mandarles el agradecimiento con el enlace a tu página."
+      >
+        <input
+          name="contactEmail"
+          type="email"
+          placeholder="contacto@empresa.es"
+          defaultValue={patrocinador?.contactEmail ?? ""}
+          className={clasesInput}
+        />
+      </Campo>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Campo

@@ -85,6 +85,8 @@ describe("lectura de la fila de la base de datos", () => {
       description: null,
       since_year: null,
       sort_order: null,
+      contact_email: null,
+      notified_at: null,
     });
 
     expect(patrocinador.tier).toBe("colaborador");
@@ -103,6 +105,8 @@ describe("lectura de la fila de la base de datos", () => {
       description: null,
       since_year: null,
       sort_order: 3,
+      contact_email: null,
+      notified_at: null,
     });
 
     expect(patrocinador.tierLabel).toBeNull();

@@ -77,6 +77,8 @@ export function patrocinadorDePrueba(cambios: Partial<ClubSponsor> = {}): ClubSp
     description: null,
     sinceYear: null,
     sortOrder: 0,
+    contactEmail: null,
+    notifiedAt: null,
     ...cambios,
   };
 }

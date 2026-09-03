@@ -90,6 +90,8 @@ export type ClubSponsorRow = {
   description: string | null;
   since_year: number | null;
   sort_order: number | null;
+  contact_email?: string | null;
+  notified_at?: string | null;
 };
 
 export function clubRowToProfile(row: ClubRow): ClubProfile {
@@ -169,6 +171,8 @@ export function clubSponsorRowToSponsor(row: ClubSponsorRow): ClubSponsor {
     description: row.description,
     sinceYear: row.since_year,
     sortOrder: row.sort_order ?? 0,
+    contactEmail: row.contact_email ?? null,
+    notifiedAt: row.notified_at ?? null,
   };
 }
 

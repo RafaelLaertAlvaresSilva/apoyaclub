@@ -79,5 +79,14 @@
     "texto": "En el buscador salen antes los clubes con la ficha más completa. Lo que más te falta ahora mismo:",
     "cierre": "Son diez minutos y no hay que volver a hacerlo.",
     "boton": "Completar mi ficha"
+  },
+  "avisoPatrocinador": {
+    "asunto": "{club} os ha añadido como patrocinadores en su página",
+    "eyebrow": "Gracias por apoyar el deporte",
+    "titulo": "{club} os da las gracias",
+    "texto": "{club} ha creado su página de patrocinio y os ha incluido entre las empresas que le apoyan. Gracias por estar ahí: sin empresas como la vuestra, muchos clubes de base no llegarían a final de temporada.",
+    "texto2": "En su página podéis ver cómo aparecéis, con vuestro logo y vuestra categoría de patrocinador. Es pública, así que también podéis compartirla.",
+    "boton": "Ver la página del club",
+    "pieMotivo": "Recibís este correo porque {club} os ha indicado como patrocinador suyo y ha facilitado esta dirección. Lo envía el club a través de ApoyaClub, la herramienta con la que gestiona su página. Es un aviso único: no os volveremos a escribir. Si preferís que os quitemos de su página, responded a este correo y el club se encargará."
   }
 }

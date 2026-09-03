@@ -168,6 +168,10 @@ export type ClubSponsor = {
   /** Año en que empezó a patrocinar. */
   sinceYear: number | null;
   sortOrder: number;
+  /** Correo de la empresa, que aporta el club. Nunca se publica. */
+  contactEmail: string | null;
+  /** Cuándo se le mandó el agradecimiento. Solo se manda una vez. */
+  notifiedAt: string | null;
 };
 
 /** Nombre que se enseña para la categoría de un patrocinador. */
