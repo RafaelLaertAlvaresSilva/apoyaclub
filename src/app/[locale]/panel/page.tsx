@@ -11,12 +11,14 @@ import {
 } from "@/lib/club-mappers";
 import { obtenerEmpresasInteresadas, obtenerMetricasClub } from "@/lib/club-metrics";
 import { primerosPasos } from "@/lib/onboarding";
+import { obtenerRecomendaciones } from "@/lib/recomendaciones";
 import { filaAServicio, type FilaServicio, type ServiceNeed } from "@/lib/service-needs";
 import { huecosDelPerfil } from "@/lib/profile-completion";
 import { createClient } from "@/lib/supabase/server";
 import { BarraProgreso } from "./components/BarraProgreso";
 import { MetricasClub } from "./components/MetricasClub";
 import { PrimerosPasos } from "./components/PrimerosPasos";
+import { Recomendaciones } from "./components/Recomendaciones";
 import { PanelNav } from "./components/PanelNav";
 import { PanelTabs } from "./components/PanelTabs";
 
@@ -120,6 +122,8 @@ export default async function PanelPage() {
         patrocinadores={patrocinadores}
         servicios={servicios}
       />
+
+      <Recomendaciones recomendaciones={obtenerRecomendaciones()} />
     </div>
   );
 }
