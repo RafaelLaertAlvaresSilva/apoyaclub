@@ -29,7 +29,18 @@ export async function subirImagenClub(
     // crear o una política de Storage que no deja escribir, y sin el
     // mensaje no hay forma de distinguir uno de otro.
     console.error("[storage] No se ha podido subir la imagen:", error);
-    throw new Error(`No se ha podido subir la imagen: ${error.message}`);
+
+    // Mismo caso que en las acciones del panel: si el almacén rechaza la
+    // escritura, casi siempre es que el testigo de sesión del navegador
+    // es más viejo que los permisos de la cuenta.
+    const mensaje = error.message ?? "";
+    if (mensaje.includes("row-level security") || mensaje.toLowerCase().includes("unauthorized")) {
+      throw new Error(
+        "Tu sesión no tiene permiso para subir imágenes. Cierra sesión, vuelve a entrar e inténtalo otra vez.",
+      );
+    }
+
+    throw new Error(`No se ha podido subir la imagen: ${mensaje}`);
   }
 
   const { data } = supabase.storage.from(BUCKET_MEDIA_CLUB).getPublicUrl(ruta);

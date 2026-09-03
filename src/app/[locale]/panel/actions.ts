@@ -88,11 +88,32 @@ function fallo(operacion: string, error: unknown, mensaje: string): { error: str
     ),
   );
 
+  // Caso aparte porque tiene una causa concreta y una solución concreta:
+  // la base de datos comprueba el permiso mirando el testigo de sesión
+  // del navegador, no la cuenta. Si ese testigo se emitió antes de que la
+  // cuenta tuviera el rol de club, el servidor la ve como club y la base
+  // de datos no, y el club se queda sin poder guardar nada sin saber por
+  // qué. Volver a entrar emite un testigo nuevo y ya con el rol dentro.
+  if (esFalloDePermisos(detalle)) {
+    return {
+      error:
+        "Tu sesión no tiene permiso para guardar. Cierra sesión, vuelve a entrar e inténtalo otra vez. Si sigue pasando, escríbenos.",
+    };
+  }
+
   if (process.env.NODE_ENV !== "production" && detalle?.message) {
     return { error: `${mensaje} (motivo técnico: ${detalle.message})` };
   }
 
   return { error: mensaje };
+}
+
+/** true si Postgres ha rechazado la escritura por las reglas de acceso. */
+function esFalloDePermisos(error: { message?: string; code?: string } | null): boolean {
+  if (!error) return false;
+  // 42501 = insufficient_privilege. El texto cubre el caso de PostgREST,
+  // que a veces devuelve el mensaje sin el código.
+  return error.code === "42501" || (error.message ?? "").includes("row-level security");
 }
 
 export async function guardarIdentidad(
