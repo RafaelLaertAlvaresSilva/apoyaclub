@@ -47,13 +47,35 @@ Copia de `.env.local.example` las que faltan y rellena al menos:
 | `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Project Settings → API | absolutamente todo |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API | panel, emails, dossier, métricas, límites |
 | `RESEND_API_KEY` y `RESEND_FROM_EMAIL` | resend.com | todos los emails |
-| `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET` | Stripe | la suscripción |
+| `STRIPE_SECRET_KEY`, `STRIPE_PRICE_MENSUAL`, `STRIPE_PRICE_TEMPORADA`, `STRIPE_PRICE_FUNDADOR`, `STRIPE_WEBHOOK_SECRET` | Stripe | la suscripción |
 | `CRON_SECRET` | invéntala, cualquier cadena larga | el cron diario de avisos |
 | `CONTACT_EMAIL` | tu email | el formulario de contacto de la landing |
 | `ADMIN_SIGNUP_KEY` | invéntala | crear cuentas de administrador |
 
 En Vercel hay que poner las mismas, más `NEXT_PUBLIC_SITE_URL` con el
 dominio real.
+
+## 2 bis. Los tres precios de Stripe
+
+Dentro de un único producto ("Suscripción ApoyaClub") se crean **tres
+precios**, todos con *Tax behavior: Inclusive* para que el club vea
+siempre el importe final:
+
+| Plan | Importe | Cada | Variable |
+| --- | --- | --- | --- |
+| Mensual | 29,90 € | 1 mes | `STRIPE_PRICE_MENSUAL` |
+| Temporada | 249,00 € | 1 año | `STRIPE_PRICE_TEMPORADA` |
+| Fundador | 199,00 € | 1 año | `STRIPE_PRICE_FUNDADOR` |
+
+El plan fundador tiene 50 plazas. El número se guarda en la tabla
+`plataforma_ajustes` (clave `plazas_fundador`) y se puede subir o bajar
+desde el SQL Editor sin tocar el código:
+
+```sql
+update public.plataforma_ajustes set valor = 75 where clave = 'plazas_fundador';
+```
+
+Mientras no queden plazas, el plan fundador deja de ofrecerse solo.
 
 ## 3. Sentry (5 minutos, cuenta gratuita)
 

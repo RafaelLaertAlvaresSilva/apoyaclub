@@ -1,17 +1,16 @@
 -- ---------------------------------------------------------------------
--- ApoyaClub — todas las migraciones, de la 0001 a la 0018.
+-- ApoyaClub: TODAS las migraciones, en orden, en un solo archivo.
 --
--- Para una base de datos nueva: Supabase -> SQL Editor -> pegar -> Run.
+-- Para una base de datos nueva y vacia. Se puede volver a ejecutar
+-- entera sin romper nada: todo esta escrito para poder repetirse.
 --
--- Generado el 2026-09-02. Probado contra un
--- PostgreSQL vacío: aplica sin errores y se puede repetir.
+-- Se pega en Supabase -> SQL Editor -> New query -> Run.
 -- ---------------------------------------------------------------------
 
 
 -- =====================================================================
 -- 0001_club_profile.sql
 -- =====================================================================
-
 -- Fase 4: perfil del club.
 --
 -- Crea la tabla `clubs` (una fila por club, con id = auth.users.id),
@@ -247,7 +246,6 @@ create policy "club_media_delete_own_folder"
 -- =====================================================================
 -- 0002_club_public_page.sql
 -- =====================================================================
-
 -- Fase 5: página pública del club (`/club/[slug]`).
 --
 -- Añade:
@@ -443,7 +441,6 @@ create policy "club_sponsors_select_public"
 -- =====================================================================
 -- 0003_opportunities.sql
 -- =====================================================================
-
 -- Fase 6: oportunidades de patrocinio.
 --
 -- Crea la tabla `opportunities`: el catálogo de oportunidades de
@@ -538,7 +535,6 @@ create policy "opportunities_select_public"
 -- =====================================================================
 -- 0004_search.sql
 -- =====================================================================
-
 -- Fase 7: buscador público de oportunidades y clubes (/buscar).
 --
 -- Añade lo que hace falta para poder filtrar y localizar clubes desde
@@ -719,7 +715,6 @@ grant select on public.opportunity_search_view to anon, authenticated;
 -- =====================================================================
 -- 0005_company_and_contact_requests.sql
 -- =====================================================================
-
 -- Fase 8: panel de empresa y solicitudes de contacto.
 --
 -- Añade:
@@ -935,7 +930,6 @@ create policy "contact_requests_update_club"
 -- =====================================================================
 -- 0006_dossier.sql
 -- =====================================================================
-
 -- Fase 9: dossier comercial en PDF.
 --
 -- Crea la tabla `club_dossiers`: la configuración del dossier de cada
@@ -1016,7 +1010,6 @@ create policy "club_dossiers_update_own"
 -- =====================================================================
 -- 0007_subscriptions.sql
 -- =====================================================================
-
 -- Fase 10: suscripción y pagos con Stripe.
 --
 -- Añade a `clubs` los campos necesarios para reflejar el estado de su
@@ -1163,7 +1156,6 @@ grant select on public.opportunity_search_view to anon, authenticated;
 -- =====================================================================
 -- 0008_legal_privacy.sql
 -- =====================================================================
-
 -- Fase 11: legal, privacidad y menores.
 --
 -- Crea `consent_records`, un registro con fecha de cada consentimiento
@@ -1217,7 +1209,6 @@ create policy "consent_records_insert_own"
 -- =====================================================================
 -- 0009_admin_panel.sql
 -- =====================================================================
-
 -- Fase 12: panel de administración y métricas.
 --
 -- Añade:
@@ -1369,7 +1360,6 @@ grant select on public.opportunity_search_view to anon, authenticated;
 -- =====================================================================
 -- 0010_antiabuso_y_geocache.sql
 -- =====================================================================
-
 -- ---------------------------------------------------------------------
 -- Fase 15: protección anti-abuso de los formularios públicos y caché de
 -- geocodificación.
@@ -1471,7 +1461,6 @@ comment on table public.geocode_cache is
 -- =====================================================================
 -- 0011_sponsor_level.sql
 -- =====================================================================
-
 -- ---------------------------------------------------------------------
 -- Nivel de patrocinador, exclusividad y equipo asociado.
 --
@@ -1569,7 +1558,6 @@ grant select on public.opportunity_search_view to anon, authenticated;
 -- =====================================================================
 -- 0012_endurecer_acceso_publico.sql
 -- =====================================================================
-
 -- ---------------------------------------------------------------------
 -- Endurecer el acceso anónimo a las tablas base.
 --
@@ -1618,7 +1606,6 @@ comment on view public.club_public_profiles is 'Vista pública de clubs (Fase 5)
 -- =====================================================================
 -- 0013_emails_del_ciclo.sql
 -- =====================================================================
-
 -- ---------------------------------------------------------------------
 -- Emails del ciclo de vida.
 --
@@ -1666,7 +1653,6 @@ create index if not exists contact_requests_sin_abrir_idx
 -- =====================================================================
 -- 0014_metricas_del_club.sql
 -- =====================================================================
-
 -- ---------------------------------------------------------------------
 -- Métricas del club: qué recibe a cambio de sus 29,90 €.
 --
@@ -1734,7 +1720,6 @@ comment on table public.dossier_views is
 -- =====================================================================
 -- 0015_plantillas_oportunidad.sql
 -- =====================================================================
-
 -- ---------------------------------------------------------------------
 -- Plantillas de oportunidad en base de datos.
 --
@@ -1828,7 +1813,6 @@ on conflict do nothing;
 -- =====================================================================
 -- 0016_servicios_que_busca_el_club.sql
 -- =====================================================================
-
 -- ---------------------------------------------------------------------
 -- Servicios que el club necesita.
 --
@@ -1933,7 +1917,6 @@ grant select on public.club_service_needs_public to anon, authenticated;
 -- =====================================================================
 -- 0017_oportunidades_por_plazas.sql
 -- =====================================================================
-
 -- ---------------------------------------------------------------------
 -- Oportunidades repartidas entre varias empresas.
 --
@@ -2019,7 +2002,6 @@ grant select on public.opportunity_search_view to anon, authenticated;
 -- =====================================================================
 -- 0018_mes_gratis_sin_tarjeta.sql
 -- =====================================================================
-
 -- ---------------------------------------------------------------------
 -- El mes gratis empieza al crear el club, sin pasar por Stripe.
 --
@@ -2069,3 +2051,520 @@ update public.clubs
        trial_ends_at = coalesce(trial_ends_at, now() + interval '30 days'),
        current_period_end = coalesce(current_period_end, now() + interval '30 days')
  where subscription_status is null;
+
+
+-- =====================================================================
+-- 0019_patrocinadores_clasificados.sql
+-- =====================================================================
+-- ---------------------------------------------------------------------
+-- Patrocinadores actuales del club: categoría, texto y orden.
+--
+-- Hasta ahora `club_sponsors` solo guardaba nombre, logo y web. Eso
+-- basta para una lista, pero no para lo que de verdad hace falta:
+--
+--   1. Que el club pueda enseñar su "muro de patrocinadores" agrupado
+--      por importancia (principal, oficial, colaborador), igual que
+--      aparece en una lona o en un dossier de verdad.
+--   2. Que pueda escribir dos líneas sobre cada empresa — desde cuándo
+--      colabora, qué aporta — que es lo que convierte un logo suelto en
+--      una prueba social utilizable.
+--
+-- Esto además alimenta la estrategia de arranque: cada club que sube a
+-- sus patrocinadores actuales mete en la plataforma empresas reales que
+-- ya han patrocinado deporte, sin coste de captación.
+--
+-- Los cuatro niveles son los mismos que ya usa `opportunities.sponsor_level`
+-- (migración 0011) para que la ficha del club y sus oportunidades hablen
+-- el mismo idioma, más un nivel libre con etiqueta propia para el club
+-- que use otra nomenclatura ("Patrocinador técnico", "Proveedor oficial").
+-- ---------------------------------------------------------------------
+
+alter table public.club_sponsors
+  add column if not exists tier text not null default 'colaborador',
+  add column if not exists tier_label text,
+  add column if not exists description text,
+  add column if not exists since_year int,
+  add column if not exists sort_order int not null default 0;
+
+-- Nivel dentro de un catálogo cerrado. 'otro' es la vía de escape: el
+-- club escribe su propia etiqueta en `tier_label`.
+alter table public.club_sponsors drop constraint if exists club_sponsors_tier_check;
+alter table public.club_sponsors
+  add constraint club_sponsors_tier_check
+  check (tier in ('principal', 'oficial', 'colaborador', 'otro'));
+
+-- La etiqueta libre solo tiene sentido en el nivel 'otro', y ahí es
+-- obligatoria: un nivel "otro" sin nombre no se puede pintar.
+alter table public.club_sponsors drop constraint if exists club_sponsors_tier_label_check;
+alter table public.club_sponsors
+  add constraint club_sponsors_tier_label_check
+  check (
+    (tier = 'otro' and tier_label is not null and length(btrim(tier_label)) between 1 and 40)
+    or (tier <> 'otro' and tier_label is null)
+  );
+
+alter table public.club_sponsors drop constraint if exists club_sponsors_description_check;
+alter table public.club_sponsors
+  add constraint club_sponsors_description_check
+  check (description is null or length(description) <= 400);
+
+alter table public.club_sponsors drop constraint if exists club_sponsors_since_year_check;
+alter table public.club_sponsors
+  add constraint club_sponsors_since_year_check
+  check (since_year is null or since_year between 1900 and 2100);
+
+comment on column public.club_sponsors.tier is
+  'Categoría del patrocinador: principal, oficial, colaborador u otro (etiqueta libre en tier_label).';
+comment on column public.club_sponsors.tier_label is
+  'Etiqueta propia del club cuando tier = ''otro'' (ej. "Patrocinador técnico"). Null en el resto de niveles.';
+comment on column public.club_sponsors.description is
+  'Dos líneas sobre la colaboración, escritas por el club. Se enseñan en la ficha pública.';
+comment on column public.club_sponsors.since_year is
+  'Año en que empezó a patrocinar, opcional. "Con nosotros desde 2019" vale más que un logo suelto.';
+comment on column public.club_sponsors.sort_order is
+  'Orden manual dentro de su categoría. A igualdad, se ordena por fecha de alta.';
+
+-- Orden de pintado: primero por categoría, luego por el orden que haya
+-- decidido el club. El índice cubre la consulta de la ficha pública.
+create index if not exists club_sponsors_orden_idx
+  on public.club_sponsors (club_id, tier, sort_order, created_at);
+
+-- No hay cambios de RLS: las políticas de 0001 (el club gestiona los
+-- suyos) y la de lectura pública de 0002 siguen valiendo tal cual,
+-- porque son a nivel de fila y estas columnas van dentro de la fila.
+
+
+-- =====================================================================
+-- 0020_visibilidad_por_perfil_completo.sql
+-- =====================================================================
+-- ---------------------------------------------------------------------
+-- La información completa da visibilidad.
+--
+-- Hasta ahora el porcentaje de perfil completado se calculaba en el
+-- código de la app y solo servía para pintar una barra en el panel: era
+-- un adorno. El club no tenía ningún motivo real para terminar su ficha.
+--
+-- Aquí ese porcentaje pasa a vivir en la base de datos (`clubs.profile_score`),
+-- se mantiene solo mediante triggers, y entra en el orden del buscador:
+-- a igualdad de todo lo demás, sale antes el club que ha contado más
+-- cosas de sí mismo. Es lo que hace verdad la frase que se le enseña al
+-- club: "cuanta más información, más visibilidad".
+--
+-- Se calcula como la media del progreso de ocho secciones, para que
+-- ninguna pese más que las demás: un club con veinte fotos y nada más no
+-- adelanta a uno que ha rellenado cantera, audiencia y patrocinadores.
+-- ---------------------------------------------------------------------
+
+alter table public.clubs
+  add column if not exists profile_score int not null default 0;
+
+comment on column public.clubs.profile_score is
+  'Porcentaje (0-100) de ficha rellenada. Lo mantienen triggers; es la única definición del dato, la usan tanto el panel del club como el orden del buscador.';
+
+-- ---------------------------------------------------------------------
+-- 1. Cálculo
+-- ---------------------------------------------------------------------
+create or replace function public.calcular_profile_score(p_club_id uuid)
+returns int
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  with club as (
+    select * from public.clubs where id = p_club_id
+  ),
+  secciones as (
+    select unnest(array[
+      -- 1. Identidad: quién es y qué cara tiene.
+      (
+        (c.logo_url is not null)::int +
+        (coalesce(array_length(c.photo_urls, 1), 0) > 0)::int +
+        (c.video_url is not null)::int +
+        (c.description is not null)::int +
+        (c.website is not null)::int +
+        (c.social_links <> '{}'::jsonb)::int
+      )::numeric / 6,
+      -- 2. Nivel deportivo.
+      (
+        (c.top_category is not null)::int +
+        (c.competitions is not null)::int +
+        (c.achievements is not null)::int
+      )::numeric / 3,
+      -- 3. Equipos.
+      (exists (select 1 from public.club_teams t where t.club_id = c.id))::int::numeric,
+      -- 4. Cantera.
+      (
+        (c.youth_teams_count is not null)::int +
+        (c.youth_players_count is not null)::int +
+        (c.youth_families_count is not null)::int
+      )::numeric / 3,
+      -- 5. Historia.
+      (
+        (c.founding_year is not null)::int +
+        (c.milestones <> '[]'::jsonb)::int
+      )::numeric / 2,
+      -- 6. Audiencia.
+      (
+        (c.followers_by_network <> '{}'::jsonb)::int +
+        (c.estimated_reach is not null)::int +
+        (c.average_attendance is not null)::int
+      )::numeric / 3,
+      -- 7. Comunidad.
+      (c.community_actions <> '[]'::jsonb)::int::numeric,
+      -- 8. Patrocinadores actuales.
+      (exists (select 1 from public.club_sponsors s where s.club_id = c.id))::int::numeric
+    ]) as fraccion
+    from club c
+  )
+  select coalesce(round(avg(fraccion) * 100)::int, 0) from secciones;
+$$;
+
+comment on function public.calcular_profile_score(uuid) is
+  'Media del progreso de las ocho secciones de la ficha, en porcentaje entero.';
+
+-- ---------------------------------------------------------------------
+-- 2. Mantenimiento automático
+-- ---------------------------------------------------------------------
+
+-- a) Cuando cambia la propia fila del club, se recalcula antes de
+--    escribirla: así el valor viaja en el mismo UPDATE y no hace falta
+--    una segunda escritura (que además reentraría en el trigger).
+create or replace function public.refrescar_profile_score_propio()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  new.profile_score := (
+    select coalesce(round(avg(fraccion) * 100)::int, 0)
+    from unnest(array[
+      (
+        (new.logo_url is not null)::int +
+        (coalesce(array_length(new.photo_urls, 1), 0) > 0)::int +
+        (new.video_url is not null)::int +
+        (new.description is not null)::int +
+        (new.website is not null)::int +
+        (new.social_links <> '{}'::jsonb)::int
+      )::numeric / 6,
+      (
+        (new.top_category is not null)::int +
+        (new.competitions is not null)::int +
+        (new.achievements is not null)::int
+      )::numeric / 3,
+      (exists (select 1 from public.club_teams t where t.club_id = new.id))::int::numeric,
+      (
+        (new.youth_teams_count is not null)::int +
+        (new.youth_players_count is not null)::int +
+        (new.youth_families_count is not null)::int
+      )::numeric / 3,
+      (
+        (new.founding_year is not null)::int +
+        (new.milestones <> '[]'::jsonb)::int
+      )::numeric / 2,
+      (
+        (new.followers_by_network <> '{}'::jsonb)::int +
+        (new.estimated_reach is not null)::int +
+        (new.average_attendance is not null)::int
+      )::numeric / 3,
+      (new.community_actions <> '[]'::jsonb)::int::numeric,
+      (exists (select 1 from public.club_sponsors s where s.club_id = new.id))::int::numeric
+    ]) as fraccion
+  );
+  return new;
+end;
+$$;
+
+drop trigger if exists clubs_refrescar_score on public.clubs;
+create trigger clubs_refrescar_score
+  before insert or update on public.clubs
+  for each row execute function public.refrescar_profile_score_propio();
+
+-- b) Cuando cambian las tablas hijas, se recalcula la fila del club.
+create or replace function public.refrescar_profile_score_del_padre()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_club_id uuid := coalesce(new.club_id, old.club_id);
+begin
+  update public.clubs
+     set profile_score = public.calcular_profile_score(v_club_id)
+   where id = v_club_id;
+  return coalesce(new, old);
+end;
+$$;
+
+drop trigger if exists club_teams_refrescar_score on public.club_teams;
+create trigger club_teams_refrescar_score
+  after insert or delete on public.club_teams
+  for each row execute function public.refrescar_profile_score_del_padre();
+
+drop trigger if exists club_sponsors_refrescar_score on public.club_sponsors;
+create trigger club_sponsors_refrescar_score
+  after insert or delete on public.club_sponsors
+  for each row execute function public.refrescar_profile_score_del_padre();
+
+-- c) Puesta al día de lo que ya existe.
+update public.clubs set profile_score = public.calcular_profile_score(id);
+
+-- ---------------------------------------------------------------------
+-- 3. El buscador lo tiene en cuenta
+-- ---------------------------------------------------------------------
+-- Se añade la columna a la vista pública de búsqueda para poder ordenar
+-- por ella. Se redondea a decenas al ordenar (en el código de la app),
+-- no aquí: así un 71 % y un 78 % se consideran iguales y desempata la
+-- novedad, en vez de premiar diferencias que no significan nada.
+drop view if exists public.opportunity_search_view cascade;
+
+create view public.opportunity_search_view as
+select
+  o.id as opportunity_id,
+  o.club_id,
+  o.title,
+  o.description,
+  o.opportunity_type,
+  o.value,
+  o.duration,
+  o.period,
+  o.collaboration_type,
+  o.objectives,
+  o.created_at as opportunity_created_at,
+  c.slug as club_slug,
+  c.name as club_name,
+  c.city as club_city,
+  c.province as club_province,
+  c.postal_code as club_postal_code,
+  c.logo_url as club_logo_url,
+  c.latitude as club_latitude,
+  c.longitude as club_longitude,
+  o.sponsor_level,
+  o.exclusivity,
+  o.team_id,
+  t.sport as team_sport,
+  t.category as team_category,
+  t.gender as team_gender,
+  t.team_level as team_level,
+  o.slots_total,
+  o.slots_taken,
+  c.profile_score as club_profile_score,
+  -- Redondeo a decenas: un 71 % y un 78 % se consideran igual de
+  -- completos y desempata la novedad. Así el orden premia terminar
+  -- secciones, no rellenar un campo suelto para adelantar a otro club.
+  (c.profile_score / 10) as club_visibility_bucket
+from public.opportunities o
+join public.clubs c on c.id = o.club_id
+left join public.club_teams t on t.id = o.team_id
+where o.status = 'available'
+  and o.archived_at is null
+  and c.subscription_status in ('trialing', 'active')
+  and not c.admin_suspended;
+
+comment on view public.opportunity_search_view is
+  'Oportunidades visibles en el buscador, con los datos del club ya unidos. SECURITY DEFINER a propósito (ver 0012): expone solo columnas públicas de `clubs`.';
+
+grant select on public.opportunity_search_view to anon, authenticated;
+
+-- Índice para el orden por visibilidad del buscador.
+create index if not exists clubs_profile_score_idx on public.clubs (profile_score desc);
+
+
+-- =====================================================================
+-- 0021_planes_de_precio.sql
+-- =====================================================================
+-- ---------------------------------------------------------------------
+-- Tres planes en vez de uno.
+--
+-- Hasta ahora solo existía la cuota mensual de 29,90 €. El problema no
+-- es el precio (es el más bajo del mercado español de software para
+-- clubes), sino el ritmo de cobro: el patrocinio es estacional y una
+-- junta directiva aprueba gastos una vez al año, no cada mes. Un club
+-- que paga mes a mes se da de baja en enero, cuando no está buscando
+-- patrocinadores.
+--
+--   mensual    29,90 €/mes  IVA incl.  — sigue existiendo
+--   temporada  249 €/año    IVA incl.  — el que se quiere vender
+--   fundador   199 €/año    IVA incl.  — solo las 50 primeras plazas,
+--                                        precio congelado de por vida
+--
+-- El plan se guarda aquí, no solo en Stripe, porque hace falta para el
+-- área financiera del administrador y para saber cuántas plazas de
+-- fundador quedan sin tener que preguntárselo a Stripe en cada visita.
+-- ---------------------------------------------------------------------
+
+alter table public.clubs
+  add column if not exists plan text,
+  add column if not exists founder_number int;
+
+alter table public.clubs drop constraint if exists clubs_plan_check;
+alter table public.clubs
+  add constraint clubs_plan_check
+  check (plan is null or plan in ('mensual', 'temporada', 'fundador'));
+
+-- Dos clubes no pueden ser el mismo número de fundador.
+create unique index if not exists clubs_founder_number_idx
+  on public.clubs (founder_number)
+  where founder_number is not null;
+
+comment on column public.clubs.plan is
+  'Plan contratado: mensual, temporada o fundador. Null mientras está en el mes gratis sin haber elegido.';
+comment on column public.clubs.founder_number is
+  'Número de plaza de fundador (1-50). Se asigna al contratar el plan fundador y no se libera aunque el club se dé de baja: la plaza se gastó.';
+
+-- ---------------------------------------------------------------------
+-- Plazas de fundador
+-- ---------------------------------------------------------------------
+-- El número total vive en la base de datos y no en el código para poder
+-- ampliarlo sin desplegar, que es justo la decisión que se querrá tomar
+-- deprisa si las 50 se agotan.
+create table if not exists public.plataforma_ajustes (
+  clave text primary key,
+  valor int not null,
+  actualizado_en timestamptz not null default now()
+);
+
+comment on table public.plataforma_ajustes is
+  'Ajustes numéricos de la plataforma que el administrador puede cambiar sin desplegar código.';
+
+insert into public.plataforma_ajustes (clave, valor)
+values ('plazas_fundador', 50)
+on conflict (clave) do nothing;
+
+alter table public.plataforma_ajustes enable row level security;
+-- Sin políticas: solo la clave de servicio la lee y la escribe.
+
+/**
+ * Reserva la siguiente plaza de fundador para un club, si queda alguna.
+ * Devuelve el número asignado, o null si ya están todas ocupadas.
+ *
+ * Se hace en la base de datos y no en el código de la app porque dos
+ * clubes pueden pulsar "contratar" a la vez: el bloqueo de la fila de
+ * ajustes serializa las dos peticiones y evita repartir la misma plaza
+ * dos veces.
+ */
+create or replace function public.reservar_plaza_fundador(p_club_id uuid)
+returns int
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_total int;
+  v_ocupadas int;
+  v_asignado int;
+  v_actual int;
+begin
+  -- Si este club ya tenía plaza, se le devuelve la suya.
+  select founder_number into v_actual from public.clubs where id = p_club_id;
+  if v_actual is not null then
+    return v_actual;
+  end if;
+
+  -- El bloqueo de esta fila es lo que serializa las peticiones a la vez.
+  select valor into v_total
+    from public.plataforma_ajustes
+   where clave = 'plazas_fundador'
+     for update;
+
+  if v_total is null then
+    return null;
+  end if;
+
+  select count(*) into v_ocupadas from public.clubs where founder_number is not null;
+
+  if v_ocupadas >= v_total then
+    return null;
+  end if;
+
+  select coalesce(max(founder_number), 0) + 1 into v_asignado from public.clubs;
+
+  update public.clubs
+     set founder_number = v_asignado,
+         plan = 'fundador'
+   where id = p_club_id;
+
+  return v_asignado;
+end;
+$$;
+
+comment on function public.reservar_plaza_fundador(uuid) is
+  'Asigna la siguiente plaza de fundador libre a un club. Null si ya no quedan.';
+
+/** Cuántas plazas de fundador quedan libres. */
+create or replace function public.plazas_fundador_libres()
+returns int
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select greatest(
+    0,
+    coalesce((select valor from public.plataforma_ajustes where clave = 'plazas_fundador'), 0)
+      - (select count(*)::int from public.clubs where founder_number is not null)
+  );
+$$;
+
+grant execute on function public.plazas_fundador_libres() to anon, authenticated;
+
+
+-- =====================================================================
+-- 0022_quien_mira_a_cada_club.sql
+-- =====================================================================
+-- ---------------------------------------------------------------------
+-- Quién mira a cada club.
+--
+-- La migración 0014 ya contaba visitas, pero de forma anónima: el club
+-- sabía "12 visitas" y nada más. Faltaban las dos preguntas que de
+-- verdad importan, tanto para el club como para el administrador de la
+-- plataforma:
+--
+--   1. ¿Cuántas EMPRESAS (no visitantes sueltos) han entrado en la ficha?
+--   2. ¿Cuántas han llegado a mirar los datos de contacto?
+--
+-- La segunda es la señal más valiosa que produce la plataforma: una
+-- empresa que abre el teléfono de un club está a un paso de escribirle.
+-- Es también la métrica con la que se defiende la cuota: "este mes tres
+-- empresas miraron tu contacto" vale más que cualquier gráfica.
+--
+-- Se guarda quién, no solo cuántos, porque son datos de empresa (una
+-- persona jurídica mirando una oferta comercial), no de navegación
+-- personal: el club ve el nombre de la empresa, igual que vería quién
+-- entra por la puerta del pabellón.
+-- ---------------------------------------------------------------------
+
+-- 1. Las visitas pasan a saber si venían de una empresa registrada.
+alter table public.club_page_views
+  add column if not exists company_id uuid references auth.users (id) on delete set null;
+
+create index if not exists club_page_views_company_idx
+  on public.club_page_views (club_id, company_id, created_at desc)
+  where company_id is not null;
+
+comment on column public.club_page_views.company_id is
+  'Empresa registrada que hizo la visita, si había sesión iniciada. Null en visitas anónimas.';
+
+-- 2. Aperturas de los datos de contacto.
+create table if not exists public.club_contact_views (
+  id bigserial primary key,
+  club_id uuid not null references public.clubs (id) on delete cascade,
+  company_id uuid references auth.users (id) on delete set null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists club_contact_views_club_idx
+  on public.club_contact_views (club_id, created_at desc);
+
+create index if not exists club_contact_views_company_idx
+  on public.club_contact_views (club_id, company_id)
+  where company_id is not null;
+
+alter table public.club_contact_views enable row level security;
+-- Sin políticas: la escribe y la lee el servidor con la clave de
+-- servicio, igual que el resto de tablas de eventos (0014).
+
+comment on table public.club_contact_views is
+  'Una fila cada vez que alguien despliega los datos de contacto de un club. Es la señal previa al primer correo.';
