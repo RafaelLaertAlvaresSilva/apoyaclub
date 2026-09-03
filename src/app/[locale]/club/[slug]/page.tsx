@@ -729,13 +729,16 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent" />
         </div>
 
-        <div className="mx-auto -mt-16 flex max-w-4xl flex-col gap-4 px-4 sm:-mt-20 sm:flex-row sm:items-end sm:justify-between">
-          <div className="flex items-end gap-4">
+        {/* El logo va DEBAJO de la portada, no montado encima: al
+            solaparse le tapaba la esquina inferior izquierda de la foto y
+            el propio logo quedaba recortado contra ella. */}
+        <div className="mx-auto mt-5 flex max-w-4xl flex-col gap-4 px-4 sm:mt-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
             {/* `object-contain` y no `object-cover`: el logo de un club
                 suele ser un escudo alto o una marca apaisada, y recortarlo
                 a un cuadrado le corta el nombre o la mitad del escudo. Se
                 enseña entero, con relleno blanco alrededor. */}
-            <div className="h-28 w-28 shrink-0 overflow-hidden rounded-2xl border-4 border-white bg-white p-2 shadow-md sm:h-40 sm:w-40">
+            <div className="h-28 w-28 shrink-0 overflow-hidden rounded-2xl border border-zinc-200 bg-white p-2 sm:h-36 sm:w-36">
               {perfil.logoUrl ? (
                 <Image
                   src={perfil.logoUrl}
@@ -750,7 +753,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                 </div>
               )}
             </div>
-            <div className="pb-1">
+            <div>
               <div className="flex flex-wrap items-center gap-2">
                 <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl">{perfil.name}</h1>
                 {perfil.verified && (
@@ -768,7 +771,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2 pb-1">
+          <div className="flex flex-wrap gap-2">
             <CompartirBoton url={urlPublica} titulo={t("portada.compartirTitulo", { club: perfil.name })} />
             <SolicitarContactoBoton clubId={perfil.id} clubName={perfil.name}>
               {t("portada.solicitarContacto")}

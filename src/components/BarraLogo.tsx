@@ -29,7 +29,7 @@ export function BarraLogo() {
             width={4275}
             height={984}
             priority
-            className="h-8 w-auto sm:h-10"
+            className="h-10 w-auto sm:h-12"
           />
         </Link>
 
