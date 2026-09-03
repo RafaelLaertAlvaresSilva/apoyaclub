@@ -16,7 +16,14 @@ import type { ClubProfile, ClubTeam } from "@/lib/types";
 export type PasoInicial = {
   id: "identidad" | "equipos" | "oportunidad";
   hecho: boolean;
-  /** Ruta a la que lleva el paso cuando está pendiente. */
+  /**
+   * Ruta a la que lleva el paso cuando está pendiente.
+   *
+   * Los dos primeros apuntan a una pestaña concreta del propio panel
+   * (`/panel#equipos`). El ancla no es decorativa: `PanelTabs` la lee
+   * para abrir esa pestaña. Sin ella el botón llevaba a `/panel` estando
+   * ya en `/panel`, así que al pulsarlo no ocurría nada.
+   */
   href: string;
 };
 
@@ -31,12 +38,12 @@ export function primerosPasos(
       // Con logo y descripción la página ya se puede enseñar; el resto
       // del perfil suma, pero no bloquea.
       hecho: !!perfil?.logoUrl && !!perfil?.description,
-      href: "/panel",
+      href: "/panel#identidad",
     },
     {
       id: "equipos",
       hecho: equipos.length > 0 || perfil?.youthTeamsCount != null,
-      href: "/panel",
+      href: "/panel#equipos",
     },
     {
       id: "oportunidad",

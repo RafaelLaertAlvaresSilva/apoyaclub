@@ -64,7 +64,16 @@ export function BarraProgreso({
                   className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500"
                 />
                 <div>
-                  <p className="text-sm font-medium text-zinc-900">{hueco.titulo}</p>
+                  {/* El ancla abre la pestaña correspondiente (ver
+                      PanelTabs): decirle al club qué le falta sin
+                      llevarle allí de un clic sería dejar el trabajo
+                      a medias. */}
+                  <a
+                    href={`#${hueco.pestana}`}
+                    className="text-sm font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-2 hover:decoration-teal-600"
+                  >
+                    {hueco.titulo}
+                  </a>
                   <p className="text-sm text-zinc-500">{hueco.porQue}</p>
                 </div>
               </li>

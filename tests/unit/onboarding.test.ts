@@ -40,6 +40,6 @@ describe("primeros pasos del club", () => {
   it("sin club todavía, el primer paso sigue siendo la identidad", () => {
     const pasos = primerosPasos(null, [], 0);
     expect(pasos[0].hecho).toBe(false);
-    expect(siguientePaso(pasos)?.href).toBe("/panel");
+    expect(siguientePaso(pasos)?.href).toBe("/panel#identidad");
   });
 });
