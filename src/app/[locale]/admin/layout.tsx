@@ -1,3 +1,4 @@
+import { BarraLogo } from "@/components/BarraLogo";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
@@ -23,5 +24,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     return redirect({ href: "/login", locale });
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <BarraLogo />
+      {children}
+    </>
+  );
 }

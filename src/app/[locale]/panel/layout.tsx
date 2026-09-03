@@ -1,3 +1,4 @@
+import { BarraLogo } from "@/components/BarraLogo";
 import { subscriptionRowToInfo, type SubscriptionRow } from "@/lib/subscription-mappers";
 import { createClient } from "@/lib/supabase/server";
 import type { Role } from "@/lib/types";
@@ -31,6 +32,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
 
   return (
     <>
+      <BarraLogo />
       {filaSuscripcion && <AvisoSuscripcion suscripcion={subscriptionRowToInfo(filaSuscripcion)} />}
       {children}
     </>
