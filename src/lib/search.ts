@@ -78,6 +78,10 @@ type FilaBusqueda = {
   team_gender: string | null;
   slots_total: number | null;
   slots_taken: number | null;
+  /** Porcentaje de ficha rellenada del club (migración 0020). */
+  club_profile_score: number | null;
+  /** El mismo porcentaje en decenas (0-10), que es como se ordena. */
+  club_visibility_bucket: number | null;
 };
 
 function filaAResultado(fila: FilaBusqueda, centro: Coordenadas | null): ResultadoOportunidad {
@@ -100,6 +104,8 @@ function filaAResultado(fila: FilaBusqueda, centro: Coordenadas | null): Resulta
     sponsorLevel: fila.sponsor_level ?? "libre",
     slotsTotal: fila.slots_total,
     slotsTaken: fila.slots_taken ?? 0,
+    profileScore: fila.club_profile_score ?? 0,
+    visibilityBucket: fila.club_visibility_bucket ?? 0,
     exclusivity: fila.exclusivity,
     teamLabel: etiquetaEquipo({
       sport: fila.team_sport,
@@ -232,10 +238,17 @@ export async function buscarOportunidades(
   }
 
   if (!usaGeo) {
-    consulta =
-      filtros.orden === "valor"
-        ? consulta.order("value", { ascending: false })
-        : consulta.order("opportunity_created_at", { ascending: false });
+    if (filtros.orden === "valor") {
+      consulta = consulta.order("value", { ascending: false });
+    } else if (filtros.orden === "novedad") {
+      consulta = consulta.order("opportunity_created_at", { ascending: false });
+    } else {
+      // Orden por defecto: tramo de ficha completa y, dentro del tramo,
+      // lo más reciente. Ver `OrdenBusqueda` en search-types.
+      consulta = consulta
+        .order("club_visibility_bucket", { ascending: false, nullsFirst: false })
+        .order("opportunity_created_at", { ascending: false });
+    }
     consulta = consulta.range(paginacion.offset, paginacion.offset + paginacion.limite - 1);
   } else {
     consulta = consulta.order("opportunity_created_at", { ascending: false }).limit(TAMANO_LOTE_GEO);
@@ -262,8 +275,16 @@ export async function buscarOportunidades(
     resultados.sort((a, b) => b.value - a.value);
   } else if (filtros.orden === "novedad") {
     resultados.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  } else {
+  } else if (filtros.orden === "cercania") {
     resultados.sort((a, b) => (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity));
+  } else {
+    // Con radio, "recomendado" sigue mandando la distancia primero (para
+    // eso ha puesto un radio), y desempata la ficha más completa.
+    resultados.sort((a, b) => {
+      const porDistancia = (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity);
+      if (porDistancia !== 0) return porDistancia;
+      return b.visibilityBucket - a.visibilityBucket;
+    });
   }
 
   const pagina = resultados.slice(paginacion.offset, paginacion.offset + paginacion.limite);

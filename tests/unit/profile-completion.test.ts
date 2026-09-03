@@ -1,64 +1,62 @@
 import { describe, expect, it } from "vitest";
-import { calcularPorcentajeCompletado } from "@/lib/profile-completion";
+import { UMBRAL_FICHA_FLOJA, convieneAvisar, huecosDelPerfil } from "@/lib/profile-completion";
 import { equipoDePrueba, patrocinadorDePrueba, perfilDePrueba } from "../fixtures/club";
 
-describe("calcularPorcentajeCompletado", () => {
-  it("es 0 cuando todavía no hay club", () => {
-    expect(calcularPorcentajeCompletado(null, [], [])).toBe(0);
+/**
+ * El porcentaje lo calcula la base de datos (migración 0020). Lo que se
+ * prueba aquí es la lista de huecos: qué se le dice al club que le falta
+ * y en qué orden, que es la parte con decisiones de producto dentro.
+ */
+describe("huecosDelPerfil", () => {
+  it("no devuelve nada si todavía no hay club", () => {
+    expect(huecosDelPerfil(null, [], [])).toEqual([]);
   });
 
-  it("es 0 con un club recién creado (solo nombre y localidad)", () => {
-    expect(calcularPorcentajeCompletado(perfilDePrueba(), [], [])).toBe(0);
+  it("un club recién creado tiene huecos, y el logo va primero", () => {
+    const huecos = huecosDelPerfil(perfilDePrueba(), [], []);
+
+    expect(huecos.length).toBeGreaterThan(5);
+    expect(huecos[0].id).toBe("logo");
   });
 
-  it("sube al rellenar una sección y nunca pasa de 100", () => {
-    const soloEquipos = calcularPorcentajeCompletado(perfilDePrueba(), [equipoDePrueba()], []);
-    expect(soloEquipos).toBeGreaterThan(0);
-    expect(soloEquipos).toBeLessThan(100);
+  it("deja de listar lo que ya está rellenado", () => {
+    const conLogo = huecosDelPerfil(perfilDePrueba({ logoUrl: "https://x/logo.png" }), [], []);
 
-    const completo = calcularPorcentajeCompletado(
-      perfilDePrueba({
-        logoUrl: "https://ejemplo/logo.png",
-        photoUrls: ["https://ejemplo/foto.jpg"],
-        videoUrl: "https://ejemplo/video",
-        description: "Un club de barrio con 40 años de historia.",
-        website: "https://ejemplo",
-        socialLinks: { instagram: "https://instagram.com/club" },
-        topCategory: "Primera Nacional",
-        competitions: "Liga y Copa",
-        achievements: "Campeón autonómico 2024",
-        youthTeamsCount: 8,
-        youthPlayersCount: 120,
-        youthFamiliesCount: 95,
-        foundingYear: 1986,
-        milestones: [{ year: 1986, text: "Fundación del club" }],
-        followersByNetwork: { instagram: 3200 },
-        estimatedReach: 25000,
-        averageAttendance: 350,
-        communityActions: [{ title: "Escuela inclusiva", description: "Plazas gratuitas para familias del barrio." }],
-        facilities: "Pabellón municipal",
-      }),
+    expect(conLogo.map((hueco) => hueco.id)).not.toContain("logo");
+  });
+
+  it("tiene en cuenta equipos y patrocinadores, que viven fuera del perfil", () => {
+    const sinNada = huecosDelPerfil(perfilDePrueba(), [], []).map((hueco) => hueco.id);
+    expect(sinNada).toContain("equipos");
+    expect(sinNada).toContain("patrocinadores");
+
+    const conAmbos = huecosDelPerfil(
+      perfilDePrueba(),
       [equipoDePrueba()],
       [patrocinadorDePrueba()],
-    );
+    ).map((hueco) => hueco.id);
 
-    expect(completo).toBe(100);
+    expect(conAmbos).not.toContain("equipos");
+    expect(conAmbos).not.toContain("patrocinadores");
   });
 
-  it("ninguna sección pesa más que otra: rellenar solo una no llega a la mitad", () => {
-    const soloIdentidad = calcularPorcentajeCompletado(
-      perfilDePrueba({
-        logoUrl: "https://ejemplo/logo.png",
-        photoUrls: ["https://ejemplo/foto.jpg"],
-        videoUrl: "https://ejemplo/video",
-        description: "Texto",
-        website: "https://ejemplo",
-        socialLinks: { instagram: "https://instagram.com/club" },
-      }),
-      [],
-      [],
-    );
+  it("cada hueco explica por qué le conviene al club, no solo qué falta", () => {
+    for (const hueco of huecosDelPerfil(perfilDePrueba(), [], [])) {
+      expect(hueco.porQue.length).toBeGreaterThan(20);
+      expect(hueco.titulo.length).toBeGreaterThan(5);
+    }
+  });
 
-    expect(soloIdentidad).toBeLessThan(50);
+  it("no repite identificadores", () => {
+    const ids = huecosDelPerfil(perfilDePrueba(), [], []).map((hueco) => hueco.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+});
+
+describe("convieneAvisar", () => {
+  it("avisa por debajo del umbral y calla por encima", () => {
+    expect(convieneAvisar(UMBRAL_FICHA_FLOJA - 1)).toBe(true);
+    expect(convieneAvisar(UMBRAL_FICHA_FLOJA)).toBe(false);
+    expect(convieneAvisar(100)).toBe(false);
   });
 });

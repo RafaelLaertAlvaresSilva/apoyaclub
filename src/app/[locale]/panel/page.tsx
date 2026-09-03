@@ -12,7 +12,7 @@ import {
 import { obtenerMetricasClub } from "@/lib/club-metrics";
 import { primerosPasos } from "@/lib/onboarding";
 import { filaAServicio, type FilaServicio, type ServiceNeed } from "@/lib/service-needs";
-import { calcularPorcentajeCompletado } from "@/lib/profile-completion";
+import { huecosDelPerfil } from "@/lib/profile-completion";
 import { createClient } from "@/lib/supabase/server";
 import { BarraProgreso } from "./components/BarraProgreso";
 import { MetricasClub } from "./components/MetricasClub";
@@ -85,7 +85,10 @@ export default async function PanelPage() {
   const pasosIniciales = primerosPasos(perfil, equipos, oportunidadesPublicadas ?? 0);
 
   const nombreProvisional = (user.user_metadata?.name as string | undefined) ?? user.email;
-  const porcentaje = calcularPorcentajeCompletado(perfil, equipos, patrocinadores);
+  // El porcentaje lo calcula la base de datos (migración 0020) y es el
+  // mismo que usa el buscador para ordenar; aquí solo se lee.
+  const porcentaje = perfil?.profileScore ?? 0;
+  const huecos = huecosDelPerfil(perfil, equipos, patrocinadores);
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
@@ -105,7 +108,7 @@ export default async function PanelPage() {
 
       <MetricasClub metricas={metricas} />
 
-      <BarraProgreso porcentaje={porcentaje} />
+      <BarraProgreso porcentaje={porcentaje} huecos={huecos} />
 
       <PanelTabs
         userId={user.id}

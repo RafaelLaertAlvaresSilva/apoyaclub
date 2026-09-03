@@ -11,7 +11,9 @@ import {
 } from "@/lib/subscription-mappers";
 import { createClient } from "@/lib/supabase/server";
 import { PanelNav } from "../components/PanelNav";
-import { abrirPortalCliente, iniciarSuscripcion } from "./actions";
+import { PLANES, esPlanValido, periodicidad, precioFormateado } from "@/lib/planes";
+import { abrirPortalCliente } from "./actions";
+import { SelectorDePlan } from "./components/SelectorDePlan";
 
 function formatearFecha(fechaIso: string): string {
   return new Date(fechaIso).toLocaleDateString("es-ES", {
@@ -26,6 +28,8 @@ const MENSAJES_ERROR: Record<string, string> = {
   checkout: "No se ha podido abrir la pasarela de pago. Inténtalo de nuevo en unos minutos.",
   portal: "No se ha podido abrir el portal de gestión de la suscripción. Inténtalo de nuevo en unos minutos.",
   "sin-suscripcion": "Todavía no tienes ninguna suscripción que gestionar.",
+  "sin-plazas":
+    "Se han agotado las plazas de club fundador mientras elegías. Puedes contratar el plan de temporada, que es el siguiente más barato.",
 };
 
 export default async function SuscripcionPage({
@@ -46,13 +50,22 @@ export default async function SuscripcionPage({
     return redirect({ href: "/login", locale });
   }
 
-  const { data: filaSuscripcion } = await supabase
-    .from("clubs")
-    .select(
-      "stripe_customer_id, stripe_subscription_id, subscription_status, trial_ends_at, current_period_end, cancel_at_period_end",
-    )
-    .eq("id", user.id)
-    .maybeSingle<SubscriptionRow>();
+  const [{ data: filaSuscripcion }, { data: plazasLibres }] = await Promise.all([
+    supabase
+      .from("clubs")
+      .select(
+        "stripe_customer_id, stripe_subscription_id, subscription_status, trial_ends_at, current_period_end, cancel_at_period_end, plan, founder_number",
+      )
+      .eq("id", user.id)
+      .maybeSingle<SubscriptionRow & { plan: string | null; founder_number: number | null }>(),
+    // Cuántas plazas de fundador quedan (migración 0021). Si la función
+    // todavía no existe en esta base de datos, se toma como 0 y el plan
+    // fundador simplemente no se ofrece.
+    supabase.rpc("plazas_fundador_libres"),
+  ]);
+
+  const planActual = esPlanValido(filaSuscripcion?.plan) ? PLANES[filaSuscripcion.plan] : null;
+  const plazasFundadorLibres = typeof plazasLibres === "number" ? plazasLibres : 0;
 
   const suscripcion = subscriptionRowToInfo(
     filaSuscripcion ?? {
@@ -94,8 +107,18 @@ export default async function SuscripcionPage({
           </div>
         )}
 
-        <h2 className="text-base font-semibold text-zinc-900">{t("planUnico")}</h2>
-        <p className="mt-1 text-sm text-zinc-500">{t("t2990mesiva")}</p>
+        <h2 className="text-base font-semibold text-zinc-900">
+          {planActual ? `Plan ${planActual.nombre}` : "Tu plan"}
+        </h2>
+        <p className="mt-1 text-sm text-zinc-500">
+          {planActual
+            ? `${precioFormateado(planActual)} ${periodicidad(planActual)}, IVA incluido.${
+                filaSuscripcion?.founder_number
+                  ? ` Eres el club fundador nº ${filaSuscripcion.founder_number}: este precio no te sube nunca.`
+                  : ""
+              }`
+            : "Elige cómo quieres pagar cuando termine tu mes gratis."}
+        </p>
 
         <dl className="mt-6 grid gap-4 sm:grid-cols-2">
           <div>
@@ -140,19 +163,20 @@ export default async function SuscripcionPage({
           </div>
         </dl>
 
-        <div className="mt-6 max-w-xs">
-          {puedeGestionar ? (
+        {puedeGestionar ? (
+          <div className="mt-6 max-w-xs">
             <form action={abrirPortalCliente}>
               <BotonEnviar>{t("gestionarSuscripcion")}</BotonEnviar>
             </form>
-          ) : (
-            <form action={iniciarSuscripcion}>
-              <BotonEnviar>
-                {suscripcion.status === "canceled" ? "Volver a suscribirse" : "Empezar prueba gratuita de 30 días"}
-              </BotonEnviar>
-            </form>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="mt-6">
+            <SelectorDePlan
+              plazasFundadorLibres={plazasFundadorLibres}
+              textoBoton={suscripcion.status === "canceled" ? "Volver a suscribirse" : "Elegir este plan"}
+            />
+          </div>
+        )}
 
         <p className="mt-4 text-xs text-zinc-500">
           Conservas todos tus datos aunque la suscripción no esté activa: solo se oculta tu página

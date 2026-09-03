@@ -414,6 +414,55 @@ export async function enviarEmailSolicitudSinAbrir({
 }
 
 /**
+ * Aviso de que la ficha del club está a medias (migración 0020).
+ *
+ * No es un correo de marketing: el porcentaje de ficha rellenada entra
+ * de verdad en el orden del buscador, así que esto le está diciendo al
+ * club por qué no le encuentran, con los tres huecos concretos que más
+ * le penalizan.
+ */
+export async function enviarEmailFichaIncompleta({
+  clubEmail,
+  clubName,
+  porcentaje,
+  huecos,
+  panelUrl,
+}: {
+  clubEmail: string;
+  clubName: string;
+  porcentaje: number;
+  /** Títulos de lo que le falta, ya priorizados. */
+  huecos: string[];
+  panelUrl: string;
+}): Promise<ResultadoEnvioEmail> {
+  const t = await traductorEmails();
+
+  const lista = huecos
+    .map(
+      (hueco) =>
+        `<li style="margin:0 0 8px;">${hueco.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</li>`,
+    )
+    .join("");
+
+  return enviarEmail({
+    to: clubEmail,
+    subject: t("fichaIncompleta.asunto", { porcentaje }),
+    html: plantilla({
+      color: "#b45309",
+      eyebrow: t("fichaIncompleta.eyebrow"),
+      titulo: t("fichaIncompleta.titulo", { club: clubName, porcentaje }),
+      cuerpo: [
+        `<p style="margin:0 0 12px;">${t("fichaIncompleta.texto")}</p>`,
+        `<ul style="margin:0 0 20px;padding-left:20px;color:#3f3f46;">${lista}</ul>`,
+        `<p style="margin:0 0 24px;">${t("fichaIncompleta.cierre")}</p>`,
+      ].join(""),
+      botonTexto: t("fichaIncompleta.boton"),
+      botonUrl: panelUrl,
+    }),
+  });
+}
+
+/**
  * Aviso de que se acaba el mes gratis. Distinto del de caducidad: aquí
  * el club no ha cancelado nada, simplemente va a empezar a pagar, y lo
  * honesto es decírselo antes de cobrar.

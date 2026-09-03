@@ -99,6 +99,13 @@ export type ClubProfile = {
   // Comunidad
   communityActions: CommunityAction[];
 
+  /**
+   * Porcentaje de ficha rellenada (0-100). Lo calcula la base de datos
+   * (`clubs.profile_score`, migración 0020) y es también lo que usa el
+   * buscador para ordenar: cuanta más información, más visibilidad.
+   */
+  profileScore: number;
+
   createdAt: string;
   updatedAt: string;
 };

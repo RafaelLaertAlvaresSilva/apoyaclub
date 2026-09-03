@@ -23,14 +23,3 @@ export function obtenerStripe(): Stripe {
   cliente = new Stripe(secretKey);
   return cliente;
 }
-
-/** Id del Price único de la suscripción (29,90€/mes, IVA incluido). */
-export function obtenerStripePriceId(): string {
-  const priceId = process.env.STRIPE_PRICE_ID;
-  if (!priceId) {
-    throw new Error(
-      "Falta STRIPE_PRICE_ID: crea el precio de 29,90€/mes en Stripe y pon su id en .env.local (ver .env.local.example).",
-    );
-  }
-  return priceId;
-}

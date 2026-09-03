@@ -71,5 +71,13 @@
     "titulo": "{dias, plural, one {Queda # día} other {Quedan # días}} de prueba para {club}",
     "texto": "El {fecha} empezará la suscripción de 29,90 €/mes con IVA incluido. No tienes que hacer nada para continuar; si prefieres no seguir, puedes cancelar desde tu panel antes de esa fecha y no se te cobrará.",
     "boton": "Ver mi suscripción"
+  },
+  "fichaIncompleta": {
+    "asunto": "Tu ficha está al {porcentaje}% y eso te resta visibilidad",
+    "eyebrow": "Te falta información",
+    "titulo": "{club}, tu ficha está al {porcentaje}%",
+    "texto": "En el buscador salen antes los clubes con la ficha más completa. Lo que más te falta ahora mismo:",
+    "cierre": "Son diez minutos y no hay que volver a hacerlo.",
+    "boton": "Completar mi ficha"
   }
 }

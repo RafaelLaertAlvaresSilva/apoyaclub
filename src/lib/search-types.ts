@@ -15,7 +15,13 @@ import type {
  * servidor) reexporta todo lo de aquí.
  */
 
-export type OrdenBusqueda = "cercania" | "valor" | "novedad";
+/**
+ * "recomendado" es el orden por defecto: primero los clubes con la ficha
+ * más completa (en decenas), y dentro de cada tramo los más recientes.
+ * Es lo que hace verdad la promesa que se le hace al club en el panel:
+ * cuanta más información, más visibilidad.
+ */
+export type OrdenBusqueda = "recomendado" | "cercania" | "valor" | "novedad";
 export type VistaBusqueda = "oportunidad" | "club";
 
 export type FiltrosBusqueda = {
@@ -58,6 +64,10 @@ export type ResultadoOportunidad = {
   /** Plazas de una oportunidad repartida entre varias empresas. Null = un único patrocinador. */
   slotsTotal: number | null;
   slotsTaken: number;
+  /** Porcentaje de ficha rellenada del club (0-100). */
+  profileScore: number;
+  /** El mismo porcentaje en decenas: es lo que ordena en "recomendado". */
+  visibilityBucket: number;
   /** Sector en exclusiva, si la oportunidad la lleva. */
   exclusivity: string | null;
   /** Equipo asociado ya formateado ("Balonmano · Cadete · Masculino"), o null. */

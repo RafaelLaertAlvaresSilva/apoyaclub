@@ -2,15 +2,7 @@ import { redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { obtenerUsuariosPorRol } from "@/lib/admin-users";
-import {
-  clubRowToProfile,
-  clubSponsorRowToSponsor,
-  clubTeamRowToTeam,
-  type ClubRow,
-  type ClubSponsorRow,
-  type ClubTeamRow,
-} from "@/lib/club-mappers";
-import { calcularPorcentajeCompletado } from "@/lib/profile-completion";
+import { clubRowToProfile, type ClubRow } from "@/lib/club-mappers";
 import type { SubscriptionStatus } from "@/lib/subscription-mappers";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -53,31 +45,15 @@ export default async function AdminClubesPage() {
   const usuarios = await obtenerUsuariosPorRol("club");
   const ids = usuarios.map((usuario) => usuario.id);
 
-  const [{ data: filasClubes }, { data: filasEquipos }, { data: filasPatrocinadores }] =
+  // El porcentaje de ficha rellenada ya viene calculado en la propia
+  // fila del club (`profile_score`, migración 0020), así que aquí no
+  // hace falta traerse equipos ni patrocinadores.
+  const { data: filasClubes } =
     ids.length > 0
-      ? await Promise.all([
-          admin.from("clubs").select("*").in("id", ids).returns<ClubRowConAdmin[]>(),
-          admin.from("club_teams").select("*").in("club_id", ids).returns<ClubTeamRow[]>(),
-          admin.from("club_sponsors").select("*").in("club_id", ids).returns<ClubSponsorRow[]>(),
-        ])
-      : [{ data: [] as ClubRowConAdmin[] }, { data: [] as ClubTeamRow[] }, { data: [] as ClubSponsorRow[] }];
+      ? await admin.from("clubs").select("*").in("id", ids).returns<ClubRowConAdmin[]>()
+      : { data: [] as ClubRowConAdmin[] };
 
   const clubesPorId = new Map((filasClubes ?? []).map((fila) => [fila.id, fila]));
-
-  const equiposPorClub = new Map<string, ReturnType<typeof clubTeamRowToTeam>[]>();
-  for (const fila of filasEquipos ?? []) {
-    const equipo = clubTeamRowToTeam(fila);
-    equiposPorClub.set(equipo.clubId, [...(equiposPorClub.get(equipo.clubId) ?? []), equipo]);
-  }
-
-  const patrocinadoresPorClub = new Map<string, ReturnType<typeof clubSponsorRowToSponsor>[]>();
-  for (const fila of filasPatrocinadores ?? []) {
-    const patrocinador = clubSponsorRowToSponsor(fila);
-    patrocinadoresPorClub.set(patrocinador.clubId, [
-      ...(patrocinadoresPorClub.get(patrocinador.clubId) ?? []),
-      patrocinador,
-    ]);
-  }
 
   const filas: ClubAdminRow[] = usuarios
     .map((usuario) => {
@@ -93,13 +69,7 @@ export default async function AdminClubesPage() {
         // que guardó su perfil.
         createdAt: usuario.createdAt,
         subscriptionStatus: filaClub?.subscription_status ?? null,
-        profileCompletion: perfil
-          ? calcularPorcentajeCompletado(
-              perfil,
-              equiposPorClub.get(usuario.id) ?? [],
-              patrocinadoresPorClub.get(usuario.id) ?? [],
-            )
-          : 0,
+        profileCompletion: perfil?.profileScore ?? 0,
         verified: perfil?.verified ?? false,
         suspended: filaClub?.admin_suspended ?? false,
       } satisfies ClubAdminRow;

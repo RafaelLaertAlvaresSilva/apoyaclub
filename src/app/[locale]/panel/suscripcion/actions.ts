@@ -5,7 +5,8 @@ import { getLocale } from "next-intl/server";
 import type { User } from "@supabase/supabase-js";
 import { redirect as redirectLocalizado } from "@/i18n/navigation";
 import { SITE_URL } from "@/lib/site";
-import { obtenerStripe, obtenerStripePriceId } from "@/lib/stripe/client";
+import { esPlanValido, priceIdDelPlan, type PlanId } from "@/lib/planes";
+import { obtenerStripe } from "@/lib/stripe/client";
 import type { SubscriptionRow } from "@/lib/subscription-mappers";
 import { createClient } from "@/lib/supabase/server";
 import type { Role } from "@/lib/types";
@@ -39,8 +40,8 @@ async function obtenerClubActual(): Promise<
 
 /**
  * Empieza (o retoma) la suscripción del club: crea una sesión de Stripe
- * Checkout para el único plan (29,90€/mes, IVA incluido) con 30 días de
- * prueba gratuita y sin cobro inicial. El estado real de la suscripción
+ * Checkout para el plan elegido (mensual, temporada o fundador; ver
+ * `lib/planes.ts`) con 30 días de prueba gratuita y sin cobro inicial. El estado real de la suscripción
  * se guarda cuando llega el webhook `checkout.session.completed`, no
  * aquí: esta acción solo abre el pago.
  *
@@ -49,11 +50,14 @@ async function obtenerClubActual(): Promise<
  * final a Stripe Checkout es una URL externa absoluta, así que usa el
  * `redirect` normal de Next.js, sin pasar por next-intl.
  */
-export async function iniciarSuscripcion(): Promise<void> {
+export async function iniciarSuscripcion(formData: FormData): Promise<void> {
   const locale = await getLocale();
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return redirectLocalizado({ href: `${RUTA_SUSCRIPCION}?error=sesion`, locale });
   const { supabase, user } = contexto;
+
+  const solicitado = String(formData.get("plan") ?? "");
+  const planId: PlanId = esPlanValido(solicitado) ? solicitado : "temporada";
 
   const { data: filaClub } = await supabase
     .from("clubs")
@@ -61,12 +65,38 @@ export async function iniciarSuscripcion(): Promise<void> {
     .eq("id", user.id)
     .maybeSingle<Pick<SubscriptionRow, "stripe_customer_id">>();
 
+  // El plan fundador tiene plazas contadas. Se reserva ANTES de abrir el
+  // pago: si se reservase después, dos clubes podrían pagar la misma
+  // plaza y habría que devolverle el dinero a uno. Si ya no quedan, se
+  // le manda de vuelta con un aviso en vez de cobrarle un precio que ya
+  // no le corresponde.
+  if (planId === "fundador") {
+    const { data: plaza } = await supabase.rpc("reservar_plaza_fundador", { p_club_id: user.id });
+    if (plaza == null) {
+      return redirectLocalizado({ href: `${RUTA_SUSCRIPCION}?error=sin-plazas`, locale });
+    }
+  } else {
+    await supabase.from("clubs").update({ plan: planId }).eq("id", user.id);
+  }
+
+  let priceId: string;
+  try {
+    priceId = priceIdDelPlan(planId);
+  } catch (excepcion) {
+    console.error("[stripe] Plan sin precio configurado:", excepcion);
+    return redirectLocalizado({ href: `${RUTA_SUSCRIPCION}?error=checkout`, locale });
+  }
+
   const stripe = obtenerStripe();
   const sesionCheckout = await stripe.checkout.sessions
     .create({
       mode: "subscription",
-      line_items: [{ price: obtenerStripePriceId(), quantity: 1 }],
-      subscription_data: { trial_period_days: 30 },
+      line_items: [{ price: priceId, quantity: 1 }],
+      subscription_data: {
+        trial_period_days: 30,
+        metadata: { plan: planId },
+      },
+      metadata: { plan: planId, club_id: user.id },
       // Si el club ya tuvo un cliente de Stripe antes (p. ej. canceló y
       // vuelve a suscribirse), se reutiliza en vez de crear uno nuevo.
       customer: filaClub?.stripe_customer_id ?? undefined,

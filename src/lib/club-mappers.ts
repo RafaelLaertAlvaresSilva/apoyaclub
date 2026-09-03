@@ -52,6 +52,12 @@ export type ClubRow = {
   estimated_reach: number | null;
   average_attendance: number | null;
   community_actions: CommunityAction[] | null;
+  /**
+   * Porcentaje de ficha rellenada (migración 0020). Lo calcula la base de
+   * datos. Opcional porque la vista pública `club_public_profiles` no lo
+   * expone: allí llega undefined y se toma como 0.
+   */
+  profile_score?: number | null;
   created_at: string;
   updated_at: string;
 };
@@ -112,6 +118,7 @@ export function clubRowToProfile(row: ClubRow): ClubProfile {
     estimatedReach: row.estimated_reach,
     averageAttendance: row.average_attendance,
     communityActions: row.community_actions ?? [],
+    profileScore: row.profile_score ?? 0,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };

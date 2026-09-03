@@ -24,11 +24,12 @@ const IDS_OBJETIVO = new Set(OBJETIVOS_OPORTUNIDAD.map((o) => o.id as string));
 const IDS_PERIODO = new Set(PERIODOS_OPORTUNIDAD.map((p) => p.id as string));
 const IDS_NIVEL_PATROCINIO = new Set(NIVELES_PATROCINIO.map((n) => n.id as string));
 const NIVELES_VALIDOS = new Set<TeamLevel>(["primer_equipo", "cantera"]);
-const ORDENES_VALIDOS = new Set<OrdenBusqueda>(["cercania", "valor", "novedad"]);
+const ORDENES_VALIDOS = new Set<OrdenBusqueda>(["recomendado", "cercania", "valor", "novedad"]);
 
 export const RADIOS_KM = [10, 25, 50, 100, 200] as const;
 
 export const OPCIONES_ORDEN: { id: OrdenBusqueda; etiqueta: string }[] = [
+  { id: "recomendado", etiqueta: "Recomendadas" },
   { id: "novedad", etiqueta: "Más recientes" },
   { id: "valor", etiqueta: "Mayor valor" },
   { id: "cercania", etiqueta: "Más cerca" },
@@ -78,7 +79,7 @@ export function parametrosAFiltros(params: ParametrosURL): { filtros: FiltrosBus
     formasColaboracion: listaDesdeParametro(params.forma, IDS_FORMA),
     objetivos: listaDesdeParametro(params.objetivo, IDS_OBJETIVO),
     niveles: listaDesdeParametro(params.patrocinio, IDS_NIVEL_PATROCINIO),
-    orden: orden && ORDENES_VALIDOS.has(orden as OrdenBusqueda) ? (orden as OrdenBusqueda) : "novedad",
+    orden: orden && ORDENES_VALIDOS.has(orden as OrdenBusqueda) ? (orden as OrdenBusqueda) : "recomendado",
   };
 
   const vista: VistaBusqueda = unParametro(params.vista) === "club" ? "club" : "oportunidad";
@@ -106,7 +107,7 @@ export function filtrosAQueryString(filtros: FiltrosBusqueda, vista: VistaBusque
   }
   if (filtros.objetivos && filtros.objetivos.length > 0) qs.set("objetivo", filtros.objetivos.join(","));
   if (filtros.niveles && filtros.niveles.length > 0) qs.set("patrocinio", filtros.niveles.join(","));
-  if (filtros.orden && filtros.orden !== "novedad") qs.set("orden", filtros.orden);
+  if (filtros.orden && filtros.orden !== "recomendado") qs.set("orden", filtros.orden);
   if (vista !== "oportunidad") qs.set("vista", vista);
 
   return qs.toString();

@@ -59,11 +59,11 @@ describe("filtros del buscador y URL", () => {
     expect(recuperados.nivelEquipo).toBeUndefined();
     expect(recuperados.radioKm).toBeUndefined();
     // Sin orden válido se cae al orden por defecto, no a undefined.
-    expect(recuperados.orden).toBe("novedad");
+    expect(recuperados.orden).toBe("recomendado");
   });
 
   it("no ensucia la URL con el orden por defecto ni con la vista por defecto", () => {
-    const qs = filtrosAQueryString({ orden: "novedad" }, "oportunidad");
+    const qs = filtrosAQueryString({ orden: "recomendado" }, "oportunidad");
     expect(qs).toBe("");
   });
 

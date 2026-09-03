@@ -1,4 +1,5 @@
 import { avisarDeFallo } from "@/lib/monitoring";
+import { planDelPriceId, type PlanId } from "@/lib/planes";
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { obtenerStripe } from "@/lib/stripe/client";
@@ -122,12 +123,30 @@ function aIsoONull(timestampUnix: number | null | undefined): string | null {
   return typeof timestampUnix === "number" ? new Date(timestampUnix * 1000).toISOString() : null;
 }
 
+/**
+ * Plan contratado, deducido del Price que Stripe devuelve en la
+ * suscripción (migración 0021).
+ *
+ * Stripe es la fuente de la verdad de lo que el club está pagando de
+ * verdad: si cambia de plan desde el portal de cliente, aquí es donde se
+ * entera la plataforma. Si el Price no es ninguno de los tres
+ * configurados se devuelve undefined y la columna se deja como estaba,
+ * en vez de escribir un plan inventado.
+ */
+function planDeLaSuscripcion(subscription: Stripe.Subscription): PlanId | undefined {
+  const priceId = subscription.items.data[0]?.price?.id;
+  if (!priceId) return undefined;
+  return planDelPriceId(priceId) ?? undefined;
+}
+
 /** Datos comunes que se guardan en `clubs` a partir de una Subscription de Stripe. */
 function datosSuscripcion(customerId: string, subscription: Stripe.Subscription) {
   const cancelAtPeriodEnd = Boolean(subscription.cancel_at_period_end);
+  const plan = planDeLaSuscripcion(subscription);
 
   return {
     stripe_customer_id: customerId,
+    ...(plan ? { plan } : {}),
     stripe_subscription_id: subscription.id,
     subscription_status: subscription.status,
     trial_ends_at: aIsoONull(subscription.trial_end),

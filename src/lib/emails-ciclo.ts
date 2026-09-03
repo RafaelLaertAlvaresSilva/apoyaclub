@@ -3,6 +3,7 @@ import { routing } from "@/i18n/routing";
 import {
   enviarEmailBienvenidaClub,
   enviarEmailBienvenidaEmpresa,
+  enviarEmailFichaIncompleta,
   enviarEmailFinDePrueba,
   enviarEmailSolicitudSinAbrir,
   type ResultadoEnvioEmail,
@@ -10,6 +11,15 @@ import {
 import { avisoPendiente, diasDesde, diasHasta } from "@/lib/fechas";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { SITE_URL } from "@/lib/site";
+import {
+  clubRowToProfile,
+  clubSponsorRowToSponsor,
+  clubTeamRowToTeam,
+  type ClubRow,
+  type ClubSponsorRow,
+  type ClubTeamRow,
+} from "@/lib/club-mappers";
+import { UMBRAL_FICHA_FLOJA, huecosDelPerfil } from "@/lib/profile-completion";
 import type { Role } from "@/lib/types";
 
 /**
@@ -39,6 +49,13 @@ const DIAS_MAXIMOS_BIENVENIDA = 7;
 const HORAS_SIN_ABRIR = 48;
 /** Cuántos días antes del fin de la prueba se avisa. */
 const UMBRALES_FIN_PRUEBA = [1, 3];
+/**
+ * Días desde el alta antes de recordar que la ficha está a medias. Menos
+ * sería impaciente: el club acaba de registrarse y aún la está montando.
+ */
+const DIAS_ANTES_DE_AVISAR_FICHA = 10;
+/** Cuántos huecos se enumeran en el correo. Más de tres agobia. */
+const HUECOS_EN_EL_EMAIL = 3;
 
 function seDaPorEnviado(resultado: ResultadoEnvioEmail): boolean {
   return resultado.ok || resultado.error === "Envío de email no configurado todavía.";
@@ -297,4 +314,90 @@ export async function cerrarPruebasVencidas(admin: ClienteAdmin, ahora = new Dat
   }
 
   return vencidas.length;
+}
+
+// ---------------------------------------------------------------------
+// 5. Ficha a medias
+// ---------------------------------------------------------------------
+type FilaFichaFloja = ClubRow & { profile_score: number | null; created_at: string };
+
+/**
+ * Recuerda una sola vez a los clubes con la ficha por debajo del umbral
+ * que eso les está costando visibilidad (migración 0020).
+ *
+ * Se manda una única vez por club (`email_log`, kind "ficha_incompleta"):
+ * un club que decide no rellenar más no tiene que recibir el mismo
+ * correo todos los meses. Y no se manda nada más registrarse: hay que
+ * darle margen para que la monte él solo.
+ */
+export async function recordarFichaIncompleta(
+  admin: ClienteAdmin,
+  ahora = new Date(),
+): Promise<number> {
+  const limite = new Date(
+    ahora.getTime() - DIAS_ANTES_DE_AVISAR_FICHA * 24 * 60 * 60 * 1000,
+  ).toISOString();
+
+  const { data, error } = await admin
+    .from("clubs")
+    .select("*")
+    .lt("profile_score", UMBRAL_FICHA_FLOJA)
+    .lt("created_at", limite)
+    .in("subscription_status", ["trialing", "active"])
+    .returns<FilaFichaFloja[]>();
+
+  if (error) {
+    avisarDeFallo("cron-suscripciones", "No se han podido leer las fichas incompletas", error);
+    return 0;
+  }
+
+  const candidatos = data ?? [];
+  if (candidatos.length === 0) return 0;
+
+  const yaAvisados = await yaEnviados(
+    admin,
+    ["ficha_incompleta"],
+    candidatos.map((club) => club.id),
+  );
+
+  let total = 0;
+
+  for (const fila of candidatos) {
+    if (yaAvisados.has(`${fila.id}:ficha_incompleta`)) continue;
+
+    const { data: usuario } = await admin.auth.admin.getUserById(fila.id);
+    const email = usuario.user?.email;
+    if (!email) continue;
+
+    // Los huecos se calculan con el perfil ya mapeado; equipos y
+    // patrocinadores se piden aparte porque viven en sus propias tablas.
+    const [{ data: equipos }, { data: patrocinadores }] = await Promise.all([
+      admin.from("club_teams").select("*").eq("club_id", fila.id).returns<ClubTeamRow[]>(),
+      admin.from("club_sponsors").select("*").eq("club_id", fila.id).returns<ClubSponsorRow[]>(),
+    ]);
+
+    const huecos = huecosDelPerfil(
+      clubRowToProfile(fila),
+      (equipos ?? []).map(clubTeamRowToTeam),
+      (patrocinadores ?? []).map(clubSponsorRowToSponsor),
+    );
+
+    if (huecos.length === 0) continue;
+
+    const resultado = await enviarEmailFichaIncompleta({
+      clubEmail: email,
+      clubName: fila.name,
+      porcentaje: fila.profile_score ?? 0,
+      huecos: huecos.slice(0, HUECOS_EN_EL_EMAIL).map((hueco) => hueco.titulo),
+      panelUrl: URL_PANEL,
+    });
+
+    if (seDaPorEnviado(resultado)) {
+      await apuntarEnviado(admin, fila.id, "ficha_incompleta");
+    }
+
+    if (resultado.ok) total += 1;
+  }
+
+  return total;
 }

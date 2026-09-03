@@ -5,6 +5,7 @@ import {
   avisarFinDePrueba,
   cerrarPruebasVencidas,
   enviarBienvenidas,
+  recordarFichaIncompleta,
   recordarSolicitudesSinAbrir,
 } from "@/lib/emails-ciclo";
 import { routing } from "@/i18n/routing";
@@ -22,6 +23,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
  * 2. Bienvenida a quien acaba de confirmar su cuenta.
  * 3. Fin del mes gratis, antes del primer cobro.
  * 4. Solicitudes que el club lleva 48 horas sin abrir.
+ * 5. Ficha a medias: una sola vez, a los diez días del alta, si sigue
+ *    por debajo del umbral que le resta visibilidad en el buscador.
  *
  * Los tres últimos viven en `lib/emails-ciclo.ts`. Cada bloque va por su
  * cuenta: si uno falla, los demás se envían igual.
@@ -126,7 +129,7 @@ export async function GET(request: Request) {
   // Los tres avisos de la migración 0013. Cada uno atrapa sus propios
   // errores y devuelve cuántos emails ha mandado, así que un fallo en
   // uno no deja a los otros sin enviarse.
-  const [bienvenidas, finDePrueba, sinAbrir, pruebasCerradas] = await Promise.all([
+  const [bienvenidas, finDePrueba, sinAbrir, pruebasCerradas, fichasIncompletas] = await Promise.all([
     enviarBienvenidas(admin).catch((excepcion) => {
       avisarDeFallo("cron-suscripciones", "Fallo enviando las bienvenidas", excepcion);
       return 0;
@@ -143,6 +146,10 @@ export async function GET(request: Request) {
       avisarDeFallo("cron-suscripciones", "Fallo cerrando las pruebas vencidas", excepcion);
       return 0;
     }),
+    recordarFichaIncompleta(admin).catch((excepcion) => {
+      avisarDeFallo("cron-suscripciones", "Fallo recordando las fichas incompletas", excepcion);
+      return 0;
+    }),
   ]);
 
   return NextResponse.json({
@@ -152,5 +159,6 @@ export async function GET(request: Request) {
     finDePrueba,
     sinAbrir,
     pruebasCerradas,
+    fichasIncompletas,
   });
 }
