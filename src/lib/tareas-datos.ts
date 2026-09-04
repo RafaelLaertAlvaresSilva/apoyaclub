@@ -55,3 +55,36 @@ export async function contarTareasVencidas(): Promise<number> {
     return 0;
   }
 }
+
+/**
+ * Cuándo se descargó por última vez el informe de cada empresa
+ * (migración 0031). La clave del mapa va en minúsculas y sin espacios
+ * porque el nombre de la empresa es texto libre y "Ferretería Ramírez"
+ * y " ferretería ramírez " tienen que ser la misma.
+ */
+export async function obtenerUltimosInformes(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  clubId: string,
+): Promise<Map<string, string>> {
+  const { data, error } = await supabase
+    .from("club_sponsor_reports")
+    .select("company_name, created_at")
+    .eq("club_id", clubId)
+    .order("created_at", { ascending: false })
+    .returns<{ company_name: string; created_at: string }[]>();
+
+  if (error) {
+    avisarDeFallo("tareas", "No se han podido leer los informes generados", error);
+    return new Map();
+  }
+
+  // Las filas vienen de la más reciente a la más antigua, así que la
+  // primera que se ve de cada empresa es la buena.
+  const ultimos = new Map<string, string>();
+  for (const fila of data ?? []) {
+    const clave = fila.company_name.trim().toLowerCase();
+    if (!ultimos.has(clave)) ultimos.set(clave, fila.created_at);
+  }
+
+  return ultimos;
+}

@@ -2,10 +2,12 @@ import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { createClient } from "@/lib/supabase/server";
-import { obtenerTareasDelClub } from "@/lib/tareas-datos";
+import { hoyISO } from "@/lib/tareas-patrocinio";
+import { obtenerTareasDelClub, obtenerUltimosInformes } from "@/lib/tareas-datos";
 import type { ClubSponsorRow } from "@/lib/club-mappers";
 import { PanelNav } from "../components/PanelNav";
 import { TareasDeHoy } from "../components/TareasDeHoy";
+import { RecordatorioInforme } from "./components/RecordatorioInforme";
 import { TareasManager } from "./components/TareasManager";
 
 /**
@@ -25,8 +27,9 @@ export default async function TareasPage() {
     return redirect({ href: "/login", locale });
   }
 
-  const [tareas, { data: patrocinadores }] = await Promise.all([
+  const [tareas, ultimosInformes, { data: patrocinadores }] = await Promise.all([
     obtenerTareasDelClub(supabase, user.id),
+    obtenerUltimosInformes(supabase, user.id),
     supabase
       .from("club_sponsors")
       .select("name")
@@ -45,6 +48,10 @@ export default async function TareasPage() {
     .filter(Boolean)
     .sort((a, b) => a.localeCompare(b, "es"));
 
+  // Solo las que tienen algo apuntado: recomendar el informe de una
+  // empresa sin tareas daría un documento en blanco.
+  const empresasConTareas = [...new Set(tareas.map((tarea) => tarea.empresa.trim()))].filter(Boolean);
+
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
@@ -62,6 +69,12 @@ export default async function TareasPage() {
       <PanelNav activo="tareas" />
 
       <TareasDeHoy tareas={tareas} />
+
+      <RecordatorioInforme
+        empresasConTareas={empresasConTareas}
+        ultimosInformes={ultimosInformes}
+        hoy={hoyISO()}
+      />
 
       <TareasManager tareas={tareas} empresasConocidas={empresasConocidas} />
     </div>

@@ -14,7 +14,8 @@ import {
   obtenerMetricasClub,
   obtenerResumenDeVisitas,
 } from "@/lib/club-metrics";
-import { obtenerTareasDelClub } from "@/lib/tareas-datos";
+import { hoyISO } from "@/lib/tareas-patrocinio";
+import { obtenerTareasDelClub, obtenerUltimosInformes } from "@/lib/tareas-datos";
 import { contarSolicitudesNuevas } from "@/lib/contact-requests";
 import { primerosPasos } from "@/lib/onboarding";
 import { obtenerRecomendaciones } from "@/lib/recomendaciones";
@@ -27,6 +28,7 @@ import { AvisoSolicitudes } from "./components/AvisoSolicitudes";
 import { PrimerosPasos } from "./components/PrimerosPasos";
 import { Recomendaciones } from "./components/Recomendaciones";
 import { PanelNav } from "./components/PanelNav";
+import { RecordatorioInforme } from "./tareas/components/RecordatorioInforme";
 import { TareasDeHoy } from "./components/TareasDeHoy";
 import { PanelTabs } from "./components/PanelTabs";
 
@@ -84,14 +86,16 @@ export default async function PanelPage() {
 
   // Las métricas se piden aparte porque van con la clave de servicio
   // (el club no lee las tablas de eventos, solo sus números agregados).
-  const [metricas, empresasInteresadas, resumenDeVisitas, tareas] = await Promise.all([
-    obtenerMetricasClub(user.id),
-    obtenerEmpresasInteresadas(user.id),
-    obtenerResumenDeVisitas(user.id),
-    // Las tareas sí van con la sesión del club: son su agenda privada
-    // y de eso se encarga RLS (migración 0030).
-    obtenerTareasDelClub(supabase, user.id),
-  ]);
+  const [metricas, empresasInteresadas, resumenDeVisitas, tareas, ultimosInformes] =
+    await Promise.all([
+      obtenerMetricasClub(user.id),
+      obtenerEmpresasInteresadas(user.id),
+      obtenerResumenDeVisitas(user.id),
+      // Las tareas y los informes van con la sesión del club: son su
+      // agenda privada y de eso se encarga RLS (migraciones 0030, 0031).
+      obtenerTareasDelClub(supabase, user.id),
+      obtenerUltimosInformes(supabase, user.id),
+    ]);
 
   const perfil = filaClub ? clubRowToProfile(filaClub) : null;
   const equipos = (filasEquipos ?? []).map(clubTeamRowToTeam);
@@ -124,6 +128,16 @@ export default async function PanelPage() {
       <AvisoSolicitudes sinAbrir={await contarSolicitudesNuevas()} />
 
       <TareasDeHoy tareas={tareas} />
+
+      {/* Dos veces por temporada y solo mientras quede alguna empresa
+          sin su informe. Va también aquí, en la portada, porque es
+          donde entra el club: si solo estuviera en la pestaña de
+          tareas, se lo perdería justo quien menos entra a mirarlas. */}
+      <RecordatorioInforme
+        empresasConTareas={[...new Set(tareas.map((tarea) => tarea.empresa.trim()))].filter(Boolean)}
+        ultimosInformes={ultimosInformes}
+        hoy={hoyISO()}
+      />
 
       <PrimerosPasos pasos={pasosIniciales} />
 

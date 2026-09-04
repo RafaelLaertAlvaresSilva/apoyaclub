@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { clubRowToProfile, type ClubRow } from "@/lib/club-mappers";
+import { avisarDeFallo } from "@/lib/monitoring";
 import { generarInformeWord } from "@/lib/informe-docx";
 import { prepararInforme } from "@/lib/informe-patrocinio";
 import { generarInformePdf } from "@/lib/informe-pdf";
@@ -56,6 +57,18 @@ export async function POST(request: Request) {
     informe,
     emailContacto: filaClub.contact_email ?? user.email ?? null,
   };
+
+  // Queda apuntado que se descargó (migración 0031): es lo que permite
+  // recordarle luego al club a qué empresa le falta. No se espera al
+  // resultado ni se comprueba: si esto falla, el club tiene que poder
+  // descargar su informe igual.
+  const { error: errorRegistro } = await supabase
+    .from("club_sponsor_reports")
+    .insert({ club_id: user.id, company_name: empresa.slice(0, 120), format: formato === "word" ? "word" : "pdf" });
+
+  if (errorRegistro) {
+    avisarDeFallo("tareas", "No se ha podido apuntar la descarga del informe", errorRegistro);
+  }
 
   // El nombre del archivo lleva el de la empresa, así que hay que
   // limpiarlo: una barra o unas comillas dentro de `filename` rompen la
