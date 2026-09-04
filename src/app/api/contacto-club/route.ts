@@ -56,13 +56,14 @@ export async function POST(request: Request) {
 
   const { data: club } = await admin
     .from("clubs")
-    .select("id, contact_name, contact_phone, contact_email, contact_public_consent, subscription_status, admin_suspended")
+    .select("id, contact_name, contact_phone, contact_email, contact_hours, contact_public_consent, subscription_status, admin_suspended")
     .eq("slug", slug)
     .maybeSingle<{
       id: string;
       contact_name: string | null;
       contact_phone: string | null;
       contact_email: string | null;
+      contact_hours: string | null;
       contact_public_consent: boolean | null;
       subscription_status: string | null;
       admin_suspended: boolean | null;
@@ -119,5 +120,6 @@ export async function POST(request: Request) {
     // El nombre y el teléfono solo si el club autorizó publicarlos.
     nombre: club.contact_public_consent ? club.contact_name : null,
     telefono: club.contact_public_consent ? club.contact_phone : null,
+    horario: club.contact_hours,
   });
 }

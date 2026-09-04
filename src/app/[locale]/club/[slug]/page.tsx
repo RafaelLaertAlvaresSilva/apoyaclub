@@ -640,48 +640,12 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
     nodo: (
       <Seccion id="contacto" titulo={t("secciones.contacto")}>
         <div className="rounded-xl border border-zinc-200 p-5">
-          {/* Nombre, teléfono y horario salen directos: la vista pública
-              ya los oculta si el club no ha autorizado publicarlos, y
-              desde la migración 0029 la autorización viene puesta. El
-              correo aparece solo también, pero pedido por detrás (ver
-              DatosDeContacto): así no queda escrito en el HTML al
-              alcance de los robots que recolectan direcciones. */}
-          {(perfil.contactName || perfil.contactPhone || perfil.contactHours) && (
-            <dl className="mb-4 space-y-2 text-sm">
-              {perfil.contactName && (
-                <div>
-                  <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                    {t("secciones.contactoPersona")}
-                  </dt>
-                  <dd className="text-zinc-900">{perfil.contactName}</dd>
-                </div>
-              )}
-              {perfil.contactPhone && (
-                <div>
-                  <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                    {t("secciones.contactoTelefono")}
-                  </dt>
-                  <dd>
-                    <a
-                      href={`tel:${perfil.contactPhone.replace(/\s+/g, "")}`}
-                      className="font-medium text-teal-700 hover:underline"
-                    >
-                      {perfil.contactPhone}
-                    </a>
-                  </dd>
-                </div>
-              )}
-              {perfil.contactHours && (
-                <div>
-                  <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                    {t("secciones.contactoHorario")}
-                  </dt>
-                  <dd className="text-zinc-900">{perfil.contactHours}</dd>
-                </div>
-              )}
-            </dl>
-          )}
-
+          {/* Nada de esto se pinta en el servidor: si el teléfono o el
+              correo quedan escritos en el HTML, los robots que rastrean
+              la web se los llevan y el club acaba en listas de spam.
+              Sale entero al pulsar el botón — un clic, sin registro.
+              De paso es lo que permite contar cuántas empresas llegan
+              hasta aquí (migración 0022). */}
           <DatosDeContacto
             slug={perfil.slug}
             textoBoton={t("secciones.verContacto")}
@@ -773,19 +737,6 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            {/* El teléfono, arriba del todo y pulsable. Es la vía más
-                corta entre la empresa que acaba de llegar y el club, y
-                estaba enterrada al final de la ficha. Solo aparece si el
-                club autorizó publicarlo: la vista pública ya devuelve
-                null cuando no. */}
-            {perfil.contactPhone && (
-              <a
-                href={`tel:${perfil.contactPhone.replace(/\s+/g, "")}`}
-                className="inline-flex items-center gap-2 rounded-lg border border-teal-200 bg-teal-50 px-4 py-2.5 text-sm font-semibold text-teal-800 transition-colors hover:bg-teal-100"
-              >
-                {perfil.contactPhone}
-              </a>
-            )}
             <CompartirBoton url={urlPublica} titulo={t("portada.compartirTitulo", { club: perfil.name })} />
             <SolicitarContactoBoton clubId={perfil.id} clubName={perfil.name}>
               {t("portada.solicitarContacto")}

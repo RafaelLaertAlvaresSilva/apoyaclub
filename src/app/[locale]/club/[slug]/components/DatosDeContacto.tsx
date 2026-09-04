@@ -1,30 +1,29 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
-type Contacto = { email: string | null; nombre: string | null; telefono: string | null };
+type Contacto = {
+  email: string | null;
+  nombre: string | null;
+  telefono: string | null;
+  horario: string | null;
+};
 
 /**
- * Correo de contacto del club y botones para escribir o llamar.
+ * Los datos de contacto del club, detrás de un botón.
  *
- * Antes había que pulsar un botón para que apareciera. Se ha quitado:
- * la empresa que entra en la ficha tiene que poder escribir sin buscar
- * nada, y un clic de más entre ella y el club es un patrocinio menos.
+ * No es un muro: no hay que registrarse ni dar nada a cambio. Es un
+ * clic, y sale todo de una vez — persona, teléfono, correo y horario.
  *
- * El correo se sigue pidiendo al servidor en vez de escribirlo en el
- * HTML, por dos motivos que no tienen nada que ver con esconderlo de
- * las personas:
+ * Ese clic hace dos cosas que sin él no se pueden hacer:
  *
- *  1. Un correo escrito en abierto en una página pública lo recogen los
- *     robots que rastrean la web y acaba en listas de spam. Pedido por
- *     detrás, no está en el HTML y no lo recogen.
- *  2. Es lo que permite contarle al club "este mes tres empresas
- *     miraron tus datos de contacto", que es la señal más valiosa que
- *     produce la plataforma.
- *
- * La petición sale cuando el bloque entra en pantalla, no al cargar la
- * página. Así la métrica sigue queriendo decir algo — que alguien llegó
- * hasta el contacto — en vez de repetir el contador de visitas.
+ *  1. El correo y el teléfono no quedan escritos en el HTML de una
+ *     página pública, que es de donde los sacan los robots que arman
+ *     listas de spam. El club deja de recibir basura por estar aquí.
+ *  2. La plataforma puede decirle al club "este mes tres empresas
+ *     miraron tus datos de contacto". Es la señal más valiosa que
+ *     produce ApoyaClub: no es una visita suelta, es alguien a un paso
+ *     de escribir.
  */
 export function DatosDeContacto({
   slug,
@@ -40,12 +39,8 @@ export function DatosDeContacto({
   const [contacto, setContacto] = useState<Contacto | null>(null);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const contenedor = useRef<HTMLDivElement>(null);
-  const yaPedido = useRef(false);
 
-  const cargar = useCallback(async () => {
-    if (yaPedido.current) return;
-    yaPedido.current = true;
+  async function mostrar() {
     setCargando(true);
     setError(null);
 
@@ -59,95 +54,83 @@ export function DatosDeContacto({
       if (!respuesta.ok) {
         const cuerpo = (await respuesta.json().catch(() => null)) as { error?: string } | null;
         setError(cuerpo?.error ?? "No se han podido cargar los datos de contacto.");
-        // Se permite reintentar: el fallo puede ser pasajero.
-        yaPedido.current = false;
         return;
       }
 
       setContacto((await respuesta.json()) as Contacto);
     } catch {
       setError("No se han podido cargar los datos de contacto. Revisa tu conexión.");
-      yaPedido.current = false;
     } finally {
       setCargando(false);
     }
-  }, [slug]);
+  }
 
-  useEffect(() => {
-    const nodo = contenedor.current;
-
-    // Navegador antiguo sin IntersectionObserver: se pide directamente.
-    // Vale más un contacto visible que una métrica fina.
-    if (!nodo || typeof IntersectionObserver === "undefined") {
-      void cargar();
-      return;
-    }
-
-    const observador = new IntersectionObserver(
-      (entradas) => {
-        if (entradas.some((entrada) => entrada.isIntersecting)) {
-          observador.disconnect();
-          void cargar();
-        }
-      },
-      // Un poco antes de que asome, para que ya esté puesto cuando se lee.
-      { rootMargin: "200px" },
+  if (!contacto) {
+    return (
+      <div>
+        <button
+          type="button"
+          onClick={mostrar}
+          disabled={cargando}
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-teal-700 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-teal-800 disabled:opacity-60"
+        >
+          {cargando ? "Cargando…" : textoBoton}
+        </button>
+        <p className="mt-2 text-xs text-zinc-500">
+          Un solo clic, sin registrarte. Así el club no acaba en listas de spam.
+        </p>
+        {error && <p className="mt-2 text-sm text-red-700">{error}</p>}
+      </div>
     );
+  }
 
-    observador.observe(nodo);
-    return () => observador.disconnect();
-  }, [cargar]);
+  const vacio = !contacto.nombre && !contacto.telefono && !contacto.email && !contacto.horario;
+
+  if (vacio) {
+    return (
+      <p className="text-sm text-zinc-600">
+        Este club todavía no ha publicado sus datos de contacto. Puedes escribirle con el botón de
+        abajo.
+      </p>
+    );
+  }
 
   return (
-    <div ref={contenedor}>
-      {contacto ? (
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          {/* El nombre y el teléfono ya salen arriba, en la ficha del
-              club. Aquí solo el correo, que es lo que faltaba. */}
-          <div className="text-sm">
-            {contacto.email && (
-              <>
-                <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Correo</p>
-                <p className="text-zinc-900">{contacto.email}</p>
-              </>
-            )}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {contacto.email && (
-              <a
-                href={`mailto:${contacto.email}`}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
-              >
-                {textoEmail}
-              </a>
-            )}
-            {contacto.telefono && (
-              <a
-                href={`tel:${contacto.telefono.replace(/\s+/g, "")}`}
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
-              >
-                {textoLlamar}
-              </a>
-            )}
-          </div>
-        </div>
-      ) : error ? (
-        <div>
-          <p className="mb-2 text-sm text-red-700">{error}</p>
-          <button
-            type="button"
-            onClick={() => void cargar()}
-            disabled={cargando}
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800 disabled:opacity-60"
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <dl className="space-y-2 text-sm">
+        {contacto.nombre && <Dato etiqueta="Persona de contacto" valor={contacto.nombre} />}
+        {contacto.telefono && <Dato etiqueta="Teléfono" valor={contacto.telefono} />}
+        {contacto.email && <Dato etiqueta="Correo" valor={contacto.email} />}
+        {contacto.horario && <Dato etiqueta="Horario de atención" valor={contacto.horario} />}
+      </dl>
+
+      <div className="flex shrink-0 flex-wrap gap-2">
+        {contacto.email && (
+          <a
+            href={`mailto:${contacto.email}`}
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
           >
-            {cargando ? "Cargando…" : textoBoton}
-          </button>
-        </div>
-      ) : (
-        // Hueco de la misma altura mientras llega, para que el bloque no
-        // dé un salto delante de quien lo está leyendo.
-        <div className="h-11 animate-pulse rounded-lg bg-zinc-100" aria-hidden="true" />
-      )}
+            {textoEmail}
+          </a>
+        )}
+        {contacto.telefono && (
+          <a
+            href={`tel:${contacto.telefono.replace(/\s+/g, "")}`}
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
+          >
+            {textoLlamar}
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function Dato({ etiqueta, valor }: { etiqueta: string; valor: string }) {
+  return (
+    <div>
+      <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{etiqueta}</dt>
+      <dd className="text-zinc-900">{valor}</dd>
     </div>
   );
 }
