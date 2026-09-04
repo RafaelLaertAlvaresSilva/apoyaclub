@@ -198,3 +198,61 @@ export function cuantoFalta(fechaISO: string, hoy: string = hoyISO()): string {
   if (diferencia > 0) return `vence en ${diferencia} días`;
   return `vencía hace ${Math.abs(diferencia)} días`;
 }
+
+export type LineaNueva = {
+  accion: string;
+  inicio: string | null;
+  fin: string;
+  notas: string | null;
+};
+
+const ES_FECHA = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * Valida y limpia las líneas del formulario de alta, donde el club
+ * apunta de una vez todo lo que le ha prometido a una empresa.
+ *
+ * El formulario manda un campo por línea con el mismo nombre, así que
+ * las cuatro listas llegan en el orden de la página y sus índices se
+ * corresponden. Funciona porque cada línea pinta siempre sus cuatro
+ * campos, aunque estén vacíos.
+ *
+ * Las líneas del todo vacías se tiran sin decir nada: son las que el
+ * club añadió y luego no llegó a rellenar. Una a medias, en cambio, sí
+ * da error: ahí sí quería apuntar algo y hay que decírselo.
+ */
+export function prepararLineas(campos: {
+  acciones: string[];
+  inicios: string[];
+  fines: string[];
+  notas: string[];
+}): { lineas: LineaNueva[] } | { error: string } {
+  const lineas: LineaNueva[] = [];
+
+  for (let indice = 0; indice < campos.acciones.length; indice += 1) {
+    const accion = (campos.acciones[indice] ?? "").trim();
+    const inicio = (campos.inicios[indice] ?? "").trim();
+    const fin = (campos.fines[indice] ?? "").trim();
+    const notas = (campos.notas[indice] ?? "").trim();
+
+    if (!accion && !inicio && !fin && !notas) continue;
+
+    if (!accion) return { error: "Te falta escribir qué hay que hacer en una de las líneas." };
+    if (!ES_FECHA.test(fin)) return { error: `Pon la fecha límite de "${accion}".` };
+    if (inicio && !ES_FECHA.test(inicio)) return { error: `La fecha de inicio de "${accion}" no vale.` };
+    if (inicio && inicio > fin) {
+      return { error: `En "${accion}", la fecha de inicio es posterior a la fecha límite.` };
+    }
+
+    lineas.push({
+      accion: accion.slice(0, 200),
+      inicio: inicio || null,
+      fin,
+      notas: notas ? notas.slice(0, 1000) : null,
+    });
+  }
+
+  if (lineas.length === 0) return { error: "Escribe al menos una cosa que haya que hacer." };
+
+  return { lineas };
+}

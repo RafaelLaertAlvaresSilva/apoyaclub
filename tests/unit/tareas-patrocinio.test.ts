@@ -5,6 +5,7 @@ import {
   cuantoFalta,
   estadoVisible,
   hoyISO,
+  prepararLineas,
   sumarDias,
   tareasParaHoy,
   type TareaPatrocinio,
@@ -139,5 +140,70 @@ describe("hoyISO", () => {
     // España (UTC+2 en verano), y el club vería vencer sus tareas un
     // día antes de tiempo.
     expect(hoyISO(new Date(2026, 8, 4, 23, 30))).toBe("2026-09-04");
+  });
+});
+
+describe("prepararLineas", () => {
+  const campos = (
+    acciones: string[],
+    fines: string[],
+    inicios: string[] = [],
+    notas: string[] = [],
+  ) => ({ acciones, fines, inicios, notas });
+
+  it("acepta varias cosas de una vez para la misma empresa", () => {
+    const resultado = prepararLineas(
+      campos(
+        ["2 publicaciones en Instagram", "Vídeo", "Visita de los jugadores"],
+        ["2026-11-30", "2026-12-15", "2026-12-20"],
+      ),
+    );
+
+    expect("lineas" in resultado && resultado.lineas).toHaveLength(3);
+    expect("lineas" in resultado && resultado.lineas[1].accion).toBe("Vídeo");
+    expect("lineas" in resultado && resultado.lineas[2].fin).toBe("2026-12-20");
+  });
+
+  it("tira las líneas que quedaron del todo vacías", () => {
+    const resultado = prepararLineas(
+      campos(["Vídeo", "", ""], ["2026-12-15", "", ""], ["", "", ""], ["", "", ""]),
+    );
+
+    expect("lineas" in resultado && resultado.lineas).toHaveLength(1);
+  });
+
+  it("avisa de la línea a medias en vez de guardarla mal", () => {
+    const sinFecha = prepararLineas(campos(["Vídeo"], [""]));
+    expect("error" in sinFecha && sinFecha.error).toContain("Vídeo");
+
+    const sinAccion = prepararLineas(campos([""], ["2026-12-15"]));
+    expect("error" in sinAccion && sinAccion.error).toContain("qué hay que hacer");
+  });
+
+  it("no deja poner el inicio después de la fecha límite", () => {
+    const resultado = prepararLineas(
+      campos(["Valla"], ["2026-10-01"], ["2026-11-01"], [""]),
+    );
+
+    expect("error" in resultado && resultado.error).toContain("posterior");
+  });
+
+  it("no acepta una fecha con otra forma", () => {
+    const resultado = prepararLineas(campos(["Vídeo"], ["15/12/2026"]));
+    expect("error" in resultado).toBe(true);
+  });
+
+  it("se queja si no ha quedado ninguna línea", () => {
+    const resultado = prepararLineas(campos([], []));
+    expect("error" in resultado && resultado.error).toContain("al menos una");
+  });
+
+  it("recorta los textos larguísimos en vez de dejar que falle la base", () => {
+    const resultado = prepararLineas(
+      campos(["x".repeat(400)], ["2026-12-15"], [""], ["y".repeat(2000)]),
+    );
+
+    expect("lineas" in resultado && resultado.lineas[0].accion).toHaveLength(200);
+    expect("lineas" in resultado && resultado.lineas[0].notas).toHaveLength(1000);
   });
 });

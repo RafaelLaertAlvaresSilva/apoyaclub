@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { createClient } from "@/lib/supabase/server";
-import { hoyISO } from "@/lib/tareas-patrocinio";
+import { hoyISO, prepararLineas } from "@/lib/tareas-patrocinio";
 import type { Role } from "@/lib/types";
 
 export type EstadoGuardado = { error: string; ok?: false } | { ok: true; error?: undefined } | null;
@@ -48,34 +48,51 @@ function fallo(operacion: string, error: unknown, mensaje: string): EstadoGuarda
   return { error: mensaje };
 }
 
-export async function crearTarea(_previo: EstadoGuardado, formData: FormData): Promise<EstadoGuardado> {
+/**
+ * Da de alta una o varias tareas para la misma empresa.
+ *
+ * Varias de una vez porque así es como se cierra un patrocinio: no se
+ * promete "una publicación", se promete un paquete —dos publicaciones,
+ * un vídeo y una visita— y obligar a rellenar el formulario cuatro
+ * veces seguidas escribiendo el mismo nombre de empresa es la forma
+ * más rápida de que el club deje de apuntar nada.
+ */
+export async function crearTareas(_previo: EstadoGuardado, formData: FormData): Promise<EstadoGuardado> {
   const sesion = await obtenerClubActual();
   if ("error" in sesion) return { error: sesion.error };
 
   const empresa = leerTexto(formData, "empresa");
-  const accion = leerTexto(formData, "accion");
-  const fin = leerFecha(formData, "fin");
-  const inicio = leerFecha(formData, "inicio");
-
   if (!empresa) return { error: "Escribe para qué empresa es." };
-  if (!accion) return { error: "Escribe qué hay que hacer." };
-  if (!fin) return { error: "Pon la fecha límite." };
-  if (inicio && inicio > fin) {
-    return { error: "La fecha de inicio no puede ser posterior a la fecha límite." };
-  }
 
-  const { error } = await sesion.supabase.from("club_sponsor_tasks").insert({
-    club_id: sesion.user.id,
-    company_name: empresa.slice(0, 120),
-    action: accion.slice(0, 200),
-    notes: leerTexto(formData, "notas")?.slice(0, 1000) ?? null,
-    starts_on: inicio,
-    due_on: fin,
-    sponsor_id: leerTexto(formData, "patrocinadorId"),
-    status: "pendiente",
+  const textos = (campo: string) => formData.getAll(campo).map((valor) => String(valor));
+  const leidas = prepararLineas({
+    acciones: textos("accion"),
+    inicios: textos("inicio"),
+    fines: textos("fin"),
+    notas: textos("notas"),
   });
 
-  if (error) return fallo("crear la tarea", error, "No se ha podido guardar. Inténtalo de nuevo.");
+  if ("error" in leidas) return { error: leidas.error };
+
+  const patrocinadorId = leerTexto(formData, "patrocinadorId");
+
+  const filas = leidas.lineas.map((linea) => ({
+    club_id: sesion.user.id,
+    company_name: empresa.slice(0, 120),
+    action: linea.accion,
+    notes: linea.notas,
+    starts_on: linea.inicio,
+    due_on: linea.fin,
+    sponsor_id: patrocinadorId,
+    status: "pendiente",
+  }));
+
+  // Un solo insert con todas: o entran todas o no entra ninguna. Media
+  // lista guardada sería peor que nada, porque el club no sabría cuál
+  // falta.
+  const { error } = await sesion.supabase.from("club_sponsor_tasks").insert(filas);
+
+  if (error) return fallo("crear las tareas", error, "No se ha podido guardar. Inténtalo de nuevo.");
 
   revalidatePath(RUTA_TAREAS);
   revalidatePath("/panel");
