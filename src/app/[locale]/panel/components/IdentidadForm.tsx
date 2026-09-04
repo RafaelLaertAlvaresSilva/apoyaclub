@@ -299,13 +299,28 @@ export function IdentidadForm({
             />
           </Campo>
 
-          <label className="flex items-start gap-2 text-sm text-zinc-700">
+          {/* Viene marcado (migración 0029). Un club que se da de alta
+              para que le patrocinen quiere que le puedan llamar; tenerlo
+              apagado por defecto dejaba fichas publicadas sin nadie a
+              quien contactar. El que prefiera filtrar lo desmarca. */}
+          <label className="flex items-start gap-2 rounded-lg bg-teal-50 p-3 text-sm text-zinc-700">
             <input
               type="checkbox"
               name="contactPublicConsent"
-              defaultChecked={perfil?.contactPublicConsent ?? false}
+              defaultChecked={perfil?.contactPublicConsent ?? true}
               className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
-            />{t("autorizoMostrarElTelefono")}</label>
+            />
+            <span>
+              <span className="font-medium text-zinc-900">
+                Mostrar mi nombre de contacto y mi teléfono en mi página pública
+              </span>
+              <span className="mt-0.5 block text-xs text-zinc-600">
+                Recomendado. Las empresas que entran en tu ficha buscan a quién llamar: si lo
+                desmarcas solo verán el formulario de solicitud y tardarás más en cerrar acuerdos.
+                Tu correo se muestra siempre, protegido para que no lo recojan los robots de spam.
+              </span>
+            </span>
+          </label>
         </div>
 
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />

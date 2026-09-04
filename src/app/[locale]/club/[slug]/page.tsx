@@ -641,10 +641,11 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
       <Seccion id="contacto" titulo={t("secciones.contacto")}>
         <div className="rounded-xl border border-zinc-200 p-5">
           {/* Nombre, teléfono y horario salen directos: la vista pública
-              ya los oculta si el club no ha autorizado publicarlos. El
-              correo no, se pide al pulsar (migración 0022), para que no
-              quede escrito en el HTML al alcance de los robots que
-              recolectan direcciones. */}
+              ya los oculta si el club no ha autorizado publicarlos, y
+              desde la migración 0029 la autorización viene puesta. El
+              correo aparece solo también, pero pedido por detrás (ver
+              DatosDeContacto): así no queda escrito en el HTML al
+              alcance de los robots que recolectan direcciones. */}
           {(perfil.contactName || perfil.contactPhone || perfil.contactHours) && (
             <dl className="mb-4 space-y-2 text-sm">
               {perfil.contactName && (
@@ -772,6 +773,19 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
           </div>
 
           <div className="flex flex-wrap gap-2">
+            {/* El teléfono, arriba del todo y pulsable. Es la vía más
+                corta entre la empresa que acaba de llegar y el club, y
+                estaba enterrada al final de la ficha. Solo aparece si el
+                club autorizó publicarlo: la vista pública ya devuelve
+                null cuando no. */}
+            {perfil.contactPhone && (
+              <a
+                href={`tel:${perfil.contactPhone.replace(/\s+/g, "")}`}
+                className="inline-flex items-center gap-2 rounded-lg border border-teal-200 bg-teal-50 px-4 py-2.5 text-sm font-semibold text-teal-800 transition-colors hover:bg-teal-100"
+              >
+                {perfil.contactPhone}
+              </a>
+            )}
             <CompartirBoton url={urlPublica} titulo={t("portada.compartirTitulo", { club: perfil.name })} />
             <SolicitarContactoBoton clubId={perfil.id} clubName={perfil.name}>
               {t("portada.solicitarContacto")}
