@@ -141,6 +141,8 @@ export function TareasManager({
                   <span className="text-xs text-zinc-500">
                     {grupo.pendientes} pendiente{grupo.pendientes === 1 ? "" : "s"}
                   </span>
+
+                  <InformeDeEmpresa empresa={grupo.empresa} />
                 </div>
                 <ul className="flex flex-col gap-2">
                   {grupo.tareas.map((tarea) => (
@@ -309,5 +311,34 @@ function FormularioNuevasTareas({
           </BotonEnviar>
         </form>
       </SeccionCard>
+  );
+}
+
+/**
+ * Los dos botones para descargar el informe de una empresa.
+ *
+ * Son formularios normales que envían un POST, no fetch: el navegador
+ * ya sabe descargar una respuesta con `Content-Disposition`, y hacerlo
+ * a mano con un blob solo añade un sitio más donde fallar. De paso
+ * funcionan aunque el JavaScript de la página se haya caído.
+ */
+function InformeDeEmpresa({ empresa }: { empresa: string }) {
+  return (
+    <span className="ml-auto flex items-center gap-1">
+      <span className="mr-1 text-xs text-zinc-400">Informe:</span>
+      {(["pdf", "word"] as const).map((formato) => (
+        <form key={formato} method="post" action="/panel/tareas/informe">
+          <input type="hidden" name="empresa" value={empresa} />
+          <input type="hidden" name="formato" value={formato} />
+          <button
+            type="submit"
+            className="rounded-lg border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-600 transition-colors hover:border-teal-500 hover:bg-teal-50 hover:text-teal-800"
+            title={`Descargar en ${formato === "pdf" ? "PDF" : "Word"} lo que has hecho por ${empresa}`}
+          >
+            {formato === "pdf" ? "PDF" : "Word"}
+          </button>
+        </form>
+      ))}
+    </span>
   );
 }
