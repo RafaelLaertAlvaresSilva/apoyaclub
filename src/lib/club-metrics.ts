@@ -1,3 +1,4 @@
+import { avisarDeFallo } from "@/lib/monitoring";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
@@ -49,9 +50,14 @@ async function contar(
     .gte("created_at", desde.toISOString())
     .lt("created_at", hasta.toISOString());
 
-  // Un error de conteo no puede tumbar el panel entero: se enseña 0 y el
-  // club ve el resto de sus datos.
-  if (error) return 0;
+  // Un error de conteo no puede tumbar el panel entero, pero tampoco
+  // puede desaparecer: enseñar 0 en silencio le dice al club "no tienes
+  // movimientos" justo cuando sí los tiene, que es peor que un error.
+  // Se enseña 0 y se avisa para que quede constancia.
+  if (error) {
+    avisarDeFallo("metricas", `No se ha podido contar ${tabla} del club`, error);
+    return 0;
+  }
   return count ?? 0;
 }
 
@@ -138,7 +144,8 @@ export async function obtenerEmpresasInteresadas(
   const admin = createAdminClient();
   const desde = new Date(ahora.getTime() - dias * 24 * 60 * 60 * 1000).toISOString();
 
-  const [{ data: visitas }, { data: contactos }] = await Promise.all([
+  const [{ data: visitas, error: errorVisitas }, { data: contactos, error: errorContactos }] =
+    await Promise.all([
     admin
       .from("club_page_views")
       .select("company_id, created_at")
@@ -155,6 +162,14 @@ export async function obtenerEmpresasInteresadas(
       .gte("created_at", desde)
       .returns<FilaVisitaConEmpresa[]>(),
   ]);
+
+  if (errorVisitas || errorContactos) {
+    avisarDeFallo(
+      "metricas",
+      "No se han podido leer las empresas interesadas",
+      errorVisitas ?? errorContactos,
+    );
+  }
 
   // Una fila por empresa, con la visita más reciente (las filas ya vienen
   // ordenadas, así que la primera que se ve de cada empresa es la buena).

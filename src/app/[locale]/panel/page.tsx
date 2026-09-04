@@ -10,6 +10,7 @@ import {
   type ClubTeamRow,
 } from "@/lib/club-mappers";
 import { obtenerEmpresasInteresadas, obtenerMetricasClub } from "@/lib/club-metrics";
+import { contarSolicitudesNuevas } from "@/lib/contact-requests";
 import { primerosPasos } from "@/lib/onboarding";
 import { obtenerRecomendaciones } from "@/lib/recomendaciones";
 import { filaAServicio, type FilaServicio, type ServiceNeed } from "@/lib/service-needs";
@@ -17,6 +18,7 @@ import { huecosDelPerfil } from "@/lib/profile-completion";
 import { createClient } from "@/lib/supabase/server";
 import { BarraProgreso } from "./components/BarraProgreso";
 import { MetricasClub } from "./components/MetricasClub";
+import { AvisoSolicitudes } from "./components/AvisoSolicitudes";
 import { PrimerosPasos } from "./components/PrimerosPasos";
 import { Recomendaciones } from "./components/Recomendaciones";
 import { PanelNav } from "./components/PanelNav";
@@ -108,6 +110,8 @@ export default async function PanelPage() {
       </div>
 
       <PanelNav activo="perfil" />
+
+      <AvisoSolicitudes sinAbrir={await contarSolicitudesNuevas()} />
 
       <PrimerosPasos pasos={pasosIniciales} />
 

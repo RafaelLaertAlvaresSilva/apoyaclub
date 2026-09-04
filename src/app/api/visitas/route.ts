@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { avisarDeFallo } from "@/lib/monitoring";
 import { consumirLimite, ipDelVisitante } from "@/lib/rate-limit";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -63,9 +64,16 @@ export async function POST(request: Request) {
       // Visita anónima: se cuenta igual, sin nombre.
     }
 
-    await admin.from("club_page_views").insert({ club_id: club.id, company_id: companyId });
-  } catch {
-    // La métrica nunca puede romper la página que la dispara.
+    const { error } = await admin
+      .from("club_page_views")
+      .insert({ club_id: club.id, company_id: companyId });
+
+    // La métrica nunca puede romper la página que la dispara, pero
+    // tampoco puede perderse sin dejar rastro: si esto falla, el club
+    // verá "0 visitas" con la ficha llena de gente.
+    if (error) avisarDeFallo("metricas", "No se ha podido apuntar la visita", error);
+  } catch (excepcion) {
+    avisarDeFallo("metricas", "Fallo apuntando la visita", excepcion);
     return NextResponse.json({ ok: true, contada: false });
   }
 

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { avisarDeFallo } from "@/lib/monitoring";
 import { consumirLimite, ipDelVisitante } from "@/lib/rate-limit";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -99,11 +100,18 @@ export async function POST(request: Request) {
     // Sin sesión: se apunta la apertura igualmente, sin nombre.
   }
 
-  // La métrica nunca puede impedir que se vea el contacto.
+  // La métrica nunca puede impedir que se vea el contacto, pero sí tiene
+  // que dejar rastro si falla: es la señal más valiosa que produce la
+  // plataforma y perderla en silencio deja al club creyendo que nadie le
+  // ha mirado.
   try {
-    await admin.from("club_contact_views").insert({ club_id: club.id, company_id: companyId });
-  } catch {
-    /* se ignora a propósito */
+    const { error } = await admin
+      .from("club_contact_views")
+      .insert({ club_id: club.id, company_id: companyId });
+
+    if (error) avisarDeFallo("metricas", "No se ha podido apuntar la apertura de contacto", error);
+  } catch (excepcion) {
+    avisarDeFallo("metricas", "Fallo apuntando la apertura de contacto", excepcion);
   }
 
   return NextResponse.json({
