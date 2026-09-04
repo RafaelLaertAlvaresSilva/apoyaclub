@@ -133,11 +133,7 @@ export default async function PanelPage() {
           sin su informe. Va también aquí, en la portada, porque es
           donde entra el club: si solo estuviera en la pestaña de
           tareas, se lo perdería justo quien menos entra a mirarlas. */}
-      <RecordatorioInforme
-        empresasConTareas={[...new Set(tareas.map((tarea) => tarea.empresa.trim()))].filter(Boolean)}
-        ultimosInformes={ultimosInformes}
-        hoy={hoyISO()}
-      />
+      <RecordatorioInforme tareas={tareas} ultimosInformes={ultimosInformes} hoy={hoyISO()} />
 
       <PrimerosPasos pasos={pasosIniciales} />
 

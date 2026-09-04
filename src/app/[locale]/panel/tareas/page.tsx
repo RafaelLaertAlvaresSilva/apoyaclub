@@ -48,10 +48,6 @@ export default async function TareasPage() {
     .filter(Boolean)
     .sort((a, b) => a.localeCompare(b, "es"));
 
-  // Solo las que tienen algo apuntado: recomendar el informe de una
-  // empresa sin tareas daría un documento en blanco.
-  const empresasConTareas = [...new Set(tareas.map((tarea) => tarea.empresa.trim()))].filter(Boolean);
-
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
@@ -70,11 +66,7 @@ export default async function TareasPage() {
 
       <TareasDeHoy tareas={tareas} />
 
-      <RecordatorioInforme
-        empresasConTareas={empresasConTareas}
-        ultimosInformes={ultimosInformes}
-        hoy={hoyISO()}
-      />
+      <RecordatorioInforme tareas={tareas} ultimosInformes={ultimosInformes} hoy={hoyISO()} />
 
       <TareasManager tareas={tareas} empresasConocidas={empresasConocidas} />
     </div>
