@@ -9,7 +9,12 @@ import {
   type ClubSponsorRow,
   type ClubTeamRow,
 } from "@/lib/club-mappers";
-import { obtenerEmpresasInteresadas, obtenerMetricasClub } from "@/lib/club-metrics";
+import {
+  obtenerEmpresasInteresadas,
+  obtenerMetricasClub,
+  obtenerResumenDeVisitas,
+} from "@/lib/club-metrics";
+import { obtenerTareasDelClub } from "@/lib/tareas-datos";
 import { contarSolicitudesNuevas } from "@/lib/contact-requests";
 import { primerosPasos } from "@/lib/onboarding";
 import { obtenerRecomendaciones } from "@/lib/recomendaciones";
@@ -22,6 +27,7 @@ import { AvisoSolicitudes } from "./components/AvisoSolicitudes";
 import { PrimerosPasos } from "./components/PrimerosPasos";
 import { Recomendaciones } from "./components/Recomendaciones";
 import { PanelNav } from "./components/PanelNav";
+import { TareasDeHoy } from "./components/TareasDeHoy";
 import { PanelTabs } from "./components/PanelTabs";
 
 export default async function PanelPage() {
@@ -78,9 +84,13 @@ export default async function PanelPage() {
 
   // Las métricas se piden aparte porque van con la clave de servicio
   // (el club no lee las tablas de eventos, solo sus números agregados).
-  const [metricas, empresasInteresadas] = await Promise.all([
+  const [metricas, empresasInteresadas, resumenDeVisitas, tareas] = await Promise.all([
     obtenerMetricasClub(user.id),
     obtenerEmpresasInteresadas(user.id),
+    obtenerResumenDeVisitas(user.id),
+    // Las tareas sí van con la sesión del club: son su agenda privada
+    // y de eso se encarga RLS (migración 0030).
+    obtenerTareasDelClub(supabase, user.id),
   ]);
 
   const perfil = filaClub ? clubRowToProfile(filaClub) : null;
@@ -113,9 +123,15 @@ export default async function PanelPage() {
 
       <AvisoSolicitudes sinAbrir={await contarSolicitudesNuevas()} />
 
+      <TareasDeHoy tareas={tareas} />
+
       <PrimerosPasos pasos={pasosIniciales} />
 
-      <MetricasClub metricas={metricas} empresas={empresasInteresadas} />
+      <MetricasClub
+        metricas={metricas}
+        empresas={empresasInteresadas}
+        resumen={resumenDeVisitas}
+      />
 
       <BarraProgreso porcentaje={porcentaje} huecos={huecos} />
 

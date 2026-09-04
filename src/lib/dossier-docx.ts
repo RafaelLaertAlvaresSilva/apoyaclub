@@ -18,12 +18,7 @@ import {
 import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
 import { deportesDelClub, seccionesConContenido } from "@/lib/dossier";
 import type { DatosDossier } from "@/lib/dossier-datos";
-import {
-  altoProporcional,
-  descargarImagen,
-  encajarEn,
-  type ImagenDescargada,
-} from "@/lib/imagenes-remotas";
+import { descargarImagen, encajarEn, type ImagenDescargada } from "@/lib/imagenes-remotas";
 import { formatoValorOportunidad } from "@/lib/opportunities";
 import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
@@ -231,7 +226,10 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
 
   // ---------- Portada ----------
   if (portada) {
-    cuerpo.push(imagen(portada, ANCHO_UTIL, Math.min(altoProporcional(portada, ANCHO_UTIL), 260)));
+    // `encajarEn` y no un alto recortado a pelo: al limitar el alto sin
+    // tocar el ancho, una portada casi cuadrada salia aplastada.
+    const medidas = encajarEn(portada, ANCHO_UTIL, 260);
+    cuerpo.push(imagen(portada, medidas.ancho, medidas.alto));
   }
 
   if (logo) {

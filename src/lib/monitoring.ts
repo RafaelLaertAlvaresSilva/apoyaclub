@@ -13,7 +13,7 @@ import * as Sentry from "@sentry/nextjs";
  * allí. Sin DSN configurado, Sentry no hace nada.
  */
 export function avisarDeFallo(
-  zona: "stripe-webhook" | "cron-suscripciones" | "email" | "dossier" | "metricas",
+  zona: "stripe-webhook" | "cron-suscripciones" | "email" | "dossier" | "metricas" | "tareas",
   mensaje: string,
   detalle?: unknown,
 ): void {

@@ -6,7 +6,9 @@ import {
   type EmpresaInteresada,
   type MetricaClub,
   type MetricasClub as Metricas,
+  type ResumenDeVisitas,
 } from "@/lib/club-metrics";
+import { DetalleDeVisitas } from "./DetalleDeVisitas";
 
 /**
  * "Tu mes en ApoyaClub" (migraciones 0014 y 0022): lo que el club recibe
@@ -28,9 +30,11 @@ import {
 export function MetricasClub({
   metricas,
   empresas,
+  resumen,
 }: {
   metricas: Metricas;
   empresas: EmpresaInteresada[];
+  resumen: ResumenDeVisitas;
 }) {
   const t = useTranslations("panel.metricas");
 
@@ -100,17 +104,11 @@ export function MetricasClub({
         </dl>
       )}
 
-      {/* El acumulado, fuera del bloque de los 30 días a propósito: se
-          enseña también cuando el mes va vacío, porque un club sin
-          movimiento este mes pero con doscientas visitas detrás no
-          está empezando de cero y no hay por qué hacerle creer que sí. */}
-      {metricas.visitasTotales > 0 && (
-        <p className="mt-4 rounded-lg bg-zinc-50 px-4 py-3 text-sm text-zinc-600">
-          {metricas.visitasTotales === 1
-            ? t("visitasTotalesUna")
-            : t("visitasTotales", { visitas: metricas.visitasTotales })}
-        </p>
-      )}
+      {/* El detalle por semana y por mes, fuera del bloque de arriba a
+          propósito: se enseña también cuando el mes va vacío, porque un
+          club sin movimiento este mes pero con doscientas visitas
+          detrás no está empezando de cero. */}
+      <DetalleDeVisitas resumen={resumen} />
 
       <ListaDeEmpresas empresas={empresas} />
     </section>

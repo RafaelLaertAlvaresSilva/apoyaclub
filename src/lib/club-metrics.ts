@@ -247,3 +247,95 @@ export async function obtenerEmpresasInteresadas(
       return (b.ultimaVisita ?? "").localeCompare(a.ultimaVisita ?? "");
     });
 }
+
+/** Lo que se puede decir de una ventana de tiempo concreta. */
+export type VentanaDeVisitas = {
+  /** Aperturas de la ficha. Una por persona y hora, no por recarga. */
+  visitas: number;
+  /** De esas, cuántas empresas registradas distintas. */
+  empresas: number;
+  /** Cuántas veces se han abierto los datos de contacto. */
+  contactos: number;
+};
+
+export type ResumenDeVisitas = {
+  semana: VentanaDeVisitas;
+  mes: VentanaDeVisitas;
+  /** Desde que el club está en ApoyaClub. Sin el detalle de empresas. */
+  totalVisitas: number;
+  totalContactos: number;
+};
+
+type FilaEvento = { company_id: string | null; created_at: string };
+
+/** Un tope por si algún día un club tiene muchísimo movimiento. */
+const MAXIMO_FILAS = 5000;
+
+function resumirVentana(filas: FilaEvento[], contactos: FilaEvento[], desde: string): VentanaDeVisitas {
+  const dentro = filas.filter((fila) => fila.created_at >= desde);
+  const empresas = new Set(
+    dentro.map((fila) => fila.company_id).filter((id): id is string => id !== null),
+  );
+
+  return {
+    visitas: dentro.length,
+    empresas: empresas.size,
+    contactos: contactos.filter((fila) => fila.created_at >= desde).length,
+  };
+}
+
+/**
+ * Quién ha entrado en la ficha del club, por semana y por mes
+ * (migraciones 0014 y 0022).
+ *
+ * Las dos ventanas salen de la misma lectura de 30 días en vez de
+ * hacer cuatro consultas: para el volumen de un club de barrio traer
+ * las filas y contarlas aquí es más barato que pedirle a la base
+ * cuatro conteos, y de paso permite contar empresas distintas, que con
+ * un `count` no se puede.
+ */
+export async function obtenerResumenDeVisitas(
+  clubId: string,
+  ahora: Date = new Date(),
+): Promise<ResumenDeVisitas> {
+  const admin = createAdminClient();
+  const haceUnMes = new Date(ahora.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const haceUnaSemana = new Date(ahora.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  const [visitas, contactos, totalVisitas, totalContactos] = await Promise.all([
+    admin
+      .from("club_page_views")
+      .select("company_id, created_at")
+      .eq("club_id", clubId)
+      .gte("created_at", haceUnMes)
+      .limit(MAXIMO_FILAS)
+      .returns<FilaEvento[]>(),
+    admin
+      .from("club_contact_views")
+      .select("company_id, created_at")
+      .eq("club_id", clubId)
+      .gte("created_at", haceUnMes)
+      .limit(MAXIMO_FILAS)
+      .returns<FilaEvento[]>(),
+    contarTodo("club_page_views", clubId),
+    contarTodo("club_contact_views", clubId),
+  ]);
+
+  if (visitas.error || contactos.error) {
+    avisarDeFallo(
+      "metricas",
+      "No se ha podido leer el detalle de visitas del club",
+      visitas.error ?? contactos.error,
+    );
+  }
+
+  const filasVisitas = visitas.data ?? [];
+  const filasContactos = contactos.data ?? [];
+
+  return {
+    semana: resumirVentana(filasVisitas, filasContactos, haceUnaSemana),
+    mes: resumirVentana(filasVisitas, filasContactos, haceUnMes),
+    totalVisitas,
+    totalContactos,
+  };
+}
