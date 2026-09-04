@@ -44,7 +44,7 @@ export function DossierManager({
   const t = useTranslations("panel.dossier");
   const formRef = useRef<HTMLFormElement>(null);
   const [estado, accion] = useActionState<EstadoDossier, FormData>(guardarConfiguracionDossier, null);
-  const [descargando, setDescargando] = useState(false);
+  const [descargando, setDescargando] = useState<"pdf" | "word" | null>(null);
   const locale = useLocale();
   const [errorDescarga, setErrorDescarga] = useState<string | null>(null);
   const [enlaceCopiado, setEnlaceCopiado] = useState(false);
@@ -60,9 +60,14 @@ export function DossierManager({
       ? `${SITE_URL}/${locale}/dossier/${configuracion.shareToken}`
       : null;
 
-  async function descargarPdf() {
+  /**
+   * Descarga el dossier en el formato que se pida. Los dos salen de la
+   * misma selección de secciones y oportunidades que hay marcada en el
+   * formulario en ese momento, sin necesidad de guardarla antes.
+   */
+  async function descargar(formato: "pdf" | "word") {
     if (!formRef.current) return;
-    setDescargando(true);
+    setDescargando(formato);
     setErrorDescarga(null);
     try {
       const datosFormulario = new FormData(formRef.current);
@@ -71,22 +76,26 @@ export function DossierManager({
       for (const valor of datosFormulario.getAll("opportunityIds"))
         cuerpo.append("opportunityIds", String(valor));
 
-      const respuesta = await fetch("/panel/dossier/pdf", { method: "POST", body: cuerpo });
-      if (!respuesta.ok) throw new Error("Fallo al generar el PDF");
+      const respuesta = await fetch(`/panel/dossier/${formato}`, { method: "POST", body: cuerpo });
+      if (!respuesta.ok) throw new Error("Fallo al generar el dossier");
 
       const blob = await respuesta.blob();
       const url = URL.createObjectURL(blob);
       const enlace = document.createElement("a");
       enlace.href = url;
-      enlace.download = `dossier-${perfil.slug}.pdf`;
+      enlace.download = `dossier-${perfil.slug}.${formato === "pdf" ? "pdf" : "docx"}`;
       document.body.appendChild(enlace);
       enlace.click();
       enlace.remove();
       URL.revokeObjectURL(url);
     } catch {
-      setErrorDescarga("No se ha podido generar el PDF. Inténtalo de nuevo.");
+      setErrorDescarga(
+        formato === "pdf"
+          ? "No se ha podido generar el PDF. Inténtalo de nuevo."
+          : "No se ha podido generar el Word. Inténtalo de nuevo.",
+      );
     } finally {
-      setDescargando(false);
+      setDescargando(null);
     }
   }
 
@@ -176,20 +185,34 @@ export function DossierManager({
       <SeccionCard titulo={t("descargar")} descripcion={t("generaElPdfAl")}>
         <div className="flex flex-col gap-3">
           <AvisoError mensaje={errorDescarga} />
-          <button
-            type="button"
-            onClick={descargarPdf}
-            disabled={descargando}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-teal-600 px-4 py-2.5 font-medium text-teal-700 transition-colors hover:bg-teal-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
-          >
-            {descargando && (
-              <span
-                className="h-4 w-4 animate-spin rounded-full border-2 border-teal-600/40 border-t-teal-600"
-                aria-hidden="true"
-              />
-            )}
-            {descargando ? "Generando…" : "Descargar PDF"}
-          </button>
+
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <BotonDescarga
+              onClick={() => descargar("pdf")}
+              ocupado={descargando === "pdf"}
+              bloqueado={descargando !== null}
+              destacado
+            >
+              Descargar PDF
+            </BotonDescarga>
+            <BotonDescarga
+              onClick={() => descargar("word")}
+              ocupado={descargando === "word"}
+              bloqueado={descargando !== null}
+            >
+              Descargar Word
+            </BotonDescarga>
+          </div>
+
+          {/* Los dos llevan el mismo contenido: la diferencia es para qué
+              sirve cada uno, y conviene decirlo aquí y no en un manual. */}
+          <p className="text-xs leading-relaxed text-zinc-500">
+            El <strong className="font-medium text-zinc-700">PDF</strong> es el que se manda a una
+            empresa: se ve igual en cualquier pantalla y no se descoloca. El{" "}
+            <strong className="font-medium text-zinc-700">Word</strong> es para ti: ábrelo para
+            cambiar textos, añadir fotos o mover apartados de sitio, y guárdalo después como PDF
+            desde el propio Word.
+          </p>
         </div>
       </SeccionCard>
 
@@ -235,5 +258,43 @@ export function DossierManager({
         </div>
       </SeccionCard>
     </form>
+  );
+}
+
+/** Los dos botones de descarga son iguales salvo el texto y el color. */
+function BotonDescarga({
+  onClick,
+  ocupado,
+  bloqueado,
+  destacado,
+  children,
+}: {
+  onClick: () => void;
+  ocupado: boolean;
+  bloqueado: boolean;
+  destacado?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={bloqueado}
+      className={`flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
+        destacado
+          ? "bg-teal-700 text-white hover:bg-teal-800"
+          : "border border-teal-600 text-teal-700 hover:bg-teal-50"
+      }`}
+    >
+      {ocupado && (
+        <span
+          className={`h-4 w-4 animate-spin rounded-full border-2 ${
+            destacado ? "border-white/40 border-t-white" : "border-teal-600/40 border-t-teal-600"
+          }`}
+          aria-hidden="true"
+        />
+      )}
+      {ocupado ? "Generando…" : children}
+    </button>
   );
 }

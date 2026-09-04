@@ -26,6 +26,14 @@ export type MetricasClub = {
   solicitudes: MetricaClub;
   /** Aperturas de los datos de contacto (migración 0022). */
   contactos: MetricaClub;
+  /**
+   * Visitas a la ficha desde que el club está en ApoyaClub, sin ventana
+   * de tiempo. Las demás cifras miran solo los últimos 30 días, que es
+   * lo correcto para ver la tendencia, pero deja al club sin saber
+   * nunca cuánta gente ha pasado por su página en total — que es la
+   * pregunta que hace todo el mundo primero.
+   */
+  visitasTotales: number;
 };
 
 const TABLAS = {
@@ -61,6 +69,21 @@ async function contar(
   return count ?? 0;
 }
 
+/** Lo mismo que `contar`, pero desde el principio de los tiempos. */
+async function contarTodo(tabla: string, clubId: string): Promise<number> {
+  const admin = createAdminClient();
+  const { count, error } = await admin
+    .from(tabla)
+    .select("id", { count: "exact", head: true })
+    .eq("club_id", clubId);
+
+  if (error) {
+    avisarDeFallo("metricas", `No se ha podido contar el total de ${tabla} del club`, error);
+    return 0;
+  }
+  return count ?? 0;
+}
+
 export async function obtenerMetricasClub(
   clubId: string,
   dias = 30,
@@ -72,12 +95,15 @@ export async function obtenerMetricasClub(
 
   const claves = Object.keys(TABLAS) as (keyof typeof TABLAS)[];
 
-  const resultados = await Promise.all(
-    claves.flatMap((clave) => [
-      contar(TABLAS[clave], clubId, inicioActual, ahora),
-      contar(TABLAS[clave], clubId, inicioAnterior, inicioActual),
-    ]),
-  );
+  const [resultados, visitasTotales] = await Promise.all([
+    Promise.all(
+      claves.flatMap((clave) => [
+        contar(TABLAS[clave], clubId, inicioActual, ahora),
+        contar(TABLAS[clave], clubId, inicioAnterior, inicioActual),
+      ]),
+    ),
+    contarTodo(TABLAS.visitas, clubId),
+  ]);
 
   const porClave = Object.fromEntries(
     claves.map((clave, indice) => [
@@ -86,7 +112,7 @@ export async function obtenerMetricasClub(
     ]),
   ) as Record<keyof typeof TABLAS, MetricaClub>;
 
-  return { dias, ...porClave };
+  return { dias, ...porClave, visitasTotales };
 }
 
 /**

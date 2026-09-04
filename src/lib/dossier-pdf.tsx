@@ -1,17 +1,11 @@
 import { Document, Image, Page, StyleSheet, Text, View, renderToBuffer } from "@react-pdf/renderer";
 import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
+import type { DatosDossier } from "@/lib/dossier-datos";
 import { deportesDelClub, seccionesConContenido } from "@/lib/dossier";
 import { formatoValorOportunidad } from "@/lib/opportunities";
 import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
-import type {
-  ClubProfile,
-  ClubSponsor,
-  ClubTeam,
-  DossierSectionKey,
-  Opportunity,
-  SocialLinks,
-} from "@/lib/types";
+import type { ClubTeam, DossierSectionKey, SocialLinks } from "@/lib/types";
 
 /**
  * Generador del dossier comercial en PDF (Fase 9). Se genera siempre en
@@ -267,14 +261,8 @@ const estilos = StyleSheet.create({
   },
 });
 
-export type DatosDossierPdf = {
-  perfil: ClubProfile;
-  equipos: ClubTeam[];
-  patrocinadores: ClubSponsor[];
-  oportunidades: Opportunity[];
-  secciones: DossierSectionKey[];
-  emailContacto: string | null;
-};
+/** El tipo vive en `dossier-datos.ts`: lo comparten el PDF y el Word. */
+export type DatosDossierPdf = DatosDossier;
 
 function Pie({ url }: { url: string }) {
   return (

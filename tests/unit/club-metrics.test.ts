@@ -3,7 +3,10 @@ import { sinDatos, variacion, type MetricasClub } from "@/lib/club-metrics";
 
 function metricas(
   cambios: Partial<
-    Record<"apariciones" | "visitas" | "dossieres" | "solicitudes" | "contactos", number>
+    Record<
+      "apariciones" | "visitas" | "dossieres" | "solicitudes" | "contactos" | "visitasTotales",
+      number
+    >
   > = {},
 ): MetricasClub {
   const vacia = { actual: 0, anterior: 0 };
@@ -14,6 +17,7 @@ function metricas(
     dossieres: { ...vacia, actual: cambios.dossieres ?? 0 },
     solicitudes: { ...vacia, actual: cambios.solicitudes ?? 0 },
     contactos: { ...vacia, actual: cambios.contactos ?? 0 },
+    visitasTotales: cambios.visitasTotales ?? 0,
   };
 }
 
@@ -36,5 +40,12 @@ describe("sinDatos", () => {
     expect(sinDatos(metricas({ visitas: 1 }))).toBe(false);
     expect(sinDatos(metricas({ solicitudes: 2 }))).toBe(false);
     expect(sinDatos(metricas({ contactos: 1 }))).toBe(false);
+  });
+
+  it("sigue siendo true si el total histórico tiene visitas pero este mes no", () => {
+    // El acumulado no cuenta aquí a propósito: "no hay movimiento este
+    // mes" es cierto aunque el club llevara cien visitas el año pasado,
+    // y es justo el aviso que necesita ver.
+    expect(sinDatos(metricas({ visitasTotales: 120 }))).toBe(true);
   });
 });

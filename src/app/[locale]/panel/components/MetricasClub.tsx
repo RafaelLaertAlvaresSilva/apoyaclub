@@ -100,6 +100,18 @@ export function MetricasClub({
         </dl>
       )}
 
+      {/* El acumulado, fuera del bloque de los 30 días a propósito: se
+          enseña también cuando el mes va vacío, porque un club sin
+          movimiento este mes pero con doscientas visitas detrás no
+          está empezando de cero y no hay por qué hacerle creer que sí. */}
+      {metricas.visitasTotales > 0 && (
+        <p className="mt-4 rounded-lg bg-zinc-50 px-4 py-3 text-sm text-zinc-600">
+          {metricas.visitasTotales === 1
+            ? t("visitasTotalesUna")
+            : t("visitasTotales", { visitas: metricas.visitasTotales })}
+        </p>
+      )}
+
       <ListaDeEmpresas empresas={empresas} />
     </section>
   );
