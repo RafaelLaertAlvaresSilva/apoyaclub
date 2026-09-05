@@ -6,7 +6,8 @@ import { RUTA_POR_ROL, type Role } from "@/lib/types";
 
 /**
  * Prefijo de ruta privada de cada rol (sin idioma): club -> /panel,
- * empresa -> /empresa, admin -> /admin (Fase 12). Es el mismo mapa que
+ * admin -> /admin (Fase 12). Desde la migración 0034 ya no hay cuentas
+ * de empresa, y su entrada del mapa apunta a la portada. Es el mismo mapa que
  * usa el login para redirigir tras autenticar, así que las dos cosas no
  * se pueden desincronizar.
  */

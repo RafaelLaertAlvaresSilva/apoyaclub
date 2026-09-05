@@ -106,33 +106,39 @@ export async function enviarEmailNuevaSolicitudContacto({
   clubEmail,
   clubName,
   companyName,
-  companySector,
-  companyCity,
-  companyWebsite,
-  presupuestoTexto,
+  personaNombre,
+  personaCorreo,
+  personaTelefono,
   opportunityTitle,
   message,
   panelUrl,
+  responderA,
 }: {
   clubEmail: string;
   clubName: string;
+  /** Nombre de la empresa, o el de quien escribe si no dio empresa. */
   companyName: string;
-  companySector: string | null;
-  companyCity: string | null;
-  companyWebsite: string | null;
-  presupuestoTexto: string | null;
+  personaNombre: string | null;
+  personaCorreo: string | null;
+  personaTelefono: string | null;
   /** Título de la oportunidad, o null si la solicitud es sobre el club en general. */
   opportunityTitle: string | null;
   message: string;
   panelUrl: string;
+  /**
+   * Correo de quien escribió, para que el club pueda darle a
+   * "Responder" y le llegue a esa persona y no a ApoyaClub. Desde que
+   * no hay cuentas de empresa (migración 0034) esto es lo que hace que
+   * la solicitud sirva de algo.
+   */
+  responderA?: string;
 }): Promise<ResultadoEnvioEmail> {
   const t = await traductorEmails();
 
   const detalles = [
-    [t("solicitudContacto.sector"), companySector],
-    [t("solicitudContacto.localidad"), companyCity],
-    [t("solicitudContacto.web"), companyWebsite],
-    [t("solicitudContacto.presupuesto"), presupuestoTexto],
+    [t("solicitudContacto.persona"), personaNombre],
+    [t("solicitudContacto.correo"), personaCorreo],
+    [t("solicitudContacto.telefono"), personaTelefono],
   ].filter(([, valor]) => Boolean(valor));
 
   const filasDetalle = detalles
@@ -164,6 +170,7 @@ export async function enviarEmailNuevaSolicitudContacto({
     to: clubEmail,
     subject: t("solicitudContacto.asunto", { empresa: companyName }),
     html,
+    replyTo: responderA,
   });
 }
 

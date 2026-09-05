@@ -1,9 +1,7 @@
 import { redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
-import { companyRowToProfile, type CompanyRow } from "@/lib/company-mappers";
 import { contactRequestRowToContactRequest, type ContactRequestRow } from "@/lib/contact-request-mappers";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { PanelNav } from "../components/PanelNav";
 import { SolicitudCard } from "./components/SolicitudCard";
@@ -34,25 +32,12 @@ export default async function SolicitudesPage() {
     .order("created_at", { ascending: false })
     .returns<ContactRequestConOportunidad[]>();
 
-  const filas = filasRaw ?? [];
-  const companyIds = Array.from(new Set(filas.map((fila) => fila.company_id)));
-
-  const [{ data: companiesRaw }, emailsPorEmpresa] = await Promise.all([
-    companyIds.length > 0
-      ? supabase.from("companies").select("*").in("id", companyIds).returns<CompanyRow[]>()
-      : Promise.resolve({ data: [] as CompanyRow[] }),
-    obtenerEmailsEmpresas(companyIds),
-  ]);
-
-  const perfilesPorEmpresa = new Map(
-    (companiesRaw ?? []).map((fila) => [fila.id, companyRowToProfile(fila)]),
-  );
-
-  const solicitudes = filas.map((fila) => ({
+  // Desde que no hay cuentas de empresa (migración 0034), la solicitud
+  // ya trae dentro quién escribe: no hay que ir a buscar ningún perfil
+  // ni ningún correo a otra tabla.
+  const solicitudes = (filasRaw ?? []).map((fila) => ({
     solicitud: contactRequestRowToContactRequest(fila),
     opportunityTitle: fila.opportunities?.title ?? null,
-    empresa: perfilesPorEmpresa.get(fila.company_id) ?? null,
-    empresaEmail: emailsPorEmpresa.get(fila.company_id) ?? null,
   }));
 
   return (
@@ -71,37 +56,15 @@ export default async function SolicitudesPage() {
         <p className="rounded-xl border border-dashed border-zinc-300 bg-white p-6 text-center text-sm text-zinc-500">{t("todaviaNoHasRecibido")}</p>
       ) : (
         <ul className="space-y-4">
-          {solicitudes.map(({ solicitud, opportunityTitle, empresa, empresaEmail }) => (
+          {solicitudes.map(({ solicitud, opportunityTitle }) => (
             <SolicitudCard
               key={solicitud.id}
               solicitud={solicitud}
               opportunityTitle={opportunityTitle}
-              empresa={empresa}
-              empresaEmail={empresaEmail}
             />
           ))}
         </ul>
       )}
     </div>
   );
-}
-
-/** El email de la empresa vive en `auth.users` (no en `companies`), igual
- * que `obtenerEmailContacto` para el club en `club/[slug]/data.ts`. */
-async function obtenerEmailsEmpresas(companyIds: string[]): Promise<Map<string, string>> {
-  if (companyIds.length === 0) return new Map();
-
-  try {
-    const admin = createAdminClient();
-    const resultados = await Promise.all(companyIds.map((id) => admin.auth.admin.getUserById(id)));
-
-    const mapa = new Map<string, string>();
-    resultados.forEach((resultado, indice) => {
-      const email = resultado.data.user?.email;
-      if (email) mapa.set(companyIds[indice], email);
-    });
-    return mapa;
-  } catch {
-    return new Map();
-  }
 }

@@ -9,11 +9,7 @@ import {
   type ClubSponsorRow,
   type ClubTeamRow,
 } from "@/lib/club-mappers";
-import {
-  obtenerEmpresasInteresadas,
-  obtenerMetricasClub,
-  obtenerResumenDeVisitas,
-} from "@/lib/club-metrics";
+import { obtenerMetricasClub, obtenerResumenDeVisitas } from "@/lib/club-metrics";
 import { hoyISO } from "@/lib/tareas-patrocinio";
 import { obtenerTareasDelClub, obtenerUltimosInformes } from "@/lib/tareas-datos";
 import { contarSolicitudesNuevas } from "@/lib/contact-requests";
@@ -86,10 +82,9 @@ export default async function PanelPage() {
 
   // Las métricas se piden aparte porque van con la clave de servicio
   // (el club no lee las tablas de eventos, solo sus números agregados).
-  const [metricas, empresasInteresadas, resumenDeVisitas, tareas, ultimosInformes] =
+  const [metricas, resumenDeVisitas, tareas, ultimosInformes] =
     await Promise.all([
       obtenerMetricasClub(user.id),
-      obtenerEmpresasInteresadas(user.id),
       obtenerResumenDeVisitas(user.id),
       // Las tareas y los informes van con la sesión del club: son su
       // agenda privada y de eso se encarga RLS (migraciones 0030, 0031).
@@ -137,11 +132,7 @@ export default async function PanelPage() {
 
       <PrimerosPasos pasos={pasosIniciales} />
 
-      <MetricasClub
-        metricas={metricas}
-        empresas={empresasInteresadas}
-        resumen={resumenDeVisitas}
-      />
+      <MetricasClub metricas={metricas} resumen={resumenDeVisitas} />
 
       <BarraProgreso porcentaje={porcentaje} huecos={huecos} />
 

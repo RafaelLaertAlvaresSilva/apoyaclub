@@ -7,11 +7,16 @@ import type { ContactRequest, ContactRequestStatus } from "@/lib/types";
  */
 export type ContactRequestRow = {
   id: string;
-  company_id: string;
+  /** Null en las solicitudes sin cuenta (migración 0034). */
+  company_id: string | null;
   club_id: string;
   opportunity_id: string | null;
   message: string;
   status: ContactRequestStatus;
+  sender_name: string | null;
+  sender_company: string | null;
+  sender_email: string | null;
+  sender_phone: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -24,6 +29,10 @@ export function contactRequestRowToContactRequest(row: ContactRequestRow): Conta
     opportunityId: row.opportunity_id,
     message: row.message,
     status: row.status,
+    remitenteNombre: row.sender_name,
+    remitenteEmpresa: row.sender_company,
+    remitenteEmail: row.sender_email,
+    remitenteTelefono: row.sender_phone,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };

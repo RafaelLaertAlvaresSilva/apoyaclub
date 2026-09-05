@@ -1,12 +1,9 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
-import { usePathname } from "@/i18n/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { CampoTrampa } from "@/components/CampoTrampa";
 import { crearSolicitudContacto, type EstadoSolicitud } from "../contact-actions";
-import { useSesionActual } from "../hooks/useSesionActual";
 
 type Props = {
   clubId: string;
@@ -22,12 +19,21 @@ const CLASES_PRIMARIA =
 const CLASES_SECUNDARIA =
   "inline-flex items-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100";
 
+const clasesCampo =
+  "w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500";
+
 /**
- * Botón "Solicitar contacto" (Fase 8), usado tanto a nivel de club como
- * en cada oportunidad de la página pública del club. Solo tiene sentido
- * para una empresa con sesión iniciada (ver `useSesionActual`): para un
- * club se oculta, y para un visitante anónimo se convierte en un enlace
- * a iniciar sesión que vuelve a esta misma página después.
+ * "Escribir al club": el formulario con el que una empresa contacta,
+ * desde la ficha del club o desde una oportunidad concreta.
+ *
+ * Ya no hace falta cuenta (migración 0034). Antes había que registrarse
+ * como empresa, y eso era una puerta cerrada delante de lo único que
+ * esta plataforma tiene que conseguir: que la empresa escriba. Quien
+ * entra en la ficha de un club a las once de la noche no se abre una
+ * cuenta, se va.
+ *
+ * Lo que se le pide es lo mínimo para que el club pueda contestarle:
+ * nombre, correo y el mensaje. La empresa y el teléfono son opcionales.
  */
 export function SolicitarContactoBoton({
   clubId,
@@ -37,38 +43,21 @@ export function SolicitarContactoBoton({
   variante = "primaria",
   children,
 }: Props) {
-  const sesion = useSesionActual();
-  const pathname = usePathname();
   const [abierto, setAbierto] = useState(false);
-  const [estado, formAction] = useActionState<EstadoSolicitud, FormData>(crearSolicitudContacto, null);
+  const [estado, formAction] = useActionState<EstadoSolicitud, FormData>(
+    crearSolicitudContacto,
+    null,
+  );
 
   useEffect(() => {
     if (estado && "ok" in estado && estado.ok) {
-      const temporizador = setTimeout(() => setAbierto(false), 2500);
+      const temporizador = setTimeout(() => setAbierto(false), 3000);
       return () => clearTimeout(temporizador);
     }
   }, [estado]);
 
   const clases = variante === "primaria" ? CLASES_PRIMARIA : CLASES_SECUNDARIA;
-
-  if (sesion.cargando) {
-    return (
-      <span className={`${clases} opacity-50`} aria-hidden="true">
-        {children}
-      </span>
-    );
-  }
-
-  // Un club no solicita contacto: solo tiene sentido para una empresa.
-  if (sesion.rol === "club") return null;
-
-  if (sesion.rol !== "empresa") {
-    return (
-      <Link href={`/login?next=${encodeURIComponent(pathname)}`} className={clases}>
-        {children}
-      </Link>
-    );
-  }
+  const enviado = !!estado && "ok" in estado && !!estado.ok;
 
   return (
     <>
@@ -77,68 +66,90 @@ export function SolicitarContactoBoton({
       </button>
 
       {abierto && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-            <div className="mb-4 flex items-start justify-between gap-4">
-              <div>
-                <h2 className="text-base font-semibold text-zinc-900">Solicitar contacto</h2>
-                <p className="mt-1 text-sm text-zinc-500">
-                  {opportunityTitle ? `Sobre «${opportunityTitle}», con ${clubName}.` : `Con ${clubName}.`}
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/40 px-4 py-8">
+          <div className="max-h-full w-full max-w-lg overflow-y-auto rounded-xl bg-white p-6 shadow-xl">
+            {enviado ? (
+              <div className="text-center">
+                <p className="text-lg font-semibold text-zinc-900">Mensaje enviado</p>
+                <p className="mt-2 text-sm text-zinc-600">
+                  {clubName} lo recibe ahora mismo y te contestará al correo que has puesto.
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={() => setAbierto(false)}
-                aria-label="Cerrar"
-                className="text-xl leading-none text-zinc-500 hover:text-zinc-600"
-              >
-                ×
-              </button>
-            </div>
-
-            {estado && "ok" in estado && estado.ok ? (
-              <p className="rounded-lg border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-800">
-                Solicitud enviada. {clubName} la recibirá en su panel y por email.
-              </p>
             ) : (
               <form action={formAction} className="space-y-4">
-                  <CampoTrampa />
                 <input type="hidden" name="clubId" value={clubId} />
                 {opportunityId && <input type="hidden" name="opportunityId" value={opportunityId} />}
+                <CampoTrampa />
 
                 <div>
-                  <label htmlFor="message" className="mb-1 block text-sm font-medium text-zinc-700">
-                    Mensaje
+                  <h2 className="text-lg font-semibold text-zinc-900">Escribir a {clubName}</h2>
+                  <p className="mt-1 text-sm text-zinc-600">
+                    {opportunityTitle
+                      ? `Sobre "${opportunityTitle}".`
+                      : "Cuéntales quién eres y qué te interesa."}{" "}
+                    No hace falta registrarse.
+                  </p>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <label className="block">
+                    <span className="mb-1 block text-sm font-medium text-zinc-700">Tu nombre</span>
+                    <input name="nombre" required minLength={2} maxLength={120} className={clasesCampo} />
                   </label>
+
+                  <label className="block">
+                    <span className="mb-1 block text-sm font-medium text-zinc-700">
+                      Empresa <span className="font-normal text-zinc-400">(opcional)</span>
+                    </span>
+                    <input name="empresa" maxLength={120} className={clasesCampo} />
+                  </label>
+
+                  <label className="block">
+                    <span className="mb-1 block text-sm font-medium text-zinc-700">Tu correo</span>
+                    <input name="correo" type="email" required maxLength={200} className={clasesCampo} />
+                  </label>
+
+                  <label className="block">
+                    <span className="mb-1 block text-sm font-medium text-zinc-700">
+                      Teléfono <span className="font-normal text-zinc-400">(opcional)</span>
+                    </span>
+                    <input name="telefono" type="tel" maxLength={40} className={clasesCampo} />
+                  </label>
+                </div>
+
+                <label className="block">
+                  <span className="mb-1 block text-sm font-medium text-zinc-700">Mensaje</span>
                   <textarea
-                    id="message"
                     name="message"
                     required
                     minLength={10}
+                    maxLength={2000}
                     rows={5}
-                    placeholder="Cuéntale al club quién eres y qué tipo de colaboración te interesa…"
-                    className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                    placeholder="Hola, tenemos una tienda en el barrio y nos interesa lo del patrocinio de las camisetas. ¿Podemos hablar?"
+                    className={clasesCampo}
                   />
-                </div>
+                </label>
 
                 {estado && "error" in estado && estado.error && (
-                  <p
-                    role="alert"
-                    className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
-                  >
+                  <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
                     {estado.error}
                   </p>
                 )}
 
-                <div className="flex justify-end gap-2">
+                <p className="text-xs text-zinc-500">
+                  Tu nombre y tu correo se los mandamos al club para que pueda contestarte. Nada
+                  más.
+                </p>
+
+                <div className="flex flex-wrap justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => setAbierto(false)}
-                    className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
+                    className="rounded-lg px-4 py-2.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100"
                   >
                     Cancelar
                   </button>
-                  <BotonEnviarSolicitud />
+                  <BotonDeEnvio />
                 </div>
               </form>
             )}
@@ -149,15 +160,16 @@ export function SolicitarContactoBoton({
   );
 }
 
-function BotonEnviarSolicitud() {
+function BotonDeEnvio() {
   const { pending } = useFormStatus();
+
   return (
     <button
       type="submit"
       disabled={pending}
-      className="rounded-lg bg-teal-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60"
+      className="rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-800 disabled:opacity-60"
     >
-      {pending ? "Enviando…" : "Enviar solicitud"}
+      {pending ? "Enviando…" : "Enviar mensaje"}
     </button>
   );
 }

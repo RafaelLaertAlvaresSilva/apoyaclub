@@ -1,81 +1,94 @@
 "use server";
 
-import type { CompanyRow } from "@/lib/company-mappers";
-import { enviarEmailNuevaSolicitudContacto } from "@/lib/email/resend";
-import { consumirLimite, pareceBot } from "@/lib/rate-limit";
 import { getLocale } from "next-intl/server";
+import { enviarEmailNuevaSolicitudContacto } from "@/lib/email/resend";
+import { avisarDeFallo } from "@/lib/monitoring";
+import { consumirLimite, ipDelVisitante, pareceBot } from "@/lib/rate-limit";
 import { SITE_URL } from "@/lib/site";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
-import type { Role } from "@/lib/types";
 
 export type EstadoSolicitud = { error: string; ok?: false } | { ok: true; error?: undefined } | null;
 
 /**
- * Crea una solicitud de contacto de una empresa a un club (Fase 8),
- * opcionalmente sobre una oportunidad concreta, y avisa al club por
- * email (si Resend no está configurado, la solicitud se crea igual: ver
- * `lib/email/resend.ts`).
+ * Solicitud de contacto de una empresa a un club, sin necesidad de
+ * cuenta (migración 0034).
  *
- * La plataforma solo pone en contacto a las dos partes: no hay chat
- * interno, ni gestión de contratos, ni cobros entre club y empresa.
+ * Antes hacía falta registrarse como empresa. Se quitó: cada paso entre
+ * la empresa y el club era un patrocinio menos, y quien entra en la
+ * ficha de un club a las once de la noche no se abre una cuenta, se va.
+ *
+ * La fila la escribe el servidor con la clave de servicio, nunca el
+ * navegador: dejar insertar en `contact_requests` desde fuera sería
+ * abrir un buzón de spam para todos los clubes a la vez. El control de
+ * abuso está aquí — campo trampa y tope por IP.
  */
 export async function crearSolicitudContacto(
   _estadoPrevio: EstadoSolicitud,
   formData: FormData,
 ): Promise<EstadoSolicitud> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
-  }
-
-  const rol = user.app_metadata?.role as Role | undefined;
-  if (rol !== "empresa") {
-    return { error: "Solo las empresas pueden solicitar contacto." };
-  }
-
+  // Campo trampa: lo rellenan los robots y nadie más. Se devuelve "ok"
+  // a propósito, para que quien lo hizo no aprenda que le han pillado.
   if (pareceBot(formData)) return { ok: true };
 
-  // Una empresa real no manda diez solicitudes en una hora (Fase 15).
-  // El límite es por empresa, no por IP: aquí siempre hay sesión.
+  const texto = (campo: string) => String(formData.get(campo) ?? "").trim();
+
+  const clubId = texto("clubId");
+  const mensaje = texto("message");
+  const nombre = texto("nombre");
+  const empresa = texto("empresa");
+  const correo = texto("correo");
+  const telefono = texto("telefono");
+  const opportunityId = texto("opportunityId") || null;
+
+  if (!clubId) return { error: "Club no encontrado." };
+  if (nombre.length < 2) return { error: "Escribe tu nombre." };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(correo)) {
+    return { error: "Escribe un correo válido: es a donde te contestará el club." };
+  }
+  if (mensaje.length < 10) return { error: "Escribe un mensaje para el club." };
+  if (mensaje.length > 2000) return { error: "El mensaje es demasiado largo." };
+
+  // Una persona real no manda diez solicitudes en una hora. Por IP,
+  // que es lo único que hay cuando no hay cuenta.
   const cupo = await consumirLimite({
     bucket: "solicitud-contacto",
-    identificador: user.id,
+    identificador: await ipDelVisitante(),
     limite: 10,
     ventanaSegundos: 3600,
   });
 
   if (!cupo) {
-    return {
-      error: "Has enviado muchas solicitudes seguidas. Espera un rato y vuelve a intentarlo.",
-    };
+    return { error: "Has enviado muchas solicitudes seguidas. Espera un rato y vuelve a intentarlo." };
   }
 
-  const clubId = String(formData.get("clubId") ?? "");
-  const opportunityId = String(formData.get("opportunityId") ?? "") || null;
-  const message = String(formData.get("message") ?? "").trim();
+  const admin = createAdminClient();
 
-  if (!clubId) return { error: "Club no encontrado." };
-  if (!message) return { error: "Escribe un mensaje para el club." };
-
-  const { error } = await supabase.from("contact_requests").insert({
-    company_id: user.id,
+  const { error } = await admin.from("contact_requests").insert({
     club_id: clubId,
     opportunity_id: opportunityId,
-    message,
+    message: mensaje,
+    sender_name: nombre.slice(0, 120),
+    sender_company: empresa ? empresa.slice(0, 120) : null,
+    sender_email: correo.slice(0, 200),
+    sender_phone: telefono ? telefono.slice(0, 40) : null,
   });
 
   if (error) {
+    avisarDeFallo("email", "No se ha podido crear la solicitud de contacto", error);
     return { error: "No se ha podido enviar la solicitud. Inténtalo de nuevo." };
   }
 
-  // El email es un extra: si falla, la solicitud ya se ha creado y el
-  // club la verá igualmente en su panel (Hecho cuando... de la Fase 8).
-  await notificarClubPorEmail({ clubId, opportunityId, message, companyId: user.id });
+  // El correo es un extra: si falla, la solicitud ya está creada y el
+  // club la verá igual en su panel.
+  await notificarClubPorEmail({
+    clubId,
+    opportunityId,
+    mensaje,
+    nombre,
+    empresa,
+    correo,
+    telefono,
+  });
 
   return { ok: true };
 }
@@ -83,25 +96,33 @@ export async function crearSolicitudContacto(
 async function notificarClubPorEmail({
   clubId,
   opportunityId,
-  message,
-  companyId,
+  mensaje,
+  nombre,
+  empresa,
+  correo,
+  telefono,
 }: {
   clubId: string;
   opportunityId: string | null;
-  message: string;
-  companyId: string;
+  mensaje: string;
+  nombre: string;
+  empresa: string;
+  correo: string;
+  telefono: string;
 }) {
   try {
     const admin = createAdminClient();
 
-    const [clubAuth, companyAuth, { data: clubRow }, { data: companyRow }] = await Promise.all([
+    const [clubAuth, { data: clubRow }] = await Promise.all([
       admin.auth.admin.getUserById(clubId),
-      admin.auth.admin.getUserById(companyId),
-      admin.from("clubs").select("name").eq("id", clubId).maybeSingle(),
-      admin.from("companies").select("*").eq("id", companyId).maybeSingle<CompanyRow>(),
+      admin.from("clubs").select("name, contact_email").eq("id", clubId).maybeSingle<{
+        name: string;
+        contact_email: string | null;
+      }>(),
     ]);
 
-    const clubEmail = clubAuth.data.user?.email;
+    // Al correo que el club publicó si lo hay, y si no al de su cuenta.
+    const clubEmail = clubRow?.contact_email ?? clubAuth.data.user?.email;
     if (!clubEmail) return;
 
     let opportunityTitle: string | null = null;
@@ -110,36 +131,25 @@ async function notificarClubPorEmail({
         .from("opportunities")
         .select("title")
         .eq("id", opportunityId)
-        .maybeSingle();
+        .maybeSingle<{ title: string }>();
       opportunityTitle = data?.title ?? null;
     }
-
-    const companyName =
-      companyRow?.name ||
-      (companyAuth.data.user?.user_metadata?.name as string | undefined) ||
-      "Una empresa";
-
-    const presupuestoTexto =
-      companyRow?.budget_min != null || companyRow?.budget_max != null
-        ? [companyRow?.budget_min, companyRow?.budget_max]
-            .filter((valor) => valor != null)
-            .map((valor) => `${valor} €`)
-            .join(" - ")
-        : null;
 
     await enviarEmailNuevaSolicitudContacto({
       clubEmail,
       clubName: clubRow?.name ?? "tu club",
-      companyName,
-      companySector: companyRow?.sector ?? null,
-      companyCity: companyRow?.city ?? null,
-      companyWebsite: companyRow?.website ?? null,
-      presupuestoTexto,
+      companyName: empresa || nombre,
+      personaNombre: nombre,
+      personaCorreo: correo,
+      personaTelefono: telefono || null,
       opportunityTitle,
-      message,
+      message: mensaje,
       panelUrl: `${SITE_URL}/${await getLocale()}/panel/solicitudes`,
+      // Para que el club conteste con "Responder" y le llegue a quien
+      // escribió, no a ApoyaClub.
+      responderA: correo,
     });
   } catch (excepcion) {
-    console.error("[contact-requests] No se ha podido notificar al club por email:", excepcion);
+    avisarDeFallo("email", "No se ha podido notificar al club por email", excepcion);
   }
 }

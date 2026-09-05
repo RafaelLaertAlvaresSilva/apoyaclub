@@ -137,123 +137,10 @@ export function sinDatos(metricas: MetricasClub): boolean {
   );
 }
 
-/** Una empresa que ha pasado por la ficha del club. */
-export type EmpresaInteresada = {
-  companyId: string;
-  nombre: string;
-  sector: string | null;
-  ciudad: string | null;
-  /** Última vez que entró en la ficha. */
-  ultimaVisita: string | null;
-  /** true si además llegó a abrir los datos de contacto. */
-  vioElContacto: boolean;
-};
-
-type FilaVisitaConEmpresa = { company_id: string; created_at: string };
-type FilaEmpresa = { id: string; name: string | null; sector: string | null; city: string | null };
-
-/**
- * Empresas registradas que han pasado por la ficha del club (migración
- * 0022), de la más reciente a la más antigua.
- *
- * Esto es lo que convierte la métrica en algo accionable: "12 visitas"
- * no se puede trabajar, pero "la Ferretería Ramírez vio tu contacto el
- * martes" sí. Las visitas anónimas no aparecen aquí, solo cuentan en el
- * total.
- */
-export async function obtenerEmpresasInteresadas(
-  clubId: string,
-  dias = 90,
-  limite = 25,
-  ahora: Date = new Date(),
-): Promise<EmpresaInteresada[]> {
-  const admin = createAdminClient();
-  const desde = new Date(ahora.getTime() - dias * 24 * 60 * 60 * 1000).toISOString();
-
-  const [{ data: visitas, error: errorVisitas }, { data: contactos, error: errorContactos }] =
-    await Promise.all([
-    admin
-      .from("club_page_views")
-      .select("company_id, created_at")
-      .eq("club_id", clubId)
-      .not("company_id", "is", null)
-      .gte("created_at", desde)
-      .order("created_at", { ascending: false })
-      .returns<FilaVisitaConEmpresa[]>(),
-    admin
-      .from("club_contact_views")
-      .select("company_id, created_at")
-      .eq("club_id", clubId)
-      .not("company_id", "is", null)
-      .gte("created_at", desde)
-      .returns<FilaVisitaConEmpresa[]>(),
-  ]);
-
-  if (errorVisitas || errorContactos) {
-    avisarDeFallo(
-      "metricas",
-      "No se han podido leer las empresas interesadas",
-      errorVisitas ?? errorContactos,
-    );
-  }
-
-  // Una fila por empresa, con la visita más reciente (las filas ya vienen
-  // ordenadas, así que la primera que se ve de cada empresa es la buena).
-  const ultimaPorEmpresa = new Map<string, string>();
-  for (const visita of visitas ?? []) {
-    if (!ultimaPorEmpresa.has(visita.company_id)) {
-      ultimaPorEmpresa.set(visita.company_id, visita.created_at);
-    }
-  }
-
-  const vieronElContacto = new Set((contactos ?? []).map((fila) => fila.company_id));
-  // Una empresa puede haber abierto el contacto desde el buscador sin
-  // que su visita quedara registrada: también cuenta como interesada.
-  for (const companyId of vieronElContacto) {
-    if (!ultimaPorEmpresa.has(companyId)) ultimaPorEmpresa.set(companyId, "");
-  }
-
-  const ids = [...ultimaPorEmpresa.keys()].slice(0, limite);
-  if (ids.length === 0) return [];
-
-  const { data: empresas } = await admin
-    .from("companies")
-    .select("id, name, sector, city")
-    .in("id", ids)
-    .returns<FilaEmpresa[]>();
-
-  const porId = new Map((empresas ?? []).map((empresa) => [empresa.id, empresa]));
-
-  return ids
-    .map((companyId) => {
-      const empresa = porId.get(companyId);
-      const ultimaVisita = ultimaPorEmpresa.get(companyId) || null;
-
-      return {
-        companyId,
-        // Una empresa que se registró pero no rellenó su perfil no tiene
-        // nombre todavía; no se enseña su correo, que no es asunto del club.
-        nombre: empresa?.name?.trim() || "Empresa sin nombre todavía",
-        sector: empresa?.sector ?? null,
-        ciudad: empresa?.city ?? null,
-        ultimaVisita,
-        vioElContacto: vieronElContacto.has(companyId),
-      } satisfies EmpresaInteresada;
-    })
-    .sort((a, b) => {
-      // Primero las que vieron el contacto: son las que están más cerca
-      // de escribir.
-      if (a.vioElContacto !== b.vioElContacto) return a.vioElContacto ? -1 : 1;
-      return (b.ultimaVisita ?? "").localeCompare(a.ultimaVisita ?? "");
-    });
-}
-
 /** Lo que se puede decir de una ventana de tiempo concreta. */
 export type VentanaDeVisitas = {
   /** Aperturas de la ficha. Una por persona y hora, no por recarga. */
   visitas: number;
-  /** De esas, cuántas empresas registradas distintas. */
-  empresas: number;
   /** Cuántas veces se han abierto los datos de contacto. */
   contactos: number;
 };
@@ -266,20 +153,14 @@ export type ResumenDeVisitas = {
   totalContactos: number;
 };
 
-type FilaEvento = { company_id: string | null; created_at: string };
+type FilaEvento = { created_at: string };
 
 /** Un tope por si algún día un club tiene muchísimo movimiento. */
 const MAXIMO_FILAS = 5000;
 
 function resumirVentana(filas: FilaEvento[], contactos: FilaEvento[], desde: string): VentanaDeVisitas {
-  const dentro = filas.filter((fila) => fila.created_at >= desde);
-  const empresas = new Set(
-    dentro.map((fila) => fila.company_id).filter((id): id is string => id !== null),
-  );
-
   return {
-    visitas: dentro.length,
-    empresas: empresas.size,
+    visitas: filas.filter((fila) => fila.created_at >= desde).length,
     contactos: contactos.filter((fila) => fila.created_at >= desde).length,
   };
 }
@@ -290,9 +171,8 @@ function resumirVentana(filas: FilaEvento[], contactos: FilaEvento[], desde: str
  *
  * Las dos ventanas salen de la misma lectura de 30 días en vez de
  * hacer cuatro consultas: para el volumen de un club de barrio traer
- * las filas y contarlas aquí es más barato que pedirle a la base
- * cuatro conteos, y de paso permite contar empresas distintas, que con
- * un `count` no se puede.
+ * las filas y contarlas aquí sale más barato que pedirle a la base
+ * cuatro conteos.
  */
 export async function obtenerResumenDeVisitas(
   clubId: string,
@@ -305,14 +185,14 @@ export async function obtenerResumenDeVisitas(
   const [visitas, contactos, totalVisitas, totalContactos] = await Promise.all([
     admin
       .from("club_page_views")
-      .select("company_id, created_at")
+      .select("created_at")
       .eq("club_id", clubId)
       .gte("created_at", haceUnMes)
       .limit(MAXIMO_FILAS)
       .returns<FilaEvento[]>(),
     admin
       .from("club_contact_views")
-      .select("company_id, created_at")
+      .select("created_at")
       .eq("club_id", clubId)
       .gte("created_at", haceUnMes)
       .limit(MAXIMO_FILAS)

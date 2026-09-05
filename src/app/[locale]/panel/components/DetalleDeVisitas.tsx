@@ -40,16 +40,11 @@ export function DetalleDeVisitas({ resumen }: { resumen: ResumenDeVisitas }) {
         </div>
       </div>
 
-      <dl className="mt-3 grid gap-3 sm:grid-cols-3">
+      <dl className="mt-3 grid gap-3 sm:grid-cols-2">
         <Dato
           valor={datos.visitas}
           etiqueta="Han visto tu ficha"
           ayuda="Personas que han abierto tu página. Recargar no cuenta dos veces."
-        />
-        <Dato
-          valor={datos.empresas}
-          etiqueta="Empresas registradas"
-          ayuda="De las anteriores, cuántas entraron con su cuenta de empresa."
         />
         <Dato
           valor={datos.contactos}

@@ -10,7 +10,10 @@
     "web": "Web",
     "presupuesto": "Presupuesto orientativo",
     "boton": "Ver y responder en tu panel",
-    "pie": "ApoyaClub solo pone en contacto a las dos partes: la conversación y cualquier acuerdo se gestionan directamente entre el club y la empresa."
+    "pie": "ApoyaClub solo pone en contacto a las dos partes: la conversación y cualquier acuerdo se gestionan directamente entre el club y la empresa.",
+    "persona": "Quién escribe",
+    "correo": "Correo",
+    "telefono": "Teléfono"
   },
   "caducidadSuscripcion": {
     "asunto": "{dias, plural, one {Queda # día} other {Quedan # días}} para que caduque tu suscripción a ApoyaClub",

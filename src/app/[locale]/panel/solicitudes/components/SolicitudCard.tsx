@@ -1,6 +1,5 @@
 import { ESTADOS_SOLICITUD } from "@/lib/contact-requests";
-import { ETIQUETA_OBJETIVO, formatoValorOportunidad } from "@/lib/opportunities";
-import type { CompanyProfile, ContactRequest, ContactRequestStatus } from "@/lib/types";
+import type { ContactRequest, ContactRequestStatus } from "@/lib/types";
 import { cambiarEstadoSolicitud } from "../actions";
 
 const ESTILO_ESTADO: Record<ContactRequestStatus, string> = {
@@ -16,30 +15,24 @@ const formatoFecha = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "
 export function SolicitudCard({
   solicitud,
   opportunityTitle,
-  empresa,
-  empresaEmail,
 }: {
   solicitud: ContactRequest;
   opportunityTitle: string | null;
-  empresa: CompanyProfile | null;
-  empresaEmail: string | null;
 }) {
-  const nombreEmpresa = empresa?.name || "Empresa sin nombre en su perfil";
-
-  const presupuesto =
-    empresa?.budgetMin != null || empresa?.budgetMax != null
-      ? [empresa?.budgetMin, empresa?.budgetMax]
-          .filter((valor): valor is number => valor != null)
-          .map((valor) => formatoValorOportunidad.format(valor))
-          .join(" - ")
-      : null;
+  // Desde que no hay cuentas de empresa (migración 0034), lo que
+  // identifica al remitente es lo que escribió en el formulario. Las
+  // solicitudes de antes no lo traen: ahí el nombre no se puede saber.
+  const titular =
+    solicitud.remitenteEmpresa ||
+    solicitud.remitenteNombre ||
+    "Solicitud anterior (sin datos de contacto)";
 
   return (
     <li className="rounded-xl border border-zinc-200 bg-white p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="font-semibold text-zinc-900">{nombreEmpresa}</h3>
+            <h3 className="font-semibold text-zinc-900">{titular}</h3>
             <span
               className={`rounded-full px-2 py-0.5 text-xs font-medium ${ESTILO_ESTADO[solicitud.status]}`}
             >
@@ -55,33 +48,29 @@ export function SolicitudCard({
       </div>
 
       <div className="mt-3 grid gap-1 text-sm text-zinc-600 sm:grid-cols-2">
-        {empresaEmail && (
-          <p>
-            Email:{" "}
-            <a href={`mailto:${empresaEmail}`} className="font-medium text-teal-700 hover:underline">
-              {empresaEmail}
-            </a>
-          </p>
+        {solicitud.remitenteNombre && solicitud.remitenteEmpresa && (
+          <p>Persona: {solicitud.remitenteNombre}</p>
         )}
-        {empresa?.sector && <p>Sector: {empresa.sector}</p>}
-        {empresa?.city && <p>Localidad: {empresa.city}</p>}
-        {empresa?.website && (
+        {solicitud.remitenteEmail && (
           <p>
-            Web:{" "}
+            Correo:{" "}
             <a
-              href={empresa.website}
-              target="_blank"
-              rel="noreferrer"
+              href={`mailto:${solicitud.remitenteEmail}`}
               className="font-medium text-teal-700 hover:underline"
             >
-              {empresa.website.replace(/^https?:\/\//, "")}
+              {solicitud.remitenteEmail}
             </a>
           </p>
         )}
-        {presupuesto && <p>Presupuesto orientativo: {presupuesto}</p>}
-        {empresa && empresa.objectives.length > 0 && (
-          <p className="sm:col-span-2">
-            Objetivos: {empresa.objectives.map((objetivo) => ETIQUETA_OBJETIVO[objetivo]).join(", ")}
+        {solicitud.remitenteTelefono && (
+          <p>
+            Teléfono:{" "}
+            <a
+              href={`tel:${solicitud.remitenteTelefono.replace(/\s+/g, "")}`}
+              className="font-medium text-teal-700 hover:underline"
+            >
+              {solicitud.remitenteTelefono}
+            </a>
           </p>
         )}
       </div>

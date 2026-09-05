@@ -18,7 +18,6 @@ import { SITE_URL } from "@/lib/site";
 import type { ClubTeam, SocialLinks } from "@/lib/types";
 import { CompartirBoton } from "./components/CompartirBoton";
 import { DatosDeContacto } from "./components/DatosDeContacto";
-import { GuardarFavoritoBoton } from "./components/GuardarFavoritoBoton";
 import { RegistrarVisita } from "./components/RegistrarVisita";
 import { SolicitarContactoBoton } from "./components/SolicitarContactoBoton";
 import { ETIQUETA_CATEGORIA_SERVICIO, obtenerServiciosDelClub } from "@/lib/service-needs";
@@ -246,7 +245,6 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     >
                       {t("oportunidades.solicitar")}
                     </SolicitarContactoBoton>
-                    <GuardarFavoritoBoton opportunityId={oportunidad.id} />
                   </div>
                 </div>
               ))}

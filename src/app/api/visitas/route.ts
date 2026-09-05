@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { consumirLimite, ipDelVisitante } from "@/lib/rate-limit";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
-import type { Role } from "@/lib/types";
 
 /**
  * Registra una visita a la página pública de un club (migración 0014).
@@ -49,24 +47,11 @@ export async function POST(request: Request) {
 
     if (!club) return NextResponse.json({ ok: false }, { status: 404 });
 
-    // Si quien visita es una empresa registrada, se apunta cuál: es la
-    // diferencia entre "12 visitas" y "3 empresas han mirado tu ficha"
-    // (migración 0022).
-    let companyId: string | null = null;
-    try {
-      const supabase = await createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      const rol = user?.app_metadata?.role as Role | undefined;
-      if (user && rol === "empresa") companyId = user.id;
-    } catch {
-      // Visita anónima: se cuenta igual, sin nombre.
-    }
-
-    const { error } = await admin
-      .from("club_page_views")
-      .insert({ club_id: club.id, company_id: companyId });
+    // Ya no se apunta quién: desde que no hay cuentas de empresa
+    // (migración 0034) todo el que entra es anónimo. La columna
+    // `company_id` se queda en la tabla con lo que se registró en su
+    // día, pero aquí no se rellena.
+    const { error } = await admin.from("club_page_views").insert({ club_id: club.id });
 
     // La métrica nunca puede romper la página que la dispara, pero
     // tampoco puede perderse sin dejar rastro: si esto falla, el club

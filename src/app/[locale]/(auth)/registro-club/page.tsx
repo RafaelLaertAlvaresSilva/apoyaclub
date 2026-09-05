@@ -109,12 +109,6 @@ export default function RegistroClubPage() {
 
       <div className="space-y-2 text-center text-sm text-zinc-500">
         <p>
-          {t("eresEmpresa")}{" "}
-          <Link href="/registro-empresa" className="font-medium text-teal-700 hover:underline">
-            {t("registrateAqui")}
-          </Link>
-        </p>
-        <p>
           {tComun("yaTienesCuenta")}{" "}
           <Link href="/login" className="font-medium text-teal-700 hover:underline">
             {tComun("iniciaSesion")}

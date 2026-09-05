@@ -80,10 +80,11 @@ export function LoginForm() {
           <Link href="/registro-club" className="font-medium text-teal-700 hover:underline">
             {t("registrarClub")}
           </Link>
-          <Link href="/registro-empresa" className="font-medium text-teal-700 hover:underline">
-            {t("registrarEmpresa")}
-          </Link>
         </div>
+        <p className="text-xs text-zinc-400">
+          ¿Eres una empresa? No necesitas cuenta: entra en la ficha de cualquier club y escríbele
+          desde ahí.
+        </p>
       </div>
     </div>
   );

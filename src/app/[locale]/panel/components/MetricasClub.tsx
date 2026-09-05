@@ -3,7 +3,6 @@ import { Link } from "@/i18n/navigation";
 import {
   variacion,
   sinDatos,
-  type EmpresaInteresada,
   type MetricaClub,
   type MetricasClub as Metricas,
   type ResumenDeVisitas,
@@ -23,17 +22,16 @@ import { DetalleDeVisitas } from "./DetalleDeVisitas";
  * qué comparar no se enseña ningún porcentaje: un "+100 %" sacado de un
  * mes a cero es ruido, no información.
  *
- * Debajo, las empresas concretas que han pasado por la ficha: es lo que
- * hace la métrica accionable, porque un nombre se puede llamar por
- * teléfono y una cifra no.
+ * Ya no salen nombres de empresa: desde que ApoyaClub no pide cuenta
+ * para mirar ni para escribir (migración 0034), quien entra en la ficha
+ * es anónimo. Lo que sí lleva nombre y apellidos es lo que llega a
+ * "Solicitudes", que es donde de verdad se puede actuar.
  */
 export function MetricasClub({
   metricas,
-  empresas,
   resumen,
 }: {
   metricas: Metricas;
-  empresas: EmpresaInteresada[];
   resumen: ResumenDeVisitas;
 }) {
   const t = useTranslations("panel.metricas");
@@ -109,48 +107,7 @@ export function MetricasClub({
           club sin movimiento este mes pero con doscientas visitas
           detrás no está empezando de cero. */}
       <DetalleDeVisitas resumen={resumen} />
-
-      <ListaDeEmpresas empresas={empresas} />
     </section>
-  );
-}
-
-/**
- * Las empresas registradas que han pasado por la ficha, con la que vio
- * el contacto arriba del todo. Solo se enseña si hay alguna: un bloque
- * vacío en el panel de un club recién llegado solo desanima.
- */
-function ListaDeEmpresas({ empresas }: { empresas: EmpresaInteresada[] }) {
-  const t = useTranslations("panel.metricas");
-
-  if (empresas.length === 0) return null;
-
-  return (
-    <div className="mt-6 border-t border-zinc-100 pt-5">
-      <h3 className="text-sm font-semibold text-zinc-900">{t("empresasTitulo")}</h3>
-      <p className="mt-1 text-xs text-zinc-500">{t("empresasTexto")}</p>
-
-      <ul className="mt-3 divide-y divide-zinc-100 rounded-lg border border-zinc-200">
-        {empresas.map((empresa) => (
-          <li
-            key={empresa.companyId}
-            className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm"
-          >
-            <div>
-              <p className="font-medium text-zinc-900">{empresa.nombre}</p>
-              <p className="text-zinc-500">
-                {[empresa.sector, empresa.ciudad].filter(Boolean).join(" · ") || "—"}
-              </p>
-            </div>
-            {empresa.vioElContacto && (
-              <span className="rounded-full bg-teal-50 px-2.5 py-1 text-xs font-medium text-teal-700">
-                {t("empresasVioContacto")}
-              </span>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
 

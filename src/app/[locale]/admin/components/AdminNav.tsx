@@ -3,7 +3,6 @@ import { Link } from "@/i18n/navigation";
 const ENLACES = [
   { id: "resumen", href: "/admin", etiqueta: "Resumen" },
   { id: "clubes", href: "/admin/clubes", etiqueta: "Clubes" },
-  { id: "empresas", href: "/admin/empresas", etiqueta: "Empresas" },
   { id: "finanzas", href: "/admin/finanzas", etiqueta: "Finanzas" },
 ] as const;
 

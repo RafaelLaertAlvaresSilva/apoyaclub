@@ -25,7 +25,6 @@ const RUTAS_ESTATICAS: { ruta: string; prioridad: number; frecuencia: "daily" | 
   { ruta: "/buscar", prioridad: 0.9, frecuencia: "daily" },
   { ruta: "/servicios", prioridad: 0.8, frecuencia: "daily" },
   { ruta: "/registro-club", prioridad: 0.8, frecuencia: "monthly" },
-  { ruta: "/registro-empresa", prioridad: 0.8, frecuencia: "monthly" },
   { ruta: "/login", prioridad: 0.3, frecuencia: "monthly" },
   { ruta: "/aviso-legal", prioridad: 0.2, frecuencia: "monthly" },
   { ruta: "/privacidad", prioridad: 0.2, frecuencia: "monthly" },

@@ -2,7 +2,9 @@ export type Role = "club" | "empresa" | "admin";
 
 export const RUTA_POR_ROL: Record<Role, string> = {
   club: "/panel",
-  empresa: "/empresa",
+  // ApoyaClub ya no tiene cuentas de empresa (migración 0034): las que
+  // quedaran de antes no tienen panel al que ir, así que a la portada.
+  empresa: "/",
   // Fase 12: panel de administración interno.
   admin: "/admin",
 };
@@ -339,12 +341,19 @@ export type ContactRequestStatus = "new" | "seen" | "in_conversation" | "closed"
  * empresa a un club, opcionalmente sobre una oportunidad concreta. */
 export type ContactRequest = {
   id: string;
-  companyId: string;
+  companyId: string | null;
   clubId: string;
   /** Null si la solicitud es sobre el club en general, no sobre una oportunidad concreta. */
   opportunityId: string | null;
   message: string;
   status: ContactRequestStatus;
+  /** Quién escribió, cuando la solicitud no viene de una cuenta
+   *  (migración 0034). Es lo único que el club necesita para
+   *  contestar. */
+  remitenteNombre: string | null;
+  remitenteEmpresa: string | null;
+  remitenteEmail: string | null;
+  remitenteTelefono: string | null;
   createdAt: string;
   updatedAt: string;
 };

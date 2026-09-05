@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { consumirLimite, ipDelVisitante } from "@/lib/rate-limit";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
-import type { Role } from "@/lib/types";
 
 /**
  * Devuelve los datos de contacto de un club y apunta que alguien los ha
@@ -88,19 +86,6 @@ export async function POST(request: Request) {
     email = usuario.user?.email ?? null;
   }
 
-  // Quién lo está mirando, si es una empresa con sesión iniciada.
-  let companyId: string | null = null;
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    const rol = user?.app_metadata?.role as Role | undefined;
-    if (user && rol === "empresa") companyId = user.id;
-  } catch {
-    // Sin sesión: se apunta la apertura igualmente, sin nombre.
-  }
-
   // La métrica nunca puede impedir que se vea el contacto, pero sí tiene
   // que dejar rastro si falla: es la señal más valiosa que produce la
   // plataforma y perderla en silencio deja al club creyendo que nadie le
@@ -108,7 +93,7 @@ export async function POST(request: Request) {
   try {
     const { error } = await admin
       .from("club_contact_views")
-      .insert({ club_id: club.id, company_id: companyId });
+      .insert({ club_id: club.id });
 
     if (error) avisarDeFallo("metricas", "No se ha podido apuntar la apertura de contacto", error);
   } catch (excepcion) {
