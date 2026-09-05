@@ -85,12 +85,23 @@ export async function guardarPerfilEmpresa(
     return { error: "El presupuesto mínimo no puede ser mayor que el máximo." };
   }
 
+  const descripcion = leerTexto(formData, "description");
+  if (descripcion && descripcion.length > 600) {
+    return { error: "La presentación no puede pasar de 600 caracteres." };
+  }
+
   const { error } = await supabase.from("companies").upsert({
     id: user.id,
     name: leerTexto(formData, "name"),
     sector: leerTexto(formData, "sector"),
     city: leerTexto(formData, "city"),
+    province: leerTexto(formData, "province"),
     website: leerTexto(formData, "website"),
+    description: descripcion,
+    logo_url: leerTexto(formData, "logoUrl"),
+    // Aparecer en el directorio (migración 0033). La casilla manda: si
+    // no viene marcada, la empresa sale de la lista pública.
+    open_to_sponsor: formData.get("openToSponsor") != null,
     budget_min: budgetMin,
     budget_max: budgetMax,
     objectives: leerObjetivos(formData),

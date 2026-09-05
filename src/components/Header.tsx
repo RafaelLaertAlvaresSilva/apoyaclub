@@ -59,6 +59,18 @@ export async function Header() {
             <span className="hidden sm:inline">Buscar clubes</span>
           </Link>
 
+          {/* El directorio de empresas (migración 0033): la otra
+              dirección. Va en la cabecera y no escondido en el panel
+              porque es lo primero que tiene que hacer un club al que no
+              le escribe nadie. */}
+          <Link
+            href="/empresas"
+            className="text-sm font-medium text-zinc-600 transition hover:text-brand-navy"
+          >
+            <span className="sm:hidden">Empresas</span>
+            <span className="hidden sm:inline">Buscar empresas</span>
+          </Link>
+
           {accesoDirecto ? (
             <Button href={accesoDirecto.href} size="sm">
               {accesoDirecto.etiqueta}

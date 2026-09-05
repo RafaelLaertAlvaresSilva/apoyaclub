@@ -7,7 +7,7 @@ import { subirImagenClub } from "@/lib/club-storage";
 
 type Props = {
   userId: string;
-  carpeta: "logo" | "fotos" | "patrocinadores";
+  carpeta: "logo" | "fotos" | "patrocinadores" | "logo-empresa";
   label: string;
   onSubido: (url: string) => Promise<void> | void;
 };

@@ -288,10 +288,22 @@ export type Opportunity = {
  * que bloquee el resto. */
 export type CompanyProfile = {
   id: string;
+  /** Se genera solo a partir del nombre (migración 0033). */
+  slug: string | null;
   name: string | null;
   sector: string | null;
   city: string | null;
+  province: string | null;
   website: string | null;
+  /** Cómo se presenta la empresa en el directorio. Máximo 600. */
+  description: string | null;
+  logoUrl: string | null;
+  /**
+   * La empresa acepta salir en el directorio público y recibir
+   * propuestas de clubes. Apagado por defecto: se registró para buscar
+   * clubes, no para salir en una lista.
+   */
+  openToSponsor: boolean;
   /** Presupuesto orientativo en euros (rango). Ambos límites son
    * opcionales e independientes entre sí. Nunca es una oferta
    * vinculante: solo una referencia para el club al leer la solicitud. */
@@ -364,4 +376,40 @@ export type DossierConfig = {
   shareToken: string | null;
   shareExpiresAt: string | null;
   updatedAt: string;
+};
+
+/**
+ * Una empresa tal y como la ve todo el mundo en el directorio
+ * (migración 0033). Sale de `company_public_profiles`, no de
+ * `companies`: aquí no hay correo ni presupuesto exacto.
+ */
+export type CompanyPublicProfile = {
+  id: string;
+  slug: string;
+  name: string;
+  sector: string | null;
+  city: string | null;
+  province: string | null;
+  website: string | null;
+  description: string | null;
+  logoUrl: string | null;
+  objectives: ObjectiveTag[];
+  /** Franja de presupuesto, nunca la cifra. */
+  budgetBand: BudgetBand | null;
+  createdAt: string;
+};
+
+export type BudgetBand = "hasta_500" | "de_500_a_2000" | "mas_2000";
+
+export type ProposalStatus = "new" | "seen" | "in_conversation" | "discarded";
+
+/** Propuesta de patrocinio de un club a una empresa (migración 0033). */
+export type ClubProposal = {
+  id: string;
+  clubId: string;
+  companyId: string;
+  opportunityId: string | null;
+  message: string;
+  status: ProposalStatus;
+  createdAt: string;
 };

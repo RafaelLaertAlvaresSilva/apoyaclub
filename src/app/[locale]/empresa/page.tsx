@@ -43,7 +43,7 @@ export default async function EmpresaPage() {
 
       <EmpresaNav activo="perfil" />
 
-      <PerfilEmpresaForm perfil={perfil} />
+      <PerfilEmpresaForm perfil={perfil} userId={user.id} />
     </div>
   );
 }
