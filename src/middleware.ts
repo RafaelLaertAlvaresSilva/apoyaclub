@@ -2,16 +2,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
 import { routing } from "@/i18n/routing";
 import { updateSession } from "@/lib/supabase/middleware";
+import { areaPrivadaDe } from "@/lib/areas-privadas";
 import { RUTA_POR_ROL, type Role } from "@/lib/types";
-
-/**
- * Prefijo de ruta privada de cada rol (sin idioma): club -> /panel,
- * admin -> /admin (Fase 12). Desde la migración 0034 ya no hay cuentas
- * de empresa, y su entrada del mapa apunta a la portada. Es el mismo mapa que
- * usa el login para redirigir tras autenticar, así que las dos cosas no
- * se pueden desincronizar.
- */
-const RUTAS_POR_ROL = Object.entries(RUTA_POR_ROL) as [Role, string][];
 
 const intlMiddleware = createIntlMiddleware(routing);
 
@@ -42,7 +34,11 @@ export async function middleware(request: NextRequest) {
   const locale = pathname.split("/")[1];
   const rutaSinIdioma = sinPrefijoDeIdioma(pathname);
 
-  const rutaProtegida = RUTAS_POR_ROL.find(([, prefijo]) => rutaSinIdioma.startsWith(prefijo));
+  // Qué área privada es, si es alguna. Ver `lib/areas-privadas.ts`:
+  // esta lista NO puede salir de `RUTA_POR_ROL`, porque ahí un rol
+  // puede apuntar a la portada y entonces toda la web pasaría a ser
+  // zona privada.
+  const rutaProtegida = areaPrivadaDe(rutaSinIdioma);
 
   // Ruta pública: dejamos pasar (la respuesta ya lleva las cookies de
   // sesión refrescadas por updateSession y el idioma resuelto).
