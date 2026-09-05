@@ -36,6 +36,7 @@ const OBJETIVOS_VALIDOS: ObjectiveTag[] = [
   "jovenes",
   "comunidad_local",
   "deporte_femenino",
+  "deporte_masculino",
   "deporte_base",
   "visibilidad",
   "contenido",

@@ -121,6 +121,7 @@ export const OBJETIVOS_OPORTUNIDAD: { id: ObjectiveTag; etiqueta: string }[] = [
   { id: "jovenes", etiqueta: "Jóvenes" },
   { id: "comunidad_local", etiqueta: "Comunidad local" },
   { id: "deporte_femenino", etiqueta: "Deporte femenino" },
+  { id: "deporte_masculino", etiqueta: "Deporte masculino" },
   { id: "deporte_base", etiqueta: "Deporte base" },
   { id: "visibilidad", etiqueta: "Visibilidad de marca" },
   { id: "contenido", etiqueta: "Contenido" },
