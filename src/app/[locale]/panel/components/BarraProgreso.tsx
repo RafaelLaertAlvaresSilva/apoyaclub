@@ -43,7 +43,7 @@ export function BarraProgreso({
   if (huecos.length === 0) return null;
 
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-5">
+    <div className="rounded-xl border border-zinc-200 bg-white p-4">
       <div className="mb-2 flex items-baseline justify-between">
         <p className="text-sm font-medium text-zinc-700">{t("perfilCompletado")}</p>
         <p className="text-sm font-semibold text-teal-700">{porcentaje}%</p>
@@ -54,16 +54,16 @@ export function BarraProgreso({
           style={{ width: `${porcentaje}%` }}
         />
       </div>
-      <p className="mt-2 text-xs text-zinc-500">{mensaje}</p>
+      <p className="mt-1.5 text-xs leading-snug text-zinc-500">{mensaje}</p>
 
-      <div className="mt-4 border-t border-zinc-100 pt-4">
+      <div className="mt-3 border-t border-zinc-100 pt-3">
           <h3 className="text-sm font-medium text-zinc-700">
             Te falta por rellenar{" "}
             <span className="font-normal text-zinc-500">
               ({huecos.length} {huecos.length === 1 ? "apartado" : "apartados"})
             </span>
           </h3>
-          <ul className="mt-3 space-y-3">
+          <ul className="mt-2 space-y-2">
             {visibles.map((hueco) => (
               <li key={hueco.id} className="flex gap-3">
                 <span
@@ -91,7 +91,7 @@ export function BarraProgreso({
                       {hueco.titulo}
                     </a>
                   )}
-                  <p className="text-sm text-zinc-500">{hueco.porQue}</p>
+                  <p className="text-xs leading-snug text-zinc-500">{hueco.porQue}</p>
                 </div>
               </li>
             ))}

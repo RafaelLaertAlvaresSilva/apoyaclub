@@ -20,7 +20,7 @@ export function DetalleDeVisitas({ resumen }: { resumen: ResumenDeVisitas }) {
   if (sinNada) return null;
 
   return (
-    <div className="mt-6 border-t border-zinc-100 pt-5">
+    <div className="mt-5 border-t border-zinc-100 pt-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-sm font-semibold text-zinc-900">Quién ha entrado en tu ficha</h3>
 
@@ -40,7 +40,7 @@ export function DetalleDeVisitas({ resumen }: { resumen: ResumenDeVisitas }) {
         </div>
       </div>
 
-      <dl className="mt-3 grid gap-3 sm:grid-cols-2">
+      <dl className="mt-3 grid gap-2 sm:grid-cols-2">
         <Dato
           valor={datos.visitas}
           etiqueta="Han visto tu ficha"
@@ -64,10 +64,10 @@ export function DetalleDeVisitas({ resumen }: { resumen: ResumenDeVisitas }) {
 
 function Dato({ valor, etiqueta, ayuda }: { valor: number; etiqueta: string; ayuda: string }) {
   return (
-    <div className="rounded-lg bg-zinc-50 p-4">
+    <div className="rounded-lg bg-zinc-50 p-3">
       <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{etiqueta}</dt>
-      <dd className="mt-1 text-2xl font-bold tabular-nums text-brand-navy">{valor}</dd>
-      <p className="mt-1 text-xs leading-relaxed text-zinc-500">{ayuda}</p>
+      <dd className="mt-1 text-xl font-bold tabular-nums text-brand-navy">{valor}</dd>
+      <p className="mt-1 text-xs leading-snug text-zinc-500">{ayuda}</p>
     </div>
   );
 }

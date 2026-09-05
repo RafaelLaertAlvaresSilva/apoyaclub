@@ -65,14 +65,14 @@ export function MetricasClub({
   ];
 
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white p-5">
+    <section className="rounded-xl border border-zinc-200 bg-white p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-base font-semibold text-zinc-900">{t("titulo")}</h2>
+        <h2 className="text-sm font-semibold text-zinc-900">{t("titulo")}</h2>
         <p className="text-xs text-zinc-500">{t("periodo", { dias: metricas.dias })}</p>
       </div>
 
       {sinDatos(metricas) ? (
-        <div className="mt-4 rounded-lg border border-dashed border-zinc-300 bg-zinc-50 p-5 text-sm text-zinc-600">
+        <div className="mt-3 rounded-lg border border-dashed border-zinc-300 bg-zinc-50 p-4 text-sm text-zinc-600">
           <p className="font-medium text-zinc-900">{t("vacioTitulo")}</p>
           <p className="mt-1">{t("vacioTexto")}</p>
           <div className="mt-3 flex flex-wrap gap-3">
@@ -88,7 +88,7 @@ export function MetricasClub({
         // Dos columnas y no tres: desde que el progreso de la ficha va
         // al lado, esta tarjeta ocupa dos tercios del ancho y con tres
         // columnas los números salían apretados contra su etiqueta.
-        <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+        <dl className="mt-3 grid gap-2 sm:grid-cols-2">
           {tarjetas.map((tarjeta) => (
             <Tarjeta
               key={tarjeta.clave}
@@ -128,10 +128,10 @@ function Tarjeta({
   const porcentaje = variacion(dato);
 
   return (
-    <div className="rounded-lg border border-zinc-200 p-4">
+    <div className="rounded-lg border border-zinc-200 p-3">
       <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{etiqueta}</dt>
       <dd className="mt-1 flex items-baseline gap-2">
-        <span className="text-2xl font-bold tabular-nums text-brand-navy">{dato.actual}</span>
+        <span className="text-xl font-bold tabular-nums text-brand-navy">{dato.actual}</span>
         {porcentaje !== null && porcentaje !== 0 && (
           <span
             className={`text-xs font-semibold ${porcentaje > 0 ? "text-teal-700" : "text-amber-700"}`}
@@ -140,7 +140,7 @@ function Tarjeta({
           </span>
         )}
       </dd>
-      <p className="mt-1.5 text-xs leading-relaxed text-zinc-500">{ayuda}</p>
+      <p className="mt-1 text-xs leading-snug text-zinc-500">{ayuda}</p>
     </div>
   );
 }
