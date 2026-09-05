@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useSyncExternalStore } from "react";
-import type { ClubProfile, ClubSponsor, ClubTeam } from "@/lib/types";
+import type { ClubProfile, ClubTeam } from "@/lib/types";
 import type { ServiceNeed } from "@/lib/service-needs";
 import { AudienciaForm } from "./AudienciaForm";
 import { CanteraForm } from "./CanteraForm";
@@ -11,7 +11,6 @@ import { HistoriaForm } from "./HistoriaForm";
 import { IdentidadForm } from "./IdentidadForm";
 import { InstalacionesForm } from "./InstalacionesForm";
 import { NivelDeportivoForm } from "./NivelDeportivoForm";
-import { PatrocinadoresForm } from "./PatrocinadoresForm";
 import { ServiciosForm } from "./ServiciosForm";
 
 type Pestana =
@@ -23,7 +22,6 @@ type Pestana =
   | "historia"
   | "audiencia"
   | "comunidad"
-  | "patrocinadores"
   | "servicios";
 
 const IDS_PESTANA = new Set<string>([
@@ -35,7 +33,6 @@ const IDS_PESTANA = new Set<string>([
   "historia",
   "audiencia",
   "comunidad",
-  "patrocinadores",
   "servicios",
 ]);
 
@@ -48,7 +45,6 @@ const PESTANAS: { id: Pestana; etiqueta: string }[] = [
   { id: "historia", etiqueta: "Historia" },
   { id: "audiencia", etiqueta: "Audiencia" },
   { id: "comunidad", etiqueta: "Comunidad" },
-  { id: "patrocinadores", etiqueta: "Patrocinadores" },
   { id: "servicios", etiqueta: "Servicios que buscamos" },
 ];
 
@@ -56,13 +52,11 @@ export function PanelTabs({
   userId,
   perfil,
   equipos,
-  patrocinadores,
   servicios = [],
 }: {
   userId: string;
   perfil: ClubProfile | null;
   equipos: ClubTeam[];
-  patrocinadores: ClubSponsor[];
   servicios?: ServiceNeed[];
 }) {
   const contenedor = useRef<HTMLDivElement>(null);
@@ -152,9 +146,6 @@ export function PanelTabs({
         )}
         {pestanaActiva === "audiencia" && perfilCreado && <AudienciaForm perfil={perfil} />}
         {pestanaActiva === "comunidad" && perfilCreado && <ComunidadForm perfil={perfil} />}
-        {pestanaActiva === "patrocinadores" && perfilCreado && (
-          <PatrocinadoresForm userId={userId} patrocinadores={patrocinadores} />
-        )}
         {pestanaActiva === "servicios" && perfilCreado && <ServiciosForm servicios={servicios} />}
       </div>
     </div>

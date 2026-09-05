@@ -4,6 +4,7 @@ import { contarTareasVencidas } from "@/lib/tareas-datos";
 
 const ENLACES = [
   { id: "perfil", href: "/panel", etiqueta: "Perfil del club" },
+  { id: "patrocinadores", href: "/panel/patrocinadores", etiqueta: "Patrocinadores" },
   { id: "tareas", href: "/panel/tareas", etiqueta: "Tareas" },
   { id: "oportunidades", href: "/panel/oportunidades", etiqueta: "Oportunidades" },
   { id: "solicitudes", href: "/panel/solicitudes", etiqueta: "Solicitudes" },

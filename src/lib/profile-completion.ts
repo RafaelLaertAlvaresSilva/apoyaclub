@@ -33,6 +33,13 @@ export type HuecoPerfil = {
   /** Por qué le conviene. Sin esto el aviso es una regañina. */
   porQue: string;
   pestana: PestanaPerfil;
+  /**
+   * A dónde lleva el enlace de "qué te falta". Casi todos los huecos se
+   * arreglan en una pestaña del perfil y van a su ancla; los
+   * patrocinadores tienen sección propia desde que salieron del perfil,
+   * así que ese lleva a otra página.
+   */
+  ruta?: string;
 };
 
 /**
@@ -68,6 +75,7 @@ export function huecosDelPerfil(
       titulo: "Añade tus patrocinadores actuales",
       porQue: "Ver que otras empresas ya confían en ti es lo que más convence a una nueva.",
       pestana: "patrocinadores",
+      ruta: "/panel/patrocinadores",
     },
     {
       id: "equipos",

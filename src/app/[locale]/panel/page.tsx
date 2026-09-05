@@ -140,7 +140,6 @@ export default async function PanelPage() {
         userId={user.id}
         perfil={perfil}
         equipos={equipos}
-        patrocinadores={patrocinadores}
         servicios={servicios}
       />
 

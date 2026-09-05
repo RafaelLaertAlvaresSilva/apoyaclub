@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import type { HuecoPerfil } from "@/lib/profile-completion";
 
 /**
@@ -64,16 +65,26 @@ export function BarraProgreso({
                   className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500"
                 />
                 <div>
-                  {/* El ancla abre la pestaña correspondiente (ver
-                      PanelTabs): decirle al club qué le falta sin
-                      llevarle allí de un clic sería dejar el trabajo
-                      a medias. */}
-                  <a
-                    href={`#${hueco.pestana}`}
-                    className="text-sm font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-2 hover:decoration-teal-600"
-                  >
-                    {hueco.titulo}
-                  </a>
+                  {/* Decirle al club qué le falta sin llevarle allí de
+                      un clic sería dejar el trabajo a medias. Casi todo
+                      se arregla en una pestaña de esta misma página, y
+                      ahí basta el ancla; lo que vive en otra sección
+                      —los patrocinadores— necesita un enlace de verdad. */}
+                  {hueco.ruta ? (
+                    <Link
+                      href={hueco.ruta}
+                      className="text-sm font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-2 hover:decoration-teal-600"
+                    >
+                      {hueco.titulo}
+                    </Link>
+                  ) : (
+                    <a
+                      href={`#${hueco.pestana}`}
+                      className="text-sm font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-2 hover:decoration-teal-600"
+                    >
+                      {hueco.titulo}
+                    </a>
+                  )}
                   <p className="text-sm text-zinc-500">{hueco.porQue}</p>
                 </div>
               </li>
