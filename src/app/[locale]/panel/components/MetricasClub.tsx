@@ -85,7 +85,10 @@ export function MetricasClub({
           </div>
         </div>
       ) : (
-        <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        // Dos columnas y no tres: desde que el progreso de la ficha va
+        // al lado, esta tarjeta ocupa dos tercios del ancho y con tres
+        // columnas los números salían apretados contra su etiqueta.
+        <dl className="mt-4 grid gap-3 sm:grid-cols-2">
           {tarjetas.map((tarjeta) => (
             <Tarjeta
               key={tarjeta.clave}

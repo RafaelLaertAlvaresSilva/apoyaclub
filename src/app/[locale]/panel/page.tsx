@@ -132,9 +132,22 @@ export default async function PanelPage() {
 
       <PrimerosPasos pasos={pasosIniciales} />
 
-      <MetricasClub metricas={metricas} resumen={resumenDeVisitas} />
-
-      <BarraProgreso porcentaje={porcentaje} huecos={huecos} />
+      {/* Las dos juntas, y el progreso a un tercio: es un recordatorio,
+          no el contenido principal del panel. Cuando la ficha está
+          completa, `BarraProgreso` no pinta nada, así que aquí se deja
+          de partir la fila y las métricas ocupan todo el ancho — si no,
+          quedaría medio panel vacío esperando a una tarjeta que ya no
+          existe. */}
+      {huecos.length > 0 ? (
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <MetricasClub metricas={metricas} resumen={resumenDeVisitas} />
+          </div>
+          <BarraProgreso porcentaje={porcentaje} huecos={huecos} />
+        </div>
+      ) : (
+        <MetricasClub metricas={metricas} resumen={resumenDeVisitas} />
+      )}
 
       <PanelTabs
         userId={user.id}

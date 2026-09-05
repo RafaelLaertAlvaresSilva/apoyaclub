@@ -14,6 +14,12 @@ import type { HuecoPerfil } from "@/lib/profile-completion";
  * resto. El porcentaje viene de la base de datos y es el mismo que usa el
  * buscador para ordenar, así que la frase "más información, más
  * visibilidad" es literalmente cierta.
+ *
+ * Cuando no falta nada, no se enseña. Un recuadro al 100 % ocupando
+ * media pantalla todos los días es ruido: ya no pide nada. Y vuelve
+ * solo en cuanto aparece un hueco —porque el club añade un equipo sin
+ * jugadores, o porque se amplía lo que se considera una ficha
+ * completa—, que es justo cuando vuelve a tener algo que decir.
  */
 export function BarraProgreso({
   porcentaje,
@@ -25,18 +31,19 @@ export function BarraProgreso({
   const t = useTranslations("panel.perfil2");
   const [verTodos, setVerTodos] = useState(false);
 
-  const completo = huecos.length === 0;
   const visibles = verTodos ? huecos : huecos.slice(0, 3);
   const ocultos = huecos.length - visibles.length;
 
-  const mensaje = completo
-    ? "Ficha completa. Sales por delante de los clubes que no la han terminado."
-    : porcentaje >= 60
+  const mensaje =
+    porcentaje >= 60
       ? "Buen ritmo. Cada apartado que rellenes te sube en el buscador."
       : "Tu ficha aún tiene poca información, y eso te hace salir más abajo en el buscador.";
 
+  // Nada que pedir, nada que enseñar.
+  if (huecos.length === 0) return null;
+
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-4">
+    <div className="rounded-xl border border-zinc-200 bg-white p-5">
       <div className="mb-2 flex items-baseline justify-between">
         <p className="text-sm font-medium text-zinc-700">{t("perfilCompletado")}</p>
         <p className="text-sm font-semibold text-teal-700">{porcentaje}%</p>
@@ -49,8 +56,7 @@ export function BarraProgreso({
       </div>
       <p className="mt-2 text-xs text-zinc-500">{mensaje}</p>
 
-      {!completo && (
-        <div className="mt-4 border-t border-zinc-100 pt-4">
+      <div className="mt-4 border-t border-zinc-100 pt-4">
           <h3 className="text-sm font-medium text-zinc-700">
             Te falta por rellenar{" "}
             <span className="font-normal text-zinc-500">
@@ -100,17 +106,16 @@ export function BarraProgreso({
               Ver los {ocultos} restantes
             </button>
           )}
-          {verTodos && huecos.length > 3 && (
-            <button
-              type="button"
-              onClick={() => setVerTodos(false)}
-              className="mt-3 text-sm font-medium text-teal-700 hover:underline"
-            >
-              Ver solo los principales
-            </button>
-          )}
-        </div>
-      )}
+        {verTodos && huecos.length > 3 && (
+          <button
+            type="button"
+            onClick={() => setVerTodos(false)}
+            className="mt-3 text-sm font-medium text-teal-700 hover:underline"
+          >
+            Ver solo los principales
+          </button>
+        )}
+      </div>
     </div>
   );
 }
