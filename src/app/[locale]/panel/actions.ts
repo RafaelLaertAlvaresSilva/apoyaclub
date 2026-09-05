@@ -15,7 +15,16 @@ import { createClient } from "@/lib/supabase/server";
 import { NIVELES_PATROCINADOR } from "@/lib/types";
 import type { Milestone, Role, SponsorTier, TeamLevel } from "@/lib/types";
 
-export type EstadoGuardado = { error: string; ok?: false } | { ok: true; error?: undefined } | null;
+export type EstadoGuardado =
+  | { error: string; ok?: false }
+  /**
+   * `nota` es para lo que salió bien a medias: el patrocinador se
+   * guardó pero su correo no llegó a salir. Fallar entero sería mentir
+   * (el patrocinador está guardado) y callarlo también (el club se
+   * quedaría creyendo que la empresa recibió el aviso).
+   */
+  | { ok: true; error?: undefined; nota?: string }
+  | null;
 
 const RUTA_PANEL = "/panel";
 
@@ -691,22 +700,43 @@ export async function agregarPatrocinador(
     .limit(1)
     .maybeSingle<{ sort_order: number }>();
 
-  const { error } = await supabase.from("club_sponsors").insert({
-    club_id: user.id,
-    name,
-    website: leerTexto(formData, "website"),
-    logo_url: leerTexto(formData, "logoUrl"),
-    tier: nivel.tier,
-    tier_label: nivel.tierLabel,
-    description: descripcion,
-    since_year: leerAnio(formData, "sinceYear"),
-    contact_email: correoEmpresa.valor,
-    sort_order: (ultimo?.sort_order ?? 0) + 1,
-  });
+  const { data: nuevo, error } = await supabase
+    .from("club_sponsors")
+    .insert({
+      club_id: user.id,
+      name,
+      website: leerTexto(formData, "website"),
+      logo_url: leerTexto(formData, "logoUrl"),
+      tier: nivel.tier,
+      tier_label: nivel.tierLabel,
+      description: descripcion,
+      since_year: leerAnio(formData, "sinceYear"),
+      contact_email: correoEmpresa.valor,
+      sort_order: (ultimo?.sort_order ?? 0) + 1,
+    })
+    .select("id")
+    .maybeSingle<{ id: string }>();
 
   if (error) return fallo("agregarPatrocinador", error, "No se ha podido añadir el patrocinador.");
 
   revalidatePath(RUTA_PANEL);
+
+  // El agradecimiento sale aquí mismo, sin un segundo viaje. La casilla
+  // del formulario viene marcada y el texto de al lado dice lo que va a
+  // pasar, así que dejarla marcada ES la declaración de que el club
+  // tiene relación con esa empresa.
+  //
+  // Si el correo falla, el patrocinador se queda guardado igual y se
+  // avisa aparte: fallar entero por un correo sería tirar el trabajo
+  // que el club acaba de hacer.
+  if (correoEmpresa.valor && nuevo?.id && !leerBooleano(formData, "noAvisar")) {
+    const aviso = await enviarAvisoAPatrocinador(supabase, user, nuevo.id);
+    if ("error" in aviso) {
+      return { ok: true, nota: `Patrocinador guardado, pero el aviso no ha salido: ${aviso.error}` };
+    }
+    return { ok: true, nota: `Guardado. Se le ha mandado el agradecimiento a ${name}.` };
+  }
+
   return { ok: true };
 }
 
@@ -760,6 +790,23 @@ export async function editarPatrocinador(
   if (error) return fallo("editarPatrocinador", error, "No se han podido guardar los cambios.");
 
   revalidatePath(RUTA_PANEL);
+
+  // Mismo criterio que en el alta. Cubre el caso corriente de un
+  // patrocinador que se dio de alta sin correo y al que se le añade
+  // después: `enviarAvisoAPatrocinador` ya se encarga de no repetirlo
+  // si a esa empresa se le escribió antes.
+  if (correoEmpresa.valor && !leerBooleano(formData, "noAvisar")) {
+    const aviso = await enviarAvisoAPatrocinador(supabase, user, id);
+    if ("error" in aviso) {
+      // "Ya se le avisó" no es un fallo del que haya que informar: es
+      // lo normal al editar cualquier otra cosa de un patrocinador al
+      // que ya se escribió en su día.
+      if (aviso.error.startsWith("A esta empresa ya se le avisó")) return { ok: true };
+      return { ok: true, nota: `Cambios guardados, pero el aviso no ha salido: ${aviso.error}` };
+    }
+    return { ok: true, nota: `Cambios guardados. Se le ha mandado el agradecimiento a ${name}.` };
+  }
+
   return { ok: true };
 }
 
@@ -844,28 +891,31 @@ function leerCorreoEmpresa(formData: FormData): { valor: string | null } | { err
  * multa: es que el dominio se queme y dejen de llegar los correos que sí
  * importan, que son las solicitudes de contacto.
  */
-export async function avisarPatrocinador(
-  _estadoPrevio: EstadoGuardado,
-  formData: FormData,
-): Promise<EstadoGuardado> {
-  const contexto = await obtenerClubActual();
-  if ("error" in contexto) return { error: contexto.error };
-  const { supabase, user } = contexto;
-
-  const id = leerTexto(formData, "id");
-  if (!id) return { error: "No se ha podido identificar el patrocinador." };
-
-  if (!leerBooleano(formData, "confirmaRelacion")) {
-    return {
-      error:
-        "Marca la confirmación: hace falta que declares que esta empresa colabora contigo y que tienes relación con esa dirección.",
-    };
-  }
-
+/**
+ * Manda el agradecimiento a un patrocinador. Lo usan dos sitios: el
+ * alta del patrocinador (donde va marcado por defecto) y el botón
+ * suelto de su ficha, para los que se dieron de alta antes o se
+ * dejaron sin avisar.
+ *
+ * Condiciones, y ninguna es opcional:
+ *
+ *   - Tiene que haber un correo de la empresa.
+ *   - Solo se escribe UNA vez a cada empresa. No es una lista de
+ *     correo: es un aviso único, y repetirlo lo convertiría en spam.
+ *   - Hay un tope diario por club, para que nadie use esto como
+ *     herramienta de envío masivo.
+ *   - Y queda guardado que el club declaró tener relación con esa
+ *     empresa antes de que el correo salga.
+ */
+async function enviarAvisoAPatrocinador(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  user: User,
+  patrocinadorId: string,
+): Promise<{ ok: true } | { error: string }> {
   const { data: patrocinador } = await supabase
     .from("club_sponsors")
     .select("id, name, contact_email, notified_at")
-    .eq("id", id)
+    .eq("id", patrocinadorId)
     .eq("club_id", user.id)
     .maybeSingle<{
       id: string;
@@ -875,9 +925,7 @@ export async function avisarPatrocinador(
     }>();
 
   if (!patrocinador) return { error: "No se ha encontrado ese patrocinador." };
-  if (!patrocinador.contact_email) {
-    return { error: "Añade primero el correo de la empresa." };
-  }
+  if (!patrocinador.contact_email) return { error: "Añade primero el correo de la empresa." };
   if (patrocinador.notified_at) {
     return { error: "A esta empresa ya se le avisó. Solo se le escribe una vez." };
   }
@@ -890,9 +938,7 @@ export async function avisarPatrocinador(
   });
 
   if (!dentroDelCupo) {
-    return {
-      error: `Has avisado a ${AVISOS_PATROCINADOR_AL_DIA} empresas hoy. Continúa mañana.`,
-    };
+    return { error: `Has avisado a ${AVISOS_PATROCINADOR_AL_DIA} empresas hoy. Continúa mañana.` };
   }
 
   const { data: club } = await supabase
@@ -935,6 +981,36 @@ export async function avisarPatrocinador(
     .update({ notified_at: ahora })
     .eq("id", patrocinador.id)
     .eq("club_id", user.id);
+
+  return { ok: true };
+}
+
+/**
+ * El botón suelto de la ficha del patrocinador, para los que se
+ * quedaron sin avisar en el alta. Aquí sí se pide marcar la casilla de
+ * relación: es un envío que se dispara solo y a propósito, sin el
+ * contexto del formulario de alta que ya lo explica.
+ */
+export async function avisarPatrocinador(
+  _estadoPrevio: EstadoGuardado,
+  formData: FormData,
+): Promise<EstadoGuardado> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return { error: contexto.error };
+  const { supabase, user } = contexto;
+
+  const id = leerTexto(formData, "id");
+  if (!id) return { error: "No se ha podido identificar el patrocinador." };
+
+  if (!leerBooleano(formData, "confirmaRelacion")) {
+    return {
+      error:
+        "Marca la confirmación: hace falta que declares que esta empresa colabora contigo y que tienes relación con esa dirección.",
+    };
+  }
+
+  const resultado = await enviarAvisoAPatrocinador(supabase, user, id);
+  if ("error" in resultado) return { error: resultado.error };
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };

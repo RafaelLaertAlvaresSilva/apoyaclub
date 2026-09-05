@@ -298,7 +298,7 @@ function CamposPatrocinador({
 
       <Campo
         etiqueta="Correo de la empresa (opcional)"
-        ayuda="Solo lo ves tú: nunca se publica. Sirve para poder mandarles el agradecimiento con el enlace a tu página."
+        ayuda="Solo lo ves tú: nunca se publica. Sirve para mandarles el agradecimiento con el enlace a tu página."
       >
         <input
           name="contactEmail"
@@ -308,6 +308,40 @@ function CamposPatrocinador({
           className={clasesInput}
         />
       </Campo>
+
+      {/* Se manda salvo que el club diga que no. Es lo que la mayoría
+          quiere y lo que le conviene al patrocinador, pero el correo
+          sale A NOMBRE DEL CLUB, así que tiene que poder decidirlo él y
+          saber qué va a pasar antes de guardar. Por eso la frase va
+          delante de la casilla y no dentro: el que no lee casillas sí
+          lee la línea en negrita.
+
+          Si a esa empresa ya se le escribió, no se enseña nada: no se
+          manda un segundo correo en ningún caso. */}
+      {!patrocinador?.notifiedAt && (
+        <div className="rounded-lg border border-teal-200 bg-teal-50 p-4">
+          <p className="text-sm text-zinc-800">
+            Al guardar, si has puesto un correo, se le enviará{" "}
+            <strong className="font-semibold">a nombre de tu club</strong> un agradecimiento por
+            apoyaros con el enlace a tu página. Se manda una sola vez.
+          </p>
+
+          <label className="mt-3 flex items-start gap-2 text-sm text-zinc-700">
+            <input
+              type="checkbox"
+              name="noAvisar"
+              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
+            />
+            <span>
+              No enviar el correo a esta empresa
+              <span className="mt-0.5 block text-xs text-zinc-600">
+                Márcalo si prefieres avisarles tú, o si todavía no has hablado con ellos. Podrás
+                mandárselo más tarde desde su ficha.
+              </span>
+            </span>
+          </label>
+        </div>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Campo
@@ -422,7 +456,11 @@ function FormularioNuevoPatrocinador({
       <CamposPatrocinador userId={userId} logoUrl={logoUrl} setLogoUrl={setLogoUrl} />
 
       <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
-      <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Patrocinador añadido." : null} />
+      <AvisoExito
+        mensaje={
+          estado && "ok" in estado && estado.ok ? (estado.nota ?? "Patrocinador añadido.") : null
+        }
+      />
 
       <BotonEnviar>{t("anadirPatrocinador")}</BotonEnviar>
     </form>
@@ -450,7 +488,11 @@ function FormularioEditarPatrocinador({
       />
 
       <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
-      <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Cambios guardados." : null} />
+      <AvisoExito
+        mensaje={
+          estado && "ok" in estado && estado.ok ? (estado.nota ?? "Cambios guardados.") : null
+        }
+      />
 
       <BotonEnviar>Guardar cambios</BotonEnviar>
     </form>
