@@ -28,7 +28,18 @@ export async function crearSolicitudContacto(
 ): Promise<EstadoSolicitud> {
   // Campo trampa: lo rellenan los robots y nadie más. Se devuelve "ok"
   // a propósito, para que quien lo hizo no aprenda que le han pillado.
-  if (pareceBot(formData)) return { ok: true };
+  //
+  // Pero queda apuntado en el servidor. Sin esta línea, un formulario
+  // que se descarta por la trampa es indistinguible de uno que se
+  // envió bien: la persona ve "mensaje enviado" y al club no le llega
+  // nada. Ha pasado, y sin rastro no hay forma de saberlo.
+  if (pareceBot(formData)) {
+    console.warn(
+      "[solicitud] Descartada por el campo trampa. Si esto le ha pasado a una persona real, " +
+        "probablemente se lo rellenó el autocompletado del navegador.",
+    );
+    return { ok: true };
+  }
 
   const texto = (campo: string) => String(formData.get(campo) ?? "").trim();
 
@@ -75,11 +86,23 @@ export async function crearSolicitudContacto(
 
   if (error) {
     avisarDeFallo("email", "No se ha podido crear la solicitud de contacto", error);
-    return { error: "No se ha podido enviar la solicitud. Inténtalo de nuevo." };
+
+    // En desarrollo se dice el motivo técnico. Un "inténtalo de nuevo"
+    // a secas obliga a adivinar, y casi siempre lo que falla es algo
+    // concreto y arreglable: una migración sin aplicar, un permiso.
+    const motivo =
+      process.env.NODE_ENV !== "production" && error.message
+        ? ` (motivo técnico: ${error.message})`
+        : "";
+
+    return { error: `No se ha podido enviar la solicitud. Inténtalo de nuevo.${motivo}` };
   }
 
+  console.log(`[solicitud] Creada para el club ${clubId}, de ${nombre} <${correo}>.`);
+
   // El correo es un extra: si falla, la solicitud ya está creada y el
-  // club la verá igual en su panel.
+  // club la verá igual en su panel. Pero se deja constancia de si salió
+  // o no, que es la pregunta que se hace uno cuando "no llega nada".
   await notificarClubPorEmail({
     clubId,
     opportunityId,
@@ -135,7 +158,7 @@ async function notificarClubPorEmail({
       opportunityTitle = data?.title ?? null;
     }
 
-    await enviarEmailNuevaSolicitudContacto({
+    const resultado = await enviarEmailNuevaSolicitudContacto({
       clubEmail,
       clubName: clubRow?.name ?? "tu club",
       companyName: empresa || nombre,
@@ -149,6 +172,12 @@ async function notificarClubPorEmail({
       // escribió, no a ApoyaClub.
       responderA: correo,
     });
+
+    if (resultado.ok) {
+      console.log(`[solicitud] Aviso enviado al club (${clubEmail}).`);
+    } else {
+      console.warn(`[solicitud] El aviso al club NO ha salido: ${resultado.error}`);
+    }
   } catch (excepcion) {
     avisarDeFallo("email", "No se ha podido notificar al club por email", excepcion);
   }
