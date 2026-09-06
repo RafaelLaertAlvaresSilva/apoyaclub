@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { Badge } from "@/components/ui/Badge";
 import { PLANES_EN_ORDEN, periodicidad, precioFormateado } from "@/lib/planes";
 import { FormularioContacto } from "./components/FormularioContacto";
+import { MenuDeSecciones } from "./components/MenuDeSecciones";
 
 /**
  * Landing de conversión (Fase 13, rediseño Fase 15). Evolución visual
@@ -62,6 +63,7 @@ export default async function Home() {
   const importes = t.raw("presupuesto.importes") as string[];
   const metricasPanel = t.raw("panel.metricas") as { numero: string; etiqueta: string }[];
   const ventajas = t.raw("precio.ventajas") as string[];
+  const puntosSeguimiento = t.raw("seguimiento.puntos") as TextoConTitulo[];
   const preguntas = t.raw("faq.preguntas") as { pregunta: string; respuesta: string }[];
 
   return (
@@ -145,6 +147,8 @@ export default async function Home() {
           </div>
         </section>
 
+        <MenuDeSecciones />
+
         {/* ============ SOY CLUB / SOY EMPRESA ============ */}
         <section className="mx-auto grid max-w-6xl gap-6 px-4 py-16 sm:grid-cols-2 sm:px-6 sm:py-20">
           <div className="rounded-3xl bg-gradient-to-br from-brand-navy to-brand-navy-dark p-10 text-white shadow-xl shadow-brand-navy/20">
@@ -174,7 +178,7 @@ export default async function Home() {
         </section>
 
         {/* ============ PROBLEMA / VALOR ============ */}
-        <section id="clubes" className="bg-zinc-50 px-4 py-20 sm:px-6 sm:py-24">
+        <section id="clubes" className="scroll-mt-32 bg-zinc-50 px-4 py-20 sm:px-6 sm:py-24">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">{t("problema.eyebrow")}</p>
             <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
@@ -194,7 +198,7 @@ export default async function Home() {
         </section>
 
         {/* ============ CÓMO FUNCIONA ============ */}
-        <section id="como-funciona" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
+        <section id="como-funciona" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-20 sm:px-6 sm:py-24">
           <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">{t("comoFunciona.titulo")}</h2>
           <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
             {pasos.map((paso, indice) => (
@@ -349,7 +353,7 @@ export default async function Home() {
         </section>
 
         {/* ============ PÁGINA PROFESIONAL DEL CLUB ============ */}
-        <section className="mx-auto grid max-w-6xl items-center gap-14 px-4 py-24 sm:px-6 lg:grid-cols-[0.85fr_1.15fr]">
+        <section id="tu-pagina" className="mx-auto grid max-w-6xl scroll-mt-32 items-center gap-14 px-4 py-24 sm:px-6 lg:grid-cols-[0.85fr_1.15fr]">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">{t("paginaClub.eyebrow")}</p>
             <h2 className="mt-3 text-[28px] font-extrabold leading-tight tracking-tight text-brand-navy sm:text-3xl">
@@ -408,7 +412,34 @@ export default async function Home() {
         </section>
 
         {/* ============ DOSSIER + PANEL ============ */}
-        <section className="bg-zinc-50 px-4 py-20 sm:px-6 sm:py-24">
+        {/* ============ SEGUIMIENTO DEL PATROCINIO ============ */}
+        {/* Es la parte que distingue a ApoyaClub de un directorio y no
+            se contaba en ninguna parte de la portada. */}
+        <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+              {t("seguimiento.eyebrow")}
+            </p>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+              {t("seguimiento.titulo")}
+            </h2>
+            <p className="mt-4 leading-relaxed text-zinc-600">{t("seguimiento.texto")}</p>
+          </div>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-3">
+            {puntosSeguimiento.map((punto, indice) => (
+              <div key={punto.titulo} className="rounded-2xl border border-zinc-200 bg-white p-7">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-teal-light text-sm font-extrabold text-brand-teal-dark">
+                  {indice + 1}
+                </span>
+                <h3 className="mt-4 font-extrabold text-brand-navy">{punto.titulo}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-zinc-600">{punto.texto}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="herramientas" className="scroll-mt-32 bg-zinc-50 px-4 py-20 sm:px-6 sm:py-24">
           <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2">
             <div className="rounded-3xl border border-zinc-200 bg-white p-9 shadow-sm">
               <h3 className="text-xl font-extrabold text-brand-navy">{t("dossier.titulo")}</h3>
@@ -453,7 +484,7 @@ export default async function Home() {
             leen también la página de suscripción, el área financiera y
             Stripe. Si estuvieran escritos aquí a mano, el día que suba
             el precio la portada seguiría enseñando el viejo. */}
-        <section id="precio" className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+        <section id="precio" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-24 sm:px-6">
           <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
             {t("precio.titulo")}
           </h2>
@@ -549,7 +580,7 @@ export default async function Home() {
         </section>
 
         {/* ============ FAQ ============ */}
-        <section id="faq" className="mx-auto max-w-3xl px-4 py-24 sm:px-6">
+        <section id="faq" className="mx-auto max-w-3xl scroll-mt-32 px-4 py-24 sm:px-6">
           <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
             {t("faq.titulo")}
           </h2>

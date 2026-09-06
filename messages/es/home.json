@@ -209,7 +209,7 @@
   },
   "dossier": {
     "titulo": "Tu dossier de patrocinio, listo en segundos",
-    "texto": "Generado automáticamente con los datos de tu página. Sin diseñarlo tú mismo.",
+    "texto": "Se genera solo con los datos de tu página, en PDF para mandarlo y en Word por si quieres retocarlo. Sin diseñarlo tú.",
     "boton": "Generar dossier"
   },
   "panel": {
@@ -221,20 +221,24 @@
         "etiqueta": "Oportunidades activas"
       },
       {
-        "numero": "12",
-        "etiqueta": "Nuevos contactos"
+        "numero": "128",
+        "etiqueta": "Visitas a tu ficha"
       },
       {
-        "numero": "7",
-        "etiqueta": "Empresas interesadas"
+        "numero": "9",
+        "etiqueta": "Han visto tu contacto"
       },
       {
         "numero": "3",
-        "etiqueta": "Negociaciones"
+        "etiqueta": "Solicitudes nuevas"
       },
       {
-        "numero": "1",
-        "etiqueta": "Renovaciones"
+        "numero": "2",
+        "etiqueta": "Tareas para hoy"
+      },
+      {
+        "numero": "5",
+        "etiqueta": "Patrocinadores"
       }
     ]
   },
@@ -313,5 +317,24 @@
   "contacto": {
     "titulo": "¿Tienes dudas? Escríbenos",
     "texto": "Ya seas un club, una empresa o simplemente tengas una pregunta, cuéntanoslo y te respondemos por email."
+  },
+  "seguimiento": {
+    "eyebrow": "Lo que no se ve en otras plataformas",
+    "titulo": "Conseguir el patrocinio es la mitad. La otra es cumplirlo",
+    "texto": "El motivo por el que un patrocinador de barrio no renueva casi nunca es el precio: es que en junio no sabe decir qué recibió por su dinero. ApoyaClub te da dónde apuntarlo y con qué demostrarlo.",
+    "puntos": [
+      {
+        "titulo": "Apunta lo que prometes",
+        "texto": "Dos publicaciones, un vídeo, una visita de los jugadores. Con su fecha, para cada empresa."
+      },
+      {
+        "titulo": "Te avisa antes de que se pase",
+        "texto": "Al entrar en tu panel ves lo que toca hoy y lo que se te ha pasado de fecha. En rojo."
+      },
+      {
+        "titulo": "Y se lo demuestras",
+        "texto": "Un informe en PDF con lo cumplido y sus enlaces. Es lo que hace que el año que viene renueve."
+      }
+    ]
   }
 }
