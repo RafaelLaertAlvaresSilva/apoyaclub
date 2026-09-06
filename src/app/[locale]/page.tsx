@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { Badge } from "@/components/ui/Badge";
+import { PLANES_EN_ORDEN, periodicidad, precioFormateado } from "@/lib/planes";
 import { FormularioContacto } from "./components/FormularioContacto";
 
 /**
@@ -69,7 +70,7 @@ export default async function Home() {
 
       <main className="flex-1">
         {/* ============ HERO ============ */}
-        <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-zinc-50 to-white px-4 py-20 sm:px-6 sm:py-28">
+        <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-zinc-50 to-white px-4 pb-20 pt-10 sm:px-6 sm:pb-24 sm:pt-14">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-brand-teal/10 blur-3xl"
@@ -80,7 +81,7 @@ export default async function Home() {
           />
 
           <div className="relative mx-auto max-w-3xl text-center">
-            <span className="mb-7 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-brand-teal-dark">
+            <span className="mb-5 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-brand-teal-dark">
               {t("hero.etiqueta")}
             </span>
 
@@ -444,18 +445,69 @@ export default async function Home() {
         </section>
 
         {/* ============ PRECIO ============ */}
-        <section id="precio" className="mx-auto max-w-xl px-4 py-24 text-center sm:px-6">
-          <h2 className="text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">{t("precio.titulo")}</h2>
-          <div className="mt-11 rounded-3xl border-2 border-brand-teal bg-white p-10 shadow-xl shadow-brand-teal/15">
-            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">{t("precio.eyebrow")}</p>
-            <p className="mt-3">
-              <span className="text-5xl font-extrabold tracking-tight text-brand-navy">{t("precio.importe")}</span>
-              <span className="text-lg text-zinc-500">{t("precio.periodo")}</span>
-            </p>
-            <p className="mt-1.5 text-sm text-zinc-500">{t("precio.condiciones")}</p>
-            <p className="mt-1 text-sm text-zinc-500">{t("precio.comision")}</p>
+        {/* Los tres planes salen de `lib/planes.ts`, que es de donde los
+            leen también la página de suscripción, el área financiera y
+            Stripe. Si estuvieran escritos aquí a mano, el día que suba
+            el precio la portada seguiría enseñando el viejo. */}
+        <section id="precio" className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+          <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+            {t("precio.titulo")}
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-zinc-600">{t("precio.subtitulo")}</p>
 
-            <div className="mt-8 grid gap-3 text-left sm:grid-cols-2">
+          <div className="mt-11 grid items-start gap-6 lg:grid-cols-3">
+            {PLANES_EN_ORDEN.map((plan) => (
+              <div
+                key={plan.id}
+                className={`flex h-full flex-col rounded-3xl bg-white p-8 ${
+                  plan.destacado
+                    ? "border-2 border-brand-teal shadow-xl shadow-brand-teal/15"
+                    : "border border-zinc-200 shadow-sm"
+                }`}
+              >
+                <div className="flex items-baseline justify-between gap-2">
+                  <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+                    {plan.nombre}
+                  </p>
+                  {plan.limitado && (
+                    <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">
+                      {t("precio.plazasFundador")}
+                    </span>
+                  )}
+                </div>
+
+                <p className="mt-3">
+                  <span className="text-4xl font-extrabold tracking-tight text-brand-navy">
+                    {precioFormateado(plan)}
+                  </span>{" "}
+                  <span className="text-base text-zinc-500">{periodicidad(plan)}</span>
+                </p>
+
+                <p className="mt-2 text-sm font-medium text-zinc-800">{plan.reclamo}</p>
+                <p className="mt-2 text-sm leading-relaxed text-zinc-500">{plan.detalle}</p>
+
+                <Link
+                  href="/registro-club"
+                  className={`mt-auto inline-flex w-full items-center justify-center rounded-2xl px-6 py-3.5 text-base font-bold transition-colors ${
+                    plan.destacado
+                      ? "bg-brand-teal-dark text-white shadow-lg shadow-brand-teal/30 hover:bg-brand-navy"
+                      : "border border-zinc-300 text-brand-navy hover:bg-zinc-50"
+                  }`}
+                >
+                  {t("precio.cta")}
+                </Link>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-6 text-center text-sm text-zinc-600">{t("precio.gratisPrimerMes")}</p>
+          <p className="mt-1 text-center text-sm text-zinc-500">{t("precio.comision")}</p>
+
+          <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-zinc-200 bg-zinc-50 p-8">
+            <p className="text-center text-sm font-bold uppercase tracking-wider text-brand-navy">
+              {t("precio.todoIncluye")}
+            </p>
+            <div className="mt-6 grid gap-3 text-left sm:grid-cols-2">
               {ventajas.map((ventaja) => (
                 <div key={ventaja} className="flex items-center gap-2.5">
                   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" className="flex-none text-brand-teal">
@@ -465,13 +517,6 @@ export default async function Home() {
                 </div>
               ))}
             </div>
-
-            <Link
-              href="/registro-club"
-              className="mt-9 inline-flex w-full items-center justify-center rounded-2xl bg-brand-teal-dark px-6 py-4 text-base font-bold text-white shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-navy"
-            >
-              {t("precio.cta")}
-            </Link>
           </div>
         </section>
 

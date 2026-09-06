@@ -6,7 +6,7 @@
   "hero": {
     "etiqueta": "LA PLATAFORMA DE PATROCINIO DEPORTIVO",
     "tituloParte1": "Cada club tiene algo que ofrecer.",
-    "tituloParte2": "Nosotros te damos las herramientas para enseñarlo y para no perderlo.",
+    "tituloParte2": "ApoyaClub te da las herramientas para mostrarlo, gestionarlo y no dejar escapar ninguna oportunidad.",
     "subtitulo": "Prepara tu club para que una empresa te diga que sí: tu página, tus oportunidades con precio, tu dossier en un clic y el control de lo que le prometes a cada patrocinador. Tú eliges a quién te acercas. Sin comisiones.",
     "cta": "Prueba 1 mes gratis",
     "condiciones": "Sin permanencia · 29,90 €/mes después del primer mes · IVA incluido",
@@ -253,9 +253,14 @@
       "Tareas con tus patrocinadores",
       "Informe de patrocinio para cada empresa",
       "Estadísticas de visitas y contactos",
+      "Licencia de ProspectPro incluida",
       "Ayuda por correo en 48 h"
     ],
-    "cta": "Prueba 1 mes gratis"
+    "cta": "Prueba 1 mes gratis",
+    "subtitulo": "El mismo producto en los tres. Lo único que cambia es cómo lo pagas.",
+    "todoIncluye": "Los tres planes incluyen:",
+    "plazasFundador": "Solo 50 plazas",
+    "gratisPrimerMes": "Empiezas con un mes gratis, en cualquiera de los tres."
   },
   "confianza": {
     "eyebrow": "Ejemplos ilustrativos",
