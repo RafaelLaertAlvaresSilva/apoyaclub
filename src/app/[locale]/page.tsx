@@ -120,8 +120,11 @@ export default async function Home() {
             {/* Un escalón menos que antes. El titular de ahora es bastante
                 más largo que el que había, y al tamaño anterior ocupaba
                 media pantalla él solo: un titular que hay que leer en
-                tres saltos deja de ser un titular. */}
-            <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl lg:text-5xl">
+                tres saltos deja de ser un titular. En el móvil baja otro
+                escalón: en una pantalla de 400 px, a 30 px la frase
+                ocupaba ocho líneas y el botón quedaba fuera de la
+                pantalla de entrada. */}
+            <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl lg:text-5xl">
               {t("hero.tituloParte1")}{" "}
               <span className="text-brand-teal-dark">{t("hero.tituloParte2")}</span>
             </h1>
