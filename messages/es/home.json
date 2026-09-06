@@ -6,8 +6,8 @@
   "hero": {
     "etiqueta": "LA PLATAFORMA DE PATROCINIO DEPORTIVO",
     "tituloParte1": "Cada club tiene algo que ofrecer.",
-    "tituloParte2": "Nosotros ayudamos a encontrar quién quiere apoyarlo.",
-    "subtitulo": "Conecta tu club con empresas interesadas en colaborar. Publica tus oportunidades y deja que ellas te encuentren y contacten directamente. Sin comisiones.",
+    "tituloParte2": "Nosotros te damos las herramientas para enseñarlo y para no perderlo.",
+    "subtitulo": "Prepara tu club para que una empresa te diga que sí: tu página, tus oportunidades con precio, tu dossier en un clic y el control de lo que le prometes a cada patrocinador. Tú eliges a quién te acercas. Sin comisiones.",
     "cta": "Prueba 1 mes gratis",
     "condiciones": "Sin permanencia · 29,90 €/mes después del primer mes · IVA incluido",
     "cadenaClub": "Club",
@@ -16,7 +16,7 @@
   },
   "caminos": {
     "clubTitulo": "Soy un club",
-    "clubTexto": "Crea tu página, publica tus oportunidades de patrocinio y que las empresas te encuentren.",
+    "clubTexto": "Crea tu página, pon precio a lo que ofreces y sal a buscar patrocinadores con algo que enseñar.",
     "clubCta": "Crea la página de tu club →",
     "empresaTitulo": "Soy una empresa",
     "empresaTexto": "Busca clubes de tu zona y patrocina desde 50 €. Acceso gratuito, sin intermediarios.",
@@ -32,11 +32,18 @@
       "Cantera",
       "Redes sociales",
       "Jugadores",
+      "Partidos",
       "Eventos",
       "Torneos",
       "Instalaciones",
+      "Vallas publicitarias",
+      "Megafonía",
       "Familias",
+      "Socios",
       "Visibilidad local",
+      "Transporte",
+      "Punto de venta en partidos",
+      "Página web",
       "Servicios",
       "Contenido"
     ]
@@ -53,8 +60,12 @@
         "texto": "Desde 50 € hasta el patrocinio principal: tú decides qué ofreces y a qué precio."
       },
       {
-        "titulo": "Encuentra empresas",
-        "texto": "Las empresas te encuentran y te contactan directamente. Vosotros negociáis el acuerdo."
+        "titulo": "Sal a buscar, y deja que te encuentren",
+        "texto": "Con tu página y tu dossier en la mano, tú eliges a qué empresas te acercas. Y la que llegue a tu ficha puede escribirte sin registrarse ni buscar tu teléfono."
+      },
+      {
+        "titulo": "Cumple lo prometido",
+        "texto": "Apunta lo que le has prometido a cada empresa, márcalo hecho con su prueba y mándale el informe. Es lo que hace que el año siguiente renueve."
       }
     ]
   },
@@ -63,20 +74,66 @@
     "titulo": "Cada club crea las suyas, a su medida",
     "texto": "Algunos ejemplos de lo que un club puede publicar en su página:",
     "ejemplos": [
-      { "titulo": "Patrocinador principal", "texto": "Máxima visibilidad: naming, equipación y comunicación oficial." },
-      { "titulo": "Equipo femenino", "texto": "Impulsa una sección concreta con su propio patrocinio." },
-      { "titulo": "Cantera", "texto": "Apoya a las categorías base y su formación." },
-      { "titulo": "Equipación", "texto": "Tu marca en la camiseta, en cada partido." },
-      { "titulo": "Torneo", "texto": "Patrocina un evento puntual de alto impacto." },
-      { "titulo": "Redes sociales", "texto": "Contenido y menciones en los canales del club." },
-      { "titulo": "Instalaciones", "texto": "Tu marca en el pabellón, campo o vestuarios." },
-      { "titulo": "Jugador", "texto": "Patrocinio individual a una figura del equipo." },
-      { "titulo": "Transporte", "texto": "Cubre los desplazamientos del equipo." },
-      { "titulo": "Fisioterapia", "texto": "Servicios de recuperación para la plantilla." },
-      { "titulo": "Restaurante", "texto": "Colaboración con comidas de equipo y eventos." },
-      { "titulo": "Hotel", "texto": "Alojamiento en desplazamientos y concentraciones." },
-      { "titulo": "Material deportivo", "texto": "Balones, material de entrenamiento y más." },
-      { "titulo": "Producto o servicio", "texto": "Colaboraciones a medida con tu negocio." }
+      {
+        "titulo": "Patrocinador principal",
+        "texto": "Máxima visibilidad: naming, equipación y comunicación oficial."
+      },
+      {
+        "titulo": "Equipo masculino",
+        "texto": "Impulsa una sección concreta con su propio patrocinio."
+      },
+      {
+        "titulo": "Equipo femenino",
+        "texto": "Impulsa una sección concreta con su propio patrocinio."
+      },
+      {
+        "titulo": "Cantera",
+        "texto": "Apoya a las categorías base y su formación."
+      },
+      {
+        "titulo": "Equipación",
+        "texto": "Tu marca en la camiseta, en cada partido."
+      },
+      {
+        "titulo": "Torneo",
+        "texto": "Patrocina un evento puntual de alto impacto."
+      },
+      {
+        "titulo": "Redes sociales",
+        "texto": "Contenido y menciones en los canales del club."
+      },
+      {
+        "titulo": "Instalaciones",
+        "texto": "Tu marca en el pabellón, campo o vestuarios."
+      },
+      {
+        "titulo": "Jugador",
+        "texto": "Patrocinio individual a una figura del equipo."
+      },
+      {
+        "titulo": "Transporte",
+        "texto": "Cubre los desplazamientos del equipo."
+      },
+      {
+        "titulo": "Fisioterapia",
+        "texto": "Servicios de recuperación para la plantilla."
+      },
+      {
+        "titulo": "Restaurante",
+        "texto": "Colaboración con comidas de equipo y eventos."
+      },
+      {
+        "titulo": "Hotel",
+        "texto": "Alojamiento en desplazamientos y concentraciones."
+      },
+      {
+        "titulo": "Material deportivo",
+        "texto": "Balones, material de entrenamiento y más."
+      },
+      {
+        "titulo": "Producto o servicio",
+        "texto": "Colaboraciones a medida con tu negocio."
+      }
     ]
   },
   "empresas": {
@@ -125,7 +182,13 @@
   "presupuesto": {
     "titulo": "¿Cuánto quieres invertir?",
     "texto": "Encuentra oportunidades que encajan con tu presupuesto.",
-    "importes": ["250 €", "500 €", "1.000 €", "2.500 €", "Personalizado"]
+    "importes": [
+      "250 €",
+      "500 €",
+      "1.000 €",
+      "2.500 €",
+      "Personalizado"
+    ]
   },
   "paginaClub": {
     "eyebrow": "La página de tu club",
@@ -153,11 +216,26 @@
     "titulo": "Tu panel, siempre a mano",
     "boton": "+ Crear oportunidad",
     "metricas": [
-      { "numero": "4", "etiqueta": "Oportunidades activas" },
-      { "numero": "12", "etiqueta": "Nuevos contactos" },
-      { "numero": "7", "etiqueta": "Empresas interesadas" },
-      { "numero": "3", "etiqueta": "Negociaciones" },
-      { "numero": "1", "etiqueta": "Renovaciones" }
+      {
+        "numero": "4",
+        "etiqueta": "Oportunidades activas"
+      },
+      {
+        "numero": "12",
+        "etiqueta": "Nuevos contactos"
+      },
+      {
+        "numero": "7",
+        "etiqueta": "Empresas interesadas"
+      },
+      {
+        "numero": "3",
+        "etiqueta": "Negociaciones"
+      },
+      {
+        "numero": "1",
+        "etiqueta": "Renovaciones"
+      }
     ]
   },
   "precio": {
@@ -168,14 +246,14 @@
     "condiciones": "IVA incluido · Sin permanencia",
     "comision": "Comisión: 0 % — tú y la empresa negociáis directamente.",
     "ventajas": [
-      "Página profesional",
+      "Página pública profesional",
       "Oportunidades ilimitadas",
-      "Dossier automático",
-      "Buscador de empresas",
-      "Gestión de contactos",
-      "Estadísticas",
-      "Herramientas de prospección",
-      "Soporte"
+      "Dossier en PDF y en Word",
+      "Solicitudes de empresas, con aviso",
+      "Tareas con tus patrocinadores",
+      "Informe de patrocinio para cada empresa",
+      "Estadísticas de visitas y contactos",
+      "Ayuda por correo en 48 h"
     ],
     "cta": "Prueba 1 mes gratis"
   },
@@ -192,7 +270,11 @@
     "preguntas": [
       {
         "pregunta": "¿Qué es exactamente ApoyaClub?",
-        "respuesta": "Una plataforma que conecta clubes deportivos con empresas que quieren patrocinarlos. El club publica una página con su valor real y un catálogo de oportunidades de patrocinio; la empresa busca, filtra y contacta directamente con el club."
+        "respuesta": "Una plataforma que le da a un club deportivo con qué conseguir patrocinadores y con qué mantenerlos: una página que enseña su valor real, un catálogo de oportunidades con precio, un dossier listo para mandar y el control de lo que le promete a cada empresa. El club decide a quién se acerca; la empresa que llegue a su página puede contactarle directamente."
+      },
+      {
+        "pregunta": "¿ApoyaClub busca las empresas por mí?",
+        "respuesta": "No, y conviene decirlo claro: a las empresas te acercas tú, que eres quien conoce tu barrio y a la gente de tu barrio. Lo que hace ApoyaClub es que ese acercamiento tenga algo detrás —una página seria, un dossier en un clic, un precio que puedes defender— y que después no se caiga: qué le has prometido a cada empresa, si está hecho, y un informe que enseñarle cuando toque renovar."
       },
       {
         "pregunta": "¿Cuánto cuesta para un club?",
@@ -200,7 +282,7 @@
       },
       {
         "pregunta": "¿Es gratis para las empresas?",
-        "respuesta": "Sí. Buscar clubes, ver sus páginas y contactar con ellos no tiene ningún coste para la empresa."
+        "respuesta": "Sí, y además no necesita ni crear una cuenta. Buscar clubes, ver sus páginas, ver sus datos de contacto y escribirles no cuesta nada."
       },
       {
         "pregunta": "¿ApoyaClub cobra alguna comisión sobre el patrocinio?",

@@ -191,7 +191,7 @@ export default async function Home() {
         {/* ============ CÓMO FUNCIONA ============ */}
         <section id="como-funciona" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
           <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">{t("comoFunciona.titulo")}</h2>
-          <div className="mt-14 grid gap-10 sm:grid-cols-3">
+          <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
             {pasos.map((paso, indice) => (
               <div key={paso.titulo} className="text-center">
                 <div className="text-sm font-extrabold tracking-wide text-zinc-500">0{indice + 1}</div>
