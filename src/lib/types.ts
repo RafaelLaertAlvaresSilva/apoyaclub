@@ -45,6 +45,8 @@ export type FollowersByNetwork = {
 export type CommunityAction = {
   title: string;
   description: string;
+  /** Foto de la acción. Opcional (migración 0036). */
+  photo?: string;
 };
 
 /** Fila de la tabla `clubs`: el perfil completo de un club. */
@@ -104,6 +106,9 @@ export type ClubProfile = {
   topCategory: string | null;
   topCategoryMale: string | null;
   topCategoryFemale: string | null;
+  /** Foto del equipo de máxima categoría de cada sexo (migración 0036). */
+  topCategoryMalePhoto: string | null;
+  topCategoryFemalePhoto: string | null;
   competitions: string | null;
   achievements: string | null;
 
@@ -146,6 +151,8 @@ export type ClubTeam = {
   gender: string | null;
   teamLevel: TeamLevel;
   playerCount: number | null;
+  /** Foto del equipo (migración 0036). La sube el club. */
+  photoUrl: string | null;
 };
 
 /**

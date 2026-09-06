@@ -297,7 +297,17 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         <Seccion id="equipos" titulo={t("secciones.equipos")}>
           <ul className="grid gap-3 sm:grid-cols-2">
             {equipos.map((equipo) => (
-              <li key={equipo.id} className="rounded-xl border border-zinc-200 p-4">
+              <li key={equipo.id} className="overflow-hidden rounded-xl border border-zinc-200">
+                {equipo.photoUrl && (
+                  <Image
+                    src={equipo.photoUrl}
+                    alt={`${equipo.sport}${equipo.category ? ` · ${equipo.category}` : ""}`}
+                    width={640}
+                    height={320}
+                    className="h-40 w-full object-cover"
+                  />
+                )}
+                <div className="p-4">
                 <p className="font-medium text-zinc-900">
                   {equipo.sport}
                   {equipo.category ? ` · ${equipo.category}` : ""}
@@ -309,6 +319,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     ? ` · ${formatoNumero.format(equipo.playerCount)} jugadores`
                     : ""}
                 </p>
+                </div>
               </li>
             ))}
           </ul>
@@ -427,20 +438,18 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             {(perfil.topCategoryMale || perfil.topCategoryFemale) && (
               <div className="grid gap-4 sm:grid-cols-2">
                 {perfil.topCategoryMale && (
-                  <div>
-                    <p className="text-sm font-medium text-zinc-500">
-                      {t("secciones.maximaCategoria")} · Masculino
-                    </p>
-                    <p className="text-zinc-900">{perfil.topCategoryMale}</p>
-                  </div>
+                  <EquipoDestacado
+                    etiqueta={`${t("secciones.maximaCategoria")} · Masculino`}
+                    categoria={perfil.topCategoryMale}
+                    foto={perfil.topCategoryMalePhoto}
+                  />
                 )}
                 {perfil.topCategoryFemale && (
-                  <div>
-                    <p className="text-sm font-medium text-zinc-500">
-                      {t("secciones.maximaCategoria")} · Femenino
-                    </p>
-                    <p className="text-zinc-900">{perfil.topCategoryFemale}</p>
-                  </div>
+                  <EquipoDestacado
+                    etiqueta={`${t("secciones.maximaCategoria")} · Femenino`}
+                    categoria={perfil.topCategoryFemale}
+                    foto={perfil.topCategoryFemalePhoto}
+                  />
                 )}
               </div>
             )}
@@ -549,11 +558,25 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         <Seccion id="comunidad" titulo={t("secciones.comunidad")} descripcion={t("secciones.comunidadDescripcion")}>
           <ul className="grid gap-3 sm:grid-cols-2">
             {perfil.communityActions.map((accion, indice) => (
-              <li key={`${accion.title}-${indice}`} className="rounded-xl border border-zinc-200 p-4">
-                <p className="font-medium text-zinc-900">{accion.title}</p>
-                {accion.description && (
-                  <p className="mt-1 text-sm text-zinc-600">{accion.description}</p>
+              <li
+                key={`${accion.title}-${indice}`}
+                className="overflow-hidden rounded-xl border border-zinc-200"
+              >
+                {accion.photo && (
+                  <Image
+                    src={accion.photo}
+                    alt={accion.title}
+                    width={640}
+                    height={320}
+                    className="h-40 w-full object-cover"
+                  />
                 )}
+                <div className="p-4">
+                  <p className="font-medium text-zinc-900">{accion.title}</p>
+                  {accion.description && (
+                    <p className="mt-1 text-sm text-zinc-600">{accion.description}</p>
+                  )}
+                </div>
               </li>
             ))}
           </ul>
@@ -862,5 +885,35 @@ function EnlaceSecundario({ href, children }: { href: string; children: React.Re
     >
       {children} ↗
     </a>
+  );
+}
+
+/**
+ * El equipo de máxima categoría, con su foto si la hay.
+ *
+ * La foto va encima del texto y no al lado: "Primera Nacional" no le
+ * dice nada a quien no es del mundillo, y una empresa que se plantea
+ * patrocinar no siempre lo es. Doce personas con la camiseta del club,
+ * en cambio, se entienden solas.
+ */
+function EquipoDestacado({
+  etiqueta,
+  categoria,
+  foto,
+}: {
+  etiqueta: string;
+  categoria: string;
+  foto: string | null;
+}) {
+  return (
+    <div className="overflow-hidden rounded-xl border border-zinc-200">
+      {foto && (
+        <Image src={foto} alt={etiqueta} width={640} height={320} className="h-40 w-full object-cover" />
+      )}
+      <div className="p-4">
+        <p className="text-sm font-medium text-zinc-500">{etiqueta}</p>
+        <p className="text-zinc-900">{categoria}</p>
+      </div>
+    </div>
   );
 }

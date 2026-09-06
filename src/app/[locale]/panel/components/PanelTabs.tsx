@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useSyncExternalStore } from "react";
 import type { ClubProfile, ClubTeam } from "@/lib/types";
-import type { ServiceNeed } from "@/lib/service-needs";
 import { AudienciaForm } from "./AudienciaForm";
 import { CanteraForm } from "./CanteraForm";
 import { ComunidadForm } from "./ComunidadForm";
@@ -11,7 +10,6 @@ import { HistoriaForm } from "./HistoriaForm";
 import { IdentidadForm } from "./IdentidadForm";
 import { InstalacionesForm } from "./InstalacionesForm";
 import { NivelDeportivoForm } from "./NivelDeportivoForm";
-import { ServiciosForm } from "./ServiciosForm";
 
 type Pestana =
   | "identidad"
@@ -21,8 +19,7 @@ type Pestana =
   | "cantera"
   | "historia"
   | "audiencia"
-  | "comunidad"
-  | "servicios";
+  | "comunidad";
 
 const IDS_PESTANA = new Set<string>([
   "identidad",
@@ -33,7 +30,6 @@ const IDS_PESTANA = new Set<string>([
   "historia",
   "audiencia",
   "comunidad",
-  "servicios",
 ]);
 
 const PESTANAS: { id: Pestana; etiqueta: string }[] = [
@@ -44,20 +40,17 @@ const PESTANAS: { id: Pestana; etiqueta: string }[] = [
   { id: "cantera", etiqueta: "Cantera" },
   { id: "historia", etiqueta: "Historia" },
   { id: "audiencia", etiqueta: "Audiencia" },
-  { id: "comunidad", etiqueta: "Comunidad" },
-  { id: "servicios", etiqueta: "Servicios que buscamos" },
+  { id: "comunidad", etiqueta: "Acción social" },
 ];
 
 export function PanelTabs({
   userId,
   perfil,
   equipos,
-  servicios = [],
 }: {
   userId: string;
   perfil: ClubProfile | null;
   equipos: ClubTeam[];
-  servicios?: ServiceNeed[];
 }) {
   const contenedor = useRef<HTMLDivElement>(null);
 
@@ -135,8 +128,10 @@ export function PanelTabs({
         )}
 
         {pestanaActiva === "identidad" && <IdentidadForm userId={userId} perfil={perfil} />}
-        {pestanaActiva === "nivel" && perfilCreado && <NivelDeportivoForm perfil={perfil} />}
-        {pestanaActiva === "equipos" && perfilCreado && <EquiposForm equipos={equipos} />}
+        {pestanaActiva === "nivel" && perfilCreado && (
+          <NivelDeportivoForm perfil={perfil} userId={userId} />
+        )}
+        {pestanaActiva === "equipos" && perfilCreado && <EquiposForm equipos={equipos} userId={userId} />}
         {pestanaActiva === "instalaciones" && perfilCreado && (
           <InstalacionesForm userId={userId} perfil={perfil} />
         )}
@@ -145,8 +140,7 @@ export function PanelTabs({
           <HistoriaForm userId={userId} perfil={perfil} />
         )}
         {pestanaActiva === "audiencia" && perfilCreado && <AudienciaForm perfil={perfil} />}
-        {pestanaActiva === "comunidad" && perfilCreado && <ComunidadForm perfil={perfil} />}
-        {pestanaActiva === "servicios" && perfilCreado && <ServiciosForm servicios={servicios} />}
+        {pestanaActiva === "comunidad" && perfilCreado && <ComunidadForm perfil={perfil} userId={userId} />}
       </div>
     </div>
   );

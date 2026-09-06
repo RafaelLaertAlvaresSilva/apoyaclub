@@ -367,6 +367,8 @@ export async function guardarNivelDeportivo(
       ),
       top_category_male: leerTexto(formData, "topCategoryMale"),
       top_category_female: leerTexto(formData, "topCategoryFemale"),
+      top_category_male_photo: leerTexto(formData, "topCategoryMalePhoto"),
+      top_category_female_photo: leerTexto(formData, "topCategoryFemalePhoto"),
       competitions: leerTexto(formData, "competitions"),
       achievements: leerTexto(formData, "achievements"),
     })
@@ -402,9 +404,35 @@ export async function agregarEquipo(
     gender: leerTexto(formData, "gender"),
     team_level: teamLevel,
     player_count: leerEntero(formData, "playerCount"),
+    photo_url: leerTexto(formData, "photoUrl"),
   });
 
   if (error) return fallo("agregarEquipo", error, "No se ha podido añadir el equipo.");
+
+  revalidatePath(RUTA_PANEL);
+  return { ok: true };
+}
+
+/**
+ * Pone o quita la foto de un equipo ya dado de alta (migración 0036).
+ *
+ * Va aparte del alta porque un equipo se crea en un momento y la foto
+ * aparece después: la del año pasado ya no vale, la de este todavía no
+ * la han hecho. Obligar a rehacer el equipo para cambiarle la foto
+ * habría sido garantizar que nadie las cambia.
+ */
+export async function guardarFotoEquipo(equipoId: string, url: string | null): Promise<EstadoGuardado> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return { error: contexto.error };
+  const { supabase, user } = contexto;
+
+  const { error } = await supabase
+    .from("club_teams")
+    .update({ photo_url: url })
+    .eq("id", equipoId)
+    .eq("club_id", user.id);
+
+  if (error) return fallo("guardarFotoEquipo", error, "No se ha podido guardar la foto.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };

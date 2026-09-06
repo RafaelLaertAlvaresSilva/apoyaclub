@@ -34,6 +34,8 @@ const CLUB_VACIO: ClubProfile = {
   topCategory: null,
   topCategoryMale: null,
   topCategoryFemale: null,
+  topCategoryMalePhoto: null,
+  topCategoryFemalePhoto: null,
   competitions: null,
   achievements: null,
   youthTeamsCount: null,
@@ -63,6 +65,7 @@ export function equipoDePrueba(cambios: Partial<ClubTeam> = {}): ClubTeam {
     gender: "Masculino",
     teamLevel: "primer_equipo",
     playerCount: 16,
+    photoUrl: null,
     ...cambios,
   };
 }

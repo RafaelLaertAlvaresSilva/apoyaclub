@@ -12,6 +12,7 @@ import {
   type EstadoGuardado,
 } from "../actions";
 import { Campo, SeccionCard, clasesInput, clasesTextarea } from "./SeccionCard";
+import { AvisoDerechosDeImagen } from "./AvisoDerechosDeImagen";
 import { ImageUploader } from "./ImageUploader";
 
 /**
@@ -44,7 +45,10 @@ export function InstalacionesForm({
       descripcion="Dónde juega el club. Es lo primero que mira una empresa que se plantea poner una lona o un vinilo."
     >
       <div className="mb-6">
-        <Campo etiqueta="Fotos de las instalaciones" ayuda="El pabellón, el campo, la pista, las gradas.">
+        <Campo
+          etiqueta="Fotos de las instalaciones"
+          ayuda="El pabellón, el campo, la pista, las gradas, el bar. Puedes añadir todas las que quieras: no hay límite."
+        >
           <div className="flex flex-wrap gap-3">
             {fotos.map((foto) => (
               <div key={foto} className="group relative h-20 w-20">
@@ -80,6 +84,10 @@ export function InstalacionesForm({
             />
           </div>
         </Campo>
+
+        <div className="mt-3">
+          <AvisoDerechosDeImagen />
+        </div>
 
         <AvisoError mensaje={errorFoto} />
       </div>

@@ -5,8 +5,10 @@ import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { clubRowToProfile, clubTeamRowToTeam, type ClubRow, type ClubTeamRow } from "@/lib/club-mappers";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
 import { obtenerPlantillas } from "@/lib/opportunity-templates";
+import { filaAServicio, type FilaServicio, type ServiceNeed } from "@/lib/service-needs";
 import { createClient } from "@/lib/supabase/server";
 import { PanelNav } from "../components/PanelNav";
+import { ServiciosForm } from "../components/ServiciosForm";
 import { OportunidadesManager } from "./components/OportunidadesManager";
 
 export default async function OportunidadesPage() {
@@ -41,6 +43,19 @@ export default async function OportunidadesPage() {
       .returns<ClubTeamRow[]>(),
   ]);
 
+  // Lo que el club NECESITA (migración 0016) vive aquí y no en su ficha:
+  // una furgoneta o un fisio que le hagan falta no describen al club, son
+  // otra forma de oportunidad — la puerta de entrada para la empresa que
+  // no tiene presupuesto de patrocinio pero sí un servicio que ofrecer.
+  const { data: filasServicios } = await supabase
+    .from("club_service_needs")
+    .select("*")
+    .eq("club_id", user.id)
+    .order("created_at", { ascending: false })
+    .returns<FilaServicio[]>();
+
+  const servicios: ServiceNeed[] = (filasServicios ?? []).map(filaAServicio);
+
   // Las plantillas viven en la base de datos (migración 0015); si no
   // están, `obtenerPlantillas` devuelve las del código.
   const plantillas = await obtenerPlantillas(supabase);
@@ -68,7 +83,10 @@ export default async function OportunidadesPage() {
           para poder publicar oportunidades de patrocinio.
         </div>
       ) : (
-        <OportunidadesManager oportunidades={oportunidades} equipos={equipos} plantillas={plantillas} />
+        <div className="flex flex-col gap-6">
+          <OportunidadesManager oportunidades={oportunidades} equipos={equipos} plantillas={plantillas} />
+          <ServiciosForm servicios={servicios} />
+        </div>
       )}
     </div>
   );

@@ -50,6 +50,8 @@ export type ClubRow = {
   top_category: string | null;
   top_category_male: string | null;
   top_category_female: string | null;
+  top_category_male_photo: string | null;
+  top_category_female_photo: string | null;
   competitions: string | null;
   achievements: string | null;
   youth_teams_count: number | null;
@@ -79,6 +81,7 @@ export type ClubTeamRow = {
   gender: string | null;
   team_level: TeamLevel;
   player_count: number | null;
+  photo_url: string | null;
 };
 
 export type ClubSponsorRow = {
@@ -126,6 +129,8 @@ export function clubRowToProfile(row: ClubRow): ClubProfile {
     topCategory: row.top_category,
     topCategoryMale: row.top_category_male,
     topCategoryFemale: row.top_category_female,
+    topCategoryMalePhoto: row.top_category_male_photo,
+    topCategoryFemalePhoto: row.top_category_female_photo,
     competitions: row.competitions,
     achievements: row.achievements,
     youthTeamsCount: row.youth_teams_count,
@@ -152,6 +157,7 @@ export function clubTeamRowToTeam(row: ClubTeamRow): ClubTeam {
     gender: row.gender,
     teamLevel: row.team_level,
     playerCount: row.player_count,
+    photoUrl: row.photo_url,
   };
 }
 
