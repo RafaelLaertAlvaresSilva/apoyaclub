@@ -85,12 +85,16 @@ export default async function Home() {
               {t("hero.etiqueta")}
             </span>
 
-            <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-5xl lg:text-6xl">
+            {/* Un escalón menos que antes. El titular de ahora es bastante
+                más largo que el que había, y al tamaño anterior ocupaba
+                media pantalla él solo: un titular que hay que leer en
+                tres saltos deja de ser un titular. */}
+            <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl lg:text-5xl">
               {t("hero.tituloParte1")}{" "}
               <span className="text-brand-teal-dark">{t("hero.tituloParte2")}</span>
             </h1>
 
-            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-zinc-600 sm:text-xl">
+            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg">
               {t("hero.subtitulo")}
             </p>
 
