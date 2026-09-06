@@ -7,6 +7,9 @@ const ENLACES = [
   { id: "patrocinadores", href: "/panel/patrocinadores", etiqueta: "Patrocinadores" },
   { id: "tareas", href: "/panel/tareas", etiqueta: "Tareas" },
   { id: "oportunidades", href: "/panel/oportunidades", etiqueta: "Oportunidades" },
+  // El recuento de gente en los partidos (migración 0037): de aquí sale
+  // la asistencia media que enseña la ficha.
+  { id: "publico", href: "/panel/publico", etiqueta: "Público" },
   { id: "solicitudes", href: "/panel/solicitudes", etiqueta: "Solicitudes" },
   // Ya no es solo PDF: también sale en Word.
   { id: "dossier", href: "/panel/dossier", etiqueta: "Dossier" },

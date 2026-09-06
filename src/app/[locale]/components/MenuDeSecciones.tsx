@@ -80,7 +80,7 @@ export function MenuDeSecciones() {
     <nav
       aria-label="Secciones de la página"
       style={{ top: alturaCabecera }}
-      className="sticky z-30 border-b border-zinc-200 bg-white/95 backdrop-blur"
+      className="sticky z-30 border-b border-zinc-200 bg-white"
     >
       {/* Se desplaza en horizontal en móvil en vez de partirse en dos
           filas: una barra de índice de dos alturas se come la pantalla

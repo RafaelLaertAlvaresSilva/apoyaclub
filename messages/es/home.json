@@ -179,17 +179,6 @@
     ],
     "avisoEjemplos": "Resultados de ejemplo — ilustrativos, no clubes reales."
   },
-  "presupuesto": {
-    "titulo": "¿Cuánto quieres invertir?",
-    "texto": "Encuentra oportunidades que encajan con tu presupuesto.",
-    "importes": [
-      "250 €",
-      "500 €",
-      "1.000 €",
-      "2.500 €",
-      "Personalizado"
-    ]
-  },
   "paginaClub": {
     "eyebrow": "La página de tu club",
     "titulo": "Un perfil profesional, no una simple ficha",
@@ -207,10 +196,60 @@
       "oportunidades": "Oportunidades"
     }
   },
-  "dossier": {
-    "titulo": "Tu dossier de patrocinio, listo en segundos",
-    "texto": "Se genera solo con los datos de tu página, en PDF para mandarlo y en Word por si quieres retocarlo. Sin diseñarlo tú.",
-    "boton": "Generar dossier"
+  "herramientas": {
+    "eyebrow": "Todo incluido",
+    "titulo": "Las herramientas que vienen contigo",
+    "texto": "No es una web con un formulario. Es lo que un club necesita para vender su patrocinio, cumplirlo y demostrarlo, sin pagar a nadie por hacerlo.",
+    "lista": [
+      {
+        "titulo": "Dossier en PDF y en Word",
+        "texto": "Se genera solo con los datos de tu ficha. El PDF para mandarlo tal cual; el Word para retocarlo, meter fotos o cambiar el orden."
+      },
+      {
+        "titulo": "Creador de oportunidades",
+        "texto": "Qué vendes, a qué precio y cuántas plazas quedan. Con plantillas hechas para no partir de una hoja en blanco."
+      },
+      {
+        "titulo": "Organizador de tareas",
+        "texto": "Lo que le has prometido a cada empresa, con su fecha. Al entrar ves lo que toca hoy, y lo que se te ha pasado sale en rojo."
+      },
+      {
+        "titulo": "Informe de progreso por empresa",
+        "texto": "Un PDF con lo cumplido y sus enlaces, para mandárselo a mitad de temporada, al final o al cerrar una colaboración corta."
+      },
+      {
+        "titulo": "Registro de público en los partidos",
+        "texto": "Apuntas cuánta gente hubo en cada partido y salen la media, el total de la temporada y el mejor partido. Con un clic, esa media pasa a tu ficha."
+      },
+      {
+        "titulo": "Estadísticas de tu ficha",
+        "texto": "Cuánta gente ha visitado tu página, cuántos han abierto tu contacto y cuántas empresas te han escrito. Por semana y por mes."
+      },
+      {
+        "titulo": "Bandeja de solicitudes",
+        "texto": "Las empresas te escriben desde tu página sin registrarse en nada, y a ti te llega el aviso por correo."
+      },
+      {
+        "titulo": "Tus patrocinadores, en su sitio",
+        "texto": "Principal, oficial o colaborador, con su logo. Quien entra ve de un vistazo que hay empresas que ya confían en el club."
+      },
+      {
+        "titulo": "Licencia de ProspectPro incluida",
+        "texto": "La herramienta con la que buscas tú las empresas de tu zona y sacas a quién escribir. Va incluida en el plan."
+      },
+      {
+        "titulo": "Acción social del club",
+        "texto": "Las fotos de lo que hacéis fuera del campo: colegios, ayuntamiento, campañas, donaciones. Es lo que más pesa en muchas empresas."
+      },
+      {
+        "titulo": "Servicios que buscas",
+        "texto": "Autobús, fisioterapia, material, imprenta. No todo se paga con dinero, y esto abre la puerta al intercambio."
+      },
+      {
+        "titulo": "Tu página pública de club",
+        "texto": "Escudo, fotos, equipos, categorías, palmarés e instalaciones. Una dirección que puedes mandar por WhatsApp sin que dé vergüenza."
+      }
+    ]
   },
   "panel": {
     "titulo": "Tu panel, siempre a mano",
@@ -265,14 +304,6 @@
     "todoIncluye": "Los tres planes incluyen:",
     "plazasFundador": "Solo 50 plazas",
     "gratisPrimerMes": "Empiezas con un mes gratis, en cualquiera de los tres."
-  },
-  "confianza": {
-    "eyebrow": "Ejemplos ilustrativos",
-    "tipoClub": "un club",
-    "tipoEmpresa": "una empresa",
-    "testimonio": "“[Espacio para un testimonio real de {tipo} cuando esté disponible.]”",
-    "autorClub": "[Nombre del club]",
-    "autorEmpresa": "[Nombre de la empresa]"
   },
   "faq": {
     "titulo": "Preguntas frecuentes",

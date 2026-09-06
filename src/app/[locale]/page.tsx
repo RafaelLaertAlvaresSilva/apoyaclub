@@ -43,6 +43,36 @@ const ACENTOS_OPORTUNIDAD = [
   "bg-brand-teal-dark",
 ] as const;
 
+/** Un icono por herramienta, por posición, junto a los textos de
+ * `home.herramientas.lista`. Trazos sueltos en vez de una librería de
+ * iconos: son doce dibujos y no compensa cargar un paquete entero. */
+const ICONOS_HERRAMIENTA = [
+  // Dossier: un documento con su esquina doblada.
+  "M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7zm0 0v4h4M9 13h6M9 17h4",
+  // Oportunidades: un rayo.
+  "M13 2 3 14h7l-1 8 10-12h-7z",
+  // Tareas: una lista con sus marcas.
+  "M10 6h10M10 12h10M10 18h10M4 6l1.2 1.2L7.5 5M4 12l1.2 1.2L7.5 10M4 18l1.2 1.2L7.5 16",
+  // Informe: barras.
+  "M3 21h18M6 21V11M12 21V4M18 21v-7",
+  // Público: gente.
+  "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M12 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",
+  // Estadísticas: un ojo.
+  "M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Zm10 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z",
+  // Solicitudes: un sobre.
+  "M3 6h18v12H3zM3 7l9 6 9-6",
+  // Patrocinadores: un escudo.
+  "M12 3l8 3v5.5c0 4.7-3.4 8.4-8 9.5-4.6-1.1-8-4.8-8-9.5V6z",
+  // ProspectPro: una lupa.
+  "M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM21 21l-4.3-4.3",
+  // Acción social: un corazón.
+  "M12 21S3 15.5 3 9.8A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 9 2.8C21 15.5 12 21 12 21Z",
+  // Servicios: una furgoneta.
+  "M3 6h11v11H3zM14 10h4l3 3v4h-7zM7.5 17a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0M16 17a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0",
+  // Tu página: una ventana de navegador.
+  "M3 5h18v14H3zM3 9h18M6.5 7h.01M9 7h.01",
+] as const;
+
 type TextoConTitulo = { titulo: string; texto: string };
 
 export default async function Home() {
@@ -60,7 +90,7 @@ export default async function Home() {
     texto: string;
     precio: string;
   }[];
-  const importes = t.raw("presupuesto.importes") as string[];
+  const herramientas = t.raw("herramientas.lista") as TextoConTitulo[];
   const metricasPanel = t.raw("panel.metricas") as { numero: string; etiqueta: string }[];
   const ventajas = t.raw("precio.ventajas") as string[];
   const puntosSeguimiento = t.raw("seguimiento.puntos") as TextoConTitulo[];
@@ -330,28 +360,6 @@ export default async function Home() {
           <p className="mt-3 text-center text-xs text-zinc-500">{t("empresas.avisoEjemplos")}</p>
         </section>
 
-        {/* ============ PRESUPUESTO ============ */}
-        <section className="bg-brand-navy px-4 py-16 sm:px-6 sm:py-20">
-          <div className="mx-auto max-w-xl text-center">
-            <h2 className="text-2xl font-extrabold text-white sm:text-3xl">{t("presupuesto.titulo")}</h2>
-            <p className="mt-2.5 text-white/70">{t("presupuesto.texto")}</p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              {importes.map((importe, indice) => (
-                <span
-                  key={importe}
-                  className={`rounded-full border px-6 py-3 text-sm font-bold ${
-                    indice === 1
-                      ? "border-brand-teal bg-brand-teal text-brand-navy-dark"
-                      : "border-white/20 bg-white/5 text-white"
-                  }`}
-                >
-                  {importe}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* ============ PÁGINA PROFESIONAL DEL CLUB ============ */}
         <section id="tu-pagina" className="mx-auto grid max-w-6xl scroll-mt-32 items-center gap-14 px-4 py-24 sm:px-6 lg:grid-cols-[0.85fr_1.15fr]">
           <div>
@@ -411,7 +419,6 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ============ DOSSIER + PANEL ============ */}
         {/* ============ SEGUIMIENTO DEL PATROCINIO ============ */}
         {/* Es la parte que distingue a ApoyaClub de un directorio y no
             se contaba en ninguna parte de la portada. */}
@@ -439,35 +446,61 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* ============ HERRAMIENTAS ============ */}
+        {/* La lista entera, no una muestra. Un club que se plantea pagar
+            29,90 € al mes está comparando con "me lo hago yo con un PDF
+            y una hoja de cálculo", y esa comparación solo se gana
+            enseñando todo lo que hay dentro. Los textos viven en
+            `messages/es/home.json`. */}
         <section id="herramientas" className="scroll-mt-32 bg-zinc-50 px-4 py-20 sm:px-6 sm:py-24">
-          <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2">
-            <div className="rounded-3xl border border-zinc-200 bg-white p-9 shadow-sm">
-              <h3 className="text-xl font-extrabold text-brand-navy">{t("dossier.titulo")}</h3>
-              <p className="mt-2 text-sm text-zinc-600">
-                {t("dossier.texto")}
+          <div className="mx-auto max-w-6xl">
+            <div className="max-w-2xl">
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+                {t("herramientas.eyebrow")}
               </p>
-              <div className="mt-6 flex items-center gap-5">
-                <div className="w-24 flex-none rounded-lg border border-zinc-200 bg-white p-2.5 shadow-md shadow-brand-navy/10">
-                  <div className="mb-2 h-1.5 w-3/5 rounded bg-brand-navy" />
-                  <div className="mb-1 h-0.5 w-full rounded bg-zinc-200" />
-                  <div className="mb-1 h-0.5 w-11/12 rounded bg-zinc-200" />
-                  <div className="mb-2.5 h-0.5 w-full rounded bg-zinc-200" />
-                  <div className="mb-2 h-6 w-full rounded bg-brand-teal-light" />
-                  <div className="mb-1 h-0.5 w-4/5 rounded bg-zinc-200" />
-                  <div className="h-0.5 w-5/6 rounded bg-zinc-200" />
-                </div>
-                <span className="inline-flex items-center rounded-full bg-brand-navy px-5 py-3 text-sm font-bold text-white">
-                  {t("dossier.boton")}
-                </span>
-              </div>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+                {t("herramientas.titulo")}
+              </h2>
+              <p className="mt-4 leading-relaxed text-zinc-600">{t("herramientas.texto")}</p>
             </div>
 
-            <div className="rounded-3xl bg-brand-navy-dark p-9 shadow-lg shadow-brand-navy-dark/30">
-              <div className="mb-5 flex items-center justify-between">
+            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {herramientas.map((herramienta, indice) => (
+                <div
+                  key={herramienta.titulo}
+                  className="rounded-2xl border border-zinc-200 bg-white p-6"
+                >
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d={ICONOS_HERRAMIENTA[indice % ICONOS_HERRAMIENTA.length]} />
+                    </svg>
+                  </span>
+                  <h3 className="mt-4 font-extrabold text-brand-navy">{herramienta.titulo}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-600">{herramienta.texto}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* La maqueta del panel se queda: la lista dice qué hay, y
+                esto dice dónde está. */}
+            <div className="mt-8 rounded-3xl bg-brand-navy-dark p-9 shadow-lg shadow-brand-navy-dark/30">
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
                 <h3 className="text-xl font-extrabold text-white">{t("panel.titulo")}</h3>
-                <span className="rounded-full bg-brand-teal-dark px-4 py-2 text-xs font-bold text-white">{t("panel.boton")}</span>
+                <span className="rounded-full bg-brand-teal-dark px-4 py-2 text-xs font-bold text-white">
+                  {t("panel.boton")}
+                </span>
               </div>
-              <div className="grid grid-cols-3 gap-2.5">
+              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
                 {metricasPanel.map((metrica) => (
                   <div key={metrica.etiqueta} className="rounded-xl bg-white/[0.06] p-3.5">
                     <div className="text-xl font-extrabold text-white">{metrica.numero}</div>
@@ -478,6 +511,7 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
 
         {/* ============ PRECIO ============ */}
         {/* Los tres planes salen de `lib/planes.ts`, que es de donde los
@@ -549,30 +583,6 @@ export default async function Home() {
                     <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                   <span className="text-sm font-medium text-zinc-700">{ventaja}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ============ CONFIANZA ============ */}
-        <section className="bg-zinc-50 px-4 py-16 sm:px-6 sm:py-20">
-          <div className="mx-auto max-w-6xl">
-            <p className="text-center text-xs font-bold uppercase tracking-wider text-zinc-500">{t("confianza.eyebrow")}</p>
-            <div className="mt-8 grid gap-5 sm:grid-cols-3">
-              {[t("confianza.tipoClub"), t("confianza.tipoEmpresa"), t("confianza.tipoClub")].map((tipo, indice) => (
-                <div key={indice} className="rounded-2xl border border-dashed border-zinc-300 bg-white p-6">
-                  <div className="mb-3 flex gap-0.5">
-                    {[0, 1, 2, 3, 4].map((i) => (
-                      <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="var(--brand-teal)">
-                        <path d="M12 2l3 7h7l-5.5 4.2L18.5 21 12 16.8 5.5 21l2-7.8L2 9h7z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="text-sm italic leading-relaxed text-zinc-600">{t("confianza.testimonio", { tipo })}</p>
-                  <div className="mt-3.5 text-sm font-bold text-brand-navy">
-                    {tipo === t("confianza.tipoEmpresa") ? t("confianza.autorEmpresa") : t("confianza.autorClub")}
-                  </div>
                 </div>
               ))}
             </div>
