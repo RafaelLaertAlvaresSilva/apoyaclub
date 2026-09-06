@@ -32,6 +32,8 @@ const CLUB_VACIO: ClubProfile = {
   contactPublicConsent: false,
   verified: false,
   topCategory: null,
+  topCategoryMale: null,
+  topCategoryFemale: null,
   competitions: null,
   achievements: null,
   youthTeamsCount: null,

@@ -60,3 +60,42 @@ describe("convieneAvisar", () => {
     expect(convieneAvisar(100)).toBe(false);
   });
 });
+
+describe("máxima categoría por sexo (migración 0035)", () => {
+  it("el hueco se cierra rellenando solo la masculina", () => {
+    const ids = huecosDelPerfil(
+      perfilDePrueba({ topCategoryMale: "Primera Nacional" }),
+      [],
+      [],
+    ).map((hueco) => hueco.id);
+
+    expect(ids).not.toContain("nivel");
+  });
+
+  it("y también rellenando solo la femenina", () => {
+    const ids = huecosDelPerfil(
+      perfilDePrueba({ topCategoryFemale: "Autonómica" }),
+      [],
+      [],
+    ).map((hueco) => hueco.id);
+
+    expect(ids).not.toContain("nivel");
+  });
+
+  it("un club que solo tiene la categoría de antes tampoco pierde puntos", () => {
+    // Los que la rellenaron cuando había una sola casilla no pueden
+    // empezar a ver un hueco que ya habían tapado.
+    const ids = huecosDelPerfil(perfilDePrueba({ topCategory: "Primera Nacional" }), [], []).map(
+      (hueco) => hueco.id,
+    );
+
+    expect(ids).not.toContain("nivel");
+  });
+});
+
+describe("el hueco de nivel deportivo sigue apareciendo cuando toca", () => {
+  it("un club sin ninguna de las tres lo tiene abierto", () => {
+    const ids = huecosDelPerfil(perfilDePrueba(), [], []).map((hueco) => hueco.id);
+    expect(ids).toContain("nivel");
+  });
+});

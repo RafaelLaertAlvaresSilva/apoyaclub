@@ -132,7 +132,12 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   const mostrarQuienesSomos = !!perfil.description || galeria.length > 0;
   const mostrarCantera =
     perfil.youthTeamsCount != null || perfil.youthPlayersCount != null || perfil.youthFamiliesCount != null;
-  const mostrarPalmares = !!perfil.topCategory || !!perfil.competitions || !!perfil.achievements;
+  const mostrarPalmares =
+    !!perfil.topCategory ||
+    !!perfil.topCategoryMale ||
+    !!perfil.topCategoryFemale ||
+    !!perfil.competitions ||
+    !!perfil.achievements;
   const mostrarHistoria = perfil.foundingYear != null || perfil.milestones.length > 0;
   const mostrarInstalaciones =
     !!perfil.facilities || !!perfil.facilitiesAddress || perfil.facilitiesPhotos.length > 0;
@@ -415,7 +420,31 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
       nodo: (
         <Seccion id="palmares" titulo={t("secciones.palmares")}>
           <div className="space-y-4">
-            {perfil.topCategory && (
+            {/* Una línea por equipo desde la migración 0035. Si el club
+                todavía no ha repartido su categoría entre masculino y
+                femenino, se enseña la de antes tal cual: su ficha no
+                puede quedarse en blanco esperando a que edite algo. */}
+            {(perfil.topCategoryMale || perfil.topCategoryFemale) && (
+              <div className="grid gap-4 sm:grid-cols-2">
+                {perfil.topCategoryMale && (
+                  <div>
+                    <p className="text-sm font-medium text-zinc-500">
+                      {t("secciones.maximaCategoria")} · Masculino
+                    </p>
+                    <p className="text-zinc-900">{perfil.topCategoryMale}</p>
+                  </div>
+                )}
+                {perfil.topCategoryFemale && (
+                  <div>
+                    <p className="text-sm font-medium text-zinc-500">
+                      {t("secciones.maximaCategoria")} · Femenino
+                    </p>
+                    <p className="text-zinc-900">{perfil.topCategoryFemale}</p>
+                  </div>
+                )}
+              </div>
+            )}
+            {!perfil.topCategoryMale && !perfil.topCategoryFemale && perfil.topCategory && (
               <div>
                 <p className="text-sm font-medium text-zinc-500">{t("secciones.maximaCategoria")}</p>
                 <p className="text-zinc-900">{perfil.topCategory}</p>

@@ -120,7 +120,11 @@ export function huecosDelPerfil(
     },
     {
       id: "nivel",
-      falta: !perfil.topCategory && !perfil.competitions,
+      falta:
+        !perfil.topCategory &&
+        !perfil.topCategoryMale &&
+        !perfil.topCategoryFemale &&
+        !perfil.competitions,
       titulo: "Indica en qué categoría y competiciones juegas",
       porQue: "Sitúa al club: no es lo mismo una liga autonómica que una nacional.",
       pestana: "nivel",

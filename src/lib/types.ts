@@ -96,7 +96,14 @@ export type ClubProfile = {
   verified: boolean;
 
   // Nivel deportivo
+  /**
+   * Resumen de las dos siguientes, lo escribe el panel. Es lo que ven
+   * el dossier y la puntuación del perfil, que existían antes de que la
+   * categoría se separara por sexo (migración 0035).
+   */
   topCategory: string | null;
+  topCategoryMale: string | null;
+  topCategoryFemale: string | null;
   competitions: string | null;
   achievements: string | null;
 

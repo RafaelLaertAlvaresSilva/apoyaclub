@@ -361,7 +361,12 @@ export async function guardarNivelDeportivo(
   const { error } = await supabase
     .from("clubs")
     .update({
-      top_category: leerTexto(formData, "topCategory"),
+      top_category: resumenDeCategorias(
+        leerTexto(formData, "topCategoryMale"),
+        leerTexto(formData, "topCategoryFemale"),
+      ),
+      top_category_male: leerTexto(formData, "topCategoryMale"),
+      top_category_female: leerTexto(formData, "topCategoryFemale"),
       competitions: leerTexto(formData, "competitions"),
       achievements: leerTexto(formData, "achievements"),
     })
@@ -1131,4 +1136,22 @@ export async function eliminarServicio(formData: FormData): Promise<void> {
   await supabase.from("club_service_needs").delete().eq("id", id).eq("club_id", user.id);
 
   revalidatePath("/panel");
+}
+
+/**
+ * La línea que se guarda en `top_category` a partir de las dos
+ * categorías por sexo (migración 0035).
+ *
+ * `top_category` sigue existiendo porque de ella dependen la vista
+ * pública, el dossier y la puntuación del perfil. Escribirla aquí, en
+ * el mismo guardado que las otras dos, es lo que evita que se
+ * descuadren: nunca se tocan por separado.
+ */
+function resumenDeCategorias(masculina: string | null, femenina: string | null): string | null {
+  const partes = [
+    masculina ? `${masculina} (masculino)` : null,
+    femenina ? `${femenina} (femenino)` : null,
+  ].filter((parte): parte is string => parte !== null);
+
+  return partes.length > 0 ? partes.join(" · ") : null;
 }

@@ -48,6 +48,8 @@ export type ClubRow = {
   contact_public_consent: boolean | null;
   verified: boolean | null;
   top_category: string | null;
+  top_category_male: string | null;
+  top_category_female: string | null;
   competitions: string | null;
   achievements: string | null;
   youth_teams_count: number | null;
@@ -122,6 +124,8 @@ export function clubRowToProfile(row: ClubRow): ClubProfile {
     contactPublicConsent: row.contact_public_consent ?? false,
     verified: row.verified ?? false,
     topCategory: row.top_category,
+    topCategoryMale: row.top_category_male,
+    topCategoryFemale: row.top_category_female,
     competitions: row.competitions,
     achievements: row.achievements,
     youthTeamsCount: row.youth_teams_count,
