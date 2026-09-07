@@ -47,3 +47,9 @@ next-env.d.ts
 
 # log de una prueba de build en local, sin contenido útil
 /build.log
+
+# Carpeta de trabajo de la app de Claude: capturas y archivos sueltos
+# que no son parte del proyecto.
+/Claude outputs/
+/_to_delete/
+*.tgz
