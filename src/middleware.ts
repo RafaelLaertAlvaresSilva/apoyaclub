@@ -3,6 +3,7 @@ import createIntlMiddleware from "next-intl/middleware";
 import { routing } from "@/i18n/routing";
 import { updateSession } from "@/lib/supabase/middleware";
 import { areaPrivadaDe } from "@/lib/areas-privadas";
+import { avisarDeFallo } from "@/lib/monitoring";
 import { RUTA_POR_ROL, type Role } from "@/lib/types";
 
 const intlMiddleware = createIntlMiddleware(routing);
@@ -53,11 +54,30 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  const rol = user.app_metadata?.role as Role | undefined;
+  let rol = user.app_metadata?.role as Role | undefined;
 
-  // Sesión sin rol asignado (no debería ocurrir): a login por seguridad.
+  // El rol se escribe en `app_metadata` inmediatamente después de crear
+  // la cuenta, pero el token que lleva el navegador puede ser de un
+  // instante anterior, y ahí dentro el usuario todavía no tiene rol.
+  // Hasta que ese token caduca por su cuenta —una hora— el club entra
+  // en la web, se ve la sesión abierta y su propio panel le rechaza.
+  // Le pasó a un club de verdad: cerrar sesión y volver a entrar lo
+  // arreglaba, porque eso pide un token nuevo. Aquí se pide ese token
+  // nuevo por él, en silencio, y sigue su camino.
   if (!rol) {
-    return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
+    const { data: renovada } = await supabase.auth.refreshSession();
+    rol = renovada.user?.app_metadata?.role as Role | undefined;
+  }
+
+  // Si después de renovar sigue sin rol, la cuenta se quedó a medio
+  // crear de verdad y no lo arregla volver a entrar. Se avisa a Sentry,
+  // porque es un club que no puede usar lo que ha contratado y nadie se
+  // enteraría de otra forma.
+  if (!rol) {
+    avisarDeFallo("sesion", `Sesión sin rol después de renovarla (usuario ${user.id})`);
+    return NextResponse.redirect(
+      new URL(`/${locale}/login?motivo=sesion-sin-rol`, request.url),
+    );
   }
 
   const [rolDeLaRuta] = rutaProtegida;

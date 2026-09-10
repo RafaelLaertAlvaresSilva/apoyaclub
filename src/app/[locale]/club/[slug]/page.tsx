@@ -20,6 +20,7 @@ import type { ClubTeam, SocialLinks } from "@/lib/types";
 import { BarraDePlazas } from "@/components/BarraDePlazas";
 import { CompartirBoton } from "./components/CompartirBoton";
 import { DatosDeContacto } from "./components/DatosDeContacto";
+import { IndiceDeSecciones } from "./components/IndiceDeSecciones";
 import { RegistrarVisita } from "./components/RegistrarVisita";
 import { SolicitarContactoBoton } from "./components/SolicitarContactoBoton";
 import { ETIQUETA_CATEGORIA_SERVICIO, obtenerServiciosDelClub } from "@/lib/service-needs";
@@ -340,7 +341,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                       clubName={perfil.name}
                       opportunityId={oportunidad.id}
                       opportunityTitle={oportunidad.title}
-                      variante="secundaria"
+                      variante="primaria"
                     >
                       Puedo ayudar con esto
                     </SolicitarContactoBoton>
@@ -353,6 +354,43 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
       </section>
     ),
   });
+
+  // Los servicios van pegados a las oportunidades y no al final: son
+  // las dos caras de lo mismo —lo que el club ofrece y lo que el club
+  // necesita— y son la única parte de la ficha donde una empresa puede
+  // hacer algo. El resto es lo que la convence de hacerlo.
+  if (servicios.length > 0) {
+    secciones.push({
+      id: "servicios",
+      etiqueta: t("servicios.titulo"),
+      nodo: (
+        <Seccion id="servicios" titulo={t("servicios.titulo")} descripcion={t("servicios.descripcion")}>
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {servicios.map((servicio) => (
+              <li key={servicio.id} className="rounded-xl border border-zinc-200 p-4">
+                <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
+                  {ETIQUETA_CATEGORIA_SERVICIO[servicio.category]}
+                </p>
+                <p className="mt-1 font-medium text-zinc-900">{servicio.title}</p>
+                {servicio.description && (
+                  <p className="mt-1 text-sm text-zinc-600">{servicio.description}</p>
+                )}
+                <div className="mt-3">
+                  <SolicitarContactoBoton
+                    clubId={perfil.id}
+                    clubName={perfil.name}
+                    variante="primaria"
+                  >
+                    {t("servicios.ofrecer")}
+                  </SolicitarContactoBoton>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Seccion>
+      ),
+    });
+  }
 
   if (mostrarQuienesSomos) {
     secciones.push({
@@ -769,39 +807,6 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
     });
   }
 
-  if (servicios.length > 0) {
-    secciones.push({
-      id: "servicios",
-      etiqueta: t("servicios.titulo"),
-      nodo: (
-        <Seccion id="servicios" titulo={t("servicios.titulo")} descripcion={t("servicios.descripcion")}>
-          <ul className="grid gap-3 sm:grid-cols-2">
-            {servicios.map((servicio) => (
-              <li key={servicio.id} className="rounded-xl border border-zinc-200 p-4">
-                <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
-                  {ETIQUETA_CATEGORIA_SERVICIO[servicio.category]}
-                </p>
-                <p className="mt-1 font-medium text-zinc-900">{servicio.title}</p>
-                {servicio.description && (
-                  <p className="mt-1 text-sm text-zinc-600">{servicio.description}</p>
-                )}
-                <div className="mt-3">
-                  <SolicitarContactoBoton
-                    clubId={perfil.id}
-                    clubName={perfil.name}
-                    variante="secundaria"
-                  >
-                    {t("servicios.ofrecer")}
-                  </SolicitarContactoBoton>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </Seccion>
-      ),
-    });
-  }
-
   // El contacto va siempre y va el último: es el final del recorrido.
   secciones.push({
     id: "contacto",
@@ -932,24 +937,8 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             a partir de las secciones que este club tiene rellenadas, así
             que ningún botón lleva a un sitio vacío. Son anclas normales:
             el salto lo hace el propio navegador. */}
-        {secciones.length > 1 && (
-          <nav
-            aria-label="Secciones de la ficha"
-            className="mx-auto mt-6 max-w-4xl px-4"
-          >
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              {secciones.map((seccion) => (
-                <a
-                  key={seccion.id}
-                  href={`#${seccion.id}`}
-                  className="whitespace-nowrap rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:border-teal-600 hover:text-teal-700"
-                >
-                  {seccion.etiqueta}
-                </a>
-              ))}
-            </div>
-          </nav>
-        )}
+        <IndiceDeSecciones secciones={secciones.map(({ id, etiqueta }) => ({ id, etiqueta }))} />
+
       </header>
 
       <main className="mx-auto w-full max-w-4xl px-4 pb-16">

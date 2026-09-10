@@ -20,8 +20,15 @@ export function LoginForm() {
     "email-verificado": t("emailVerificado"),
   };
 
+  // Avisos que llegan cuando la web ha tenido que devolver a alguien
+  // aquí, para que no se quede mirando el formulario sin saber por qué.
+  const MENSAJES_MOTIVO: Record<string, string> = {
+    "sesion-sin-rol": t("sesionSinRol"),
+  };
+
   const next = searchParams.get("next");
   const mensajeExito = searchParams.get("mensaje");
+  const motivo = searchParams.get("motivo");
 
   const [estado, formAction] = useActionState(iniciarSesion, null);
 
@@ -50,14 +57,9 @@ export function LoginForm() {
         </div>
 
         <div>
-          <div className="mb-1 flex items-center justify-between">
-            <label htmlFor="password" className="block text-sm font-medium text-zinc-700">
-              {tComun("password")}
-            </label>
-            <Link href="/recuperar-password" className="text-xs font-medium text-teal-700 hover:underline">
-              {t("olvidada")}
-            </Link>
-          </div>
+          <label htmlFor="password" className="mb-1 block text-sm font-medium text-zinc-700">
+            {tComun("password")}
+          </label>
           <input
             id="password"
             name="password"
@@ -66,9 +68,20 @@ export function LoginForm() {
             autoComplete="current-password"
             className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           />
+          {/* Debajo del campo y no al lado de su etiqueta: aquí es donde
+              se mira cuando la contraseña no entra. */}
+          <div className="mt-1.5">
+            <Link
+              href="/recuperar-password"
+              className="text-sm font-medium text-teal-700 hover:underline"
+            >
+              {t("olvidadaLarga")}
+            </Link>
+          </div>
         </div>
 
         {mensajeExito && <AvisoExito mensaje={MENSAJES_EXITO[mensajeExito]} />}
+        {motivo && MENSAJES_MOTIVO[motivo] && <AvisoError mensaje={MENSAJES_MOTIVO[motivo]} />}
         <AvisoError mensaje={estado?.error} />
 
         <BotonEnviar>{t("boton")}</BotonEnviar>
