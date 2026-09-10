@@ -15,6 +15,8 @@ import type { ClubAdminRow } from "./types";
 type ClubRowConAdmin = ClubRow & {
   subscription_status: SubscriptionStatus;
   admin_suspended: boolean;
+  trial_ends_at: string | null;
+  stripe_subscription_id: string | null;
 };
 
 /**
@@ -71,6 +73,8 @@ export default async function AdminClubesPage() {
         // que guardó su perfil.
         createdAt: usuario.createdAt,
         subscriptionStatus: filaClub?.subscription_status ?? null,
+        trialEndsAt: filaClub?.trial_ends_at ?? null,
+        tieneSuscripcionEnStripe: Boolean(filaClub?.stripe_subscription_id),
         profileCompletion: perfil?.profileScore ?? 0,
         verified: perfil?.verified ?? false,
         suspended: filaClub?.admin_suspended ?? false,

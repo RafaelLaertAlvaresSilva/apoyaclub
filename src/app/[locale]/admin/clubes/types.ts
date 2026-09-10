@@ -8,6 +8,10 @@ export type ClubAdminRow = {
   email: string | null;
   createdAt: string;
   subscriptionStatus: SubscriptionStatus;
+  /** Fin de la prueba gratuita, que es también el fin del acceso regalado. */
+  trialEndsAt: string | null;
+  /** Si tiene suscripción de Stripe, el acceso ya no se regala desde aquí. */
+  tieneSuscripcionEnStripe: boolean;
   profileCompletion: number;
   verified: boolean;
   suspended: boolean;

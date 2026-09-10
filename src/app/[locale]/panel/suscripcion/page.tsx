@@ -9,6 +9,7 @@ import {
   subscriptionRowToInfo,
   type SubscriptionRow,
 } from "@/lib/subscription-mappers";
+import { esAccesoRegalado } from "@/lib/acceso-gratuito";
 import { createClient } from "@/lib/supabase/server";
 import { PanelNav } from "../components/PanelNav";
 import { PLANES, esPlanValido, periodicidad, precioFormateado } from "@/lib/planes";
@@ -83,6 +84,11 @@ export default async function SuscripcionPage({
   // falta empezar una nueva desde Checkout.
   const puedeGestionar = Boolean(suscripcion.stripeCustomerId) && suscripcion.status !== "canceled";
 
+  // Un club invitado por ApoyaClub: por dentro es una prueba gratuita
+  // larga (ver `lib/acceso-gratuito.ts`), y lo que le espera al final no
+  // es lo mismo que a quien está en su mes de prueba normal.
+  const invitado = esAccesoRegalado(suscripcion.status, suscripcion.trialEndsAt);
+
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
@@ -130,9 +136,22 @@ export default async function SuscripcionPage({
 
           {suscripcion.status === "trialing" && suscripcion.currentPeriodEnd && (
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{t("finDeLaPrueba")}</dt>
+              <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                {invitado ? "Acceso de invitado hasta" : t("finDeLaPrueba")}
+              </dt>
               <dd className="mt-1 text-sm text-zinc-700">
-                {formatearFecha(suscripcion.currentPeriodEnd)} — después se cobrarán 29,90 €/mes.
+                {formatearFecha(suscripcion.currentPeriodEnd)}
+                {/* Lo que pasa ese día depende de si hay una suscripción
+                    de verdad detrás. Decirle "después se cobrarán 29,90 €"
+                    a un club al que nadie va a cobrarle nada —porque no ha
+                    dado ninguna tarjeta— es prometerle un cobro que no
+                    existe y ocultarle el que sí ocurre: que su página deja
+                    de verse. */}
+                {suscripcion.stripeSubscriptionId
+                  ? " — ese día se cobra el primer recibo de tu plan."
+                  : invitado
+                    ? " — hasta entonces no se te cobra nada. Te avisaremos por correo antes de esa fecha."
+                    : " — si para entonces no has elegido plan, tu página deja de verse. No se cobra nada sin que tú lo actives."}
               </dd>
             </div>
           )}
