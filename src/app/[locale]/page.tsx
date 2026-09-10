@@ -206,13 +206,27 @@ export default async function Home() {
               <p className="mt-4 text-[15px] leading-relaxed text-zinc-600 sm:text-base">
                 {t("caminos.empresaTexto")}
               </p>
+              {/* Dos puertas y no una: por aquí entran tres personas
+                  distintas y solo una de ellas viene con presupuesto de
+                  marketing. Las otras dos —el negocio que puede poner un
+                  servicio, y el vecino que pone 50 €— son las que un
+                  club de barrio consigue de verdad, y "Buscar
+                  oportunidades" a secas no les decía nada. */}
               <div className="mt-8 sm:mt-auto">
-                <Link
-                  href="/buscar"
-                  className="inline-flex w-full items-center justify-center rounded-2xl border-2 border-brand-navy px-6 py-4 text-base font-bold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white sm:w-auto sm:px-8"
-                >
-                  {t("caminos.empresaCta")}
-                </Link>
+                <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <Link
+                    href="/buscar?busca=patrocinios"
+                    className="inline-flex items-center justify-center rounded-2xl border-2 border-brand-navy px-6 py-4 text-base font-bold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white sm:px-8"
+                  >
+                    {t("caminos.empresaCta")}
+                  </Link>
+                  <Link
+                    href="/buscar?busca=necesidades"
+                    className="inline-flex items-center justify-center rounded-2xl border-2 border-amber-300 bg-amber-50 px-6 py-4 text-base font-bold text-amber-900 transition-colors hover:border-amber-400 hover:bg-amber-100 sm:px-8"
+                  >
+                    {t("caminos.empresaCtaNecesidades")}
+                  </Link>
+                </div>
                 <p className="mt-3 text-sm text-zinc-500">{t("caminos.empresaGratis")}</p>
               </div>
             </div>

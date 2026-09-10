@@ -19,10 +19,11 @@
     "clubTitulo": "Soy un club",
     "clubTexto": "Quiero mostrar lo que mi club puede ofrecer, encontrar oportunidades y gestionar mis contactos.",
     "clubCta": "Quiero hacer crecer mi club",
-    "empresaTitulo": "Soy una empresa",
-    "empresaTexto": "Quiero descubrir oportunidades deportivas que encajen con mi presupuesto y mis objetivos.",
+    "empresaTitulo": "Soy una empresa o quiero colaborar",
+    "empresaTexto": "Descubre qué puedes patrocinar, o qué necesita un club de tu zona. Y si lo tuyo es un servicio en vez de dinero, también encaja.",
     "empresaCta": "Buscar oportunidades",
-    "empresaGratis": "Gratis y sin cuenta"
+    "empresaGratis": "Gratis, sin cuenta y sin intermediarios",
+    "empresaCtaNecesidades": "Ver qué necesitan los clubes"
   },
   "comoFunciona": {
     "eyebrow": "En cuatro pasos",

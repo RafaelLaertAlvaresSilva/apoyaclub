@@ -222,6 +222,13 @@ export async function buscarOportunidades(
   if (filtros.objetivos && filtros.objetivos.length > 0) {
     consulta = consulta.overlaps("objectives", filtros.objetivos);
   }
+  // Patrocinios o necesidades (migración 0038). "todo" no filtra nada,
+  // que es como se comportaba el buscador antes de que existieran.
+  if (filtros.busca === "patrocinios") consulta = consulta.eq("is_need", false);
+  if (filtros.busca === "necesidades") {
+    consulta = consulta.eq("is_need", true);
+    if (filtros.necesidad) consulta = consulta.eq("need_category", filtros.necesidad);
+  }
   if (filtros.niveles && filtros.niveles.length > 0) {
     consulta = consulta.in("sponsor_level", filtros.niveles);
   }

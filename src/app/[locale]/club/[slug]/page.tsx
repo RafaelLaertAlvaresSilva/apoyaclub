@@ -183,20 +183,29 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
    */
   const secciones: { id: string; etiqueta: string; nodo: React.ReactNode }[] = [];
 
+  // Las dos direcciones, separadas (migración 0038): lo que el club
+  // ofrece a cambio de dinero y lo que necesita a cambio de visibilidad.
+  const loQueOfrece = oportunidades.filter((oportunidad) => !oportunidad.esNecesidad);
+  const loQueNecesita = oportunidades.filter((oportunidad) => oportunidad.esNecesidad);
+
   secciones.push({
     id: "oportunidades",
     etiqueta: t("oportunidades.titulo"),
     nodo: (
       <section id="oportunidades" className="scroll-mt-24 pt-8">
+        {/* El recuadro verde solo aparece si hay algo que enseñar en
+            él. Un club que únicamente ha publicado necesidades no debe
+            ver un "todavía no hay oportunidades" encima de las suyas. */}
+        {(loQueOfrece.length > 0 || oportunidades.length === 0) && (
         <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">
             {t("oportunidades.titulo")}
           </p>
-          {oportunidades.length === 0 ? (
+          {loQueOfrece.length === 0 ? (
             <p className="mt-2 text-zinc-700">{t("oportunidades.vacio")}</p>
           ) : (
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              {oportunidades.map((oportunidad) => (
+              {loQueOfrece.map((oportunidad) => (
                 <div
                   key={oportunidad.id}
                   className="flex flex-col gap-2 rounded-xl border border-teal-100 bg-white p-4"
@@ -277,6 +286,70 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             </div>
           )}
         </div>
+        )}
+
+        {/* Lo que el club necesita va en su propio bloque y en ámbar
+            (migración 0038). Mezclado con lo que ofrece, quien entra no
+            distingue en qué dirección va cada cosa; separado, un
+            fisioterapeuta que llega a la ficha ve lo suyo sin leerse
+            todo lo demás. Y al club le empuja a rellenarlo, porque el
+            hueco se nota. */}
+        {loQueNecesita.length > 0 && (
+          <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-wide text-amber-800">
+              Lo que necesitamos
+            </p>
+            <p className="mt-2 text-sm text-amber-900">
+              Servicios y productos que le hacen falta al club. A cambio, la misma visibilidad
+              que cualquier patrocinador.
+            </p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {loQueNecesita.map((oportunidad) => (
+                <div
+                  key={oportunidad.id}
+                  className="flex flex-col gap-2 rounded-xl border border-amber-200 bg-white p-4"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="font-semibold text-zinc-900">{oportunidad.title}</p>
+                    {oportunidad.categoriaNecesidad && (
+                      <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                        {ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]}
+                      </span>
+                    )}
+                  </div>
+
+                  {oportunidad.description && (
+                    <p className="text-sm text-zinc-600">{oportunidad.description}</p>
+                  )}
+
+                  {esPorPlazas(oportunidad) && (
+                    <BarraDePlazas
+                      slotsTotal={oportunidad.slotsTotal}
+                      slotsTaken={oportunidad.slotsTaken}
+                      etiqueta="colaboradores"
+                    />
+                  )}
+
+                  {oportunidad.duration && (
+                    <p className="text-xs font-medium text-zinc-500">{oportunidad.duration}</p>
+                  )}
+
+                  <div className="mt-1 flex flex-wrap gap-2">
+                    <SolicitarContactoBoton
+                      clubId={perfil.id}
+                      clubName={perfil.name}
+                      opportunityId={oportunidad.id}
+                      opportunityTitle={oportunidad.title}
+                      variante="secundaria"
+                    >
+                      Puedo ayudar con esto
+                    </SolicitarContactoBoton>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
     ),
   });

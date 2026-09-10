@@ -23,6 +23,8 @@ describe("filtros del buscador y URL", () => {
     formasColaboracion: ["money", "mixed"],
     objetivos: ["familias", "deporte_base"],
     niveles: ["principal", "oficial"],
+    busca: "necesidades",
+    necesidad: "fisioterapia",
     orden: "valor",
   };
 
@@ -33,6 +35,27 @@ describe("filtros del buscador y URL", () => {
 
     expect(recuperados).toEqual(filtros);
     expect(vista).toBe("oportunidad");
+  });
+
+  it("por defecto se buscan las dos cosas a la vez", () => {
+    const { filtros: recuperados } = parametrosAFiltros({});
+    expect(recuperados.busca).toBe("todo");
+    expect(recuperados.necesidad).toBeUndefined();
+  });
+
+  it("no ensucia la URL cuando se buscan las dos cosas", () => {
+    const qs = filtrosAQueryString({ busca: "todo" }, "oportunidad");
+    expect(new URLSearchParams(qs).has("busca")).toBe(false);
+  });
+
+  it("una necesidad inventada en la URL se ignora, pero la pestaña se respeta", () => {
+    const { filtros: recuperados } = parametrosAFiltros({
+      busca: "necesidades",
+      necesidad: "brujeria",
+    });
+
+    expect(recuperados.busca).toBe("necesidades");
+    expect(recuperados.necesidad).toBeUndefined();
   });
 
   it("conserva la vista por club", () => {

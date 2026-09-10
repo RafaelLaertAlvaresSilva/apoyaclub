@@ -1,4 +1,5 @@
 import {
+  CATEGORIAS_NECESIDAD,
   FORMAS_COLABORACION,
   NIVELES_PATROCINIO,
   OBJETIVOS_OPORTUNIDAD,
@@ -6,7 +7,7 @@ import {
   TIPOS_OPORTUNIDAD,
 } from "@/lib/opportunities";
 import type { FiltrosBusqueda, OrdenBusqueda, VistaBusqueda } from "@/lib/search-types";
-import type { TeamLevel } from "@/lib/types";
+import type { CategoriaNecesidad, TeamLevel } from "@/lib/types";
 
 /**
  * Traduce entre los filtros del buscador (`FiltrosBusqueda`) y los
@@ -23,6 +24,7 @@ const IDS_FORMA = new Set(FORMAS_COLABORACION.map((f) => f.id as string));
 const IDS_OBJETIVO = new Set(OBJETIVOS_OPORTUNIDAD.map((o) => o.id as string));
 const IDS_PERIODO = new Set(PERIODOS_OPORTUNIDAD.map((p) => p.id as string));
 const IDS_NIVEL_PATROCINIO = new Set(NIVELES_PATROCINIO.map((n) => n.id as string));
+const IDS_NECESIDAD = new Set(CATEGORIAS_NECESIDAD.map((c) => c.id as string));
 const NIVELES_VALIDOS = new Set<TeamLevel>(["primer_equipo", "cantera"]);
 const ORDENES_VALIDOS = new Set<OrdenBusqueda>(["recomendado", "cercania", "valor", "novedad"]);
 
@@ -79,6 +81,14 @@ export function parametrosAFiltros(params: ParametrosURL): { filtros: FiltrosBus
     formasColaboracion: listaDesdeParametro(params.forma, IDS_FORMA),
     objetivos: listaDesdeParametro(params.objetivo, IDS_OBJETIVO),
     niveles: listaDesdeParametro(params.patrocinio, IDS_NIVEL_PATROCINIO),
+    busca: (() => {
+      const valor = unParametro(params.busca);
+      return valor === "patrocinios" || valor === "necesidades" ? valor : "todo";
+    })(),
+    necesidad: (() => {
+      const valor = unParametro(params.necesidad);
+      return valor && IDS_NECESIDAD.has(valor) ? (valor as CategoriaNecesidad) : undefined;
+    })(),
     orden: orden && ORDENES_VALIDOS.has(orden as OrdenBusqueda) ? (orden as OrdenBusqueda) : "recomendado",
   };
 
@@ -107,6 +117,8 @@ export function filtrosAQueryString(filtros: FiltrosBusqueda, vista: VistaBusque
   }
   if (filtros.objetivos && filtros.objetivos.length > 0) qs.set("objetivo", filtros.objetivos.join(","));
   if (filtros.niveles && filtros.niveles.length > 0) qs.set("patrocinio", filtros.niveles.join(","));
+  if (filtros.busca && filtros.busca !== "todo") qs.set("busca", filtros.busca);
+  if (filtros.necesidad) qs.set("necesidad", filtros.necesidad);
   if (filtros.orden && filtros.orden !== "recomendado") qs.set("orden", filtros.orden);
   if (vista !== "oportunidad") qs.set("vista", vista);
 

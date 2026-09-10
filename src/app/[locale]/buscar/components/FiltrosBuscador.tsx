@@ -6,6 +6,7 @@ import { useState } from "react";
 import { clasesInput } from "@/app/[locale]/panel/components/SeccionCard";
 import { filtrosAQueryString, RADIOS_KM } from "@/lib/buscar-params";
 import {
+  CATEGORIAS_NECESIDAD,
   FORMAS_COLABORACION,
   NIVELES_PATROCINIO,
   OBJETIVOS_OPORTUNIDAD,
@@ -15,6 +16,7 @@ import {
 import type { FiltrosBusqueda, VistaBusqueda } from "@/lib/search-types";
 import type {
   BudgetPeriod,
+  CategoriaNecesidad,
   CollaborationType,
   ObjectiveTag,
   OpportunityType,
@@ -58,9 +60,17 @@ function leerFiltrosDelFormulario(formData: FormData): FiltrosBusqueda {
     formasColaboracion: leerListaMarcada<CollaborationType>(formData, "forma"),
     objetivos: leerListaMarcada<ObjectiveTag>(formData, "objetivo"),
     niveles: leerListaMarcada<SponsorLevel>(formData, "patrocinio"),
+    busca: (texto("busca") as FiltrosBusqueda["busca"]) ?? "todo",
+    necesidad: texto("necesidad") as CategoriaNecesidad | undefined,
     orden: (texto("orden") as FiltrosBusqueda["orden"]) ?? "novedad",
   };
 }
+
+const OPCIONES_BUSCA: { id: NonNullable<FiltrosBusqueda["busca"]>; etiqueta: string }[] = [
+  { id: "todo", etiqueta: "Todo" },
+  { id: "patrocinios", etiqueta: "Patrocinios" },
+  { id: "necesidades", etiqueta: "Lo que necesitan" },
+];
 
 const clasesEtiquetaGrupo = "mb-2 block text-sm font-medium text-zinc-700";
 const clasesCheckbox =
@@ -105,6 +115,49 @@ export function FiltrosBuscador({
       }}
       className="space-y-5"
     >
+      {/* Lo primero, porque parte la búsqueda en dos mundos que no se
+          parecen en nada: la empresa que viene a gastar presupuesto de
+          marketing no quiere ver "necesitamos un fisio" entre las
+          lonas, y el fisio no quiere ver las lonas. */}
+      <div>
+        <p className={clasesEtiquetaGrupo}>Qué buscas</p>
+        <div className="grid grid-cols-3 overflow-hidden rounded-lg border border-zinc-300">
+          {OPCIONES_BUSCA.map((opcion) => (
+            <label
+              key={opcion.id}
+              className="cursor-pointer border-r border-zinc-200 px-2 py-2 text-center text-xs font-medium text-zinc-600 last:border-r-0 has-checked:bg-teal-700 has-checked:text-white"
+            >
+              <input
+                type="radio"
+                name="busca"
+                value={opcion.id}
+                defaultChecked={(filtrosIniciales.busca ?? "todo") === opcion.id}
+                className="sr-only"
+              />
+              {opcion.etiqueta}
+            </label>
+          ))}
+        </div>
+
+        {/* Solo tiene sentido dentro de las necesidades. Se deja
+            siempre en el DOM para que el valor no se pierda al cambiar
+            de pestaña sin querer, pero oculto cuando no toca. */}
+        <div className={(filtrosIniciales.busca ?? "todo") === "necesidades" ? "mt-2" : "hidden"}>
+          <select
+            name="necesidad"
+            defaultValue={filtrosIniciales.necesidad ?? ""}
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
+          >
+            <option value="">Cualquier servicio o producto</option>
+            {CATEGORIAS_NECESIDAD.map((categoria) => (
+              <option key={categoria.id} value={categoria.id}>
+                {categoria.etiqueta}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       <div>
         <p className={clasesEtiquetaGrupo}>{t("ubicacion")}</p>
         <div className="space-y-2">

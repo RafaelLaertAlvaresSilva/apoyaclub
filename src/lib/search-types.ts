@@ -42,8 +42,24 @@ export type FiltrosBusqueda = {
   objetivos?: ObjectiveTag[];
   /** Nivel de patrocinador: principal, oficial, colaborador o libre. */
   niveles?: SponsorLevel[];
+  /**
+   * Qué clase de oportunidad se busca (migración 0038):
+   *
+   *   - "todo": las dos cosas mezcladas, que es lo que había siempre.
+   *   - "patrocinios": solo lo que el club ofrece a cambio de dinero.
+   *   - "necesidades": solo lo que el club necesita.
+   *
+   * Existe porque son dos cabezas distintas: la empresa que viene a
+   * gastar presupuesto de marketing no quiere ver "necesitamos un
+   * fisio" entre las lonas, y el fisio no quiere ver las lonas.
+   */
+  busca?: BusquedaDe;
+  /** Dentro de las necesidades, de qué clase. */
+  necesidad?: CategoriaNecesidad;
   orden?: OrdenBusqueda;
 };
+
+export type BusquedaDe = "todo" | "patrocinios" | "necesidades";
 
 export type ResultadoOportunidad = {
   opportunityId: string;
