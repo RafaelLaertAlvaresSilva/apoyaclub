@@ -153,6 +153,12 @@ export type ClubTeam = {
   playerCount: number | null;
   /** Foto del equipo (migración 0036). La sube el club. */
   photoUrl: string | null;
+  /** En qué compite este equipo: "Primera Autonómica", "Liga comarcal"
+   * (migración 0038). La categoría —cadete, sénior— va en `category`. */
+  competitionLevel: string | null;
+  /** Logros de este equipo concreto (migración 0038). Los del club
+   * entero siguen en `ClubProfile.achievements`. */
+  achievements: string | null;
 };
 
 /**
@@ -245,6 +251,31 @@ export type OpportunityType =
 export type OpportunityStatus = "available" | "reserved" | "closed";
 
 /**
+ * Qué necesita el club, cuando la oportunidad va al revés de lo normal
+ * (migración 0038). Es una lista cerrada y no texto libre para que un
+ * fisioterapeuta pueda buscar "fisioterapia" y encontrarlas todas, en
+ * vez de depender de cómo lo escribiera cada club.
+ */
+export type CategoriaNecesidad =
+  | "fisioterapia"
+  | "medico"
+  | "fotografia"
+  | "video"
+  | "marketing"
+  | "imprenta"
+  | "transporte"
+  | "material"
+  | "equipacion"
+  | "limpieza"
+  | "restauracion"
+  | "alojamiento"
+  | "gimnasio"
+  | "nutricion"
+  | "asesoria"
+  | "informatica"
+  | "otro";
+
+/**
  * Nivel de patrocinador de una oportunidad (Fase 2, implementado al
  * cerrar la auditoría de la Fase 15). Es la primera pregunta que se hace
  * una empresa: "¿esto es el patrocinio principal del club o una
@@ -289,6 +320,15 @@ export type Opportunity = {
   slotsTotal: number | null;
   /** Plazas ya cubiertas, que lleva el club a mano. */
   slotsTaken: number;
+  /**
+   * true = el club NECESITA esto y ofrece visibilidad a cambio (un
+   * fisio, un autobús, material). false = lo normal: el club ofrece y
+   * la empresa paga. Migración 0038.
+   */
+  esNecesidad: boolean;
+  /** Qué clase de servicio o producto necesita. Solo cuando
+   * `esNecesidad` es true. */
+  categoriaNecesidad: CategoriaNecesidad | null;
   /** Fecha en la que se archivó (null = activa). Archivar no borra la oportunidad, solo la oculta. */
   archivedAt: string | null;
   createdAt: string;

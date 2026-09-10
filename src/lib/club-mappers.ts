@@ -82,6 +82,8 @@ export type ClubTeamRow = {
   team_level: TeamLevel;
   player_count: number | null;
   photo_url: string | null;
+  competition_level: string | null;
+  achievements: string | null;
 };
 
 export type ClubSponsorRow = {
@@ -158,6 +160,8 @@ export function clubTeamRowToTeam(row: ClubTeamRow): ClubTeam {
     teamLevel: row.team_level,
     playerCount: row.player_count,
     photoUrl: row.photo_url,
+    competitionLevel: row.competition_level,
+    achievements: row.achievements,
   };
 }
 
@@ -224,4 +228,45 @@ export function agruparPatrocinadoresPorNivel(
   }
 
   return grupos;
+}
+
+/**
+ * Los equipos del club repartidos por sexo, para que la ficha pública
+ * los enseñe separados (migración 0038).
+ *
+ * Una empresa que quiere patrocinar deporte femenino no debería tener
+ * que ir leyendo tarjeta por tarjeta a ver cuál le vale. El orden es
+ * femenino, masculino, mixto y al final los que no lo tienen puesto:
+ * el femenino primero a propósito, porque es el que más cuesta que se
+ * vea y el que más empresas buscan expresamente.
+ *
+ * Si todos los equipos caen en el mismo grupo, se devuelve un único
+ * grupo sin título: un club con equipos solo masculinos no necesita un
+ * titular que se lo recuerde.
+ */
+export function agruparEquiposPorSexo(
+  equipos: ClubTeam[],
+): { titulo: string | null; equipos: ClubTeam[] }[] {
+  const clave = (equipo: ClubTeam) => (equipo.gender ?? "").trim().toLowerCase();
+
+  const grupos: { titulo: string; coincide: (valor: string) => boolean }[] = [
+    { titulo: "Equipos femeninos", coincide: (v) => v.startsWith("fem") },
+    { titulo: "Equipos masculinos", coincide: (v) => v.startsWith("masc") },
+    { titulo: "Equipos mixtos", coincide: (v) => v.startsWith("mix") },
+  ];
+
+  const repartidos = grupos.map((grupo) => ({
+    titulo: grupo.titulo,
+    equipos: equipos.filter((equipo) => grupo.coincide(clave(equipo))),
+  }));
+
+  const resto = equipos.filter(
+    (equipo) => !grupos.some((grupo) => grupo.coincide(clave(equipo))),
+  );
+  if (resto.length > 0) repartidos.push({ titulo: "Otros equipos", equipos: resto });
+
+  const conEquipos = repartidos.filter((grupo) => grupo.equipos.length > 0);
+
+  if (conEquipos.length <= 1) return [{ titulo: null, equipos }];
+  return conEquipos;
 }

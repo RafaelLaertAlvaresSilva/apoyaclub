@@ -25,6 +25,39 @@ export function ComunidadForm({
   const [descripcionNueva, setDescripcionNueva] = useState("");
   const [fotoNueva, setFotoNueva] = useState("");
 
+  /**
+   * Lo que se guarda: la lista más lo que haya a medio escribir abajo.
+   *
+   * Antes solo se guardaba la lista, y quien escribía una acción y le
+   * daba directamente a "Guardar" —que es lo que haría cualquiera— veía
+   * cómo su texto desaparecía sin un solo aviso. El botón de "Añadir
+   * acción" sigue estando para encadenar varias, pero ya no es
+   * obligatorio pasar por él.
+   */
+  const pendiente: CommunityAction | null = tituloNuevo.trim()
+    ? {
+        title: tituloNuevo.trim(),
+        description: descripcionNueva.trim(),
+        ...(fotoNueva ? { photo: fotoNueva } : {}),
+      }
+    : null;
+
+  const accionesAGuardar = pendiente ? [...acciones, pendiente] : acciones;
+
+  // Cuando el guardado sale bien, lo pendiente pasa a la lista y las
+  // casillas se vacían. Sin esto, el siguiente guardado mandaría la
+  // misma acción por segunda vez y saldría duplicada.
+  const [estadoVisto, setEstadoVisto] = useState(estado);
+  if (estado !== estadoVisto) {
+    setEstadoVisto(estado);
+    if (estado && "ok" in estado && estado.ok && pendiente) {
+      setAcciones(accionesAGuardar);
+      setTituloNuevo("");
+      setDescripcionNueva("");
+      setFotoNueva("");
+    }
+  }
+
   function anadirAccion() {
     if (!tituloNuevo.trim()) return;
     setAcciones((actuales) => [
@@ -161,7 +194,7 @@ export function ComunidadForm({
 
         <AvisoDerechosDeImagen />
 
-        <input type="hidden" name="communityActions" value={JSON.stringify(acciones)} />
+        <input type="hidden" name="communityActions" value={JSON.stringify(accionesAGuardar)} />
 
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
         <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />

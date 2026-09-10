@@ -8,14 +8,16 @@ import { LOCALE_CONFIG } from "@/config/locales";
 import type { AppLocale } from "@/i18n/routing";
 import {
   CLASES_NIVEL_PATROCINIO,
+  ETIQUETA_CATEGORIA_NECESIDAD,
   ETIQUETA_NIVEL_PATROCINIO,
   esPorPlazas,
   formatoValorOportunidad,
   plazasLibres,
 } from "@/lib/opportunities";
-import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
+import { agruparEquiposPorSexo, agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
 import { SITE_URL } from "@/lib/site";
 import type { ClubTeam, SocialLinks } from "@/lib/types";
+import { BarraDePlazas } from "@/components/BarraDePlazas";
 import { CompartirBoton } from "./components/CompartirBoton";
 import { DatosDeContacto } from "./components/DatosDeContacto";
 import { RegistrarVisita } from "./components/RegistrarVisita";
@@ -202,6 +204,18 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex flex-wrap items-center gap-2">
                       <p className="font-semibold text-zinc-900">{oportunidad.title}</p>
+                      {/* La flecha al revés: el club necesita esto y da
+                          visibilidad a cambio (migración 0038). Se marca
+                          en ámbar y no en verde para que se distinga de
+                          un golpe de lo que el club ofrece. */}
+                      {oportunidad.esNecesidad && (
+                        <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                          Lo necesitamos
+                          {oportunidad.categoriaNecesidad
+                            ? ` · ${ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]}`
+                            : ""}
+                        </span>
+                      )}
                       {oportunidad.sponsorLevel !== "libre" && (
                         <span
                           className={`rounded-full px-2 py-0.5 text-xs font-medium ${
@@ -230,12 +244,19 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     </p>
                   )}
                   {esPorPlazas(oportunidad) && (
-                    <p className="text-xs font-medium text-brand-teal-dark">
-                      {t("oportunidades.plazas", {
-                        libres: plazasLibres(oportunidad),
-                        total: oportunidad.slotsTotal ?? 0,
-                      })}
-                    </p>
+                    <div className="space-y-1.5">
+                      <p className="text-xs font-medium text-brand-teal-dark">
+                        {t("oportunidades.plazas", {
+                          libres: plazasLibres(oportunidad),
+                          total: oportunidad.slotsTotal ?? 0,
+                        })}
+                      </p>
+                      <BarraDePlazas
+                        slotsTotal={oportunidad.slotsTotal}
+                        slotsTaken={oportunidad.slotsTaken}
+                        etiqueta={oportunidad.esNecesidad ? "colaboradores" : "plazas"}
+                      />
+                    </div>
                   )}
                   {oportunidad.duration && (
                     <p className="text-xs font-medium text-zinc-500">{oportunidad.duration}</p>
@@ -295,8 +316,21 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
       etiqueta: t("secciones.equipos"),
       nodo: (
         <Seccion id="equipos" titulo={t("secciones.equipos")}>
-          <ul className="grid gap-3 sm:grid-cols-2">
-            {equipos.map((equipo) => (
+          {/* Agrupados por sexo (migración 0038). Antes iban todos
+              revueltos y una empresa que solo quiere patrocinar deporte
+              femenino tenía que ir leyendo tarjeta por tarjeta. Los
+              grupos solo aparecen cuando hay más de uno: un club con
+              equipos solo masculinos no necesita un titular que se lo
+              recuerde. */}
+          {agruparEquiposPorSexo(equipos).map(({ titulo, equipos: delGrupo }) => (
+            <div key={titulo ?? "sin-grupo"} className={titulo ? "mb-6 last:mb-0" : ""}>
+              {titulo && (
+                <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500">
+                  {titulo}
+                </h3>
+              )}
+              <ul className="grid gap-3 sm:grid-cols-2">
+                {delGrupo.map((equipo) => (
               <li key={equipo.id} className="overflow-hidden rounded-xl border border-zinc-200">
                 {equipo.photoUrl && (
                   <Image
@@ -319,10 +353,22 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     ? ` · ${formatoNumero.format(equipo.playerCount)} jugadores`
                     : ""}
                 </p>
+                {equipo.competitionLevel && (
+                  <p className="mt-2 text-sm font-medium text-brand-teal-dark">
+                    {equipo.competitionLevel}
+                  </p>
+                )}
+                {equipo.achievements && (
+                  <p className="mt-1 whitespace-pre-line text-sm text-zinc-600">
+                    {equipo.achievements}
+                  </p>
+                )}
                 </div>
               </li>
-            ))}
-          </ul>
+                ))}
+              </ul>
+            </div>
+          ))}
         </Seccion>
       ),
     });

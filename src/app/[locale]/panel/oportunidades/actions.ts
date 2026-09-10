@@ -2,9 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
+import { leerCategoriaNecesidad } from "@/lib/opportunities";
 import { createClient } from "@/lib/supabase/server";
 import type {
   BudgetPeriod,
+  CategoriaNecesidad,
   CollaborationType,
   ObjectiveTag,
   OpportunityStatus,
@@ -151,6 +153,25 @@ function leerPlazas(formData: FormData): { total: number | null; cubiertas: numb
   return { total, cubiertas: validas };
 }
 
+/**
+ * Si esto es algo que el club NECESITA y, en ese caso, de qué clase
+ * (migración 0038). La categoría solo se guarda cuando es una
+ * necesidad: la base de datos lo exige, y con razón — una categoría de
+ * necesidad colgando de una oportunidad normal no significa nada.
+ */
+function leerNecesidad(formData: FormData): {
+  esNecesidad: boolean;
+  categoria: CategoriaNecesidad | null;
+} {
+  const esNecesidad = String(formData.get("esNecesidad") ?? "no") === "si";
+  if (!esNecesidad) return { esNecesidad: false, categoria: null };
+
+  return {
+    esNecesidad: true,
+    categoria: leerCategoriaNecesidad(String(formData.get("categoriaNecesidad") ?? "")),
+  };
+}
+
 function leerObjetivos(formData: FormData): ObjectiveTag[] {
   return formData
     .getAll("objectives")
@@ -179,6 +200,10 @@ export async function crearOportunidad(
   if (value === null) return { error: "Indica un valor válido (0 o más)." };
 
   const plazas = leerPlazas(formData);
+  const necesidad = leerNecesidad(formData);
+  if (necesidad.esNecesidad && !necesidad.categoria) {
+    return { error: "Elige qué servicio o producto necesitas." };
+  }
 
   const { error } = await supabase.from("opportunities").insert({
     club_id: user.id,
@@ -195,6 +220,8 @@ export async function crearOportunidad(
     team_id: await leerEquipo(supabase, user.id, formData),
     slots_total: plazas.total,
     slots_taken: plazas.cubiertas,
+    is_need: necesidad.esNecesidad,
+    need_category: necesidad.categoria,
   });
 
   if (error) return { error: "No se ha podido crear la oportunidad." };
@@ -228,6 +255,10 @@ export async function actualizarOportunidad(
 
   const status = leerEstado(formData) ?? "available";
   const plazas = leerPlazas(formData);
+  const necesidad = leerNecesidad(formData);
+  if (necesidad.esNecesidad && !necesidad.categoria) {
+    return { error: "Elige qué servicio o producto necesitas." };
+  }
 
   const { error } = await supabase
     .from("opportunities")
@@ -245,6 +276,8 @@ export async function actualizarOportunidad(
       team_id: await leerEquipo(supabase, user.id, formData),
       slots_total: plazas.total,
       slots_taken: plazas.cubiertas,
+      is_need: necesidad.esNecesidad,
+      need_category: necesidad.categoria,
       status,
     })
     .eq("id", id)
@@ -291,7 +324,7 @@ export async function duplicarOportunidad(formData: FormData): Promise<void> {
   const { data: original } = await supabase
     .from("opportunities")
     .select(
-      "title, description, opportunity_type, value, duration, period, collaboration_type, objectives, sponsor_level, exclusivity, team_id, slots_total",
+      "title, description, opportunity_type, value, duration, period, collaboration_type, objectives, sponsor_level, exclusivity, team_id, slots_total, is_need, need_category",
     )
     .eq("id", id)
     .eq("club_id", user.id)
@@ -316,6 +349,8 @@ export async function duplicarOportunidad(formData: FormData): Promise<void> {
     // original, no de la copia.
     slots_total: original.slots_total,
     slots_taken: 0,
+    is_need: original.is_need,
+    need_category: original.need_category,
   });
 
   revalidatePath(RUTA_OPORTUNIDADES);

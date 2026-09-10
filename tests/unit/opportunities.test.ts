@@ -49,6 +49,8 @@ describe("oportunidades", () => {
       team_id: null,
       slots_total: null,
       slots_taken: null,
+      is_need: null,
+      need_category: null,
       archived_at: null,
       created_at: "2026-01-01T00:00:00.000Z",
       updated_at: "2026-01-01T00:00:00.000Z",

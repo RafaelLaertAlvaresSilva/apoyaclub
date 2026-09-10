@@ -4,6 +4,7 @@ import { createPublicClient } from "@/lib/supabase/public";
 import { etiquetaEquipo } from "@/lib/opportunities";
 import type {
   BudgetPeriod,
+  CategoriaNecesidad,
   CollaborationType,
   ObjectiveTag,
   OpportunityType,
@@ -78,6 +79,8 @@ type FilaBusqueda = {
   team_gender: string | null;
   slots_total: number | null;
   slots_taken: number | null;
+  is_need: boolean | null;
+  need_category: CategoriaNecesidad | null;
   /** Porcentaje de ficha rellenada del club (migración 0020). */
   club_profile_score: number | null;
   /** El mismo porcentaje en decenas (0-10), que es como se ordena. */
@@ -104,6 +107,8 @@ function filaAResultado(fila: FilaBusqueda, centro: Coordenadas | null): Resulta
     sponsorLevel: fila.sponsor_level ?? "libre",
     slotsTotal: fila.slots_total,
     slotsTaken: fila.slots_taken ?? 0,
+    esNecesidad: fila.is_need ?? false,
+    categoriaNecesidad: fila.need_category,
     profileScore: fila.club_profile_score ?? 0,
     visibilityBucket: fila.club_visibility_bucket ?? 0,
     exclusivity: fila.exclusivity,

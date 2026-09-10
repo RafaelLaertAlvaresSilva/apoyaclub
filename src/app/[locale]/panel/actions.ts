@@ -405,9 +405,56 @@ export async function agregarEquipo(
     team_level: teamLevel,
     player_count: leerEntero(formData, "playerCount"),
     photo_url: leerTexto(formData, "photoUrl"),
+    competition_level: leerTexto(formData, "competitionLevel"),
+    achievements: leerTexto(formData, "achievements"),
   });
 
   if (error) return fallo("agregarEquipo", error, "No se ha podido añadir el equipo.");
+
+  revalidatePath(RUTA_PANEL);
+  return { ok: true };
+}
+
+/**
+ * Cambia los datos de un equipo ya dado de alta (migración 0038).
+ *
+ * Antes solo se podía crear y borrar: un club que se equivocaba en la
+ * categoría, o que subía de división en enero, tenía que borrar el
+ * equipo y volver a crearlo — y con él se iba la foto y cualquier
+ * oportunidad que tuviera asociada.
+ */
+export async function actualizarEquipo(
+  _estadoPrevio: EstadoGuardado,
+  formData: FormData,
+): Promise<EstadoGuardado> {
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return { error: contexto.error };
+  const { supabase, user } = contexto;
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return { error: "No se sabe qué equipo cambiar." };
+
+  const sport = leerTexto(formData, "sport");
+  if (!sport) return { error: "Indica el deporte del equipo." };
+
+  const teamLevelValor = String(formData.get("teamLevel") ?? "");
+  const teamLevel: TeamLevel = teamLevelValor === "cantera" ? "cantera" : "primer_equipo";
+
+  const { error } = await supabase
+    .from("club_teams")
+    .update({
+      sport,
+      category: leerTexto(formData, "category"),
+      gender: leerTexto(formData, "gender"),
+      team_level: teamLevel,
+      player_count: leerEntero(formData, "playerCount"),
+      competition_level: leerTexto(formData, "competitionLevel"),
+      achievements: leerTexto(formData, "achievements"),
+    })
+    .eq("id", id)
+    .eq("club_id", user.id);
+
+  if (error) return fallo("actualizarEquipo", error, "No se han podido guardar los cambios del equipo.");
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };

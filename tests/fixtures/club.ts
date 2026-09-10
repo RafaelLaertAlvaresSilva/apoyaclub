@@ -66,6 +66,8 @@ export function equipoDePrueba(cambios: Partial<ClubTeam> = {}): ClubTeam {
     teamLevel: "primer_equipo",
     playerCount: 16,
     photoUrl: null,
+    competitionLevel: null,
+    achievements: null,
     ...cambios,
   };
 }

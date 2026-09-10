@@ -11,12 +11,14 @@ import {
   ETIQUETA_OBJETIVO,
   ETIQUETA_PERIODO,
   CLASES_NIVEL_PATROCINIO,
+  ETIQUETA_CATEGORIA_NECESIDAD,
   ETIQUETA_NIVEL_PATROCINIO,
   ETIQUETA_TIPO_OPORTUNIDAD,
   esPorPlazas,
   formatoValorOportunidad,
   plazasLibres,
 } from "@/lib/opportunities";
+import { BarraDePlazas } from "@/components/BarraDePlazas";
 import { agruparPorClub, type FiltrosBusqueda, type PaginaBusqueda, type ResultadoClub, type ResultadoOportunidad, type VistaBusqueda } from "@/lib/search-types";
 
 const formatoDistancia = (km: number) => (km < 10 ? `${km.toFixed(1)} km` : `${Math.round(km)} km`);
@@ -215,6 +217,16 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
       <div>
         <div className="flex flex-wrap items-center gap-2">
           <p className="font-semibold text-zinc-900">{oportunidad.title}</p>
+          {/* La oportunidad al revés: el club necesita esto y da
+              visibilidad a cambio (migración 0038). */}
+          {oportunidad.esNecesidad && (
+            <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+              Lo necesitan
+              {oportunidad.categoriaNecesidad
+                ? ` · ${ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]}`
+                : ""}
+            </span>
+          )}
           {oportunidad.sponsorLevel !== "libre" && (
             <span
               className={`rounded-full px-2 py-0.5 text-xs font-medium ${
@@ -248,12 +260,19 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
       </div>
 
       {esPorPlazas(oportunidad) && (
-        <p className="text-xs font-medium text-brand-teal-dark">
-          {tTarjeta("plazas", {
-            libres: plazasLibres(oportunidad),
-            total: oportunidad.slotsTotal ?? 0,
-          })}
-        </p>
+        <div className="space-y-1.5">
+          <p className="text-xs font-medium text-brand-teal-dark">
+            {tTarjeta("plazas", {
+              libres: plazasLibres(oportunidad),
+              total: oportunidad.slotsTotal ?? 0,
+            })}
+          </p>
+          <BarraDePlazas
+            slotsTotal={oportunidad.slotsTotal}
+            slotsTaken={oportunidad.slotsTaken}
+            etiqueta={oportunidad.esNecesidad ? "colaboradores" : "plazas"}
+          />
+        </div>
       )}
 
       <div className="mt-auto flex items-center justify-between pt-1">

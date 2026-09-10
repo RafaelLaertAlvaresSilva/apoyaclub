@@ -22,6 +22,8 @@ function oportunidad(cambios: Partial<ResultadoOportunidad> = {}): ResultadoOpor
     sponsorLevel: "libre",
     slotsTotal: null,
     slotsTaken: 0,
+    esNecesidad: false,
+    categoriaNecesidad: null,
     profileScore: 0,
     visibilityBucket: 0,
     exclusivity: null,

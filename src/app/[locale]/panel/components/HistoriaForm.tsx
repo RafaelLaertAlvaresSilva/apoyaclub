@@ -50,6 +50,39 @@ export function HistoriaForm({ userId, perfil }: { userId: string; perfil: ClubP
     setHitos((actuales) => actuales.filter((_, i) => i !== indice));
   }
 
+  /**
+   * Lo que se guarda: los hitos de la lista más el que esté a medio
+   * escribir. Mismo motivo que en Acción social: quien rellena el año y
+   * el texto y le da a "Guardar" sin pasar por "Añadir hito" perdía lo
+   * escrito sin ningún aviso.
+   */
+  const anioPendiente = Number.parseInt(anioNuevo, 10);
+  const hitoPendiente: Milestone | null =
+    Number.isFinite(anioPendiente) && textoNuevo.trim()
+      ? {
+          year: anioPendiente,
+          text: textoNuevo.trim(),
+          photoUrl: fotoNueva || null,
+          videoUrl: videoNuevo.trim() || null,
+        }
+      : null;
+
+  const hitosAGuardar = hitoPendiente ? [...hitos, hitoPendiente] : hitos;
+
+  // Al guardar bien, lo pendiente pasa a la lista y se vacían las
+  // casillas: si no, el siguiente guardado lo mandaría otra vez.
+  const [estadoVisto, setEstadoVisto] = useState(estado);
+  if (estado !== estadoVisto) {
+    setEstadoVisto(estado);
+    if (estado && "ok" in estado && estado.ok && hitoPendiente) {
+      setHitos(hitosAGuardar);
+      setAnioNuevo("");
+      setTextoNuevo("");
+      setFotoNueva("");
+      setVideoNuevo("");
+    }
+  }
+
   return (
     <SeccionCard titulo={t("historia")} descripcion={t("fundacionEHitosDestacados")}>
       <form action={formAction} className="space-y-4">
@@ -178,7 +211,7 @@ export function HistoriaForm({ userId, perfil }: { userId: string; perfil: ClubP
           </div>
         </div>
 
-        <input type="hidden" name="milestones" value={JSON.stringify(hitos)} />
+        <input type="hidden" name="milestones" value={JSON.stringify(hitosAGuardar)} />
 
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
         <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />

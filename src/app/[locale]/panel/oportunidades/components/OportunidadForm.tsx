@@ -1,10 +1,12 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { Campo, SeccionCard, clasesInput, clasesTextarea } from "@/app/[locale]/panel/components/SeccionCard";
 import {
+  CATEGORIAS_NECESIDAD,
   ESTADOS_OPORTUNIDAD,
   FORMAS_COLABORACION,
   NIVELES_PATROCINIO,
@@ -15,6 +17,7 @@ import {
 } from "@/lib/opportunities";
 import type {
   BudgetPeriod,
+  CategoriaNecesidad,
   ClubTeam,
   CollaborationType,
   ObjectiveTag,
@@ -43,6 +46,9 @@ export type ValoresOportunidad = {
   // Fase 17: oportunidad repartida entre varias empresas.
   slotsTotal?: number | null;
   slotsTaken?: number;
+  // Migración 0038: la oportunidad al revés — el club necesita algo.
+  esNecesidad?: boolean;
+  categoriaNecesidad?: CategoriaNecesidad | null;
 };
 
 /**
@@ -73,9 +79,92 @@ export function OportunidadForm({
   equipos?: ClubTeam[];
 }) {
   const t = useTranslations("panel.oportunidades");
+
+  // Qué clase de oportunidad es. Cambia lo que se enseña debajo, así
+  // que vive en el componente y no solo en el formulario.
+  const [esNecesidad, setEsNecesidad] = useState(valoresIniciales?.esNecesidad ?? false);
+
   const contenidoFormulario = (
     <form action={accion} className="space-y-4">
       {idOportunidad && <input type="hidden" name="id" value={idOportunidad} />}
+
+      {/* Lo primero de todo, porque cambia el sentido de lo que viene
+          detrás. Una oportunidad normal es "te doy visibilidad, me das
+          dinero"; una necesidad es "necesito un fisio y te doy
+          visibilidad a cambio". Es la misma ficha con la flecha al
+          revés, y para un fisioterapeuta del barrio es probablemente
+          la mejor oportunidad que hay en la plataforma. */}
+      <fieldset className="rounded-lg border border-zinc-200 p-4">
+        <legend className="px-1 text-sm font-medium text-zinc-700">¿Qué es esto?</legend>
+        <div className="grid gap-2 sm:grid-cols-2">
+          <label
+            className={`flex cursor-pointer gap-2.5 rounded-lg border p-3 transition-colors ${
+              esNecesidad ? "border-zinc-200 hover:bg-zinc-50" : "border-teal-500 bg-teal-50"
+            }`}
+          >
+            <input
+              type="radio"
+              name="esNecesidad"
+              value="no"
+              checked={!esNecesidad}
+              onChange={() => setEsNecesidad(false)}
+              className="mt-0.5"
+            />
+            <span>
+              <span className="block text-sm font-medium text-zinc-900">Ofrezco patrocinio</span>
+              <span className="block text-xs text-zinc-500">
+                Doy visibilidad a la empresa y ella aporta dinero.
+              </span>
+            </span>
+          </label>
+
+          <label
+            className={`flex cursor-pointer gap-2.5 rounded-lg border p-3 transition-colors ${
+              esNecesidad ? "border-amber-500 bg-amber-50" : "border-zinc-200 hover:bg-zinc-50"
+            }`}
+          >
+            <input
+              type="radio"
+              name="esNecesidad"
+              value="si"
+              checked={esNecesidad}
+              onChange={() => setEsNecesidad(true)}
+              className="mt-0.5"
+            />
+            <span>
+              <span className="block text-sm font-medium text-zinc-900">
+                Necesito un servicio o producto
+              </span>
+              <span className="block text-xs text-zinc-500">
+                Fisio, autobús, fotógrafo, material… y doy visibilidad a cambio.
+              </span>
+            </span>
+          </label>
+        </div>
+
+        {esNecesidad && (
+          <div className="mt-4">
+            <Campo
+              etiqueta="Qué necesitas"
+              ayuda="Sirve para que una empresa de ese ramo te encuentre buscando lo suyo."
+            >
+              <select
+                name="categoriaNecesidad"
+                required
+                defaultValue={valoresIniciales?.categoriaNecesidad ?? ""}
+                className={clasesInput}
+              >
+                <option value="" disabled>Elige qué necesitas</option>
+                {CATEGORIAS_NECESIDAD.map((categoria) => (
+                  <option key={categoria.id} value={categoria.id}>
+                    {categoria.etiqueta}
+                  </option>
+                ))}
+              </select>
+            </Campo>
+          </div>
+        )}
+      </fieldset>
 
       <Campo
         etiqueta={t("nombreDeLaOportunidad")}
@@ -220,7 +309,14 @@ export function OportunidadForm({
       )}
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Campo etiqueta={t("plazas")} ayuda={t("plazasAyuda")}>
+        <Campo
+          etiqueta={esNecesidad ? "Cuántos colaboradores necesitas" : t("plazas")}
+          ayuda={
+            esNecesidad
+              ? "Si con uno te vale, déjalo vacío. A partir de dos sale una barra con lo que llevas cubierto."
+              : t("plazasAyuda")
+          }
+        >
           <input
             name="slotsTotal"
             type="number"
@@ -231,7 +327,10 @@ export function OportunidadForm({
           />
         </Campo>
 
-        <Campo etiqueta={t("plazasCubiertas")} ayuda={t("plazasCubiertasAyuda")}>
+        <Campo
+          etiqueta={esNecesidad ? "Cuántos tienes ya" : t("plazasCubiertas")}
+          ayuda={t("plazasCubiertasAyuda")}
+        >
           <input
             name="slotsTaken"
             type="number"

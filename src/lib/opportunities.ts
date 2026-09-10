@@ -1,5 +1,6 @@
 import type {
   BudgetPeriod,
+  CategoriaNecesidad,
   CollaborationType,
   ObjectiveTag,
   OpportunityStatus,
@@ -246,4 +247,64 @@ export function valorTotalDeLasPlazas(oportunidad: {
   value: number;
 }): number {
   return (oportunidad.slotsTotal ?? 1) * oportunidad.value;
+}
+
+/**
+ * Cuánto se lleva cubierto de una oportunidad por plazas, en tanto por
+ * ciento. Es lo que pinta la barra de progreso.
+ *
+ * Se calcula al leerlo y no se guarda en ninguna columna: el porcentaje
+ * es `cubiertas / total`, y guardarlo significaría que el día que el
+ * club corrige el número de plazas la barra se queda mintiendo.
+ */
+export function porcentajeDePlazas(oportunidad: {
+  slotsTotal: number | null;
+  slotsTaken: number;
+}): number {
+  const total = oportunidad.slotsTotal ?? 0;
+  if (total <= 0) return 0;
+  const cubiertas = Math.min(Math.max(oportunidad.slotsTaken, 0), total);
+  return Math.round((cubiertas / total) * 100);
+}
+
+// ---------------------------------------------------------------------
+// Lo que el club necesita (migración 0038)
+// ---------------------------------------------------------------------
+
+/**
+ * Catálogo de necesidades. Lista cerrada a propósito: si cada club
+ * escribe lo suyo, un fisioterapeuta que busque "fisioterapia" no
+ * encuentra al que puso "recuperación deportiva".
+ */
+export const CATEGORIAS_NECESIDAD: { id: CategoriaNecesidad; etiqueta: string }[] = [
+  { id: "fisioterapia", etiqueta: "Fisioterapia" },
+  { id: "medico", etiqueta: "Servicio médico" },
+  { id: "fotografia", etiqueta: "Fotografía" },
+  { id: "video", etiqueta: "Vídeo" },
+  { id: "marketing", etiqueta: "Marketing y redes" },
+  { id: "imprenta", etiqueta: "Imprenta y rotulación" },
+  { id: "transporte", etiqueta: "Transporte y autobús" },
+  { id: "material", etiqueta: "Material deportivo" },
+  { id: "equipacion", etiqueta: "Equipaciones" },
+  { id: "limpieza", etiqueta: "Limpieza" },
+  { id: "restauracion", etiqueta: "Restauración y catering" },
+  { id: "alojamiento", etiqueta: "Alojamiento" },
+  { id: "gimnasio", etiqueta: "Gimnasio y preparación física" },
+  { id: "nutricion", etiqueta: "Nutrición" },
+  { id: "asesoria", etiqueta: "Asesoría y gestoría" },
+  { id: "informatica", etiqueta: "Informática y web" },
+  { id: "otro", etiqueta: "Otro" },
+];
+
+export const ETIQUETA_CATEGORIA_NECESIDAD: Record<CategoriaNecesidad, string> =
+  CATEGORIAS_NECESIDAD.reduce(
+    (acumulado, categoria) => ({ ...acumulado, [categoria.id]: categoria.etiqueta }),
+    {} as Record<CategoriaNecesidad, string>,
+  );
+
+/** Una categoría del formulario, solo si está en el catálogo. */
+export function leerCategoriaNecesidad(valor: string): CategoriaNecesidad | null {
+  return CATEGORIAS_NECESIDAD.some((categoria) => categoria.id === valor)
+    ? (valor as CategoriaNecesidad)
+    : null;
 }

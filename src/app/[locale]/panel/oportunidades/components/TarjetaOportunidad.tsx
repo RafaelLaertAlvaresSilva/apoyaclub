@@ -7,7 +7,9 @@ import {
   CLASES_NIVEL_PATROCINIO,
   ESTADOS_OPORTUNIDAD,
   ETIQUETA_NIVEL_PATROCINIO,
+  ETIQUETA_CATEGORIA_NECESIDAD,
   ETIQUETA_TIPO_OPORTUNIDAD,
+  esPorPlazas,
   formatoValorOportunidad,
 } from "@/lib/opportunities";
 import {
@@ -19,6 +21,7 @@ import {
   eliminarOportunidad,
   restaurarOportunidad,
 } from "../actions";
+import { BarraDePlazas } from "@/components/BarraDePlazas";
 import { OportunidadForm } from "./OportunidadForm";
 
 const ESTILO_ESTADO: Record<OpportunityStatus, string> = {
@@ -64,6 +67,14 @@ export function TarjetaOportunidad({
                 {ETIQUETA_NIVEL_PATROCINIO[oportunidad.sponsorLevel]}
               </span>
             )}
+            {oportunidad.esNecesidad && (
+              <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                Lo necesitamos
+                {oportunidad.categoriaNecesidad
+                  ? ` · ${ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]}`
+                  : ""}
+              </span>
+            )}
             {oportunidad.archivedAt && (
               <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-500">{t("archivada")}</span>
             )}
@@ -80,6 +91,18 @@ export function TarjetaOportunidad({
           )}
           {oportunidad.description && (
             <p className="mt-2 text-sm text-zinc-600">{oportunidad.description}</p>
+          )}
+
+          {/* Cuando hace falta más de una empresa, el club necesita ver
+              cuántas lleva sin ponerse a restar. */}
+          {esPorPlazas(oportunidad) && (
+            <div className="mt-3 max-w-xs">
+              <BarraDePlazas
+                slotsTotal={oportunidad.slotsTotal}
+                slotsTaken={oportunidad.slotsTaken}
+                etiqueta={oportunidad.esNecesidad ? "colaboradores" : "plazas"}
+              />
+            </div>
           )}
         </div>
 
@@ -207,6 +230,8 @@ function EditorOportunidad({
           teamId: oportunidad.teamId,
           slotsTotal: oportunidad.slotsTotal,
           slotsTaken: oportunidad.slotsTaken,
+          esNecesidad: oportunidad.esNecesidad,
+          categoriaNecesidad: oportunidad.categoriaNecesidad,
         }}
       />
     </li>

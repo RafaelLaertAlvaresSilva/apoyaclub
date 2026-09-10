@@ -1,5 +1,6 @@
 import type {
   BudgetPeriod,
+  CategoriaNecesidad,
   CollaborationType,
   ObjectiveTag,
   Opportunity,
@@ -31,6 +32,8 @@ export type OpportunityRow = {
   team_id: string | null;
   slots_total: number | null;
   slots_taken: number | null;
+  is_need: boolean | null;
+  need_category: CategoriaNecesidad | null;
   archived_at: string | null;
   created_at: string;
   updated_at: string;
@@ -57,6 +60,10 @@ export function opportunityRowToOpportunity(row: OpportunityRow): Opportunity {
     teamId: row.team_id,
     slotsTotal: row.slots_total,
     slotsTaken: row.slots_taken ?? 0,
+    // Se acepta null por si la fila viene de una consulta hecha antes
+    // de aplicar la migración 0038; en base de datos es NOT NULL.
+    esNecesidad: row.is_need ?? false,
+    categoriaNecesidad: row.need_category,
     archivedAt: row.archived_at,
     createdAt: row.created_at,
     updatedAt: row.updated_at,

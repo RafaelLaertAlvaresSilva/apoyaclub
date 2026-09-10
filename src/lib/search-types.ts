@@ -1,4 +1,5 @@
 import type {
+  CategoriaNecesidad,
   BudgetPeriod,
   CollaborationType,
   ObjectiveTag,
@@ -64,6 +65,11 @@ export type ResultadoOportunidad = {
   /** Plazas de una oportunidad repartida entre varias empresas. Null = un único patrocinador. */
   slotsTotal: number | null;
   slotsTaken: number;
+  /** true = el club NECESITA esto y ofrece visibilidad a cambio
+   * (migración 0038). */
+  esNecesidad: boolean;
+  /** Qué necesita, cuando `esNecesidad` es true. */
+  categoriaNecesidad: CategoriaNecesidad | null;
   /** Porcentaje de ficha rellenada del club (0-100). */
   profileScore: number;
   /** El mismo porcentaje en decenas: es lo que ordena en "recomendado". */
