@@ -23,12 +23,12 @@ import { useEffect, useState } from "react";
  */
 
 const SECCIONES = [
-  { id: "clubes", etiqueta: "Qué puedes ofrecer" },
   { id: "como-funciona", etiqueta: "Cómo funciona" },
-  { id: "tu-pagina", etiqueta: "Tu página" },
+  { id: "clubes", etiqueta: "Qué puedes ofrecer" },
+  { id: "oportunidades", etiqueta: "Oportunidades" },
+  { id: "empresas", etiqueta: "Para empresas" },
   { id: "herramientas", etiqueta: "Herramientas" },
   { id: "precio", etiqueta: "Precio" },
-  { id: "faq", etiqueta: "Preguntas" },
 ] as const;
 
 export function MenuDeSecciones() {

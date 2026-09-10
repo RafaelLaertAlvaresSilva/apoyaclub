@@ -7,132 +7,106 @@
     "etiqueta": "LA PLATAFORMA DE PATROCINIO DEPORTIVO",
     "tituloParte1": "Cada club tiene algo que ofrecer.",
     "tituloParte2": "ApoyaClub te da las herramientas para mostrarlo, gestionarlo y no dejar escapar ninguna oportunidad.",
-    "subtitulo": "Prepara tu club para que una empresa te diga que sí: tu página, tus oportunidades con precio, tu dossier en un clic y el control de lo que le prometes a cada patrocinador. Tú eliges a quién te acercas. Sin comisiones.",
     "cta": "Prueba 1 mes gratis",
-    "condiciones": "Sin permanencia · 29,90 €/mes después del primer mes · IVA incluido",
+    "condiciones": "1 mes gratis · 29,90 €/mes después · IVA incluido · Sin permanencia",
     "cadenaClub": "Club",
     "cadenaOportunidad": "Oportunidad",
-    "cadenaEmpresa": "Empresa"
+    "cadenaEmpresa": "Empresa",
+    "resumen": "Patrocinadores, colaboradores, servicios y oportunidades para hacer crecer tu club.",
+    "ctaSecundario": "Descubre cómo funciona"
   },
   "caminos": {
     "clubTitulo": "Soy un club",
-    "clubTexto": "Crea tu página, pon precio a lo que ofreces y sal a buscar patrocinadores con algo que enseñar.",
-    "clubCta": "Crea la página de tu club →",
+    "clubTexto": "Quiero mostrar lo que mi club puede ofrecer, encontrar oportunidades y gestionar mis contactos.",
+    "clubCta": "Quiero hacer crecer mi club",
     "empresaTitulo": "Soy una empresa",
-    "empresaTexto": "Busca clubes de tu zona y patrocina desde 50 €. Acceso gratuito, sin intermediarios.",
-    "empresaCta": "Explorar clubes →"
-  },
-  "problema": {
-    "eyebrow": "Para clubes",
-    "titulo": "Un patrocinio no tiene por qué ser solo poner un logo en una camiseta",
-    "texto": "Tu club tiene mucho más que ofrecer de lo que crees. Esto es lo que las empresas valoran:",
-    "tags": [
-      "Equipaciones",
-      "Equipos",
-      "Cantera",
-      "Redes sociales",
-      "Jugadores",
-      "Partidos",
-      "Eventos",
-      "Torneos",
-      "Instalaciones",
-      "Vallas publicitarias",
-      "Megafonía",
-      "Familias",
-      "Socios",
-      "Visibilidad local",
-      "Transporte",
-      "Punto de venta en partidos",
-      "Página web",
-      "Servicios",
-      "Contenido"
-    ]
+    "empresaTexto": "Quiero descubrir oportunidades deportivas que encajen con mi presupuesto y mis objetivos.",
+    "empresaCta": "Buscar oportunidades",
+    "empresaGratis": "Gratis y sin cuenta"
   },
   "comoFunciona": {
+    "eyebrow": "En cuatro pasos",
     "titulo": "Cómo funciona",
     "pasos": [
       {
-        "titulo": "Crea tu perfil",
-        "texto": "Equipos, cantera, audiencia, instalaciones y comunidad: todo lo que hace valioso a tu club."
+        "clave": "CREA",
+        "titulo": "Crea tu perfil profesional",
+        "texto": "Equipos, cantera, instalaciones, audiencia y palmarés. Lo escribes una vez."
       },
       {
-        "titulo": "Publica tus oportunidades",
-        "texto": "Desde 50 € hasta el patrocinio principal: tú decides qué ofreces y a qué precio."
+        "clave": "PUBLICA",
+        "titulo": "Convierte lo que tienes en oportunidades",
+        "texto": "Con su precio, sus plazas y lo que incluye. Desde 50 € hasta el patrocinio principal."
       },
       {
-        "titulo": "Sal a buscar, y deja que te encuentren",
-        "texto": "Con tu página y tu dossier en la mano, tú eliges a qué empresas te acercas. Y la que llegue a tu ficha puede escribirte sin registrarse ni buscar tu teléfono."
+        "clave": "CONTACTA",
+        "titulo": "Encuentra empresas y gestiona tus contactos",
+        "texto": "Tú eliges a quién te acercas, con tu dossier en la mano. Y quien llegue a tu página puede escribirte sin registrarse."
       },
       {
-        "titulo": "Cumple lo prometido",
-        "texto": "Apunta lo que le has prometido a cada empresa, márcalo hecho con su prueba y mándale el informe. Es lo que hace que el año siguiente renueve."
+        "clave": "CRECE",
+        "titulo": "Consigue acuerdos y renuévalos",
+        "texto": "Apunta lo prometido, márcalo hecho y manda el informe. Es lo que hace que el año siguiente repitan."
       }
     ]
   },
   "oportunidades": {
-    "eyebrow": "Oportunidades de patrocinio",
-    "titulo": "Cada club crea las suyas, a su medida",
-    "texto": "Algunos ejemplos de lo que un club puede publicar en su página:",
+    "eyebrow": "El corazón de la plataforma",
+    "titulo": "Convierte lo que tienes en oportunidades",
+    "texto": "Cada club crea las suyas, a su medida. Y no todas son dinero: hay quien necesita un autobús, un fisio o material.",
+    "nota": "Ejemplos de cómo se ve una oportunidad publicada. Los datos son de muestra.",
     "ejemplos": [
       {
-        "titulo": "Patrocinador principal",
-        "texto": "Máxima visibilidad: naming, equipación y comunicación oficial."
+        "categoria": "Patrocinio",
+        "titulo": "Patrocinador equipo femenino",
+        "precio": "500 €",
+        "periodo": "/temporada",
+        "datos": [
+          "Alicante",
+          "250 familias",
+          "4.800 seguidores"
+        ],
+        "incluye": [
+          "Logo en equipación",
+          "4 publicaciones",
+          "8 stories",
+          "Presencia en partidos"
+        ],
+        "cta": "Me interesa"
       },
       {
-        "titulo": "Equipo masculino",
-        "texto": "Impulsa una sección concreta con su propio patrocinio."
+        "categoria": "Evento",
+        "titulo": "Patrocinador del torneo de Navidad",
+        "precio": "300 €",
+        "periodo": "",
+        "datos": [
+          "120 participantes",
+          "Un fin de semana",
+          "3 plazas"
+        ],
+        "incluye": [
+          "Lona en el pabellón",
+          "Marca en el cartel",
+          "Mención en megafonía"
+        ],
+        "cta": "Ver oportunidad"
       },
       {
-        "titulo": "Equipo femenino",
-        "texto": "Impulsa una sección concreta con su propio patrocinio."
-      },
-      {
-        "titulo": "Cantera",
-        "texto": "Apoya a las categorías base y su formación."
-      },
-      {
-        "titulo": "Equipación",
-        "texto": "Tu marca en la camiseta, en cada partido."
-      },
-      {
-        "titulo": "Torneo",
-        "texto": "Patrocina un evento puntual de alto impacto."
-      },
-      {
-        "titulo": "Redes sociales",
-        "texto": "Contenido y menciones en los canales del club."
-      },
-      {
-        "titulo": "Instalaciones",
-        "texto": "Tu marca en el pabellón, campo o vestuarios."
-      },
-      {
-        "titulo": "Jugador",
-        "texto": "Patrocinio individual a una figura del equipo."
-      },
-      {
-        "titulo": "Transporte",
-        "texto": "Cubre los desplazamientos del equipo."
-      },
-      {
-        "titulo": "Fisioterapia",
-        "texto": "Servicios de recuperación para la plantilla."
-      },
-      {
-        "titulo": "Restaurante",
-        "texto": "Colaboración con comidas de equipo y eventos."
-      },
-      {
-        "titulo": "Hotel",
-        "texto": "Alojamiento en desplazamientos y concentraciones."
-      },
-      {
-        "titulo": "Material deportivo",
-        "texto": "Balones, material de entrenamiento y más."
-      },
-      {
-        "titulo": "Producto o servicio",
-        "texto": "Colaboraciones a medida con tu negocio."
+        "categoria": "Colaboración",
+        "titulo": "Fisioterapia para la plantilla",
+        "precio": "Servicio",
+        "periodo": "",
+        "datos": [
+          "Equipo sénior",
+          "Cantera",
+          "Todo el año"
+        ],
+        "incluye": [
+          "Marca en la web del club",
+          "Mención en redes",
+          "Presencia en el pabellón"
+        ],
+        "cta": "Ver oportunidad"
       }
     ]
   },
@@ -148,14 +122,18 @@
       "publicoValor": "Familias",
       "deporte": "DEPORTE",
       "deporteValor": "Todos",
-      "buscar": "Buscar",
+      "buscar": "Buscar oportunidades",
       "masFiltros": "Más filtros",
       "tipo": "TIPO DE OPORTUNIDAD",
       "tipoValor": "Equipación",
       "categoria": "CATEGORÍA",
       "categoriaValor": "Cantera",
       "alcance": "ALCANCE",
-      "alcanceValor": "Local"
+      "alcanceValor": "Local",
+      "presupuestoEtiqueta": "¿CUÁNTO QUIERES INVERTIR?",
+      "ubicacionEtiqueta": "¿DÓNDE?",
+      "deporteEtiqueta": "¿QUÉ DEPORTE?",
+      "publicoEtiqueta": "¿A QUIÉN QUIERES LLEGAR?"
     },
     "resultados": [
       {
@@ -177,7 +155,10 @@
         "precio": "480 €"
       }
     ],
-    "avisoEjemplos": "Resultados de ejemplo — ilustrativos, no clubes reales."
+    "avisoEjemplos": "Resultados de ejemplo — ilustrativos, no clubes reales.",
+    "texto": "Dices cuánto quieres invertir, dónde y a quién quieres llegar. Y ves lo que hay.",
+    "gratis": "Gratis, sin cuenta y sin intermediarios.",
+    "nota": "Maqueta del buscador. Las oportunidades que salen son de muestra."
   },
   "paginaClub": {
     "eyebrow": "La página de tu club",
@@ -252,7 +233,7 @@
     ]
   },
   "panel": {
-    "titulo": "Tu panel, siempre a mano",
+    "titulo": "Así funciona ApoyaClub por dentro",
     "boton": "+ Crear oportunidad",
     "metricas": [
       {
@@ -279,7 +260,11 @@
         "numero": "5",
         "etiqueta": "Patrocinadores"
       }
-    ]
+    ],
+    "saludo": "Buenos días, Club Deportivo Ejemplo",
+    "eyebrow": "Tu panel",
+    "texto": "Todo lo que pasa con tu club, en una pantalla: quién te ha visto, quién te ha escrito y qué te toca hacer hoy.",
+    "nota": "Maqueta del panel con datos de muestra."
   },
   "precio": {
     "titulo": "Precio transparente",
@@ -296,14 +281,14 @@
       "Tareas con tus patrocinadores",
       "Informe de patrocinio para cada empresa",
       "Estadísticas de visitas y contactos",
-      "Licencia de ProspectPro incluida",
-      "Ayuda por correo en 48 h"
+      "Licencia de ProspectPro incluida"
     ],
     "cta": "Prueba 1 mes gratis",
     "subtitulo": "El mismo producto en los tres. Lo único que cambia es cómo lo pagas.",
     "todoIncluye": "Los tres planes incluyen:",
     "plazasFundador": "Solo 50 plazas",
-    "gratisPrimerMes": "Empiezas con un mes gratis, en cualquiera de los tres."
+    "gratisPrimerMes": "Empiezas con un mes gratis, en cualquiera de los tres.",
+    "cancelar": "Cancela cuando quieras."
   },
   "faq": {
     "titulo": "Preguntas frecuentes",
@@ -343,7 +328,9 @@
   "ctaFinal": {
     "tituloLinea1": "Tu club ya tiene valor.",
     "tituloLinea2": "Ahora toca mostrarlo.",
-    "cta": "Empieza tu mes gratis"
+    "cta": "Empieza tu mes gratis",
+    "subtexto": "Crea tu perfil, publica tus oportunidades y empieza a gestionar nuevas posibilidades para tu club.",
+    "condiciones": "1 mes gratis · Sin permanencia"
   },
   "contacto": {
     "titulo": "¿Tienes dudas? Escríbenos",
@@ -367,5 +354,60 @@
         "texto": "Un informe en PDF con lo cumplido y sus enlaces. Es lo que hace que el año que viene renueve."
       }
     ]
+  },
+  "ofrece": {
+    "eyebrow": "Para clubes",
+    "titulo": "Tu club tiene mucho más que ofrecer de lo que imaginas",
+    "tarjetas": [
+      "Equipos",
+      "Cantera",
+      "Equipaciones",
+      "Jugadores",
+      "Eventos",
+      "Torneos",
+      "Instalaciones",
+      "Redes sociales",
+      "Familias",
+      "Visibilidad local",
+      "Contenido",
+      "Servicios"
+    ],
+    "cierre1": "Un patrocinio no tiene por qué ser solo poner un logo en una camiseta.",
+    "cierre2": "ApoyaClub convierte todo lo que tu club puede ofrecer en oportunidades que puedes mostrar y gestionar."
+  },
+  "embudo": {
+    "eyebrow": "Lo que no tiene ningún directorio",
+    "titulo": "Que ninguna oportunidad se quede por el camino",
+    "texto": "Una empresa escribe en marzo, se contesta, y en junio nadie se acuerda. Cada solicitud que te llega tiene su estado, y tú ves de un vistazo cuáles están vivas.",
+    "estados": [
+      {
+        "nombre": "Nueva",
+        "texto": "Acaba de escribirte. Te llega aviso por correo."
+      },
+      {
+        "nombre": "Vista",
+        "texto": "La has leído. Sigue esperando respuesta."
+      },
+      {
+        "nombre": "En conversación",
+        "texto": "Estáis hablando. Aquí es donde se cierra."
+      },
+      {
+        "nombre": "Cerrada",
+        "texto": "Acuerdo hecho. Pasa a tus tareas."
+      }
+    ],
+    "descartada": "Descartada",
+    "descartadaTexto": "Las que no encajan salen de en medio, pero no se borran.",
+    "cierre": "Y lo que se cierra no termina ahí: pasa a tus tareas, con fechas, y de ahí sale el informe que le enseñas a la empresa cuando toca renovar."
+  },
+  "dossier": {
+    "eyebrow": "Dossier automático",
+    "titulo": "Tu club, presentado como merece",
+    "texto": "Crea tu información una vez y genera un dossier profesional para compartir con empresas. En PDF para mandarlo y en Word por si quieres retocarlo.",
+    "boton": "Generar dossier"
+  },
+  "ctaFijo": {
+    "texto": "Prueba 1 mes gratis"
   }
 }

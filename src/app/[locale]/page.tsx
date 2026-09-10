@@ -4,44 +4,40 @@ import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { Badge } from "@/components/ui/Badge";
 import { PLANES_EN_ORDEN, periodicidad, precioFormateado } from "@/lib/planes";
+import { CtaFijoMovil } from "./components/CtaFijoMovil";
 import { FormularioContacto } from "./components/FormularioContacto";
 import { MenuDeSecciones } from "./components/MenuDeSecciones";
 
 /**
- * Landing de conversión (Fase 13, rediseño Fase 15). Evolución visual
- * de la landing anterior: mismo contenido y conceptos (dos caminos,
- * problema/solución, precio, cómo funciona, FAQ, fiscalidad, contacto),
- * con más aire, jerarquía y una estética más "SaaS premium" acorde al
- * sistema de diseño de Fase 1 (tokens `brand-navy`/`brand-teal`). El
- * Footer con los enlaces legales lo sigue poniendo `app/layout.tsx`.
+ * Landing de conversión (Fase 13, rediseño Fase 15, reordenación Fase 16).
  *
- * Las fotografías reales de clubes quedan pendientes de contenido: las
- * maquetas (página de club, dossier, panel) usan datos de ejemplo,
- * marcados como tales, en vez de datos inventados que parezcan reales.
+ * La reordenación de Fase 16 no cambia el concepto ni el contenido: lo
+ * jerarquiza. Cada sección defiende UNA idea, en este orden, que es el
+ * de las preguntas que se hace quien entra por primera vez:
+ *
+ *   qué es esto → para quién es → qué tengo yo que ofrecer → cómo se
+ *   convierte en una oportunidad → cómo se ve mi página → cómo me
+ *   encuentra una empresa → qué pasa cuando me escriben → qué le mando
+ *   → qué herramientas hay → cuánto cuesta.
+ *
+ * Dos reglas que conviene no romper al tocar esto:
+ *
+ *   - Se enseña el producto, no se cuenta. Las maquetas (página de
+ *     club, tarjeta de oportunidad, buscador, panel, dossier) valen más
+ *     que tres párrafos, y por eso el texto de cada sección es corto.
+ *   - Lo que se enseña existe. Los datos de las maquetas son de
+ *     muestra y se dice; las funciones que aparecen, no. Ver el embudo:
+ *     dibuja los estados reales de `contact_requests`, no un embudo de
+ *     manual con etapas que el club no encontraría al entrar.
+ *
+ * No hay fotografías de clubes y no es un descuido: no existe ninguna
+ * con derechos cedidos, y una foto de banco de imágenes en la portada
+ * de un producto para clubes de barrio se huele a distancia.
  */
 export async function generateMetadata(): Promise<Metadata> {
   const tMeta = await getTranslations("home.meta");
   return { title: tMeta("titulo"), description: tMeta("descripcion") };
 }
-
-/** Colores del filo superior de cada tarjeta de ejemplo. Van por
- * posición, junto a los textos de `home.oportunidades.ejemplos`. */
-const ACENTOS_OPORTUNIDAD = [
-  "bg-brand-navy",
-  "bg-brand-teal-dark",
-  "bg-brand-teal",
-  "bg-brand-navy-dark",
-  "bg-brand-navy",
-  "bg-brand-teal-dark",
-  "bg-brand-teal",
-  "bg-brand-navy-dark",
-  "bg-brand-navy",
-  "bg-brand-teal-dark",
-  "bg-brand-teal",
-  "bg-brand-navy-dark",
-  "bg-brand-navy",
-  "bg-brand-teal-dark",
-] as const;
 
 /** Un icono por herramienta, por posición, junto a los textos de
  * `home.herramientas.lista`. Trazos sueltos en vez de una librería de
@@ -73,6 +69,9 @@ const ICONOS_HERRAMIENTA = [
   "M3 5h18v14H3zM3 9h18M6.5 7h.01M9 7h.01",
 ] as const;
 
+/** Filo de color de cada tarjeta de oportunidad, por posición. */
+const ACENTOS_OPORTUNIDAD = ["bg-brand-navy", "bg-brand-teal-dark", "bg-brand-teal"] as const;
+
 type TextoConTitulo = { titulo: string; texto: string };
 
 export default async function Home() {
@@ -81,28 +80,38 @@ export default async function Home() {
   // Los textos que son listas viven en `messages/es/home.json` como
   // arrays; `t.raw` los devuelve tal cual (next-intl solo interpola
   // cadenas sueltas).
-  const tags = t.raw("problema.tags") as string[];
-  const pasos = t.raw("comoFunciona.pasos") as TextoConTitulo[];
-  const ejemplosOportunidad = t.raw("oportunidades.ejemplos") as TextoConTitulo[];
+  const pasos = t.raw("comoFunciona.pasos") as (TextoConTitulo & { clave: string })[];
+  const queOfrece = t.raw("ofrece.tarjetas") as string[];
+  const oportunidades = t.raw("oportunidades.ejemplos") as {
+    categoria: string;
+    titulo: string;
+    precio: string;
+    periodo: string;
+    datos: string[];
+    incluye: string[];
+    cta: string;
+  }[];
   const resultadosEjemplo = t.raw("empresas.resultados") as {
     categoria: string;
     titulo: string;
     texto: string;
     precio: string;
   }[];
+  const estadosEmbudo = t.raw("embudo.estados") as { nombre: string; texto: string }[];
   const herramientas = t.raw("herramientas.lista") as TextoConTitulo[];
   const metricasPanel = t.raw("panel.metricas") as { numero: string; etiqueta: string }[];
   const ventajas = t.raw("precio.ventajas") as string[];
-  const puntosSeguimiento = t.raw("seguimiento.puntos") as TextoConTitulo[];
   const preguntas = t.raw("faq.preguntas") as { pregunta: string; respuesta: string }[];
 
   return (
     <div className="flex flex-1 flex-col bg-white">
       <Header />
 
-      <main className="flex-1">
+      {/* El hueco de abajo es para el botón fijo del móvil, que si no
+          taparía la última línea de la página. */}
+      <main className="flex-1 pb-24 sm:pb-0">
         {/* ============ HERO ============ */}
-        <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-zinc-50 to-white px-4 pb-20 pt-10 sm:px-6 sm:pb-24 sm:pt-14">
+        <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-zinc-50 to-white px-4 pb-20 pt-10 sm:px-6 sm:pb-28 sm:pt-16">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-brand-teal/10 blur-3xl"
@@ -113,269 +122,267 @@ export default async function Home() {
           />
 
           <div className="relative mx-auto max-w-3xl text-center">
-            <span className="mb-5 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-brand-teal-dark">
+            <span className="mb-6 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-brand-teal-dark">
               {t("hero.etiqueta")}
             </span>
 
-            {/* Un escalón menos que antes. El titular de ahora es bastante
-                más largo que el que había, y al tamaño anterior ocupaba
-                media pantalla él solo: un titular que hay que leer en
-                tres saltos deja de ser un titular. En el móvil baja otro
-                escalón: en una pantalla de 400 px, a 30 px la frase
-                ocupaba ocho líneas y el botón quedaba fuera de la
-                pantalla de entrada. */}
+            {/* El titular en dos alturas: la frase que define ApoyaClub
+                arriba, en grande, y la promesa debajo. En el móvil baja
+                un escalón: a 30 px ocupaba ocho líneas y el botón se
+                quedaba fuera de la primera pantalla. */}
             <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl lg:text-5xl">
-              {t("hero.tituloParte1")}{" "}
-              <span className="text-brand-teal-dark">{t("hero.tituloParte2")}</span>
+              {t("hero.tituloParte1")}
             </h1>
+            <p className="mx-auto mt-4 max-w-2xl text-lg font-bold leading-snug text-brand-teal-dark sm:text-2xl">
+              {t("hero.tituloParte2")}
+            </p>
 
-            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg">
-              {t("hero.subtitulo")}
+            <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-zinc-600 sm:text-lg">
+              {t("hero.resumen")}
             </p>
 
             <div className="mt-9 flex flex-col items-center gap-3">
-              <Link
-                href="/registro-club"
-                className="inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-navy"
-              >
-                {t("hero.cta")}
-              </Link>
+              <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
+                <Link
+                  href="/registro-club"
+                  className="inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-navy"
+                >
+                  {t("hero.cta")}
+                </Link>
+                <a
+                  href="#como-funciona"
+                  className="inline-flex items-center justify-center rounded-full border border-zinc-300 bg-white px-8 py-4 text-base font-bold text-brand-navy transition-colors hover:bg-zinc-50"
+                >
+                  {t("hero.ctaSecundario")}
+                </a>
+              </div>
               <p className="text-sm text-zinc-500">{t("hero.condiciones")}</p>
             </div>
 
-            {/* CLUB -> OPORTUNIDAD -> EMPRESA */}
-            <div className="mt-14 flex flex-wrap items-center justify-center gap-3">
-              <div className="flex items-center gap-2.5 rounded-full border border-zinc-200 bg-white py-2 pl-2.5 pr-5 shadow-sm">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-navy">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 2l3 7h7l-5.5 4.2L18.5 21 12 16.8 5.5 21l2-7.8L2 9h7z" />
-                  </svg>
-                </span>
-                <span className="text-sm font-bold text-brand-navy">{t("hero.cadenaClub")}</span>
-              </div>
-              <svg aria-hidden="true" width="22" height="14" viewBox="0 0 24 14" fill="none" className="text-zinc-300">
-                <path d="M1 7h20M15 1l6 6-6 6" stroke="currentColor" strokeWidth="2" />
-              </svg>
-              <div className="flex items-center gap-2.5 rounded-full border border-zinc-200 bg-white py-2 pl-2.5 pr-5 shadow-sm">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-teal">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M13 2L3 14h7l-1 8 10-12h-7z" />
-                  </svg>
-                </span>
-                <span className="text-sm font-bold text-brand-navy">{t("hero.cadenaOportunidad")}</span>
-              </div>
-              <svg aria-hidden="true" width="22" height="14" viewBox="0 0 24 14" fill="none" className="text-zinc-300">
-                <path d="M1 7h20M15 1l6 6-6 6" stroke="currentColor" strokeWidth="2" />
-              </svg>
-              <div className="flex items-center gap-2.5 rounded-full border border-zinc-200 bg-white py-2 pl-2.5 pr-5 shadow-sm">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-navy-dark">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="8" width="18" height="12" rx="1.5" />
-                    <path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                  </svg>
-                </span>
-                <span className="text-sm font-bold text-brand-navy">{t("hero.cadenaEmpresa")}</span>
-              </div>
+            {/* CLUB -> OPORTUNIDAD -> EMPRESA. Es el concepto entero de
+                ApoyaClub en tres palabras, y por eso está en el hero. */}
+            <div className="mt-14 flex flex-col items-center justify-center gap-2 sm:flex-row sm:flex-wrap sm:gap-3">
+              <EslabonCadena color="bg-brand-navy" texto={t("hero.cadenaClub")}>
+                <path d="M12 2l3 7h7l-5.5 4.2L18.5 21 12 16.8 5.5 21l2-7.8L2 9h7z" />
+              </EslabonCadena>
+              <FlechaCadena />
+              <EslabonCadena color="bg-brand-teal" texto={t("hero.cadenaOportunidad")}>
+                <path d="M13 2L3 14h7l-1 8 10-12h-7z" />
+              </EslabonCadena>
+              <FlechaCadena />
+              <EslabonCadena color="bg-brand-navy-dark" texto={t("hero.cadenaEmpresa")}>
+                <rect x="3" y="8" width="18" height="12" rx="1.5" />
+                <path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              </EslabonCadena>
             </div>
           </div>
         </section>
 
         <MenuDeSecciones />
 
-        {/* ============ SOY CLUB / SOY EMPRESA ============ */}
-        <section className="mx-auto grid max-w-6xl gap-6 px-4 py-16 sm:grid-cols-2 sm:px-6 sm:py-20">
-          <div className="rounded-3xl bg-gradient-to-br from-brand-navy to-brand-navy-dark p-10 text-white shadow-xl shadow-brand-navy/20">
-            <h3 className="text-2xl font-extrabold">{t("caminos.clubTitulo")}</h3>
-            <p className="mt-2.5 text-[15px] leading-relaxed text-white/80">
-              {t("caminos.clubTexto")}
-            </p>
-            <Link
-              href="/registro-club"
-              className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-brand-teal-dark px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-navy"
-            >
-              {t("caminos.clubCta")}
-            </Link>
-          </div>
-          <div className="rounded-3xl border border-zinc-200 bg-white p-10 shadow-sm">
-            <h3 className="text-2xl font-extrabold text-brand-navy">{t("caminos.empresaTitulo")}</h3>
-            <p className="mt-2.5 text-[15px] leading-relaxed text-zinc-600">
-              {t("caminos.empresaTexto")}
-            </p>
-            <Link
-              href="/buscar"
-              className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-brand-navy px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-navy-dark"
-            >
-              {t("caminos.empresaCta")}
-            </Link>
-          </div>
-        </section>
+        {/* ============ DOS PUERTAS DE ENTRADA ============ */}
+        {/* Quien entra es una de dos personas con problemas distintos, y
+            lo primero que necesita es saber cuál de las dos puertas es
+            la suya. */}
+        <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="flex flex-col rounded-3xl bg-gradient-to-br from-brand-navy to-brand-navy-dark p-8 text-white shadow-xl shadow-brand-navy/20 sm:p-10">
+              <h2 className="text-2xl font-extrabold sm:text-3xl">{t("caminos.clubTitulo")}</h2>
+              <p className="mt-4 text-[15px] leading-relaxed text-white/80 sm:text-base">
+                {t("caminos.clubTexto")}
+              </p>
+              <Link
+                href="/registro-club"
+                className="mt-8 inline-flex items-center justify-center rounded-2xl bg-brand-teal-dark px-6 py-4 text-base font-bold text-white transition-colors hover:bg-brand-teal sm:mt-auto sm:self-start sm:px-8"
+              >
+                {t("caminos.clubCta")}
+              </Link>
+            </div>
 
-        {/* ============ PROBLEMA / VALOR ============ */}
-        <section id="clubes" className="scroll-mt-32 bg-zinc-50 px-4 py-20 sm:px-6 sm:py-24">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">{t("problema.eyebrow")}</p>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
-              {t("problema.titulo")}
-            </h2>
-            <p className="mx-auto mt-4 max-w-lg text-zinc-600">
-              {t("problema.texto")}
-            </p>
-          </div>
-          <div className="mx-auto mt-11 flex max-w-3xl flex-wrap justify-center gap-3">
-            {tags.map((tag) => (
-              <Badge key={tag} tone="navy" className="rounded-full border border-zinc-200 bg-white px-5 py-3 text-sm font-semibold text-brand-navy">
-                {tag}
-              </Badge>
-            ))}
+            <div className="flex flex-col rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm sm:p-10">
+              <h2 className="text-2xl font-extrabold text-brand-navy sm:text-3xl">
+                {t("caminos.empresaTitulo")}
+              </h2>
+              <p className="mt-4 text-[15px] leading-relaxed text-zinc-600 sm:text-base">
+                {t("caminos.empresaTexto")}
+              </p>
+              <div className="mt-8 sm:mt-auto">
+                <Link
+                  href="/buscar"
+                  className="inline-flex w-full items-center justify-center rounded-2xl border-2 border-brand-navy px-6 py-4 text-base font-bold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white sm:w-auto sm:px-8"
+                >
+                  {t("caminos.empresaCta")}
+                </Link>
+                <p className="mt-3 text-sm text-zinc-500">{t("caminos.empresaGratis")}</p>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* ============ CÓMO FUNCIONA ============ */}
-        <section id="como-funciona" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-20 sm:px-6 sm:py-24">
-          <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">{t("comoFunciona.titulo")}</h2>
-          <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            {pasos.map((paso, indice) => (
-              <div key={paso.titulo} className="text-center">
-                <div className="text-sm font-extrabold tracking-wide text-zinc-500">0{indice + 1}</div>
-                <div className="mx-auto mt-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-teal-light">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--brand-teal-dark)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-                    {indice === 0 ? (
-                      <>
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
-                      </>
-                    ) : indice === 1 ? (
-                      <>
-                        <path d="M12 3v12" />
-                        <path d="M6 9l6-6 6 6" />
-                        <path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
-                      </>
-                    ) : (
-                      <>
-                        <circle cx="11" cy="11" r="7" />
-                        <path d="M21 21l-4.3-4.3" />
-                      </>
-                    )}
-                  </svg>
-                </div>
-                <h3 className="mt-5 text-lg font-bold text-brand-navy">{paso.titulo}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-zinc-600">{paso.texto}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ============ OPORTUNIDADES ============ */}
-        <section className="bg-zinc-50 px-4 py-20 sm:px-6 sm:py-24">
+        <section id="como-funciona" className="scroll-mt-32 bg-zinc-50 px-4 py-20 sm:px-6 sm:py-28">
           <div className="mx-auto max-w-6xl">
             <div className="mx-auto max-w-2xl text-center">
-              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">{t("oportunidades.eyebrow")}</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+                {t("comoFunciona.eyebrow")}
+              </p>
               <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
-                {t("oportunidades.titulo")}
+                {t("comoFunciona.titulo")}
               </h2>
-              <p className="mx-auto mt-4 text-zinc-600">{t("oportunidades.texto")}</p>
             </div>
-            <div className="mt-11 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {ejemplosOportunidad.map((oportunidad, indice) => (
-                <div key={oportunidad.titulo} className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
-                  <div className={`h-1.5 ${ACENTOS_OPORTUNIDAD[indice % ACENTOS_OPORTUNIDAD.length]}`} />
-                  <div className="p-5">
-                    <h4 className="text-[15px] font-bold text-brand-navy">{oportunidad.titulo}</h4>
-                    <p className="mt-1.5 text-sm text-zinc-500">{oportunidad.texto}</p>
-                  </div>
+
+            <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {pasos.map((paso, indice) => (
+                <div key={paso.clave} className="rounded-3xl border border-zinc-200 bg-white p-7">
+                  <span className="text-4xl font-extrabold tabular-nums text-brand-teal/40">
+                    {String(indice + 1).padStart(2, "0")}
+                  </span>
+                  <p className="mt-3 text-sm font-extrabold uppercase tracking-wider text-brand-teal-dark">
+                    {paso.clave}
+                  </p>
+                  <h3 className="mt-2 text-lg font-extrabold leading-snug text-brand-navy">
+                    {paso.titulo}
+                  </h3>
+                  <p className="mt-3 text-[15px] leading-relaxed text-zinc-600">{paso.texto}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ============ PARA EMPRESAS: BUSCADOR ============ */}
-        <section id="empresas" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">{t("empresas.eyebrow")}</p>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
-              {t("empresas.titulo")}
+        {/* ============ LO QUE TU CLUB PUEDE OFRECER ============ */}
+        <section id="clubes" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+              {t("ofrece.eyebrow")}
+            </p>
+            <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl">
+              {t("ofrece.titulo")}
             </h2>
           </div>
 
-          <div className="mx-auto mt-10 max-w-3xl rounded-3xl border border-zinc-200 bg-white p-5 shadow-lg shadow-brand-navy/5 sm:p-6">
-            <div className="grid gap-2.5 sm:grid-cols-[repeat(4,1fr)_auto]">
-              <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                <div className="text-[11px] font-semibold text-zinc-500">{t("empresas.filtros.presupuesto")}</div>
-                <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.presupuestoValor")}</div>
-              </div>
-              <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                <div className="text-[11px] font-semibold text-zinc-500">{t("empresas.filtros.ubicacion")}</div>
-                <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.ubicacionValor")}</div>
-              </div>
-              <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                <div className="text-[11px] font-semibold text-zinc-500">{t("empresas.filtros.publico")}</div>
-                <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.publicoValor")}</div>
-              </div>
-              <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                <div className="text-[11px] font-semibold text-zinc-500">{t("empresas.filtros.deporte")}</div>
-                <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.deporteValor")}</div>
-              </div>
-              <Link
-                href="/buscar"
-                className="flex items-center justify-center rounded-xl bg-brand-teal-dark px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-brand-navy"
+          <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {queOfrece.map((cosa) => (
+              <div
+                key={cosa}
+                className="rounded-2xl border border-zinc-200 bg-white px-4 py-5 text-center shadow-sm transition-colors hover:border-brand-teal/50"
               >
-                {t("empresas.filtros.buscar")}
-              </Link>
-            </div>
-
-            <details className="group mt-3">
-              <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm font-semibold text-brand-teal-dark marker:content-none">
-                {t("empresas.filtros.masFiltros")}
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="transition-transform group-open:rotate-180">
-                  <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </summary>
-              <div className="mt-3 grid gap-2.5 border-t border-zinc-100 pt-4 sm:grid-cols-3">
-                <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                  <div className="text-[11px] font-semibold text-zinc-500">{t("empresas.filtros.tipo")}</div>
-                  <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.tipoValor")}</div>
-                </div>
-                <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                  <div className="text-[11px] font-semibold text-zinc-500">{t("empresas.filtros.categoria")}</div>
-                  <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.categoriaValor")}</div>
-                </div>
-                <div className="rounded-xl border border-zinc-200 px-4 py-2.5">
-                  <div className="text-[11px] font-semibold text-zinc-500">{t("empresas.filtros.alcance")}</div>
-                  <div className="text-sm font-semibold text-brand-navy">{t("empresas.filtros.alcanceValor")}</div>
-                </div>
-              </div>
-            </details>
-          </div>
-
-          <div className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-3">
-            {resultadosEjemplo.map((resultado) => (
-              <div key={resultado.titulo} className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-                <Badge tone="teal" className="mb-3">
-                  {resultado.categoria.toUpperCase()}
-                </Badge>
-                <h4 className="text-[15px] font-bold text-brand-navy">{resultado.titulo}</h4>
-                <p className="mt-1.5 text-sm text-zinc-500">{resultado.texto}</p>
-                <div className="mt-3 text-lg font-extrabold text-brand-navy">{resultado.precio}</div>
+                <span className="text-sm font-bold text-brand-navy sm:text-[15px]">{cosa}</span>
               </div>
             ))}
           </div>
-          <p className="mt-3 text-center text-xs text-zinc-500">{t("empresas.avisoEjemplos")}</p>
+
+          <div className="mx-auto mt-12 max-w-2xl text-center">
+            <p className="text-xl font-extrabold leading-snug text-brand-navy sm:text-2xl">
+              {t("ofrece.cierre1")}
+            </p>
+            <p className="mt-4 text-[15px] leading-relaxed text-zinc-600 sm:text-base">
+              {t("ofrece.cierre2")}
+            </p>
+          </div>
         </section>
 
-        {/* ============ PÁGINA PROFESIONAL DEL CLUB ============ */}
-        <section id="tu-pagina" className="mx-auto grid max-w-6xl scroll-mt-32 items-center gap-14 px-4 py-24 sm:px-6 lg:grid-cols-[0.85fr_1.15fr]">
+        {/* ============ OPORTUNIDADES ============ */}
+        {/* La pieza central del producto, así que las tarjetas se
+            enseñan como se ven dentro: con precio, con lo que incluye y
+            con su botón. */}
+        <section id="oportunidades" className="scroll-mt-32 bg-brand-navy px-4 py-20 sm:px-6 sm:py-28">
+          <div className="mx-auto max-w-6xl">
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal">
+                {t("oportunidades.eyebrow")}
+              </p>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                {t("oportunidades.titulo")}
+              </h2>
+              <p className="mt-4 leading-relaxed text-white/70">{t("oportunidades.texto")}</p>
+            </div>
+
+            <div className="mt-14 grid gap-6 lg:grid-cols-3">
+              {oportunidades.map((oportunidad, indice) => (
+                <div
+                  key={oportunidad.titulo}
+                  className="flex flex-col overflow-hidden rounded-3xl bg-white shadow-xl shadow-black/20"
+                >
+                  <div className={`h-1.5 ${ACENTOS_OPORTUNIDAD[indice % ACENTOS_OPORTUNIDAD.length]}`} />
+                  <div className="flex flex-1 flex-col p-7">
+                    <Badge tone="teal" className="self-start">
+                      {oportunidad.categoria.toUpperCase()}
+                    </Badge>
+                    <h3 className="mt-4 text-lg font-extrabold leading-snug text-brand-navy">
+                      {oportunidad.titulo}
+                    </h3>
+
+                    <p className="mt-3">
+                      <span className="text-3xl font-extrabold tracking-tight text-brand-navy">
+                        {oportunidad.precio}
+                      </span>
+                      {oportunidad.periodo && (
+                        <span className="text-base text-zinc-500">{oportunidad.periodo}</span>
+                      )}
+                    </p>
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {oportunidad.datos.map((dato) => (
+                        <span
+                          key={dato}
+                          className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600"
+                        >
+                          {dato}
+                        </span>
+                      ))}
+                    </div>
+
+                    <ul className="mt-5 space-y-2 border-t border-zinc-100 pt-5">
+                      {oportunidad.incluye.map((cosa) => (
+                        <li key={cosa} className="flex items-start gap-2.5">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            className="mt-0.5 flex-none text-brand-teal"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M20 6L9 17l-5-5"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                          <span className="text-sm text-zinc-700">{cosa}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <span className="mt-7 inline-flex w-full items-center justify-center rounded-2xl bg-brand-navy px-6 py-3.5 text-sm font-bold text-white">
+                      {oportunidad.cta}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <p className="mt-8 text-center text-xs text-white/50">{t("oportunidades.nota")}</p>
+          </div>
+        </section>
+
+        {/* ============ LA PÁGINA DEL CLUB ============ */}
+        <section
+          id="tu-pagina"
+          className="mx-auto grid max-w-6xl scroll-mt-32 items-center gap-14 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[0.85fr_1.15fr]"
+        >
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">{t("paginaClub.eyebrow")}</p>
-            <h2 className="mt-3 text-[28px] font-extrabold leading-tight tracking-tight text-brand-navy sm:text-3xl">
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+              {t("paginaClub.eyebrow")}
+            </p>
+            <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl">
               {t("paginaClub.titulo")}
             </h2>
-            <p className="mt-4 leading-relaxed text-zinc-600">
-              {t("paginaClub.texto")}
-            </p>
-            <p className="mt-4 leading-relaxed text-zinc-600">
-              {t("paginaClub.texto2")}
-            </p>
+            <p className="mt-5 leading-relaxed text-zinc-600">{t("paginaClub.texto")}</p>
+            <p className="mt-4 leading-relaxed text-zinc-600">{t("paginaClub.texto2")}</p>
           </div>
 
           <div className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-xl shadow-brand-navy/10">
@@ -388,82 +395,284 @@ export default async function Home() {
             <div className="h-32 bg-gradient-to-br from-brand-navy to-brand-teal-dark" />
             <div className="px-6">
               <div className="-mt-8 flex h-16 w-16 items-center justify-center rounded-2xl border-4 border-white bg-white shadow-md">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--brand-teal-dark)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  width="26"
+                  height="26"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--brand-teal-dark)"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
                   <path d="M12 2l3 7h7l-5.5 4.2L18.5 21 12 16.8 5.5 21l2-7.8L2 9h7z" />
                 </svg>
               </div>
             </div>
             <div className="px-6 pb-6 pt-3.5">
-              <div className="text-[17px] font-extrabold text-brand-navy">{t("paginaClub.maqueta.nombre")}</div>
+              <div className="text-[17px] font-extrabold text-brand-navy">
+                {t("paginaClub.maqueta.nombre")}
+              </div>
               <div className="mt-2 flex flex-wrap gap-2">
                 <Badge tone="teal">{t("paginaClub.maqueta.etiqueta1")}</Badge>
                 <Badge tone="teal">{t("paginaClub.maqueta.etiqueta2")}</Badge>
                 <Badge tone="neutral">{t("paginaClub.maqueta.etiqueta3")}</Badge>
               </div>
               <div className="mt-4 grid grid-cols-4 gap-2.5 border-t border-zinc-100 pt-4">
-                <div>
-                  <div className="text-base font-extrabold text-brand-navy">12,4k</div>
-                  <div className="text-[11px] text-zinc-500">{t("paginaClub.maqueta.seguidores")}</div>
-                </div>
-                <div>
-                  <div className="text-base font-extrabold text-brand-navy">48k</div>
-                  <div className="text-[11px] text-zinc-500">{t("paginaClub.maqueta.alcance")}</div>
-                </div>
-                <div>
-                  <div className="text-base font-extrabold text-brand-navy">9</div>
-                  <div className="text-[11px] text-zinc-500">{t("paginaClub.maqueta.equipos")}</div>
-                </div>
-                <div>
-                  <div className="text-base font-extrabold text-brand-navy">3</div>
-                  <div className="text-[11px] text-zinc-500">{t("paginaClub.maqueta.oportunidades")}</div>
-                </div>
+                <DatoMaqueta numero="12,4k" etiqueta={t("paginaClub.maqueta.seguidores")} />
+                <DatoMaqueta numero="48k" etiqueta={t("paginaClub.maqueta.alcance")} />
+                <DatoMaqueta numero="9" etiqueta={t("paginaClub.maqueta.equipos")} />
+                <DatoMaqueta numero="3" etiqueta={t("paginaClub.maqueta.oportunidades")} />
               </div>
             </div>
           </div>
         </section>
 
-        {/* ============ SEGUIMIENTO DEL PATROCINIO ============ */}
-        {/* Es la parte que distingue a ApoyaClub de un directorio y no
-            se contaba en ninguna parte de la portada. */}
-        <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
-              {t("seguimiento.eyebrow")}
-            </p>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
-              {t("seguimiento.titulo")}
-            </h2>
-            <p className="mt-4 leading-relaxed text-zinc-600">{t("seguimiento.texto")}</p>
-          </div>
+        {/* ============ PARA EMPRESAS: BUSCADOR ============ */}
+        {/* Cuatro preguntas a la vista y el resto escondido. El buscador
+            de dentro tiene muchos más filtros; enseñarlos todos aquí
+            haría que pareciera complicado justo en el momento en que
+            hay que parecer fácil. */}
+        <section id="empresas" className="scroll-mt-32 bg-zinc-50 px-4 py-20 sm:px-6 sm:py-28">
+          <div className="mx-auto max-w-6xl">
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+                {t("empresas.eyebrow")}
+              </p>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+                {t("empresas.titulo")}
+              </h2>
+              <p className="mt-4 leading-relaxed text-zinc-600">{t("empresas.texto")}</p>
+            </div>
 
-          <div className="mt-12 grid gap-6 sm:grid-cols-3">
-            {puntosSeguimiento.map((punto, indice) => (
-              <div key={punto.titulo} className="rounded-2xl border border-zinc-200 bg-white p-7">
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-teal-light text-sm font-extrabold text-brand-teal-dark">
-                  {indice + 1}
-                </span>
-                <h3 className="mt-4 font-extrabold text-brand-navy">{punto.titulo}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-zinc-600">{punto.texto}</p>
+            <div className="mx-auto mt-12 max-w-3xl rounded-3xl border border-zinc-200 bg-white p-5 shadow-lg shadow-brand-navy/5 sm:p-7">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <CasillaFiltro
+                  etiqueta={t("empresas.filtros.presupuestoEtiqueta")}
+                  valor={t("empresas.filtros.presupuestoValor")}
+                />
+                <CasillaFiltro
+                  etiqueta={t("empresas.filtros.ubicacionEtiqueta")}
+                  valor={t("empresas.filtros.ubicacionValor")}
+                />
+                <CasillaFiltro
+                  etiqueta={t("empresas.filtros.deporteEtiqueta")}
+                  valor={t("empresas.filtros.deporteValor")}
+                />
+                <CasillaFiltro
+                  etiqueta={t("empresas.filtros.publicoEtiqueta")}
+                  valor={t("empresas.filtros.publicoValor")}
+                />
               </div>
-            ))}
+
+              <details className="group mt-4">
+                <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm font-semibold text-brand-teal-dark marker:content-none">
+                  {t("empresas.filtros.masFiltros")}
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    className="transition-transform group-open:rotate-180"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M6 9l6 6 6-6"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </summary>
+                <div className="mt-4 grid gap-3 border-t border-zinc-100 pt-4 sm:grid-cols-3">
+                  <CasillaFiltro
+                    etiqueta={t("empresas.filtros.tipo")}
+                    valor={t("empresas.filtros.tipoValor")}
+                  />
+                  <CasillaFiltro
+                    etiqueta={t("empresas.filtros.categoria")}
+                    valor={t("empresas.filtros.categoriaValor")}
+                  />
+                  <CasillaFiltro
+                    etiqueta={t("empresas.filtros.alcance")}
+                    valor={t("empresas.filtros.alcanceValor")}
+                  />
+                </div>
+              </details>
+
+              <Link
+                href="/buscar"
+                className="mt-5 flex w-full items-center justify-center rounded-2xl bg-brand-teal-dark px-6 py-4 text-base font-bold text-white transition-colors hover:bg-brand-navy"
+              >
+                {t("empresas.filtros.buscar")}
+              </Link>
+            </div>
+
+            <div className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-3">
+              {resultadosEjemplo.map((resultado) => (
+                <div
+                  key={resultado.titulo}
+                  className="flex flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm"
+                >
+                  <Badge tone="teal" className="mb-3 self-start">
+                    {resultado.categoria.toUpperCase()}
+                  </Badge>
+                  <h3 className="text-[15px] font-bold leading-snug text-brand-navy">
+                    {resultado.titulo}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-500">{resultado.texto}</p>
+                  <div className="mt-4 text-xl font-extrabold text-brand-navy">
+                    {resultado.precio}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <p className="mt-5 text-center text-sm font-medium text-zinc-600">
+              {t("empresas.gratis")}
+            </p>
+            <p className="mt-1 text-center text-xs text-zinc-500">{t("empresas.nota")}</p>
           </div>
         </section>
 
-        {/* ============ HERRAMIENTAS ============ */}
+        {/* ============ EL EMBUDO ============ */}
+        {/* Los cuatro estados son los que tiene de verdad una solicitud
+            en `contact_requests`. Si algún día se añaden etapas, se
+            cambian aquí; lo que no puede pasar es que la portada dibuje
+            un embudo que el club no se encuentra al entrar. */}
+        <section id="seguimiento" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+              {t("embudo.eyebrow")}
+            </p>
+            <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl">
+              {t("embudo.titulo")}
+            </h2>
+            <p className="mt-4 leading-relaxed text-zinc-600">{t("embudo.texto")}</p>
+          </div>
+
+          <ol className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {estadosEmbudo.map((estado, indice) => (
+              <li
+                key={estado.nombre}
+                className="relative rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm"
+              >
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-teal-light text-sm font-extrabold text-brand-teal-dark">
+                  {indice + 1}
+                </span>
+                <h3 className="mt-4 font-extrabold text-brand-navy">{estado.nombre}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-zinc-600">{estado.texto}</p>
+
+                {/* La flecha entre casillas solo tiene sentido cuando
+                    van en fila; apiladas en el móvil sobra. */}
+                {indice < estadosEmbudo.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute -right-3 top-1/2 hidden -translate-y-1/2 text-zinc-300 lg:block"
+                  >
+                    <svg width="18" height="12" viewBox="0 0 24 14" fill="none">
+                      <path d="M1 7h20M15 1l6 6-6 6" stroke="currentColor" strokeWidth="2" />
+                    </svg>
+                  </span>
+                )}
+              </li>
+            ))}
+          </ol>
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3 rounded-2xl bg-zinc-50 px-6 py-5 text-center">
+            <span className="rounded-full border border-zinc-300 bg-white px-4 py-1.5 text-sm font-semibold text-zinc-500">
+              {t("embudo.descartada")}
+            </span>
+            <span className="text-sm text-zinc-600">{t("embudo.descartadaTexto")}</span>
+          </div>
+
+          <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] leading-relaxed text-zinc-600 sm:text-base">
+            {t("embudo.cierre")}
+          </p>
+        </section>
+
+        {/* ============ DOSSIER ============ */}
+        <section className="bg-zinc-50 px-4 py-20 sm:px-6 sm:py-28">
+          <div className="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-2">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+                {t("dossier.eyebrow")}
+              </p>
+              <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl">
+                {t("dossier.titulo")}
+              </h2>
+              <p className="mt-5 leading-relaxed text-zinc-600">{t("dossier.texto")}</p>
+              <span className="mt-8 inline-flex items-center gap-2.5 rounded-2xl bg-brand-navy px-7 py-4 text-base font-bold text-white">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 3v12M7 11l5 5 5-5M4 21h16" />
+                </svg>
+                {t("dossier.boton")}
+              </span>
+            </div>
+
+            {/* Maqueta de las dos primeras hojas del dossier. */}
+            <div className="flex justify-center gap-5">
+              <HojaDeDossier />
+              <HojaDeDossier segunda />
+            </div>
+          </div>
+        </section>
+
+        {/* ============ EL PANEL Y LAS HERRAMIENTAS ============ */}
         {/* La lista entera, no una muestra. Un club que se plantea pagar
             29,90 € al mes está comparando con "me lo hago yo con un PDF
             y una hoja de cálculo", y esa comparación solo se gana
-            enseñando todo lo que hay dentro. Los textos viven en
-            `messages/es/home.json`. */}
-        <section id="herramientas" className="scroll-mt-32 bg-zinc-50 px-4 py-20 sm:px-6 sm:py-24">
+            enseñando todo lo que hay dentro. */}
+        <section id="herramientas" className="scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
           <div className="mx-auto max-w-6xl">
-            <div className="max-w-2xl">
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+                {t("panel.eyebrow")}
+              </p>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+                {t("panel.titulo")}
+              </h2>
+              <p className="mt-4 leading-relaxed text-zinc-600">{t("panel.texto")}</p>
+            </div>
+
+            {/* Maqueta del panel del club. */}
+            <div className="mx-auto mt-12 max-w-4xl rounded-3xl bg-brand-navy-dark p-6 shadow-2xl shadow-brand-navy-dark/30 sm:p-9">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <p className="text-lg font-extrabold text-white sm:text-xl">{t("panel.saludo")}</p>
+                <span className="rounded-full bg-brand-teal-dark px-5 py-2.5 text-sm font-bold text-white">
+                  {t("panel.boton")}
+                </span>
+              </div>
+              <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {metricasPanel.map((metrica) => (
+                  <div key={metrica.etiqueta} className="rounded-2xl bg-white/[0.07] p-4">
+                    <div className="text-2xl font-extrabold text-white">{metrica.numero}</div>
+                    <div className="mt-0.5 text-xs text-white/60">{metrica.etiqueta}</div>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-5 text-center text-xs text-white/40">{t("panel.nota")}</p>
+            </div>
+
+            <div className="mx-auto mt-20 max-w-2xl text-center">
               <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
                 {t("herramientas.eyebrow")}
               </p>
-              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+              <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-brand-navy sm:text-3xl">
                 {t("herramientas.titulo")}
-              </h2>
+              </h3>
               <p className="mt-4 leading-relaxed text-zinc-600">{t("herramientas.texto")}</p>
             </div>
 
@@ -473,10 +682,10 @@ export default async function Home() {
                   key={herramienta.titulo}
                   className="rounded-2xl border border-zinc-200 bg-white p-6"
                 >
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
                     <svg
-                      width="20"
-                      height="20"
+                      width="21"
+                      height="21"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -488,26 +697,104 @@ export default async function Home() {
                       <path d={ICONOS_HERRAMIENTA[indice % ICONOS_HERRAMIENTA.length]} />
                     </svg>
                   </span>
-                  <h3 className="mt-4 font-extrabold text-brand-navy">{herramienta.titulo}</h3>
+                  <h4 className="mt-4 font-extrabold text-brand-navy">{herramienta.titulo}</h4>
                   <p className="mt-2 text-sm leading-relaxed text-zinc-600">{herramienta.texto}</p>
                 </div>
               ))}
             </div>
+          </div>
+        </section>
 
-            {/* La maqueta del panel se queda: la lista dice qué hay, y
-                esto dice dónde está. */}
-            <div className="mt-8 rounded-3xl bg-brand-navy-dark p-9 shadow-lg shadow-brand-navy-dark/30">
-              <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-                <h3 className="text-xl font-extrabold text-white">{t("panel.titulo")}</h3>
-                <span className="rounded-full bg-brand-teal-dark px-4 py-2 text-xs font-bold text-white">
-                  {t("panel.boton")}
-                </span>
-              </div>
-              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
-                {metricasPanel.map((metrica) => (
-                  <div key={metrica.etiqueta} className="rounded-xl bg-white/[0.06] p-3.5">
-                    <div className="text-xl font-extrabold text-white">{metrica.numero}</div>
-                    <div className="text-[11px] text-white/60">{metrica.etiqueta}</div>
+        {/* ============ PRECIO ============ */}
+        {/* Los tres planes salen de `lib/planes.ts`, que es de donde los
+            leen también la página de suscripción, el área financiera y
+            Stripe. Si estuvieran escritos aquí a mano, el día que suba
+            el precio la portada seguiría enseñando el viejo. */}
+        <section id="precio" className="scroll-mt-32 bg-zinc-50 px-4 py-20 sm:px-6 sm:py-28">
+          <div className="mx-auto max-w-6xl">
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+                {t("precio.eyebrow")}
+              </p>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+                {t("precio.titulo")}
+              </h2>
+              <p className="mt-4 text-zinc-600">{t("precio.subtitulo")}</p>
+            </div>
+
+            <div className="mt-14 grid items-start gap-6 lg:grid-cols-3">
+              {PLANES_EN_ORDEN.map((plan) => (
+                <div
+                  key={plan.id}
+                  className={`flex h-full flex-col rounded-3xl bg-white p-8 ${
+                    plan.destacado
+                      ? "border-2 border-brand-teal shadow-xl shadow-brand-teal/15"
+                      : "border border-zinc-200 shadow-sm"
+                  }`}
+                >
+                  <div className="flex items-baseline justify-between gap-2">
+                    <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+                      {plan.nombre}
+                    </p>
+                    {plan.limitado && (
+                      <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">
+                        {t("precio.plazasFundador")}
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="mt-3">
+                    <span className="text-4xl font-extrabold tracking-tight text-brand-navy">
+                      {precioFormateado(plan)}
+                    </span>{" "}
+                    <span className="text-base text-zinc-500">{periodicidad(plan)}</span>
+                  </p>
+
+                  <p className="mt-2 text-sm font-medium text-zinc-800">{plan.reclamo}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-500">{plan.detalle}</p>
+
+                  <Link
+                    href="/registro-club"
+                    className={`mt-auto inline-flex w-full items-center justify-center rounded-2xl px-6 py-4 text-base font-bold transition-colors ${
+                      plan.destacado
+                        ? "bg-brand-teal-dark text-white shadow-lg shadow-brand-teal/30 hover:bg-brand-navy"
+                        : "border border-zinc-300 text-brand-navy hover:bg-zinc-50"
+                    }`}
+                  >
+                    {t("precio.cta")}
+                  </Link>
+                </div>
+              ))}
+            </div>
+
+            <p className="mt-7 text-center text-sm text-zinc-600">{t("precio.gratisPrimerMes")}</p>
+            <p className="mt-1 text-center text-sm text-zinc-500">{t("precio.cancelar")}</p>
+            <p className="mt-1 text-center text-sm text-zinc-500">{t("precio.comision")}</p>
+
+            <div className="mx-auto mt-12 max-w-3xl rounded-3xl border border-zinc-200 bg-white p-8">
+              <p className="text-center text-sm font-bold uppercase tracking-wider text-brand-navy">
+                {t("precio.todoIncluye")}
+              </p>
+              <div className="mt-7 grid gap-3.5 text-left sm:grid-cols-2">
+                {ventajas.map((ventaja) => (
+                  <div key={ventaja} className="flex items-center gap-2.5">
+                    <svg
+                      width="17"
+                      height="17"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      className="flex-none text-brand-teal"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M20 6L9 17l-5-5"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <span className="text-sm font-medium text-zinc-700">{ventaja}</span>
                   </div>
                 ))}
               </div>
@@ -515,98 +802,23 @@ export default async function Home() {
           </div>
         </section>
 
-
-        {/* ============ PRECIO ============ */}
-        {/* Los tres planes salen de `lib/planes.ts`, que es de donde los
-            leen también la página de suscripción, el área financiera y
-            Stripe. Si estuvieran escritos aquí a mano, el día que suba
-            el precio la portada seguiría enseñando el viejo. */}
-        <section id="precio" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-24 sm:px-6">
-          <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
-            {t("precio.titulo")}
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-center text-zinc-600">{t("precio.subtitulo")}</p>
-
-          <div className="mt-11 grid items-start gap-6 lg:grid-cols-3">
-            {PLANES_EN_ORDEN.map((plan) => (
-              <div
-                key={plan.id}
-                className={`flex h-full flex-col rounded-3xl bg-white p-8 ${
-                  plan.destacado
-                    ? "border-2 border-brand-teal shadow-xl shadow-brand-teal/15"
-                    : "border border-zinc-200 shadow-sm"
-                }`}
-              >
-                <div className="flex items-baseline justify-between gap-2">
-                  <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
-                    {plan.nombre}
-                  </p>
-                  {plan.limitado && (
-                    <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">
-                      {t("precio.plazasFundador")}
-                    </span>
-                  )}
-                </div>
-
-                <p className="mt-3">
-                  <span className="text-4xl font-extrabold tracking-tight text-brand-navy">
-                    {precioFormateado(plan)}
-                  </span>{" "}
-                  <span className="text-base text-zinc-500">{periodicidad(plan)}</span>
-                </p>
-
-                <p className="mt-2 text-sm font-medium text-zinc-800">{plan.reclamo}</p>
-                <p className="mt-2 text-sm leading-relaxed text-zinc-500">{plan.detalle}</p>
-
-                <Link
-                  href="/registro-club"
-                  className={`mt-auto inline-flex w-full items-center justify-center rounded-2xl px-6 py-3.5 text-base font-bold transition-colors ${
-                    plan.destacado
-                      ? "bg-brand-teal-dark text-white shadow-lg shadow-brand-teal/30 hover:bg-brand-navy"
-                      : "border border-zinc-300 text-brand-navy hover:bg-zinc-50"
-                  }`}
-                >
-                  {t("precio.cta")}
-                </Link>
-              </div>
-            ))}
-          </div>
-
-          <p className="mt-6 text-center text-sm text-zinc-600">{t("precio.gratisPrimerMes")}</p>
-          <p className="mt-1 text-center text-sm text-zinc-500">{t("precio.comision")}</p>
-
-          <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-zinc-200 bg-zinc-50 p-8">
-            <p className="text-center text-sm font-bold uppercase tracking-wider text-brand-navy">
-              {t("precio.todoIncluye")}
-            </p>
-            <div className="mt-6 grid gap-3 text-left sm:grid-cols-2">
-              {ventajas.map((ventaja) => (
-                <div key={ventaja} className="flex items-center gap-2.5">
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" className="flex-none text-brand-teal">
-                    <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  <span className="text-sm font-medium text-zinc-700">{ventaja}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* ============ FAQ ============ */}
-        <section id="faq" className="mx-auto max-w-3xl scroll-mt-32 px-4 py-24 sm:px-6">
+        <section id="faq" className="mx-auto max-w-3xl scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
           <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
             {t("faq.titulo")}
           </h2>
 
-          <div className="mt-11 space-y-3">
+          <div className="mt-12 space-y-3">
             {preguntas.map((item) => (
               <details
                 key={item.pregunta}
-                className="group rounded-2xl border border-zinc-200 bg-white p-5 open:border-brand-teal/40"
+                className="group rounded-2xl border border-zinc-200 bg-white p-6 open:border-brand-teal/40"
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-brand-navy marker:content-none">
                   {item.pregunta}
-                  <span className="flex-none text-zinc-500 transition-transform group-open:rotate-45">+</span>
+                  <span className="flex-none text-zinc-500 transition-transform group-open:rotate-45">
+                    +
+                  </span>
                 </summary>
                 <p className="mt-3 text-sm leading-relaxed text-zinc-600">{item.respuesta}</p>
               </details>
@@ -616,7 +828,17 @@ export default async function Home() {
           {/* Fiscalidad: aviso de que no se ofrece asesoramiento fiscal */}
           <div role="alert" className="mt-8 flex gap-3.5 rounded-2xl border border-amber-200 bg-amber-50 p-6">
             <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-amber-100">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#92400e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#92400e"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
                 <path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
               </svg>
             </span>
@@ -632,40 +854,131 @@ export default async function Home() {
         </section>
 
         {/* ============ CTA FINAL ============ */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-brand-navy to-brand-navy-dark px-4 py-24 text-center sm:px-6">
+        <section className="relative overflow-hidden bg-gradient-to-br from-brand-navy to-brand-navy-dark px-4 py-24 text-center sm:px-6 sm:py-28">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-brand-teal/15 blur-3xl"
           />
-          <div className="relative mx-auto max-w-xl">
+          <div className="relative mx-auto max-w-2xl">
             <h2 className="text-3xl font-extrabold leading-tight text-white sm:text-4xl">
               {t("ctaFinal.tituloLinea1")}
               <br />
               {t("ctaFinal.tituloLinea2")}
             </h2>
+            <p className="mx-auto mt-5 max-w-xl leading-relaxed text-white/70">
+              {t("ctaFinal.subtexto")}
+            </p>
             <Link
               href="/registro-club"
-              className="mt-8 inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/40 transition-colors hover:bg-brand-navy"
+              className="mt-9 inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/40 transition-colors hover:bg-brand-teal"
             >
               {t("ctaFinal.cta")}
             </Link>
+            <p className="mt-4 text-sm text-white/60">{t("ctaFinal.condiciones")}</p>
           </div>
         </section>
 
         {/* ============ CONTACTO ============ */}
-        <section id="contacto" className="mx-auto max-w-xl px-4 py-24 sm:px-6">
+        <section id="contacto" className="mx-auto max-w-xl px-4 py-20 sm:px-6 sm:py-28">
           <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
             {t("contacto.titulo")}
           </h2>
-          <p className="mt-3 text-center text-zinc-600">
-            {t("contacto.texto")}
-          </p>
+          <p className="mt-3 text-center text-zinc-600">{t("contacto.texto")}</p>
 
           <div className="mt-9 rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm">
             <FormularioContacto />
           </div>
         </section>
       </main>
+
+      <CtaFijoMovil texto={t("ctaFijo.texto")} condiciones={t("ctaFinal.condiciones")} />
+    </div>
+  );
+}
+
+/** Una de las tres palabras de CLUB → OPORTUNIDAD → EMPRESA. */
+function EslabonCadena({
+  color,
+  texto,
+  children,
+}: {
+  color: string;
+  texto: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center gap-2.5 rounded-full border border-zinc-200 bg-white py-2 pl-2.5 pr-5 shadow-sm">
+      <span className={`flex h-8 w-8 items-center justify-center rounded-full ${color}`}>
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#fff"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          {children}
+        </svg>
+      </span>
+      <span className="text-sm font-bold text-brand-navy">{texto}</span>
+    </div>
+  );
+}
+
+function FlechaCadena() {
+  return (
+    <svg
+      aria-hidden="true"
+      width="22"
+      height="14"
+      viewBox="0 0 24 14"
+      fill="none"
+      className="rotate-90 text-zinc-300 sm:rotate-0"
+    >
+      <path d="M1 7h20M15 1l6 6-6 6" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
+}
+
+function DatoMaqueta({ numero, etiqueta }: { numero: string; etiqueta: string }) {
+  return (
+    <div>
+      <div className="text-base font-extrabold text-brand-navy">{numero}</div>
+      <div className="text-[11px] text-zinc-500">{etiqueta}</div>
+    </div>
+  );
+}
+
+/** Una casilla del buscador de empresas: la pregunta y la respuesta. */
+function CasillaFiltro({ etiqueta, valor }: { etiqueta: string; valor: string }) {
+  return (
+    <div className="rounded-2xl border border-zinc-200 px-5 py-3.5">
+      <div className="text-[11px] font-bold uppercase tracking-wide text-zinc-500">{etiqueta}</div>
+      <div className="mt-0.5 text-base font-bold text-brand-navy">{valor}</div>
+    </div>
+  );
+}
+
+/** Hoja del dossier: líneas grises, sin texto inventado. */
+function HojaDeDossier({ segunda = false }: { segunda?: boolean }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={`w-36 flex-none rounded-xl border border-zinc-200 bg-white p-4 shadow-xl shadow-brand-navy/10 sm:w-44 ${
+        segunda ? "mt-8 rotate-2" : "-rotate-2"
+      }`}
+    >
+      <div className="mb-3 h-2 w-3/5 rounded bg-brand-navy" />
+      <div className="mb-1.5 h-1 w-full rounded bg-zinc-200" />
+      <div className="mb-1.5 h-1 w-11/12 rounded bg-zinc-200" />
+      <div className="mb-4 h-1 w-full rounded bg-zinc-200" />
+      <div className={`mb-4 rounded ${segunda ? "h-12 bg-brand-navy/10" : "h-16 bg-brand-teal-light"}`} />
+      <div className="mb-1.5 h-1 w-4/5 rounded bg-zinc-200" />
+      <div className="mb-1.5 h-1 w-full rounded bg-zinc-200" />
+      <div className="h-1 w-5/6 rounded bg-zinc-200" />
     </div>
   );
 }
