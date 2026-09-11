@@ -1,3 +1,4 @@
+import { DatosDelTitular } from "@/components/DatosDelTitular";
 import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
 import { LegalPageShell } from "@/components/LegalPageShell";
@@ -21,14 +22,9 @@ export default function AvisoLegalPage() {
     >
       <section>
         <h2>1. Titular del sitio web</h2>
-        <p>
-          En cumplimiento del artículo 10 de la Ley 34/2002, de Servicios de la Sociedad de
-          la Información y de Comercio Electrónico (LSSI-CE), se informa de los siguientes
-          datos: [Nombre y apellidos / razón social del titular], con [NIF/CIF nº
-          XXXXXXXXX], domicilio en [dirección completa], correo electrónico de contacto
-          [email de contacto] y, en su caso, inscrito en [registro mercantil u otro registro
-          público, si procede].
-        </p>
+        <DatosDelTitular
+          introduccion="En cumplimiento del artículo 10 de la Ley 34/2002, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se informa de los siguientes datos:"
+        />
       </section>
 
       <section>
@@ -63,7 +59,7 @@ export default function AvisoLegalPage() {
         <h2>4. Propiedad intelectual e industrial</h2>
         <p>
           Los contenidos propios de la Plataforma (diseño, código, marca ApoyaClub, textos e
-          imágenes que no sean del club o la empresa) son titularidad de [titular] o de sus
+          imágenes que no sean del club o la empresa) son titularidad del titular del sitio o de sus
           licenciantes. Los contenidos que cada club o empresa publica sobre sí mismo (logo,
           fotos, descripciones) siguen siendo de su propiedad; al publicarlos, autorizan a
           la Plataforma a mostrarlos en el contexto del servicio (su página pública, el

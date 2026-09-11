@@ -1,3 +1,5 @@
+import { DatosDelTitular } from "@/components/DatosDelTitular";
+import { TITULAR } from "@/lib/titular";
 import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
 import { LegalPageShell } from "@/components/LegalPageShell";
@@ -22,12 +24,7 @@ export default function PrivacidadPage() {
     >
       <section>
         <h2>1. Responsable del tratamiento</h2>
-        <p>
-          [Nombre y apellidos / razón social], con [NIF/CIF nº XXXXXXXXX] y domicilio en
-          [dirección completa], es el responsable del tratamiento de los datos personales
-          recogidos a través de ApoyaClub. Contacto para cuestiones de privacidad: [email de
-          contacto].
-        </p>
+        <DatosDelTitular introduccion="El responsable del tratamiento de los datos personales recogidos a través de ApoyaClub es:" />
       </section>
 
       <section>
@@ -131,8 +128,8 @@ export default function PrivacidadPage() {
           puedes descargar todos tus datos en cualquier momento desde tu panel
           (&quot;Privacidad y datos&quot; → &quot;Descargar mis datos&quot;); para la
           supresión, puedes eliminar tu cuenta y todos sus datos desde el mismo apartado.
-          Para el resto de derechos, o si tienes cualquier duda, escribe a [email de
-          contacto]. También tienes derecho a reclamar ante la Agencia Española de
+          Para el resto de derechos, o si tienes cualquier duda, escribe a{" "}
+          <a href={`mailto:${TITULAR.email}`}>{TITULAR.email}</a>. También tienes derecho a reclamar ante la Agencia Española de
           Protección de Datos (www.aepd.es) si consideras que no se han atendido tus
           derechos correctamente.
         </p>
