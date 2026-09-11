@@ -76,6 +76,10 @@ export async function iniciarSuscripcion(formData: FormData): Promise<void> {
       return redirectLocalizado({ href: `${RUTA_SUSCRIPCION}?error=sin-plazas`, locale });
     }
   } else {
+    // Si venía de abrir el pago de Fundador y no lo terminó, su plaza
+    // vuelve al montón en este mismo instante: acaba de elegir otro
+    // plan, así que ya no hay nada que reservarle (migración 0040).
+    await supabase.rpc("liberar_plaza_fundador", { p_club_id: user.id });
     await supabase.from("clubs").update({ plan: planId }).eq("id", user.id);
   }
 

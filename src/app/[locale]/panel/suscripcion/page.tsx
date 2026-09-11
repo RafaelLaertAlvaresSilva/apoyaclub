@@ -119,7 +119,7 @@ export default async function SuscripcionPage({
         <p className="mt-1 text-sm text-zinc-500">
           {planActual
             ? `${precioFormateado(planActual)} ${periodicidad(planActual)}, IVA incluido.${
-                filaSuscripcion?.founder_number
+                planActual.id === "fundador" && filaSuscripcion?.founder_number
                   ? ` Eres el club fundador nº ${filaSuscripcion.founder_number}: este precio no te sube nunca.`
                   : ""
               }`

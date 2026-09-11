@@ -401,3 +401,27 @@ export async function recordarFichaIncompleta(
 
   return total;
 }
+
+// ---------------------------------------------------------------------
+// 6. Plazas de fundador que nadie llegó a pagar (migración 0040)
+// ---------------------------------------------------------------------
+
+/**
+ * Devuelve al montón las plazas de fundador reservadas que no acabaron
+ * en suscripción, y dice cuántas ha soltado.
+ *
+ * No manda ningún correo —es el único paso del cron que no lo hace—,
+ * pero vive aquí por lo mismo que los demás: es mantenimiento diario
+ * que nadie va a hacer a mano, y el día que las 50 plazas se agoten,
+ * la pregunta va a ser cuántas estaban de verdad ocupadas.
+ */
+export async function soltarPlazasDeFundadorSinPagar(admin: ClienteAdmin): Promise<number> {
+  const { data, error } = await admin.rpc("liberar_plazas_fundador_caducadas", { p_horas: 24 });
+
+  if (error) {
+    avisarDeFallo("cron-suscripciones", "No se han podido soltar las plazas de fundador sin pagar", error);
+    return 0;
+  }
+
+  return typeof data === "number" ? data : 0;
+}
