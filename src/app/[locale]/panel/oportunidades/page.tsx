@@ -2,9 +2,9 @@ import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
+import { requisitosDelClub } from "@/lib/catalogo-ideas";
 import { clubRowToProfile, clubTeamRowToTeam, type ClubRow, type ClubTeamRow } from "@/lib/club-mappers";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
-import { obtenerPlantillas } from "@/lib/opportunity-templates";
 import { filaAServicio, type FilaServicio, type ServiceNeed } from "@/lib/service-needs";
 import { createClient } from "@/lib/supabase/server";
 import { PanelNav } from "../components/PanelNav";
@@ -56,13 +56,14 @@ export default async function OportunidadesPage() {
 
   const servicios: ServiceNeed[] = (filasServicios ?? []).map(filaAServicio);
 
-  // Las plantillas viven en la base de datos (migración 0015); si no
-  // están, `obtenerPlantillas` devuelve las del código.
-  const plantillas = await obtenerPlantillas(supabase);
-
   const perfil = filaClub ? clubRowToProfile(filaClub) : null;
   const oportunidades = (filasOportunidades ?? []).map(opportunityRowToOpportunity);
   const equipos = (filasEquipos ?? []).map(clubTeamRowToTeam);
+
+  // Qué ideas del catálogo puede ofrecer de verdad este club. Se calcula
+  // aquí, en el servidor, y viaja como una lista corta: el catálogo
+  // entero es del código, no hace falta traérselo de ningún sitio.
+  const requisitos = [...requisitosDelClub(perfil, equipos)];
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
@@ -84,7 +85,7 @@ export default async function OportunidadesPage() {
         </div>
       ) : (
         <div className="flex flex-col gap-6">
-          <OportunidadesManager oportunidades={oportunidades} equipos={equipos} plantillas={plantillas} />
+          <OportunidadesManager oportunidades={oportunidades} equipos={equipos} requisitos={requisitos} />
           <ServiciosForm servicios={servicios} />
         </div>
       )}

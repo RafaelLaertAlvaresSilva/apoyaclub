@@ -2,25 +2,23 @@
 
 import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
-import type { ClubTeam, OpportunityType } from "@/lib/types";
-import type { PlantillasPorTipo } from "@/lib/opportunity-templates";
-import type { PlantillaOportunidad } from "@/lib/opportunities";
+import { descripcionDeLaIdea, type Idea, type RequisitoIdea } from "@/lib/catalogo-ideas";
+import type { ClubTeam } from "@/lib/types";
 import { crearOportunidad } from "../actions";
+import { CatalogoDeIdeas } from "./CatalogoDeIdeas";
 import { OportunidadForm } from "./OportunidadForm";
-import { PlantillasRapidas } from "./PlantillasRapidas";
 
 export function NuevaOportunidad({
   equipos = [],
-  plantillas,
+  requisitos = [],
 }: {
   equipos?: ClubTeam[];
-  plantillas?: PlantillasPorTipo;
+  /** Lo que el club puede cumplir según su ficha, para el catálogo. */
+  requisitos?: RequisitoIdea[];
 }) {
   const t = useTranslations("panel.oportunidades");
   const [abierto, setAbierto] = useState(false);
-  const [plantilla, setPlantilla] = useState<{ tipo: OpportunityType; datos: PlantillaOportunidad } | null>(
-    null,
-  );
+  const [idea, setIdea] = useState<Idea | null>(null);
   const [estado, formAction] = useActionState(crearOportunidad, null);
 
   // Al crearse con éxito, el padre vuelve a pasar `oportunidades` con
@@ -47,17 +45,36 @@ export function NuevaOportunidad({
         >{t("cerrar")}</button>
       </div>
 
-      <PlantillasRapidas plantillas={plantillas} onElegir={(tipo, datos) => setPlantilla({ tipo, datos })} />
+      <CatalogoDeIdeas requisitos={requisitos} onElegir={setIdea} />
+
+      {idea && (
+        <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-3">
+          <p className="text-sm text-amber-900">
+            <strong>Añade algo tuyo antes de publicarla.</strong> Cuánta gente va a vuestros
+            partidos, cuántos equipos sois, cuántos seguidores tenéis. Si todos los clubes publican
+            el mismo texto, la empresa no sabrá por qué elegiros a vosotros.
+          </p>
+        </div>
+      )}
 
       <OportunidadForm
-        key={plantilla ? `${plantilla.tipo}-${plantilla.datos.title}` : "en-blanco"}
+        key={idea ? idea.id : "en-blanco"}
         accion={formAction}
         estado={estado}
         equipos={equipos}
         textoBoton="Crear oportunidad"
         valoresIniciales={
-          plantilla
-            ? { title: plantilla.datos.title, description: plantilla.datos.description, opportunityType: plantilla.tipo }
+          idea
+            ? {
+                title: idea.titulo,
+                description: descripcionDeLaIdea(idea),
+                opportunityType: idea.tipo,
+                duration: idea.duracion,
+                period: idea.periodo,
+                collaborationType: idea.colaboracion,
+                esNecesidad: idea.esNecesidad ?? false,
+                categoriaNecesidad: idea.categoriaNecesidad,
+              }
             : undefined
         }
       />

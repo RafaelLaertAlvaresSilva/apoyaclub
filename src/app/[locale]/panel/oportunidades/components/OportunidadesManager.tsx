@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import type { ClubTeam, Opportunity, OpportunityStatus } from "@/lib/types";
-import type { PlantillasPorTipo } from "@/lib/opportunity-templates";
+import type { RequisitoIdea } from "@/lib/catalogo-ideas";
 import { ESTADOS_OPORTUNIDAD } from "@/lib/opportunities";
 import { NuevaOportunidad } from "./NuevaOportunidad";
 import { TarjetaOportunidad } from "./TarjetaOportunidad";
@@ -16,11 +16,11 @@ type Orden = "recientes" | "valor_desc" | "valor_asc";
 export function OportunidadesManager({
   oportunidades,
   equipos = [],
-  plantillas,
+  requisitos,
 }: {
   oportunidades: Opportunity[];
   equipos?: ClubTeam[];
-  plantillas?: PlantillasPorTipo;
+  requisitos?: RequisitoIdea[];
 }) {
   const t = useTranslations("panel.oportunidades");
   const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>("todas");
@@ -47,7 +47,7 @@ export function OportunidadesManager({
 
   return (
     <div className="space-y-6">
-      <NuevaOportunidad key={oportunidades.length} equipos={equipos} plantillas={plantillas} />
+      <NuevaOportunidad key={oportunidades.length} equipos={equipos} requisitos={requisitos} />
 
       <div className="rounded-xl border border-zinc-200 bg-white p-4">
         <div className="flex flex-wrap items-end gap-4">
