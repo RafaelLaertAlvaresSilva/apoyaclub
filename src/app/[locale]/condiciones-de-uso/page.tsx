@@ -91,9 +91,42 @@ export default function CondicionesDeUsoPage() {
       <section>
         <h2>7. Uso indebido de la Plataforma</h2>
         <p>
-          [Listado de conductas prohibidas: suplantación, contenido ilícito o engañoso, uso
-          del contacto facilitado por otro usuario con fines distintos a los previstos,
-          scraping masivo, etc. Redacción pendiente de revisión jurídica.]
+          Al usar ApoyaClub te comprometes a no hacer nada de lo siguiente:
+        </p>
+        <ul>
+          <li>
+            Hacerte pasar por un club, una empresa o una persona que no eres, o crear una
+            ficha de un club sin estar autorizado por él.
+          </li>
+          <li>
+            Publicar información falsa o engañosa sobre el club, sus equipos, su audiencia o
+            lo que ofrece a un patrocinador.
+          </li>
+          <li>
+            Subir imágenes, vídeos, escudos o marcas sobre los que no tengas derechos, o en
+            los que aparezcan personas —y en especial menores— sin su consentimiento o el de
+            sus padres o tutores.
+          </li>
+          <li>
+            Usar los datos de contacto que se facilitan en la Plataforma para algo distinto
+            de hablar de la colaboración concreta que los motivó. En particular, no se
+            pueden usar para enviar publicidad no solicitada, ni incorporarlos a listas de
+            correo, ni cederlos o venderlos a terceros.
+          </li>
+          <li>
+            Extraer de forma masiva y automatizada el contenido de la Plataforma, ya sea con
+            robots, scripts o cualquier otro medio.
+          </li>
+          <li>
+            Intentar acceder a cuentas, datos o áreas que no te corresponden, o alterar el
+            funcionamiento del servicio.
+          </li>
+          <li>Publicar contenido ilícito, ofensivo o discriminatorio.</li>
+        </ul>
+        <p>
+          Incumplir cualquiera de estos puntos puede suponer la retirada del contenido, la
+          suspensión de la cuenta o su cancelación, según la gravedad. Si el incumplimiento
+          ha causado un daño a otro usuario o a un tercero, responde quien lo cometió.
         </p>
       </section>
 
@@ -110,16 +143,27 @@ export default function CondicionesDeUsoPage() {
       <section>
         <h2>9. Modificación de estas condiciones</h2>
         <p>
-          [Cláusula sobre cómo y con qué antelación se comunican los cambios a estas
-          condiciones. Redacción pendiente de revisión jurídica.]
+          Estas condiciones pueden cambiar, por ejemplo si cambian las funciones de la
+          Plataforma o la normativa aplicable. Cada versión lleva su fecha de última
+          actualización en la cabecera de esta página.
+        </p>
+        <p>
+          Si el cambio afecta de forma relevante a tus derechos o a lo que pagas, te
+          avisaremos por correo electrónico con antelación suficiente antes de que entre en
+          vigor, y podrás darte de baja sin penalización si no estás de acuerdo. Los cambios
+          menores —corregir una redacción, añadir una aclaración— se publican directamente
+          en esta página.
         </p>
       </section>
 
       <section>
         <h2>10. Legislación aplicable y jurisdicción</h2>
         <p>
-          [Legislación española aplicable y fuero para la resolución de controversias.
-          Redacción pendiente de revisión jurídica.]
+          Estas condiciones se rigen por la legislación española. Para cualquier
+          controversia, las partes se someten a los juzgados y tribunales que correspondan
+          conforme a la ley. Cuando el usuario tenga la condición de consumidor, se aplicará
+          el fuero que la normativa de consumo le reconozca, que no puede alterarse por
+          estas condiciones.
         </p>
       </section>
     </LegalPageShell>

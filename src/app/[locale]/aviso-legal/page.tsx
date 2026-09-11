@@ -70,18 +70,38 @@ export default function AvisoLegalPage() {
       <section>
         <h2>5. Exclusión de responsabilidad</h2>
         <p>
-          [Cláusula de exclusión de responsabilidad estándar: disponibilidad del servicio,
-          veracidad de los datos que introducen los clubes y empresas, uso que hagan del
-          contacto que se facilitan entre sí, enlaces a terceros, etc. Redacción pendiente
-          de revisión jurídica.]
+          La Plataforma pone en contacto a clubes y empresas, y ahí termina su papel. No
+          participa en la negociación, no fija las condiciones del patrocinio, no cobra
+          comisión alguna sobre él y no responde de que el acuerdo entre las partes se
+          cumpla, ni del dinero, los bienes o los servicios que se intercambien.
+        </p>
+        <p>
+          La información que se publica en la ficha de un club o de una empresa la
+          introduce esa misma parte y es ella quien responde de su veracidad y de tener
+          derecho a publicarla, incluidas las imágenes. La Plataforma no la verifica una
+          por una; puede retirar o corregir cualquier contenido que resulte falso, ilícito
+          o contrario a estas condiciones.
+        </p>
+        <p>
+          El servicio se presta tal y como está y se procura mantenerlo disponible, pero no
+          se garantiza que funcione sin interrupciones ni errores. Pueden producirse paradas
+          por mantenimiento, por fallos de los proveedores técnicos o por causas ajenas.
+        </p>
+        <p>
+          La Plataforma puede enlazar a sitios de terceros (la web de un club, la de una
+          empresa, herramientas recomendadas). Esos sitios son ajenos y la Plataforma no
+          responde de su contenido ni de lo que ocurra en ellos.
         </p>
       </section>
 
       <section>
         <h2>6. Legislación aplicable y jurisdicción</h2>
         <p>
-          [Legislación española aplicable y fuero para la resolución de controversias.
-          Redacción pendiente de revisión jurídica.]
+          Estas condiciones se rigen por la legislación española. Para cualquier
+          controversia, las partes se someten a los juzgados y tribunales que correspondan
+          conforme a la ley. Cuando el usuario tenga la condición de consumidor, se aplicará
+          el fuero que la normativa de consumo le reconozca, que no puede alterarse por este
+          aviso.
         </p>
       </section>
     </LegalPageShell>

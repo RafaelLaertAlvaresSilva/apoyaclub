@@ -87,10 +87,22 @@ export default function PrivacidadPage() {
       <section>
         <h2>5. Transferencias internacionales</h2>
         <p>
-          [Detallar si Supabase/Stripe/Resend/Vercel implican transferencia de datos fuera
-          del Espacio Económico Europeo y con qué garantías (cláusulas contractuales tipo,
-          adecuación, etc.), según la región de proyecto elegida en cada servicio.
-          Redacción pendiente de revisión jurídica.]
+          La base de datos, las cuentas de usuario y las imágenes están alojadas en
+          servidores situados en Irlanda (Supabase, región de la Unión Europea), y el envío
+          de correos se hace también desde la región europea del proveedor (Resend).
+        </p>
+        <p>
+          Algunos de los proveedores empleados son compañías con matriz fuera del Espacio
+          Económico Europeo, o pueden tratar datos fuera de él —en particular el alojamiento
+          de la aplicación (Vercel), el cobro de la suscripción (Stripe) y el registro de
+          errores técnicos (Sentry)—. Esos tratamientos se amparan en las garantías que
+          ofrecen dichos proveedores para las transferencias internacionales, como las
+          cláusulas contractuales tipo aprobadas por la Comisión Europea o los marcos de
+          adecuación vigentes.
+        </p>
+        <p>
+          Si quieres el detalle de qué proveedor trata qué dato y dónde, escríbenos a{" "}
+          <a href={`mailto:${TITULAR.email}`}>{TITULAR.email}</a> y te lo contamos.
         </p>
       </section>
 
@@ -114,9 +126,20 @@ export default function PrivacidadPage() {
         <p>
           Los datos se conservan mientras la cuenta esté activa. Si se elimina la cuenta
           (ver sección 9), se borran de forma permanente, salvo los que la ley obligue a
-          conservar por más tiempo (por ejemplo, datos de facturación). [Plazos concretos de
-          conservación tras la eliminación, incluyendo el registro de consentimientos:
-          pendiente de revisión jurídica.]
+          conservar por más tiempo.
+        </p>
+        <p>
+          Hay dos excepciones, y conviene explicarlas porque son las únicas cosas que
+          sobreviven a la eliminación de una cuenta. La primera son los datos de
+          facturación de las suscripciones cobradas: la normativa fiscal y mercantil obliga
+          a conservarlos, y se guardan durante el plazo que esa normativa marque. La
+          segunda es el registro de consentimientos —qué versión de estas condiciones
+          aceptó cada usuario y cuándo—, que se conserva porque es la única forma de poder
+          demostrar que el consentimiento existió.
+        </p>
+        <p>
+          Las solicitudes de contacto que una empresa envía a un club forman parte de los
+          datos del club y se borran con su cuenta.
         </p>
       </section>
 
