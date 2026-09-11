@@ -208,10 +208,26 @@ export default async function SuscripcionPage({
         </dl>
 
         {puedeGestionar ? (
-          <div className="mt-6 max-w-xs">
-            <form action={abrirPortalCliente}>
-              <BotonEnviar>{t("gestionarSuscripcion")}</BotonEnviar>
-            </form>
+          <div className="mt-6">
+            <div className="max-w-xs">
+              <form action={abrirPortalCliente}>
+                <BotonEnviar>{t("gestionarSuscripcion")}</BotonEnviar>
+              </form>
+            </div>
+
+            {/* Un club con tesorero y junta directiva necesita las
+                facturas para su contabilidad, y si no sabe dónde están
+                acaba pidiéndolas por correo una a una. Decirle aquí
+                exactamente dónde pinchar ahorra ese correo. */}
+            <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4">
+              <p className="text-sm font-medium text-zinc-900">Tus facturas</p>
+              <p className="mt-1 text-sm text-zinc-600">
+                Están todas en ese mismo botón, en el apartado{" "}
+                <strong>Historial de facturación</strong>: se descargan en PDF, con el CIF y la
+                dirección que diste al contratar. Ahí mismo puedes corregir esos datos si cambian, y
+                la siguiente factura sale ya con los nuevos.
+              </p>
+            </div>
           </div>
         ) : (
           <div className="mt-6">
@@ -225,7 +241,8 @@ export default async function SuscripcionPage({
         <p className="mt-4 text-xs text-zinc-500">
           Conservas todos tus datos aunque la suscripción no esté activa: solo se oculta tu página
           pública y tus oportunidades hasta que vuelvas a suscribirte. Desde &quot;Gestionar
-          suscripción&quot; puedes cambiar de tarjeta, ver tus facturas o cancelar.
+          suscripción&quot; puedes cambiar de tarjeta, descargar tus facturas, actualizar los datos
+          fiscales del club o cancelar.
         </p>
       </section>
     </div>

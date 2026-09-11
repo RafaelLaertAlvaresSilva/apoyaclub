@@ -105,6 +105,28 @@ export async function iniciarSuscripcion(formData: FormData): Promise<void> {
       // vuelve a suscribirse), se reutiliza en vez de crear uno nuevo.
       customer: filaClub?.stripe_customer_id ?? undefined,
       customer_email: filaClub?.stripe_customer_id ? undefined : (user.email ?? undefined),
+
+      // Datos fiscales del club, pedidos en el momento de pagar.
+      //
+      // Sin esto solo se sabía el correo y la tarjeta, y con eso no se
+      // puede emitir una factura: falta a quién se le hace. Reclamárselo
+      // después, club por club, es media mañana al mes en cuanto haya
+      // veinte. Aquí se pide una vez, cuando el tesorero ya está con la
+      // tarjeta en la mano y no le cuesta nada.
+      //
+      // El NIF se pide aparte de la dirección porque muchos clubes de
+      // base son asociaciones deportivas con CIF, no autónomos, y
+      // Stripe valida el formato español si se le dice que lo pida.
+      billing_address_collection: "required",
+      tax_id_collection: { enabled: true },
+
+      // Cuando el cliente ya existe, Stripe no guarda encima lo que el
+      // club escriba si no se le autoriza expresamente. Sin estas dos
+      // líneas, un club que corrige su dirección al renovar vería cómo
+      // su factura sigue saliendo con la vieja.
+      ...(filaClub?.stripe_customer_id
+        ? { customer_update: { address: "auto" as const, name: "auto" as const } }
+        : {}),
       // Recupera el club en el webhook aunque todavía no tenga cliente
       // de Stripe asociado (primera suscripción).
       client_reference_id: user.id,
