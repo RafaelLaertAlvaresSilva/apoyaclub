@@ -89,6 +89,12 @@ export default async function SuscripcionPage({
   // es lo mismo que a quien está en su mes de prueba normal.
   const invitado = esAccesoRegalado(suscripcion.status, suscripcion.trialEndsAt);
 
+  // La suscripción ha llegado de verdad cuando existe en Stripe. El
+  // estado por sí solo no sirve: un club recién registrado ya está en
+  // "trialing" desde el primer día, sin haber pasado por ninguna
+  // pasarela de pago.
+  const confirmada = Boolean(suscripcion.stripeSubscriptionId);
+
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
       <div className="flex items-center justify-between">
@@ -102,9 +108,28 @@ export default async function SuscripcionPage({
       <PanelNav activo="suscripcion" />
 
       <section className="rounded-xl border border-zinc-200 bg-white p-6">
+        {/* Volviendo de la pasarela de pago.
+            El aviso mira si la confirmación ya ha llegado, en vez de
+            fiarse de que la dirección lleve "checkout=success" pegado.
+            Antes decía "en unos segundos se reflejará aquí" para
+            siempre, incluso con la suscripción ya activa debajo y por
+            mucho que se recargara la página: el club leía que algo
+            seguía a medias cuando ya estaba hecho. */}
         {checkout === "success" && (
           <div className="mb-4">
-            <AvisoExito mensaje="¡Gracias! Estamos confirmando tu suscripción con Stripe: en unos segundos se reflejará aquí." />
+            <AvisoExito
+              mensaje={
+                confirmada
+                  ? "Suscripción confirmada. Ya está todo en marcha."
+                  : "¡Gracias! Estamos confirmando tu suscripción con Stripe. Suele tardar unos segundos: vuelve a cargar la página en un momento."
+              }
+            />
+          </div>
+        )}
+
+        {checkout === "cancel" && (
+          <div className="mb-4">
+            <AvisoError mensaje="Has salido de la pasarela sin terminar el pago. No se ha cobrado nada y puedes volver a intentarlo cuando quieras." />
           </div>
         )}
         {error && (
