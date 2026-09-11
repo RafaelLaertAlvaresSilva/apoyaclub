@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
 import { avisarDeFallo } from "@/lib/monitoring";
+import { etiquetaEquipo } from "@/lib/opportunities";
 import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
 import { mediaParaLaFicha } from "@/lib/publico-partidos";
 import { createClient } from "@/lib/supabase/server";
@@ -65,12 +66,38 @@ export async function guardarPartido(
     return { error: "El público tiene que ser un número entre 0 y 200.000." };
   }
 
+  // El equipo llega como el id de uno de la ficha, o como "otro" y
+  // entonces el nombre va escrito a mano (migración 0039).
+  const equipoElegido = leerTexto(formData, "equipoId");
+  let equipoId: string | null = null;
+  let equipoTexto = leerTexto(formData, "equipo")?.slice(0, 120) ?? null;
+
+  if (equipoElegido && equipoElegido !== "otro") {
+    // Que el equipo sea suyo no se da por hecho aunque el desplegable
+    // solo enseñe los suyos: el formulario lo manda el navegador y
+    // cualquiera puede cambiarlo antes de enviarlo.
+    const { data: equipo } = await sesion.supabase
+      .from("club_teams")
+      .select("id, sport, category, gender")
+      .eq("id", equipoElegido)
+      .eq("club_id", sesion.user.id)
+      .maybeSingle<{ id: string; sport: string; category: string | null; gender: string | null }>();
+
+    if (!equipo) return { error: "Ese equipo no es de tu club." };
+
+    equipoId = equipo.id;
+    // Se guarda también el nombre: es el que tenía el equipo el día del
+    // partido, y es lo que queda si algún día se borra de la ficha.
+    equipoTexto = (etiquetaEquipo(equipo) ?? equipo.sport).slice(0, 120);
+  }
+
   const { error } = await sesion.supabase.from("club_matches").insert({
     club_id: sesion.user.id,
     played_on: fecha,
     opponent: rival.slice(0, 120),
     competition: leerTexto(formData, "competicion")?.slice(0, 120) ?? null,
-    team: leerTexto(formData, "equipo")?.slice(0, 120) ?? null,
+    team: equipoTexto,
+    team_id: equipoId,
     home: String(formData.get("donde") ?? "casa") === "casa",
     attendance: publico,
     notes: leerTexto(formData, "notas")?.slice(0, 1000) ?? null,

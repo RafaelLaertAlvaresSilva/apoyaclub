@@ -15,7 +15,7 @@ export async function obtenerPartidosDelClub(
 ): Promise<Partido[]> {
   const { data, error } = await supabase
     .from("club_matches")
-    .select("id, club_id, played_on, opponent, competition, team, home, attendance, notes")
+    .select("id, club_id, played_on, opponent, competition, team, team_id, home, attendance, notes")
     .eq("club_id", clubId)
     .order("played_on", { ascending: false })
     .returns<PartidoRow[]>();

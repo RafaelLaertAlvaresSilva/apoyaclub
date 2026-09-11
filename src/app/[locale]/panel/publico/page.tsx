@@ -1,10 +1,13 @@
 import { getLocale } from "next-intl/server";
 import { redirect } from "@/i18n/navigation";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
+import { etiquetaEquipo } from "@/lib/opportunities";
 import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
 import { createClient } from "@/lib/supabase/server";
 import { PanelNav } from "../components/PanelNav";
 import { RegistroDePublico } from "./components/RegistroDePublico";
+
+type FilaEquipo = { id: string; sport: string; category: string | null; gender: string | null };
 
 /**
  * El registro de público en los partidos (migración 0037).
@@ -35,21 +38,22 @@ export default async function PublicoPage() {
       .maybeSingle<{ average_attendance: number | null }>(),
     supabase
       .from("club_teams")
-      .select("name")
+      .select("id, sport, category, gender")
       .eq("club_id", user.id)
-      .returns<{ name: string }[]>(),
+      .order("created_at", { ascending: true })
+      .returns<FilaEquipo[]>(),
   ]);
 
-  // Para la lista de sugerencias del campo "Equipo": los equipos que ya
-  // tiene dados de alta en su ficha, más los que haya escrito aquí.
-  const equiposConocidos = [
-    ...new Set([
-      ...(equipos ?? []).map((equipo) => equipo.name.trim()),
-      ...partidos.map((partido) => partido.equipo?.trim() ?? ""),
-    ]),
-  ]
-    .filter(Boolean)
-    .sort((a, b) => a.localeCompare(b, "es"));
+  // Los equipos de la ficha, que es lo que se elige en el desplegable.
+  //
+  // Esta consulta pedía antes una columna `name` que `club_teams` no
+  // tiene: un equipo se llama por su deporte, su categoría y su sexo.
+  // Fallaba en silencio, la lista salía vacía y el club acababa
+  // escribiendo el nombre a mano, distinto cada vez.
+  const equiposDelClub = (equipos ?? []).map((equipo) => ({
+    id: equipo.id,
+    etiqueta: etiquetaEquipo(equipo) ?? equipo.sport,
+  }));
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
@@ -70,7 +74,7 @@ export default async function PublicoPage() {
 
       <RegistroDePublico
         partidos={partidos}
-        equiposConocidos={equiposConocidos}
+        equiposDelClub={equiposDelClub}
         mediaEnLaFicha={club?.average_attendance ?? null}
       />
     </div>

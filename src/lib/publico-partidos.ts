@@ -19,6 +19,8 @@ export type Partido = {
   rival: string;
   competicion: string | null;
   equipo: string | null;
+  /** El equipo de la ficha que jugó este partido (migración 0039). */
+  equipoId: string | null;
   enCasa: boolean;
   publico: number;
   notas: string | null;
@@ -31,6 +33,7 @@ export type PartidoRow = {
   opponent: string;
   competition: string | null;
   team: string | null;
+  team_id: string | null;
   home: boolean;
   attendance: number;
   notes: string | null;
@@ -44,6 +47,7 @@ export function partidoRowToPartido(row: PartidoRow): Partido {
     rival: row.opponent,
     competicion: row.competition,
     equipo: row.team,
+    equipoId: row.team_id,
     enCasa: row.home,
     publico: row.attendance,
     notas: row.notes,
@@ -175,4 +179,107 @@ export function fechaCorta(fechaISO: string): string {
 export function hoyParaElFormulario(ahora: Date = new Date()): string {
   const dosCifras = (n: number) => String(n).padStart(2, "0");
   return `${ahora.getFullYear()}-${dosCifras(ahora.getMonth() + 1)}-${dosCifras(ahora.getDate())}`;
+}
+
+// ---------------------------------------------------------------------
+// Por equipo y mes a mes (migración 0039)
+// ---------------------------------------------------------------------
+
+/**
+ * Un partido cuenta para el equipo de la ficha si lo tiene apuntado, y
+ * si no, para el nombre que el club escribió a mano. Los partidos sin
+ * ninguna de las dos cosas van todos juntos a un grupo aparte: son los
+ * que se apuntaron antes de que esto existiera, y esconderlos haría que
+ * las cuentas por equipo no cuadrasen con el total de la temporada.
+ */
+const SIN_EQUIPO = "__sin_equipo__";
+
+export type PublicoDeUnEquipo = {
+  /** `team_id` si lo hay; si no, el nombre escrito a mano. */
+  clave: string;
+  etiqueta: string;
+  /** true cuando el partido no dice de qué equipo fue. */
+  sinAsignar: boolean;
+  resumen: ResumenDePublico;
+  resumenEnCasa: ResumenDePublico;
+};
+
+/**
+ * El público de cada equipo.
+ *
+ * `etiquetasActuales` permite que, si el club renombra un equipo en su
+ * ficha, su historial aparezca con el nombre nuevo en vez de con el que
+ * tenía el día de cada partido.
+ */
+export function agruparPorEquipo(
+  partidos: Partido[],
+  etiquetasActuales: Map<string, string> = new Map(),
+): PublicoDeUnEquipo[] {
+  const grupos = new Map<string, { etiqueta: string; partidos: Partido[] }>();
+
+  for (const partido of partidos) {
+    const nombreEscrito = partido.equipo?.trim() || "";
+    const clave = partido.equipoId ?? (nombreEscrito || SIN_EQUIPO);
+    const etiqueta = partido.equipoId
+      ? (etiquetasActuales.get(partido.equipoId) ?? (nombreEscrito || "Equipo borrado"))
+      : nombreEscrito || "Sin equipo asignado";
+
+    const grupo = grupos.get(clave);
+    if (grupo) grupo.partidos.push(partido);
+    else grupos.set(clave, { etiqueta, partidos: [partido] });
+  }
+
+  return [...grupos.entries()]
+    .map(([clave, grupo]) => ({
+      clave,
+      etiqueta: grupo.etiqueta,
+      sinAsignar: clave === SIN_EQUIPO,
+      resumen: resumirPublico(grupo.partidos),
+      resumenEnCasa: resumirPublico(soloEnCasa(grupo.partidos)),
+    }))
+    .sort((a, b) => {
+      // Los partidos sin equipo, siempre al final: son una tarea
+      // pendiente, no un equipo del club.
+      if (a.sinAsignar !== b.sinAsignar) return a.sinAsignar ? 1 : -1;
+      if (b.resumen.partidos !== a.resumen.partidos) return b.resumen.partidos - a.resumen.partidos;
+      return a.etiqueta.localeCompare(b.etiqueta, "es");
+    });
+}
+
+export type PublicoDeUnMes = {
+  /** "2026-09". */
+  mes: string;
+  /** "septiembre de 2026". */
+  etiqueta: string;
+  resumen: ResumenDePublico;
+  resumenEnCasa: ResumenDePublico;
+};
+
+/** "septiembre de 2026" a partir de "2026-09", sin pasar por Date. */
+export function mesLargo(mes: string): string {
+  const [anio, numero] = mes.split("-").map(Number);
+  const nombre = MESES[numero - 1];
+  if (!nombre) return mes;
+  return `${nombre} de ${anio}`;
+}
+
+/** Mes a mes, del más reciente al más antiguo. */
+export function agruparPorMes(partidos: Partido[]): PublicoDeUnMes[] {
+  const porMes = new Map<string, Partido[]>();
+
+  for (const partido of partidos) {
+    const mes = partido.fecha.slice(0, 7);
+    const lista = porMes.get(mes);
+    if (lista) lista.push(partido);
+    else porMes.set(mes, [partido]);
+  }
+
+  return [...porMes.entries()]
+    .sort(([a], [b]) => b.localeCompare(a))
+    .map(([mes, deEseMes]) => ({
+      mes,
+      etiqueta: mesLargo(mes),
+      resumen: resumirPublico(deEseMes),
+      resumenEnCasa: resumirPublico(soloEnCasa(deEseMes)),
+    }));
 }

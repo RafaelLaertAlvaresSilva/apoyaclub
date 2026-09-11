@@ -1,10 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
+  agruparPorEquipo,
+  agruparPorMes,
   agruparPorTemporada,
   fechaCorta,
   fechaLarga,
   hoyParaElFormulario,
   mediaParaLaFicha,
+  mesLargo,
   resumirPublico,
   soloEnCasa,
   temporadaDe,
@@ -18,6 +21,7 @@ function partido(parcial: Partial<Partido> & { fecha: string; publico: number })
     rival: "C.D. Ejemplo",
     competicion: null,
     equipo: null,
+    equipoId: null,
     enCasa: true,
     notas: null,
     ...parcial,
@@ -131,5 +135,75 @@ describe("fechas", () => {
     // Las 23:30 del 31 de diciembre en España son ya el día 1 en UTC.
     const nochevieja = new Date(2026, 11, 31, 23, 30);
     expect(hoyParaElFormulario(nochevieja)).toBe("2026-12-31");
+  });
+});
+
+describe("agruparPorEquipo", () => {
+  const partidos = [
+    partido({ fecha: "2026-09-04", publico: 200, equipoId: "eq-1", equipo: "Balonmano · Sénior · Masculino" }),
+    partido({ fecha: "2026-09-18", publico: 300, equipoId: "eq-1", equipo: "Balonmano · Sénior · Masculino" }),
+    partido({ fecha: "2026-09-11", publico: 120, equipoId: "eq-1", equipo: "Balonmano · Sénior · Masculino", enCasa: false }),
+    partido({ fecha: "2026-09-25", publico: 80, equipoId: "eq-2", equipo: "Balonmano · Cadete · Femenino" }),
+    partido({ fecha: "2026-10-02", publico: 60, equipo: "Alevín mixto" }),
+    partido({ fecha: "2026-10-09", publico: 40 }),
+  ];
+
+  it("separa el público de cada equipo", () => {
+    const grupos = agruparPorEquipo(partidos);
+    const senior = grupos.find((grupo) => grupo.clave === "eq-1");
+
+    expect(senior?.resumen.partidos).toBe(3);
+    expect(senior?.resumen.total).toBe(620);
+    // La media en casa deja fuera el partido de 120 jugado fuera.
+    expect(senior?.resumenEnCasa.media).toBe(250);
+  });
+
+  it("un equipo renombrado en la ficha se enseña con el nombre nuevo", () => {
+    const grupos = agruparPorEquipo(partidos, new Map([["eq-1", "Balonmano · Primera Nacional"]]));
+    expect(grupos.find((grupo) => grupo.clave === "eq-1")?.etiqueta).toBe(
+      "Balonmano · Primera Nacional",
+    );
+  });
+
+  it("el nombre escrito a mano hace grupo propio", () => {
+    const grupos = agruparPorEquipo(partidos);
+    expect(grupos.find((grupo) => grupo.etiqueta === "Alevín mixto")?.resumen.partidos).toBe(1);
+  });
+
+  it("los partidos sin equipo van juntos y al final", () => {
+    const grupos = agruparPorEquipo(partidos);
+    expect(grupos[grupos.length - 1].sinAsignar).toBe(true);
+    expect(grupos[grupos.length - 1].resumen.partidos).toBe(1);
+  });
+
+  it("manda el que más partidos tiene", () => {
+    expect(agruparPorEquipo(partidos)[0].clave).toBe("eq-1");
+  });
+
+  it("sin partidos, ningún grupo", () => {
+    expect(agruparPorEquipo([])).toEqual([]);
+  });
+});
+
+describe("agruparPorMes", () => {
+  it("agrupa por mes, del más reciente al más antiguo", () => {
+    const meses = agruparPorMes([
+      partido({ fecha: "2026-09-04", publico: 200 }),
+      partido({ fecha: "2026-10-02", publico: 100 }),
+      partido({ fecha: "2026-09-18", publico: 300 }),
+    ]);
+
+    expect(meses.map((mes) => mes.mes)).toEqual(["2026-10", "2026-09"]);
+    expect(meses[1].resumen.media).toBe(250);
+  });
+});
+
+describe("mesLargo", () => {
+  it("escribe el mes con letras", () => {
+    expect(mesLargo("2026-09")).toBe("septiembre de 2026");
+  });
+
+  it("con algo que no es un mes, lo devuelve tal cual", () => {
+    expect(mesLargo("vaya")).toBe("vaya");
   });
 });
