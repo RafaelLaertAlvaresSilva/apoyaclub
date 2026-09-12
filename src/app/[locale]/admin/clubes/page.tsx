@@ -1,5 +1,6 @@
 import { redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
+import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { obtenerUsuariosPorRol } from "@/lib/admin-users";
 import { obtenerActividadPorClub } from "@/lib/admin-actividad-clubes";
@@ -30,7 +31,38 @@ type ClubRowConAdmin = ClubRow & {
  * tiene fila ahí y, aun así, tiene que aparecer en este listado (con
  * 0% de perfil y sin suscripción).
  */
-export default async function AdminClubesPage() {
+const AVISOS: Record<string, { texto: string; bien: boolean }> = {
+  regalado: {
+    texto: "Listo. Ese club ya tiene el acceso gratuito hasta la fecha que has puesto.",
+    bien: true,
+  },
+  "sin-ficha": {
+    texto:
+      "Ese club todavía no ha guardado su ficha, así que no hay dónde apuntarle el acceso. En cuanto entre en su panel y guarde al menos el nombre y la localidad, podrás regalárselo.",
+    bien: false,
+  },
+  "paga-stripe": {
+    texto:
+      "Ese club tiene una suscripción activa en Stripe y no se le puede poner una prueba por encima: la plataforma diría una cosa y Stripe estaría cobrando otra. Tendría que cancelarla él desde su panel.",
+    bien: false,
+  },
+  fecha: {
+    texto: "Pon una fecha de hoy en adelante: con una fecha pasada le estarías quitando el acceso.",
+    bien: false,
+  },
+  "no-admin": {
+    texto: "Tu sesión ha caducado. Vuelve a iniciar sesión e inténtalo otra vez.",
+    bien: false,
+  },
+};
+
+export default async function AdminClubesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ aviso?: string }>;
+}) {
+  const { aviso } = await searchParams;
+  const mensaje = aviso ? AVISOS[aviso] : undefined;
   const t = await getTranslations("admin.clubes");
   const supabase = await createClient();
   const {
@@ -96,6 +128,13 @@ export default async function AdminClubesPage() {
       </div>
 
       <AdminNav activo="clubes" />
+
+      {mensaje &&
+        (mensaje.bien ? (
+          <AvisoExito mensaje={mensaje.texto} />
+        ) : (
+          <AvisoError mensaje={mensaje.texto} />
+        ))}
 
       {filas.length === 0 ? (
         <p className="text-sm text-zinc-500">{t("todaviaNoSeHa")}</p>

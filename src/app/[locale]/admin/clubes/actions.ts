@@ -1,12 +1,34 @@
 "use server";
 
+import { getLocale } from "next-intl/server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "@/i18n/navigation";
 import { fechaDeAccesoValida, finalDelDia } from "@/lib/acceso-gratuito";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import type { Role } from "@/lib/types";
 
 const RUTA_CLUBES = "/admin/clubes";
+
+/**
+ * Qué ha pasado al pulsar un botón del listado.
+ *
+ * Existe porque el botón de regalar acceso puede negarse por motivos
+ * legítimos —el club no ha rellenado su ficha, o ya paga por Stripe— y
+ * antes se negaba en silencio: se pulsaba y no ocurría nada, que desde
+ * fuera es exactamente igual que un botón roto.
+ */
+export type AvisoAdmin =
+  | "regalado"
+  | "sin-ficha"
+  | "paga-stripe"
+  | "fecha"
+  | "no-admin";
+
+async function volverConAviso(aviso: AvisoAdmin): Promise<void> {
+  const locale = await getLocale();
+  redirect({ href: `${RUTA_CLUBES}?aviso=${aviso}`, locale });
+}
 
 /**
  * Igual que `obtenerClubActual` en el panel del club (`app/panel/*`):
@@ -82,11 +104,11 @@ export async function quitarVerificacionClub(formData: FormData): Promise<void> 
  */
 export async function darAccesoGratuito(formData: FormData): Promise<void> {
   const contexto = await obtenerAdminActual();
-  if ("error" in contexto) return;
+  if ("error" in contexto) return volverConAviso("no-admin");
 
   const id = String(formData.get("id") ?? "");
   const hasta = fechaDeAccesoValida(String(formData.get("hasta") ?? ""));
-  if (!id || !hasta) return;
+  if (!id || !hasta) return volverConAviso("fecha");
 
   const { data: fila } = await contexto.admin
     .from("clubs")
@@ -94,7 +116,14 @@ export async function darAccesoGratuito(formData: FormData): Promise<void> {
     .eq("id", id)
     .maybeSingle<{ stripe_subscription_id: string | null }>();
 
-  if (!fila || fila.stripe_subscription_id) return;
+  // Un club que todavía no ha guardado su ficha no tiene fila en
+  // `clubs` —se crea al guardar nombre y localidad, que son
+  // obligatorios— y por tanto no hay dónde escribirle el acceso.
+  if (!fila) return volverConAviso("sin-ficha");
+
+  // Y a uno que ya paga no se le escribe una prueba por encima: la
+  // plataforma diría una cosa y Stripe estaría cobrando otra.
+  if (fila.stripe_subscription_id) return volverConAviso("paga-stripe");
 
   const fin = finalDelDia(hasta);
 
@@ -115,4 +144,5 @@ export async function darAccesoGratuito(formData: FormData): Promise<void> {
     .eq("id", id);
 
   revalidatePath(RUTA_CLUBES);
+  return volverConAviso("regalado");
 }
