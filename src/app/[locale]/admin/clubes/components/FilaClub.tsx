@@ -82,25 +82,40 @@ export function FilaClub({ fila }: { fila: ClubAdminRow }) {
         ) : (
           /* El acceso de los clubes invitados. Es la prueba gratuita con
              la fecha movida, así que se termina poniendo la de hoy: esa
-             noche el cron la cierra sola. */
-          <form action={darAccesoGratuito} className="mt-2 flex flex-wrap items-center gap-1">
+             noche el cron la cierra sola.
+
+             Los tres botones de arriba son el caso normal —se pulsa uno
+             y ya está—; el calendario de abajo queda para la fecha rara.
+             Cada botón manda su propio plazo porque el navegador envía
+             el nombre y el valor del botón que se pulsa, así que no hace
+             falta JavaScript para nada de esto. */
+          <form action={darAccesoGratuito} className="mt-2">
             <input type="hidden" name="id" value={fila.id} />
-            <label htmlFor={`hasta-${fila.id}`} className="sr-only">
-              Acceso gratuito hasta
-            </label>
-            <input
-              id={`hasta-${fila.id}`}
-              type="date"
-              name="hasta"
-              defaultValue={fila.trialEndsAt ? fila.trialEndsAt.slice(0, 10) : unAnioDesde()}
-              className="rounded-lg border border-zinc-300 px-2 py-1 text-xs text-zinc-700"
-            />
-            <button
-              type="submit"
-              className="rounded-lg border border-violet-200 px-2.5 py-1 text-xs font-medium text-violet-700 transition-colors hover:bg-violet-50"
-            >
-              Regalar
-            </button>
+
+            <div className="flex flex-wrap gap-1">
+              <BotonDePlazo plazo="6-meses">6 meses</BotonDePlazo>
+              <BotonDePlazo plazo="1-anio">1 año</BotonDePlazo>
+              <BotonDePlazo plazo="temporada">Hasta junio</BotonDePlazo>
+            </div>
+
+            <div className="mt-1.5 flex flex-wrap items-center gap-1">
+              <label htmlFor={`hasta-${fila.id}`} className="sr-only">
+                Acceso gratuito hasta una fecha concreta
+              </label>
+              <input
+                id={`hasta-${fila.id}`}
+                type="date"
+                name="hasta"
+                defaultValue={fila.trialEndsAt ? fila.trialEndsAt.slice(0, 10) : unAnioDesde()}
+                className="rounded-lg border border-zinc-300 px-2 py-1 text-xs text-zinc-700"
+              />
+              <button
+                type="submit"
+                className="rounded-lg border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
+              >
+                Esa fecha
+              </button>
+            </div>
           </form>
         )}
       </td>
@@ -142,5 +157,19 @@ export function FilaClub({ fila }: { fila: ClubAdminRow }) {
         </div>
       </td>
     </tr>
+  );
+}
+
+/** Uno de los botones rápidos del acceso invitado. */
+function BotonDePlazo({ plazo, children }: { plazo: string; children: React.ReactNode }) {
+  return (
+    <button
+      type="submit"
+      name="plazo"
+      value={plazo}
+      className="rounded-lg border border-violet-200 px-2.5 py-1 text-xs font-medium text-violet-700 transition-colors hover:bg-violet-50"
+    >
+      {children}
+    </button>
   );
 }

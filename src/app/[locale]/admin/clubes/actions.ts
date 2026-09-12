@@ -3,7 +3,7 @@
 import { getLocale } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "@/i18n/navigation";
-import { fechaDeAccesoValida, finalDelDia } from "@/lib/acceso-gratuito";
+import { fechaDeAccesoValida, fechaDelPlazo, finalDelDia } from "@/lib/acceso-gratuito";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import type { Role } from "@/lib/types";
@@ -107,7 +107,12 @@ export async function darAccesoGratuito(formData: FormData): Promise<void> {
   if ("error" in contexto) return volverConAviso("no-admin");
 
   const id = String(formData.get("id") ?? "");
-  const hasta = fechaDeAccesoValida(String(formData.get("hasta") ?? ""));
+
+  // El plazo llega de los botones rápidos (seis meses, un año, fin de
+  // temporada) y la fecha, del calendario de al lado. El botón manda:
+  // si se ha pulsado uno, es lo que el administrador acaba de decidir.
+  const plazo = fechaDelPlazo(String(formData.get("plazo") ?? ""));
+  const hasta = plazo ?? fechaDeAccesoValida(String(formData.get("hasta") ?? ""));
   if (!id || !hasta) return volverConAviso("fecha");
 
   const { data: fila } = await contexto.admin

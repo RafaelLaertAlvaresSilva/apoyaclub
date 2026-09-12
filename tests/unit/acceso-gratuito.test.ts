@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
+  dentroDeMeses,
   diasHasta,
   esAccesoRegalado,
   fechaDeAccesoValida,
+  fechaDelPlazo,
   finalDelDia,
+  finDeTemporada,
   hoyISO,
   unAnioDesde,
 } from "@/lib/acceso-gratuito";
@@ -85,5 +88,46 @@ describe("fechaDeAccesoValida", () => {
 describe("finalDelDia", () => {
   it("el club conserva el acceso durante todo el día elegido", () => {
     expect(finalDelDia("2027-06-30")).toBe("2027-06-30T23:59:59.000Z");
+  });
+});
+
+describe("dentroDeMeses", () => {
+  it("cuenta meses, no días", () => {
+    expect(dentroDeMeses(6, HOY)).toBe("2027-03-10");
+  });
+
+  it("cruza el año sin perderse", () => {
+    expect(dentroDeMeses(6, new Date("2026-10-15T00:00:00.000Z"))).toBe("2027-04-15");
+  });
+});
+
+describe("finDeTemporada", () => {
+  it("en septiembre, la temporada acaba el junio siguiente", () => {
+    expect(finDeTemporada(new Date("2026-09-12T00:00:00.000Z"))).toBe("2027-06-30");
+  });
+
+  it("en marzo, acaba el junio de este mismo año", () => {
+    expect(finDeTemporada(new Date("2027-03-01T00:00:00.000Z"))).toBe("2027-06-30");
+  });
+
+  it("el 1 de julio ya cuenta para la temporada siguiente", () => {
+    expect(finDeTemporada(new Date("2027-07-01T00:00:00.000Z"))).toBe("2028-06-30");
+  });
+
+  it("el 30 de junio todavía es de la que termina", () => {
+    expect(finDeTemporada(new Date("2027-06-30T00:00:00.000Z"))).toBe("2027-06-30");
+  });
+});
+
+describe("fechaDelPlazo", () => {
+  it("traduce cada botón a su fecha", () => {
+    expect(fechaDelPlazo("6-meses", HOY)).toBe("2027-03-10");
+    expect(fechaDelPlazo("1-anio", HOY)).toBe("2027-09-10");
+    expect(fechaDelPlazo("temporada", HOY)).toBe("2027-06-30");
+  });
+
+  it("con cualquier otra cosa, null: manda la fecha del calendario", () => {
+    expect(fechaDelPlazo("", HOY)).toBeNull();
+    expect(fechaDelPlazo("para siempre", HOY)).toBeNull();
   });
 });

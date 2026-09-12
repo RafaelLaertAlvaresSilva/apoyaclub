@@ -31,6 +31,40 @@ export function unAnioDesde(ahora: Date = new Date()): string {
   return dentroDeUnAnio.toISOString().slice(0, 10);
 }
 
+/** La fecha de dentro de N meses, en "AAAA-MM-DD". */
+export function dentroDeMeses(meses: number, ahora: Date = new Date()): string {
+  const destino = new Date(
+    Date.UTC(ahora.getUTCFullYear(), ahora.getUTCMonth() + meses, ahora.getUTCDate()),
+  );
+  return destino.toISOString().slice(0, 10);
+}
+
+/**
+ * El 30 de junio con el que termina la temporada en curso.
+ *
+ * En España la temporada va de verano a verano, así que a partir del 1
+ * de julio la que cuenta es la del año siguiente. Es la fecha que
+ * iguala a todos los clubes invitados: acaban el mismo día, y ese día
+ * cae cuando un club decide su presupuesto para la siguiente.
+ */
+export function finDeTemporada(ahora: Date = new Date()): string {
+  const anio = ahora.getUTCMonth() + 1 >= MES_FIN_DE_TEMPORADA ? ahora.getUTCFullYear() + 1 : ahora.getUTCFullYear();
+  return `${anio}-06-30`;
+}
+
+/** Julio: el primer mes que ya cuenta para la temporada siguiente. */
+export const MES_FIN_DE_TEMPORADA = 7;
+
+/** Lo que se puede pedir desde los botones rápidos del panel. */
+export type PlazoRegalado = "6-meses" | "1-anio" | "temporada";
+
+export function fechaDelPlazo(plazo: string, ahora: Date = new Date()): string | null {
+  if (plazo === "6-meses") return dentroDeMeses(6, ahora);
+  if (plazo === "1-anio") return unAnioDesde(ahora);
+  if (plazo === "temporada") return finDeTemporada(ahora);
+  return null;
+}
+
 /** Días que faltan para una fecha, contando desde hoy. Negativo si ya pasó. */
 export function diasHasta(fecha: string | null, ahora: Date = new Date()): number {
   if (!fecha) return 0;
