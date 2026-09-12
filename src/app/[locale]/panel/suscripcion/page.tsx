@@ -231,6 +231,22 @@ export default async function SuscripcionPage({
           </div>
         ) : (
           <div className="mt-6">
+            {/* Al club invitado se le enseñan los planes igual, por si
+                quiere pasarse a pago antes de tiempo, pero con el aviso
+                delante: si no, alguien acaba metiendo una tarjeta que no
+                le hacía ninguna falta y pensando que era obligatorio. */}
+            {invitado && suscripcion.currentPeriodEnd && (
+              <div className="mb-4 rounded-lg border border-violet-200 bg-violet-50 p-4">
+                <p className="text-sm font-medium text-violet-900">
+                  Ya tienes acceso gratuito hasta el {formatearFecha(suscripcion.currentPeriodEnd)}.
+                </p>
+                <p className="mt-1 text-sm text-violet-800">
+                  No necesitas elegir plan ni dar ninguna tarjeta hasta entonces. Te avisaremos por
+                  correo antes de esa fecha para que decidas con tiempo.
+                </p>
+              </div>
+            )}
+
             <SelectorDePlan
               plazasFundadorLibres={plazasFundadorLibres}
               textoBoton={suscripcion.status === "canceled" ? "Volver a suscribirse" : "Elegir este plan"}
