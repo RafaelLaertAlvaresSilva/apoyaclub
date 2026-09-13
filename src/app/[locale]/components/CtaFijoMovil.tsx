@@ -19,6 +19,11 @@ import { Link } from "@/i18n/navigation";
  *   - El banner de cookies tiene que estar ya contestado. Los dos van
  *     pegados abajo y se solaparían; manda el de cookies, que es una
  *     obligación legal y no una llamada a la acción.
+ *
+ * Y una tercera para callarse: mientras se lee la sección "Para
+ * empresas". Ahí la página está explicando que para el comercio esto es
+ * gratis y sin cuenta, y tener pegado abajo un "Prueba 1 mes gratis ·
+ * 29,90 €/mes" dice lo contrario en la misma pantalla.
  */
 
 const CLAVE_COOKIES = "apoyaclub_cookie_consent";
@@ -33,8 +38,19 @@ function suscribirse(alCambiar: () => void) {
   };
 }
 
+/** Si la sección "Para empresas" asoma por la pantalla, se está
+ * leyendo: el botón vive justo delante de ella. */
+function leyendoLoDeLasEmpresas(): boolean {
+  const seccion = document.getElementById("empresas");
+  if (!seccion) return false;
+
+  const caja = seccion.getBoundingClientRect();
+  return caja.top < window.innerHeight && caja.bottom > 0;
+}
+
 function debeVerse(): boolean {
   if (window.scrollY < ALTURA_PARA_APARECER) return false;
+  if (leyendoLoDeLasEmpresas()) return false;
   try {
     return window.localStorage.getItem(CLAVE_COOKIES) !== null;
   } catch {

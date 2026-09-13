@@ -157,6 +157,26 @@ export default async function Home() {
                 </a>
               </div>
               <p className="text-sm text-zinc-500">{t("hero.condiciones")}</p>
+
+              {/* La segunda salida, para quien no es un club.
+                  *
+                  * Todo lo de arriba —titular, botón, letra pequeña— le
+                  * habla al club, y la letra pequeña lleva un precio. Un
+                  * comercio de barrio leía "29,90 €/mes" en los primeros
+                  * diez segundos y se iba creyendo que le iban a cobrar,
+                  * cuando para él esto es gratis y ni cuenta necesita.
+                  * Va aquí y no más abajo porque ese malentendido se
+                  * produce aquí. */}
+              <p className="mt-4 text-[15px] text-zinc-600">
+                <span className="font-semibold text-brand-navy">{t("hero.puenteEmpresa")}</span>{" "}
+                <Link
+                  href="/buscar"
+                  className="font-semibold text-brand-teal-dark underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
+                >
+                  {t("hero.puenteEmpresaEnlace")}
+                </Link>{" "}
+                — {t("hero.puenteEmpresaNota")}
+              </p>
             </div>
 
             {/* CLUB -> OPORTUNIDAD -> EMPRESA. Es el concepto entero de

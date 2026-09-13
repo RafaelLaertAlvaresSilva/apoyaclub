@@ -31,9 +31,7 @@ export function LegalPageShell({
         <h1 className="mt-4 text-2xl font-semibold text-zinc-900">{titulo}</h1>
         <p className="mt-1 text-sm text-zinc-500">Última actualización: {actualizado}</p>
 
-        <div className="mt-6">
-          <AvisoRevisionJuridica />
-        </div>
+        <AvisoRevisionJuridica />
 
         <div className="mt-8 space-y-6 text-sm leading-relaxed text-zinc-700 [&_h2]:mt-8 [&_h2]:text-base [&_h2]:font-semibold [&_h2]:text-zinc-900 [&_p]:mt-2 [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5">
           {children}

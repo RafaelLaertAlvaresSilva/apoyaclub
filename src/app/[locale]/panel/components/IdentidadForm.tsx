@@ -49,6 +49,23 @@ export function IdentidadForm({
           </a>{t("compartelaConLasEmpresas")}</p>
       )}
 
+      {/* Las imágenes solo cuando el club ya tiene ficha.
+          *
+          * Guardar una foto es un `update` sobre la fila del club, y esa
+          * fila no existe hasta que se guardan nombre y localidad. Antes
+          * de eso la imagen se subía al almacén y el `update` no tocaba
+          * ninguna fila: ni se veía la foto, ni salía ningún error. Y era
+          * el primer paso que pide el asistente de bienvenida, así que el
+          * primer gesto de todo club nuevo fallaba en silencio. */}
+      {!perfil ? (
+        <div className="mb-6 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-600">
+          <p className="font-medium text-zinc-800">Escudo, portada y fotos, en un momento</p>
+          <p className="mt-1">
+            Guarda primero el nombre y la localidad de tu club, aquí abajo. En cuanto lo hagas
+            aparecen aquí los botones para subir tu escudo, la foto de portada y las del club.
+          </p>
+        </div>
+      ) : (
       <div className="mb-6 space-y-4">
         <PortadaEditor
           userId={userId}
@@ -151,6 +168,7 @@ export function IdentidadForm({
 
         <AvisoError mensaje={errorImagen} />
       </div>
+      )}
 
       <form action={formAction} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">

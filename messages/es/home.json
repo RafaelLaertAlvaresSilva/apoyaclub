@@ -13,7 +13,10 @@
     "cadenaOportunidad": "Oportunidad",
     "cadenaEmpresa": "Empresa",
     "resumen": "Patrocinadores, colaboradores, servicios y oportunidades para hacer crecer tu club.",
-    "ctaSecundario": "Descubre cómo funciona"
+    "ctaSecundario": "Descubre cómo funciona",
+    "puenteEmpresa": "¿Eres una empresa?",
+    "puenteEmpresaEnlace": "Mira qué puedes patrocinar cerca de ti",
+    "puenteEmpresaNota": "Gratis, sin cuenta y sin intermediarios."
   },
   "caminos": {
     "clubTitulo": "Soy un club",

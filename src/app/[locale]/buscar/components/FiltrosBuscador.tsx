@@ -132,6 +132,12 @@ export function FiltrosBuscador({
                 name="busca"
                 value={opcion.id}
                 defaultChecked={(filtrosIniciales.busca ?? "todo") === opcion.id}
+                // Se aplica al pulsarlo, como los desplegables de abajo.
+                // Sin esto, en el ordenador —donde no había botón de
+                // buscar— pulsar "Lo que necesitan" no hacía nada, y el
+                // filtro por tipo de servicio, que solo aparece dentro de
+                // esa pestaña, era inalcanzable.
+                onChange={(evento) => aplicar(evento.currentTarget.form!)}
                 className="sr-only"
               />
               {opcion.etiqueta}
@@ -352,7 +358,11 @@ export function FiltrosBuscador({
       {/* El orden vive en la barra de resultados (OPCIONES_ORDEN se reexporta desde aquí para que ambos usen la misma lista), pero el valor seleccionado se manda con este mismo formulario. */}
       <input type="hidden" name="orden" value={filtrosIniciales.orden ?? "novedad"} />
 
-      <div className="flex gap-2 lg:hidden">
+      {/* El botón de buscar, en todos los tamaños. Estaba solo en móvil
+          (`lg:hidden`), y en el ordenador quedaban sin aplicar la
+          localidad y el presupuesto, que son campos de escribir: la
+          única forma de aplicarlos era saber que hay que pulsar Intro. */}
+      <div className="flex gap-2">
         <button
           type="submit"
           className="flex-1 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
@@ -367,14 +377,6 @@ export function FiltrosBuscador({
           {t("limpiar")}
         </button>
       </div>
-
-      <button
-        type="button"
-        onClick={limpiar}
-        className="hidden w-full rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 lg:block"
-      >
-        {t("limpiarFiltros")}
-      </button>
     </form>
   );
 
