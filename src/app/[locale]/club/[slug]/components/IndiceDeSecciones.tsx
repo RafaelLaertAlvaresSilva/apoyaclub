@@ -9,10 +9,23 @@ type Seccion = { id: string; etiqueta: string };
  */
 const DESTACADAS = ["oportunidades", "servicios"] as const;
 
-const CLASES_DESTACADA =
-  "inline-flex items-center rounded-full bg-teal-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-teal-800";
-const CLASES_NORMAL =
-  "inline-flex items-center rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:border-teal-600 hover:text-teal-700";
+/**
+ * Ojo con estas clases: ninguna lleva `inline-flex` dentro.
+ *
+ * Lo llevaban, y por eso el desplegable del móvil no servía de nada.
+ * Una de estas pastillas se esconde en el móvil con `hidden`, y
+ * `hidden` e `inline-flex` son las dos la misma propiedad de CSS
+ * (`display`). Con las dos puestas a la vez gana la que el navegador
+ * lea la última, que resultó ser `inline-flex`: en el teléfono salían
+ * todas las secciones sueltas Y además el desplegable con las mismas
+ * dentro. El menú entero, dos veces.
+ *
+ * Ahora el `display` se pone fuera, en cada sitio donde se usan, y no
+ * hay forma de que se peleen.
+ */
+const CLASES_PASTILLA = "items-center rounded-full px-4 py-2 text-sm transition-colors";
+const CLASES_DESTACADA = `inline-flex ${CLASES_PASTILLA} bg-teal-700 font-semibold text-white hover:bg-teal-800`;
+const CLASES_NORMAL = `${CLASES_PASTILLA} border border-zinc-300 bg-white font-medium text-zinc-700 hover:border-teal-600 hover:text-teal-700`;
 
 /**
  * Índice de la ficha del club.
@@ -45,7 +58,8 @@ export function IndiceDeSecciones({ secciones }: { secciones: Seccion[] }) {
         ))}
 
         {/* En el móvil estas mismas van dentro del desplegable de abajo:
-            aquí se esconden para no repetirlas. */}
+            aquí se esconden para no repetirlas. `CLASES_NORMAL` ya no
+            trae `display`, así que `hidden` manda sin discusión. */}
         {resto.map((seccion) => (
           <a
             key={seccion.id}
@@ -77,7 +91,11 @@ export function IndiceDeSecciones({ secciones }: { secciones: Seccion[] }) {
 
           <div className="mt-2 flex flex-wrap gap-2">
             {resto.map((seccion) => (
-              <a key={seccion.id} href={`#${seccion.id}`} className={CLASES_NORMAL}>
+              <a
+                key={seccion.id}
+                href={`#${seccion.id}`}
+                className={`inline-flex ${CLASES_NORMAL}`}
+              >
                 {seccion.etiqueta}
               </a>
             ))}
