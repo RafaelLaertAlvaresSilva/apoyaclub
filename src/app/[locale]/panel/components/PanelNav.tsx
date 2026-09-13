@@ -14,6 +14,10 @@ const ENLACES = [
   // El recuento de gente en los partidos (migración 0037): de aquí sale
   // la asistencia media que enseña la ficha.
   { id: "publico", href: "/panel/publico", etiqueta: "Público" },
+  // Lo que sale de juntar la ficha con ese recuento, sin sumar nada:
+  // es lo que el club enseña a una empresa cuando le preguntan "¿y a
+  // cuánta gente llegáis?".
+  { id: "alcance", href: "/panel/alcance", etiqueta: "Alcance" },
   { id: "solicitudes", href: "/panel/solicitudes", etiqueta: "Solicitudes" },
   // Ya no es solo PDF: también sale en Word.
   { id: "dossier", href: "/panel/dossier", etiqueta: "Dossier" },

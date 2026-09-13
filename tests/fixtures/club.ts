@@ -41,6 +41,7 @@ const CLUB_VACIO: ClubProfile = {
   youthTeamsCount: null,
   youthPlayersCount: null,
   youthFamiliesCount: null,
+  membersCount: null,
   foundingYear: null,
   milestones: [],
   followersByNetwork: {},

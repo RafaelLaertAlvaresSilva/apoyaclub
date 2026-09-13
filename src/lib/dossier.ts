@@ -1,3 +1,4 @@
+import type { Partido } from "@/lib/publico-partidos";
 import type { ClubProfile, ClubSponsor, ClubTeam, DossierSectionKey } from "@/lib/types";
 
 /**
@@ -10,7 +11,11 @@ export const SECCIONES_DOSSIER: { id: DossierSectionKey; etiqueta: string; descr
   { id: "historia", etiqueta: "Historia", descripcion: "Año de fundación e hitos." },
   { id: "equipos", etiqueta: "Equipos", descripcion: "Deporte, categoría y nivel de cada equipo." },
   { id: "cantera", etiqueta: "Cantera", descripcion: "Equipos, jugadores y familias (datos agregados)." },
-  { id: "audiencia", etiqueta: "Audiencia", descripcion: "Seguidores, alcance y asistencia media." },
+  {
+    id: "audiencia",
+    etiqueta: "Audiencia",
+    descripcion: "A cuánta gente llegas, con el origen de cada cifra y sin sumar unas con otras.",
+  },
   { id: "instalaciones", etiqueta: "Instalaciones", descripcion: "Descripción de las instalaciones del club." },
   { id: "patrocinadores", etiqueta: "Patrocinadores actuales", descripcion: "Marcas que ya confían en el club." },
 ];
@@ -29,6 +34,7 @@ export function seccionesConContenido(
   perfil: ClubProfile,
   equipos: ClubTeam[],
   patrocinadores: ClubSponsor[],
+  partidos: Partido[] = [],
 ): Set<DossierSectionKey> {
   const disponibles = new Set<DossierSectionKey>();
 
@@ -48,7 +54,12 @@ export function seccionesConContenido(
   ) {
     disponibles.add("cantera");
   }
+  // La audiencia ya no depende solo de lo que el club escriba en su
+  // ficha: un club que solo apunta el público de sus partidos tiene la
+  // mejor cifra de todas y antes se quedaba sin sección.
   if (
+    partidos.length > 0 ||
+    perfil.membersCount != null ||
     perfil.estimatedReach != null ||
     perfil.averageAttendance != null ||
     Object.values(perfil.followersByNetwork).some((valor) => valor != null)

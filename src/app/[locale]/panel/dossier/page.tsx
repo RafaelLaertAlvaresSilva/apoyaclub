@@ -7,6 +7,7 @@ import type { ClubRow, ClubSponsorRow, ClubTeamRow } from "@/lib/club-mappers";
 import { dossierRowToConfig, type DossierRow } from "@/lib/dossier-mappers";
 import { seccionesConContenido, seccionesPorDefecto } from "@/lib/dossier";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
+import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
 import { createClient } from "@/lib/supabase/server";
 import { PanelNav } from "../components/PanelNav";
 import { DossierManager } from "./components/DossierManager";
@@ -25,8 +26,14 @@ export default async function DossierPage() {
     return redirect({ href: "/login", locale });
   }
 
-  const [{ data: filaClub }, { data: filasEquipos }, { data: filasPatrocinadores }, { data: filasOportunidades }, { data: filaDossier }] =
-    await Promise.all([
+  const [
+    { data: filaClub },
+    { data: filasEquipos },
+    { data: filasPatrocinadores },
+    { data: filasOportunidades },
+    { data: filaDossier },
+    partidos,
+  ] = await Promise.all([
       supabase.from("clubs").select("*").eq("id", user.id).maybeSingle<ClubRow>(),
       supabase
         .from("club_teams")
@@ -51,8 +58,12 @@ export default async function DossierPage() {
         .is("archived_at", null)
         .order("value", { ascending: false })
         .returns<OpportunityRow[]>(),
-      supabase.from("club_dossiers").select("*").eq("id", user.id).maybeSingle<DossierRow>(),
-    ]);
+    supabase.from("club_dossiers").select("*").eq("id", user.id).maybeSingle<DossierRow>(),
+    // El registro de público: es lo que decide si la sección de
+    // audiencia tiene algo que enseñar (y es lo mejor que puede
+    // enseñar).
+    obtenerPartidosDelClub(supabase, user.id),
+  ]);
 
   const perfil = filaClub ? clubRowToProfile(filaClub) : null;
   const equipos = (filasEquipos ?? []).map(clubTeamRowToTeam);
@@ -84,9 +95,13 @@ export default async function DossierPage() {
           equipos={equipos}
           patrocinadores={patrocinadores}
           oportunidades={oportunidades}
-          seccionesDisponibles={Array.from(seccionesConContenido(perfil, equipos, patrocinadores))}
+          seccionesDisponibles={Array.from(
+            seccionesConContenido(perfil, equipos, patrocinadores, partidos),
+          )}
           configuracion={configuracion}
-          seccionesPorDefecto={seccionesPorDefecto(seccionesConContenido(perfil, equipos, patrocinadores))}
+          seccionesPorDefecto={seccionesPorDefecto(
+            seccionesConContenido(perfil, equipos, patrocinadores, partidos),
+          )}
         />
       )}
     </div>

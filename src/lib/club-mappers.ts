@@ -57,6 +57,9 @@ export type ClubRow = {
   youth_teams_count: number | null;
   youth_players_count: number | null;
   youth_families_count: number | null;
+  /** Migración 0042. Opcional porque las filas antiguas de la vista
+   * pública pueden llegar sin ella. */
+  members_count?: number | null;
   founding_year: number | null;
   milestones: Milestone[] | null;
   followers_by_network: FollowersByNetwork | null;
@@ -138,6 +141,7 @@ export function clubRowToProfile(row: ClubRow): ClubProfile {
     youthTeamsCount: row.youth_teams_count,
     youthPlayersCount: row.youth_players_count,
     youthFamiliesCount: row.youth_families_count,
+    membersCount: row.members_count ?? null,
     foundingYear: row.founding_year,
     milestones: row.milestones ?? [],
     followersByNetwork: row.followers_by_network ?? {},

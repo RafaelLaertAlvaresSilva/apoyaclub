@@ -706,6 +706,7 @@ export async function guardarAudiencia(
     .from("clubs")
     .update({
       followers_by_network: followersByNetwork,
+      members_count: leerEntero(formData, "membersCount"),
       estimated_reach: leerEntero(formData, "estimatedReach"),
       average_attendance: leerEntero(formData, "averageAttendance"),
     })

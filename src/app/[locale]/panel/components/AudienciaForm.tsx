@@ -70,13 +70,13 @@ export function AudienciaForm({ perfil }: { perfil: ClubProfile | null }) {
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Campo etiqueta={t("alcanceEstimado")} ayuda={t("personasALasQue")}>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Campo etiqueta={t("socios")} ayuda={t("sociosAyuda")}>
             <input
-              name="estimatedReach"
+              name="membersCount"
               type="number"
               min={0}
-              defaultValue={perfil?.estimatedReach ?? ""}
+              defaultValue={perfil?.membersCount ?? ""}
               className={clasesInput}
             />
           </Campo>
@@ -86,6 +86,15 @@ export function AudienciaForm({ perfil }: { perfil: ClubProfile | null }) {
               type="number"
               min={0}
               defaultValue={perfil?.averageAttendance ?? ""}
+              className={clasesInput}
+            />
+          </Campo>
+          <Campo etiqueta={t("alcanceEstimado")} ayuda={t("personasALasQue")}>
+            <input
+              name="estimatedReach"
+              type="number"
+              min={0}
+              defaultValue={perfil?.estimatedReach ?? ""}
               className={clasesInput}
             />
           </Campo>

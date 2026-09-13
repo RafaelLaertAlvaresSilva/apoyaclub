@@ -105,6 +105,7 @@ export function huecosDelPerfil(
       id: "audiencia",
       falta:
         !Object.values(perfil.followersByNetwork).some((valor) => valor != null) &&
+        perfil.membersCount == null &&
         perfil.estimatedReach == null &&
         perfil.averageAttendance == null,
       titulo: "Añade tu audiencia y seguidores",

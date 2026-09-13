@@ -53,3 +53,4 @@ next-env.d.ts
 /Claude outputs/
 /_to_delete/
 *.tgz
+_to_delete/

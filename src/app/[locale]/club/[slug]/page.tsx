@@ -146,6 +146,12 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
     !!perfil.facilities || !!perfil.facilitiesAddress || perfil.facilitiesPhotos.length > 0;
 
   const estadisticasAudiencia = [
+    // Los socios van los primeros: es la cifra que mejor dice a cuánta
+    // gente del pueblo llega el club. Y van sueltos, sin sumarse con
+    // jugadores ni familias, porque muchos padres son también socios.
+    perfil.membersCount != null
+      ? { etiqueta: t("secciones.socios"), valor: formatoNumero.format(perfil.membersCount) }
+      : null,
     perfil.estimatedReach != null
       ? { etiqueta: t("secciones.alcanceEstimado"), valor: formatoNumero.format(perfil.estimatedReach) }
       : null,

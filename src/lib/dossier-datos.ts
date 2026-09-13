@@ -2,6 +2,8 @@ import { clubRowToProfile, clubSponsorRowToSponsor, clubTeamRowToTeam } from "@/
 import type { ClubRow, ClubSponsorRow, ClubTeamRow } from "@/lib/club-mappers";
 import { seccionesValidas } from "@/lib/dossier-mappers";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
+import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
+import type { Partido } from "@/lib/publico-partidos";
 import type { createClient } from "@/lib/supabase/server";
 import type { ClubProfile, ClubSponsor, ClubTeam, DossierSectionKey, Opportunity } from "@/lib/types";
 
@@ -17,6 +19,9 @@ export type DatosDossier = {
   equipos: ClubTeam[];
   patrocinadores: ClubSponsor[];
   oportunidades: Opportunity[];
+  /** El registro de público (migración 0037). De aquí sale la parte
+   * contada del alcance, que es la que una empresa se cree. */
+  partidos: Partido[];
   secciones: DossierSectionKey[];
   emailContacto: string | null;
 };
@@ -41,8 +46,13 @@ export async function reunirDatosDelDossier(
   const secciones = seccionesValidas(formData.getAll("sections"));
   const idsOportunidades = formData.getAll("opportunityIds").map(String);
 
-  const [{ data: filaClub }, { data: filasEquipos }, { data: filasPatrocinadores }, { data: filasOportunidades }] =
-    await Promise.all([
+  const [
+    { data: filaClub },
+    { data: filasEquipos },
+    { data: filasPatrocinadores },
+    { data: filasOportunidades },
+    partidos,
+  ] = await Promise.all([
       supabase.from("clubs").select("*").eq("id", clubId).maybeSingle<ClubRow>(),
       supabase
         .from("club_teams")
@@ -66,7 +76,8 @@ export async function reunirDatosDelDossier(
             .order("value", { ascending: false })
             .returns<OpportunityRow[]>()
         : Promise.resolve({ data: [] as OpportunityRow[] }),
-    ]);
+    obtenerPartidosDelClub(supabase, clubId),
+  ]);
 
   if (!filaClub) return null;
 
@@ -76,6 +87,7 @@ export async function reunirDatosDelDossier(
     equipos: (filasEquipos ?? []).map(clubTeamRowToTeam),
     patrocinadores: (filasPatrocinadores ?? []).map(clubSponsorRowToSponsor),
     oportunidades: (filasOportunidades ?? []).map(opportunityRowToOpportunity),
+    partidos,
     secciones,
     emailContacto,
   };

@@ -1,4 +1,12 @@
 import { Document, Image, Page, StyleSheet, Text, View, renderToBuffer } from "@react-pdf/renderer";
+import {
+  AVISO_DE_ORIGEN,
+  calcularAlcance,
+  cifrasDePortada,
+  unidadEnTexto,
+  type BloqueDeAlcance,
+  type CifraDeAlcance,
+} from "@/lib/alcance";
 import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
 import type { DatosDossier } from "@/lib/dossier-datos";
 import { deportesDelClub, seccionesConContenido } from "@/lib/dossier";
@@ -42,14 +50,6 @@ const COLOR_BORDE = "#e4e4e7"; // zinc-200
 const ETIQUETA_NIVEL_EQUIPO: Record<ClubTeam["teamLevel"], string> = {
   primer_equipo: "Primer equipo",
   cantera: "Cantera",
-};
-
-const ETIQUETA_RED: Record<keyof SocialLinks, string> = {
-  instagram: "Instagram",
-  facebook: "Facebook",
-  twitter: "X / Twitter",
-  tiktok: "TikTok",
-  youtube: "YouTube",
 };
 
 const formatoNumero = new Intl.NumberFormat("es-ES");
@@ -184,6 +184,12 @@ const estilos = StyleSheet.create({
   },
   tarjetaValor: { fontSize: 17, fontFamily: "Helvetica-Bold", color: COLOR_MARCA },
   tarjetaEtiqueta: { fontSize: 8, color: COLOR_TEXTO_SUAVE, marginTop: 2 },
+  tarjetaUnidad: { fontSize: 8, fontFamily: "Helvetica", color: COLOR_TEXTO_SUAVE },
+  tarjetaProcedencia: { fontSize: 7, color: COLOR_TEXTO_SUAVE, marginTop: 3, maxWidth: 150 },
+  bloqueTitulo: { fontSize: 10, fontFamily: "Helvetica-Bold", color: COLOR_MARCA, marginBottom: 2 },
+  bloqueExplicacion: { fontSize: 8, color: COLOR_TEXTO_SUAVE, marginBottom: 6, lineHeight: 1.4 },
+  cuenta: { fontSize: 7.5, color: COLOR_TEXTO_SUAVE, marginTop: 4, lineHeight: 1.4 },
+  avisoDeOrigen: { fontSize: 7.5, color: COLOR_TEXTO_SUAVE, marginTop: 4, fontFamily: "Helvetica-Oblique" },
 
   hito: { display: "flex", flexDirection: "row", gap: 10, marginBottom: 5 },
   hitoAno: { fontSize: 10, fontFamily: "Helvetica-Bold", color: COLOR_ACENTO, width: 34 },
@@ -284,6 +290,46 @@ function Tarjeta({ etiqueta, valor }: { etiqueta: string; valor: string }) {
   );
 }
 
+/**
+ * Una cifra del informe de alcance, con su unidad y con de dónde sale
+ * escrito debajo. La procedencia no es decoración: es lo que separa
+ * "240 personas de media, apuntadas partido a partido" de un número
+ * puesto a ojo, y es lo único que hace que la empresa se lo crea.
+ */
+function TarjetaDeAlcance({ cifra }: { cifra: CifraDeAlcance }) {
+  return (
+    <View style={estilos.tarjeta}>
+      <Text style={estilos.tarjetaValor}>
+        {formatoNumero.format(cifra.valor)}{" "}
+        <Text style={estilos.tarjetaUnidad}>{unidadEnTexto(cifra.unidad, cifra.valor)}</Text>
+      </Text>
+      <Text style={estilos.tarjetaEtiqueta}>{cifra.etiqueta}</Text>
+      <Text style={estilos.tarjetaProcedencia}>{cifra.procedencia}</Text>
+    </View>
+  );
+}
+
+function BloqueDeAlcanceEnPdf({ bloque }: { bloque: BloqueDeAlcance }) {
+  return (
+    <View style={{ marginBottom: 10 }}>
+      <Text style={estilos.bloqueTitulo}>{bloque.titulo}</Text>
+      <Text style={estilos.bloqueExplicacion}>{bloque.explicacion}</Text>
+      <View style={estilos.filaTarjetas}>
+        {bloque.cifras.map((cifra) => (
+          <TarjetaDeAlcance key={cifra.id} cifra={cifra} />
+        ))}
+      </View>
+      {bloque.cifras
+        .filter((cifra) => cifra.cuenta)
+        .map((cifra) => (
+          <Text key={`${cifra.id}-cuenta`} style={estilos.cuenta}>
+            {cifra.etiqueta}: {cifra.cuenta}
+          </Text>
+        ))}
+    </View>
+  );
+}
+
 function Cifra({ etiqueta, valor }: { etiqueta: string; valor: string }) {
   return (
     <View style={estilos.cifra}>
@@ -325,10 +371,11 @@ function DossierDocumento({
   equipos,
   patrocinadores,
   oportunidades,
+  partidos,
   secciones,
   emailContacto,
 }: DatosDossierPdf) {
-  const disponibles = seccionesConContenido(perfil, equipos, patrocinadores);
+  const disponibles = seccionesConContenido(perfil, equipos, patrocinadores, partidos);
   const incluir = (clave: DossierSectionKey) => secciones.includes(clave) && disponibles.has(clave);
 
   const deportes = deportesDelClub(equipos);
@@ -338,61 +385,23 @@ function DossierDocumento({
   const redesSociales = (Object.entries(perfil.socialLinks) as [keyof SocialLinks, string | undefined][])
     .filter((entrada): entrada is [keyof SocialLinks, string] => !!entrada[1]);
 
-  const seguidoresTotales = Object.values(perfil.followersByNetwork).reduce<number>(
-    (suma, valor) => suma + (valor ?? 0),
-    0,
-  );
-
-  const jugadoresEnEquipos = equipos.reduce<number>(
-    (suma, equipo) => suma + (equipo.playerCount ?? 0),
-    0,
-  );
-  const jugadores = jugadoresEnEquipos > 0 ? jugadoresEnEquipos : perfil.youthPlayersCount;
-
   /**
-   * Las cuatro cifras de la portada: lo que una empresa necesita para
-   * decidir en medio minuto si esto le interesa. Se cogen las cuatro
-   * primeras que el club tenga rellenadas, en el orden que más convence
-   * a una empresa local: gente, familias, presencia.
+   * El alcance del club, calculado en un solo sitio (`lib/alcance.ts`)
+   * y compartido con la página "Alcance" del panel.
+   *
+   * Antes, aquí se sumaban los seguidores de todas las redes en una
+   * sola cifra de portada. El padre que sigue al club en Instagram y en
+   * Facebook contaba dos veces, y la primera empresa que lo notara
+   * dejaba de creerse también lo que sí era cierto. Ahora se enseña la
+   * red mayor y nada más.
    */
-  const cifrasPortada = [
-    jugadores != null ? { etiqueta: "Jugadores", valor: formatoNumero.format(jugadores) } : null,
-    perfil.youthFamiliesCount != null
-      ? { etiqueta: "Familias vinculadas", valor: formatoNumero.format(perfil.youthFamiliesCount) }
-      : null,
-    perfil.averageAttendance != null
-      ? { etiqueta: "Asistencia por partido", valor: formatoNumero.format(perfil.averageAttendance) }
-      : null,
-    seguidoresTotales > 0
-      ? { etiqueta: "Seguidores en redes", valor: formatoNumero.format(seguidoresTotales) }
-      : null,
-    perfil.estimatedReach != null
-      ? { etiqueta: "Alcance estimado", valor: formatoNumero.format(perfil.estimatedReach) }
-      : null,
-    equipos.length > 0 ? { etiqueta: "Equipos", valor: formatoNumero.format(equipos.length) } : null,
-  ]
-    .filter((cifra): cifra is { etiqueta: string; valor: string } => cifra !== null)
-    .slice(0, 4);
+  const alcance = calcularAlcance({ perfil, equipos, partidos });
+  const cifrasPortada = cifrasDePortada(alcance);
 
   const masBarata = oportunidades.reduce<number | null>(
     (minimo, oportunidad) => (minimo == null || oportunidad.value < minimo ? oportunidad.value : minimo),
     null,
   );
-
-  const estadisticasAudiencia = [
-    perfil.estimatedReach != null
-      ? { etiqueta: "Alcance estimado", valor: formatoNumero.format(perfil.estimatedReach) }
-      : null,
-    perfil.averageAttendance != null
-      ? { etiqueta: "Asistencia media", valor: formatoNumero.format(perfil.averageAttendance) }
-      : null,
-    ...(Object.entries(perfil.followersByNetwork) as [keyof SocialLinks, number | undefined][])
-      .filter((entrada): entrada is [keyof SocialLinks, number] => entrada[1] != null)
-      .map(([red, valor]) => ({
-        etiqueta: `Seguidores en ${ETIQUETA_RED[red]}`,
-        valor: formatoNumero.format(valor),
-      })),
-  ].filter((estadistica): estadistica is { etiqueta: string; valor: string } => estadistica !== null);
 
   return (
     <Document
@@ -438,7 +447,11 @@ function DossierDocumento({
             {cifrasPortada.length > 0 && (
               <View style={estilos.filaCifras}>
                 {cifrasPortada.map((cifra) => (
-                  <Cifra key={cifra.etiqueta} etiqueta={cifra.etiqueta} valor={cifra.valor} />
+                  <Cifra
+                    key={cifra.id}
+                    etiqueta={cifra.etiqueta}
+                    valor={formatoNumero.format(cifra.valor)}
+                  />
                 ))}
               </View>
             )}
@@ -577,13 +590,16 @@ function DossierDocumento({
           </Seccion>
         )}
 
-        {incluir("audiencia") && (
-          <Seccion etiqueta="A quién llegas" titulo="Audiencia en cifras">
-            <View style={estilos.filaTarjetas}>
-              {estadisticasAudiencia.map((estadistica) => (
-                <Tarjeta key={estadistica.etiqueta} etiqueta={estadistica.etiqueta} valor={estadistica.valor} />
-              ))}
-            </View>
+        {incluir("audiencia") && alcance.hayCifras && (
+          <Seccion
+            etiqueta="A quién llegas"
+            titulo="Audiencia en cifras"
+            descripcion="Las cifras van separadas según de dónde salen, y no se suman entre sí: la misma persona puede ser socio, padre de un jugador y seguidor en redes."
+          >
+            {alcance.bloques.map((bloque) => (
+              <BloqueDeAlcanceEnPdf key={bloque.id} bloque={bloque} />
+            ))}
+            <Text style={estilos.avisoDeOrigen}>{AVISO_DE_ORIGEN}</Text>
           </Seccion>
         )}
 

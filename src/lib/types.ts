@@ -116,6 +116,9 @@ export type ClubProfile = {
   youthTeamsCount: number | null;
   youthPlayersCount: number | null;
   youthFamiliesCount: number | null;
+  /** Socios del club (migración 0042). Nunca se suma con jugadores ni
+   * familias: son conjuntos que se solapan. */
+  membersCount: number | null;
 
   // Historia
   foundingYear: number | null;

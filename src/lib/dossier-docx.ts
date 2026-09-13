@@ -17,6 +17,12 @@ import {
 } from "docx";
 import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
 import { deportesDelClub, seccionesConContenido } from "@/lib/dossier";
+import {
+  AVISO_DE_ORIGEN,
+  calcularAlcance,
+  cifrasDePortada,
+  unidadEnTexto,
+} from "@/lib/alcance";
 import type { DatosDossier } from "@/lib/dossier-datos";
 import { descargarImagen, encajarEn, type ImagenDescargada } from "@/lib/imagenes-remotas";
 import { formatoValorOportunidad } from "@/lib/opportunities";
@@ -56,14 +62,6 @@ const ANCHO_UTIL = 690; // ancho util de una A4 con los margenes de este documen
 const ETIQUETA_NIVEL_EQUIPO: Record<ClubTeam["teamLevel"], string> = {
   primer_equipo: "Primer equipo",
   cantera: "Cantera",
-};
-
-const ETIQUETA_RED: Record<keyof SocialLinks, string> = {
-  instagram: "Instagram",
-  facebook: "Facebook",
-  twitter: "X / Twitter",
-  tiktok: "TikTok",
-  youtube: "YouTube",
 };
 
 const formatoNumero = new Intl.NumberFormat("es-ES");
@@ -154,9 +152,10 @@ function tablaDeCifras(cifras: { etiqueta: string; valor: string }[]) {
 
 /** Construye el .docx y lo devuelve como Buffer. */
 export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
-  const { perfil, equipos, patrocinadores, oportunidades, secciones, emailContacto } = datos;
+  const { perfil, equipos, patrocinadores, oportunidades, partidos, secciones, emailContacto } =
+    datos;
 
-  const disponibles = seccionesConContenido(perfil, equipos, patrocinadores);
+  const disponibles = seccionesConContenido(perfil, equipos, patrocinadores, partidos);
   const incluir = (clave: DossierSectionKey) => secciones.includes(clave) && disponibles.has(clave);
 
   const deportes = deportesDelClub(equipos);
@@ -175,52 +174,23 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
   const redesSociales = (Object.entries(perfil.socialLinks) as [keyof SocialLinks, string | undefined][])
     .filter((entrada): entrada is [keyof SocialLinks, string] => !!entrada[1]);
 
-  const seguidoresTotales = Object.values(perfil.followersByNetwork).reduce<number>(
-    (suma, valor) => suma + (valor ?? 0),
-    0,
-  );
+  /**
+   * El alcance, calculado en `lib/alcance.ts` — el mismo sitio que usan
+   * el PDF y la página "Alcance" del panel. Que los tres salgan de una
+   * sola cuenta no es elegancia: es que el día que una empresa compare
+   * el Word con el PDF del mismo club, las cifras tienen que coincidir.
+   */
+  const alcance = calcularAlcance({ perfil, equipos, partidos });
 
-  const jugadoresEnEquipos = equipos.reduce<number>((suma, equipo) => suma + (equipo.playerCount ?? 0), 0);
-  const jugadores = jugadoresEnEquipos > 0 ? jugadoresEnEquipos : perfil.youthPlayersCount;
-
-  const cifrasPortada = [
-    jugadores != null ? { etiqueta: "Jugadores", valor: formatoNumero.format(jugadores) } : null,
-    perfil.youthFamiliesCount != null
-      ? { etiqueta: "Familias vinculadas", valor: formatoNumero.format(perfil.youthFamiliesCount) }
-      : null,
-    perfil.averageAttendance != null
-      ? { etiqueta: "Asistencia por partido", valor: formatoNumero.format(perfil.averageAttendance) }
-      : null,
-    seguidoresTotales > 0
-      ? { etiqueta: "Seguidores en redes", valor: formatoNumero.format(seguidoresTotales) }
-      : null,
-    perfil.estimatedReach != null
-      ? { etiqueta: "Alcance estimado", valor: formatoNumero.format(perfil.estimatedReach) }
-      : null,
-    equipos.length > 0 ? { etiqueta: "Equipos", valor: formatoNumero.format(equipos.length) } : null,
-  ]
-    .filter((cifra): cifra is { etiqueta: string; valor: string } => cifra !== null)
-    .slice(0, 4);
+  const cifrasPortada = cifrasDePortada(alcance).map((cifra) => ({
+    etiqueta: cifra.etiqueta,
+    valor: formatoNumero.format(cifra.valor),
+  }));
 
   const masBarata = oportunidades.reduce<number | null>(
     (minimo, oportunidad) => (minimo == null || oportunidad.value < minimo ? oportunidad.value : minimo),
     null,
   );
-
-  const estadisticasAudiencia = [
-    perfil.estimatedReach != null
-      ? { etiqueta: "Alcance estimado", valor: formatoNumero.format(perfil.estimatedReach) }
-      : null,
-    perfil.averageAttendance != null
-      ? { etiqueta: "Asistencia media", valor: formatoNumero.format(perfil.averageAttendance) }
-      : null,
-    ...(Object.entries(perfil.followersByNetwork) as [keyof SocialLinks, number | undefined][])
-      .filter((entrada): entrada is [keyof SocialLinks, number] => entrada[1] != null)
-      .map(([red, valor]) => ({
-        etiqueta: `Seguidores en ${ETIQUETA_RED[red]}`,
-        valor: formatoNumero.format(valor),
-      })),
-  ].filter((estadistica): estadistica is { etiqueta: string; valor: string } => estadistica !== null);
 
   const cuerpo: (Paragraph | Table)[] = [];
 
@@ -385,20 +355,44 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
     }
   }
 
-  if (incluir("audiencia") && estadisticasAudiencia.length > 0) {
+  if (incluir("audiencia") && alcance.hayCifras) {
     cuerpo.push(titulo("Audiencia en cifras"));
-    for (const estadistica of estadisticasAudiencia) {
-      cuerpo.push(
-        new Paragraph({
-          bullet: { level: 0 },
-          spacing: { after: 60 },
-          children: [
-            new TextRun({ text: `${estadistica.etiqueta}: `, size: 22, color: GRIS }),
-            new TextRun({ text: estadistica.valor, size: 22, bold: true, color: NAVY }),
-          ],
-        }),
-      );
+    cuerpo.push(
+      parrafo(
+        "Las cifras van separadas segun de donde salen, y no se suman entre si: la misma persona puede ser socio, padre de un jugador y seguidor en redes.",
+        { color: GRIS, tamano: 20 },
+      ),
+    );
+
+    for (const bloque of alcance.bloques) {
+      cuerpo.push(parrafo(bloque.titulo, { negrita: true, tamano: 22, espacioDespues: 20 }));
+      cuerpo.push(parrafo(bloque.explicacion, { color: GRIS, tamano: 18 }));
+
+      for (const cifra of bloque.cifras) {
+        cuerpo.push(
+          new Paragraph({
+            bullet: { level: 0 },
+            spacing: { after: 20 },
+            children: [
+              new TextRun({ text: `${cifra.etiqueta}: `, size: 22, color: GRIS }),
+              new TextRun({
+                text: `${formatoNumero.format(cifra.valor)} ${unidadEnTexto(cifra.unidad, cifra.valor)}`,
+                size: 22,
+                bold: true,
+                color: NAVY,
+              }),
+              new TextRun({ text: ` — ${cifra.procedencia}`, size: 18, color: GRIS_TENUE }),
+            ],
+          }),
+        );
+
+        if (cifra.cuenta) {
+          cuerpo.push(parrafo(cifra.cuenta, { color: GRIS, tamano: 18, espacioDespues: 60 }));
+        }
+      }
     }
+
+    cuerpo.push(parrafo(AVISO_DE_ORIGEN, { color: GRIS_TENUE, tamano: 16 }));
   }
 
   if (incluir("patrocinadores")) {

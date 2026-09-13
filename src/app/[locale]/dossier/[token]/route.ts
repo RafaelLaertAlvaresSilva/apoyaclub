@@ -4,6 +4,7 @@ import type { ClubRow, ClubSponsorRow, ClubTeamRow } from "@/lib/club-mappers";
 import { dossierRowToConfig, type DossierRow } from "@/lib/dossier-mappers";
 import { generarDossierPdf } from "@/lib/dossier-pdf";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
+import { partidoRowToPartido, type PartidoRow } from "@/lib/publico-partidos";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
@@ -68,8 +69,13 @@ export async function GET(_request: Request, { params }: ParametrosRuta) {
       if (error) console.error("[dossier] No se ha podido registrar la apertura:", error.message);
     });
 
-  const [{ data: filasEquipos }, { data: filasPatrocinadores }, { data: filasOportunidades }, { data: usuario }] =
-    await Promise.all([
+  const [
+    { data: filasEquipos },
+    { data: filasPatrocinadores },
+    { data: filasOportunidades },
+    { data: filasPartidos },
+    { data: usuario },
+  ] = await Promise.all([
       admin
         .from("club_teams")
         .select("*")
@@ -93,14 +99,24 @@ export async function GET(_request: Request, { params }: ParametrosRuta) {
             .order("value", { ascending: false })
             .returns<OpportunityRow[]>()
         : Promise.resolve({ data: [] as OpportunityRow[] }),
-      admin.auth.admin.getUserById(filaClub.id),
-    ]);
+    // El registro de público: de aquí sale la parte contada del
+    // alcance. Con la clave de servicio, igual que todo lo demás de
+    // esta ruta, porque quien abre el enlace no tiene sesión.
+    admin
+      .from("club_matches")
+      .select("id, club_id, played_on, opponent, competition, team, team_id, home, attendance, notes")
+      .eq("club_id", filaClub.id)
+      .order("played_on", { ascending: false })
+      .returns<PartidoRow[]>(),
+    admin.auth.admin.getUserById(filaClub.id),
+  ]);
 
   const pdf = await generarDossierPdf({
     perfil: clubRowToProfile(filaClub),
     equipos: (filasEquipos ?? []).map(clubTeamRowToTeam),
     patrocinadores: (filasPatrocinadores ?? []).map(clubSponsorRowToSponsor),
     oportunidades: (filasOportunidades ?? []).map(opportunityRowToOpportunity),
+    partidos: (filasPartidos ?? []).map(partidoRowToPartido),
     secciones: configuracion.sections,
     emailContacto: usuario.user?.email ?? null,
   });
