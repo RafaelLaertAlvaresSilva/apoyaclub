@@ -396,16 +396,24 @@ export async function restaurarOportunidad(formData: FormData): Promise<void> {
 // ---------------------------------------------------------------------
 // Eliminar
 // ---------------------------------------------------------------------
-export async function eliminarOportunidad(formData: FormData): Promise<void> {
+export async function eliminarOportunidad(formData: FormData): Promise<EstadoGuardado> {
   const contexto = await obtenerClubActual();
-  if ("error" in contexto) return;
+  if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const id = String(formData.get("id") ?? "");
-  if (!id) return;
+  if (!id) return { error: "No se ha podido identificar qué borrar." };
 
-  await supabase.from("opportunities").delete().eq("id", id).eq("club_id", user.id);
+  const { error } = await supabase
+    .from("opportunities")
+    .delete()
+    .eq("id", id)
+    .eq("club_id", user.id);
+
+  if (error) return { error: "No se ha podido borrar la oportunidad. Inténtalo de nuevo." };
+
   revalidatePath(RUTA_OPORTUNIDADES);
+  return { ok: true };
 }
 
 // ---------------------------------------------------------------------

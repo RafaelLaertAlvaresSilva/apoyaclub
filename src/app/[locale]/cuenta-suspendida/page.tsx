@@ -3,6 +3,7 @@ import { BarraLogo } from "@/components/BarraLogo";
 import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
+import { TITULAR } from "@/lib/titular";
 
 export const metadata: Metadata = {
   title: "Cuenta suspendida | ApoyaClub",
@@ -23,9 +24,19 @@ export default function CuentaSuspendidaPage() {
           <h1 className="text-2xl font-semibold text-zinc-900">{t("tuCuentaEstaSuspendida")}</h1>
           <p className="text-sm text-zinc-600">{t("elAccesoAlPanel")}</p>
           <div className="flex flex-col items-center gap-3 pt-2 sm:flex-row sm:justify-center">
+            {/* Escribir es la única salida real de esta pantalla, así
+                que es el botón principal. Decía "escríbenos" sin decir
+                a dónde, y quien llega aquí tiene la cuenta bloqueada:
+                no puede hacer ninguna otra cosa. */}
+            <a
+              href={`mailto:${TITULAR.email}?subject=${encodeURIComponent("Cuenta suspendida en ApoyaClub")}`}
+              className="inline-block rounded-lg bg-teal-700 px-6 py-3 font-medium text-white transition-colors hover:bg-teal-800"
+            >
+              {t("escribirnos")}
+            </a>
             <Link
               href="/"
-              className="inline-block rounded-lg bg-teal-700 px-6 py-3 font-medium text-white transition-colors hover:bg-teal-800"
+              className="inline-block rounded-lg border border-zinc-300 bg-white px-6 py-3 font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
             >{t("volverAlInicio")}</Link>
             <CerrarSesionBoton />
           </div>

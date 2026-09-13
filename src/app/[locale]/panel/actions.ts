@@ -485,16 +485,24 @@ export async function guardarFotoEquipo(equipoId: string, url: string | null): P
   return { ok: true };
 }
 
-export async function eliminarEquipo(formData: FormData): Promise<void> {
+export async function eliminarEquipo(formData: FormData): Promise<EstadoGuardado> {
   const contexto = await obtenerClubActual();
-  if ("error" in contexto) return;
+  if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const id = String(formData.get("id") ?? "");
-  if (!id) return;
+  if (!id) return { error: "No se ha podido identificar qué borrar." };
 
-  await supabase.from("club_teams").delete().eq("id", id).eq("club_id", user.id);
+  const { error } = await supabase
+    .from("club_teams")
+    .delete()
+    .eq("id", id)
+    .eq("club_id", user.id);
+
+  if (error) return fallo("eliminarEquipo", error, "No se ha podido borrar. Inténtalo de nuevo.");
+
   revalidatePath(RUTA_PANEL);
+  return { ok: true };
 }
 
 // ---------------------------------------------------------------------
@@ -1130,16 +1138,24 @@ function leerAnio(formData: FormData, campo: string): number | null {
   return anio >= 1900 && anio <= 2100 ? anio : null;
 }
 
-export async function eliminarPatrocinador(formData: FormData): Promise<void> {
+export async function eliminarPatrocinador(formData: FormData): Promise<EstadoGuardado> {
   const contexto = await obtenerClubActual();
-  if ("error" in contexto) return;
+  if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const id = String(formData.get("id") ?? "");
-  if (!id) return;
+  if (!id) return { error: "No se ha podido identificar qué borrar." };
 
-  await supabase.from("club_sponsors").delete().eq("id", id).eq("club_id", user.id);
+  const { error } = await supabase
+    .from("club_sponsors")
+    .delete()
+    .eq("id", id)
+    .eq("club_id", user.id);
+
+  if (error) return fallo("eliminarPatrocinador", error, "No se ha podido borrar. Inténtalo de nuevo.");
+
   revalidatePath(RUTA_PANEL);
+  return { ok: true };
 }
 
 // ---------------------------------------------------------------------
@@ -1201,17 +1217,25 @@ export async function cambiarEstadoServicio(formData: FormData): Promise<void> {
   revalidatePath("/panel");
 }
 
-export async function eliminarServicio(formData: FormData): Promise<void> {
+export async function eliminarServicio(formData: FormData): Promise<EstadoGuardado> {
   const contexto = await obtenerClubActual();
-  if ("error" in contexto) return;
+  if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const id = String(formData.get("id") ?? "");
-  if (!id) return;
+  if (!id) return { error: "No se ha podido identificar qué borrar." };
 
-  await supabase.from("club_service_needs").delete().eq("id", id).eq("club_id", user.id);
+  const { error } = await supabase
+    .from("club_service_needs")
+    .delete()
+    .eq("id", id)
+    .eq("club_id", user.id);
+
+  if (error) return fallo("eliminarServicio", error, "No se ha podido borrar. Inténtalo de nuevo.");
+
 
   revalidatePath("/panel");
+  return { ok: true };
 }
 
 /**

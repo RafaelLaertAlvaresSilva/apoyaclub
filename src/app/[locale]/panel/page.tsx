@@ -88,7 +88,12 @@ export default async function PanelPage() {
 
   const pasosIniciales = primerosPasos(perfil, equipos, oportunidadesPublicadas ?? 0);
 
-  const nombreProvisional = (user.user_metadata?.name as string | undefined) ?? user.email;
+  // Mientras no haya ficha, el título grande era la dirección de correo
+  // con la que el club se registró. Es lo primero que se ve al entrar y
+  // daba sensación de página a medio hacer, justo en el momento en que
+  // hay que generar confianza. El correo sigue estando, debajo y en
+  // pequeño, que es donde sirve.
+  const nombreProvisional = (user.user_metadata?.name as string | undefined) ?? "Tu club";
   // El porcentaje lo calcula la base de datos (migración 0020) y es el
   // mismo que usa el buscador para ordenar; aquí solo se lee.
   const porcentaje = perfil?.profileScore ?? 0;
@@ -102,6 +107,7 @@ export default async function PanelPage() {
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">
             {perfil?.name ?? nombreProvisional}
           </h1>
+          {!perfil && <p className="mt-1 text-sm text-zinc-500">{user.email}</p>}
         </div>
         <CerrarSesionBoton />
       </div>

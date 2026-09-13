@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
+import { BorrarConConfirmacion } from "@/components/BorrarConConfirmacion";
 import type { ClubTeam, Opportunity, OpportunityStatus } from "@/lib/types";
 import {
   CLASES_NIVEL_PATROCINIO,
@@ -205,13 +206,13 @@ export function TarjetaOportunidad({
           </a>
         )}
 
-        <form action={eliminarOportunidad}>
-          <input type="hidden" name="id" value={oportunidad.id} />
-          <button
-            type="submit"
-            className="rounded-lg px-3 py-1.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50"
-          >{t("eliminar")}</button>
-        </form>
+        <BorrarConConfirmacion
+          accion={eliminarOportunidad}
+          id={oportunidad.id}
+          nombre={oportunidad.title}
+          etiqueta={t("eliminar")}
+          clases="rounded-lg px-3 py-1.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50"
+        />
       </div>
     </li>
   );

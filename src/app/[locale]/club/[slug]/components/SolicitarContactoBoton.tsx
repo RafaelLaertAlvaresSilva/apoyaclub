@@ -49,12 +49,21 @@ export function SolicitarContactoBoton({
     null,
   );
 
+  // La ventana se cerraba sola a los tres segundos. Quien apartaba la
+  // vista un momento no llegaba a ver si su mensaje había salido, y lo
+  // mandaba otra vez o se quedaba con la duda. Es el momento exacto en
+  // el que se gana la operación: ahora se cierra cuando el que escribe
+  // quiere, no cuando un reloj lo decide.
   useEffect(() => {
-    if (estado && "ok" in estado && estado.ok) {
-      const temporizador = setTimeout(() => setAbierto(false), 3000);
-      return () => clearTimeout(temporizador);
+    if (!abierto) return;
+
+    function alPulsarTecla(evento: KeyboardEvent) {
+      if (evento.key === "Escape") setAbierto(false);
     }
-  }, [estado]);
+
+    document.addEventListener("keydown", alPulsarTecla);
+    return () => document.removeEventListener("keydown", alPulsarTecla);
+  }, [abierto]);
 
   const clases = variante === "primaria" ? CLASES_PRIMARIA : CLASES_SECUNDARIA;
   const enviado = !!estado && "ok" in estado && !!estado.ok;
@@ -66,14 +75,32 @@ export function SolicitarContactoBoton({
       </button>
 
       {abierto && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/40 px-4 py-8">
-          <div className="max-h-full w-full max-w-lg overflow-y-auto rounded-xl bg-white p-6 shadow-xl">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/40 px-4 py-8"
+          // Pinchar fuera cierra solo en la pantalla de "enviado". Con
+          // el formulario abierto no: un clic de más al lado del
+          // recuadro se llevaría por delante un mensaje ya escrito.
+          onClick={enviado ? (evento) => { if (evento.target === evento.currentTarget) setAbierto(false); } : undefined}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Escribir a ${clubName}`}
+            className="max-h-full w-full max-w-lg overflow-y-auto rounded-xl bg-white p-6 shadow-xl"
+          >
             {enviado ? (
               <div className="text-center">
                 <p className="text-lg font-semibold text-zinc-900">Mensaje enviado</p>
                 <p className="mt-2 text-sm text-zinc-600">
                   {clubName} lo recibe ahora mismo y te contestará al correo que has puesto.
                 </p>
+                <button
+                  type="button"
+                  onClick={() => setAbierto(false)}
+                  className="mt-5 rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-800"
+                >
+                  Cerrar
+                </button>
               </div>
             ) : (
               <form action={formAction} className="space-y-4">

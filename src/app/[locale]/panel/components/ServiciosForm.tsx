@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
+import { BorrarConConfirmacion } from "@/components/BorrarConConfirmacion";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { Campo, SeccionCard, clasesInput, clasesTextarea } from "./SeccionCard";
@@ -70,15 +71,13 @@ export function ServiciosForm({ servicios }: { servicios: ServiceNeed[] }) {
                   </button>
                 </form>
 
-                <form action={eliminarServicio}>
-                  <input type="hidden" name="id" value={servicio.id} />
-                  <button
-                    type="submit"
-                    className="rounded-lg px-2.5 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-50"
-                  >
-                    {t("eliminar")}
-                  </button>
-                </form>
+                <BorrarConConfirmacion
+                  accion={eliminarServicio}
+                  id={servicio.id}
+                  nombre={servicio.title}
+                  etiqueta={t("eliminar")}
+                  clases="rounded-lg px-2.5 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-50"
+                />
               </div>
             </li>
           ))}

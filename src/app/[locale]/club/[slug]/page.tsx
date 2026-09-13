@@ -228,9 +228,13 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             ver un "todavía no hay oportunidades" encima de las suyas. */}
         {(loQueOfrece.length > 0 || oportunidades.length === 0) && (
         <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">
+          {/* Al mismo tamaño que "Quiénes somos" o "Palmarés". Era una
+              línea diminuta en mayúsculas, así que al bajar por la ficha
+              lo único que la empresa puede hacer parecía un pie de foto
+              y lo que solo informa parecía lo principal. */}
+          <h2 className="text-xl font-semibold text-brand-teal-dark sm:text-2xl">
             {t("oportunidades.titulo")}
-          </p>
+          </h2>
           {loQueOfrece.length === 0 ? (
             <p className="mt-2 text-zinc-700">{t("oportunidades.vacio")}</p>
           ) : (
@@ -333,9 +337,9 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             hueco se nota. */}
         {loQueNecesita.length > 0 && (
           <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
-            <p className="text-xs font-semibold uppercase tracking-wide text-amber-800">
+            <h2 className="text-xl font-semibold text-amber-900 sm:text-2xl">
               Lo que necesitamos
-            </p>
+            </h2>
             <p className="mt-2 text-sm text-amber-900">
               Servicios y productos que le hacen falta al club. A cambio, la misma visibilidad
               que cualquier patrocinador.
@@ -385,7 +389,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                       opportunityTitle={oportunidad.title}
                       variante="primaria"
                     >
-                      Puedo ayudar con esto
+                      {t("servicios.ofrecer")}
                     </SolicitarContactoBoton>
                   </div>
                 </div>
@@ -419,9 +423,9 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         // pequeña para saber en qué dirección va cada cosa.
         <section id="servicios" className="scroll-mt-24 pt-8">
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
-            <p className="text-xs font-semibold uppercase tracking-wide text-amber-800">
+            <h2 className="text-xl font-semibold text-amber-900 sm:text-2xl">
               {t("servicios.titulo")}
-            </p>
+            </h2>
             <p className="mt-2 text-sm text-amber-900">{t("servicios.descripcion")}</p>
 
             <div className="mt-4">

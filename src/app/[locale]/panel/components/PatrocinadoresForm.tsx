@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useActionState, useState } from "react";
+import { BorrarConConfirmacion } from "@/components/BorrarConConfirmacion";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
@@ -147,15 +148,13 @@ function FilaPatrocinador({
           >
             {editando ? "Cerrar" : "Editar"}
           </button>
-          <form action={eliminarPatrocinador}>
-            <input type="hidden" name="id" value={patrocinador.id} />
-            <button
-              type="submit"
-              className="rounded px-2 py-1 text-sm font-medium text-red-600 hover:bg-red-50"
-            >
-              {t("eliminar")}
-            </button>
-          </form>
+          <BorrarConConfirmacion
+            accion={eliminarPatrocinador}
+            id={patrocinador.id}
+            nombre={patrocinador.name}
+            etiqueta={t("eliminar")}
+            clases="rounded px-2 py-1 text-sm font-medium text-red-600 hover:bg-red-50"
+          />
         </div>
       </div>
 
