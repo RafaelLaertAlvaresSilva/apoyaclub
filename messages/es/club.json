@@ -59,5 +59,6 @@
     "titulo": "Servicios que buscamos",
     "descripcion": "Cosas que el club necesita y que tu empresa quizá pueda cubrir, a cambio de visibilidad.",
     "ofrecer": "Puedo ofrecerlo"
-  }
+  },
+  "verMas": "Ver {cuantos} más"
 }

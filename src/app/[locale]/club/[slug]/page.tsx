@@ -22,6 +22,7 @@ import { CompartirBoton } from "./components/CompartirBoton";
 import { DatosDeContacto } from "./components/DatosDeContacto";
 import { FotoAmpliable } from "./components/FotoAmpliable";
 import { IndiceDeSecciones } from "./components/IndiceDeSecciones";
+import { ListaConVerMas } from "./components/ListaConVerMas";
 import { RegistrarVisita } from "./components/RegistrarVisita";
 import { SolicitarContactoBoton } from "./components/SolicitarContactoBoton";
 import { ETIQUETA_CATEGORIA_SERVICIO, obtenerServiciosDelClub } from "@/lib/service-needs";
@@ -189,7 +190,27 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
    * llevar a una sección que no existe, y cambiar el orden es mover una
    * línea en vez de mover cien de maquetación.
    */
-  const secciones: { id: string; etiqueta: string; nodo: React.ReactNode }[] = [];
+  /**
+   * Cuántas tarjetas se ven en el ordenador antes del botón "Ver más",
+   * y la rejilla que usan las tres listas de esta zona.
+   *
+   * `lg:grid-cols-1` es la clave: a partir de esa anchura las dos
+   * columnas —lo que el club ofrece y lo que busca— se ponen una al
+   * lado de la otra, y dentro de cada una las tarjetas van en vertical.
+   * Sin eso saldrían cuatro tarjetas por fila, estrechas y sin leerse.
+   */
+  const VISIBLES_EN_ORDENADOR = 2;
+  const REJILLA_TARJETAS = "grid gap-3 sm:grid-cols-2 lg:grid-cols-1";
+  const cuantasSobran = (total: number) => Math.max(0, total - VISIBLES_EN_ORDENADOR);
+
+  const secciones: {
+    id: string;
+    etiqueta: string;
+    nodo: React.ReactNode;
+    /** Las secciones con el mismo grupo se pintan una al lado de la
+     * otra en el ordenador. */
+    grupo?: string;
+  }[] = [];
 
   // Las dos direcciones, separadas (migración 0038): lo que el club
   // ofrece a cambio de dinero y lo que necesita a cambio de visibilidad.
@@ -199,6 +220,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   secciones.push({
     id: "oportunidades",
     etiqueta: t("oportunidades.titulo"),
+    grupo: "ofrece-y-busca",
     nodo: (
       <section id="oportunidades" className="scroll-mt-24 pt-8">
         {/* El recuadro verde solo aparece si hay algo que enseñar en
@@ -212,7 +234,13 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
           {loQueOfrece.length === 0 ? (
             <p className="mt-2 text-zinc-700">{t("oportunidades.vacio")}</p>
           ) : (
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div className="mt-4">
+            <ListaConVerMas
+              clasesLista={REJILLA_TARJETAS}
+              visiblesEnOrdenador={VISIBLES_EN_ORDENADOR}
+              textoVerMas={t("verMas", { cuantos: cuantasSobran(loQueOfrece.length) })}
+              tono="verde"
+            >
               {loQueOfrece.map((oportunidad) => (
                 <div
                   key={oportunidad.id}
@@ -291,6 +319,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                   </div>
                 </div>
               ))}
+            </ListaConVerMas>
             </div>
           )}
         </div>
@@ -311,7 +340,13 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
               Servicios y productos que le hacen falta al club. A cambio, la misma visibilidad
               que cualquier patrocinador.
             </p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div className="mt-4">
+            <ListaConVerMas
+              clasesLista={REJILLA_TARJETAS}
+              visiblesEnOrdenador={VISIBLES_EN_ORDENADOR}
+              textoVerMas={t("verMas", { cuantos: cuantasSobran(loQueNecesita.length) })}
+              tono="ambar"
+            >
               {loQueNecesita.map((oportunidad) => (
                 <div
                   key={oportunidad.id}
@@ -355,6 +390,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                   </div>
                 </div>
               ))}
+            </ListaConVerMas>
             </div>
           </div>
         )}
@@ -370,31 +406,58 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
     secciones.push({
       id: "servicios",
       etiqueta: t("servicios.titulo"),
+      grupo: "ofrece-y-busca",
       nodo: (
-        <Seccion id="servicios" titulo={t("servicios.titulo")} descripcion={t("servicios.descripcion")}>
-          <ul className="grid gap-3 sm:grid-cols-2">
-            {servicios.map((servicio) => (
-              <li key={servicio.id} className="rounded-xl border border-zinc-200 p-4">
-                <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
-                  {ETIQUETA_CATEGORIA_SERVICIO[servicio.category]}
-                </p>
-                <p className="mt-1 font-medium text-zinc-900">{servicio.title}</p>
-                {servicio.description && (
-                  <p className="mt-1 text-sm text-zinc-600">{servicio.description}</p>
-                )}
-                <div className="mt-3">
-                  <SolicitarContactoBoton
-                    clubId={perfil.id}
-                    clubName={perfil.name}
-                    variante="primaria"
+        // Su propio recuadro de color, como el de las oportunidades.
+        // Antes era texto suelto sobre blanco y, puesto al lado del
+        // recuadro verde, parecía el relleno de la página en vez de la
+        // otra mitad de lo que el club propone.
+        //
+        // En ámbar y no en verde a propósito: en toda la ficha el verde
+        // es lo que la empresa compra y el ámbar lo que el club
+        // necesita. Los dos del mismo color obligarían a leer la letra
+        // pequeña para saber en qué dirección va cada cosa.
+        <section id="servicios" className="scroll-mt-24 pt-8">
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-wide text-amber-800">
+              {t("servicios.titulo")}
+            </p>
+            <p className="mt-2 text-sm text-amber-900">{t("servicios.descripcion")}</p>
+
+            <div className="mt-4">
+              <ListaConVerMas
+                clasesLista={REJILLA_TARJETAS}
+                visiblesEnOrdenador={VISIBLES_EN_ORDENADOR}
+                textoVerMas={t("verMas", { cuantos: cuantasSobran(servicios.length) })}
+                tono="ambar"
+              >
+                {servicios.map((servicio) => (
+                  <div
+                    key={servicio.id}
+                    className="rounded-xl border border-amber-200 bg-white p-4"
                   >
-                    {t("servicios.ofrecer")}
-                  </SolicitarContactoBoton>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </Seccion>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-amber-800">
+                      {ETIQUETA_CATEGORIA_SERVICIO[servicio.category]}
+                    </p>
+                    <p className="mt-1 font-medium text-zinc-900">{servicio.title}</p>
+                    {servicio.description && (
+                      <p className="mt-1 text-sm text-zinc-600">{servicio.description}</p>
+                    )}
+                    <div className="mt-3">
+                      <SolicitarContactoBoton
+                        clubId={perfil.id}
+                        clubName={perfil.name}
+                        variante="primaria"
+                      >
+                        {t("servicios.ofrecer")}
+                      </SolicitarContactoBoton>
+                    </div>
+                  </div>
+                ))}
+              </ListaConVerMas>
+            </div>
+          </div>
+        </section>
       ),
     });
   }
@@ -972,9 +1035,27 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
       </header>
 
       <main className="mx-auto w-full max-w-4xl px-4 pb-16">
-        {secciones.map((seccion) => (
-          <Fragment key={seccion.id}>{seccion.nodo}</Fragment>
-        ))}
+        {agruparParaElOrdenador(secciones).map((grupo) =>
+          grupo.length === 1 ? (
+            <Fragment key={grupo[0].id}>{grupo[0].nodo}</Fragment>
+          ) : (
+            // Una al lado de la otra solo a partir de `lg`. Por debajo
+            // de esa anchura la rejilla tiene una sola columna, así que
+            // en el teléfono sale exactamente igual que antes: una
+            // sección detrás de la otra.
+            //
+            // `items-start` para que la columna corta no se estire
+            // hasta el largo de la otra dejando un socavón de color.
+            <div
+              key={grupo.map((seccion) => seccion.id).join("-")}
+              className="grid gap-4 lg:grid-cols-2 lg:items-start"
+            >
+              {grupo.map((seccion) => (
+                <Fragment key={seccion.id}>{seccion.nodo}</Fragment>
+              ))}
+            </div>
+          ),
+        )}
       </main>
 
       <footer className="border-t border-zinc-100 py-8 text-center text-xs text-zinc-500">
@@ -982,6 +1063,30 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
       </footer>
     </div>
   );
+}
+
+type SeccionDeLaFicha = { id: string; etiqueta: string; nodo: React.ReactNode; grupo?: string };
+
+/**
+ * Junta las secciones seguidas que llevan el mismo `grupo`, para
+ * pintarlas una al lado de la otra en el ordenador.
+ *
+ * Solo las seguidas: si un día alguien mete otra sección en medio, el
+ * grupo se parte en vez de saltársela y cambiar el orden de la ficha
+ * por su cuenta.
+ */
+function agruparParaElOrdenador(secciones: SeccionDeLaFicha[]): SeccionDeLaFicha[][] {
+  const grupos: SeccionDeLaFicha[][] = [];
+
+  for (const seccion of secciones) {
+    const ultimo = grupos[grupos.length - 1];
+    const sigueElGrupo = !!seccion.grupo && ultimo?.[0]?.grupo === seccion.grupo;
+
+    if (sigueElGrupo) ultimo.push(seccion);
+    else grupos.push([seccion]);
+  }
+
+  return grupos;
 }
 
 function Seccion({
