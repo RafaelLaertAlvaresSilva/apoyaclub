@@ -156,6 +156,26 @@ Ya están implementados y funcionando, no son promesas del texto:
   contacto y de los registros de consentimiento: es una pregunta para el
   abogado, no una decisión técnica.
 
+## Cifras de audiencia que el club publica
+
+El club puede publicar cifras sobre a cuánta gente llega: socios,
+jugadores, familias vinculadas, seguidores por red social y el público
+que hubo en cada partido. Esas cifras salen en su página pública, en el
+dossier en PDF y en el dossier en Word que la empresa descarga o recibe
+por un enlace.
+
+Cómo se tratan, porque es lo que importa para la responsabilidad:
+
+- **ApoyaClub no las comprueba.** Las escribe el club. Lo único que hace
+  la plataforma es calcular a partir de ellas.
+- Cada cifra sale marcada con de dónde viene: contada (el club apuntó el
+  público partido a partido), declarada (la escribió en su ficha) o
+  deducida (una cuenta hecha con las anteriores, escrita entera al lado).
+- No se suman cifras de distinta procedencia, para no dar una cantidad
+  de personas mayor que la real.
+- Al pie de la sección de audiencia, tanto en el PDF como en el Word,
+  aparece: «Cifras facilitadas por el club. ApoyaClub no las verifica.»
+
 ## Lo que conviene preguntar
 
 1. ¿Los cuatro textos cubren lo que hace realmente la plataforma, tal y
@@ -178,3 +198,8 @@ Ya están implementados y funcionando, no son promesas del texto:
 10. Registro de actividades de tratamiento y contratos de encargado con
     Supabase, Vercel, Stripe, Resend, Sentry y Cloudflare: no están
     hechos.
+11. Cifras de audiencia (apartado anterior): si un club exagera sus
+    números y una empresa patrocina por eso, ¿basta con la advertencia
+    de que la plataforma no las verifica, o hacen falta las condiciones
+    de uso también? ¿Conviene que el club declare expresamente que son
+    ciertas al publicarlas?
