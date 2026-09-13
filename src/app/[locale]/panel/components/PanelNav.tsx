@@ -7,6 +7,10 @@ const ENLACES = [
   { id: "patrocinadores", href: "/panel/patrocinadores", etiqueta: "Patrocinadores" },
   { id: "tareas", href: "/panel/tareas", etiqueta: "Tareas" },
   { id: "oportunidades", href: "/panel/oportunidades", etiqueta: "Oportunidades" },
+  // La libreta de empresas a las que el club quiere escribir
+  // (migración 0041). Va pegada a Oportunidades porque es el paso
+  // siguiente: ya sabes qué ofreces, ahora a quién.
+  { id: "objetivos", href: "/panel/objetivos", etiqueta: "A quién escribir" },
   // El recuento de gente en los partidos (migración 0037): de aquí sale
   // la asistencia media que enseña la ficha.
   { id: "publico", href: "/panel/publico", etiqueta: "Público" },
