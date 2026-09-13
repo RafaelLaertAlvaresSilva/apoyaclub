@@ -2,7 +2,9 @@ import { NextResponse, type NextRequest } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
 import { routing } from "@/i18n/routing";
 import { updateSession } from "@/lib/supabase/middleware";
+import { esRutaAbiertaSinSuscripcion, puedeUsarElPanel } from "@/lib/acceso-club";
 import { areaPrivadaDe } from "@/lib/areas-privadas";
+import type { SubscriptionStatus } from "@/lib/subscription-mappers";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { RUTA_POR_ROL, type Role } from "@/lib/types";
 
@@ -93,12 +95,29 @@ export async function middleware(request: NextRequest) {
   if (rol === "club") {
     const { data: fila } = await supabase
       .from("clubs")
-      .select("admin_suspended")
+      .select("admin_suspended, subscription_status")
       .eq("id", user.id)
-      .maybeSingle<{ admin_suspended: boolean | null }>();
+      .maybeSingle<{ admin_suspended: boolean | null; subscription_status: SubscriptionStatus }>();
 
     if (fila?.admin_suspended) {
       return NextResponse.redirect(new URL(`/${locale}/cuenta-suspendida`, request.url));
+    }
+
+    // Terminado el mes de prueba, la plataforma se usa pagando: el club
+    // sigue entrando, pero solo a la página de suscripción y a la de
+    // privacidad. Ver `lib/acceso-club.ts` para el porqué de esas dos
+    // excepciones, que no son un descuido.
+    //
+    // Un club sin fila todavía no ha guardado su ficha: está recién
+    // registrado y su mes corre, así que pasa.
+    if (
+      fila &&
+      !puedeUsarElPanel(fila.subscription_status) &&
+      !esRutaAbiertaSinSuscripcion(rutaSinIdioma)
+    ) {
+      return NextResponse.redirect(
+        new URL(`/${locale}/panel/suscripcion?motivo=prueba-terminada`, request.url),
+      );
     }
   }
 

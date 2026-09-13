@@ -1,5 +1,6 @@
 "use server";
 
+import { diasDePruebaQueQuedan } from "@/lib/acceso-club";
 import { redirect } from "next/navigation";
 import { getLocale } from "next-intl/server";
 import type { User } from "@supabase/supabase-js";
@@ -61,9 +62,16 @@ export async function iniciarSuscripcion(formData: FormData): Promise<void> {
 
   const { data: filaClub } = await supabase
     .from("clubs")
-    .select("stripe_customer_id")
+    .select("stripe_customer_id, trial_ends_at")
     .eq("id", user.id)
-    .maybeSingle<Pick<SubscriptionRow, "stripe_customer_id">>();
+    .maybeSingle<Pick<SubscriptionRow, "stripe_customer_id" | "trial_ends_at">>();
+
+  // La prueba no se regala dos veces. Stripe daba 30 días a todo el que
+  // contratara, sin mirar si el club ya se había gastado su mes gratis:
+  // quien se registraba, lo usaba entero y luego pagaba acababa con dos
+  // meses. Ahora Stripe solo continúa la prueba que ya estaba corriendo,
+  // y si no queda nada, el primer recibo se cobra al momento.
+  const diasDePrueba = diasDePruebaQueQuedan(filaClub?.trial_ends_at ?? null);
 
   // El plan fundador tiene plazas contadas. Se reserva ANTES de abrir el
   // pago: si se reservase después, dos clubes podrían pagar la misma
@@ -97,7 +105,7 @@ export async function iniciarSuscripcion(formData: FormData): Promise<void> {
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
       subscription_data: {
-        trial_period_days: 30,
+        ...(diasDePrueba > 0 ? { trial_period_days: diasDePrueba } : {}),
         metadata: { plan: planId },
       },
       metadata: { plan: planId, club_id: user.id },

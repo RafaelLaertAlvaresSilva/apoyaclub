@@ -36,10 +36,10 @@ const MENSAJES_ERROR: Record<string, string> = {
 export default async function SuscripcionPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; checkout?: string }>;
+  searchParams: Promise<{ error?: string; checkout?: string; motivo?: string }>;
 }) {
   const t = await getTranslations("panel.suscripcion");
-  const { error, checkout } = await searchParams;
+  const { error, checkout, motivo } = await searchParams;
 
   const supabase = await createClient();
   const {
@@ -124,6 +124,21 @@ export default async function SuscripcionPage({
                   : "¡Gracias! Estamos confirmando tu suscripción con Stripe. Suele tardar unos segundos: vuelve a cargar la página en un momento."
               }
             />
+          </div>
+        )}
+
+        {/* Le ha traído el middleware desde otra página del panel: se
+            le acabó la prueba y todo lo demás está cerrado. Merece una
+            explicación, no aparecer aquí sin saber por qué. */}
+        {motivo === "prueba-terminada" && (
+          <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4">
+            <p className="text-sm font-medium text-amber-900">
+              Tu mes de prueba ha terminado.
+            </p>
+            <p className="mt-1 text-sm text-amber-800">
+              Para volver a usar tu panel y que tu página vuelva a verse, elige uno de los planes de
+              abajo. No pierdes nada de lo que tienes guardado: sigue todo ahí esperándote.
+            </p>
           </div>
         )}
 
