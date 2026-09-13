@@ -20,6 +20,7 @@ import type { ClubTeam, SocialLinks } from "@/lib/types";
 import { BarraDePlazas } from "@/components/BarraDePlazas";
 import { CompartirBoton } from "./components/CompartirBoton";
 import { DatosDeContacto } from "./components/DatosDeContacto";
+import { FotoAmpliable } from "./components/FotoAmpliable";
 import { IndiceDeSecciones } from "./components/IndiceDeSecciones";
 import { RegistrarVisita } from "./components/RegistrarVisita";
 import { SolicitarContactoBoton } from "./components/SolicitarContactoBoton";
@@ -417,6 +418,15 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     fill
                     sizes="(min-width: 640px) 33vw, 50vw"
                     className="object-cover"
+                  />
+                  {/* Recortadas a cuadrado se pierde medio equipo. Sin
+                      rótulo: seis rótulos taparían justo lo que se
+                      quiere mirar. */}
+                  <FotoAmpliable
+                    src={foto}
+                    alt={t("portada.verFoto", { club: perfil.name })}
+                    textoAbrir={t("portada.verFotoCompleta")}
+                    textoCerrar={t("portada.cerrarFoto")}
                   />
                 </div>
               ))}
@@ -872,6 +882,19 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent" />
+
+          {/* La portada se enseña recortada a una franja apaisada. En un
+              teléfono en vertical eso deja fuera casi toda la foto, así
+              que al tocarla se abre entera. */}
+          {portada && (
+            <FotoAmpliable
+              src={portada}
+              alt={t("portada.verFoto", { club: perfil.name })}
+              textoAbrir={t("portada.verFotoCompleta")}
+              textoCerrar={t("portada.cerrarFoto")}
+              conEtiqueta
+            />
+          )}
         </div>
 
         {/* El logo va DEBAJO de la portada, no montado encima: al
@@ -918,9 +941,10 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
 
           <div className="flex flex-wrap gap-2">
             <CompartirBoton url={urlPublica} titulo={t("portada.compartirTitulo", { club: perfil.name })} />
-            <SolicitarContactoBoton clubId={perfil.id} clubName={perfil.name}>
-              {t("portada.solicitarContacto")}
-            </SolicitarContactoBoton>
+            {/* Aquí había también un "Solicitar contacto". Estaba dos
+                veces en la misma página: "Contactar" baja justo al
+                apartado donde vuelve a salir. Dos botones que hacen lo
+                mismo, uno al lado del otro, obligan a elegir sin motivo. */}
             <a
               href="#contacto"
               className="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"

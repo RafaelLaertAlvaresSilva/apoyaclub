@@ -9,7 +9,10 @@
     "verificadoAyuda": "Club verificado por el equipo de ApoyaClub",
     "solicitarContacto": "Solicitar contacto",
     "contactar": "Contactar",
-    "compartirTitulo": "{club} — ApoyaClub"
+    "compartirTitulo": "{club} — ApoyaClub",
+    "verFotoCompleta": "Ver foto completa",
+    "cerrarFoto": "Cerrar la foto",
+    "verFoto": "Ver la foto completa de {club}"
   },
   "oportunidades": {
     "titulo": "Oportunidades disponibles",
