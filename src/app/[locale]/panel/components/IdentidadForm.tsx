@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useActionState, useState, useTransition } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
+import { BloquePlegable, cuantosRellenados } from "@/components/BloquePlegable";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import type { ClubProfile } from "@/lib/types";
 import {
@@ -31,6 +32,30 @@ export function IdentidadForm({
   const [, iniciarTransicion] = useTransition();
 
   const fotos = perfil?.photoUrls ?? [];
+
+  // Los apartados plegables se abren solos si ya tienen algo dentro.
+  //
+  // No es solo comodidad: si un club guardó en su día una dirección mal
+  // escrita, el navegador se niega a enviar el formulario por culpa de
+  // ese campo, y con el apartado cerrado no puede enseñar dónde está el
+  // problema. Se quedaría pulsando "Guardar" sin que pasara nada.
+  const enlaces = [
+    perfil?.website,
+    perfil?.videoUrl,
+    perfil?.socialLinks.instagram,
+    perfil?.socialLinks.facebook,
+    perfil?.socialLinks.twitter,
+    perfil?.socialLinks.tiktok,
+    perfil?.socialLinks.youtube,
+  ];
+  const contacto = [
+    perfil?.contactName,
+    perfil?.contactPhone,
+    perfil?.contactEmail,
+    perfil?.contactHours,
+  ];
+  const hayAlgo = (valores: (string | null | undefined)[]) =>
+    valores.some((valor) => !!valor?.trim());
 
   function manejarErrorAccion(resultado: { error: string } | { ok: true } | null) {
     if (resultado && "error" in resultado) setErrorImagen(resultado.error);
@@ -171,6 +196,16 @@ export function IdentidadForm({
       )}
 
       <form action={formAction} className="space-y-4">
+        {/* Lo obligatorio, dicho antes de empezar. Con el nombre y la
+            localidad el club ya tiene página: todo lo demás suma, pero
+            nada de ello impide publicar. Sin esta línea, la pantalla
+            parecía un impreso que hay que completar entero. */}
+        <p className="rounded-lg bg-zinc-50 px-4 py-3 text-sm text-zinc-600">
+          Solo el <strong className="font-medium text-zinc-800">nombre</strong> y la{" "}
+          <strong className="font-medium text-zinc-800">localidad</strong> son obligatorios: con
+          eso ya tienes tu página. Lo demás lo puedes ir rellenando cuando quieras.
+        </p>
+
         <div className="grid gap-4 sm:grid-cols-2">
           <Campo etiqueta={t("nombreDelClub")}>
             <input
@@ -200,27 +235,6 @@ export function IdentidadForm({
           </Campo>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Campo etiqueta={t("web")}>
-            <input
-              name="website"
-              type="url"
-              defaultValue={perfil?.website ?? ""}
-              placeholder="https://"
-              className={clasesInput}
-            />
-          </Campo>
-          <Campo etiqueta="Vídeo de presentación" ayuda={t("enlaceAYoutubeVimeo")}>
-            <input
-              name="videoUrl"
-              type="url"
-              defaultValue={perfil?.videoUrl ?? ""}
-              placeholder="https://"
-              className={clasesInput}
-            />
-          </Campo>
-        </div>
-
         <Campo etiqueta="Descripción">
           <textarea
             name="description"
@@ -229,47 +243,92 @@ export function IdentidadForm({
           />
         </Campo>
 
-        <div>
-          <p className="mb-2 text-sm font-medium text-zinc-700">{t("redesSociales")}</p>
+        <BloquePlegable
+          titulo="Web, vídeo y redes sociales"
+          abierto={hayAlgo(enlaces)}
+          resumen={cuantosRellenados(
+            enlaces,
+            "Las empresas entran a mirarlas antes de escribirte",
+          )}
+        >
           <div className="grid gap-4 sm:grid-cols-2">
-            <input
-              name="instagram"
-              defaultValue={perfil?.socialLinks.instagram ?? ""}
-              placeholder="Instagram (URL)"
-              className={clasesInput}
-            />
-            <input
-              name="facebook"
-              defaultValue={perfil?.socialLinks.facebook ?? ""}
-              placeholder="Facebook (URL)"
-              className={clasesInput}
-            />
-            <input
-              name="twitter"
-              defaultValue={perfil?.socialLinks.twitter ?? ""}
-              placeholder="X / Twitter (URL)"
-              className={clasesInput}
-            />
-            <input
-              name="tiktok"
-              defaultValue={perfil?.socialLinks.tiktok ?? ""}
-              placeholder="TikTok (URL)"
-              className={clasesInput}
-            />
-            <input
-              name="youtube"
-              defaultValue={perfil?.socialLinks.youtube ?? ""}
-              placeholder="YouTube (URL)"
-              className={clasesInput}
-            />
+            <Campo etiqueta={t("web")}>
+              <input
+                name="website"
+                type="url"
+                defaultValue={perfil?.website ?? ""}
+                placeholder="https://"
+                className={clasesInput}
+              />
+            </Campo>
+            <Campo etiqueta="Vídeo de presentación" ayuda={t("enlaceAYoutubeVimeo")}>
+              <input
+                name="videoUrl"
+                type="url"
+                defaultValue={perfil?.videoUrl ?? ""}
+                placeholder="https://"
+                className={clasesInput}
+              />
+            </Campo>
           </div>
-        </div>
 
-        <div className="space-y-3 rounded-lg border border-zinc-200 p-4">
-          <div>
-            <p className="text-sm font-medium text-zinc-700">{t("contactoPublico")}</p>
-            <p className="text-xs text-zinc-500">{t("elCorreoDeTu")}</p>
+          {/* Cada red con su etiqueta a la vista. Antes el nombre vivía
+              dentro del campo como texto de ejemplo, así que en cuanto
+              se escribía la dirección desaparecía: ni de un vistazo ni
+              con un lector de pantalla se sabía cuál era cuál. */}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Campo etiqueta="Instagram">
+              <input
+                name="instagram"
+                defaultValue={perfil?.socialLinks.instagram ?? ""}
+                placeholder="https://instagram.com/tuclub"
+                className={clasesInput}
+              />
+            </Campo>
+            <Campo etiqueta="Facebook">
+              <input
+                name="facebook"
+                defaultValue={perfil?.socialLinks.facebook ?? ""}
+                placeholder="https://facebook.com/tuclub"
+                className={clasesInput}
+              />
+            </Campo>
+            <Campo etiqueta="X / Twitter">
+              <input
+                name="twitter"
+                defaultValue={perfil?.socialLinks.twitter ?? ""}
+                placeholder="https://x.com/tuclub"
+                className={clasesInput}
+              />
+            </Campo>
+            <Campo etiqueta="TikTok">
+              <input
+                name="tiktok"
+                defaultValue={perfil?.socialLinks.tiktok ?? ""}
+                placeholder="https://tiktok.com/@tuclub"
+                className={clasesInput}
+              />
+            </Campo>
+            <Campo etiqueta="YouTube">
+              <input
+                name="youtube"
+                defaultValue={perfil?.socialLinks.youtube ?? ""}
+                placeholder="https://youtube.com/@tuclub"
+                className={clasesInput}
+              />
+            </Campo>
           </div>
+        </BloquePlegable>
+
+        <BloquePlegable
+          titulo={t("contactoPublico")}
+          abierto={hayAlgo(contacto)}
+          resumen={cuantosRellenados(
+            contacto,
+            "A quién llaman las empresas que entran en tu ficha",
+          )}
+        >
+          <p className="text-xs text-zinc-500">{t("elCorreoDeTu")}</p>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Campo etiqueta={t("nombreDeContacto")}>
@@ -339,7 +398,7 @@ export function IdentidadForm({
               </span>
             </span>
           </label>
-        </div>
+        </BloquePlegable>
 
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
         <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />

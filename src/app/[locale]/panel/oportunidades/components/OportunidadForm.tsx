@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
+import { BloquePlegable } from "@/components/BloquePlegable";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { Campo, SeccionCard, clasesInput, clasesTextarea } from "@/app/[locale]/panel/components/SeccionCard";
 import {
@@ -227,6 +228,19 @@ export function OportunidadForm({
         </Campo>
       </div>
 
+      {/* A partir de aquí, todo opcional.
+          *
+          * Publicar la primera oportunidad es lo que tiene que pasar
+          * para que esto sirva de algo, y la pantalla pedía catorce
+          * cosas de golpe —periodo, forma de colaboración, nivel,
+          * exclusividad, equipo, plazas y seis casillas de objetivo—
+          * cuando solo hacen falta tres. Parecía un impreso
+          * administrativo justo en el momento que más cuesta. */}
+      <BloquePlegable
+        titulo="Más detalles"
+        resumen="Nivel, plazas, exclusividad, a quién va dirigida… Nada de esto hace falta para publicar: puedes rellenarlo luego."
+        abierto={!!idOportunidad}
+      >
       <div className="grid gap-4 sm:grid-cols-2">
         <Campo
           etiqueta={t("periodo")}
@@ -362,6 +376,7 @@ export function OportunidadForm({
           ))}
         </div>
       </Campo>
+      </BloquePlegable>
 
       {mostrarEstado && (
         <Campo etiqueta={t("estado")}>
