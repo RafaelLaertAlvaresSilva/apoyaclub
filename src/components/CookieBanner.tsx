@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 const CLAVE_ALMACENAMIENTO = "apoyaclub_cookie_consent";
 
@@ -64,8 +64,36 @@ export function CookieBanner() {
   const t = useTranslations("common.componentes");
   const yaElegido = useSyncExternalStore(suscribirse, leerSnapshotCliente, leerSnapshotServidor);
   const [descartado, setDescartado] = useState(false);
+  const caja = useRef<HTMLDivElement>(null);
+  const visible = !yaElegido && !descartado;
 
-  if (yaElegido || descartado) return null;
+  /**
+   * Mientras el aviso está puesto, la página se hace igual de alta que
+   * él por abajo.
+   *
+   * Va pegado al borde inferior y nada le reservaba sitio, así que en un
+   * teléfono tapaba los últimos 150 px: justo donde caen el botón de
+   * crear la cuenta y los enlaces del pie. Se mide en vez de fijar una
+   * altura a mano porque el texto ocupa tres líneas o cinco según el
+   * ancho del teléfono.
+   */
+  useEffect(() => {
+    if (!visible) return;
+
+    function reservarSitio() {
+      const alto = caja.current?.getBoundingClientRect().height ?? 0;
+      document.body.style.paddingBottom = `${Math.round(alto)}px`;
+    }
+
+    reservarSitio();
+    window.addEventListener("resize", reservarSitio);
+    return () => {
+      window.removeEventListener("resize", reservarSitio);
+      document.body.style.paddingBottom = "";
+    };
+  }, [visible]);
+
+  if (!visible) return null;
 
   function elegir(choice: EleccionCookies["choice"]) {
     guardarEleccion(choice);
@@ -74,6 +102,7 @@ export function CookieBanner() {
 
   return (
     <div
+      ref={caja}
       role="dialog"
       aria-label="Aviso de cookies"
       className="fixed inset-x-0 bottom-0 z-50 border-t border-zinc-200 bg-white px-4 py-4 shadow-[0_-4px_12px_rgba(0,0,0,0.06)]"
@@ -89,12 +118,12 @@ export function CookieBanner() {
           <button
             type="button"
             onClick={() => elegir("rejected")}
-            className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
+            className="rounded-lg border border-zinc-300 px-5 py-3 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
           >{t("rechazar")}</button>
           <button
             type="button"
             onClick={() => elegir("accepted")}
-            className="rounded-lg bg-teal-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-800"
+            className="rounded-lg bg-teal-700 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-teal-800"
           >{t("aceptar")}</button>
         </div>
       </div>

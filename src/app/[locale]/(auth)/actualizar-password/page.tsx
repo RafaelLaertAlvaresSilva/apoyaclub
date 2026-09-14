@@ -2,6 +2,12 @@ import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ActualizarPasswordForm } from "./ActualizarPasswordForm";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Nueva contraseña",
+};
+
 export default async function ActualizarPasswordPage() {
   const supabase = await createClient();
   const {
@@ -11,7 +17,7 @@ export default async function ActualizarPasswordPage() {
   if (!user) {
     return (
       <div className="space-y-4 text-center">
-        <h1 className="text-lg font-semibold text-zinc-900">
+        <h1 className="text-2xl font-semibold text-zinc-900">
           Enlace no válido
         </h1>
         <p className="text-sm text-zinc-500">

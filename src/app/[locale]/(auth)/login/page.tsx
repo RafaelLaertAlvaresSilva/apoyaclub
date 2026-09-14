@@ -5,6 +5,12 @@ import { createClient } from "@/lib/supabase/server";
 import { RUTA_POR_ROL, type Role } from "@/lib/types";
 import { LoginForm } from "./LoginForm";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Acceder",
+};
+
 /**
  * Quien ya tiene la sesión abierta no ve un formulario de acceso: se le
  * lleva a su sitio. Enseñarle la caja de "introduce tus datos" a alguien

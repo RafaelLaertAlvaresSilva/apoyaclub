@@ -10,6 +10,10 @@ const ENLACES_CLUBES = [
 
 const ENLACES_EMPRESAS = [
   { href: "/buscar", clave: "buscarClubes" },
+  // La página que mejor encaja con el cliente más probable —el comercio
+  // de barrio sin presupuesto de marketing— no estaba enlazada ni aquí
+  // ni en la cabecera. Estaba construida la puerta y faltaba el cartel.
+  { href: "/servicios", clave: "queNecesitan" },
   { href: "/#como-funciona", clave: "comoFunciona" },
   { href: "/#empresas", clave: "accesoGratuito" },
 ] as const;

@@ -52,6 +52,9 @@
     "vacioConRadio": "Prueba a ampliar el radio de búsqueda o a quitar algún filtro.",
     "vacioSinRadio": "Prueba a quitar algún filtro para ver más resultados.",
     "vacioTitulo": "No hay oportunidades que coincidan con esta búsqueda.",
-    "verClub": "Ver club"
+    "verClub": "Ver club",
+    "vacioSinFiltrosTitulo": "Todavía no hay clubes publicados por aquí.",
+    "vacioSinFiltrosTexto": "ApoyaClub acaba de empezar y los clubes se van dando de alta poco a poco. Mientras tanto, mira qué cosas necesitan.",
+    "verQueNecesitan": "Ver qué necesitan los clubes"
   }
 }

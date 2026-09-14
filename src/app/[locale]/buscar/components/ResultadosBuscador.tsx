@@ -335,15 +335,29 @@ function TarjetaClub({ club }: { club: ResultadoClub }) {
 function EstadoVacio({ filtros, vista }: { filtros: FiltrosBusqueda; vista: VistaBusqueda }) {
   const tVacio = useTranslations("buscar.resultados");
   const router = useRouter();
-  const tieneFiltros = Object.values(filtros).some((valor) =>
-    Array.isArray(valor) ? valor.length > 0 : valor != null && valor !== "" && valor !== "novedad",
-  );
+  // El orden y la pestaña de "qué buscas" no son filtros: vienen
+  // puestos de casa. Contarlos hacía que, entrando al buscador limpio,
+  // saliera "prueba a quitar algún filtro" sin haber puesto ninguno.
+  // Con pocos clubes todavía, ese es el primer mensaje que ve una
+  // empresa: un callejón sin salida que además no es verdad.
+  const NO_SON_FILTROS = new Set(["orden", "busca", "vista"]);
+  const tieneFiltros = Object.entries(filtros).some(([nombre, valor]) => {
+    if (NO_SON_FILTROS.has(nombre)) return false;
+    if (Array.isArray(valor)) return valor.length > 0;
+    return valor != null && valor !== "" && valor !== "todo";
+  });
 
   return (
     <div className="rounded-xl border border-dashed border-zinc-300 bg-white p-8 text-center">
-      <p className="font-medium text-zinc-900">{tVacio("vacioTitulo")}</p>
-      <p className="mt-1 text-sm text-zinc-500">
-        {filtros.radioKm ? tVacio("vacioConRadio") : tVacio("vacioSinRadio")}
+      <p className="font-medium text-zinc-900">
+        {tieneFiltros ? tVacio("vacioTitulo") : tVacio("vacioSinFiltrosTitulo")}
+      </p>
+      <p className="mx-auto mt-1 max-w-md text-sm text-zinc-500">
+        {!tieneFiltros
+          ? tVacio("vacioSinFiltrosTexto")
+          : filtros.radioKm
+            ? tVacio("vacioConRadio")
+            : tVacio("vacioSinRadio")}
       </p>
       <div className="mt-4 flex flex-wrap justify-center gap-2">
         {filtros.radioKm && (
@@ -357,7 +371,7 @@ function EstadoVacio({ filtros, vista }: { filtros: FiltrosBusqueda; vista: Vist
             {tVacio("ampliarRadio", { km: filtros.radioKm! * 2 })}
           </button>
         )}
-        {tieneFiltros && (
+        {tieneFiltros ? (
           <button
             type="button"
             onClick={() => router.push("/buscar")}
@@ -365,6 +379,13 @@ function EstadoVacio({ filtros, vista }: { filtros: FiltrosBusqueda; vista: Vist
           >
             {tVacio("quitarFiltros")}
           </button>
+        ) : (
+          <Link
+            href="/servicios"
+            className="rounded-lg bg-teal-700 px-4 py-2 text-sm font-medium text-white hover:bg-teal-800"
+          >
+            {tVacio("verQueNecesitan")}
+          </Link>
         )}
       </div>
     </div>

@@ -480,7 +480,19 @@ export default async function Home() {
               <p className="mt-4 leading-relaxed text-zinc-600">{t("empresas.texto")}</p>
             </div>
 
-            <div className="mx-auto mt-12 max-w-3xl rounded-3xl border border-zinc-200 bg-white p-5 shadow-lg shadow-brand-navy/5 sm:p-7">
+            {/* El aviso de que esto es una maqueta va ANTES, no debajo
+                en gris claro cuando ya has intentado escribir en las
+                casillas. Y el recuadro entero es un enlace al buscador
+                de verdad: antes se podían tocar cuatro cosas que no
+                respondían, en la única sección pensada para la empresa. */}
+            <p className="mt-10 text-center text-sm font-medium text-zinc-500">
+              {t("empresas.nota")}
+            </p>
+
+            <Link
+              href="/buscar"
+              className="mx-auto mt-3 block max-w-3xl rounded-3xl border border-zinc-200 bg-white p-5 shadow-lg shadow-brand-navy/5 transition-colors hover:border-brand-teal sm:p-7"
+            >
               <div className="grid gap-3 sm:grid-cols-2">
                 <CasillaFiltro
                   etiqueta={t("empresas.filtros.presupuestoEtiqueta")}
@@ -500,49 +512,11 @@ export default async function Home() {
                 />
               </div>
 
-              <details className="group mt-4">
-                <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm font-semibold text-brand-teal-dark marker:content-none">
-                  {t("empresas.filtros.masFiltros")}
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    className="transition-transform group-open:rotate-180"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M6 9l6 6 6-6"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </summary>
-                <div className="mt-4 grid gap-3 border-t border-zinc-100 pt-4 sm:grid-cols-3">
-                  <CasillaFiltro
-                    etiqueta={t("empresas.filtros.tipo")}
-                    valor={t("empresas.filtros.tipoValor")}
-                  />
-                  <CasillaFiltro
-                    etiqueta={t("empresas.filtros.categoria")}
-                    valor={t("empresas.filtros.categoriaValor")}
-                  />
-                  <CasillaFiltro
-                    etiqueta={t("empresas.filtros.alcance")}
-                    valor={t("empresas.filtros.alcanceValor")}
-                  />
-                </div>
-              </details>
 
-              <Link
-                href="/buscar"
-                className="mt-5 flex w-full items-center justify-center rounded-2xl bg-brand-teal-dark px-6 py-4 text-base font-bold text-white transition-colors hover:bg-brand-navy"
-              >
+              <span className="mt-5 flex w-full items-center justify-center rounded-2xl bg-brand-teal-dark px-6 py-4 text-base font-bold text-white">
                 {t("empresas.filtros.buscar")}
-              </Link>
-            </div>
+              </span>
+            </Link>
 
             <div className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-3">
               {resultadosEjemplo.map((resultado) => (
@@ -567,7 +541,6 @@ export default async function Home() {
             <p className="mt-5 text-center text-sm font-medium text-zinc-600">
               {t("empresas.gratis")}
             </p>
-            <p className="mt-1 text-center text-xs text-zinc-500">{t("empresas.nota")}</p>
           </div>
         </section>
 

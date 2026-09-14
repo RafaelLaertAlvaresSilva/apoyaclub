@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { AvisoError } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
+import { CLASES_CAMPO_ACCESO } from "@/components/CampoContrasena";
 import { registrarAdmin } from "./actions";
 
 /**
@@ -20,7 +21,7 @@ export default function RegistroAdminPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-lg font-semibold text-zinc-900">{t("titulo")}</h1>
+        <h1 className="text-2xl font-semibold text-zinc-900">{t("titulo")}</h1>
         <p className="mt-1 text-sm text-zinc-500">
           {t("subtitulo")}
         </p>
@@ -37,7 +38,7 @@ export default function RegistroAdminPage() {
             type="text"
             required
             autoComplete="name"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+            className={CLASES_CAMPO_ACCESO}
           />
         </div>
 
@@ -51,7 +52,7 @@ export default function RegistroAdminPage() {
             type="email"
             required
             autoComplete="email"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+            className={CLASES_CAMPO_ACCESO}
           />
         </div>
 
@@ -66,7 +67,7 @@ export default function RegistroAdminPage() {
             required
             minLength={8}
             autoComplete="new-password"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+            className={CLASES_CAMPO_ACCESO}
           />
           <p className="mt-1 text-xs text-zinc-500">{tComun("minimoCaracteres")}</p>
         </div>
@@ -81,7 +82,7 @@ export default function RegistroAdminPage() {
             type="password"
             required
             autoComplete="new-password"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+            className={CLASES_CAMPO_ACCESO}
           />
         </div>
 
@@ -95,7 +96,7 @@ export default function RegistroAdminPage() {
             type="password"
             required
             autoComplete="off"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+            className={CLASES_CAMPO_ACCESO}
           />
         </div>
 

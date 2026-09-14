@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { AvisoError } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
+import { CampoContrasena } from "@/components/CampoContrasena";
 import { actualizarPassword } from "./actions";
 
 export function ActualizarPasswordForm() {
@@ -14,7 +15,7 @@ export function ActualizarPasswordForm() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-lg font-semibold text-zinc-900">
+        <h1 className="text-2xl font-semibold text-zinc-900">
           {t("titulo")}
         </h1>
         <p className="mt-1 text-sm text-zinc-500">
@@ -23,35 +24,21 @@ export function ActualizarPasswordForm() {
       </div>
 
       <form action={formAction} className="space-y-4">
-        <div>
-          <label htmlFor="password" className="mb-1 block text-sm font-medium text-zinc-700">
-            {t("nueva")}
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            minLength={8}
-            autoComplete="new-password"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
-          />
-          <p className="mt-1 text-xs text-zinc-500">{tComun("minimoCaracteres")}</p>
-        </div>
+        <CampoContrasena
+          id="password"
+          name="password"
+          etiqueta={t("nueva")}
+          autoComplete="new-password"
+          minLength={8}
+          ayuda={tComun("minimoCaracteres")}
+        />
 
-        <div>
-          <label htmlFor="confirmarPassword" className="mb-1 block text-sm font-medium text-zinc-700">
-            {t("confirmarNueva")}
-          </label>
-          <input
-            id="confirmarPassword"
-            name="confirmarPassword"
-            type="password"
-            required
-            autoComplete="new-password"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
-          />
-        </div>
+        <CampoContrasena
+          id="confirmarPassword"
+          name="confirmarPassword"
+          etiqueta={t("confirmarNueva")}
+          autoComplete="new-password"
+        />
 
         <AvisoError mensaje={estado?.error} />
 

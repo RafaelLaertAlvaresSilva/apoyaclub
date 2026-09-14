@@ -24,7 +24,14 @@ export const metadata: Metadata = {
   // compartir la página pública de un club por WhatsApp, Fase 5) se
   // resuelvan como absolutas.
   metadataBase: new URL(SITE_URL),
-  title: "ApoyaClub",
+  // Con plantilla, para que cada página solo tenga que poner su nombre
+  // y no repetir "| ApoyaClub" a mano en cada archivo. Las pantallas de
+  // acceso y registro no ponían ninguno: la pestaña decía "ApoyaClub" a
+  // secas, y /registro-club está en el mapa del sitio que lee Google.
+  title: {
+    default: "ApoyaClub — Conecta tu club deportivo con empresas patrocinadoras",
+    template: "%s | ApoyaClub",
+  },
   description: "Conecta tu club deportivo con empresas patrocinadoras.",
   appleWebApp: {
     // Fase 15: para que "Añadir a pantalla de inicio" en iOS use el

@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
+import { CLASES_CAMPO_ACCESO, CampoContrasena } from "@/components/CampoContrasena";
 import { iniciarSesion } from "./actions";
 
 export function LoginForm() {
@@ -35,7 +36,7 @@ export function LoginForm() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-lg font-semibold text-zinc-900">{t("titulo")}</h1>
+        <h1 className="text-2xl font-semibold text-zinc-900">{t("titulo")}</h1>
         <p className="mt-1 text-sm text-zinc-500">{t("subtitulo")}</p>
       </div>
 
@@ -52,22 +53,16 @@ export function LoginForm() {
             type="email"
             required
             autoComplete="email"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+            className={CLASES_CAMPO_ACCESO}
           />
         </div>
 
-        <div>
-          <label htmlFor="password" className="mb-1 block text-sm font-medium text-zinc-700">
-            {tComun("password")}
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            autoComplete="current-password"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
-          />
+        <CampoContrasena
+          id="password"
+          name="password"
+          etiqueta={tComun("password")}
+          autoComplete="current-password"
+        >
           {/* Debajo del campo y no al lado de su etiqueta: aquí es donde
               se mira cuando la contraseña no entra. */}
           <div className="mt-1.5">
@@ -78,7 +73,7 @@ export function LoginForm() {
               {t("olvidadaLarga")}
             </Link>
           </div>
-        </div>
+        </CampoContrasena>
 
         {mensajeExito && <AvisoExito mensaje={MENSAJES_EXITO[mensajeExito]} />}
         {motivo && MENSAJES_MOTIVO[motivo] && <AvisoError mensaje={MENSAJES_MOTIVO[motivo]} />}

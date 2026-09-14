@@ -55,7 +55,7 @@ export async function Header() {
             href="/buscar"
             className="text-sm font-medium text-zinc-600 transition hover:text-brand-navy"
           >
-            <span className="sm:hidden">Clubes</span>
+            <span className="sm:hidden">Buscar</span>
             <span className="hidden sm:inline">Buscar clubes</span>
           </Link>
 

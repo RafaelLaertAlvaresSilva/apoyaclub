@@ -61,6 +61,45 @@ function clavesUsadas(contenido: string, variable: string): string[] {
   return [...new Set([...contenido.matchAll(patron)].map((coincidencia) => coincidencia[1]))];
 }
 
+/**
+ * Claves que no se escriben enteras, sino armadas al vuelo:
+ *
+ *   {ENLACES.map((enlace) => t(`empresas.${enlace.clave}`))}
+ *
+ * La comprobación de arriba no las ve —no hay ningún literal que
+ * empiece por `t("`— y por ahí se coló una clave inexistente en el pie
+ * de página, que sale en todas las páginas de la web.
+ *
+ * Aquí se recogen los dos trozos: los prefijos que se usan así en el
+ * archivo (`empresas.`, `clubes.`…) y todos los valores de texto de la
+ * propiedad que va dentro (`clave: "queNecesitan"`). Luego se exige que
+ * cada valor exista bajo ALGUNO de esos prefijos. No bajo todos: el pie
+ * tiene tres listas con tres prefijos distintos y una misma propiedad,
+ * y no hay forma honesta de saber desde fuera cuál va con cuál. Con
+ * "alguno" basta para pillar la clave que no existe en ninguna parte,
+ * que es el fallo real.
+ */
+function clavesArmadasAlVuelo(contenido: string, variable: string): { prefijos: string[]; valores: string[] } {
+  const patron = new RegExp("\\b" + variable + "\\(\\s*`([^`$]*)\\$\\{\\s*\\w+\\.(\\w+)\\s*\\}`", "g");
+
+  const prefijos = new Set<string>();
+  const propiedades = new Set<string>();
+
+  for (const [, prefijo, propiedad] of contenido.matchAll(patron)) {
+    prefijos.add(prefijo);
+    propiedades.add(propiedad);
+  }
+
+  const valores = new Set<string>();
+  for (const propiedad of propiedades) {
+    for (const [, valor] of contenido.matchAll(new RegExp("\\b" + propiedad + ':\\s*"([^"]+)"', "g"))) {
+      valores.add(valor);
+    }
+  }
+
+  return { prefijos: [...prefijos], valores: [...valores] };
+}
+
 describe("claves de traducción", () => {
   const archivos = archivosDeCodigo(path.join(RAIZ, "src"));
 
@@ -90,6 +129,22 @@ describe("claves de traducción", () => {
           const rutaCompleta = [...prefijo, clave].join(".");
           if (!existeClave(contenido, rutaCompleta)) {
             errores.push(`${path.relative(RAIZ, archivo)}: falta "${rutaCompleta}" en ${nombreArchivo}.json`);
+          }
+        }
+
+        const { prefijos, valores } = clavesArmadasAlVuelo(contenidoArchivo, variable);
+
+        for (const valor of valores) {
+          const encaja = prefijos.some((pre) =>
+            existeClave(contenido, [...prefijo, `${pre}${valor}`].join(".")),
+          );
+
+          if (prefijos.length > 0 && !encaja) {
+            errores.push(
+              `${path.relative(RAIZ, archivo)}: "${valor}" no existe bajo ninguno de los prefijos ${prefijos
+                .map((pre) => `"${pre}"`)
+                .join(", ")} en ${nombreArchivo}.json`,
+            );
           }
         }
       }

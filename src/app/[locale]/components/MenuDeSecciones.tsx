@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Índice de la portada: una barra con las secciones, pegada bajo la
@@ -34,6 +34,21 @@ const SECCIONES = [
 export function MenuDeSecciones() {
   const [alturaCabecera, setAlturaCabecera] = useState(0);
   const [activa, setActiva] = useState<string | null>(null);
+  const barra = useRef<HTMLDivElement>(null);
+
+  // La pestaña de la sección en la que estás se trae a la vista sola.
+  // `block: "nearest"` es lo que impide que al hacerlo se mueva también
+  // la página entera hacia arriba.
+  useEffect(() => {
+    if (!activa || !barra.current) return;
+
+    const pestana = barra.current.querySelector(`[data-seccion="${activa}"]`);
+    pestana?.scrollIntoView({
+      inline: "nearest",
+      block: "nearest",
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    });
+  }, [activa]);
 
   // La cabecera es sticky y esta barra va justo debajo. Se mide en vez
   // de fijarla: el logo cambia de alto entre móvil y escritorio.
@@ -84,12 +99,24 @@ export function MenuDeSecciones() {
     >
       {/* Se desplaza en horizontal en móvil en vez de partirse en dos
           filas: una barra de índice de dos alturas se come la pantalla
-          justo en el sitio donde menos sobra. */}
-      <div className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 py-2 sm:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          justo en el sitio donde menos sobra.
+          *
+          * Con dos añadidos, porque en un teléfono solo caben tres de
+          * las seis y "Para empresas" —la única entrada a lo que le
+          * interesa a un comercio— quedaba fuera de pantalla detrás de
+          * un gesto que casi nadie hace: un degradado en el borde
+          * derecho que avisa de que hay más, y la sección en la que
+          * estás, que se trae sola a la vista al ir bajando. */}
+      <div className="relative">
+        <div
+          ref={barra}
+          className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 py-2 sm:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
         {SECCIONES.map((seccion) => (
           <a
             key={seccion.id}
             href={`#${seccion.id}`}
+            data-seccion={seccion.id}
             aria-current={activa === seccion.id ? "true" : undefined}
             className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
               activa === seccion.id
@@ -100,6 +127,14 @@ export function MenuDeSecciones() {
             {seccion.etiqueta}
           </a>
         ))}
+        </div>
+
+        {/* El aviso de "hay más a la derecha". No se puede pulsar y solo
+            está en el móvil, que es donde la fila no cabe. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-white to-transparent sm:hidden"
+        />
       </div>
     </nav>
   );
