@@ -967,7 +967,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         {/* El logo va DEBAJO de la portada, no montado encima: al
             solaparse le tapaba la esquina inferior izquierda de la foto y
             el propio logo quedaba recortado contra ella. */}
-        <div className="mx-auto mt-5 flex max-w-4xl flex-col gap-4 px-4 sm:mt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto mt-5 flex max-w-5xl flex-col gap-4 px-4 sm:px-6 sm:mt-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             {/* `object-contain` y no `object-cover`: el logo de un club
                 suele ser un escudo alto o una marca apaisada, y recortarlo
@@ -1022,7 +1022,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         </div>
 
         {mostrarEnlaces && (
-          <div className="mx-auto mt-4 max-w-4xl px-4">
+          <div className="mx-auto mt-4 max-w-5xl px-4 sm:px-6">
             <div className="flex flex-wrap gap-2">
               {perfil.website && <EnlaceSecundario href={perfil.website}>Sitio web</EnlaceSecundario>}
               {perfil.videoUrl && <EnlaceSecundario href={perfil.videoUrl}>Vídeo de presentación</EnlaceSecundario>}
@@ -1038,7 +1038,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
 
       </header>
 
-      <main id="contenido" className="mx-auto w-full max-w-4xl px-4 pb-16">
+      <main id="contenido" className="mx-auto w-full max-w-5xl px-4 sm:px-6 pb-16">
         {agruparParaElOrdenador(secciones).map((grupo) =>
           grupo.length === 1 ? (
             <Fragment key={grupo[0].id}>{grupo[0].nodo}</Fragment>

@@ -49,7 +49,7 @@ export function IndiceDeSecciones({ secciones }: { secciones: Seccion[] }) {
   if (secciones.length < 2) return null;
 
   return (
-    <nav aria-label="Secciones de la ficha" className="mx-auto mt-6 max-w-4xl px-4">
+    <nav aria-label="Secciones de la ficha" className="mx-auto mt-6 max-w-5xl px-4 sm:px-6">
       <div className="flex flex-wrap gap-2">
         {destacadas.map((seccion) => (
           <a key={seccion.id} href={`#${seccion.id}`} className={CLASES_DESTACADA}>

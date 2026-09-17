@@ -290,7 +290,7 @@ export function FiltrosBuscador({
                 value={forma.id}
                 defaultChecked={filtrosIniciales.formasColaboracion?.includes(forma.id) ?? false}
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
-                className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
+                className="rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
               />
               {forma.etiqueta}
             </label>
@@ -309,7 +309,7 @@ export function FiltrosBuscador({
                 value={nivel.id}
                 defaultChecked={filtrosIniciales.niveles?.includes(nivel.id) ?? false}
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
-                className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
+                className="rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
               />
               {nivel.etiqueta}
             </label>
@@ -328,7 +328,7 @@ export function FiltrosBuscador({
                 value={tipo.id}
                 defaultChecked={filtrosIniciales.tipos?.includes(tipo.id) ?? false}
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
-                className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
+                className="rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
               />
               {tipo.etiqueta}
             </label>
@@ -347,7 +347,7 @@ export function FiltrosBuscador({
                 value={objetivo.id}
                 defaultChecked={filtrosIniciales.objetivos?.includes(objetivo.id) ?? false}
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
-                className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
+                className="rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
               />
               {objetivo.etiqueta}
             </label>

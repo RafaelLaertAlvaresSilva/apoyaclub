@@ -1,3 +1,4 @@
+import { Header } from "@/components/Header";
 import { CargandoRegion, Skeleton } from "@/components/ui/Skeleton";
 
 /**
@@ -5,10 +6,16 @@ import { CargandoRegion, Skeleton } from "@/components/ui/Skeleton";
  * aplicación: cuando la búsqueda lleva radio, primero se geocodifica la
  * ciudad y solo después se consulta. Sin esto, el usuario veía la
  * página anterior congelada.
+ *
+ * Pinta la cabecera, aunque no esté cargando: va dentro de la página y
+ * no del armazón común, así que sin esto desaparece mientras se busca y
+ * vuelve al terminar. El parpadeo se nota mucho y da sensación de web
+ * inestable justo en la pantalla que más tarda.
  */
 export default function CargandoBuscador() {
   return (
     <CargandoRegion etiqueta="Buscando oportunidades…">
+      <Header />
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[18rem_1fr]">
         <div className="hidden flex-col gap-4 lg:flex">
           <Skeleton className="h-6 w-32" />

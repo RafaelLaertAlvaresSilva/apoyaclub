@@ -33,7 +33,7 @@ export default async function PaginaBuscar({ searchParams }: { searchParams: Pro
       <Header />
 
       <header className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-8">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8">
           <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl">{t("titulo")}</h1>
           <p className="mt-2 text-zinc-600">{t("texto")}</p>
           {/* La otra dirección: lo que los clubes necesitan (migración 0016). */}
@@ -46,7 +46,7 @@ export default async function PaginaBuscar({ searchParams }: { searchParams: Pro
         </div>
       </header>
 
-      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 lg:flex-row lg:items-start">
+      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 sm:px-6 py-6 lg:flex-row lg:items-start">
         <FiltrosBuscador
           filtrosIniciales={filtros}
           vistaInicial={vista}

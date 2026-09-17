@@ -58,7 +58,7 @@ export default async function PaginaServicios({
       <Header />
 
       <header className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto max-w-5xl px-4 py-8">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 py-8">
           <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
             {t("eyebrow")}
           </p>
@@ -67,7 +67,7 @@ export default async function PaginaServicios({
         </div>
       </header>
 
-      <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-6">
+      <div className="mx-auto w-full max-w-5xl flex-1 px-4 sm:px-6 py-6">
         {/* Filtros: un formulario normal con GET, sin estado en cliente. */}
         <form method="get" className="flex flex-wrap items-end gap-3 rounded-xl border border-zinc-200 bg-white p-4">
           <label className="text-sm">

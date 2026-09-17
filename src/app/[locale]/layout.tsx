@@ -33,6 +33,18 @@ export const metadata: Metadata = {
     template: "%s | ApoyaClub",
   },
   description: "Conecta tu club deportivo con empresas patrocinadoras.",
+  // Lo que lee WhatsApp, Telegram o LinkedIn al pegar un enlace. La
+  // imagen la pone `opengraph-image.tsx` de esta misma carpeta; las
+  // fichas de club tienen la suya y esta les deja el resto puesto.
+  openGraph: {
+    type: "website",
+    siteName: "ApoyaClub",
+    locale: "es_ES",
+    url: SITE_URL,
+    title: "ApoyaClub — Conecta tu club deportivo con empresas patrocinadoras",
+    description:
+      "Tu club publica lo que puede ofrecer y las empresas de tu zona lo encuentran. Para las empresas es gratis y sin cuenta.",
+  },
   appleWebApp: {
     // Fase 15: para que "Añadir a pantalla de inicio" en iOS use el
     // nombre de la marca en vez de la URL, con el icono de

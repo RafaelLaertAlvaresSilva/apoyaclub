@@ -84,9 +84,15 @@ export function LoginForm() {
 
       <div className="space-y-1 text-center text-sm text-zinc-500">
         <p>{t("sinCuenta")}</p>
-        <div className="flex justify-center gap-4">
-          <Link href="/registro-club" className="font-medium text-teal-700 hover:underline">
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link href="/registro-club" className="font-medium text-brand-teal-dark hover:underline">
             {t("registrarClub")}
+          </Link>
+          {/* La salida para quien se registró y nunca recibió el correo.
+              Antes solo se llegaba a esa pantalla justo después de
+              registrarse: quien cerraba la pestaña se quedaba fuera. */}
+          <Link href="/revisa-tu-correo" className="font-medium text-brand-teal-dark hover:underline">
+            No me llegó el correo de confirmación
           </Link>
         </div>
         <p className="text-xs text-zinc-400">

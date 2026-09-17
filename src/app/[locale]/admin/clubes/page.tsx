@@ -1,4 +1,4 @@
-import { redirect } from "@/i18n/navigation";
+import { Link, redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
@@ -66,9 +66,10 @@ const AVISOS: Record<string, { texto: string; bien: boolean }> = {
 export default async function AdminClubesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ aviso?: string }>;
+  searchParams: Promise<{ aviso?: string; buscar?: string }>;
 }) {
-  const { aviso } = await searchParams;
+  const { aviso, buscar } = await searchParams;
+  const busqueda = (buscar ?? "").trim().toLowerCase();
   const mensaje = aviso ? AVISOS[aviso] : undefined;
   const t = await getTranslations("admin.clubes");
   const supabase = await createClient();
@@ -124,8 +125,19 @@ export default async function AdminClubesPage({
     })
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
+  // Filtro por nombre, localidad o correo. Va por la dirección
+  // (`?buscar=`) y no con JavaScript: así el resultado se puede
+  // guardar en favoritos y recargar, y funciona igual en el móvil.
+  const visibles = busqueda
+    ? filas.filter((fila) =>
+        [fila.name, fila.city, fila.email].some((campo) =>
+          (campo ?? "").toLowerCase().includes(busqueda),
+        ),
+      )
+    : filas;
+
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8">
+    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-teal-700">{t("panelDeAdministracion")}</p>
@@ -143,8 +155,47 @@ export default async function AdminClubesPage({
           <AvisoError mensaje={mensaje.texto} />
         ))}
 
+      {filas.length > 0 && (
+        <form className="flex flex-wrap items-center gap-2">
+          <label htmlFor="buscar-club" className="sr-only">
+            Buscar un club por nombre, localidad o correo
+          </label>
+          <input
+            id="buscar-club"
+            name="buscar"
+            type="search"
+            defaultValue={buscar ?? ""}
+            placeholder="Nombre, localidad o correo"
+            className="w-full max-w-xs rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-brand-teal-dark focus:outline-none focus:ring-1 focus:ring-brand-teal-dark"
+          />
+          <button
+            type="submit"
+            className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy"
+          >
+            Buscar
+          </button>
+          {busqueda && (
+            <>
+              <Link
+                href="/admin/clubes"
+                className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
+              >
+                Ver todos
+              </Link>
+              <span className="text-sm text-zinc-500">
+                {visibles.length} de {filas.length}
+              </span>
+            </>
+          )}
+        </form>
+      )}
+
       {filas.length === 0 ? (
         <p className="text-sm text-zinc-500">{t("todaviaNoSeHa")}</p>
+      ) : visibles.length === 0 ? (
+        <p className="text-sm text-zinc-500">
+          Ningún club coincide con «{buscar}».
+        </p>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
           <table className="w-full min-w-[840px] text-left text-sm">
@@ -160,7 +211,7 @@ export default async function AdminClubesPage({
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-100">
-              {filas.map((fila) => (
+              {visibles.map((fila) => (
                 <FilaClub key={fila.id} fila={fila} />
               ))}
             </tbody>
