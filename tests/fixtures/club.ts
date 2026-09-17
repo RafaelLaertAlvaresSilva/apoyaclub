@@ -36,6 +36,8 @@ const CLUB_VACIO: ClubProfile = {
   topCategoryFemale: null,
   topCategoryMalePhoto: null,
   topCategoryFemalePhoto: null,
+  topCategoryMalePhotoNote: null,
+  topCategoryFemalePhotoNote: null,
   competitions: null,
   achievements: null,
   youthTeamsCount: null,

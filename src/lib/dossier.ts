@@ -6,18 +6,62 @@ import type { ClubProfile, ClubSponsor, ClubTeam, DossierSectionKey } from "@/li
  * panel (selector de secciones) y el generador de PDF.
  */
 
-export const SECCIONES_DOSSIER: { id: DossierSectionKey; etiqueta: string; descripcion: string }[] = [
-  { id: "identidad", etiqueta: "Identidad", descripcion: "Quiénes somos, ubicación y contacto." },
-  { id: "historia", etiqueta: "Historia", descripcion: "Año de fundación e hitos." },
-  { id: "equipos", etiqueta: "Equipos", descripcion: "Deporte, categoría y nivel de cada equipo." },
-  { id: "cantera", etiqueta: "Cantera", descripcion: "Equipos, jugadores y familias (datos agregados)." },
+/**
+ * Las secciones del dossier, y dónde se rellena cada una.
+ *
+ * `donde` existe para que una sección vacía no sea un callejón sin
+ * salida. Antes, la que no tenía datos salía en gris con un "todavía no
+ * has añadido datos" y ahí se acababa: el club tenía que adivinar en
+ * qué pestaña del panel se rellenaba eso. Ahora se pulsa y lleva.
+ */
+export const SECCIONES_DOSSIER: {
+  id: DossierSectionKey;
+  etiqueta: string;
+  descripcion: string;
+  donde: string;
+}[] = [
+  {
+    id: "identidad",
+    etiqueta: "Identidad",
+    descripcion: "Quiénes somos, ubicación y contacto.",
+    donde: "/panel#identidad",
+  },
+  {
+    id: "historia",
+    etiqueta: "Historia",
+    descripcion: "Año de fundación e hitos.",
+    donde: "/panel#historia",
+  },
+  {
+    id: "equipos",
+    etiqueta: "Equipos",
+    descripcion: "Deporte, categoría y nivel de cada equipo.",
+    donde: "/panel#equipos",
+  },
+  {
+    id: "cantera",
+    etiqueta: "Cantera",
+    descripcion: "Equipos, jugadores y familias (datos agregados).",
+    donde: "/panel#cantera",
+  },
   {
     id: "audiencia",
     etiqueta: "Audiencia",
     descripcion: "A cuánta gente llegas, con el origen de cada cifra y sin sumar unas con otras.",
+    donde: "/panel#audiencia",
   },
-  { id: "instalaciones", etiqueta: "Instalaciones", descripcion: "Descripción de las instalaciones del club." },
-  { id: "patrocinadores", etiqueta: "Patrocinadores actuales", descripcion: "Marcas que ya confían en el club." },
+  {
+    id: "instalaciones",
+    etiqueta: "Instalaciones",
+    descripcion: "Descripción de las instalaciones del club.",
+    donde: "/panel#instalaciones",
+  },
+  {
+    id: "patrocinadores",
+    etiqueta: "Patrocinadores actuales",
+    descripcion: "Marcas que ya confían en el club.",
+    donde: "/panel/patrocinadores",
+  },
 ];
 
 export const ETIQUETA_SECCION_DOSSIER: Record<DossierSectionKey, string> = SECCIONES_DOSSIER.reduce(

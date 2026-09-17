@@ -26,6 +26,15 @@ export function ComunidadForm({
   const [fotoNueva, setFotoNueva] = useState("");
 
   /**
+   * Cuál de las acciones ya añadidas se está editando, si alguna.
+   *
+   * Antes, una acción añadida solo se podía quitar y volver a escribir
+   * entera: una errata en el título costaba teclearlo todo otra vez, y
+   * si llevaba foto, subirla de nuevo.
+   */
+  const [editando, setEditando] = useState<number | null>(null);
+
+  /**
    * Lo que se guarda: la lista más lo que haya a medio escribir abajo.
    *
    * Antes solo se guardaba la lista, y quien escribía una acción y le
@@ -73,6 +82,13 @@ export function ComunidadForm({
     setFotoNueva("");
   }
 
+  /** Cambia el título o la descripción de una acción ya añadida. */
+  function cambiarAccion(indice: number, cambios: Partial<CommunityAction>) {
+    setAcciones((actuales) =>
+      actuales.map((accion, i) => (i === indice ? { ...accion, ...cambios } : accion)),
+    );
+  }
+
   /** Pone o quita la foto de una acción ya añadida. */
   function cambiarFoto(indice: number, url: string | null) {
     setAcciones((actuales) =>
@@ -91,6 +107,7 @@ export function ComunidadForm({
 
   function quitarAccion(indice: number) {
     setAcciones((actuales) => actuales.filter((_, i) => i !== indice));
+    setEditando(null);
   }
 
   return (
@@ -102,8 +119,12 @@ export function ComunidadForm({
         {acciones.length > 0 && (
           <ul className="space-y-2">
             {acciones.map((accion, indice) => (
+              // La clave es la posición y no el título: mientras se
+              // edita, el título cambia con cada tecla, y con él la
+              // clave; React tiraba la casilla y montaba otra nueva, o
+              // sea que el cursor se salía a la primera letra escrita.
               <li
-                key={`${accion.title}-${indice}`}
+                key={indice}
                 className="flex items-start gap-3 rounded-lg border border-zinc-200 px-3 py-2 text-sm"
               >
                 {accion.photo ? (
@@ -122,9 +143,41 @@ export function ComunidadForm({
                 )}
 
                 <span className="min-w-0 flex-1">
-                  <span className="font-medium text-zinc-900">{accion.title}</span>
-                  {accion.description && <span className="text-zinc-600"> — {accion.description}</span>}
+                  {editando === indice ? (
+                    <span className="flex flex-col gap-2">
+                      <input
+                        type="text"
+                        value={accion.title}
+                        onChange={(evento) => cambiarAccion(indice, { title: evento.target.value })}
+                        aria-label="Título de la acción"
+                        className={clasesInput}
+                      />
+                      <textarea
+                        value={accion.description}
+                        onChange={(evento) =>
+                          cambiarAccion(indice, { description: evento.target.value })
+                        }
+                        placeholder="Descripción (opcional)"
+                        aria-label="Descripción de la acción"
+                        className={clasesTextarea}
+                      />
+                    </span>
+                  ) : (
+                    <>
+                      <span className="font-medium text-zinc-900">{accion.title}</span>
+                      {accion.description && (
+                        <span className="text-zinc-600"> — {accion.description}</span>
+                      )}
+                    </>
+                  )}
                   <span className="mt-2 flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setEditando(editando === indice ? null : indice)}
+                      className="rounded-lg border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-100"
+                    >
+                      {editando === indice ? "Hecho" : "Editar"}
+                    </button>
                     <ImageUploader
                       userId={userId}
                       carpeta="comunidad"

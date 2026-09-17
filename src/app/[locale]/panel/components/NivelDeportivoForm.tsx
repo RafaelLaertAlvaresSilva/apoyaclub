@@ -23,6 +23,13 @@ export function NivelDeportivoForm({
   const [fotoMasculino, setFotoMasculino] = useState(perfil?.topCategoryMalePhoto ?? "");
   const [fotoFemenino, setFotoFemenino] = useState(perfil?.topCategoryFemalePhoto ?? "");
 
+  // El pie de foto va en estado y no suelto en el formulario porque su
+  // casilla desaparece al quitar la foto: si el texto viviera solo en
+  // el DOM, quitar la foto un momento se llevaría por delante lo
+  // escrito sin avisar.
+  const [pieMasculino, setPieMasculino] = useState(perfil?.topCategoryMalePhotoNote ?? "");
+  const [pieFemenino, setPieFemenino] = useState(perfil?.topCategoryFemalePhotoNote ?? "");
+
   return (
     <SeccionCard
       titulo={t("nivelDeportivo")}
@@ -47,6 +54,9 @@ export function NivelDeportivoForm({
               etiqueta="Equipo masculino"
               nombreCampo="topCategoryMale"
               nombreFoto="topCategoryMalePhoto"
+              nombrePie="topCategoryMalePhotoNote"
+              pie={pieMasculino}
+              onPie={setPieMasculino}
               valor={perfil?.topCategoryMale ?? ""}
               foto={fotoMasculino}
               onFoto={setFotoMasculino}
@@ -57,6 +67,9 @@ export function NivelDeportivoForm({
               etiqueta="Equipo femenino"
               nombreCampo="topCategoryFemale"
               nombreFoto="topCategoryFemalePhoto"
+              nombrePie="topCategoryFemalePhotoNote"
+              pie={pieFemenino}
+              onPie={setPieFemenino}
               valor={perfil?.topCategoryFemale ?? ""}
               foto={fotoFemenino}
               onFoto={setFotoFemenino}
@@ -118,6 +131,9 @@ function EquipoDeMaximaCategoria({
   etiqueta,
   nombreCampo,
   nombreFoto,
+  nombrePie,
+  pie,
+  onPie,
   valor,
   foto,
   onFoto,
@@ -127,6 +143,9 @@ function EquipoDeMaximaCategoria({
   etiqueta: string;
   nombreCampo: string;
   nombreFoto: string;
+  nombrePie: string;
+  pie: string;
+  onPie: (texto: string) => void;
   valor: string;
   foto: string;
   onFoto: (url: string) => void;
@@ -182,6 +201,36 @@ function EquipoDeMaximaCategoria({
           )}
         </div>
       </div>
+
+      {/* El pie de foto.
+          
+          "Primera Autonómica" no le dice nada a la empresa que entra
+          por primera vez, y la foto —que es lo primero que mira— se
+          quedaba sin contar nada. Una línea del club lo arregla.
+          
+          Solo aparece cuando hay foto: un pie sin foto no tiene dónde
+          ir, y una casilla más en un formulario largo tiene su coste.
+          Lo que ya esté escrito viaja igualmente, para que quitar la
+          foto un momento no borre el texto. */}
+      {foto ? (
+        <div className="mt-3">
+          <Campo
+            etiqueta="Qué se ve en la foto"
+            ayuda="Una línea, para quien no conozca las categorías. Se ve debajo de la foto."
+          >
+            <input
+              name={nombrePie}
+              maxLength={200}
+              value={pie}
+              onChange={(evento) => onPie(evento.target.value)}
+              placeholder="Primer equipo, temporada 2025/26. Subimos de categoría en mayo."
+              className={clasesInput}
+            />
+          </Campo>
+        </div>
+      ) : (
+        <input type="hidden" name={nombrePie} value={pie} />
+      )}
     </div>
   );
 }

@@ -109,6 +109,12 @@ export type ClubProfile = {
   /** Foto del equipo de máxima categoría de cada sexo (migración 0036). */
   topCategoryMalePhoto: string | null;
   topCategoryFemalePhoto: string | null;
+  /**
+   * Pie de cada una de esas fotos (migración 0044): qué se está
+   * viendo, en una línea del club. Voluntario.
+   */
+  topCategoryMalePhotoNote: string | null;
+  topCategoryFemalePhotoNote: string | null;
   competitions: string | null;
   achievements: string | null;
 

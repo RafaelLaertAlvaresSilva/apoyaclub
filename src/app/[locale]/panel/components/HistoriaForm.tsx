@@ -26,6 +26,22 @@ export function HistoriaForm({ userId, perfil }: { userId: string; perfil: ClubP
   const [fotoNueva, setFotoNueva] = useState("");
   const [videoNuevo, setVideoNuevo] = useState("");
 
+  /**
+   * Cuál de los hitos ya añadidos se está editando, si alguno.
+   *
+   * Antes solo se podía quitar y volver a escribirlo entero: cambiar
+   * un año mal puesto costaba teclear otra vez la descripción y volver
+   * a subir la foto.
+   */
+  const [editando, setEditando] = useState<number | null>(null);
+
+  /** Cambia algo de un hito ya añadido. */
+  function cambiarHito(indice: number, cambios: Partial<Milestone>) {
+    setHitos((actuales) =>
+      actuales.map((hito, i) => (i === indice ? { ...hito, ...cambios } : hito)),
+    );
+  }
+
   function anadirHito() {
     const anio = Number.parseInt(anioNuevo, 10);
     if (!Number.isFinite(anio) || !textoNuevo.trim()) return;
@@ -48,6 +64,7 @@ export function HistoriaForm({ userId, perfil }: { userId: string; perfil: ClubP
 
   function quitarHito(indice: number) {
     setHitos((actuales) => actuales.filter((_, i) => i !== indice));
+    setEditando(null);
   }
 
   /**
@@ -104,13 +121,18 @@ export function HistoriaForm({ userId, perfil }: { userId: string; perfil: ClubP
             <ul className="mb-3 space-y-2">
               {hitos
                 .map((hito, indice) => ({ hito, indice }))
-                .sort((a, b) => a.hito.year - b.hito.year)
+                // Mientras se edita un año no se reordena: la lista
+                // saltaría bajo el dedo a media cifra escrita.
+                .sort((a, b) => (editando === null ? a.hito.year - b.hito.year : a.indice - b.indice))
                 .map(({ hito, indice }) => (
+                  // La clave es la posición y no el año: al editar, el
+                  // año cambia con cada tecla y React tiraba la casilla
+                  // para montar otra, o sea que el cursor se salía.
                   <li
-                    key={`${hito.year}-${indice}`}
+                    key={indice}
                     className="flex items-start justify-between gap-3 rounded-lg border border-zinc-200 px-3 py-2 text-sm"
                   >
-                    <div className="flex min-w-0 items-start gap-3">
+                    <div className="flex min-w-0 flex-1 items-start gap-3">
                       {hito.photoUrl && (
                         <Image
                           src={hito.photoUrl}
@@ -121,23 +143,88 @@ export function HistoriaForm({ userId, perfil }: { userId: string; perfil: ClubP
                           unoptimized
                         />
                       )}
-                      <div className="min-w-0">
-                        <p>
-                          <span className="font-medium text-zinc-900">{hito.year}</span>{" "}
-                          <span className="text-zinc-600">{hito.text}</span>
-                        </p>
-                        {hito.videoUrl && (
-                          <p className="truncate text-xs text-teal-700">{hito.videoUrl}</p>
-                        )}
-                      </div>
+                      {editando === indice ? (
+                        <div className="flex min-w-0 flex-1 flex-col gap-2">
+                          <div className="flex flex-wrap items-start gap-2">
+                            <div className="w-24">
+                              <input
+                                type="number"
+                                value={hito.year}
+                                onChange={(evento) =>
+                                  cambiarHito(indice, {
+                                    year: Number.parseInt(evento.target.value, 10) || 0,
+                                  })
+                                }
+                                aria-label={t("ano")}
+                                className={clasesInput}
+                              />
+                            </div>
+                            <div className="min-w-48 flex-1">
+                              <input
+                                type="text"
+                                value={hito.text}
+                                onChange={(evento) => cambiarHito(indice, { text: evento.target.value })}
+                                aria-label={t("descripcionDelHito")}
+                                className={clasesInput}
+                              />
+                            </div>
+                          </div>
+                          <input
+                            type="url"
+                            value={hito.videoUrl ?? ""}
+                            onChange={(evento) =>
+                              cambiarHito(indice, { videoUrl: evento.target.value || null })
+                            }
+                            placeholder="https://youtube.com/..."
+                            aria-label="Vídeo del hito"
+                            className={clasesInput}
+                          />
+                          <div className="flex flex-wrap items-center gap-2">
+                            <ImageUploader
+                              userId={userId}
+                              carpeta="fotos"
+                              label={hito.photoUrl ? "Cambiar foto" : "Subir foto"}
+                              onSubido={async (url) => cambiarHito(indice, { photoUrl: url })}
+                            />
+                            {hito.photoUrl && (
+                              <button
+                                type="button"
+                                onClick={() => cambiarHito(indice, { photoUrl: null })}
+                                className="rounded-lg px-2 py-1 text-xs font-medium text-zinc-500 hover:bg-red-50 hover:text-red-700"
+                              >
+                                Quitar foto
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="min-w-0">
+                          <p>
+                            <span className="font-medium text-zinc-900">{hito.year}</span>{" "}
+                            <span className="text-zinc-600">{hito.text}</span>
+                          </p>
+                          {hito.videoUrl && (
+                            <p className="truncate text-xs text-teal-700">{hito.videoUrl}</p>
+                          )}
+                        </div>
+                      )}
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => quitarHito(indice)}
-                      className="shrink-0 text-red-600 hover:underline"
-                    >
-                      {t("quitar")}
-                    </button>
+                    <div className="flex shrink-0 flex-col items-end gap-1">
+                      <button
+                        type="button"
+                        onClick={() => setEditando(editando === indice ? null : indice)}
+                        className="rounded-lg border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-100"
+                      >
+                        {editando === indice ? "Hecho" : "Editar"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => quitarHito(indice)}
+                        className="text-red-600 hover:underline"
+                      >
+                        {t("quitar")}
+                      </button>
+                    </div>
                   </li>
                 ))}
             </ul>

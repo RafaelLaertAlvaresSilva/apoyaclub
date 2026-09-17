@@ -256,3 +256,44 @@ export function prepararLineas(campos: {
 
   return { lineas };
 }
+
+/**
+ * Una empresa que el club ya tiene apuntada en algún sitio.
+ *
+ * `id` es el de su ficha de patrocinador, cuando la tiene. Las que solo
+ * se escribieron en una tarea llegan con `id: null`: valen para
+ * elegirlas de la lista, pero no hay ficha detrás a la que enganchar
+ * nada.
+ */
+export type EmpresaConocida = { id: string | null; nombre: string };
+
+/**
+ * Las empresas que ofrecer en el desplegable de "Apuntar algo nuevo".
+ *
+ * Los patrocinadores de la ficha van primero a la hora de decidir
+ * quién se queda: si "Ferretería Ramírez" está en la ficha y además se
+ * escribió a mano en una tarea vieja, gana la de la ficha, que es la
+ * que trae identificador. Lo mismo escrito con otras mayúsculas o sin
+ * acentos no entra dos veces.
+ */
+export function empresasConocidasDe(
+  patrocinadores: { id: string; name: string }[],
+  tareas: { empresa: string }[],
+): EmpresaConocida[] {
+  const empresas: EmpresaConocida[] = [];
+  const vistas = new Set<string>();
+
+  const anotar = (nombre: string, id: string | null) => {
+    const limpio = nombre.trim();
+    if (!limpio) return;
+    const clave = limpio.toLocaleLowerCase("es");
+    if (vistas.has(clave)) return;
+    vistas.add(clave);
+    empresas.push({ id, nombre: limpio });
+  };
+
+  for (const patrocinador of patrocinadores) anotar(patrocinador.name, patrocinador.id);
+  for (const tarea of tareas) anotar(tarea.empresa, null);
+
+  return empresas.sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
+}

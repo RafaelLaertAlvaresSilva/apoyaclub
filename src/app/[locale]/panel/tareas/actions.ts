@@ -48,6 +48,24 @@ function fallo(operacion: string, error: unknown, mensaje: string): EstadoGuarda
   return { error: mensaje };
 }
 
+/** El patrocinador, solo si es de este club. Si no, null. */
+async function comprobarPatrocinador(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  clubId: string,
+  patrocinadorId: string | null,
+): Promise<string | null> {
+  if (!patrocinadorId) return null;
+
+  const { data } = await supabase
+    .from("club_sponsors")
+    .select("id")
+    .eq("id", patrocinadorId)
+    .eq("club_id", clubId)
+    .maybeSingle<{ id: string }>();
+
+  return data?.id ?? null;
+}
+
 /**
  * Da de alta una o varias tareas para la misma empresa.
  *
@@ -74,7 +92,17 @@ export async function crearTareas(_previo: EstadoGuardado, formData: FormData): 
 
   if ("error" in leidas) return { error: leidas.error };
 
-  const patrocinadorId = leerTexto(formData, "patrocinadorId");
+  // El identificador del patrocinador lo pone el desplegable cuando se
+  // elige uno de la ficha del club. Se comprueba que sea suyo antes de
+  // guardarlo: llega del navegador, así que no vale fiarse de que sea
+  // el que mandamos nosotros. Si no cuadra, la tarea se guarda igual
+  // con el nombre escrito — perder el enlace es mucho mejor que perder
+  // lo que el club acaba de apuntar.
+  const patrocinadorId = await comprobarPatrocinador(
+    sesion.supabase,
+    sesion.user.id,
+    leerTexto(formData, "patrocinadorId"),
+  );
 
   const filas = leidas.lineas.map((linea) => ({
     club_id: sesion.user.id,

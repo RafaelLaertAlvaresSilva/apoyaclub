@@ -52,6 +52,8 @@ export type ClubRow = {
   top_category_female: string | null;
   top_category_male_photo: string | null;
   top_category_female_photo: string | null;
+  top_category_male_photo_note?: string | null;
+  top_category_female_photo_note?: string | null;
   competitions: string | null;
   achievements: string | null;
   youth_teams_count: number | null;
@@ -136,6 +138,8 @@ export function clubRowToProfile(row: ClubRow): ClubProfile {
     topCategoryFemale: row.top_category_female,
     topCategoryMalePhoto: row.top_category_male_photo,
     topCategoryFemalePhoto: row.top_category_female_photo,
+    topCategoryMalePhotoNote: row.top_category_male_photo_note ?? null,
+    topCategoryFemalePhotoNote: row.top_category_female_photo_note ?? null,
     competitions: row.competitions,
     achievements: row.achievements,
     youthTeamsCount: row.youth_teams_count,

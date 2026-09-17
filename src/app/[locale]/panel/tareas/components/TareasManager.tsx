@@ -8,6 +8,7 @@ import {
   agruparPorEmpresa,
   estadoVisible,
   hoyISO,
+  type EmpresaConocida,
   type TareaPatrocinio,
 } from "@/lib/tareas-patrocinio";
 import { crearTareas } from "../actions";
@@ -57,7 +58,7 @@ export function TareasManager({
   empresasConocidas,
 }: {
   tareas: TareaPatrocinio[];
-  empresasConocidas: string[];
+  empresasConocidas: EmpresaConocida[];
 }) {
   const [estado, formAction] = useActionState(crearTareas, null);
   const [filtro, setFiltro] = useState<Filtro>("pendientes");
@@ -199,7 +200,7 @@ function FormularioNuevasTareas({
 }: {
   accion: (formData: FormData) => void;
   estado: { error?: string; ok?: boolean } | null;
-  empresasConocidas: string[];
+  empresasConocidas: EmpresaConocida[];
   /** Dentro del desplegable ya hay recuadro y título propios: no hacen
    * falta otros. Solo la primera vez, con la lista vacía, va con
    * tarjeta. */
@@ -224,26 +225,7 @@ function FormularioNuevasTareas({
 
   const formulario = (
         <form action={formAction} className="flex flex-col gap-5">
-          <Campo etiqueta="Empresa" ayuda="No hace falta que esté registrada en ApoyaClub.">
-            <input
-              name="empresa"
-              required
-              maxLength={120}
-              list="empresas-conocidas"
-              placeholder="Ferretería Ramírez"
-              className={clasesInput}
-            />
-          </Campo>
-
-          {/* El desplegable se rellena con los patrocinadores de la ficha
-              y con las empresas ya escritas aquí. Sin esto, la misma
-              empresa acaba como "Ferreteria Ramirez", "ferretería
-              ramírez" y "Ramírez", y los grupos dejan de servir. */}
-          <datalist id="empresas-conocidas">
-            {empresasConocidas.map((empresa) => (
-              <option key={empresa} value={empresa} />
-            ))}
-          </datalist>
+          <SelectorDeEmpresa empresasConocidas={empresasConocidas} />
 
           <div>
             <p className="mb-2 text-sm font-medium text-zinc-700">Lo habitual, de un clic</p>
@@ -348,5 +330,84 @@ function FormularioNuevasTareas({
     >
       {formulario}
     </SeccionCard>
+  );
+}
+
+
+/**
+ * Para qué empresa es lo que se apunta.
+ *
+ * Antes era una casilla de texto con una lista de sugerencias
+ * (`<datalist>`) detrás. Tenía dos problemas, y el club solo veía el
+ * primero: en el móvil esa lista o no se abre o se abre como un
+ * teclado predictivo, así que desde el teléfono no había forma de
+ * elegir a los patrocinadores que ya tienes; y al escribir el nombre a
+ * mano la tarea se quedaba solo con el texto, sin enganchar con la
+ * ficha del patrocinador.
+ *
+ * Un desplegable de verdad se abre en cualquier teléfono, y al elegir
+ * de la lista la tarea se queda enganchada a la ficha. Escribir un
+ * nombre nuevo sigue estando a un clic, porque la mayoría de los
+ * acuerdos de un club de barrio son con empresas que no están en
+ * ninguna parte.
+ */
+function SelectorDeEmpresa({ empresasConocidas }: { empresasConocidas: EmpresaConocida[] }) {
+  const OTRA = "__otra__";
+
+  // Sin nada conocido todavía, un desplegable con una sola opción
+  // ("Otra empresa") es un paso de más que no elige nada: se va
+  // directo a escribir el nombre.
+  const [eleccion, setEleccion] = useState(() => (empresasConocidas.length > 0 ? "" : OTRA));
+
+  const elegida = empresasConocidas.find((empresa) => empresa.nombre === eleccion);
+  const esOtra = eleccion === OTRA;
+
+  return (
+    <div className="flex flex-col gap-3">
+      {empresasConocidas.length > 0 && (
+        <Campo
+          etiqueta="Empresa"
+          ayuda="Tus patrocinadores y las empresas que ya has apuntado aquí."
+        >
+          <select
+            name="empresaElegida"
+            required
+            value={eleccion}
+            onChange={(evento) => setEleccion(evento.target.value)}
+            className={clasesInput}
+          >
+            <option value="">Elige una empresa…</option>
+            {empresasConocidas.map((empresa) => (
+              <option key={empresa.nombre} value={empresa.nombre}>
+                {empresa.nombre}
+              </option>
+            ))}
+            <option value={OTRA}>Otra empresa (escribirla)</option>
+          </select>
+        </Campo>
+      )}
+
+      {esOtra && (
+        <Campo
+          etiqueta={empresasConocidas.length > 0 ? "Nombre de la empresa" : "Empresa"}
+          ayuda="No hace falta que esté registrada en ApoyaClub."
+        >
+          <input
+            name="empresa"
+            required
+            maxLength={120}
+            placeholder="Ferretería Ramírez"
+            className={clasesInput}
+          />
+        </Campo>
+      )}
+
+      {/* Elegida de la lista: el nombre viaja aquí, y con él el
+          identificador de su ficha cuando lo tiene. */}
+      {!esOtra && <input type="hidden" name="empresa" value={eleccion} />}
+      {!esOtra && elegida?.id && (
+        <input type="hidden" name="patrocinadorId" value={elegida.id} />
+      )}
+    </div>
   );
 }

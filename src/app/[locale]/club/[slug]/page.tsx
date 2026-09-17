@@ -634,6 +634,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     etiqueta={`${t("secciones.maximaCategoria")} · Masculino`}
                     categoria={perfil.topCategoryMale}
                     foto={perfil.topCategoryMalePhoto}
+                    pie={perfil.topCategoryMalePhotoNote}
                   />
                 )}
                 {perfil.topCategoryFemale && (
@@ -641,6 +642,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     etiqueta={`${t("secciones.maximaCategoria")} · Femenino`}
                     categoria={perfil.topCategoryFemale}
                     foto={perfil.topCategoryFemalePhoto}
+                    pie={perfil.topCategoryFemalePhotoNote}
                   />
                 )}
               </div>
@@ -1099,19 +1101,29 @@ function EquipoDestacado({
   etiqueta,
   categoria,
   foto,
+  pie,
 }: {
   etiqueta: string;
   categoria: string;
   foto: string | null;
+  /** Lo que el club cuenta de esta foto (migración 0044). Puede faltar. */
+  pie: string | null;
 }) {
   return (
     <div className="overflow-hidden rounded-xl border border-zinc-200">
       {foto && (
-        <Image src={foto} alt={etiqueta} width={640} height={320} className="h-40 w-full object-cover" />
+        <Image src={foto} alt={pie || etiqueta} width={640} height={320} className="h-40 w-full object-cover" />
       )}
       <div className="p-4">
         <p className="text-sm font-medium text-zinc-500">{etiqueta}</p>
         <p className="text-zinc-900">{categoria}</p>
+
+        {/* El pie, cuando el club lo ha escrito. "Primera Autonómica"
+            no le dice nada a quien no es del mundillo; esta línea sí.
+            Va debajo y en pequeño: acompaña a la foto, no la tapa. */}
+        {foto && pie && (
+          <p className="mt-2 border-t border-zinc-100 pt-2 text-sm text-zinc-600">{pie}</p>
+        )}
       </div>
     </div>
   );

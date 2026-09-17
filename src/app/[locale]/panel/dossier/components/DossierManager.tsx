@@ -119,26 +119,54 @@ export function DossierManager({
         <div className="grid gap-3 sm:grid-cols-2">
           {SECCIONES_DOSSIER.map((seccion) => {
             const disponible = seccionesDisponibles.includes(seccion.id);
+
+            // Vacía: en vez de una casilla apagada que no lleva a
+            // ningún sitio, un enlace al sitio donde se rellena. Antes
+            // el club tenía que adivinar en qué pestaña estaba cada
+            // cosa, y lo normal es que la sección se quedara vacía.
+            if (!disponible) {
+              return (
+                <Link
+                  key={seccion.id}
+                  href={seccion.donde}
+                  className="group flex items-start gap-3 rounded-lg border border-dashed border-zinc-300 bg-zinc-50/60 p-3 text-sm transition-colors hover:border-brand-teal-dark hover:bg-teal-50"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border border-zinc-300 text-xs font-bold leading-none text-zinc-400 group-hover:border-brand-teal-dark group-hover:text-brand-teal-dark"
+                  >
+                    +
+                  </span>
+                  <span>
+                    <span className="block font-medium text-zinc-500 group-hover:text-zinc-900">
+                      {seccion.etiqueta}
+                    </span>
+                    <span className="block text-xs text-zinc-500">
+                      Todavía no has añadido datos.{" "}
+                      <span className="font-medium text-brand-teal-dark underline">
+                        Añadirlos ahora
+                      </span>
+                    </span>
+                  </span>
+                </Link>
+              );
+            }
+
             return (
               <label
                 key={seccion.id}
-                className={`flex items-start gap-3 rounded-lg border p-3 text-sm ${
-                  disponible ? "border-zinc-200" : "cursor-not-allowed border-zinc-100 opacity-50"
-                }`}
+                className="flex items-start gap-3 rounded-lg border border-zinc-200 p-3 text-sm"
               >
                 <input
                   type="checkbox"
                   name="sections"
                   value={seccion.id}
-                  disabled={!disponible}
-                  defaultChecked={disponible && seccionesIniciales.includes(seccion.id)}
+                  defaultChecked={seccionesIniciales.includes(seccion.id)}
                   className="mt-0.5 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
                 />
                 <span>
                   <span className="block font-medium text-zinc-900">{seccion.etiqueta}</span>
-                  <span className="block text-xs text-zinc-500">
-                    {disponible ? seccion.descripcion : "Todavía no has añadido datos para esta sección."}
-                  </span>
+                  <span className="block text-xs text-zinc-500">{seccion.descripcion}</span>
                 </span>
               </label>
             );

@@ -11,7 +11,7 @@ import { routing } from "@/i18n/routing";
 import { CONSENT_TYPES, LEGAL_VERSIONS } from "@/lib/legal";
 import { createClient } from "@/lib/supabase/server";
 import { NIVELES_PATROCINADOR } from "@/lib/types";
-import type { Milestone, Role, SponsorTier, TeamLevel } from "@/lib/types";
+import type { CommunityAction, Milestone, Role, SponsorTier, TeamLevel } from "@/lib/types";
 
 export type EstadoGuardado =
   | { error: string; ok?: false }
@@ -367,6 +367,8 @@ export async function guardarNivelDeportivo(
       top_category_female: leerTexto(formData, "topCategoryFemale"),
       top_category_male_photo: leerTexto(formData, "topCategoryMalePhoto"),
       top_category_female_photo: leerTexto(formData, "topCategoryFemalePhoto"),
+      top_category_male_photo_note: leerTexto(formData, "topCategoryMalePhotoNote"),
+      top_category_female_photo_note: leerTexto(formData, "topCategoryFemalePhotoNote"),
       competitions: leerTexto(formData, "competitions"),
       achievements: leerTexto(formData, "achievements"),
     })
@@ -651,6 +653,41 @@ export async function guardarHistoria(
  * el esquema, un `javascript:...` guardado aquí se ejecutaría en el
  * navegador de quien visite la página. Solo se aceptan http y https.
  */
+/**
+ * Las acciones sociales, tal y como se pueden guardar.
+ *
+ * Llegan como JSON que arma el propio formulario, igual que los hitos,
+ * así que se comprueban con el mismo criterio: lo que no tenga título
+ * no entra, y la foto solo si es una dirección http(s) de verdad.
+ *
+ * Hace falta desde que las acciones se pueden editar: dejar el título
+ * en blanco al corregir una errata metía un renglón vacío en la ficha
+ * pública sin que nada avisara.
+ */
+function sanearAccionesComunidad(valor: unknown): CommunityAction[] {
+  if (!Array.isArray(valor)) return [];
+
+  return valor
+    .slice(0, 50)
+    .map((bruto): CommunityAction | null => {
+      if (typeof bruto !== "object" || bruto === null) return null;
+      const accion = bruto as Record<string, unknown>;
+
+      const title = typeof accion.title === "string" ? accion.title.trim().slice(0, 200) : "";
+      if (!title) return null;
+
+      const description =
+        typeof accion.description === "string" ? accion.description.trim().slice(0, 1000) : "";
+      const photo = enlaceSeguro(accion.photo);
+
+      // `photo` se deja fuera si no la hay, en vez de ponerla a null:
+      // el tipo la declara opcional y una clave con null dentro del
+      // jsonb no es lo mismo que una clave que no está.
+      return photo ? { title, description, photo } : { title, description };
+    })
+    .filter((accion): accion is CommunityAction => accion !== null);
+}
+
 function sanearHitos(valor: unknown): Milestone[] {
   if (!Array.isArray(valor)) return [];
 
@@ -735,9 +772,11 @@ export async function guardarComunidad(
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
-  let communityActions: unknown = [];
+  let communityActions: CommunityAction[];
   try {
-    communityActions = JSON.parse(String(formData.get("communityActions") ?? "[]"));
+    communityActions = sanearAccionesComunidad(
+      JSON.parse(String(formData.get("communityActions") ?? "[]")),
+    );
   } catch {
     return { error: "Las acciones no tienen un formato válido." };
   }

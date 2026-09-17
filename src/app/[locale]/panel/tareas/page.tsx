@@ -2,7 +2,7 @@ import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { createClient } from "@/lib/supabase/server";
-import { hoyISO } from "@/lib/tareas-patrocinio";
+import { empresasConocidasDe, hoyISO } from "@/lib/tareas-patrocinio";
 import { obtenerTareasDelClub, obtenerUltimosInformes } from "@/lib/tareas-datos";
 import type { ClubSponsorRow } from "@/lib/club-mappers";
 import { PanelNav } from "../components/PanelNav";
@@ -32,21 +32,16 @@ export default async function TareasPage() {
     obtenerUltimosInformes(supabase, user.id),
     supabase
       .from("club_sponsors")
-      .select("name")
+      .select("id, name")
       .eq("club_id", user.id)
-      .returns<Pick<ClubSponsorRow, "name">[]>(),
+      .returns<Pick<ClubSponsorRow, "id" | "name">[]>(),
   ]);
 
-  // Para el desplegable de empresas: las que ya tiene como
-  // patrocinadores en su ficha, más las que haya escrito antes aquí.
-  const empresasConocidas = [
-    ...new Set([
-      ...(patrocinadores ?? []).map((patrocinador) => patrocinador.name.trim()),
-      ...tareas.map((tarea) => tarea.empresa.trim()),
-    ]),
-  ]
-    .filter(Boolean)
-    .sort((a, b) => a.localeCompare(b, "es"));
+  // Las empresas que el club ya conoce: los patrocinadores de su ficha
+  // y las que haya escrito aquí alguna vez. Van con su identificador
+  // cuando lo tienen, para que la tarea quede enganchada a la ficha del
+  // patrocinador y no solo a un nombre escrito.
+  const empresasConocidas = empresasConocidasDe(patrocinadores ?? [], tareas);
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
