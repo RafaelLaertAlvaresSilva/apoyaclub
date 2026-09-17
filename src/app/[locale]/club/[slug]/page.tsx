@@ -329,18 +329,41 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
         </div>
         )}
 
-        {/* Lo que el club necesita va en su propio bloque y en ámbar
-            (migración 0038). Mezclado con lo que ofrece, quien entra no
-            distingue en qué dirección va cada cosa; separado, un
-            fisioterapeuta que llega a la ficha ve lo suyo sin leerse
-            todo lo demás. Y al club le empuja a rellenarlo, porque el
-            hueco se nota. */}
+      </section>
+    ),
+  });
+
+  // Los servicios van pegados a las oportunidades y no al final: son
+  // las dos caras de lo mismo —lo que el club ofrece y lo que el club
+  // necesita— y son la única parte de la ficha donde una empresa puede
+  // hacer algo. El resto es lo que la convence de hacerlo.
+  // Todo lo que el club necesita, en la misma columna.
+  //
+  // Estaban en dos sitios: las oportunidades marcadas como necesidad
+  // colgando de "Oportunidades disponibles", y los servicios en su
+  // propia sección. Para una empresa son lo mismo —cosas que el club
+  // pide y que puede aportar— y verlas separadas por media pantalla no
+  // ayudaba a nadie. Ahora la ficha se lee en dos columnas: a la
+  // izquierda lo que se compra, a la derecha lo que se ofrece.
+  //
+  // En verde, como las oportunidades. Lo tuve en ámbar para que el
+  // color dijera la dirección; con las dos cosas juntas en su columna y
+  // bajo su título, el color ya no tiene que decirlo. Lo que separa una
+  // columna de la otra a simple vista es el precio: a la izquierda lo
+  // llevan todas, a la derecha ninguna.
+  if (servicios.length > 0 || loQueNecesita.length > 0) {
+    secciones.push({
+      id: "servicios",
+      etiqueta: t("servicios.titulo"),
+      grupo: "ofrece-y-busca",
+      nodo: (
+        <section id="servicios" className="flex scroll-mt-24 flex-col gap-4 pt-8">
         {loQueNecesita.length > 0 && (
-          <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold text-amber-900 sm:text-2xl">
+            <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 sm:p-8">
+            <h2 className="text-xl font-semibold text-brand-teal-dark sm:text-2xl">
               Lo que necesitamos
             </h2>
-            <p className="mt-2 text-sm text-amber-900">
+            <p className="mt-2 text-sm text-zinc-700">
               Servicios y productos que le hacen falta al club. A cambio, la misma visibilidad
               que cualquier patrocinador.
             </p>
@@ -349,17 +372,17 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
               clasesLista={REJILLA_TARJETAS}
               visiblesEnOrdenador={VISIBLES_EN_ORDENADOR}
               textoVerMas={t("verMas", { cuantos: cuantasSobran(loQueNecesita.length) })}
-              tono="ambar"
+              tono="verde"
             >
               {loQueNecesita.map((oportunidad) => (
                 <div
                   key={oportunidad.id}
-                  className="flex flex-col gap-2 rounded-xl border border-amber-200 bg-white p-4"
+                  className="flex flex-col gap-2 rounded-xl border border-teal-100 bg-white p-4"
                 >
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="font-semibold text-zinc-900">{oportunidad.title}</p>
                     {oportunidad.categoriaNecesidad && (
-                      <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                      <span className="rounded-full bg-teal-100 px-2 py-0.5 text-xs font-medium text-teal-800">
                         {ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]}
                       </span>
                     )}
@@ -389,7 +412,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                       opportunityTitle={oportunidad.title}
                       variante="primaria"
                     >
-                      {t("servicios.ofrecer")}
+                      {t("oportunidades.solicitar")}
                     </SolicitarContactoBoton>
                   </div>
                 </div>
@@ -398,69 +421,48 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             </div>
           </div>
         )}
-      </section>
-    ),
-  });
 
-  // Los servicios van pegados a las oportunidades y no al final: son
-  // las dos caras de lo mismo —lo que el club ofrece y lo que el club
-  // necesita— y son la única parte de la ficha donde una empresa puede
-  // hacer algo. El resto es lo que la convence de hacerlo.
-  if (servicios.length > 0) {
-    secciones.push({
-      id: "servicios",
-      etiqueta: t("servicios.titulo"),
-      grupo: "ofrece-y-busca",
-      nodo: (
-        // Su propio recuadro de color, como el de las oportunidades.
-        // Antes era texto suelto sobre blanco y, puesto al lado del
-        // recuadro verde, parecía el relleno de la página en vez de la
-        // otra mitad de lo que el club propone.
-        //
-        // En ámbar y no en verde a propósito: en toda la ficha el verde
-        // es lo que la empresa compra y el ámbar lo que el club
-        // necesita. Los dos del mismo color obligarían a leer la letra
-        // pequeña para saber en qué dirección va cada cosa.
-        <section id="servicios" className="scroll-mt-24 pt-8">
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold text-amber-900 sm:text-2xl">
-              {t("servicios.titulo")}
-            </h2>
-            <p className="mt-2 text-sm text-amber-900">{t("servicios.descripcion")}</p>
+          {servicios.length > 0 && (
+            <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 sm:p-8">
+              <h2 className="text-xl font-semibold text-brand-teal-dark sm:text-2xl">
+                {t("servicios.titulo")}
+              </h2>
+              <p className="mt-2 text-sm text-zinc-700">{t("servicios.descripcion")}</p>
 
-            <div className="mt-4">
-              <ListaConVerMas
-                clasesLista={REJILLA_TARJETAS}
-                visiblesEnOrdenador={VISIBLES_EN_ORDENADOR}
-                textoVerMas={t("verMas", { cuantos: cuantasSobran(servicios.length) })}
-                tono="ambar"
-              >
-                {servicios.map((servicio) => (
-                  <div
-                    key={servicio.id}
-                    className="rounded-xl border border-amber-200 bg-white p-4"
-                  >
-                    <p className="text-xs font-semibold uppercase tracking-wide text-amber-800">
-                      {ETIQUETA_CATEGORIA_SERVICIO[servicio.category]}
-                    </p>
-                    <p className="mt-1 font-medium text-zinc-900">{servicio.title}</p>
-                    {servicio.description && (
-                      <p className="mt-1 text-sm text-zinc-600">{servicio.description}</p>
-                    )}
-                    <div className="mt-3">
-                      <SolicitarContactoBoton
-                        clubId={perfil.id}
-                        clubName={perfil.name}
-                        variante="primaria"
-                      >
-                        {t("servicios.ofrecer")}
-                      </SolicitarContactoBoton>
+              <div className="mt-4">
+                <ListaConVerMas
+                  clasesLista={REJILLA_TARJETAS}
+                  visiblesEnOrdenador={VISIBLES_EN_ORDENADOR}
+                  textoVerMas={t("verMas", { cuantos: cuantasSobran(servicios.length) })}
+                  tono="verde"
+                >
+                  {servicios.map((servicio) => (
+                    <div
+                      key={servicio.id}
+                      className="rounded-xl border border-teal-100 bg-white p-4"
+                    >
+                      <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
+                        {ETIQUETA_CATEGORIA_SERVICIO[servicio.category]}
+                      </p>
+                      <p className="mt-1 font-medium text-zinc-900">{servicio.title}</p>
+                      {servicio.description && (
+                        <p className="mt-1 text-sm text-zinc-600">{servicio.description}</p>
+                      )}
+                      <div className="mt-3">
+                        <SolicitarContactoBoton
+                          clubId={perfil.id}
+                          clubName={perfil.name}
+                          variante="primaria"
+                        >
+                          {t("oportunidades.solicitar")}
+                        </SolicitarContactoBoton>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </ListaConVerMas>
+                  ))}
+                </ListaConVerMas>
+              </div>
             </div>
-          </div>
+          )}
         </section>
       ),
     });
