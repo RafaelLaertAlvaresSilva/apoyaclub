@@ -64,9 +64,9 @@ export async function eliminarCuentaClub(
 
   const { data: filaClub } = await supabase
     .from("clubs")
-    .select("stripe_subscription_id")
+    .select("stripe_subscription_id, name, city, province, plan, subscription_status, created_at")
     .eq("id", user.id)
-    .maybeSingle<{ stripe_subscription_id: string | null }>();
+    .maybeSingle<FilaAntesDeIrse>();
 
   if (filaClub?.stripe_subscription_id) {
     try {
@@ -89,6 +89,14 @@ export async function eliminarCuentaClub(
   }
 
   const admin = createAdminClient();
+
+  // La baja se apunta ANTES de borrar nada: después de esta línea la
+  // fila del club ya no existe y no habría de dónde sacar el nombre.
+  // Si el apunte falla, la cuenta se borra igual — el derecho de
+  // supresión no puede quedarse esperando a que funcione una
+  // estadística.
+  await apuntarLaBaja(admin, user.id, filaClub ?? null, leerMotivo(formData));
+
   const { error } = await admin.auth.admin.deleteUser(user.id);
   if (error) {
     console.error("[eliminar cuenta] No se ha podido eliminar el usuario:", error);
@@ -98,4 +106,59 @@ export async function eliminarCuentaClub(
   await supabase.auth.signOut();
   const locale = await getLocale();
   return redirect({ href: "/cuenta-eliminada", locale });
+}
+
+/** Lo que hay que leer de la fila del club antes de que desaparezca. */
+type FilaAntesDeIrse = {
+  stripe_subscription_id: string | null;
+  name: string | null;
+  city: string | null;
+  province: string | null;
+  plan: string | null;
+  subscription_status: string | null;
+  created_at: string | null;
+};
+
+/** El motivo que el club haya querido contar. Es voluntario. */
+function leerMotivo(formData: FormData): string | null {
+  const texto = String(formData.get("motivo") ?? "").trim();
+  return texto ? texto.slice(0, 500) : null;
+}
+
+/**
+ * Deja constancia de la baja (migración 0045).
+ *
+ * Lo que se guarda es de la entidad, no de la persona: el nombre del
+ * club, dónde está, qué plan tenía y cuánto duró. Ni correo, ni
+ * teléfono, ni persona de contacto: eso se va con la cuenta, como tiene
+ * que irse.
+ *
+ * Nunca hace fallar la baja. Si esto no se puede escribir, el club se
+ * va igual y ApoyaClub se queda sin el dato, que es el orden correcto
+ * de prioridades.
+ */
+async function apuntarLaBaja(
+  admin: ReturnType<typeof createAdminClient>,
+  clubId: string,
+  fila: FilaAntesDeIrse | null,
+  motivo: string | null,
+): Promise<void> {
+  try {
+    await admin.from("club_closures").insert({
+      club_id: clubId,
+      club_name: fila?.name ?? "(sin nombre)",
+      city: fila?.city ?? null,
+      province: fila?.province ?? null,
+      plan: fila?.plan ?? null,
+      subscription_status: fila?.subscription_status ?? null,
+      // Solo cuenta como pagador quien salió de la prueba: en
+      // "trialing" no ha pasado por caja todavía.
+      ever_paid: !!fila?.stripe_subscription_id && fila.subscription_status !== "trialing",
+      signed_up_at: fila?.created_at ?? null,
+      closed_by: "club",
+      reason: motivo,
+    });
+  } catch (excepcion) {
+    console.error("[eliminar cuenta] No se ha podido apuntar la baja:", excepcion);
+  }
 }

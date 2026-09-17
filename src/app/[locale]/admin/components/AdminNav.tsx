@@ -4,6 +4,7 @@ const ENLACES = [
   { id: "resumen", href: "/admin", etiqueta: "Resumen" },
   { id: "clubes", href: "/admin/clubes", etiqueta: "Clubes" },
   { id: "finanzas", href: "/admin/finanzas", etiqueta: "Finanzas" },
+  { id: "bajas", href: "/admin/bajas", etiqueta: "Bajas" },
 ] as const;
 
 type SeccionAdmin = (typeof ENLACES)[number]["id"];

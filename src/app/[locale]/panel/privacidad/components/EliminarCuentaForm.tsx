@@ -40,6 +40,24 @@ export function EliminarCuentaForm() {
         <li>{t("tuPaginaPublicaDeja")}</li>
       </ul>
 
+      {/* Voluntario y antes de la confirmación: aquí es donde el club
+          todavía está dispuesto a contarlo. Preguntarlo después de
+          escribir ELIMINAR ya no lo lee nadie. */}
+      <div>
+        <label htmlFor="motivo" className="mb-1 block text-sm font-medium text-zinc-700">
+          {t("motivo")}
+        </label>
+        <p className="mb-1 text-xs text-zinc-500">{t("motivoAyuda")}</p>
+        <textarea
+          id="motivo"
+          name="motivo"
+          rows={2}
+          maxLength={500}
+          placeholder={t("motivoPlaceholder")}
+          className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+        />
+      </div>
+
       <div>
         <label htmlFor="confirmacion" className="mb-1 block text-sm font-medium text-zinc-700">{t("escribeEliminarParaConfirmar")}</label>
         <input
