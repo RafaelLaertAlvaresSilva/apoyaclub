@@ -32,6 +32,13 @@ type ClubRowConAdmin = ClubRow & {
  * 0% de perfil y sin suscripción).
  */
 const AVISOS: Record<string, { texto: string; bien: boolean }> = {
+  suspendido: {
+    texto: "Club suspendido. Su página pública ya no se ve y no puede entrar a su panel.",
+    bien: true,
+  },
+  reactivado: { texto: "Club reactivado. Vuelve a tener su página y su panel.", bien: true },
+  verificado: { texto: "Club verificado. Ya le sale la insignia en su página.", bien: true },
+  "sin-verificar": { texto: "Verificación quitada.", bien: true },
   regalado: {
     texto: "Listo. Ese club ya tiene el acceso gratuito hasta la fecha que has puesto.",
     bien: true,

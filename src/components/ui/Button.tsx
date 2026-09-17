@@ -5,7 +5,7 @@ type Variante = "primary" | "secondary" | "ghost";
 type Tamano = "sm" | "md";
 
 const CLASES_BASE =
-  "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-dark disabled:pointer-events-none disabled:opacity-50";
 
 const CLASES_VARIANTE: Record<Variante, string> = {
   // Teal oscuro y no el claro: con texto blanco encima, el claro se

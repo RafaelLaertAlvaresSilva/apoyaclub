@@ -9,6 +9,7 @@ import {
   verificarClub,
 } from "../actions";
 import type { ClubAdminRow } from "../types";
+import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
 
 const formatoFecha = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric" });
 
@@ -141,19 +142,32 @@ export function FilaClub({ fila }: { fila: ClubAdminRow }) {
               {fila.verified ? "Quitar verificación" : "Verificar"}
             </button>
           </form>
-          <form action={fila.suspended ? reactivarClub : suspenderClub}>
-            <input type="hidden" name="id" value={fila.id} />
-            <button
-              type="submit"
-              className={`rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
-                fila.suspended
-                  ? "border-zinc-300 text-zinc-700 hover:bg-zinc-100"
-                  : "border-red-200 text-red-700 hover:bg-red-50"
-              }`}
-            >
-              {fila.suspended ? "Reactivar" : "Suspender"}
-            </button>
-          </form>
+          {/* Suspender le tumba al club la página pública y le corta el
+              acceso al panel, y se hacía de un clic: un roce en el móvil
+              y un club se quedaba fuera sin que se enterase nadie.
+              Reactivar no hace daño, así que ese va directo. */}
+          {fila.suspended ? (
+            <form action={reactivarClub}>
+              <input type="hidden" name="id" value={fila.id} />
+              <button
+                type="submit"
+                className="rounded-lg border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
+              >
+                Reactivar
+              </button>
+            </form>
+          ) : (
+            <AccionConConfirmacion
+              accion={suspenderClub}
+              id={fila.id}
+              nombre={fila.name}
+              etiqueta="Suspender"
+              pregunta="¿Suspender a"
+              confirmar="Sí, suspender"
+              enCurso="Suspendiendo…"
+              clases="rounded-lg border border-red-200 px-2.5 py-1 text-xs font-medium text-red-700 transition-colors hover:bg-red-50"
+            />
+          )}
         </div>
       </td>
     </tr>

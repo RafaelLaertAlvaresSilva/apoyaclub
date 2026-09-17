@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
-import { BorrarConConfirmacion } from "@/components/BorrarConConfirmacion";
+import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
 import type { ClubTeam, Opportunity, OpportunityStatus } from "@/lib/types";
 import {
   CLASES_NIVEL_PATROCINIO,
@@ -206,7 +206,7 @@ export function TarjetaOportunidad({
           </a>
         )}
 
-        <BorrarConConfirmacion
+        <AccionConConfirmacion
           accion={eliminarOportunidad}
           id={oportunidad.id}
           nombre={oportunidad.title}

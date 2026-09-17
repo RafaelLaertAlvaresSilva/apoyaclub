@@ -94,12 +94,35 @@ export function TareasManager({
 
   return (
     <div className="flex flex-col gap-6">
-      <FormularioNuevasTareas
-        key={claveFormulario}
-        accion={formAction}
-        estado={estado}
-        empresasConocidas={empresasConocidas}
-      />
+      {/* Si ya hay tareas apuntadas, el alta se pliega y lo primero que
+          se ve es lo que el club viene a mirar: qué tiene pendiente.
+          Estaba al revés —un formulario vacío delante y la lista
+          debajo, fuera de pantalla en el móvil— y era lo contrario de
+          lo que hacen Oportunidades y "A quién escribir". */}
+      {tareas.length === 0 ? (
+        <FormularioNuevasTareas
+          key={claveFormulario}
+          accion={formAction}
+          estado={estado}
+          empresasConocidas={empresasConocidas}
+        />
+      ) : (
+        <details className="group rounded-xl border border-zinc-200 bg-white">
+          <summary className="flex cursor-pointer list-none items-center gap-2 px-5 py-4 text-sm font-medium text-brand-teal-dark [&::-webkit-details-marker]:hidden">
+            <span aria-hidden="true" className="text-base leading-none">+</span>
+            Apuntar algo nuevo
+          </summary>
+          <div className="border-t border-zinc-100 px-5 py-5">
+            <FormularioNuevasTareas
+              key={claveFormulario}
+              accion={formAction}
+              estado={estado}
+              empresasConocidas={empresasConocidas}
+              sinTarjeta
+            />
+          </div>
+        </details>
+      )}
 
       <SeccionCard
         titulo="Todo lo que has prometido"
@@ -172,10 +195,15 @@ function FormularioNuevasTareas({
   accion: formAction,
   estado,
   empresasConocidas,
+  sinTarjeta = false,
 }: {
   accion: (formData: FormData) => void;
   estado: { error?: string; ok?: boolean } | null;
   empresasConocidas: string[];
+  /** Dentro del desplegable ya hay recuadro y título propios: no hacen
+   * falta otros. Solo la primera vez, con la lista vacía, va con
+   * tarjeta. */
+  sinTarjeta?: boolean;
 }) {
   const [lineas, setLineas] = useState<LineaFormulario[]>([nuevaLinea()]);
 
@@ -194,11 +222,7 @@ function FormularioNuevasTareas({
     });
   }
 
-  return (
-      <SeccionCard
-        titulo="Apuntar lo que le has prometido a una empresa"
-        descripcion="Puedes añadir todas las cosas de una vez: las dos publicaciones, el vídeo y la visita van juntas en el mismo patrocinio."
-      >
+  const formulario = (
         <form action={formAction} className="flex flex-col gap-5">
           <Campo etiqueta="Empresa" ayuda="No hace falta que esté registrada en ApoyaClub.">
             <input
@@ -313,6 +337,16 @@ function FormularioNuevasTareas({
             {lineas.length === 1 ? "Añadir a la lista" : `Añadir las ${lineas.length} a la lista`}
           </BotonEnviar>
         </form>
-      </SeccionCard>
+  );
+
+  if (sinTarjeta) return formulario;
+
+  return (
+    <SeccionCard
+      titulo="Apuntar lo que le has prometido a una empresa"
+      descripcion="Puedes añadir todas las cosas de una vez: las dos publicaciones, el vídeo y la visita van juntas en el mismo patrocinio."
+    >
+      {formulario}
+    </SeccionCard>
   );
 }

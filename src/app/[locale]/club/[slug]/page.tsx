@@ -1038,7 +1038,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
 
       </header>
 
-      <main className="mx-auto w-full max-w-4xl px-4 pb-16">
+      <main id="contenido" className="mx-auto w-full max-w-4xl px-4 pb-16">
         {agruparParaElOrdenador(secciones).map((grupo) =>
           grupo.length === 1 ? (
             <Fragment key={grupo[0].id}>{grupo[0].nodo}</Fragment>

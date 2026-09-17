@@ -77,6 +77,9 @@ export default async function DossierPage() {
         <div>
           <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("dossierComercialEnPdf")}</h1>
+          <p className="mt-1 max-w-2xl text-sm text-zinc-600">
+            El documento que le pasas a una empresa: tu club en un PDF, con las cifras y las oportunidades que tú elijas. También sale en Word, por si quieres retocarlo.
+          </p>
         </div>
         <CerrarSesionBoton />
       </div>

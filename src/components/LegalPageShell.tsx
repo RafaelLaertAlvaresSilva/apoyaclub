@@ -25,7 +25,7 @@ export function LegalPageShell({
     <>
       <Header />
 
-      <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+      <main id="contenido" className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
         <Link href="/" className="text-sm font-medium text-teal-700 hover:underline">{t("volverAApoyaclub")}</Link>
 
         <h1 className="mt-4 text-2xl font-semibold text-zinc-900">{titulo}</h1>
@@ -33,10 +33,10 @@ export function LegalPageShell({
 
         <AvisoRevisionJuridica />
 
-        <div className="mt-8 space-y-6 text-sm leading-relaxed text-zinc-700 [&_h2]:mt-8 [&_h2]:text-base [&_h2]:font-semibold [&_h2]:text-zinc-900 [&_p]:mt-2 [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5">
+        <div className="mt-8 space-y-6 text-sm leading-relaxed text-zinc-700 [&_h2]:mt-8 [&_h2]:text-base [&_h2]:font-semibold [&_h2]:text-zinc-900 [&_p]:mt-2 [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5 [&_a]:font-medium [&_a]:text-brand-teal-dark [&_a]:underline [&_a]:underline-offset-2">
           {children}
         </div>
-      </div>
+      </main>
     </>
   );
 }

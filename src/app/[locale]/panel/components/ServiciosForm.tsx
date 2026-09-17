@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
-import { BorrarConConfirmacion } from "@/components/BorrarConConfirmacion";
+import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { Campo, SeccionCard, clasesInput, clasesTextarea } from "./SeccionCard";
@@ -71,7 +71,7 @@ export function ServiciosForm({ servicios }: { servicios: ServiceNeed[] }) {
                   </button>
                 </form>
 
-                <BorrarConConfirmacion
+                <AccionConConfirmacion
                   accion={eliminarServicio}
                   id={servicio.id}
                   nombre={servicio.title}

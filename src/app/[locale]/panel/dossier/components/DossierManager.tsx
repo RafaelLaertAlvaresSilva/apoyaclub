@@ -132,7 +132,7 @@ export function DossierManager({
                   value={seccion.id}
                   disabled={!disponible}
                   defaultChecked={disponible && seccionesIniciales.includes(seccion.id)}
-                  className="mt-0.5 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
+                  className="mt-0.5 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
                 />
                 <span>
                   <span className="block font-medium text-zinc-900">{seccion.etiqueta}</span>
@@ -169,7 +169,7 @@ export function DossierManager({
                     name="opportunityIds"
                     value={oportunidad.id}
                     defaultChecked={oportunidadesIniciales.has(oportunidad.id)}
-                    className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
+                    className="rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
                   />
                   <span className="font-medium text-zinc-900">{oportunidad.title}</span>
                 </span>
@@ -226,7 +226,7 @@ export function DossierManager({
               type="checkbox"
               name="shareEnabled"
               defaultChecked={configuracion?.shareEnabled ?? false}
-              className="rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
+              className="rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
             />{t("activarEnlacePublico")}</label>
 
           <Campo etiqueta="Caducidad (opcional)" ayuda={t("dejaloEnBlancoPara")}>

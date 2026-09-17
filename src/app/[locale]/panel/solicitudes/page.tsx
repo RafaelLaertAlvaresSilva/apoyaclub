@@ -46,6 +46,9 @@ export default async function SolicitudesPage() {
         <div>
           <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("solicitudesDeContacto")}</h1>
+          <p className="mt-1 max-w-2xl text-sm text-zinc-600">
+            Empresas que han escrito desde tu página pública. Contestar el mismo día es lo que más cierra acuerdos.
+          </p>
         </div>
         <CerrarSesionBoton />
       </div>

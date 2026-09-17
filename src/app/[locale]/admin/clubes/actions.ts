@@ -23,7 +23,11 @@ export type AvisoAdmin =
   | "sin-ficha"
   | "paga-stripe"
   | "fecha"
-  | "no-admin";
+  | "no-admin"
+  | "suspendido"
+  | "reactivado"
+  | "verificado"
+  | "sin-verificar";
 
 async function volverConAviso(aviso: AvisoAdmin): Promise<void> {
   const locale = await getLocale();
@@ -59,33 +63,42 @@ async function obtenerAdminActual(): Promise<
   return { admin: createAdminClient() };
 }
 
-async function actualizarClub(formData: FormData, cambios: Record<string, unknown>): Promise<void> {
+async function actualizarClub(
+  formData: FormData,
+  cambios: Record<string, unknown>,
+  aviso: AvisoAdmin,
+): Promise<void> {
   const contexto = await obtenerAdminActual();
-  if ("error" in contexto) return;
+  if ("error" in contexto) return volverConAviso("no-admin");
 
   const id = String(formData.get("id") ?? "");
-  if (!id) return;
+  if (!id) return volverConAviso("no-admin");
 
   await contexto.admin.from("clubs").update(cambios).eq("id", id);
   revalidatePath(RUTA_CLUBES);
+
+  // Con aviso, como el de regalar acceso. Suspender un club le tumba la
+  // página pública y le corta el panel, y hasta ahora no decía nada:
+  // desde fuera, hacerlo y que fallase se veían exactamente igual.
+  return volverConAviso(aviso);
 }
 
 /** Bloqueo total (Fase 12): el club pierde el acceso a su panel y desaparece de la página pública y del buscador. */
 export async function suspenderClub(formData: FormData): Promise<void> {
-  await actualizarClub(formData, { admin_suspended: true, admin_suspended_at: new Date().toISOString() });
+  await actualizarClub(formData, { admin_suspended: true, admin_suspended_at: new Date().toISOString() }, "suspendido");
 }
 
 export async function reactivarClub(formData: FormData): Promise<void> {
-  await actualizarClub(formData, { admin_suspended: false, admin_suspended_at: null });
+  await actualizarClub(formData, { admin_suspended: false, admin_suspended_at: null }, "reactivado");
 }
 
 /** Insignia pública de "verificado" en la página del club. */
 export async function verificarClub(formData: FormData): Promise<void> {
-  await actualizarClub(formData, { verified: true, verified_at: new Date().toISOString() });
+  await actualizarClub(formData, { verified: true, verified_at: new Date().toISOString() }, "verificado");
 }
 
 export async function quitarVerificacionClub(formData: FormData): Promise<void> {
-  await actualizarClub(formData, { verified: false, verified_at: null });
+  await actualizarClub(formData, { verified: false, verified_at: null }, "sin-verificar");
 }
 
 /**

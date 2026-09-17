@@ -49,7 +49,15 @@ export async function PanelNav({ activo }: { activo: SeccionPanel }) {
     id === "solicitudes" ? sinAbrir : id === "tareas" ? vencidas : 0;
 
   return (
-    <nav className="flex flex-wrap gap-2 border-b border-zinc-200 pb-3">
+    /* En el móvil, una sola fila que se desplaza de lado en vez de tres
+       o cuatro que se comen media pantalla. Se repetía en las once
+       páginas del panel: el club bajaba el mismo bloque una y otra vez,
+       y con botones más pequeños de lo cómodo para el dedo.
+       *
+       * En el ordenador sigue partiéndose en varias filas, que ahí hay
+       * sitio de sobra y verlas todas a la vez va mejor. */
+    <nav className="relative border-b border-zinc-200 pb-3">
+      <div className="flex gap-2 overflow-x-auto sm:flex-wrap sm:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {ENLACES.map((enlace) => {
         const contador = contadorDe(enlace.id);
 
@@ -57,7 +65,8 @@ export async function PanelNav({ activo }: { activo: SeccionPanel }) {
           <Link
             key={enlace.id}
             href={enlace.href}
-            className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+            aria-current={activo === enlace.id ? "page" : undefined}
+            className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
               activo === enlace.id ? "bg-teal-700 text-white" : "text-zinc-600 hover:bg-zinc-100"
             }`}
           >
@@ -77,6 +86,14 @@ export async function PanelNav({ activo }: { activo: SeccionPanel }) {
           </Link>
         );
       })}
+      </div>
+
+      {/* Avisa de que la fila sigue a la derecha. Solo en el móvil, que
+          es donde no cabe, y no se puede pulsar. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-3 right-0 top-0 w-8 bg-gradient-to-l from-zinc-50 to-transparent sm:hidden"
+      />
     </nav>
   );
 }

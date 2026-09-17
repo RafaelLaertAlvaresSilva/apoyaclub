@@ -71,6 +71,9 @@ export default async function OportunidadesPage() {
         <div>
           <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("oportunidadesDePatrocinio")}</h1>
+          <p className="mt-1 max-w-2xl text-sm text-zinc-600">
+            Lo que tu club ofrece a una empresa a cambio de patrocinio, y lo que necesita a cambio de visibilidad. Es lo único de tu ficha donde una empresa puede hacer algo.
+          </p>
         </div>
         <CerrarSesionBoton />
       </div>

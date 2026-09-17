@@ -24,6 +24,9 @@ export default async function PrivacidadClubPage() {
         <div>
           <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("privacidadYDatos")}</h1>
+          <p className="mt-1 max-w-2xl text-sm text-zinc-600">
+            Qué datos guardamos de tu club, cómo descargarlos y cómo borrar la cuenta. Nada de esto depende de que estés al día con el pago.
+          </p>
         </div>
         <CerrarSesionBoton />
       </div>

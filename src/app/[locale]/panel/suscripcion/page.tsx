@@ -101,6 +101,9 @@ export default async function SuscripcionPage({
         <div>
           <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("suscripcion")}</h1>
+          <p className="mt-1 max-w-2xl text-sm text-zinc-600">
+            Tu plan, tus facturas y tus datos de facturación. Desde aquí se cambia el método de pago y se cancela, sin llamar a nadie.
+          </p>
         </div>
         <CerrarSesionBoton />
       </div>

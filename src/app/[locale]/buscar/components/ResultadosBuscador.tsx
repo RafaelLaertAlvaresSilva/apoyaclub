@@ -90,7 +90,7 @@ export function ResultadosBuscador({
             id="orden"
             value={filtros.orden ?? "novedad"}
             onChange={(evento) => cambiarOrden(evento.target.value as FiltrosBusqueda["orden"])}
-            className="rounded-lg border border-zinc-300 px-2 py-1.5 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+            className="rounded-lg border border-zinc-300 px-2 py-1.5 text-sm focus:border-brand-teal-dark focus:outline-none focus:ring-1 focus:ring-brand-teal-dark"
           >
             {OPCIONES_ORDEN.map((opcion) => (
               <option key={opcion.id} value={opcion.id}>

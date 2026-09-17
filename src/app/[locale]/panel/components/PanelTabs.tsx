@@ -92,6 +92,57 @@ export function PanelTabs({
     primerCampo?.focus({ preventScroll: true });
   }, [ancla]);
 
+  /**
+   * Si hay algo escrito sin guardar, se pregunta antes de cambiar de
+   * pestaña.
+   *
+   * Cada pestaña guarda con su propio botón, así que media descripción
+   * escrita más un toque en "Equipos" se iba entera, sin avisar. Era la
+   * forma más rápida de que un directivo con poco tiempo no volviera a
+   * rellenar la ficha.
+   *
+   * Se comprueba mirando los campos de verdad —lo que hay dentro contra
+   * lo que traían puesto— en vez de llevar la cuenta de cada tecla: así
+   * escribir y borrar no cuenta como cambio, y un formulario recién
+   * guardado tampoco.
+   */
+  function haySinGuardar(): boolean {
+    const campos = contenedor.current?.querySelectorAll<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >("form input, form textarea, form select");
+    if (!campos) return false;
+
+    for (const campo of campos) {
+      if (campo.type === "hidden" || campo.type === "file") continue;
+
+      if (campo instanceof HTMLSelectElement) {
+        const porDefecto = [...campo.options].find((opcion) => opcion.defaultSelected);
+        if ((porDefecto?.value ?? campo.options[0]?.value ?? "") !== campo.value) return true;
+        continue;
+      }
+
+      if (campo.type === "checkbox" || campo.type === "radio") {
+        if ((campo as HTMLInputElement).defaultChecked !== (campo as HTMLInputElement).checked) {
+          return true;
+        }
+        continue;
+      }
+
+      if (campo.defaultValue !== campo.value) return true;
+    }
+
+    return false;
+  }
+
+  /** true si se puede cambiar de pestaña: no hay nada sin guardar, o lo
+   * hay y el club ha dicho que le da igual. */
+  function puedeSalir(): boolean {
+    if (!haySinGuardar()) return true;
+    return window.confirm(
+      "Tienes cambios sin guardar en esta pestaña. Si sales ahora se pierden.",
+    );
+  }
+
   return (
     <div ref={contenedor} className="grid gap-6 lg:grid-cols-[200px_1fr]">
       <nav className="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
@@ -103,6 +154,7 @@ export function PanelTabs({
               type="button"
               disabled={bloqueada}
               onClick={() => {
+                if (!puedeSalir()) return;
                 // Cambiar el ancla es lo que abre la pestaña, porque el
                 // ancla es la única fuente de la verdad aquí.
                 window.location.hash = pestana.id;

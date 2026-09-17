@@ -109,7 +109,7 @@ export default async function Home() {
 
       {/* El hueco de abajo es para el botón fijo del móvil, que si no
           taparía la última línea de la página. */}
-      <main className="flex-1 pb-24 sm:pb-0">
+      <main id="contenido" className="flex-1 pb-24 sm:pb-0">
         {/* ============ HERO ============ */}
         <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-zinc-50 to-white px-4 pb-20 pt-10 sm:px-6 sm:pb-28 sm:pt-16">
           <div

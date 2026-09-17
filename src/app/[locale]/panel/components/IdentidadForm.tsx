@@ -146,7 +146,7 @@ export function IdentidadForm({
                   });
                 }
               }}
-              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
+              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
             />{t("confirmoQueLasFotos")}</label>
 
           <div className="flex flex-wrap gap-3">
@@ -385,7 +385,7 @@ export function IdentidadForm({
               type="checkbox"
               name="contactPublicConsent"
               defaultChecked={perfil?.contactPublicConsent ?? true}
-              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
+              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
             />
             <span>
               <span className="font-medium text-zinc-900">

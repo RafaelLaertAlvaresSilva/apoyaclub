@@ -6,7 +6,8 @@ import { useFormStatus } from "react-dom";
 type Resultado = { error: string; ok?: false } | { ok: true } | null;
 
 /**
- * Borrar algo en dos toques, y enterarse si no se pudo.
+ * Hacer algo que no tiene vuelta atrás, en dos toques, y enterarse si
+ * no se pudo.
  *
  * Antes esto era un botón rojo suelto pegado a "Editar" y a las flechas
  * de ordenar. Un toque y el patrocinador desaparecía: sin preguntar,
@@ -24,24 +25,34 @@ type Resultado = { error: string; ok?: false } | { ok: true } | null;
  * nada, y concluía que la web estaba rota. El motivo real tiene
  * solución en diez segundos si alguien lo cuenta.
  */
-export function BorrarConConfirmacion({
+export function AccionConConfirmacion({
   accion,
   id,
   nombre,
   etiqueta = "Eliminar",
+  pregunta = "¿Borrar",
+  confirmar = "Sí, borrar",
+  enCurso = "Borrando…",
   clases = "rounded-lg px-2.5 py-1.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50",
 }: {
-  /** La Server Action que borra. Recibe el `id` en el FormData. */
-  accion: (formData: FormData) => Promise<Resultado>;
+  /** La Server Action. Recibe el `id` en el FormData. Puede no devolver
+   * nada: las que redirigen con su propio aviso (las de admin) no
+   * tienen a dónde volver a contarlo. */
+  accion: (formData: FormData) => Promise<Resultado | void>;
   id: string;
   /** Lo que se va a borrar, con las palabras del club: "Ferretería Ramírez". */
   nombre: string;
   etiqueta?: string;
+  /** Cómo se pregunta. Se completa con el nombre y un "?": "¿Suspender
+   * a" + "Club Ejemplo" + "?". */
+  pregunta?: string;
+  confirmar?: string;
+  enCurso?: string;
   clases?: string;
 }) {
   const [preguntando, setPreguntando] = useState(false);
   const [estado, enviar] = useActionState<Resultado, FormData>(
-    async (_previo, formData) => accion(formData),
+    async (_previo, formData) => (await accion(formData)) ?? null,
     null,
   );
   const botonNo = useRef<HTMLButtonElement>(null);
@@ -77,10 +88,10 @@ export function BorrarConConfirmacion({
     >
       <input type="hidden" name="id" value={id} />
       <p className="text-xs text-red-900">
-        ¿Borrar <strong className="font-semibold">{nombre}</strong>?
+        {pregunta} <strong className="font-semibold">{nombre}</strong>?
       </p>
       <div className="mt-1 flex items-center gap-1">
-        <BotonSi />
+        <BotonSi texto={confirmar} enCurso={enCurso} />
         <button
           ref={botonNo}
           type="button"
@@ -94,7 +105,7 @@ export function BorrarConConfirmacion({
   );
 }
 
-function BotonSi() {
+function BotonSi({ texto, enCurso }: { texto: string; enCurso: string }) {
   const { pending } = useFormStatus();
 
   return (
@@ -103,7 +114,7 @@ function BotonSi() {
       disabled={pending}
       className="rounded bg-red-600 px-2.5 py-1 text-xs font-semibold text-white transition-colors hover:bg-red-700 disabled:opacity-60"
     >
-      {pending ? "Borrando…" : "Sí, borrar"}
+      {pending ? enCurso : texto}
     </button>
   );
 }

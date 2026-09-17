@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useActionState, useState, useTransition } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
-import { BorrarConConfirmacion } from "@/components/BorrarConConfirmacion";
+import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { etiquetaEquipo } from "@/lib/opportunities";
 import type { ClubTeam } from "@/lib/types";
@@ -176,7 +176,7 @@ function FilaEquipo({
         {editando && <EditorDeEquipo equipo={equipo} />}
       </div>
 
-      <BorrarConConfirmacion
+      <AccionConConfirmacion
         accion={eliminarEquipo}
         id={equipo.id}
         nombre={etiquetaEquipo(equipo) ?? equipo.sport}

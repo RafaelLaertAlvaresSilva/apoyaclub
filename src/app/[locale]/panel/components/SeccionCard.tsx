@@ -66,6 +66,6 @@ export function Campo({
 }
 
 export const clasesInput =
-  "w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500";
+  "w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-brand-teal-dark focus:outline-none focus:ring-1 focus:ring-brand-teal-dark";
 
 export const clasesTextarea = `${clasesInput} min-h-24 resize-y`;

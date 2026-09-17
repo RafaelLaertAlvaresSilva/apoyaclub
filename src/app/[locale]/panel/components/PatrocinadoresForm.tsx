@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useActionState, useState } from "react";
-import { BorrarConConfirmacion } from "@/components/BorrarConConfirmacion";
+import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
@@ -148,7 +148,7 @@ function FilaPatrocinador({
           >
             {editando ? "Cerrar" : "Editar"}
           </button>
-          <BorrarConConfirmacion
+          <AccionConConfirmacion
             accion={eliminarPatrocinador}
             id={patrocinador.id}
             nombre={patrocinador.name}
@@ -217,7 +217,7 @@ function AvisoAlPatrocinador({ patrocinador }: { patrocinador: ClubSponsor }) {
         <input
           type="checkbox"
           name="confirmaRelacion"
-          className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
+          className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
         />
         <span>
           Confirmo que esta empresa colabora con mi club y que tengo relación con esa dirección
@@ -329,7 +329,7 @@ function CamposPatrocinador({
             <input
               type="checkbox"
               name="noAvisar"
-              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
+              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
             />
             <span>
               No enviar el correo a esta empresa

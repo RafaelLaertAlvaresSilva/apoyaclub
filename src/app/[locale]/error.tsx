@@ -34,7 +34,7 @@ export default function ErrorEnLaPagina({
   }, [error]);
 
   return (
-    <main className="flex flex-1 flex-col items-center justify-center bg-zinc-50 px-6 py-24 text-center">
+    <main id="contenido" className="flex flex-1 flex-col items-center justify-center bg-zinc-50 px-6 py-24 text-center">
       <p className="text-sm font-medium text-brand-teal-dark">{t("algoHaFallado")}</p>
       <h1 className="mt-2 text-2xl font-semibold text-zinc-900 sm:text-3xl">{t("noHemosPodidoCargar")}</h1>
       <p className="mt-3 max-w-md text-zinc-600">
