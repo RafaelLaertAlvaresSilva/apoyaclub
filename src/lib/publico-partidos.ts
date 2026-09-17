@@ -136,18 +136,25 @@ export function agruparPorTemporada(partidos: Partido[]): TemporadaDePartidos[] 
 /**
  * La media que se le propone al club llevarse a su ficha.
  *
- * Es la de los partidos en casa de la temporada más reciente que tenga
- * registrada, y si en esa temporada no jugó ninguno en casa, la de
- * todos sus partidos. Se prefiere lo reciente a lo abundante: un club
- * que ha subido de categoría no quiere enseñar la media de hace tres
- * años porque haya más partidos apuntados.
+ * Solo partidos en casa, y de la temporada más reciente que tenga
+ * registrada. Se prefiere lo reciente a lo abundante: un club que ha
+ * subido de categoría no quiere enseñar la media de hace tres años
+ * porque haya más partidos apuntados.
+ *
+ * Y solo de casa, sin excepción. Antes, si en esa temporada no había
+ * ninguno en casa, se caía a la media de TODOS los partidos y ese
+ * número se publicaba en la ficha como "Asistencia media". En un
+ * partido fuera el público es del rival: un club modesto que juega en
+ * campos grandes acababa publicando una media que no es suya, y la
+ * empresa que va al pabellón se encuentra la cuarta parte de gente.
+ * Sin partidos en casa no hay cifra que dar, y es mejor no dar ninguna
+ * que dar una que no se sostiene.
  */
 export function mediaParaLaFicha(partidos: Partido[]): number | null {
   const temporadas = agruparPorTemporada(partidos);
   if (temporadas.length === 0) return null;
 
-  const ultima = temporadas[0];
-  return ultima.resumenEnCasa.media ?? ultima.resumen.media;
+  return temporadas[0].resumenEnCasa.media;
 }
 
 /** "12 de mayo de 2026" a partir de "2026-05-12", sin pasar por Date. */

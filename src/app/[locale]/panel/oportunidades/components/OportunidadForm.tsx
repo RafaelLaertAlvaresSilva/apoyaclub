@@ -215,17 +215,27 @@ export function OportunidadForm({
           />
         </Campo>
 
-        <Campo etiqueta="Valor (€) *" ayuda={t("loFijasTuLa")}>
-          <input
-            name="value"
-            type="number"
-            min={0}
-            step="0.01"
-            required
-            defaultValue={valoresIniciales?.value ?? ""}
-            className={clasesInput}
-          />
-        </Campo>
+        {/* El precio, solo cuando el club ofrece patrocinio.
+            *
+            * Si lo que publica es que NECESITA un fisio o un autobús,
+            * no hay precio que poner: lo que se ofrece es el servicio
+            * en sí, y a cambio va visibilidad. Pedirle un importe
+            * obligatorio dejaba al club mirando una casilla que no sabe
+            * rellenar, y lo que acababa escribiendo era un cero que
+            * luego salía publicado. */}
+        {!esNecesidad && (
+          <Campo etiqueta="Valor (€) *" ayuda={t("loFijasTuLa")}>
+            <input
+              name="value"
+              type="number"
+              min={0}
+              step="0.01"
+              required
+              defaultValue={valoresIniciales?.value ?? ""}
+              className={clasesInput}
+            />
+          </Campo>
+        )}
       </div>
 
       {/* A partir de aquí, todo opcional.

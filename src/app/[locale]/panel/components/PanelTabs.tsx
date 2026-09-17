@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { ClubProfile, ClubTeam } from "@/lib/types";
 import { AudienciaForm } from "./AudienciaForm";
 import { CanteraForm } from "./CanteraForm";
@@ -66,8 +66,40 @@ export function PanelTabs({
   // absolutamente nada.
   const ancla = useSyncExternalStore(suscribirseAlAncla, leerAncla, () => "");
 
-  const solicitada = IDS_PESTANA.has(ancla) ? (ancla as Pestana) : "identidad";
+  /**
+   * La pestaña en la que estabas, por si el ancla desaparece.
+   *
+   * Pasaba cada vez que se guardaba algo fuera de Identidad —subir la
+   * foto de un equipo, guardar Historia, Cantera, Instalaciones…—: al
+   * terminar, el panel te devolvía a "Identidad del club" y había que
+   * volver a buscar dónde estabas. Aquí abajo se arregla la causa; esto
+   * es la red por si algún día vuelve a pasar por otro motivo.
+   */
+  const [ultimaPestana, setUltimaPestana] = useState<Pestana>("identidad");
+
+  const esValida = IDS_PESTANA.has(ancla);
+  if (esValida && ancla !== ultimaPestana) setUltimaPestana(ancla as Pestana);
+
+  const solicitada = esValida ? (ancla as Pestana) : ultimaPestana;
   const pestanaActiva: Pestana = solicitada !== "identidad" && !perfilCreado ? "identidad" : solicitada;
+
+  /**
+   * La causa: Next no escucha los cambios de ancla.
+   *
+   * La pestaña abierta vive en el ancla de la URL, pero Next se guarda
+   * por su cuenta en qué dirección cree que estamos, y ahí nunca llegó
+   * el `#equipos`. Al terminar cualquier acción de guardado, vuelve a
+   * la dirección que tenía apuntada —sin ancla— y el panel se queda sin
+   * saber qué pestaña abrir.
+   *
+   * `replaceState` con la dirección que ya hay puesta no navega a
+   * ningún sitio ni añade nada al historial: solo le dice a Next dónde
+   * estamos de verdad.
+   */
+  useEffect(() => {
+    if (!ancla) return;
+    window.history.replaceState(null, "", window.location.href);
+  }, [ancla]);
 
   // Al llegar desde uno de esos enlaces, la sección queda más abajo de
   // lo que se ve, así que hay que bajar hasta ella y dejar el cursor

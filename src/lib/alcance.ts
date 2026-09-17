@@ -446,12 +446,20 @@ function compararTemporadas(partidos: Partido[]): ComparacionDeTemporadas | null
 
   const [actual, anterior] = temporadas;
 
-  const mediaDe = (t: (typeof temporadas)[number]) =>
-    t.resumenEnCasa.partidos >= PARTIDOS_PARA_COMPARAR
-      ? t.resumenEnCasa.media
-      : t.resumen.partidos >= PARTIDOS_PARA_COMPARAR
-        ? t.resumen.media
-        : null;
+  // El mismo criterio en las dos temporadas, o no se comparan.
+  //
+  // Antes cada una elegía por su cuenta entre "solo en casa" y "todos
+  // los partidos" según cuántos tuviera apuntados, así que podía salir
+  // la media en casa de este año contra la de casa y fuera del pasado.
+  // Eso no es una comparación: es un porcentaje inventado, y encima con
+  // pinta de dato.
+  const enCasa = (t: (typeof temporadas)[number]) =>
+    t.resumenEnCasa.partidos >= PARTIDOS_PARA_COMPARAR ? t.resumenEnCasa.media : null;
+  const todos = (t: (typeof temporadas)[number]) =>
+    t.resumen.partidos >= PARTIDOS_PARA_COMPARAR ? t.resumen.media : null;
+
+  const soloEnCasa = enCasa(actual) != null && enCasa(anterior) != null;
+  const mediaDe = soloEnCasa ? enCasa : todos;
 
   const mediaActual = mediaDe(actual);
   const mediaAnterior = mediaDe(anterior);

@@ -25,8 +25,6 @@ import { IndiceDeSecciones } from "./components/IndiceDeSecciones";
 import { ListaConVerMas } from "./components/ListaConVerMas";
 import { RegistrarVisita } from "./components/RegistrarVisita";
 import { SolicitarContactoBoton } from "./components/SolicitarContactoBoton";
-import { ETIQUETA_CATEGORIA_SERVICIO, obtenerServiciosDelClub } from "@/lib/service-needs";
-import { createPublicClient } from "@/lib/supabase/public";
 import { deportesDelClub, obtenerClubPublico } from "./data";
 
 export const revalidate = 60;
@@ -105,7 +103,6 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   // Servicios que el club busca (migración 0016): la puerta de entrada
   // de la empresa que no tiene presupuesto de patrocinio pero sí un
   // servicio que ofrecer.
-  const servicios = await obtenerServiciosDelClub(createPublicClient(), perfil.id);
 
   const deportes = deportesDelClub(equipos);
   const ubicacion = [perfil.city, perfil.province].filter(Boolean).join(", ");
@@ -351,22 +348,18 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   // bajo su título, el color ya no tiene que decirlo. Lo que separa una
   // columna de la otra a simple vista es el precio: a la izquierda lo
   // llevan todas, a la derecha ninguna.
-  if (servicios.length > 0 || loQueNecesita.length > 0) {
+  if (loQueNecesita.length > 0) {
     secciones.push({
       id: "servicios",
       etiqueta: t("servicios.titulo"),
       grupo: "ofrece-y-busca",
       nodo: (
-        <section id="servicios" className="flex scroll-mt-24 flex-col gap-4 pt-8">
-        {loQueNecesita.length > 0 && (
-            <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 sm:p-8">
+        <section id="servicios" className="scroll-mt-24 pt-8">
+          <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 sm:p-8">
             <h2 className="text-xl font-semibold text-brand-teal-dark sm:text-2xl">
-              Lo que necesitamos
+              {t("servicios.titulo")}
             </h2>
-            <p className="mt-2 text-sm text-zinc-700">
-              Servicios y productos que le hacen falta al club. A cambio, la misma visibilidad
-              que cualquier patrocinador.
-            </p>
+            <p className="mt-2 text-sm text-zinc-700">{t("servicios.descripcion")}</p>
             <div className="mt-4">
             <ListaConVerMas
               clasesLista={REJILLA_TARJETAS}
@@ -420,49 +413,6 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             </ListaConVerMas>
             </div>
           </div>
-        )}
-
-          {servicios.length > 0 && (
-            <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 sm:p-8">
-              <h2 className="text-xl font-semibold text-brand-teal-dark sm:text-2xl">
-                {t("servicios.titulo")}
-              </h2>
-              <p className="mt-2 text-sm text-zinc-700">{t("servicios.descripcion")}</p>
-
-              <div className="mt-4">
-                <ListaConVerMas
-                  clasesLista={REJILLA_TARJETAS}
-                  visiblesEnOrdenador={VISIBLES_EN_ORDENADOR}
-                  textoVerMas={t("verMas", { cuantos: cuantasSobran(servicios.length) })}
-                  tono="verde"
-                >
-                  {servicios.map((servicio) => (
-                    <div
-                      key={servicio.id}
-                      className="rounded-xl border border-teal-100 bg-white p-4"
-                    >
-                      <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
-                        {ETIQUETA_CATEGORIA_SERVICIO[servicio.category]}
-                      </p>
-                      <p className="mt-1 font-medium text-zinc-900">{servicio.title}</p>
-                      {servicio.description && (
-                        <p className="mt-1 text-sm text-zinc-600">{servicio.description}</p>
-                      )}
-                      <div className="mt-3">
-                        <SolicitarContactoBoton
-                          clubId={perfil.id}
-                          clubName={perfil.name}
-                          variante="primaria"
-                        >
-                          {t("oportunidades.solicitar")}
-                        </SolicitarContactoBoton>
-                      </div>
-                    </div>
-                  ))}
-                </ListaConVerMas>
-              </div>
-            </div>
-          )}
         </section>
       ),
     });

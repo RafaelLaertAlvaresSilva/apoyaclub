@@ -196,11 +196,15 @@ export async function crearOportunidad(
   const opportunityType = leerTipo(formData);
   if (!opportunityType) return { error: "Elige un tipo de oportunidad." };
 
-  const value = leerValor(formData);
-  if (value === null) return { error: "Indica un valor válido (0 o más)." };
-
   const plazas = leerPlazas(formData);
   const necesidad = leerNecesidad(formData);
+
+  // Lo que el club NECESITA no lleva precio: lo que ofrece es el
+  // servicio, y a cambio va visibilidad. El formulario ni siquiera
+  // enseña la casilla en ese caso, así que aquí no puede exigirse.
+  const value = necesidad.esNecesidad ? 0 : leerValor(formData);
+  if (value === null) return { error: "Indica un valor válido (0 o más)." };
+
   if (necesidad.esNecesidad && !necesidad.categoria) {
     return { error: "Elige qué servicio o producto necesitas." };
   }
@@ -250,12 +254,16 @@ export async function actualizarOportunidad(
   const opportunityType = leerTipo(formData);
   if (!opportunityType) return { error: "Elige un tipo de oportunidad." };
 
-  const value = leerValor(formData);
-  if (value === null) return { error: "Indica un valor válido (0 o más)." };
-
   const status = leerEstado(formData) ?? "available";
   const plazas = leerPlazas(formData);
   const necesidad = leerNecesidad(formData);
+
+  // Lo que el club NECESITA no lleva precio: lo que ofrece es el
+  // servicio, y a cambio va visibilidad. El formulario ni siquiera
+  // enseña la casilla en ese caso, así que aquí no puede exigirse.
+  const value = necesidad.esNecesidad ? 0 : leerValor(formData);
+  if (value === null) return { error: "Indica un valor válido (0 o más)." };
+
   if (necesidad.esNecesidad && !necesidad.categoria) {
     return { error: "Elige qué servicio o producto necesitas." };
   }

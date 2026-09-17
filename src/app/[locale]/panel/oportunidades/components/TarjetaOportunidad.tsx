@@ -178,34 +178,6 @@ export function TarjetaOportunidad({
           </form>
         )}
 
-        {/* El cartel para redes. Es un enlace y no un formulario porque
-            lo que devuelve es un PNG: el navegador lo descarga solo, y
-            en el móvil cae directo en la galería. */}
-        {!oportunidad.archivedAt && (
-          <a
-            href={`/es/panel/oportunidades/cartel?id=${oportunidad.id}`}
-            download
-            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-teal-700 transition-colors hover:bg-teal-50"
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="5" />
-              <circle cx="12" cy="12" r="4" />
-              <path d="M17.5 6.5h.01" />
-            </svg>
-            Cartel para redes
-          </a>
-        )}
-
         <AccionConConfirmacion
           accion={eliminarOportunidad}
           id={oportunidad.id}

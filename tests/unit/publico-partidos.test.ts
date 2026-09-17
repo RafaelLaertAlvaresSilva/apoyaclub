@@ -115,13 +115,20 @@ describe("mediaParaLaFicha", () => {
     expect(media).toBe(250);
   });
 
-  it("cae a todos los partidos si en la última temporada no jugó en casa", () => {
+  it("no da ninguna media si en la última temporada no jugó en casa", () => {
+    // Antes caía a la media de todos los partidos, incluidos los de
+    // fuera. Y esa cifra se publica en la ficha como "Asistencia
+    // media": en un partido fuera el público es del rival, así que un
+    // club modesto que juega en campos grandes acababa anunciando una
+    // media que no era suya, y la empresa que se acercaba al pabellón
+    // se encontraba la cuarta parte de gente. Sin partidos en casa no
+    // hay cifra que dar.
     const media = mediaParaLaFicha([
       partido({ fecha: "2026-09-01", publico: 400, enCasa: false }),
       partido({ fecha: "2026-09-08", publico: 200, enCasa: false }),
     ]);
 
-    expect(media).toBe(300);
+    expect(media).toBeNull();
   });
 });
 

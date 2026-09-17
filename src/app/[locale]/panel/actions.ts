@@ -9,8 +9,6 @@ import { consumirLimite } from "@/lib/rate-limit";
 import { SITE_URL } from "@/lib/site";
 import { routing } from "@/i18n/routing";
 import { CONSENT_TYPES, LEGAL_VERSIONS } from "@/lib/legal";
-import { getTranslations } from "next-intl/server";
-import { esCategoriaValida } from "@/lib/service-needs";
 import { createClient } from "@/lib/supabase/server";
 import { NIVELES_PATROCINADOR } from "@/lib/types";
 import type { Milestone, Role, SponsorTier, TeamLevel } from "@/lib/types";
@@ -1159,84 +1157,15 @@ export async function eliminarPatrocinador(formData: FormData): Promise<EstadoGu
 }
 
 // ---------------------------------------------------------------------
-// Servicios que el club necesita (migración 0016)
+// Lo que el club necesita
 // ---------------------------------------------------------------------
-
-/**
- * Alta de un servicio que el club busca. Es la otra dirección de la
- * plataforma: no lo que ofrece, sino lo que le hace falta, que es por
- * donde entra la empresa pequeña sin presupuesto de patrocinio.
- */
-export async function guardarServicio(
-  _estadoPrevio: EstadoGuardado,
-  formData: FormData,
-): Promise<EstadoGuardado> {
-  const contexto = await obtenerClubActual();
-  if ("error" in contexto) return { error: contexto.error };
-  const { supabase, user } = contexto;
-
-  const t = await getTranslations("panel.servicios");
-
-  const title = String(formData.get("title") ?? "").trim();
-  const categoria = String(formData.get("category") ?? "");
-
-  if (!title) return { error: t("errorTitulo") };
-  if (!esCategoriaValida(categoria)) return { error: t("errorCategoria") };
-
-  const descripcion = String(formData.get("description") ?? "").trim();
-
-  const { error } = await supabase.from("club_service_needs").insert({
-    club_id: user.id,
-    category: categoria,
-    title,
-    description: descripcion || null,
-  });
-
-  if (error) return { error: t("errorGuardar") };
-
-  revalidatePath("/panel");
-  return { ok: true };
-}
-
-/** Marca un servicio como cubierto (o lo reabre) sin borrarlo. */
-export async function cambiarEstadoServicio(formData: FormData): Promise<void> {
-  const contexto = await obtenerClubActual();
-  if ("error" in contexto) return;
-  const { supabase, user } = contexto;
-
-  const id = String(formData.get("id") ?? "");
-  const estado = String(formData.get("status") ?? "");
-  if (!id || (estado !== "open" && estado !== "covered")) return;
-
-  await supabase
-    .from("club_service_needs")
-    .update({ status: estado })
-    .eq("id", id)
-    .eq("club_id", user.id);
-
-  revalidatePath("/panel");
-}
-
-export async function eliminarServicio(formData: FormData): Promise<EstadoGuardado> {
-  const contexto = await obtenerClubActual();
-  if ("error" in contexto) return { error: contexto.error };
-  const { supabase, user } = contexto;
-
-  const id = String(formData.get("id") ?? "");
-  if (!id) return { error: "No se ha podido identificar qué borrar." };
-
-  const { error } = await supabase
-    .from("club_service_needs")
-    .delete()
-    .eq("id", id)
-    .eq("club_id", user.id);
-
-  if (error) return fallo("eliminarServicio", error, "No se ha podido borrar. Inténtalo de nuevo.");
-
-
-  revalidatePath("/panel");
-  return { ok: true };
-}
+//
+// Aquí vivían `guardarServicio`, `cambiarEstadoServicio` y
+// `eliminarServicio`, que escribían en `club_service_needs`
+// (migración 0016). Se retiraron con la migración 0043: lo que el club
+// necesita es ahora una oportunidad con `is_need = true`, que es la
+// única forma que el buscador indexa. Antes había dos formularios para
+// decir lo mismo y solo uno de los dos servía para que te encontraran.
 
 /**
  * La línea que se guarda en `top_category` a partir de las dos

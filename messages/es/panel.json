@@ -236,24 +236,6 @@
     "seCancelaDeInmediato": "Se cancela de inmediato cualquier suscripción activa en Stripe.",
     "tuPaginaPublicaDeja": "Tu página pública deja de existir. Esta acción no se puede deshacer."
   },
-  "servicios": {
-    "titulo": "Servicios que necesitamos",
-    "descripcion": "Lo que le hace falta a tu club: fisioterapia, transporte, comidas de equipo, imprenta… Muchas empresas pequeñas no tienen presupuesto de patrocinio, pero sí un servicio que ofrecer a cambio de visibilidad.",
-    "categoria": "Tipo de servicio",
-    "categoriaAyuda": "Ayuda a que la empresa adecuada te encuentre.",
-    "queNecesitas": "Qué necesitas *",
-    "queNecesitasAyuda": "Ejemplos: \"Fisioterapeuta para los partidos de casa\", \"Autobús para los desplazamientos de la cantera\".",
-    "detalle": "Detalle",
-    "detalleAyuda": "Con qué frecuencia, para cuántas personas, en qué fechas. Cuanto más claro, más fácil es que alguien diga que sí.",
-    "anadir": "Añadir servicio",
-    "guardado": "Guardado.",
-    "marcarCubierto": "Ya lo tengo cubierto",
-    "reabrir": "Volver a buscarlo",
-    "eliminar": "Eliminar",
-    "errorTitulo": "Indica qué necesitas.",
-    "errorCategoria": "Elige un tipo de servicio.",
-    "errorGuardar": "No se ha podido guardar. Inténtalo de nuevo."
-  },
   "solicitudes": {
     "panelDelClub": "Panel del club",
     "solicitudesDeContacto": "Solicitudes de contacto",

@@ -99,15 +99,21 @@ export function RegistroDePublico({
                   : "Aún no hay partidos en casa apuntados"
               }
             />
+            {/* El mejor, de los de casa. Salía de todos los partidos, así
+                que un desplazamiento con 2.000 personas del rival podía
+                figurar como el mejor partido del club: es gente que no
+                iba a verte a ti. */}
             <Dato
               numero={
-                ultima.resumen.mejor ? formatoNumero.format(ultima.resumen.mejor.publico) : "—"
+                ultima.resumenEnCasa.mejor
+                  ? formatoNumero.format(ultima.resumenEnCasa.mejor.publico)
+                  : "—"
               }
-              etiqueta="Mejor partido"
+              etiqueta="Mejor partido en casa"
               detalle={
-                ultima.resumen.mejor
-                  ? `${ultima.resumen.mejor.rival}, ${fechaLarga(ultima.resumen.mejor.fecha)}`
-                  : ""
+                ultima.resumenEnCasa.mejor
+                  ? `${ultima.resumenEnCasa.mejor.rival}, ${fechaLarga(ultima.resumenEnCasa.mejor.fecha)}`
+                  : "Aún no hay partidos en casa apuntados"
               }
             />
           </div>

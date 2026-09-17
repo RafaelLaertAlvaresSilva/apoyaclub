@@ -3,22 +3,27 @@ import { getTranslations } from "next-intl/server";
 import { Header } from "@/components/Header";
 import { Link } from "@/i18n/navigation";
 import {
-  CATEGORIAS_SERVICIO,
-  ETIQUETA_CATEGORIA_SERVICIO,
-  buscarServicios,
-  esCategoriaValida,
-} from "@/lib/service-needs";
-import { obtenerProvinciasDisponibles } from "@/lib/search";
-import { createPublicClient } from "@/lib/supabase/public";
+  CATEGORIAS_NECESIDAD,
+  ETIQUETA_CATEGORIA_NECESIDAD,
+  leerCategoriaNecesidad,
+} from "@/lib/opportunities";
+import { buscarOportunidades, obtenerProvinciasDisponibles } from "@/lib/search";
 
 /**
- * Lo que los clubes necesitan, para una empresa (migración 0016).
+ * Lo que los clubes necesitan, para una empresa.
  *
  * El buscador de patrocinio va de dinero: la empresa paga y el club le da
  * visibilidad. Esta página va de lo contrario, y es la puerta de entrada
  * de la empresa pequeña: una clínica de fisioterapia, una furgoneta, una
  * imprenta. No hay presupuesto de patrocinio de por medio, pero sí un
  * acuerdo posible.
+ *
+ * Bebe de las mismas oportunidades que el buscador, filtrando las
+ * marcadas como necesidad (migración 0043). Antes leía de una tabla
+ * aparte, `club_service_needs`, que el buscador no consultaba: un club
+ * podía apuntar lo que necesita en el sitio donde nadie lo encontraba.
+ * Ahora hay un solo sitio, y esta página es la versión sin filtros ni
+ * jerga del mismo listado.
  */
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -44,14 +49,17 @@ export default async function PaginaServicios({
   const t = await getTranslations("servicios");
 
   const categoriaParam = unParametro(params.categoria);
-  const categoria = categoriaParam && esCategoriaValida(categoriaParam) ? categoriaParam : undefined;
+  const categoria = categoriaParam ? (leerCategoriaNecesidad(categoriaParam) ?? undefined) : undefined;
   const provincia = unParametro(params.provincia);
 
-  const supabase = createPublicClient();
-  const [servicios, provincias] = await Promise.all([
-    buscarServicios(supabase, { categoria, provincia }),
+  const [pagina, provincias] = await Promise.all([
+    buscarOportunidades(
+      { busca: "necesidades", necesidad: categoria, provincia, orden: "novedad" },
+      { offset: 0, limite: 100 },
+    ),
     obtenerProvinciasDisponibles(),
   ]);
+  const servicios = pagina.resultados;
 
   return (
     <div className="flex flex-1 flex-col bg-zinc-50">
@@ -78,7 +86,7 @@ export default async function PaginaServicios({
               className="rounded-lg border border-zinc-300 px-3 py-2 text-sm"
             >
               <option value="">{t("todasLasCategorias")}</option>
-              {CATEGORIAS_SERVICIO.map((opcion) => (
+              {CATEGORIAS_NECESIDAD.map((opcion) => (
                 <option key={opcion.id} value={opcion.id}>
                   {opcion.etiqueta}
                 </option>
@@ -122,10 +130,15 @@ export default async function PaginaServicios({
         ) : (
           <ul className="mt-6 grid gap-3 sm:grid-cols-2">
             {servicios.map((servicio) => (
-              <li key={servicio.id} className="flex flex-col gap-2 rounded-xl border border-zinc-200 bg-white p-4">
-                <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
-                  {ETIQUETA_CATEGORIA_SERVICIO[servicio.category]}
-                </p>
+              <li
+                key={servicio.opportunityId}
+                className="flex flex-col gap-2 rounded-xl border border-zinc-200 bg-white p-4"
+              >
+                {servicio.categoriaNecesidad && (
+                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
+                    {ETIQUETA_CATEGORIA_NECESIDAD[servicio.categoriaNecesidad]}
+                  </p>
+                )}
                 <p className="font-semibold text-zinc-900">{servicio.title}</p>
                 {servicio.description && (
                   <p className="text-sm text-zinc-600">{servicio.description}</p>

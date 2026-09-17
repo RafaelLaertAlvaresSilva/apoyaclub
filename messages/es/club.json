@@ -56,8 +56,8 @@
   },
   "pie": "Página de {club} en ApoyaClub — la plataforma que conecta clubes deportivos con empresas patrocinadoras.",
   "servicios": {
-    "titulo": "Servicios que buscamos",
-    "descripcion": "Cosas que el club necesita y que tu empresa quizá pueda cubrir, a cambio de visibilidad."
+    "titulo": "Lo que necesitamos",
+    "descripcion": "Servicios y productos que le hacen falta al club. A cambio, la misma visibilidad que cualquier patrocinador."
   },
   "verMas": "Ver {cuantos} más"
 }
