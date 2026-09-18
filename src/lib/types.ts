@@ -2,9 +2,10 @@ export type Role = "club" | "empresa" | "admin";
 
 export const RUTA_POR_ROL: Record<Role, string> = {
   club: "/panel",
-  // ApoyaClub ya no tiene cuentas de empresa (migración 0034): las que
-  // quedaran de antes no tienen panel al que ir, así que a la portada.
-  empresa: "/",
+  // Las cuentas de empresa volvieron con la migración 0046, ahora para
+  // publicar lo que la empresa ofrece. Buscar clubes y escribirles
+  // sigue sin necesitar cuenta.
+  empresa: "/empresa",
   // Fase 12: panel de administración interno.
   admin: "/admin",
 };

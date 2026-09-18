@@ -122,6 +122,18 @@ export default async function PaginaServicios({
           </Link>
         </form>
 
+        {/* La otra mitad (migración 0046): esta página enseña lo que
+            piden los clubes, y desde aquí la empresa puede decir lo que
+            ella pone. Es el momento en que ya ha visto que hay demanda
+            real de lo suyo. */}
+        <p className="mt-4 rounded-xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-900">
+          ¿Tu empresa puede cubrir algo de esto?{" "}
+          <Link href="/registro-empresa" className="font-medium underline">
+            Publica lo que ofreces
+          </Link>{" "}
+          y que te encuentren los clubes. Es gratis.
+        </p>
+
         {servicios.length === 0 ? (
           <div className="mt-6 rounded-xl border border-dashed border-zinc-300 bg-white p-8 text-center">
             <p className="font-medium text-zinc-900">{t("vacioTitulo")}</p>

@@ -19,6 +19,7 @@ import type { Role } from "@/lib/types";
  */
 export const AREAS_PRIVADAS: readonly (readonly [Role, string])[] = [
   ["club", "/panel"],
+  ["empresa", "/empresa"],
   ["admin", "/admin"],
 ] as const;
 

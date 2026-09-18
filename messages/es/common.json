@@ -8,14 +8,16 @@
       "comoFunciona": "Cómo funciona",
       "precios": "Precios",
       "crearPagina": "Crea la página de tu club",
-      "faq": "Preguntas frecuentes"
+      "faq": "Preguntas frecuentes",
+      "empresasQueAyudan": "Empresas que ayudan"
     },
     "empresas": {
       "titulo": "Para empresas",
       "buscarClubes": "Buscar clubes",
       "comoFunciona": "Cómo funciona",
       "accesoGratuito": "Acceso gratuito",
-      "queNecesitan": "Qué necesitan los clubes"
+      "queNecesitan": "Qué necesitan los clubes",
+      "publicarOferta": "Publicar lo que ofrezco"
     },
     "legalTitulo": "Legal",
     "enlaces": {

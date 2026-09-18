@@ -59,6 +59,16 @@ export async function Header() {
             <span className="hidden sm:inline">Buscar clubes</span>
           </Link>
 
+          {/* La otra dirección (migración 0046): a quién puede escribir
+              un club. En el móvil no cabe junto al botón principal, así
+              que ahí solo está en el pie. */}
+          <Link
+            href="/empresas"
+            className="hidden text-sm font-medium text-zinc-600 transition hover:text-brand-navy sm:inline"
+          >
+            Empresas
+          </Link>
+
           {accesoDirecto ? (
             <Button href={accesoDirecto.href} size="sm">
               {accesoDirecto.etiqueta}

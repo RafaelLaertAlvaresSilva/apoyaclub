@@ -1,0 +1,63 @@
+import type { Metadata } from "next";
+import { redirect } from "@/i18n/navigation";
+import { getLocale } from "next-intl/server";
+import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
+import { createClient } from "@/lib/supabase/server";
+import { EmpresaNav } from "../components/EmpresaNav";
+import { FichaForm } from "./FichaForm";
+
+export const metadata: Metadata = { title: "Mi ficha" };
+
+type FilaEmpresa = {
+  name: string | null;
+  sector: string | null;
+  city: string | null;
+  province: string | null;
+  website: string | null;
+  description: string | null;
+  open_to_sponsor: boolean;
+};
+
+export default async function FichaEmpresaPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    const locale = await getLocale();
+    return redirect({ href: "/login", locale });
+  }
+
+  const { data: empresa } = await supabase
+    .from("companies")
+    .select("name, sector, city, province, website, description, open_to_sponsor")
+    .eq("id", user.id)
+    .maybeSingle<FilaEmpresa>();
+
+  return (
+    <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-medium text-teal-700">Panel de empresa</p>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Mi ficha</h1>
+        </div>
+        <CerrarSesionBoton />
+      </div>
+
+      <EmpresaNav activo="ficha" />
+
+      <FichaForm
+        datos={{
+          nombre: empresa?.name ?? "",
+          sector: empresa?.sector ?? "",
+          localidad: empresa?.city ?? "",
+          provincia: empresa?.province ?? "",
+          web: empresa?.website ?? "",
+          descripcion: empresa?.description ?? "",
+          enElDirectorio: empresa?.open_to_sponsor ?? false,
+        }}
+      />
+    </div>
+  );
+}

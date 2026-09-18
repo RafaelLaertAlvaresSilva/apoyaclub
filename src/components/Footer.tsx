@@ -5,6 +5,9 @@ const ENLACES_CLUBES = [
   { href: "/#como-funciona", clave: "comoFunciona" },
   { href: "/#precio", clave: "precios" },
   { href: "/registro-club", clave: "crearPagina" },
+  // Desde el lado del club, el directorio de empresas es a quién
+  // escribir (migración 0046).
+  { href: "/empresas", clave: "empresasQueAyudan" },
   { href: "/#faq", clave: "faq" },
 ] as const;
 
@@ -16,6 +19,7 @@ const ENLACES_EMPRESAS = [
   { href: "/servicios", clave: "queNecesitan" },
   { href: "/#como-funciona", clave: "comoFunciona" },
   { href: "/#empresas", clave: "accesoGratuito" },
+  { href: "/registro-empresa", clave: "publicarOferta" },
 ] as const;
 
 const ENLACES_LEGALES = [
