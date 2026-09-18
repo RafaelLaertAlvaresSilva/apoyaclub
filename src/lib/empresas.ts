@@ -235,3 +235,32 @@ export async function provinciasConOfertas(supabase: SupabaseClient): Promise<st
     (a, b) => a.localeCompare(b, "es"),
   );
 }
+
+/**
+ * Cómo se contacta con una empresa.
+ *
+ * Vive en `companies` (migración 0047) y nunca en la vista pública: se
+ * sirve detrás de un clic, igual que el del club, para que no lo
+ * recojan los robots de spam.
+ */
+export type ContactoEmpresa = {
+  nombre: string | null;
+  email: string | null;
+  telefono: string | null;
+  /** Si no, no se enseña a nadie. */
+  publico: boolean;
+};
+
+/**
+ * Una empresa puede publicar cuando se puede contactar con ella.
+ *
+ * Con el correo o con el teléfono basta; los dos es mejor. Sin ninguno
+ * de los dos, la oferta es un cartel con el teléfono arrancado: el club
+ * la lee, le encaja y no tiene a dónde ir.
+ */
+export function sePuedeContactar(contacto: {
+  email: string | null;
+  telefono: string | null;
+}): boolean {
+  return !!contacto.email?.trim() || !!contacto.telefono?.trim();
+}

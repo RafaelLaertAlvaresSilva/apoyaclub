@@ -3,7 +3,9 @@
 import { useActionState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
+import type { ContactoEmpresa } from "@/lib/empresas";
 import { Campo, SeccionCard, clasesInput, clasesTextarea } from "../../panel/components/SeccionCard";
+import { CamposDeContacto } from "../components/CamposDeContacto";
 import { guardarFichaEmpresa } from "../actions";
 
 export type DatosFicha = {
@@ -14,6 +16,7 @@ export type DatosFicha = {
   web: string;
   descripcion: string;
   enElDirectorio: boolean;
+  contacto: ContactoEmpresa;
 };
 
 /**
@@ -96,6 +99,13 @@ export function FichaForm({ datos }: { datos: DatosFicha }) {
             />
           </Campo>
         </div>
+      </SeccionCard>
+
+      <SeccionCard
+        titulo="Contacto"
+        descripcion="Cómo te escriben los clubes. Es lo mismo que pide el formulario de publicar."
+      >
+        <CamposDeContacto contacto={datos.contacto} />
       </SeccionCard>
 
       <SeccionCard

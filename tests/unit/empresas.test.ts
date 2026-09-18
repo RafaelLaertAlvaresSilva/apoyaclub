@@ -9,6 +9,7 @@ import {
   leerEstadoOferta,
   leerTipoDeOferta,
   resumenDeOferta,
+  sePuedeContactar,
 } from "@/lib/empresas";
 import { CATEGORIAS_NECESIDAD } from "@/lib/opportunities";
 import { AREAS_PRIVADAS, areaPrivadaDe } from "@/lib/areas-privadas";
@@ -154,5 +155,67 @@ describe("empresas y clubes hablan el mismo idioma", () => {
     );
     expect(formulario).toContain("CATEGORIAS_NECESIDAD");
     expect(CATEGORIAS_NECESIDAD.length).toBeGreaterThan(10);
+  });
+});
+
+/**
+ * El agujero que encontró el primer uso real: una empresa publicaba su
+ * oferta, el club entraba en su ficha, le encajaba… y no había teléfono
+ * ni correo por ninguna parte. La oferta era un cartel con el teléfono
+ * arrancado.
+ */
+describe("se puede contactar con la empresa", () => {
+  it("con el correo basta", () => {
+    expect(sePuedeContactar({ email: "hola@empresa.es", telefono: null })).toBe(true);
+  });
+
+  it("con el teléfono basta", () => {
+    expect(sePuedeContactar({ email: null, telefono: "600000000" })).toBe(true);
+  });
+
+  it("sin ninguno de los dos, no", () => {
+    expect(sePuedeContactar({ email: null, telefono: null })).toBe(false);
+  });
+
+  it("los espacios en blanco no cuentan como contacto", () => {
+    expect(sePuedeContactar({ email: "   ", telefono: "  " })).toBe(false);
+  });
+
+  it("no se puede publicar sin forma de contacto", () => {
+    const acciones = readFileSync(join(RAIZ, "src/app/[locale]/empresa/actions.ts"), "utf8");
+    // El aviso al publicar y el mismo al guardar la ficha: si alguna de
+    // las dos puertas se quedara abierta, volvería el callejón sin
+    // salida por ahí.
+    expect(acciones).toContain("sePuedeContactar");
+    expect(acciones.match(/leerContacto\(formData\)/g)?.length).toBe(3);
+  });
+
+  /**
+   * El correo y el teléfono se sirven detrás de un clic, nunca escritos
+   * en la página: de ahí es de donde los recogen los robots de spam.
+   * La vista pública no puede llegar a tenerlos.
+   */
+  it("el contacto no entra en la vista pública", () => {
+    const migracion = readFileSync(
+      join(RAIZ, "supabase/migrations/0046_lo_que_ofrece_la_empresa.sql"),
+      "utf8",
+    );
+    const vista = migracion.slice(
+      migracion.indexOf("create view public.company_offers_public"),
+      migracion.indexOf("grant select on public.company_offers_public"),
+    );
+
+    expect(vista).not.toContain("contact_email");
+    expect(vista).not.toContain("contact_phone");
+    expect(vista).not.toContain("contact_name");
+  });
+
+  it("y la migración que lo añade tampoco lo mete en el directorio", () => {
+    const migracion = readFileSync(
+      join(RAIZ, "supabase/migrations/0047_como_contactar_con_la_empresa.sql"),
+      "utf8",
+    );
+    expect(migracion).not.toContain("create or replace view");
+    expect(migracion).not.toContain("create view");
   });
 });

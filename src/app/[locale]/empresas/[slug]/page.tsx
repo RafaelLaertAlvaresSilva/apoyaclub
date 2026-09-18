@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { ETIQUETA_TIPO_OFERTA, obtenerOfertasPublicas } from "@/lib/empresas";
 import { ETIQUETA_CATEGORIA_NECESIDAD } from "@/lib/opportunities";
 import { createPublicClient } from "@/lib/supabase/public";
+import { ContactoDeLaEmpresa } from "../components/ContactoDeLaEmpresa";
 
 export const revalidate = 60;
 
@@ -150,6 +151,16 @@ export default async function PaginaEmpresa({ params }: { params: Promise<{ slug
               ))}
             </ul>
           )}
+        </section>
+
+        {/* Lo que faltaba: sin esto el club leía la oferta, le
+            encajaba, y no tenía a dónde ir. */}
+        <section className="mt-6 rounded-2xl border border-zinc-200 bg-white p-6">
+          <h2 className="text-lg font-semibold text-zinc-900">Hablar con esta empresa</h2>
+          <p className="mb-4 mt-1 text-sm text-zinc-600">
+            Dile quién eres y qué club llevas. No hace falta que tengas nada preparado.
+          </p>
+          <ContactoDeLaEmpresa slug={empresa.slug} />
         </section>
 
         <p className="mt-8 text-center text-sm text-zinc-500">

@@ -4,9 +4,15 @@ import { useActionState, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { CATEGORIAS_NECESIDAD } from "@/lib/opportunities";
-import { TIPOS_DE_OFERTA, type OfertaDeEmpresa, type TipoDeOferta } from "@/lib/empresas";
+import {
+  TIPOS_DE_OFERTA,
+  type ContactoEmpresa,
+  type OfertaDeEmpresa,
+  type TipoDeOferta,
+} from "@/lib/empresas";
 import { Campo, clasesInput, clasesTextarea } from "../../panel/components/SeccionCard";
 import { crearOferta, editarOferta } from "../actions";
+import { CamposDeContacto } from "./CamposDeContacto";
 
 /**
  * Lo que la empresa ofrece, en un formulario.
@@ -21,10 +27,13 @@ import { crearOferta, editarOferta } from "../actions";
  */
 export function OfertaForm({
   oferta,
+  contacto,
   alTerminar,
 }: {
   /** Si viene, se edita; si no, se crea una nueva. */
   oferta?: OfertaDeEmpresa;
+  /** El de la empresa, para rellenarlo ya puesto. */
+  contacto: ContactoEmpresa;
   alTerminar?: () => void;
 }) {
   const [estado, formAction] = useActionState(oferta ? editarOferta : crearOferta, null);
@@ -140,6 +149,8 @@ export function OfertaForm({
           className={clasesInput}
         />
       </Campo>
+
+      <CamposDeContacto contacto={contacto} />
 
       <AvisoError mensaje={estado?.error} />
       <AvisoExito mensaje={estado?.ok ? "Guardado." : null} />

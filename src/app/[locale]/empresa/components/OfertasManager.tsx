@@ -7,6 +7,7 @@ import { ETIQUETA_CATEGORIA_NECESIDAD } from "@/lib/opportunities";
 import {
   ETIQUETA_ESTADO_OFERTA,
   ETIQUETA_TIPO_OFERTA,
+  type ContactoEmpresa,
   type EstadoOferta,
   type OfertaDeEmpresa,
 } from "@/lib/empresas";
@@ -34,7 +35,13 @@ const COLOR_ESTADO: Record<EstadoOferta, string> = {
  * Un formulario vacío por delante y la lista debajo, fuera de pantalla
  * en el móvil, es lo contrario de lo que la empresa viene a mirar.
  */
-export function OfertasManager({ ofertas }: { ofertas: OfertaDeEmpresa[] }) {
+export function OfertasManager({
+  ofertas,
+  contacto,
+}: {
+  ofertas: OfertaDeEmpresa[];
+  contacto: ContactoEmpresa;
+}) {
   const [creando, setCreando] = useState(ofertas.length === 0);
   const [editando, setEditando] = useState<string | null>(null);
 
@@ -48,7 +55,7 @@ export function OfertasManager({ ofertas }: { ofertas: OfertaDeEmpresa[] }) {
           titulo="Publica lo que ofreces"
           descripcion="Sale en el directorio de empresas y lo ven los clubes que buscan justo eso."
         >
-          <OfertaForm alTerminar={() => setCreando(false)} />
+          <OfertaForm contacto={contacto} alTerminar={() => setCreando(false)} />
         </SeccionCard>
       ) : (
         <button
@@ -66,6 +73,7 @@ export function OfertasManager({ ofertas }: { ofertas: OfertaDeEmpresa[] }) {
             <TarjetaOferta
               key={oferta.id}
               oferta={oferta}
+              contacto={contacto}
               editando={editando === oferta.id}
               alEditar={() => setEditando(oferta.id)}
               alCerrar={() => setEditando(null)}
@@ -84,6 +92,7 @@ export function OfertasManager({ ofertas }: { ofertas: OfertaDeEmpresa[] }) {
               <TarjetaOferta
                 key={oferta.id}
                 oferta={oferta}
+                contacto={contacto}
                 editando={false}
                 alEditar={() => setEditando(oferta.id)}
                 alCerrar={() => setEditando(null)}
@@ -98,11 +107,13 @@ export function OfertasManager({ ofertas }: { ofertas: OfertaDeEmpresa[] }) {
 
 function TarjetaOferta({
   oferta,
+  contacto,
   editando,
   alEditar,
   alCerrar,
 }: {
   oferta: OfertaDeEmpresa;
+  contacto: ContactoEmpresa;
   editando: boolean;
   alEditar: () => void;
   alCerrar: () => void;
@@ -126,7 +137,7 @@ function TarjetaOferta({
   if (editando) {
     return (
       <div className="rounded-xl border border-teal-300 bg-white p-5">
-        <OfertaForm oferta={oferta} alTerminar={alCerrar} />
+        <OfertaForm oferta={oferta} contacto={contacto} alTerminar={alCerrar} />
       </div>
     );
   }

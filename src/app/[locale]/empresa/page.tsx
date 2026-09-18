@@ -10,7 +10,15 @@ import { OfertasManager } from "./components/OfertasManager";
 
 export const metadata: Metadata = { title: "Lo que ofrezco" };
 
-type FilaEmpresa = { name: string | null; slug: string | null; open_to_sponsor: boolean };
+type FilaEmpresa = {
+  name: string | null;
+  slug: string | null;
+  open_to_sponsor: boolean;
+  contact_name: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  contact_public_consent: boolean;
+};
 
 /**
  * El panel de la empresa (migración 0046).
@@ -35,13 +43,20 @@ export default async function EmpresaPage() {
   const [{ data: empresa }, ofertas] = await Promise.all([
     supabase
       .from("companies")
-      .select("name, slug, open_to_sponsor")
+      .select("name, slug, open_to_sponsor, contact_name, contact_email, contact_phone, contact_public_consent")
       .eq("id", user.id)
       .maybeSingle<FilaEmpresa>(),
     obtenerOfertasDeLaEmpresa(supabase, user.id),
   ]);
 
   const publicadas = ofertas.filter((oferta) => !oferta.archivadaEn).length;
+
+  const contacto = {
+    nombre: empresa?.contact_name ?? null,
+    email: empresa?.contact_email ?? null,
+    telefono: empresa?.contact_phone ?? null,
+    publico: empresa?.contact_public_consent ?? true,
+  };
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
@@ -73,7 +88,7 @@ export default async function EmpresaPage() {
         </p>
       )}
 
-      <OfertasManager ofertas={ofertas} />
+      <OfertasManager ofertas={ofertas} contacto={contacto} />
     </div>
   );
 }

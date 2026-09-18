@@ -16,6 +16,10 @@ type FilaEmpresa = {
   website: string | null;
   description: string | null;
   open_to_sponsor: boolean;
+  contact_name: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  contact_public_consent: boolean;
 };
 
 export default async function FichaEmpresaPage() {
@@ -31,7 +35,9 @@ export default async function FichaEmpresaPage() {
 
   const { data: empresa } = await supabase
     .from("companies")
-    .select("name, sector, city, province, website, description, open_to_sponsor")
+    .select(
+      "name, sector, city, province, website, description, open_to_sponsor, contact_name, contact_email, contact_phone, contact_public_consent",
+    )
     .eq("id", user.id)
     .maybeSingle<FilaEmpresa>();
 
@@ -56,6 +62,12 @@ export default async function FichaEmpresaPage() {
           web: empresa?.website ?? "",
           descripcion: empresa?.description ?? "",
           enElDirectorio: empresa?.open_to_sponsor ?? false,
+          contacto: {
+            nombre: empresa?.contact_name ?? null,
+            email: empresa?.contact_email ?? null,
+            telefono: empresa?.contact_phone ?? null,
+            publico: empresa?.contact_public_consent ?? true,
+          },
         }}
       />
     </div>

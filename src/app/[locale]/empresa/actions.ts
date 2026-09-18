@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { leerCategoriaNecesidad } from "@/lib/opportunities";
-import { leerEstadoOferta, leerTipoDeOferta } from "@/lib/empresas";
+import { leerEstadoOferta, leerTipoDeOferta, sePuedeContactar } from "@/lib/empresas";
 import { createClient } from "@/lib/supabase/server";
 import type { Role } from "@/lib/types";
 
@@ -88,6 +88,41 @@ function leerFormulario(formData: FormData): DatosDeOferta | { error: string } {
   };
 }
 
+type DatosDeContacto = {
+  contact_name: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  contact_public_consent: boolean;
+};
+
+/**
+ * El contacto que viaja con el formulario de la oferta.
+ *
+ * Va en la ficha de la empresa y no en cada oferta, porque una empresa
+ * tiene un contacto y no uno por anuncio. Se pide aquí de todas formas
+ * —relleno con lo que ya haya— porque este es el momento en que hace
+ * falta: publicar sin forma de contacto deja al club con la oferta
+ * leída y ningún sitio al que ir.
+ */
+function leerContacto(formData: FormData): DatosDeContacto | { error: string } {
+  const contacto = {
+    contact_name: leerTexto(formData, "contactoNombre")?.slice(0, 120) ?? null,
+    contact_email: leerTexto(formData, "contactoEmail")?.slice(0, 200) ?? null,
+    contact_phone: leerTexto(formData, "contactoTelefono")?.slice(0, 40) ?? null,
+    contact_public_consent: formData.get("contactoPublico") === "on",
+  };
+
+  if (!sePuedeContactar({ email: contacto.contact_email, telefono: contacto.contact_phone })) {
+    return { error: "Pon un correo o un teléfono: sin eso, el club no puede escribirte." };
+  }
+
+  if (contacto.contact_email && !contacto.contact_email.includes("@")) {
+    return { error: "Ese correo no parece un correo." };
+  }
+
+  return contacto;
+}
+
 export async function crearOferta(
   _previo: EstadoGuardado,
   formData: FormData,
@@ -97,6 +132,20 @@ export async function crearOferta(
 
   const datos = leerFormulario(formData);
   if ("error" in datos) return { error: datos.error };
+
+  const contacto = leerContacto(formData);
+  if ("error" in contacto) return { error: contacto.error };
+
+  // El contacto primero: si esto falla, no queremos una oferta
+  // publicada a la que nadie pueda responder.
+  const { error: errorContacto } = await sesion.supabase
+    .from("companies")
+    .update(contacto)
+    .eq("id", sesion.user.id);
+
+  if (errorContacto) {
+    return fallo("guardar el contacto", errorContacto, "No se ha podido guardar. Inténtalo de nuevo.");
+  }
 
   const { error } = await sesion.supabase
     .from("company_offers")
@@ -120,6 +169,18 @@ export async function editarOferta(
 
   const datos = leerFormulario(formData);
   if ("error" in datos) return { error: datos.error };
+
+  const contacto = leerContacto(formData);
+  if ("error" in contacto) return { error: contacto.error };
+
+  const { error: errorContacto } = await sesion.supabase
+    .from("companies")
+    .update(contacto)
+    .eq("id", sesion.user.id);
+
+  if (errorContacto) {
+    return fallo("guardar el contacto", errorContacto, "No se ha podido guardar. Inténtalo de nuevo.");
+  }
 
   // El `company_id` va en el update además de en la regla de fila: si
   // algún día se tocara la RLS, esto sigue impidiendo editar la oferta
@@ -220,6 +281,9 @@ export async function guardarFichaEmpresa(
   const name = leerTexto(formData, "nombre");
   if (!name) return { error: "El nombre de la empresa no puede quedarse vacío." };
 
+  const contacto = leerContacto(formData);
+  if ("error" in contacto) return { error: contacto.error };
+
   const { error } = await sesion.supabase
     .from("companies")
     .update({
@@ -230,6 +294,7 @@ export async function guardarFichaEmpresa(
       website: leerTexto(formData, "web"),
       description: leerTexto(formData, "descripcion")?.slice(0, 600) ?? null,
       open_to_sponsor: formData.get("enElDirectorio") === "on",
+      ...contacto,
     })
     .eq("id", sesion.user.id);
 
