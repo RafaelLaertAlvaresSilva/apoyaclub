@@ -4,6 +4,8 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BloquePlegable } from "@/components/BloquePlegable";
+import type { Accion, Beneficio } from "@/lib/ficha-oportunidad";
+import { EditorDeLaFicha } from "./EditorDeLaFicha";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { Campo, SeccionCard, clasesInput, clasesTextarea } from "@/app/[locale]/panel/components/SeccionCard";
 import {
@@ -47,6 +49,13 @@ export type ValoresOportunidad = {
   // Fase 17: oportunidad repartida entre varias empresas.
   slotsTotal?: number | null;
   slotsTaken?: number;
+  // Migración 0049: la ficha detallada.
+  beneficios?: Beneficio[];
+  acciones?: Accion[];
+  frecuencia?: string | null;
+  desde?: string | null;
+  hasta?: string | null;
+  requisitos?: string | null;
   // Migración 0038: la oportunidad al revés — el club necesita algo.
   esNecesidad?: boolean;
   categoriaNecesidad?: CategoriaNecesidad | null;
@@ -246,6 +255,66 @@ export function OportunidadForm({
           * exclusividad, equipo, plazas y seis casillas de objetivo—
           * cuando solo hacen falta tres. Parecía un impreso
           * administrativo justo en el momento que más cuesta. */}
+      {/* La ficha: lo que convierte un precio en un acuerdo. Va antes
+          de "Más detalles" porque importa mucho más que el nivel de
+          patrocinador o el periodo, y abierta cuando ya tiene algo
+          escrito para que se vea que está. */}
+      <BloquePlegable
+        titulo="Qué recibe la empresa y quién hace qué"
+        resumen="El detalle del acuerdo, línea a línea. No hace falta para publicar, pero es lo que hace que la empresa entienda qué le estás ofreciendo."
+        abierto={
+          (valoresIniciales?.beneficios?.length ?? 0) > 0 ||
+          (valoresIniciales?.acciones?.length ?? 0) > 0
+        }
+      >
+        <EditorDeLaFicha
+          beneficios={valoresIniciales?.beneficios ?? []}
+          acciones={valoresIniciales?.acciones ?? []}
+        />
+
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          <Campo etiqueta="Frecuencia" ayuda="Cada cuánto: mensual, por partido en casa…">
+            <input
+              name="frecuencia"
+              maxLength={120}
+              defaultValue={valoresIniciales?.frecuencia ?? ""}
+              placeholder="Mensual"
+              className={clasesInput}
+            />
+          </Campo>
+
+          <Campo etiqueta="Desde / hasta" grupo ayuda="Opcional. Cuándo empieza y cuándo acaba.">
+            <div className="flex gap-2">
+              <input
+                name="desde"
+                type="date"
+                defaultValue={valoresIniciales?.desde ?? ""}
+                aria-label="Desde"
+                className={clasesInput}
+              />
+              <input
+                name="hasta"
+                type="date"
+                defaultValue={valoresIniciales?.hasta ?? ""}
+                aria-label="Hasta"
+                className={clasesInput}
+              />
+            </div>
+          </Campo>
+        </div>
+
+        <div className="mt-4">
+          <Campo etiqueta="Otros requisitos" ayuda="Cualquier cosa que convenga dejar por escrito.">
+            <textarea
+              name="requisitos"
+              maxLength={1000}
+              defaultValue={valoresIniciales?.requisitos ?? ""}
+              className={clasesTextarea}
+            />
+          </Campo>
+        </div>
+      </BloquePlegable>
+
       <BloquePlegable
         titulo="Más detalles"
         resumen="Nivel, plazas, exclusividad, a quién va dirigida… Nada de esto hace falta para publicar: puedes rellenarlo luego."

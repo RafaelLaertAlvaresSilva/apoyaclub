@@ -1,3 +1,4 @@
+import type { Accion, Beneficio } from "@/lib/ficha-oportunidad";
 export type Role = "club" | "empresa" | "admin";
 
 export const RUTA_POR_ROL: Record<Role, string> = {
@@ -339,6 +340,17 @@ export type Opportunity = {
   /** Qué clase de servicio o producto necesita. Solo cuando
    * `esNecesidad` es true. */
   categoriaNecesidad: CategoriaNecesidad | null;
+  /**
+   * La ficha detallada (migración 0049): qué recibe la empresa, quién
+   * se encarga de cada cosa y bajo qué condiciones. Vacías mientras el
+   * club no las rellene; la oportunidad se ve igual sin ellas.
+   */
+  beneficios: Beneficio[];
+  acciones: Accion[];
+  frecuencia: string | null;
+  desde: string | null;
+  hasta: string | null;
+  requisitos: string | null;
   /** Fecha en la que se archivó (null = activa). Archivar no borra la oportunidad, solo la oculta. */
   archivedAt: string | null;
   createdAt: string;

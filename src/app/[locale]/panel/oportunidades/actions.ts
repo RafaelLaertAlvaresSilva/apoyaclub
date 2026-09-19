@@ -1,5 +1,7 @@
 "use server";
 
+import { leerAcciones, leerBeneficios, type Accion, type Beneficio } from "@/lib/ficha-oportunidad";
+
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
 import { leerCategoriaNecesidad } from "@/lib/opportunities";
@@ -78,6 +80,38 @@ async function obtenerClubActual(): Promise<
 function leerTexto(formData: FormData, campo: string): string | null {
   const valor = String(formData.get(campo) ?? "").trim();
   return valor === "" ? null : valor;
+}
+
+/**
+ * La ficha detallada que viaja como JSON en un campo oculto
+ * (migración 0049).
+ *
+ * Se vuelve a comprobar aquí aunque el formulario ya la haya filtrado:
+ * lo que llega del navegador no se guarda nunca tal cual. `leerBeneficios`
+ * y `leerAcciones` tiran las líneas sin texto, recortan las largas y
+ * descartan lo que no tenga la forma esperada.
+ */
+function leerFicha(formData: FormData): { benefits: Beneficio[]; actions: Accion[] } {
+  const trozo = (campo: string): unknown => {
+    try {
+      return JSON.parse(String(formData.get(campo) ?? "[]"));
+    } catch {
+      // Un JSON roto no puede tumbar el guardado entero: se pierde la
+      // ficha, que se vuelve a escribir, y no la oportunidad.
+      return [];
+    }
+  };
+
+  return {
+    benefits: leerBeneficios(trozo("beneficios")),
+    actions: leerAcciones(trozo("acciones")),
+  };
+}
+
+/** Una fecha del formulario, solo si tiene la forma AAAA-MM-DD. */
+function leerFechaDeLaFicha(formData: FormData, campo: string): string | null {
+  const valor = leerTexto(formData, campo);
+  return valor && /^\d{4}-\d{2}-\d{2}$/.test(valor) ? valor : null;
 }
 
 function leerValor(formData: FormData): number | null {
@@ -216,6 +250,11 @@ export async function crearOportunidad(
     opportunity_type: opportunityType,
     value,
     duration: leerTexto(formData, "duration"),
+    ...leerFicha(formData),
+    frequency: leerTexto(formData, "frecuencia"),
+    starts_on: leerFechaDeLaFicha(formData, "desde"),
+    ends_on: leerFechaDeLaFicha(formData, "hasta"),
+    requirements: leerTexto(formData, "requisitos"),
     period: leerPeriodo(formData),
     collaboration_type: leerFormaColaboracion(formData),
     objectives: leerObjetivos(formData),
@@ -276,6 +315,11 @@ export async function actualizarOportunidad(
       opportunity_type: opportunityType,
       value,
       duration: leerTexto(formData, "duration"),
+      ...leerFicha(formData),
+      frequency: leerTexto(formData, "frecuencia"),
+      starts_on: leerFechaDeLaFicha(formData, "desde"),
+      ends_on: leerFechaDeLaFicha(formData, "hasta"),
+      requirements: leerTexto(formData, "requisitos"),
       period: leerPeriodo(formData),
       collaboration_type: leerFormaColaboracion(formData),
       objectives: leerObjetivos(formData),
@@ -332,7 +376,7 @@ export async function duplicarOportunidad(formData: FormData): Promise<void> {
   const { data: original } = await supabase
     .from("opportunities")
     .select(
-      "title, description, opportunity_type, value, duration, period, collaboration_type, objectives, sponsor_level, exclusivity, team_id, slots_total, is_need, need_category",
+      "title, description, opportunity_type, value, duration, period, collaboration_type, objectives, sponsor_level, exclusivity, team_id, slots_total, is_need, need_category, benefits, actions, frequency, starts_on, ends_on, requirements",
     )
     .eq("id", id)
     .eq("club_id", user.id)
@@ -347,6 +391,12 @@ export async function duplicarOportunidad(formData: FormData): Promise<void> {
     opportunity_type: original.opportunity_type,
     value: original.value,
     duration: original.duration,
+    benefits: original.benefits ?? [],
+    actions: original.actions ?? [],
+    frequency: original.frequency ?? null,
+    starts_on: original.starts_on ?? null,
+    ends_on: original.ends_on ?? null,
+    requirements: original.requirements ?? null,
     period: original.period,
     collaboration_type: original.collaboration_type,
     objectives: original.objectives,

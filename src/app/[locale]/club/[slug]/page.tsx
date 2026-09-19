@@ -19,6 +19,7 @@ import { SITE_URL } from "@/lib/site";
 import type { ClubTeam, SocialLinks } from "@/lib/types";
 import { BarraDePlazas } from "@/components/BarraDePlazas";
 import { BotonFavorito } from "@/components/Favoritos";
+import { Link } from "@/i18n/navigation";
 import { CompartirBoton } from "./components/CompartirBoton";
 import { DatosDeContacto } from "./components/DatosDeContacto";
 import { FotoAmpliable } from "./components/FotoAmpliable";
@@ -199,7 +200,6 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
    */
   const VISIBLES_EN_ORDENADOR = 2;
   const REJILLA_TARJETAS = "grid gap-3 sm:grid-cols-2 lg:grid-cols-1";
-  const cuantasSobran = (total: number) => Math.max(0, total - VISIBLES_EN_ORDENADOR);
 
   const secciones: {
     id: string;
@@ -240,8 +240,10 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             <ListaConVerMas
               clasesLista={REJILLA_TARJETAS}
               visiblesEnOrdenador={VISIBLES_EN_ORDENADOR}
-              textoVerMas={t("verMas", { cuantos: cuantasSobran(loQueOfrece.length) })}
+              textoVerMas={`Ver las ${loQueOfrece.length} oportunidades`}
               tono="verde"
+              href={`/club/${perfil.slug}/oportunidades`}
+              cuantasEnTotal={loQueOfrece.length}
             >
               {loQueOfrece.map((oportunidad) => (
                 <div
@@ -318,6 +320,15 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     >
                       {t("oportunidades.solicitar")}
                     </SolicitarContactoBoton>
+                    {/* A su propia ficha, donde está el detalle de qué
+                        recibe la empresa y quién hace cada cosa, y desde
+                        donde se puede compartir esta sola. */}
+                    <Link
+                      href={`/club/${perfil.slug}/oportunidad/${oportunidad.id}`}
+                      className="inline-flex items-center rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:border-brand-teal-dark hover:text-brand-teal-dark"
+                    >
+                      Ver ficha
+                    </Link>
                   </div>
                 </div>
               ))}
@@ -365,8 +376,10 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             <ListaConVerMas
               clasesLista={REJILLA_TARJETAS}
               visiblesEnOrdenador={VISIBLES_EN_ORDENADOR}
-              textoVerMas={t("verMas", { cuantos: cuantasSobran(loQueNecesita.length) })}
+              textoVerMas={`Ver las ${loQueNecesita.length} cosas que necesitamos`}
               tono="verde"
+              href={`/club/${perfil.slug}/necesidades`}
+              cuantasEnTotal={loQueNecesita.length}
             >
               {loQueNecesita.map((oportunidad) => (
                 <div
@@ -408,6 +421,15 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     >
                       {t("oportunidades.solicitar")}
                     </SolicitarContactoBoton>
+                    {/* A su propia ficha, donde está el detalle de qué
+                        recibe la empresa y quién hace cada cosa, y desde
+                        donde se puede compartir esta sola. */}
+                    <Link
+                      href={`/club/${perfil.slug}/oportunidad/${oportunidad.id}`}
+                      className="inline-flex items-center rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:border-brand-teal-dark hover:text-brand-teal-dark"
+                    >
+                      Ver ficha
+                    </Link>
                   </div>
                 </div>
               ))}

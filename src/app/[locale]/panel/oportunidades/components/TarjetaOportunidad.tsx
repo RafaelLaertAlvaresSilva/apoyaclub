@@ -233,6 +233,12 @@ function EditorOportunidad({
           slotsTaken: oportunidad.slotsTaken,
           esNecesidad: oportunidad.esNecesidad,
           categoriaNecesidad: oportunidad.categoriaNecesidad,
+          beneficios: oportunidad.beneficios,
+          acciones: oportunidad.acciones,
+          frecuencia: oportunidad.frecuencia,
+          desde: oportunidad.desde,
+          hasta: oportunidad.hasta,
+          requisitos: oportunidad.requisitos,
         }}
       />
     </li>

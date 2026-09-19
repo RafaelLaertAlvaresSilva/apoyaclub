@@ -1,6 +1,7 @@
 "use client";
 
 import { Children, useState, type ReactNode } from "react";
+import { Link } from "@/i18n/navigation";
 
 /**
  * Una lista que en el ordenador enseña solo las primeras y guarda el
@@ -24,6 +25,8 @@ export function ListaConVerMas({
   clasesLista,
   textoVerMas,
   tono,
+  href,
+  cuantasEnTotal,
 }: {
   children: ReactNode;
   visiblesEnOrdenador?: number;
@@ -34,9 +37,24 @@ export function ListaConVerMas({
    * función no se puede cruzar hasta aquí. */
   textoVerMas: string;
   tono: "verde" | "ambar";
+  /**
+   * A dónde lleva "Ver todas" (migración 0049).
+   *
+   * Antes el botón desplegaba la lista aquí mismo. Ahora lleva a la
+   * página donde están todas y desde donde se abre cada una por
+   * separado, que es lo que hace falta para poder compartir una sola.
+   * Se sustituye en vez de sumarse: dos botones parecidos uno al lado
+   * del otro obligan a elegir sin motivo.
+   */
+  href: string;
+  /** Cuántas hay en total, para el texto del botón. */
+  cuantasEnTotal: number;
 }) {
   const todos = Children.toArray(children);
-  const [desplegado, setDesplegado] = useState(false);
+
+  // En el teléfono la lista sigue saliendo entera; en el ordenador se
+  // recorta para que las dos columnas empiecen a la misma altura.
+  const [desplegado] = useState(false);
 
   const primeros = todos.slice(0, visiblesEnOrdenador);
   const resto = todos.slice(visiblesEnOrdenador);
@@ -56,14 +74,13 @@ export function ListaConVerMas({
         <div className={`mt-3 ${clasesLista} ${desplegado ? "" : "lg:hidden"}`}>{resto}</div>
       )}
 
-      {resto.length > 0 && !desplegado && (
-        <button
-          type="button"
-          onClick={() => setDesplegado(true)}
-          className={`mt-4 hidden w-full rounded-xl border-2 px-4 py-3 text-sm font-semibold transition-colors lg:block ${clasesBoton}`}
+      {cuantasEnTotal > 0 && (
+        <Link
+          href={href}
+          className={`mt-4 block w-full rounded-xl border-2 px-4 py-3 text-center text-sm font-semibold transition-colors ${clasesBoton}`}
         >
           {textoVerMas}
-        </button>
+        </Link>
       )}
     </>
   );

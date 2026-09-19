@@ -1,3 +1,4 @@
+import { leerAcciones, leerBeneficios } from "@/lib/ficha-oportunidad";
 import type {
   BudgetPeriod,
   CategoriaNecesidad,
@@ -34,6 +35,12 @@ export type OpportunityRow = {
   slots_taken: number | null;
   is_need: boolean | null;
   need_category: CategoriaNecesidad | null;
+  benefits?: unknown;
+  actions?: unknown;
+  frequency?: string | null;
+  starts_on?: string | null;
+  ends_on?: string | null;
+  requirements?: string | null;
   archived_at: string | null;
   created_at: string;
   updated_at: string;
@@ -64,6 +71,14 @@ export function opportunityRowToOpportunity(row: OpportunityRow): Opportunity {
     // de aplicar la migración 0038; en base de datos es NOT NULL.
     esNecesidad: row.is_need ?? false,
     categoriaNecesidad: row.need_category,
+    // Se saneen aquí y no al pintar: llegan de un jsonb, y lo que hay
+    // dentro lo escribió una versión anterior del formulario.
+    beneficios: leerBeneficios(row.benefits),
+    acciones: leerAcciones(row.actions),
+    frecuencia: row.frequency ?? null,
+    desde: row.starts_on ?? null,
+    hasta: row.ends_on ?? null,
+    requisitos: row.requirements ?? null,
     archivedAt: row.archived_at,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
