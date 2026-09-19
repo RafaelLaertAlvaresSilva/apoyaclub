@@ -294,6 +294,7 @@ export async function guardarFichaEmpresa(
       website: leerTexto(formData, "web"),
       description: leerTexto(formData, "descripcion")?.slice(0, 600) ?? null,
       open_to_sponsor: formData.get("enElDirectorio") === "on",
+      alerts_enabled: formData.get("quiereAvisos") === "on",
       ...contacto,
     })
     .eq("id", sesion.user.id);

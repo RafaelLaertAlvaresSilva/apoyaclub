@@ -1,6 +1,7 @@
 import { avisarDeFallo } from "@/lib/monitoring";
 import { NextResponse } from "next/server";
 import { enviarEmailAvisoCaducidadSuscripcion } from "@/lib/email/resend";
+import { avisarDeNecesidadesQueEncajan } from "@/lib/avisos-empresa";
 import {
   avisarFinDePrueba,
   cerrarPruebasVencidas,
@@ -28,6 +29,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
  *    por debajo del umbral que le resta visibilidad en el buscador.
  * 6. Plazas de fundador reservadas que nunca llegaron a pago: vuelven
  *    al montón (migración 0040). Es el único paso que no manda correo.
+ * 7. Avisos a las empresas: un club ha publicado que necesita algo de
+ *    lo que ellas ofrecen (migración 0048). Es lo que hace que la
+ *    empresa vuelva sin que nadie la persiga.
  *
  * Los tres últimos viven en `lib/emails-ciclo.ts`. Cada bloque va por su
  * cuenta: si uno falla, los demás se envían igual.
@@ -139,6 +143,7 @@ export async function GET(request: Request) {
     pruebasCerradas,
     fichasIncompletas,
     plazasSoltadas,
+    avisosAEmpresas,
   ] = await Promise.all([
     enviarBienvenidas(admin).catch((excepcion) => {
       avisarDeFallo("cron-suscripciones", "Fallo enviando las bienvenidas", excepcion);
@@ -164,6 +169,10 @@ export async function GET(request: Request) {
       avisarDeFallo("cron-suscripciones", "Fallo soltando las plazas de fundador sin pagar", excepcion);
       return 0;
     }),
+    avisarDeNecesidadesQueEncajan(admin).catch((excepcion) => {
+      avisarDeFallo("cron-suscripciones", "Fallo avisando a las empresas de lo que les encaja", excepcion);
+      return 0;
+    }),
   ]);
 
   return NextResponse.json({
@@ -175,5 +184,6 @@ export async function GET(request: Request) {
     pruebasCerradas,
     fichasIncompletas,
     plazasSoltadas,
+    avisosAEmpresas,
   });
 }

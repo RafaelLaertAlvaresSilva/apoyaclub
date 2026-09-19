@@ -16,6 +16,7 @@ export type DatosFicha = {
   web: string;
   descripcion: string;
   enElDirectorio: boolean;
+  quiereAvisos: boolean;
   contacto: ContactoEmpresa;
 };
 
@@ -126,6 +127,29 @@ export function FichaForm({ datos }: { datos: DatosFicha }) {
             <span className="mt-1 block text-zinc-500">
               Si publicas una oferta esto se enciende solo: una oferta que no se ve no sirve de
               nada. Apagándolo dejas de salir, y tus ofertas dejan de verse con él.
+            </span>
+          </span>
+        </label>
+      </SeccionCard>
+
+      <SeccionCard
+        titulo="Avisos por correo"
+        descripcion="Lo que hace que no tengas que estar entrando a mirar."
+      >
+        <label className="flex items-start gap-3 text-sm">
+          <input
+            type="checkbox"
+            name="quiereAvisos"
+            defaultChecked={datos.quiereAvisos}
+            className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+          />
+          <span>
+            <span className="block font-medium text-zinc-900">
+              Avísame cuando un club busque algo que ofrezco
+            </span>
+            <span className="mt-1 block text-zinc-500">
+              Un correo, como mucho al día, solo con lo que encaja con tus categorías. Si has
+              puesto provincia, solo de clubes de tu provincia.
             </span>
           </span>
         </label>

@@ -558,3 +558,71 @@ export async function enviarEmailFinDePrueba({
     }),
   });
 }
+
+/**
+ * Lo que los clubes buscan y esta empresa ofrece (migración 0048).
+ *
+ * Un solo correo con todo lo que le encaja, no uno por cada cosa: cinco
+ * correos el mismo día es la forma más rápida de que alguien se dé de
+ * baja de todo.
+ *
+ * El enlace de baja va en el pie de cada envío y funciona sin iniciar
+ * sesión. Obligar a recordar la contraseña para dejar de recibir
+ * correos es la mejor manera de que te marquen como spam, que hace
+ * mucho más daño que perder un suscriptor.
+ */
+export async function enviarEmailNecesidadesQueEncajan({
+  empresaEmail,
+  empresaNombre,
+  necesidades,
+  cuantasMas,
+  buscarUrl,
+  bajaUrl,
+}: {
+  empresaEmail: string;
+  empresaNombre: string;
+  necesidades: { titulo: string; categoria: string; clubNombre: string; clubUrl: string }[];
+  /** Las que no han cabido. Salen en el siguiente correo. */
+  cuantasMas: number;
+  buscarUrl: string;
+  bajaUrl: string;
+}): Promise<ResultadoEnvioEmail> {
+  const t = await traductorEmails();
+
+  const lista = necesidades
+    .map(
+      (necesidad) => `
+        <li style="margin:0 0 12px;">
+          <a href="${necesidad.clubUrl}" style="color:#047857;font-weight:600;text-decoration:none;">${necesidad.titulo}</a>
+          <br />
+          <span style="color:#71717a;font-size:14px;">${necesidad.categoria} · ${necesidad.clubNombre}</span>
+        </li>`,
+    )
+    .join("");
+
+  const cuerpo = `
+    <p style="margin:0 0 16px;">${t("necesidadesQueEncajan.texto", { empresa: empresaNombre })}</p>
+    <ul style="margin:0 0 20px;padding-left:20px;line-height:1.5;">${lista}</ul>
+    ${
+      cuantasMas > 0
+        ? `<p style="margin:0 0 24px;color:#71717a;font-size:14px;">${t("necesidadesQueEncajan.yMas", { cuantas: cuantasMas })}</p>`
+        : ""
+    }
+  `;
+
+  return enviarEmail({
+    to: empresaEmail,
+    subject: t("necesidadesQueEncajan.asunto", { cuantas: necesidades.length }),
+    html: plantilla({
+      color: "#047857",
+      eyebrow: t("necesidadesQueEncajan.eyebrow"),
+      titulo: t("necesidadesQueEncajan.titulo", { cuantas: necesidades.length }),
+      cuerpo,
+      botonTexto: t("necesidadesQueEncajan.boton"),
+      botonUrl: buscarUrl,
+      pie: t("necesidadesQueEncajan.pie", {
+        enlaceBaja: `<a href="${bajaUrl}" style="color:#a1a1aa;">${t("necesidadesQueEncajan.enlaceBaja")}</a>`,
+      }),
+    }),
+  });
+}

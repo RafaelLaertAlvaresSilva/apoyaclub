@@ -91,5 +91,15 @@
     "texto2": "En su página podéis ver cómo aparecéis, con vuestro logo y vuestra categoría de patrocinador. Es pública, así que también podéis compartirla.",
     "boton": "Ver la página del club",
     "pieMotivo": "Recibís este correo porque {club} os ha indicado como patrocinador suyo y ha facilitado esta dirección. Lo envía el club a través de ApoyaClub, la herramienta con la que gestiona su página. Es un aviso único: no os volveremos a escribir. Si preferís que os quitemos de su página, responded a este correo y el club se encargará."
+  },
+  "necesidadesQueEncajan": {
+    "asunto": "{cuantas, plural, one {Un club busca lo que ofreces} other {# clubes buscan lo que ofreces}}",
+    "eyebrow": "Te puede encajar",
+    "titulo": "{cuantas, plural, one {Un club está buscando esto} other {Estos # clubes están buscando algo que ofreces}}",
+    "texto": "Se han publicado en ApoyaClub y encajan con lo que {empresa} ofrece. Si alguno te interesa, escríbele directamente: no hace falta que tengas nada preparado.",
+    "yMas": "{cuantas, plural, one {Y hay # más esperando.} other {Y hay # más esperando.}}",
+    "boton": "Ver todo lo que buscan los clubes",
+    "pie": "Recibes esto porque publicaste lo que tu empresa ofrece en ApoyaClub. Puedes dejar de recibir estos avisos cuando quieras: {enlaceBaja}",
+    "enlaceBaja": "darse de baja"
   }
 }

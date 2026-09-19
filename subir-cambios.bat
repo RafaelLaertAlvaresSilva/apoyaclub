@@ -6,12 +6,6 @@ echo.
 echo == ApoyaClub: subir los cambios a GitHub ==
 echo.
 
-if exist "_sync_favoritos_1.tgz" (
-  move /y "_sync_favoritos_1.tgz" "_to_delete\" > nul
-  echo Paquete antiguo apartado, ya no hacia falta.
-)
-
-echo.
 echo -- 1 de 3: preparando los archivos --
 git add -A
 if errorlevel 1 goto error
