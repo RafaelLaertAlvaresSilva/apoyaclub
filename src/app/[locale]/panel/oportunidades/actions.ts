@@ -21,6 +21,27 @@ export type EstadoGuardado = { error: string; ok?: false } | { ok: true; error?:
 
 const RUTA_OPORTUNIDADES = "/panel/oportunidades";
 
+/**
+ * Refresca lo que ve una empresa, además del panel.
+ *
+ * La ficha pública del club y sus listados se guardan en caché un
+ * minuto para ir rápidos. Hasta ahora, guardar una oportunidad solo
+ * refrescaba el panel: el club cambiaba algo, iba a mirar su página y
+ * la veía igual que antes. Sin saber lo de la caché, la conclusión es
+ * que no se ha guardado — y vuelve a guardar, y sigue igual.
+ *
+ * Se refrescan todas las rutas del patrón y no solo las de este club:
+ * saber el slug obligaría a una consulta más en cada guardado, y con
+ * el tamaño que tiene esto no compensa.
+ */
+function refrescarFichaPublica(): void {
+  revalidatePath(RUTA_OPORTUNIDADES);
+  revalidatePath("/[locale]/club/[slug]", "page");
+  revalidatePath("/[locale]/club/[slug]/oportunidades", "page");
+  revalidatePath("/[locale]/club/[slug]/necesidades", "page");
+  revalidatePath("/[locale]/club/[slug]/oportunidad/[id]", "page");
+}
+
 const TIPOS_VALIDOS: OpportunityType[] = [
   "equipment",
   "venue_matches",
@@ -269,7 +290,7 @@ export async function crearOportunidad(
 
   if (error) return { error: "No se ha podido crear la oportunidad." };
 
-  revalidatePath(RUTA_OPORTUNIDADES);
+  refrescarFichaPublica();
   return { ok: true };
 }
 
@@ -337,7 +358,7 @@ export async function actualizarOportunidad(
 
   if (error) return { error: "No se ha podido guardar la oportunidad." };
 
-  revalidatePath(RUTA_OPORTUNIDADES);
+  refrescarFichaPublica();
   return { ok: true };
 }
 
@@ -359,7 +380,7 @@ export async function cambiarEstadoOportunidad(formData: FormData): Promise<void
     .eq("id", id)
     .eq("club_id", user.id);
 
-  revalidatePath(RUTA_OPORTUNIDADES);
+  refrescarFichaPublica();
 }
 
 // ---------------------------------------------------------------------
@@ -411,7 +432,7 @@ export async function duplicarOportunidad(formData: FormData): Promise<void> {
     need_category: original.need_category,
   });
 
-  revalidatePath(RUTA_OPORTUNIDADES);
+  refrescarFichaPublica();
 }
 
 // ---------------------------------------------------------------------
@@ -431,7 +452,7 @@ export async function archivarOportunidad(formData: FormData): Promise<void> {
     .eq("id", id)
     .eq("club_id", user.id);
 
-  revalidatePath(RUTA_OPORTUNIDADES);
+  refrescarFichaPublica();
 }
 
 export async function restaurarOportunidad(formData: FormData): Promise<void> {
@@ -448,7 +469,7 @@ export async function restaurarOportunidad(formData: FormData): Promise<void> {
     .eq("id", id)
     .eq("club_id", user.id);
 
-  revalidatePath(RUTA_OPORTUNIDADES);
+  refrescarFichaPublica();
 }
 
 // ---------------------------------------------------------------------
@@ -470,7 +491,7 @@ export async function eliminarOportunidad(formData: FormData): Promise<EstadoGua
 
   if (error) return { error: "No se ha podido borrar la oportunidad. Inténtalo de nuevo." };
 
-  revalidatePath(RUTA_OPORTUNIDADES);
+  refrescarFichaPublica();
   return { ok: true };
 }
 
@@ -510,5 +531,5 @@ export async function compartirComoPlantilla(formData: FormData): Promise<void> 
     is_public: true,
   });
 
-  revalidatePath(RUTA_OPORTUNIDADES);
+  refrescarFichaPublica();
 }
