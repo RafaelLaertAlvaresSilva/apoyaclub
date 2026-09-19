@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import type { DatosDelClub } from "@/lib/plantillas-correo-club";
 import {
   CLASES_ESTADO,
   ESTADOS,
@@ -10,9 +12,21 @@ import {
   type Prospecto,
 } from "@/lib/prospectos";
 import { borrarObjetivo, cambiarEstadoObjetivo, cambiarProximoPaso } from "../actions";
+import { EscribirCorreo } from "./EscribirCorreo";
 
 /** Una empresa de la lista, con lo que el club hace con ella. */
-export function FilaObjetivo({ prospecto, hoy }: { prospecto: Prospecto; hoy: string }) {
+export function FilaObjetivo({
+  prospecto,
+  hoy,
+  club,
+}: {
+  prospecto: Prospecto;
+  hoy: string;
+  /** Los datos con los que se escribe el correo. */
+  club: DatosDelClub;
+}) {
+  const [escribiendo, setEscribiendo] = useState(false);
+
   const toca =
     estaAbierto(prospecto) && prospecto.proximoPaso !== null && prospecto.proximoPaso <= hoy;
 
@@ -89,7 +103,17 @@ export function FilaObjetivo({ prospecto, hoy }: { prospecto: Prospecto; hoy: st
         )}
       </form>
 
-      <div className="mt-3 flex flex-wrap gap-1">
+      <div className="mt-3 flex flex-wrap items-center gap-1">
+        {/* Lo que el club viene a hacer aquí: escribirle. Va delante de
+            los botones de estado, que son para después. */}
+        <button
+          type="button"
+          onClick={() => setEscribiendo((valor) => !valor)}
+          className="mr-1 rounded-lg bg-brand-teal-dark px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-brand-navy"
+        >
+          {escribiendo ? "Cerrar" : "Escribirle"}
+        </button>
+
         {ESTADOS.filter((estado) => estado.id !== prospecto.estado).map((estado) => (
           <form key={estado.id} action={cambiarEstadoObjetivo}>
             <input type="hidden" name="id" value={prospecto.id} />
@@ -103,6 +127,17 @@ export function FilaObjetivo({ prospecto, hoy }: { prospecto: Prospecto; hoy: st
           </form>
         ))}
       </div>
+
+      {escribiendo && (
+        <EscribirCorreo
+          club={club}
+          empresaNombre={prospecto.nombre}
+          contactoNombre={prospecto.contactoNombre}
+          contactoDatos={prospecto.contactoDatos}
+          notas={prospecto.notas}
+          alCerrar={() => setEscribiendo(false)}
+        />
+      )}
     </li>
   );
 }

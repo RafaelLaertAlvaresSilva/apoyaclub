@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
+import type { DatosDelClub } from "@/lib/plantillas-correo-club";
 import { ORIGENES, ordenarParaTrabajar, resumirProspectos, type Prospecto } from "@/lib/prospectos";
 import { guardarObjetivo } from "../actions";
 import { FilaObjetivo } from "./FilaObjetivo";
@@ -16,7 +17,15 @@ const clasesInput =
  * Lo de arriba no es la lista: es lo que el club tiene que hacer hoy.
  * La lista es lo que hay debajo.
  */
-export function ListaDeObjetivos({ prospectos, hoy }: { prospectos: Prospecto[]; hoy: string }) {
+export function ListaDeObjetivos({
+  prospectos,
+  hoy,
+  club,
+}: {
+  prospectos: Prospecto[];
+  hoy: string;
+  club: DatosDelClub;
+}) {
   const [estado, alta] = useActionState(guardarObjetivo, null);
   const [abierto, setAbierto] = useState(prospectos.length === 0);
 
@@ -119,7 +128,7 @@ export function ListaDeObjetivos({ prospectos, hoy }: { prospectos: Prospecto[];
       ) : (
         <ul className="flex flex-col gap-3">
           {ordenados.map((prospecto) => (
-            <FilaObjetivo key={prospecto.id} prospecto={prospecto} hoy={hoy} />
+            <FilaObjetivo key={prospecto.id} prospecto={prospecto} hoy={hoy} club={club} />
           ))}
         </ul>
       )}
