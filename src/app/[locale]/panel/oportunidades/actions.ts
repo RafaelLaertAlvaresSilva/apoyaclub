@@ -3,6 +3,7 @@
 import { leerAcciones, leerBeneficios, type Accion, type Beneficio } from "@/lib/ficha-oportunidad";
 
 import { revalidatePath } from "next/cache";
+import { avisarDeFallo } from "@/lib/monitoring";
 import type { User } from "@supabase/supabase-js";
 import { leerCategoriaNecesidad } from "@/lib/opportunities";
 import { createClient } from "@/lib/supabase/server";
@@ -18,6 +19,36 @@ import type {
 } from "@/lib/types";
 
 export type EstadoGuardado = { error: string; ok?: false } | { ok: true; error?: undefined } | null;
+
+/**
+ * Un fallo de base de datos, con su motivo apuntado.
+ *
+ * Hasta ahora este archivo se comía el error entero: ni al registro ni
+ * a Sentry, y al club le salía "no se ha podido guardar" sin más. Con
+ * eso, cuando algo falla de verdad no hay forma de saber por qué —
+ * ni desde fuera ni desde dentro— y se acaba probando a ciegas.
+ *
+ * El caso de la columna que la base de datos todavía no conoce se
+ * nombra aparte porque tiene arreglo y no es culpa de quien lo sufre:
+ * pasa cuando se añade una columna y el intermediario de Supabase
+ * sigue con el esquema viejo en memoria.
+ */
+function fallo(operacion: string, error: unknown, mensaje: string): EstadoGuardado {
+  avisarDeFallo("publico", `No se ha podido ${operacion}`, error);
+
+  const detalle = String(
+    (error as { message?: unknown } | null)?.message ?? "",
+  ).toLowerCase();
+
+  if (detalle.includes("schema cache") || detalle.includes("column")) {
+    return {
+      error:
+        "La base de datos todavía no reconoce alguno de los campos nuevos. Escríbenos a info@apoyaclub.com y lo dejamos listo en un momento.",
+    };
+  }
+
+  return { error: mensaje };
+}
 
 const RUTA_OPORTUNIDADES = "/panel/oportunidades";
 
@@ -288,7 +319,7 @@ export async function crearOportunidad(
     need_category: necesidad.categoria,
   });
 
-  if (error) return { error: "No se ha podido crear la oportunidad." };
+  if (error) return fallo("crear la oportunidad", error, "No se ha podido crear la oportunidad.");
 
   refrescarFichaPublica();
   return { ok: true };
@@ -356,7 +387,7 @@ export async function actualizarOportunidad(
     .eq("id", id)
     .eq("club_id", user.id);
 
-  if (error) return { error: "No se ha podido guardar la oportunidad." };
+  if (error) return fallo("guardar la oportunidad", error, "No se ha podido guardar la oportunidad.");
 
   refrescarFichaPublica();
   return { ok: true };
@@ -489,7 +520,7 @@ export async function eliminarOportunidad(formData: FormData): Promise<EstadoGua
     .eq("id", id)
     .eq("club_id", user.id);
 
-  if (error) return { error: "No se ha podido borrar la oportunidad. Inténtalo de nuevo." };
+  if (error) return fallo("borrar la oportunidad", error, "No se ha podido borrar. Inténtalo de nuevo.");
 
   refrescarFichaPublica();
   return { ok: true };
