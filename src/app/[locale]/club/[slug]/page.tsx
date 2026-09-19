@@ -18,6 +18,7 @@ import { agruparEquiposPorSexo, agruparPatrocinadoresPorNivel } from "@/lib/club
 import { SITE_URL } from "@/lib/site";
 import type { ClubTeam, SocialLinks } from "@/lib/types";
 import { BarraDePlazas } from "@/components/BarraDePlazas";
+import { BotonFavorito } from "@/components/Favoritos";
 import { CompartirBoton } from "./components/CompartirBoton";
 import { DatosDeContacto } from "./components/DatosDeContacto";
 import { FotoAmpliable } from "./components/FotoAmpliable";
@@ -960,7 +961,15 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Guardar el club para luego. Sin cuenta se queda en este
+                navegador; con cuenta de empresa, en la cuenta. */}
+            <BotonFavorito
+              tipo="club"
+              id={perfil.id}
+              nombre={perfil.name}
+              clases="border border-zinc-300 bg-white px-2.5 py-2"
+            />
             <CompartirBoton url={urlPublica} titulo={t("portada.compartirTitulo", { club: perfil.name })} />
             {/* Aquí había también un "Solicitar contacto". Estaba dos
                 veces en la misma página: "Contactar" baja justo al

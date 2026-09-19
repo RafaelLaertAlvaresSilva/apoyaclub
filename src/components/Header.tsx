@@ -69,6 +69,17 @@ export async function Header() {
             Empresas
           </Link>
 
+          {/* Lo guardado. Se ve siempre, con y sin cuenta: quien guarda
+              sin registrarse tiene que poder volver a su lista, y si no
+              hay un enlace no la encuentra. */}
+          <Link
+            href="/favoritos"
+            aria-label="Lo que has guardado"
+            className="text-sm font-medium text-zinc-600 transition hover:text-brand-navy"
+          >
+            <span aria-hidden="true">♡</span>
+          </Link>
+
           {accesoDirecto ? (
             <Button href={accesoDirecto.href} size="sm">
               {accesoDirecto.etiqueta}

@@ -7,6 +7,7 @@ import { obtenerOfertasDeLaEmpresa } from "@/lib/empresas";
 import { createClient } from "@/lib/supabase/server";
 import { EmpresaNav } from "./components/EmpresaNav";
 import { OfertasManager } from "./components/OfertasManager";
+import { TraerGuardados } from "./components/TraerGuardados";
 
 export const metadata: Metadata = { title: "Lo que ofrezco" };
 
@@ -75,6 +76,8 @@ export default async function EmpresaPage() {
       </div>
 
       <EmpresaNav activo="ofertas" />
+
+      <TraerGuardados />
 
       {/* Solo cuando hay algo publicado: el enlace a una ficha vacía no
           le sirve de nada a nadie. */}

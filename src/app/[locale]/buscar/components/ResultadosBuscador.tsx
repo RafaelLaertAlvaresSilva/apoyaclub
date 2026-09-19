@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { BotonFavorito } from "@/components/Favoritos";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
@@ -212,6 +213,7 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
           </Link>
           <Ubicacion ciudad={oportunidad.clubCity} provincia={oportunidad.clubProvince} distanceKm={oportunidad.distanceKm} />
         </div>
+        <BotonFavorito tipo="oportunidad" id={oportunidad.opportunityId} nombre={oportunidad.title} />
       </div>
 
       <div>
@@ -308,6 +310,7 @@ function TarjetaClub({ club }: { club: ResultadoClub }) {
           <p className="font-semibold text-zinc-900">{club.clubName}</p>
           <Ubicacion ciudad={club.clubCity} provincia={club.clubProvince} distanceKm={club.distanceKm} />
         </div>
+        <BotonFavorito tipo="club" id={club.clubId} nombre={club.clubName} />
       </div>
 
       <div className="flex flex-wrap gap-1.5">
