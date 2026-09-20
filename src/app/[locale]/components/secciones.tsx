@@ -946,6 +946,23 @@ export async function SeccionPantallas() {
    ============================================================ */
 
 /**
+ * "Más de 100" a partir de 112, y "más de 10" a partir de 14.
+ *
+ * Se redondea hacia abajo al escalón anterior, nunca al más cercano:
+ * "más de 100" con 112 ideas es verdad; "más de 120" no lo sería. Y se
+ * resta uno antes de redondear para el caso en que el total caiga justo
+ * en el escalón — con 100 ideas clavadas, "más de 100" es mentira.
+ *
+ * Si redondear deja el número por debajo del primer escalón (menos de
+ * 100 ideas, menos de 10 categorías), no hay redondeo que valga y se
+ * dice la cifra exacta.
+ */
+function masDe(total: number, escalon: number): number {
+  const redondeado = Math.floor((total - 1) / escalon) * escalon;
+  return redondeado >= escalon ? redondeado : total;
+}
+
+/**
  * Cuatro cosas que hace ApoyaClub, debajo de la promesa.
  *
  * La promesa sola —"patrocinadores, colaboradores, servicios y
@@ -964,24 +981,13 @@ export async function SeccionPantallas() {
  * acuerda de volver aquí. Y se dicen redondeados hacia abajo —"más de
  * 100", "más de 10"— porque con 112 ideas eso es verdad hoy y lo
  * seguirá siendo mañana, pase lo que pase con el catálogo.
- */
-/**
- * "Más de 100" a partir de 112, y "más de 10" a partir de 14.
  *
- * Se redondea hacia abajo al escalón anterior, nunca al más cercano:
- * "más de 100" con 112 ideas es verdad; "más de 120" no lo sería. Y se
- * resta uno antes de redondear para el caso en que el total caiga justo
- * en el escalón — con 100 ideas clavadas, "más de 100" es mentira.
- *
- * Si redondear deja el número por debajo del primer escalón (menos de
- * 100 ideas, menos de 10 categorías), no hay redondeo que valga y se
- * dice la cifra exacta.
+ * El ancho (`max-w-3xl`) está puesto para que caigan en 1 + 3: la de
+ * las ideas, que es la más larga y la que más sorprende, sola arriba, y
+ * las otras tres debajo. No hay que "arreglarlo" ensanchándolo — con
+ * las cuatro buscando una sola fila quedan 3 + 1, y una pastilla suelta
+ * al final se lee como un descuido en vez de como un énfasis.
  */
-function masDe(total: number, escalon: number): number {
-  const redondeado = Math.floor((total - 1) / escalon) * escalon;
-  return redondeado >= escalon ? redondeado : total;
-}
-
 export async function FuncionesDestacadas() {
   const t = await getTranslations("home");
 
@@ -996,7 +1002,7 @@ export async function FuncionesDestacadas() {
   ];
 
   return (
-    <ul className="mx-auto mt-7 flex max-w-5xl flex-wrap items-center justify-center gap-x-3 gap-y-2.5">
+    <ul className="mx-auto mt-7 flex max-w-3xl flex-wrap items-center justify-center gap-x-3 gap-y-2.5">
       {funciones.map((funcion) => (
         <li
           key={funcion}

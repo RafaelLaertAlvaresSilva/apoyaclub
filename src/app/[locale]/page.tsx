@@ -84,9 +84,17 @@ export default async function Home() {
               {t("hero.etiqueta")}
             </span>
 
+            {/* El titular, en dos alturas. Arriba lo que le pasa al
+                club; debajo, más pequeño, lo que hace ApoyaClub con
+                ello. La primera sola es una observación bonita que no
+                dice qué es esto; la segunda nombra los dos verbos del
+                producto, descubrir y gestionar. */}
             <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl lg:text-5xl">
               {t("hero.tituloParte1")}
             </h1>
+            <p className="mx-auto mt-4 max-w-2xl text-xl font-bold leading-snug text-brand-teal-dark sm:text-2xl">
+              {t("hero.tituloParte2")}
+            </p>
 
             <p className="mx-auto mt-5 max-w-xl text-[17px] leading-relaxed text-zinc-600 sm:text-lg">
               {t("hero.resumen")}
