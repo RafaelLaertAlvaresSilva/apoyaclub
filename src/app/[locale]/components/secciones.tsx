@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/Badge";
+import { CATEGORIAS_IDEA, TOTAL_DE_IDEAS } from "@/lib/catalogo-ideas";
 import { PLANES_EN_ORDEN, periodicidad, precioFormateado } from "@/lib/planes";
 import { FormularioContacto } from "./FormularioContacto";
 import { Pantallas } from "./Pantallas";
@@ -937,6 +938,75 @@ export async function SeccionPantallas() {
         />
       </div>
     </section>
+  );
+}
+
+/* ============================================================
+   LAS CUATRO FUNCIONES DEL HERO
+   ============================================================ */
+
+/**
+ * Cuatro cosas que hace ApoyaClub, debajo de la promesa.
+ *
+ * La promesa sola —"patrocinadores, colaboradores, servicios y
+ * oportunidades para hacer crecer tu club"— dice para qué sirve, pero
+ * no qué es. Podría ser un listado, una agencia o un curso. Estas
+ * cuatro lo cierran en una línea, sin añadir un párrafo: se escanean,
+ * no se leen.
+ *
+ * Son cuatro y no ocho a propósito. Una fila de ocho pastillas vuelve a
+ * ser el muro de texto que el hero intenta no ser, y la lista completa
+ * ya está en /para-clubes.
+ *
+ * Los números salen del catálogo (`TOTAL_DE_IDEAS` y
+ * `CATEGORIAS_IDEA`), no escritos a mano. Una cifra a mano en una
+ * portada es una cifra que un día miente: el catálogo crece y nadie se
+ * acuerda de volver aquí. Y se dicen redondeados hacia abajo —"más de
+ * 100", "más de 10"— porque con 112 ideas eso es verdad hoy y lo
+ * seguirá siendo mañana, pase lo que pase con el catálogo.
+ */
+/**
+ * "Más de 100" a partir de 112, y "más de 10" a partir de 14.
+ *
+ * Se redondea hacia abajo al escalón anterior, nunca al más cercano:
+ * "más de 100" con 112 ideas es verdad; "más de 120" no lo sería. Y se
+ * resta uno antes de redondear para el caso en que el total caiga justo
+ * en el escalón — con 100 ideas clavadas, "más de 100" es mentira.
+ *
+ * Si redondear deja el número por debajo del primer escalón (menos de
+ * 100 ideas, menos de 10 categorías), no hay redondeo que valga y se
+ * dice la cifra exacta.
+ */
+function masDe(total: number, escalon: number): number {
+  const redondeado = Math.floor((total - 1) / escalon) * escalon;
+  return redondeado >= escalon ? redondeado : total;
+}
+
+export async function FuncionesDestacadas() {
+  const t = await getTranslations("home");
+
+  const funciones = [
+    t("funciones.ideas", {
+      ideas: masDe(TOTAL_DE_IDEAS, 100),
+      categorias: masDe(CATEGORIAS_IDEA.length, 10),
+    }),
+    t("funciones.empresas"),
+    t("funciones.tareas"),
+    t("funciones.dossier"),
+  ];
+
+  return (
+    <ul className="mx-auto mt-7 flex max-w-5xl flex-wrap items-center justify-center gap-x-3 gap-y-2.5">
+      {funciones.map((funcion) => (
+        <li
+          key={funcion}
+          className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 py-2 text-[13px] font-semibold text-brand-navy shadow-sm sm:text-sm"
+        >
+          <Tic className="flex-none text-brand-teal" tamano={14} />
+          {funcion}
+        </li>
+      ))}
+    </ul>
   );
 }
 

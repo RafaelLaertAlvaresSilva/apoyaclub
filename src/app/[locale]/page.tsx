@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { CtaFijoMovil } from "./components/CtaFijoMovil";
 import {
   CadenaDelConcepto,
+  FuncionesDestacadas,
   SeccionComoFunciona,
   SeccionCtaFinal,
   SeccionPantallas,
@@ -90,6 +91,11 @@ export default async function Home() {
             <p className="mx-auto mt-5 max-w-xl text-[17px] leading-relaxed text-zinc-600 sm:text-lg">
               {t("hero.resumen")}
             </p>
+
+            {/* La promesa dice para qué sirve; estas cuatro dicen qué
+                es. Sin ellas, esto podría ser un listado, una agencia o
+                un curso. */}
+            <FuncionesDestacadas />
           </div>
 
           {/* ============ LAS DOS PUERTAS ============ */}

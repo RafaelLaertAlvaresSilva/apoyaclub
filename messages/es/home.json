@@ -581,5 +581,11 @@
       ]
     },
     "nota": "Las pantallas son de muestra: los datos no son de ningún club real."
+  },
+  "funciones": {
+    "ideas": "Más de {ideas} ideas en más de {categorias} categorías",
+    "empresas": "Empresas y colaboradores",
+    "tareas": "Tus tareas, al día",
+    "dossier": "Dossier e informes"
   }
 }

@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { CtaFijoMovil } from "../components/CtaFijoMovil";
 import { MenuDeSecciones, type SeccionDelMenu } from "../components/MenuDeSecciones";
 import {
+  FuncionesDestacadas,
   SeccionComoFunciona,
   SeccionContacto,
   SeccionCtaFinal,
@@ -68,6 +69,8 @@ export default async function ParaClubesPage() {
             <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-zinc-600 sm:text-lg">
               {t("paraClubes.texto")}
             </p>
+
+            <FuncionesDestacadas />
 
             <div className="mt-9 flex flex-col items-center gap-3">
               <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
