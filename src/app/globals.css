@@ -9,7 +9,24 @@
  * grises neutros (zinc) siguen siendo los de Tailwind.
  */
 :root {
-  --background: #ffffff;
+  /*
+   * El lienzo: el fondo de todas las páginas.
+   *
+   * Antes era blanco puro, y con las tarjetas también blancas no se
+   * distinguía dónde acababa una y empezaba la página: todo se leía
+   * como una sola hoja plana. Ahora el fondo lleva un punto de azul
+   * —el mismo tono que el azul marino de la marca, 210°, no un gris
+   * cualquiera— y las tarjetas blancas se levantan de él.
+   *
+   * Es deliberadamente flojo. Un fondo de color en una web de producto
+   * se nota a los dos segundos y cansa a los diez; este solo tiene que
+   * hacer que lo blanco parezca blanco.
+   */
+  --lienzo: #f1f5f9;
+  --lienzo-hondo: #e6edf4;
+  --lienzo-borde: #dbe4ed;
+
+  --background: var(--lienzo);
   --foreground: #18181b;
 
   --brand-navy: #14304f;
@@ -33,6 +50,21 @@
   --color-brand-teal-light: var(--brand-teal-light);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /*
+   * Los tres grises más claros de Tailwind, redefinidos con el mismo
+   * punto de azul. Se hace aquí y no fichero por fichero porque
+   * `bg-zinc-50` está escrito en más de cincuenta sitios: cambiarlo a
+   * mano era garantizar que la mitad de las páginas se quedaran con el
+   * gris viejo y la otra mitad con el nuevo.
+   *
+   * Solo los tres claros, que son superficies y bordes. Del 300 para
+   * abajo son textos, y un texto teñido de azul no se lee como una
+   * decisión: se lee como un monitor mal calibrado.
+   */
+  --color-zinc-50: var(--lienzo);
+  --color-zinc-100: var(--lienzo-hondo);
+  --color-zinc-200: var(--lienzo-borde);
 }
 
 /*

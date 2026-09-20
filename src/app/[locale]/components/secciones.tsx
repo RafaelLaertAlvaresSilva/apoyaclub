@@ -454,7 +454,11 @@ export async function SeccionEmbudo() {
         ))}
       </ol>
 
-      <div className="mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-center gap-3 rounded-2xl bg-zinc-50 px-6 py-5 text-center">
+      {/* En blanco y con borde, como las cuatro casillas de arriba.
+          Era `bg-zinc-50`, que funcionaba cuando el fondo de la página
+          era blanco; desde que el fondo es el lienzo —del mismo tono—
+          esta caja desaparecía del todo. */}
+      <div className="mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-center gap-3 rounded-2xl border border-zinc-200 bg-white px-6 py-5 text-center">
         <span className="rounded-full border border-zinc-300 bg-white px-4 py-1.5 text-sm font-semibold text-zinc-500">
           {t("embudo.descartada")}
         </span>
@@ -907,7 +911,7 @@ export async function SeccionPantallas() {
   const estados = t.raw("embudo.estados") as { nombre: string; texto: string }[];
 
   return (
-    <section className="bg-white px-4 py-20 sm:px-6 sm:py-24">
+    <section className="px-4 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-6xl">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
@@ -963,13 +967,19 @@ function masDe(total: number, escalon: number): number {
 }
 
 /**
- * Cuatro cosas que hace ApoyaClub, debajo de la promesa.
+ * Cuatro cosas que hace ApoyaClub, debajo del titular.
  *
- * La promesa sola —"patrocinadores, colaboradores, servicios y
- * oportunidades para hacer crecer tu club"— dice para qué sirve, pero
- * no qué es. Podría ser un listado, una agencia o un curso. Estas
- * cuatro lo cierran en una línea, sin añadir un párrafo: se escanean,
- * no se leen.
+ * El titular dice que tu club tiene algo que ofrecer y que aquí lo
+ * descubres y lo gestionas. Eso es la promesa; estas cuatro son la
+ * prueba. Sin ellas ApoyaClub podría ser un listado, una agencia o un
+ * curso, y quien entra no tiene forma de saberlo hasta que baja media
+ * página.
+ *
+ * Son pastillas y no un párrafo a propósito: se escanean en medio
+ * segundo. Aquí había antes una línea en prosa que enumeraba lo mismo
+ * —"patrocinadores, colaboradores, servicios y oportunidades"— y se
+ * quitó: dos listas seguidas de las mismas cosas no convencen el
+ * doble, cansan.
  *
  * Son cuatro y no ocho a propósito. Una fila de ocho pastillas vuelve a
  * ser el muro de texto que el hero intenta no ser, y la lista completa

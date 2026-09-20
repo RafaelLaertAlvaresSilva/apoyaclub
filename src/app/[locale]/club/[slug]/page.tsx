@@ -898,7 +898,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   });
 
   return (
-    <div className="flex flex-1 flex-col bg-white">
+    <div className="flex flex-1 flex-col bg-zinc-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados) }}

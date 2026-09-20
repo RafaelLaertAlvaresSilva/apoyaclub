@@ -48,11 +48,11 @@ export default async function ParaClubesPage() {
   const t = await getTranslations("home");
 
   return (
-    <div className="flex flex-1 flex-col bg-white">
+    <div className="flex flex-1 flex-col bg-zinc-50">
       <Header />
 
       <main id="contenido" className="flex-1 pb-24 sm:pb-0">
-        <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-zinc-50 to-white px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-16">
+        <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-white to-zinc-50 px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-16">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-brand-teal/10 blur-3xl"

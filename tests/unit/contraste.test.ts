@@ -55,3 +55,43 @@ describe("contraste de los colores de marca", () => {
     expect(contraste(token("brand-teal-dark"), token("brand-teal-light"))).toBeGreaterThanOrEqual(4.5);
   });
 });
+
+/**
+ * El lienzo: el fondo teñido de todas las páginas.
+ *
+ * Tiene dos trabajos opuestos y aquí se comprueban los dos. Por un
+ * lado, todo lo que se escribe encima tiene que seguir leyéndose. Por
+ * otro —y esta es la razón de que exista— tiene que distinguirse del
+ * blanco de las tarjetas: si alguien lo devuelve a blanco puro "para
+ * limpiar", la página vuelve a ser la hoja plana que era y nadie se
+ * entera hasta que lo ve un club.
+ */
+describe("el lienzo de fondo", () => {
+  const lienzo = () => token("lienzo");
+
+  it("el texto normal se lee encima", () => {
+    expect(contraste(lienzo(), token("foreground"))).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it("los títulos y las etiquetas de marca se leen encima", () => {
+    expect(contraste(lienzo(), token("brand-navy"))).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(lienzo(), token("brand-teal-dark"))).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it("se distingue del blanco de las tarjetas", () => {
+    // 1,0 sería el mismo color. No hay un mínimo de la WCAG para esto
+    // —no es texto—, así que el listón lo pone el ojo: por debajo de
+    // 1,03 la tarjeta deja de verse como una tarjeta.
+    expect(contraste(BLANCO, lienzo())).toBeGreaterThan(1.03);
+  });
+
+  it("pero no tanto como para parecer una caja gris", () => {
+    expect(contraste(BLANCO, lienzo())).toBeLessThan(1.2);
+  });
+
+  it("el escalón hondo y el borde van en la misma dirección, no más claros", () => {
+    const luz = (hex: string) => contraste(hex, "#000000");
+    expect(luz(token("lienzo-hondo"))).toBeLessThan(luz(lienzo()));
+    expect(luz(token("lienzo-borde"))).toBeLessThan(luz(token("lienzo-hondo")));
+  });
+});

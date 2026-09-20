@@ -59,14 +59,14 @@ export default async function Home() {
   const t = await getTranslations("home");
 
   return (
-    <div className="flex flex-1 flex-col bg-white">
+    <div className="flex flex-1 flex-col bg-zinc-50">
       <Header />
 
       {/* El hueco de abajo es para el botón fijo del móvil, que si no
           taparía la última línea de la página. */}
       <main id="contenido" className="flex-1 pb-24 sm:pb-0">
         {/* ============ HERO ============ */}
-        <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-zinc-50 to-white px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-16">
+        <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-white to-zinc-50 px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-16">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-brand-teal/10 blur-3xl"
@@ -84,20 +84,23 @@ export default async function Home() {
               {t("hero.etiqueta")}
             </span>
 
-            {/* El titular, en dos alturas. Arriba lo que le pasa al
-                club; debajo, más pequeño, lo que hace ApoyaClub con
-                ello. La primera sola es una observación bonita que no
-                dice qué es esto; la segunda nombra los dos verbos del
-                producto, descubrir y gestionar. */}
+            {/* El titular, en dos alturas, y nada más. Arriba lo que
+                le pasa al club; debajo, más pequeño, lo que hace
+                ApoyaClub con ello. La primera sola es una observación
+                bonita que no dice qué es esto; la segunda nombra los
+                dos verbos del producto, descubrir y gestionar.
+                *
+                * Debajo había una tercera línea —"patrocinadores,
+                * colaboradores, servicios y oportunidades para hacer
+                * crecer tu club"— que enumeraba lo mismo que enumeran
+                * las cuatro pastillas de aquí abajo, pero en prosa y
+                * peor. Dos listas seguidas de las mismas cosas no
+                * convencen el doble: cansan. */}
             <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl lg:text-5xl">
               {t("hero.tituloParte1")}
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-xl font-bold leading-snug text-brand-teal-dark sm:text-2xl">
               {t("hero.tituloParte2")}
-            </p>
-
-            <p className="mx-auto mt-5 max-w-xl text-[17px] leading-relaxed text-zinc-600 sm:text-lg">
-              {t("hero.resumen")}
             </p>
 
             {/* La promesa dice para qué sirve; estas cuatro dicen qué
