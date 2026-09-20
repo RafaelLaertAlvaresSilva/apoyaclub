@@ -53,7 +53,7 @@ export function Footer() {
           <div>
             <p className="text-lg font-extrabold text-white">{t("apoyaclub")}</p>
             <p className="mt-3 max-w-xs text-sm text-white/55">{t("descripcion")}</p>
-            <Link href="/#contacto" className="mt-4 inline-block text-sm font-medium text-white/70 hover:text-white">
+            <Link href="/para-clubes#contacto" className="mt-4 inline-block text-sm font-medium text-white/70 hover:text-white">
               {t("contacto")}
             </Link>
           </div>

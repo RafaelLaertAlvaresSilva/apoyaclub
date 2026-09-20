@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { PLANES_EN_ORDEN, periodicidad, precioFormateado } from "@/lib/planes";
 import { FormularioContacto } from "./FormularioContacto";
+import { Pantallas } from "./Pantallas";
 
 /**
  * Las secciones largas de la portada, sueltas.
@@ -669,9 +670,19 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
           ))}
         </div>
 
-        <p className="mt-7 text-center text-sm text-zinc-600">{t("precio.gratisPrimerMes")}</p>
-        <p className="mt-1 text-center text-sm text-zinc-500">{t("precio.cancelar")}</p>
-        <p className="mt-1 text-center text-sm text-zinc-500">{t("precio.comision")}</p>
+        {/* Tres líneas de letra pequeña, una debajo de otra, no se leen:
+            se saltan. En la portada van resumidas en una. */}
+        {compacta ? (
+          <p className="mt-7 text-center text-sm text-zinc-600">
+            {t("precio.resumenCondiciones")}
+          </p>
+        ) : (
+          <>
+            <p className="mt-7 text-center text-sm text-zinc-600">{t("precio.gratisPrimerMes")}</p>
+            <p className="mt-1 text-center text-sm text-zinc-500">{t("precio.cancelar")}</p>
+            <p className="mt-1 text-center text-sm text-zinc-500">{t("precio.comision")}</p>
+          </>
+        )}
 
         {!compacta && (
           <div className="mx-auto mt-12 max-w-3xl rounded-3xl border border-zinc-200 bg-white p-8">
@@ -819,6 +830,111 @@ export async function SeccionContacto() {
 
       <div className="mt-9 rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm">
         <FormularioContacto />
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   EL VÍDEO
+   ============================================================ */
+
+/**
+ * Dónde está el vídeo, dentro de `public/`. Una sola línea, a
+ * propósito: el día que haya vídeo se cambia el `null` por
+ * `"/apoyaclub-en-un-minuto.mp4"` y la sección aparece sola.
+ *
+ * Y mientras no lo haya, la sección no se pinta. Un recuadro vacío con
+ * un triángulo de "play" que no reproduce nada es peor que no tener
+ * vídeo: el visitante pulsa, no pasa nada, y lo que aprende es que la
+ * web está a medio hacer.
+ */
+const VIDEO_DEL_PRODUCTO: string | null = null;
+
+export async function SeccionVideo() {
+  if (!VIDEO_DEL_PRODUCTO) return null;
+
+  const t = await getTranslations("home");
+
+  return (
+    <section className="px-4 py-20 sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-2xl text-center">
+        <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+          {t("video.eyebrow")}
+        </p>
+        <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+          {t("video.titulo")}
+        </h2>
+        <p className="mt-4 leading-relaxed text-zinc-600">{t("video.texto")}</p>
+      </div>
+
+      {/* `preload="metadata"` y no `auto`: un vídeo de un minuto son
+          varios megas, y la mayoría de quien entra no le va a dar al
+          play. Que no los pague por adelantado, sobre todo con datos
+          del móvil. */}
+      <div className="mx-auto mt-10 max-w-3xl overflow-hidden rounded-3xl border border-zinc-200 bg-black shadow-xl shadow-brand-navy/15">
+        <video
+          controls
+          playsInline
+          preload="metadata"
+          className="aspect-video h-auto w-full max-w-full"
+        >
+          <source src={VIDEO_DEL_PRODUCTO} type="video/mp4" />
+          {t("video.alternativa")}
+        </video>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   LAS CUATRO PANTALLAS
+   ============================================================ */
+
+/** Lo que antes eran seis secciones de texto. Ver `Pantallas.tsx`. */
+export async function SeccionPantallas() {
+  const t = await getTranslations("home");
+  const lista = t.raw("pantallas.lista") as { clave: string; pestana: string; pie: string }[];
+  const oportunidad = t.raw("pantallas.oportunidad") as {
+    categoria: string;
+    titulo: string;
+    precio: string;
+    periodo: string;
+    datos: string[];
+    incluye: string[];
+  };
+  const estados = t.raw("embudo.estados") as { nombre: string; texto: string }[];
+
+  return (
+    <section className="bg-white px-4 py-20 sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+            {t("pantallas.eyebrow")}
+          </p>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+            {t("pantallas.titulo")}
+          </h2>
+        </div>
+
+        <Pantallas
+          lista={lista}
+          etiquetaLista={t("pantallas.etiquetaLista")}
+          club={{
+            url: t("paginaClub.maqueta.url"),
+            nombre: t("paginaClub.maqueta.nombre"),
+            etiqueta1: t("paginaClub.maqueta.etiqueta1"),
+            etiqueta2: t("paginaClub.maqueta.etiqueta2"),
+            etiqueta3: t("paginaClub.maqueta.etiqueta3"),
+            seguidores: t("paginaClub.maqueta.seguidores"),
+            alcance: t("paginaClub.maqueta.alcance"),
+            equipos: t("paginaClub.maqueta.equipos"),
+            oportunidades: t("paginaClub.maqueta.oportunidades"),
+          }}
+          oportunidad={oportunidad}
+          estados={estados}
+          nota={t("pantallas.nota")}
+        />
       </div>
     </section>
   );

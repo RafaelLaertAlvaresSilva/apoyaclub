@@ -24,21 +24,10 @@ import { useEffect, useRef, useState } from "react";
 
 export type SeccionDelMenu = { id: string; etiqueta: string };
 
-/** Las de la portada. Desde que la portada es corta caben todas; las
- * páginas de club y de empresa pasan las suyas. */
-const SECCIONES_PORTADA: SeccionDelMenu[] = [
-  { id: "para-quien", etiqueta: "Para quién es" },
-  { id: "como-funciona", etiqueta: "Cómo funciona" },
-  { id: "precio", etiqueta: "Precio" },
-  { id: "faq", etiqueta: "Preguntas" },
-  { id: "contacto", etiqueta: "Contacto" },
-];
-
-export function MenuDeSecciones({
-  secciones = SECCIONES_PORTADA,
-}: {
-  secciones?: SeccionDelMenu[];
-}) {
+/** Cada página pasa la suya. La portada no lo usa: desde que tiene seis
+ * bloques se acaba antes de que te pierdas, y un índice encima de una
+ * página corta es una barra más que tapar. */
+export function MenuDeSecciones({ secciones }: { secciones: SeccionDelMenu[] }) {
   const [alturaCabecera, setAlturaCabecera] = useState(0);
   const [activa, setActiva] = useState<string | null>(null);
   const barra = useRef<HTMLDivElement>(null);
