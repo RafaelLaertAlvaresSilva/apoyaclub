@@ -262,10 +262,15 @@ export function OportunidadForm({
       <BloquePlegable
         titulo="Qué recibe la empresa y quién hace qué"
         resumen="El detalle del acuerdo, línea a línea. No hace falta para publicar, pero es lo que hace que la empresa entienda qué le estás ofreciendo."
-        abierto={
-          (valoresIniciales?.beneficios?.length ?? 0) > 0 ||
-          (valoresIniciales?.acciones?.length ?? 0) > 0
-        }
+        /* Abierto siempre.
+         *
+         * Lo tuve plegado cuando estaba vacío, para no alargar un
+         * formulario ya largo. El resultado fue que no se veía: quien
+         * entraba a editar rellenaba los campos de siempre, guardaba, y
+         * la ficha seguía en blanco sin que nada explicara por qué.
+         * Una función que hay que descubrir es una función que no
+         * existe. */
+        abierto
       >
         <EditorDeLaFicha
           beneficios={valoresIniciales?.beneficios ?? []}
