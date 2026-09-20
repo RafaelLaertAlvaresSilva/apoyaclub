@@ -382,30 +382,31 @@
     "cierre2": "ApoyaClub convierte todo lo que tu club puede ofrecer en oportunidades que puedes mostrar y gestionar."
   },
   "embudo": {
-    "eyebrow": "Lo que no tiene ningún directorio",
-    "titulo": "Que ninguna oportunidad se quede por el camino",
-    "texto": "Una empresa escribe en marzo, se contesta, y en junio nadie se acuerda. Cada solicitud que te llega tiene su estado, y tú ves de un vistazo cuáles están vivas.",
+    "eyebrow": "Cuando una empresa te escribe",
+    "titulo": "No se te pierde ningún mensaje",
+    "texto": "Cada empresa que te escribe aparece en una lista dentro de tu panel. Tú la vas moviendo según cómo va la conversación, y de un vistazo ves a quién tienes pendiente de contestar.",
+    "comoSeLee": "Así se mueve un mensaje, de izquierda a derecha:",
     "estados": [
       {
         "nombre": "Nueva",
-        "texto": "Acaba de escribirte. Te llega aviso por correo."
+        "texto": "Una empresa te acaba de escribir. Te llega un aviso a tu correo."
       },
       {
         "nombre": "Vista",
-        "texto": "La has leído. Sigue esperando respuesta."
+        "texto": "Ya has leído el mensaje, pero todavía no le has contestado."
       },
       {
         "nombre": "En conversación",
-        "texto": "Estáis hablando. Aquí es donde se cierra."
+        "texto": "Estáis hablando. Aquí es donde se cierra el acuerdo."
       },
       {
         "nombre": "Cerrada",
-        "texto": "Acuerdo hecho. Pasa a tus tareas."
+        "texto": "Acuerdo cerrado. Lo que prometiste pasa solo a tu lista de tareas."
       }
     ],
     "descartada": "Descartada",
-    "descartadaTexto": "Las que no encajan salen de en medio, pero no se borran.",
-    "cierre": "Y lo que se cierra no termina ahí: pasa a tus tareas, con fechas, y de ahí sale el informe que le enseñas a la empresa cuando toca renovar."
+    "descartadaTexto": "Si la empresa no encajaba, la apartas y deja de molestar. No se borra: el año que viene puede volver a interesarte.",
+    "cierre": "En resumen: te escriben, lo ves todo en un sitio, y cuando cerráis el acuerdo ApoyaClub te va recordando lo que te toca hacer para cumplirlo."
   },
   "dossier": {
     "eyebrow": "Dossier automático",

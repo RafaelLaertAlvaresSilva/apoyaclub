@@ -417,7 +417,14 @@ export async function SeccionEmbudo() {
         <p className="mt-4 leading-relaxed text-zinc-600">{t("embudo.texto")}</p>
       </div>
 
-      <ol className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Sin esta línea, las cuatro casillas son cuatro palabras
+          sueltas: nadie sabe si hay que elegir una, si son opciones o
+          si van en orden. */}
+      <p className="mt-10 text-center text-sm font-semibold text-brand-navy">
+        {t("embudo.comoSeLee")}
+      </p>
+
+      <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {estadosEmbudo.map((estado, indice) => (
           <li
             key={estado.nombre}
@@ -445,14 +452,14 @@ export async function SeccionEmbudo() {
         ))}
       </ol>
 
-      <div className="mt-6 flex flex-wrap items-center justify-center gap-3 rounded-2xl bg-zinc-50 px-6 py-5 text-center">
+      <div className="mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-center gap-3 rounded-2xl bg-zinc-50 px-6 py-5 text-center">
         <span className="rounded-full border border-zinc-300 bg-white px-4 py-1.5 text-sm font-semibold text-zinc-500">
           {t("embudo.descartada")}
         </span>
-        <span className="text-sm text-zinc-600">{t("embudo.descartadaTexto")}</span>
+        <span className="text-sm leading-relaxed text-zinc-600">{t("embudo.descartadaTexto")}</span>
       </div>
 
-      <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] leading-relaxed text-zinc-600 sm:text-base">
+      <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] font-medium leading-relaxed text-brand-navy sm:text-base">
         {t("embudo.cierre")}
       </p>
     </section>
