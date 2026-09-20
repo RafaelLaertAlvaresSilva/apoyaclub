@@ -1,14 +1,17 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
+// Cada columna apunta a la página de su público, no a la portada. La
+// portada solo pregunta cuál de los dos eres; el detalle está en
+// `/para-clubes` y `/para-empresas`.
 const ENLACES_CLUBES = [
-  { href: "/#como-funciona", clave: "comoFunciona" },
-  { href: "/#precio", clave: "precios" },
+  { href: "/para-clubes#como-funciona", clave: "comoFunciona" },
+  { href: "/para-clubes#precio", clave: "precios" },
   { href: "/registro-club", clave: "crearPagina" },
   // Desde el lado del club, el directorio de empresas es a quién
   // escribir (migración 0046).
   { href: "/empresas", clave: "empresasQueAyudan" },
-  { href: "/#faq", clave: "faq" },
+  { href: "/para-clubes#faq", clave: "faq" },
 ] as const;
 
 const ENLACES_EMPRESAS = [
@@ -17,8 +20,8 @@ const ENLACES_EMPRESAS = [
   // de barrio sin presupuesto de marketing— no estaba enlazada ni aquí
   // ni en la cabecera. Estaba construida la puerta y faltaba el cartel.
   { href: "/servicios", clave: "queNecesitan" },
-  { href: "/#como-funciona", clave: "comoFunciona" },
-  { href: "/#empresas", clave: "accesoGratuito" },
+  { href: "/para-empresas#como", clave: "comoFunciona" },
+  { href: "/para-empresas", clave: "accesoGratuito" },
   { href: "/registro-empresa", clave: "publicarOferta" },
 ] as const;
 

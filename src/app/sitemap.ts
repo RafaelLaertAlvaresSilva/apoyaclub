@@ -22,6 +22,8 @@ export const revalidate = 3600;
 
 const RUTAS_ESTATICAS: { ruta: string; prioridad: number; frecuencia: "daily" | "weekly" | "monthly" }[] = [
   { ruta: "", prioridad: 1, frecuencia: "weekly" },
+  { ruta: "/para-clubes", prioridad: 0.9, frecuencia: "weekly" },
+  { ruta: "/para-empresas", prioridad: 0.9, frecuencia: "weekly" },
   { ruta: "/buscar", prioridad: 0.9, frecuencia: "daily" },
   { ruta: "/servicios", prioridad: 0.8, frecuencia: "daily" },
   { ruta: "/registro-club", prioridad: 0.8, frecuencia: "monthly" },

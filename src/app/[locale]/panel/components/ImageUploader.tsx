@@ -7,15 +7,19 @@ import { subirImagenClub } from "@/lib/club-storage";
 
 type Props = {
   userId: string;
-  carpeta: "logo" | "fotos" | "patrocinadores" | "equipos" | "comunidad";
+  carpeta: "logo" | "fotos" | "patrocinadores" | "equipos" | "comunidad" | "logo-empresa";
   label: string;
   onSubido: (url: string) => Promise<void> | void;
 };
 
 /**
  * Botón para subir una imagen: la comprime en el navegador, la sube a
- * Supabase Storage (carpeta del propio club) y avisa al padre con la URL
+ * Supabase Storage (carpeta de quien sube) y avisa al padre con la URL
  * pública resultante para que la guarde donde corresponda.
+ *
+ * Vale igual para un club y para una empresa: la regla del bucket solo
+ * comprueba que la carpeta raíz sea el identificador de quien sube, sin
+ * mirar de qué tipo de cuenta se trata.
  */
 export function ImageUploader({ userId, carpeta, label, onSubido }: Props) {
   const [supabase] = useState(() => createClient());

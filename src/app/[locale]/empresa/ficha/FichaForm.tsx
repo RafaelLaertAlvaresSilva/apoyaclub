@@ -1,9 +1,11 @@
 "use client";
 
-import { useActionState } from "react";
+import Image from "next/image";
+import { useActionState, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import type { ContactoEmpresa } from "@/lib/empresas";
+import { ImageUploader } from "../../panel/components/ImageUploader";
 import { Campo, SeccionCard, clasesInput, clasesTextarea } from "../../panel/components/SeccionCard";
 import { CamposDeContacto } from "../components/CamposDeContacto";
 import { guardarFichaEmpresa } from "../actions";
@@ -17,6 +19,7 @@ export type DatosFicha = {
   descripcion: string;
   enElDirectorio: boolean;
   quiereAvisos: boolean;
+  logoUrl: string | null;
   contacto: ContactoEmpresa;
 };
 
@@ -28,13 +31,57 @@ export type DatosFicha = {
  * descripción antes de dejarla hacer nada es la forma más rápida de que
  * cierre la pestaña.
  */
-export function FichaForm({ datos }: { datos: DatosFicha }) {
+export function FichaForm({ datos, userId }: { datos: DatosFicha; userId: string }) {
   const [estado, formAction] = useActionState(guardarFichaEmpresa, null);
+
+  // El logo viaja en un campo oculto, igual que en el panel del club:
+  // se sube antes de guardar y lo que se manda es la dirección ya
+  // subida, no el archivo.
+  const [logoUrl, setLogoUrl] = useState(datos.logoUrl ?? "");
 
   return (
     <form action={formAction} className="flex flex-col gap-6">
       <SeccionCard titulo="Tu empresa" descripcion="Lo que ve un club antes de escribirte.">
         <div className="flex flex-col gap-4">
+          {/* Lo primero que ve un club en el directorio. Una ficha sin
+              logo se lee como una empresa a medio hacer. */}
+          <Campo etiqueta="Logo" grupo ayuda="Cuadrado se ve mejor. Puedes cambiarlo cuando quieras.">
+            <input type="hidden" name="logoUrl" value={logoUrl} />
+            <div className="flex flex-wrap items-center gap-3">
+              {logoUrl ? (
+                <Image
+                  src={logoUrl}
+                  alt="Logo de tu empresa"
+                  width={64}
+                  height={64}
+                  className="h-16 w-16 rounded-lg border border-zinc-200 bg-white object-contain p-1"
+                  unoptimized
+                />
+              ) : (
+                <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-dashed border-zinc-300 bg-zinc-50 text-xs text-zinc-400">
+                  Sin logo
+                </div>
+              )}
+
+              <ImageUploader
+                userId={userId}
+                carpeta="logo-empresa"
+                label={logoUrl ? "Cambiar logo" : "Subir logo"}
+                onSubido={(url) => setLogoUrl(url)}
+              />
+
+              {logoUrl && (
+                <button
+                  type="button"
+                  onClick={() => setLogoUrl("")}
+                  className="rounded-lg px-3 py-1.5 text-sm font-medium text-zinc-500 transition-colors hover:bg-red-50 hover:text-red-700"
+                >
+                  Quitar
+                </button>
+              )}
+            </div>
+          </Campo>
+
           <Campo etiqueta="Nombre *">
             <input
               name="nombre"

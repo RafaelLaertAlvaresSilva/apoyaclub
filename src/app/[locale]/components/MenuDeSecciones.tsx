@@ -3,17 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Índice de la portada: una barra con las secciones, pegada bajo la
- * cabecera, que marca en cuál estás.
+ * Índice de una página larga: una barra con sus secciones, pegada bajo
+ * la cabecera, que marca en cuál estás.
  *
- * La portada es larga, y tiene que serlo — un club que se plantea pagar
- * necesita ver qué recibe. Lo que no puede es no tener mapa: sin él,
- * quien solo quiere el precio se pierde por el camino y quien vuelve una
- * segunda vez tiene que volver a bajar entero.
+ * La usan la portada y las dos páginas de detalle —clubes y empresas—,
+ * y cada una pasa su lista. Quien solo quiere el precio no debería
+ * tener que bajar la página entera para encontrarlo, y quien vuelve una
+ * segunda vez tampoco.
  *
  * Dos decisiones:
  *
- *   - Seis entradas, no catorce. Un índice con todas las secciones
+ *   - Pocas entradas, no todas. Un índice con todas las secciones
  *     vuelve a ser el problema que intenta resolver. Están las que
  *     alguien busca a propósito; las demás se leen bajando.
  *   - La altura de la cabecera se mide en el navegador en vez de
@@ -22,16 +22,23 @@ import { useEffect, useRef, useState } from "react";
  *     hasta que lo ve un club.
  */
 
-const SECCIONES = [
-  { id: "como-funciona", etiqueta: "Cómo funciona" },
-  { id: "clubes", etiqueta: "Qué puedes ofrecer" },
-  { id: "oportunidades", etiqueta: "Oportunidades" },
-  { id: "empresas", etiqueta: "Para empresas" },
-  { id: "herramientas", etiqueta: "Herramientas" },
-  { id: "precio", etiqueta: "Precio" },
-] as const;
+export type SeccionDelMenu = { id: string; etiqueta: string };
 
-export function MenuDeSecciones() {
+/** Las de la portada. Desde que la portada es corta caben todas; las
+ * páginas de club y de empresa pasan las suyas. */
+const SECCIONES_PORTADA: SeccionDelMenu[] = [
+  { id: "para-quien", etiqueta: "Para quién es" },
+  { id: "como-funciona", etiqueta: "Cómo funciona" },
+  { id: "precio", etiqueta: "Precio" },
+  { id: "faq", etiqueta: "Preguntas" },
+  { id: "contacto", etiqueta: "Contacto" },
+];
+
+export function MenuDeSecciones({
+  secciones = SECCIONES_PORTADA,
+}: {
+  secciones?: SeccionDelMenu[];
+}) {
   const [alturaCabecera, setAlturaCabecera] = useState(0);
   const [activa, setActiva] = useState<string | null>(null);
   const barra = useRef<HTMLDivElement>(null);
@@ -71,7 +78,7 @@ export function MenuDeSecciones() {
   useEffect(() => {
     if (typeof IntersectionObserver === "undefined") return;
 
-    const nodos = SECCIONES.map(({ id }) => document.getElementById(id)).filter(
+    const nodos = secciones.map(({ id }) => document.getElementById(id)).filter(
       (nodo): nodo is HTMLElement => nodo !== null,
     );
     if (nodos.length === 0) return;
@@ -89,7 +96,7 @@ export function MenuDeSecciones() {
 
     for (const nodo of nodos) observador.observe(nodo);
     return () => observador.disconnect();
-  }, []);
+  }, [secciones]);
 
   return (
     <nav
@@ -101,18 +108,17 @@ export function MenuDeSecciones() {
           filas: una barra de índice de dos alturas se come la pantalla
           justo en el sitio donde menos sobra.
           *
-          * Con dos añadidos, porque en un teléfono solo caben tres de
-          * las seis y "Para empresas" —la única entrada a lo que le
-          * interesa a un comercio— quedaba fuera de pantalla detrás de
-          * un gesto que casi nadie hace: un degradado en el borde
-          * derecho que avisa de que hay más, y la sección en la que
-          * estás, que se trae sola a la vista al ir bajando. */}
+          * Con dos añadidos, porque en un teléfono solo caben tres o
+          * cuatro y las últimas quedaban fuera de pantalla detrás de un
+          * gesto que casi nadie hace: un degradado en el borde derecho
+          * que avisa de que hay más, y la sección en la que estás, que
+          * se trae sola a la vista al ir bajando. */}
       <div className="relative">
         <div
           ref={barra}
           className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 py-2 sm:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-        {SECCIONES.map((seccion) => (
+        {secciones.map((seccion) => (
           <a
             key={seccion.id}
             href={`#${seccion.id}`}

@@ -15,7 +15,7 @@ export async function subirImagenClub(
   // "logo-empresa" es del directorio (migración 0033). Cabe aquí
   // porque la política de Storage solo mira que la carpeta raíz sea el
   // uid de quien sube, y eso vale igual para un club que para una empresa.
-  carpeta: "logo" | "fotos" | "patrocinadores" | "equipos" | "comunidad",
+  carpeta: "logo" | "fotos" | "patrocinadores" | "equipos" | "comunidad" | "logo-empresa",
   archivo: File,
 ): Promise<string> {
   const blob = await comprimirImagen(archivo);

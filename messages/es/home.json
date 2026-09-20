@@ -4,7 +4,7 @@
     "descripcion": "Conecta tu club con empresas interesadas en colaborar. Publica tus oportunidades de patrocinio, desde 50 € hasta el patrocinio principal, y deja que te encuentren y contacten directamente. Sin comisiones."
   },
   "hero": {
-    "etiqueta": "LA PLATAFORMA DE PATROCINIO DEPORTIVO",
+    "etiqueta": "PLATAFORMA DE GESTIÓN DE PATROCINIOS DEPORTIVOS",
     "tituloParte1": "Cada club tiene algo que ofrecer.",
     "tituloParte2": "ApoyaClub te da las herramientas para mostrarlo, gestionarlo y no dejar escapar ninguna oportunidad.",
     "cta": "Prueba 1 mes gratis",
@@ -13,20 +13,21 @@
     "cadenaOportunidad": "Oportunidad",
     "cadenaEmpresa": "Empresa",
     "resumen": "Patrocinadores, colaboradores, servicios y oportunidades para hacer crecer tu club.",
-    "ctaSecundario": "Descubre cómo funciona",
-    "puenteEmpresa": "¿Eres una empresa?",
-    "puenteEmpresaEnlace": "Mira qué puedes patrocinar cerca de ti",
-    "puenteEmpresaNota": "Gratis, sin cuenta y sin intermediarios."
+    "ctaSecundario": "Descubre cómo funciona"
   },
   "caminos": {
-    "clubTitulo": "Soy un club",
-    "clubTexto": "Quiero mostrar lo que mi club puede ofrecer, encontrar oportunidades y gestionar mis contactos.",
-    "clubCta": "Quiero hacer crecer mi club",
-    "empresaTitulo": "Soy una empresa o quiero colaborar",
-    "empresaTexto": "Descubre qué puedes patrocinar, o qué necesita un club de tu zona. Y si lo tuyo es un servicio en vez de dinero, también encaja.",
-    "empresaCta": "Buscar oportunidades",
-    "empresaGratis": "Gratis, sin cuenta y sin intermediarios",
-    "empresaCtaNecesidades": "Ver qué necesitan los clubes"
+    "clubEtiqueta": "PARA CLUBES",
+    "clubTitulo": "Tengo un club",
+    "clubTexto": "La página de tu club, tus oportunidades de patrocinio y las herramientas para conseguirlas, cumplirlas y demostrarlo.",
+    "clubCta": "Crea la página de tu club",
+    "clubCondiciones": "1 mes gratis · Sin permanencia",
+    "clubAtajo": "O ve directo al registro",
+    "empresaEtiqueta": "PARA EMPRESAS Y COLABORADORES",
+    "empresaTitulo": "Soy una empresa o colaborador",
+    "empresaTexto": "Descubre qué puedes patrocinar cerca de ti, o qué necesita un club de tu zona. Y si lo tuyo es un servicio en vez de dinero, también cuenta.",
+    "empresaCta": "Quiero descubrir oportunidades",
+    "empresaGratis": "Gratis, sin cuenta y sin intermediarios.",
+    "empresaAtajo": "O ve directo al buscador"
   },
   "comoFunciona": {
     "eyebrow": "En cuatro pasos",
@@ -327,7 +328,8 @@
       }
     ],
     "fiscalidadTitulo": "Sobre la fiscalidad del patrocinio",
-    "fiscalidadTexto": "Un acuerdo de patrocinio entre un club y una empresa puede tener implicaciones fiscales (IVA, facturación, deducciones…) para ambas partes. ApoyaClub no gestiona el cobro ni actúa como agencia, y <fuerte>no ofrece asesoramiento fiscal</fuerte>: te recomendamos consultar con un asesor fiscal o gestoría antes de cerrar cualquier acuerdo."
+    "fiscalidadTexto": "Un acuerdo de patrocinio entre un club y una empresa puede tener implicaciones fiscales (IVA, facturación, deducciones…) para ambas partes. ApoyaClub no gestiona el cobro ni actúa como agencia, y <fuerte>no ofrece asesoramiento fiscal</fuerte>: te recomendamos consultar con un asesor fiscal o gestoría antes de cerrar cualquier acuerdo.",
+    "verTodas": "Ver todas las preguntas"
   },
   "ctaFinal": {
     "tituloLinea1": "Tu club ya tiene valor.",
@@ -413,5 +415,120 @@
   },
   "ctaFijo": {
     "texto": "Prueba 1 mes gratis"
+  },
+  "paraClubes": {
+    "meta": {
+      "titulo": "Para clubes — ApoyaClub",
+      "descripcion": "Tu página, tus oportunidades de patrocinio y las herramientas para conseguirlas y cumplirlas. 1 mes gratis, sin permanencia."
+    },
+    "etiqueta": "PARA CLUBES",
+    "titulo": "Todo lo que tu club necesita para conseguir patrocinios",
+    "texto": "Patrocinadores, colaboradores, servicios y oportunidades para hacer crecer tu club. Aquí está todo lo que incluye, sin letra pequeña."
+  },
+  "paraEmpresas": {
+    "meta": {
+      "titulo": "Para empresas y colaboradores — ApoyaClub",
+      "descripcion": "Descubre qué puedes patrocinar en clubes de tu zona, o qué necesitan. Gratis, sin cuenta y sin intermediarios."
+    },
+    "etiqueta": "PARA EMPRESAS Y COLABORADORES",
+    "titulo": "Ayuda a un club de tu zona y que se note",
+    "texto": "Clubes de barrio que dicen exactamente qué ofrecen y qué necesitan. Miras, eliges y escribes al club. Sin comisiones y sin nadie en medio.",
+    "cta": "Ver qué puedo patrocinar",
+    "ctaNecesidades": "Ver qué necesitan los clubes",
+    "gratis": "Gratis, sin cuenta y sin intermediarios.",
+    "comoEyebrow": "En tres pasos",
+    "comoTitulo": "Cómo funciona para ti",
+    "pasos": [
+      {
+        "titulo": "Miras lo que hay cerca",
+        "texto": "Filtras por provincia, deporte, público y cuánto quieres invertir. Cada oportunidad dice qué recibes, qué se encarga el club y qué pones tú."
+      },
+      {
+        "titulo": "Escribes al club",
+        "texto": "Directamente, desde su página. El club recibe tu mensaje y te contesta él. ApoyaClub no se mete en medio ni cobra comisión."
+      },
+      {
+        "titulo": "Os ponéis de acuerdo",
+        "texto": "Lo acordáis entre vosotros, como siempre se ha hecho. El club lleva el seguimiento en su panel y te enseña después que lo ha cumplido."
+      }
+    ],
+    "comoCierre": "No hace falta cuenta para nada de esto. Puedes mirar, comparar y escribir a un club sin registrarte.",
+    "formas": {
+      "eyebrow": "No solo dinero",
+      "titulo": "Colaborar no siempre es firmar un cheque",
+      "texto": "La mayoría de lo que un club de barrio necesita no se compra con presupuesto de marketing. Se resuelve con lo que tu negocio ya hace.",
+      "lista": [
+        "Un autobús para un desplazamiento",
+        "Material deportivo",
+        "Equipaciones",
+        "Un fisioterapeuta",
+        "Comida para un torneo",
+        "Imprenta y cartelería",
+        "Horas de tu oficio",
+        "Un local para un acto",
+        "Aportar 50 € al mes"
+      ],
+      "cierre": "Si lo tuyo es un servicio, un producto o unas horas, los clubes lo están pidiendo por su nombre. Busca por lo que necesitan y verás quién lo necesita cerca de ti."
+    },
+    "cuenta": {
+      "eyebrow": "Opcional y gratis",
+      "titulo": "¿Y si me registro?",
+      "texto": "Para mirar y escribir a un club no hace falta. La cuenta es gratuita y sirve para que los clubes te encuentren a ti, en vez de tener que buscarlos tú cada vez.",
+      "ventajas": [
+        {
+          "titulo": "Tu ficha en el directorio",
+          "texto": "Con tu logo, tu sector, tu zona y una presentación. Es lo que mira un club cuando busca a quién escribir."
+        },
+        {
+          "titulo": "Publica lo que ofreces",
+          "texto": "Un servicio, un producto o una cantidad. Sale en el directorio con tu contacto, para que el club te escriba a ti."
+        },
+        {
+          "titulo": "Avisos por correo",
+          "texto": "Cuando un club de tu provincia pide algo de lo que tú ofreces, te llega un aviso. Como mucho uno al día, y se apaga cuando quieras."
+        },
+        {
+          "titulo": "Guarda tus favoritos",
+          "texto": "Los clubes y las oportunidades que te interesan, en una lista, para volver a ellos cuando lo tengas decidido."
+        }
+      ],
+      "cta": "Crear mi cuenta de empresa",
+      "condiciones": "Gratis, sin tarjeta y sin permanencia.",
+      "directorio": "Ver el directorio de empresas"
+    },
+    "faq": {
+      "titulo": "Preguntas frecuentes",
+      "preguntas": [
+        {
+          "pregunta": "¿Me cobráis algo?",
+          "respuesta": "No. Ni por mirar, ni por escribir a un club, ni por registrarte, ni por publicar lo que ofreces. ApoyaClub lo pagan los clubes con su suscripción; para una empresa o un colaborador es gratis."
+        },
+        {
+          "pregunta": "¿Os quedáis con una comisión de lo que le dé al club?",
+          "respuesta": "No. Lo que acuerdes con el club es entre vosotros y el dinero no pasa por aquí en ningún momento."
+        },
+        {
+          "pregunta": "¿Tengo que registrarme para contactar con un club?",
+          "respuesta": "No. Entras en la página del club, rellenas el formulario de contacto y el club recibe tu mensaje. La cuenta solo hace falta si quieres que te encuentren a ti."
+        },
+        {
+          "pregunta": "No tengo presupuesto, pero puedo aportar un servicio. ¿Sirve?",
+          "respuesta": "Sirve, y es lo que más falta hace. Muchos clubes publican directamente lo que necesitan —un autobús, un fisio, material— en vez de pedir dinero. Búscalo en «qué necesitan los clubes»."
+        },
+        {
+          "pregunta": "¿Cómo sé que el club existe de verdad?",
+          "respuesta": "Cada club rellena su página con sus equipos, sus instalaciones y sus datos, y responde él mismo a tu mensaje. Si algo no te cuadra, escríbenos y lo miramos."
+        },
+        {
+          "pregunta": "¿Puedo quitar mi ficha del directorio?",
+          "respuesta": "Cuando quieras, desde tu panel, con una casilla. Dejas de salir y tus ofertas dejan de verse con ella."
+        }
+      ]
+    },
+    "cierre": {
+      "titulo": "Hay un club a diez minutos de tu negocio",
+      "texto": "Mira qué está buscando. Puede que sea justo lo que tú puedes dar.",
+      "cta": "Ver oportunidades cerca de mí"
+    }
   }
 }
