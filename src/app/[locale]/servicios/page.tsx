@@ -167,12 +167,20 @@ export default async function PaginaServicios({
                       {[servicio.clubCity, servicio.clubProvince].filter(Boolean).join(", ")}
                     </p>
                   </div>
-                  <Link
-                    href={`/club/${servicio.clubSlug}`}
-                    className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-brand-navy"
-                  >
-                    {t("verClub")}
-                  </Link>
+                  <span className="flex flex-wrap items-center gap-2">
+                    <Link
+                      href={`/club/${servicio.clubSlug}/oportunidad/${servicio.opportunityId}`}
+                      className="rounded-lg border border-brand-teal-dark px-3 py-1.5 text-xs font-medium text-brand-teal-dark transition-colors hover:bg-teal-50"
+                    >
+                      Ver ficha
+                    </Link>
+                    <Link
+                      href={`/club/${servicio.clubSlug}`}
+                      className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-brand-navy"
+                    >
+                      {t("verClub")}
+                    </Link>
+                  </span>
                 </div>
               </li>
             ))}

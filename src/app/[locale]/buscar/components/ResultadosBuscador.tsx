@@ -284,12 +284,25 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
             <span className="ml-1 text-xs font-medium text-zinc-500">{tTarjeta("porEmpresa")}</span>
           )}
         </p>
-        <Link
-          href={`/club/${oportunidad.clubSlug}`}
-          className="rounded-lg bg-teal-700 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-teal-800"
-        >
-          {tTarjeta("verClub")}
-        </Link>
+        <span className="flex flex-wrap items-center gap-2">
+          {/* Directa al detalle del acuerdo: qué recibe la empresa,
+              quién hace cada cosa y con qué condiciones. Desde el
+              buscador, lo que se está mirando es ESTA oportunidad, no
+              el club entero; obligar a pasar por su ficha completa para
+              volver a buscarla es un paso de más. */}
+          <Link
+            href={`/club/${oportunidad.clubSlug}/oportunidad/${oportunidad.opportunityId}`}
+            className="rounded-lg border border-teal-700 px-3 py-1.5 text-xs font-medium text-teal-800 transition-colors hover:bg-teal-50"
+          >
+            Ver ficha
+          </Link>
+          <Link
+            href={`/club/${oportunidad.clubSlug}`}
+            className="rounded-lg bg-teal-700 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-teal-800"
+          >
+            {tTarjeta("verClub")}
+          </Link>
+        </span>
       </div>
     </li>
   );

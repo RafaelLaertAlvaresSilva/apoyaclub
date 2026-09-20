@@ -67,3 +67,29 @@ describe("el formulario de tareas", () => {
     expect(fuente).toContain('name="patrocinadorId"');
   });
 });
+
+/**
+ * `editarTarea` llevaba escrito desde el principio y no lo llamaba
+ * nadie: se podía apuntar y borrar una tarea, pero no corregirla. Una
+ * fecha mal puesta obligaba a borrarla y escribirla entera otra vez.
+ */
+describe("una tarea se puede corregir después", () => {
+  const fila = readFileSync(
+    join(RAIZ, "src/app/[locale]/panel/tareas/components/TareaFila.tsx"),
+    "utf8",
+  );
+
+  it("la pantalla llama a la acción de editar", () => {
+    expect(fila).toContain("editarTarea");
+  });
+
+  it("y deja cambiar lo que de verdad se equivoca uno", () => {
+    for (const campo of ["empresa", "accion", "inicio", "fin", "notas"]) {
+      expect(fila).toContain(`name="${campo}"`);
+    }
+  });
+
+  it("el fallo al guardar se enseña, no se traga", () => {
+    expect(fila).toContain("estadoEdicion?.error");
+  });
+});

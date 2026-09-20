@@ -38,67 +38,100 @@ export async function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <Link href="/" className="shrink-0">
-          <Image
-            src="/logo-full.png"
-            alt="ApoyaClub"
-            width={4275}
-            height={984}
-            priority
-            className="h-12 w-auto sm:h-14"
-          />
-        </Link>
+      <div className="mx-auto w-full max-w-6xl px-4 py-3 sm:px-6">
+        {/* En el teléfono esto iba todo en una fila y no cabía: el logo
+            solo ya se come media pantalla, así que los enlaces se
+            quedaban apretados o directamente fuera. Ahora en el móvil
+            van en una segunda fila, debajo, y en el ordenador todo
+            sigue en una sola como estaba. */}
+        <div className="flex items-center justify-between gap-3">
+          <Link href="/" className="shrink-0">
+            <Image
+              src="/logo-full.png"
+              alt="ApoyaClub"
+              width={4275}
+              height={984}
+              priority
+              className="h-10 w-auto sm:h-14"
+            />
+          </Link>
 
-        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="hidden items-center gap-4 sm:flex">
+            <Link
+              href="/buscar"
+              className="text-sm font-medium text-zinc-600 transition hover:text-brand-navy"
+            >
+              Buscar clubes
+            </Link>
+            <Link
+              href="/empresas"
+              className="text-sm font-medium text-zinc-600 transition hover:text-brand-navy"
+            >
+              Empresas
+            </Link>
+            <Link
+              href="/favoritos"
+              aria-label="Lo que has guardado"
+              className="text-sm font-medium text-zinc-600 transition hover:text-brand-navy"
+            >
+              <span aria-hidden="true">♡</span>
+            </Link>
+          </div>
+
+          <div className="flex shrink-0 items-center gap-3">
+            {accesoDirecto ? (
+              <Button href={accesoDirecto.href} size="sm">
+                <span className="sm:hidden">Mi panel</span>
+                <span className="hidden sm:inline">{accesoDirecto.etiqueta}</span>
+              </Button>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="hidden text-sm font-medium text-zinc-600 transition hover:text-brand-navy sm:inline"
+                >
+                  Iniciar sesión
+                </Link>
+                <Button href="/registro-club" size="sm">
+                  <span className="sm:hidden">Empezar</span>
+                  <span className="hidden sm:inline">Crea la página de tu club</span>
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* La segunda fila, solo en el teléfono. Con el texto entero:
+            un corazón suelto no le dice a nadie que ahí están sus
+            clubes guardados. */}
+        <nav className="mt-2.5 flex items-center gap-4 sm:hidden">
           <Link
             href="/buscar"
             className="text-sm font-medium text-zinc-600 transition hover:text-brand-navy"
           >
-            <span className="sm:hidden">Buscar</span>
-            <span className="hidden sm:inline">Buscar clubes</span>
+            Buscar clubes
           </Link>
-
-          {/* La otra dirección (migración 0046): a quién puede escribir
-              un club. En el móvil no cabe junto al botón principal, así
-              que ahí solo está en el pie. */}
           <Link
             href="/empresas"
-            className="hidden text-sm font-medium text-zinc-600 transition hover:text-brand-navy sm:inline"
+            className="text-sm font-medium text-zinc-600 transition hover:text-brand-navy"
           >
             Empresas
           </Link>
-
-          {/* Lo guardado. Se ve siempre, con y sin cuenta: quien guarda
-              sin registrarse tiene que poder volver a su lista, y si no
-              hay un enlace no la encuentra. */}
           <Link
             href="/favoritos"
-            aria-label="Lo que has guardado"
             className="text-sm font-medium text-zinc-600 transition hover:text-brand-navy"
           >
-            <span aria-hidden="true">♡</span>
+            <span aria-hidden="true">♡</span> Guardados
           </Link>
-
-          {accesoDirecto ? (
-            <Button href={accesoDirecto.href} size="sm">
-              {accesoDirecto.etiqueta}
-            </Button>
-          ) : (
-            <>
-              <Link
-                href="/login"
-                className="hidden text-sm font-medium text-zinc-600 transition hover:text-brand-navy sm:inline"
-              >
-                Iniciar sesión
-              </Link>
-              <Button href="/registro-club" size="sm">
-                <span className="sm:hidden">Empezar</span>
-                <span className="hidden sm:inline">Crea la página de tu club</span>
-              </Button>
-            </>
+          {!accesoDirecto && (
+            <Link
+              href="/login"
+              className="ml-auto text-sm font-medium text-zinc-600 transition hover:text-brand-navy"
+            >
+              Iniciar sesión
+            </Link>
           )}
-        </div>
+        </nav>
       </div>
     </header>
   );

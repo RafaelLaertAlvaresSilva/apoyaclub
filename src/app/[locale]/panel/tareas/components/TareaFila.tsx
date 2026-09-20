@@ -10,7 +10,7 @@ import {
   fechaLegible,
   type TareaPatrocinio,
 } from "@/lib/tareas-patrocinio";
-import { borrarTarea, cambiarEstadoTarea, repetirTarea } from "../actions";
+import { borrarTarea, cambiarEstadoTarea, editarTarea, repetirTarea } from "../actions";
 
 /**
  * Una tarea de la lista, con sus botones.
@@ -26,9 +26,30 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
   const [estadoRepetir, repetir] = useActionState(repetirTarea, null);
   const [pidiendoPrueba, setPidiendoPrueba] = useState(false);
 
+  /**
+   * Editar una tarea ya apuntada.
+   *
+   * `editarTarea` llevaba escrito desde el principio y no lo llamaba
+   * nadie: se podía apuntar y borrar, pero no corregir. Una fecha mal
+   * puesta obligaba a borrar la tarea y escribirla entera otra vez, con
+   * lo que se perdía de paso que estuviera hecha.
+   */
+  const [editando, setEditando] = useState(false);
+  const [estadoEdicion, editar] = useActionState(editarTarea, null);
+
+  // Al guardar bien se cierra el formulario. Se mira en el render y no
+  // desde un efecto: un efecto que además cambia estado provoca un
+  // render de más y es fácil que se quede a medias.
+  const [edicionVista, setEdicionVista] = useState(estadoEdicion);
+  if (estadoEdicion !== edicionVista) {
+    setEdicionVista(estadoEdicion);
+    if (estadoEdicion?.ok) setEditando(false);
+  }
+
   const estado = estadoVisible(tarea, hoy);
   const cerrada = tarea.estado !== "pendiente";
-  const error = estadoCambio?.error ?? estadoBorrado?.error ?? estadoRepetir?.error ?? null;
+  const error =
+    estadoCambio?.error ?? estadoBorrado?.error ?? estadoRepetir?.error ?? estadoEdicion?.error ?? null;
 
   return (
     <li
@@ -91,6 +112,14 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
           </Boton>
         )}
 
+        <button
+          type="button"
+          onClick={() => setEditando((valor) => !valor)}
+          className="rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
+        >
+          {editando ? "Cerrar" : "Editar"}
+        </button>
+
         <form action={repetir}>
           <input type="hidden" name="id" value={tarea.id} />
           <button
@@ -112,6 +141,84 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
           </button>
         </form>
       </div>
+
+      {editando && (
+        <form action={editar} className="mt-3 flex flex-col gap-3 rounded-lg bg-zinc-50 p-3">
+          <input type="hidden" name="id" value={tarea.id} />
+
+          <label className="block text-xs">
+            <span className="mb-1 block font-medium text-zinc-700">Empresa</span>
+            <input
+              name="empresa"
+              required
+              maxLength={120}
+              defaultValue={tarea.empresa}
+              className={CLASES_CAMPO}
+            />
+          </label>
+
+          <label className="block text-xs">
+            <span className="mb-1 block font-medium text-zinc-700">Qué hay que hacer</span>
+            <input
+              name="accion"
+              required
+              maxLength={200}
+              defaultValue={tarea.accion}
+              className={CLASES_CAMPO}
+            />
+          </label>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="block text-xs">
+              <span className="mb-1 block font-medium text-zinc-700">Desde (opcional)</span>
+              <input
+                name="inicio"
+                type="date"
+                defaultValue={tarea.inicio ?? ""}
+                className={CLASES_CAMPO}
+              />
+            </label>
+
+            <label className="block text-xs">
+              <span className="mb-1 block font-medium text-zinc-700">Fecha límite</span>
+              <input
+                name="fin"
+                type="date"
+                required
+                defaultValue={tarea.fin}
+                className={CLASES_CAMPO}
+              />
+            </label>
+          </div>
+
+          <label className="block text-xs">
+            <span className="mb-1 block font-medium text-zinc-700">Notas</span>
+            <textarea
+              name="notas"
+              maxLength={1000}
+              rows={2}
+              defaultValue={tarea.notas ?? ""}
+              className={CLASES_CAMPO}
+            />
+          </label>
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="submit"
+              className="rounded-lg bg-teal-700 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-teal-800"
+            >
+              Guardar cambios
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditando(false)}
+              className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      )}
 
       {/* Al marcar hecho se pide el enlace de la prueba, pero no se
           obliga: si el club no lo tiene a mano ahora, puede cerrar la
@@ -185,3 +292,7 @@ function Boton({
     </form>
   );
 }
+
+/** Las mismas en todos los campos de la edición. */
+const CLASES_CAMPO =
+  "w-full rounded-lg border border-zinc-300 px-2.5 py-1.5 text-sm text-zinc-900 outline-none transition-colors focus:border-teal-600 focus:ring-2 focus:ring-teal-100";
