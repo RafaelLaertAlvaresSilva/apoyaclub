@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/Badge";
 import { CATEGORIAS_IDEA, TOTAL_DE_IDEAS } from "@/lib/catalogo-ideas";
 import { PLANES_EN_ORDEN, periodicidad, precioFormateado } from "@/lib/planes";
 import { FormularioContacto } from "./FormularioContacto";
-import { Pantallas } from "./Pantallas";
 
 /**
  * Las secciones largas de la portada, sueltas.
@@ -917,69 +916,20 @@ export async function SeccionVideo() {
 }
 
 /* ============================================================
-   LAS CUATRO PANTALLAS
+   LAS SEIS HERRAMIENTAS
    ============================================================ */
-
-/** Lo que antes eran seis secciones de texto. Ver `Pantallas.tsx`. */
-export async function SeccionPantallas() {
-  const t = await getTranslations("home");
-  const lista = t.raw("pantallas.lista") as { clave: string; pestana: string; pie: string }[];
-  const oportunidad = t.raw("pantallas.oportunidad") as {
-    categoria: string;
-    titulo: string;
-    precio: string;
-    periodo: string;
-    datos: string[];
-    incluye: string[];
-  };
-  const estados = t.raw("embudo.estados") as { nombre: string; texto: string }[];
-
-  return (
-    <section className="px-4 py-20 sm:px-6 sm:py-24">
-      <div className="mx-auto max-w-6xl">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
-            {t("pantallas.eyebrow")}
-          </p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
-            {t("pantallas.titulo")}
-          </h2>
-        </div>
-
-        <Pantallas
-          lista={lista}
-          etiquetaLista={t("pantallas.etiquetaLista")}
-          club={{
-            url: t("paginaClub.maqueta.url"),
-            nombre: t("paginaClub.maqueta.nombre"),
-            etiqueta1: t("paginaClub.maqueta.etiqueta1"),
-            etiqueta2: t("paginaClub.maqueta.etiqueta2"),
-            etiqueta3: t("paginaClub.maqueta.etiqueta3"),
-            seguidores: t("paginaClub.maqueta.seguidores"),
-            alcance: t("paginaClub.maqueta.alcance"),
-            equipos: t("paginaClub.maqueta.equipos"),
-            oportunidades: t("paginaClub.maqueta.oportunidades"),
-          }}
-          oportunidad={oportunidad}
-          estados={estados}
-          nota={t("pantallas.nota")}
-        />
-
-        <HerramientasClave />
-      </div>
-    </section>
-  );
-}
 
 /**
  * Las seis herramientas de la portada, y el aviso de que hay más.
  *
- * Las cuatro pantallas de arriba enseñan el producto, pero solo cuatro
- * trozos. Un club que se plantea pagar quiere saber qué más hay dentro,
- * y la respuesta honesta —doce herramientas— no cabe en una portada de
- * seis bloques.
+ * Aquí había antes un bloque de cuatro pantallas en pestañas —tu
+ * página, tus oportunidades, quién te escribe, tu dossier— y se quitó
+ * al llegar estas: cuatro de aquellas pestañas eran cuatro de estas
+ * seis herramientas, contadas dos veces en la misma sección.
  *
- * Así que seis aquí, con su nombre y una línea, y las otras seis
+ * Un club que se plantea pagar quiere saber qué hay dentro, y la
+ * respuesta honesta —doce herramientas— no cabe en una portada de seis
+ * bloques. Seis aquí, con su nombre y una línea, y las otras seis
  * nombradas en una frase debajo. El club se lleva la idea correcta
  * ("hay bastante más de lo que estoy viendo") sin tener que leerse las
  * doce, y quien quiera las doce tiene el enlace.
@@ -992,7 +942,7 @@ export async function SeccionPantallas() {
  * Cuáles son las seis se decide en `messages`, no aquí: la lista de
  * claves vive junto a los textos, que es donde alguien va a buscarla.
  */
-async function HerramientasClave() {
+export async function SeccionHerramientasClave() {
   const t = await getTranslations("home");
   const todas = t.raw("herramientas.lista") as Herramienta[];
   const claves = t.raw("herramientas.destacadas") as string[];
@@ -1007,49 +957,54 @@ async function HerramientasClave() {
   const cuantasMas = todas.length - destacadas.length;
 
   return (
-    <div className="mt-20 border-t border-zinc-200 pt-14">
-      <div className="mx-auto max-w-2xl text-center">
-        <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
-          {t("herramientas.eyebrow")}
-        </p>
-        <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-brand-navy sm:text-3xl">
-          {t("herramientas.titulo")}
-        </h3>
-      </div>
-
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {destacadas.map((herramienta) => (
-          <div
-            key={herramienta.clave}
-            className="flex gap-4 rounded-2xl border border-zinc-200 bg-white p-5"
-          >
-            <span className="inline-flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
-              <IconoHerramienta clave={herramienta.clave} />
-            </span>
-            <div>
-              <h4 className="font-extrabold leading-snug text-brand-navy">{herramienta.titulo}</h4>
-              <p className="mt-1 text-sm leading-relaxed text-zinc-600">{herramienta.corto}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* El "y hay más". El número sale de la resta, no escrito a mano:
-          el día que se añada una herramienta, la portada lo dice sola. */}
-      {cuantasMas > 0 && (
-        <div className="mx-auto mt-8 max-w-3xl text-center">
-          <p className="text-[15px] leading-relaxed text-zinc-600">
-            {t("herramientas.hayMas", { cuantas: cuantasMas })}
+    <section id="herramientas" className="scroll-mt-32 px-4 py-20 sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+            {t("herramientas.eyebrow")}
           </p>
-          <Link
-            href="/para-clubes#herramientas"
-            className="mt-4 inline-block text-sm font-bold text-brand-teal-dark underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
-          >
-            {t("herramientas.verTodas", { total: todas.length })}
-          </Link>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+            {t("herramientas.titulo")}
+          </h2>
+          <p className="mt-4 leading-relaxed text-zinc-600">{t("herramientas.texto")}</p>
         </div>
-      )}
-    </div>
+
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {destacadas.map((herramienta) => (
+            <div
+              key={herramienta.clave}
+              className="flex gap-4 rounded-2xl border border-zinc-200 bg-white p-5"
+            >
+              <span className="inline-flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+                <IconoHerramienta clave={herramienta.clave} />
+              </span>
+              <div>
+                <h3 className="font-extrabold leading-snug text-brand-navy">
+                  {herramienta.titulo}
+                </h3>
+                <p className="mt-1 text-sm leading-relaxed text-zinc-600">{herramienta.corto}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* El "y hay más". El número sale de la resta, no escrito a mano:
+            el día que se añada una herramienta, la portada lo dice sola. */}
+        {cuantasMas > 0 && (
+          <div className="mx-auto mt-8 max-w-3xl text-center">
+            <p className="text-[15px] leading-relaxed text-zinc-600">
+              {t("herramientas.hayMas", { cuantas: cuantasMas })}
+            </p>
+            <Link
+              href="/para-clubes#herramientas"
+              className="mt-4 inline-block text-sm font-bold text-brand-teal-dark underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
+            >
+              {t("herramientas.verTodas", { total: todas.length })}
+            </Link>
+          </div>
+        )}
+      </div>
+    </section>
   );
 }
 

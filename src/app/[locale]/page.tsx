@@ -8,7 +8,7 @@ import {
   FuncionesDestacadas,
   SeccionComoFunciona,
   SeccionCtaFinal,
-  SeccionPantallas,
+  SeccionHerramientasClave,
   SeccionPrecio,
   SeccionVideo,
 } from "./components/secciones";
@@ -178,7 +178,7 @@ export default async function Home() {
 
         <SeccionVideo />
         <SeccionComoFunciona />
-        <SeccionPantallas />
+        <SeccionHerramientasClave />
         <SeccionPrecio compacta />
         <SeccionCtaFinal />
       </main>

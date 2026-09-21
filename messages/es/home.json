@@ -572,50 +572,6 @@
     "texto": "Un club de verdad, de principio a fin: la página, una oportunidad publicada y una empresa escribiendo.",
     "alternativa": "Tu navegador no puede reproducir este vídeo."
   },
-  "pantallas": {
-    "eyebrow": "Cuatro pantallas",
-    "titulo": "Esto es lo que te llevas",
-    "etiquetaLista": "Pantallas de ApoyaClub",
-    "lista": [
-      {
-        "clave": "pagina",
-        "pestana": "Tu página",
-        "pie": "Una página pública con tu escudo, tus equipos y tus números. La compartes por WhatsApp y se ve así."
-      },
-      {
-        "clave": "oportunidad",
-        "pestana": "Tus oportunidades",
-        "pie": "Cada oportunidad lleva su precio, sus plazas y lo que incluye. La empresa sabe qué compra antes de escribirte."
-      },
-      {
-        "clave": "solicitudes",
-        "pestana": "Quién te escribe",
-        "pie": "Cada empresa que te escribe entra en una lista. De un vistazo ves a quién tienes pendiente de contestar."
-      },
-      {
-        "clave": "dossier",
-        "pestana": "Tu dossier",
-        "pie": "Tu dossier de patrocinio en PDF y en Word, hecho solo con lo que ya has rellenado. Listo para mandar."
-      }
-    ],
-    "oportunidad": {
-      "categoria": "Equipación",
-      "titulo": "Tu marca en la camiseta del juvenil",
-      "precio": "600 €",
-      "periodo": "/temporada",
-      "datos": [
-        "1 plaza",
-        "22 jugadores",
-        "Alicante"
-      ],
-      "incluye": [
-        "Logo en la parte delantera",
-        "Mención en redes cada partido",
-        "Foto oficial con el patrocinador"
-      ]
-    },
-    "nota": "Las pantallas son de muestra: los datos no son de ningún club real."
-  },
   "funciones": {
     "ideas": "Más de {ideas} ideas en más de {categorias} categorías",
     "empresas": "Empresas y colaboradores",
