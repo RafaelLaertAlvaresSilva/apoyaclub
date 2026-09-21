@@ -61,8 +61,23 @@ const ENLACES_CON_SESION = [
   { href: "/empresas", etiqueta: "Empresas" },
 ] as const;
 
-const CLASES_ENLACE = "text-sm font-medium text-zinc-600 transition hover:text-brand-navy";
-const CLASES_UTILIDAD = "text-sm font-medium text-zinc-500 transition hover:text-brand-navy";
+/**
+ * Cada enlace, dentro de su recuadro.
+ *
+ * Eran texto suelto, y desde que la página tiene fondo la cabecera es
+ * la única franja blanca de arriba: las palabras flotaban en ella sin
+ * que nada dijera que se podían pulsar.
+ *
+ * El relleno es el mismo tono del fondo de la página, así que los
+ * recuadros se leen como botones sin gritar. La jerarquía no la hace
+ * la forma —todos son recuadros— sino el color: cinco en gris claro y
+ * uno, el de crear la página, en verde. Un solo botón de color en una
+ * cabecera se ve antes que cinco compitiendo.
+ */
+const CLASES_BASE_ENLACE =
+  "rounded-lg bg-zinc-50 px-2.5 py-1.5 text-sm font-medium transition-colors hover:bg-zinc-100";
+const CLASES_ENLACE = `${CLASES_BASE_ENLACE} text-brand-navy`;
+const CLASES_UTILIDAD = `${CLASES_BASE_ENLACE} text-zinc-600 hover:text-brand-navy`;
 
 export async function Header() {
   const supabase = await createClient();
@@ -79,17 +94,20 @@ export async function Header() {
       <div className="mx-auto w-full max-w-6xl px-4 py-3 sm:px-6">
         {/* Todo en una fila no cabe hasta bien entrado el escritorio: el
             logo solo ya se come 243 px, y con los tres enlaces, los
-            guardados, la sesión y el botón hacen falta unos 950. Por
+            guardados, la sesión y el botón hacen falta unos 1.050. Por
             debajo de eso los enlaces bajan a una segunda fila.
             *
-            * El corte está en `lg` (1024 px) y no en `sm` (640), que es
-            * donde estaba: entre 640 y 1024 —tabletas y portátiles
-            * pequeños— la fila única se montaba sobre sí misma, con
-            * "Guardados" escrito literalmente encima de "Para
-            * empresas". Nadie lo veía porque casi nunca se mira ahí. */}
+            * El corte estuvo en `sm` (640 px) y ahí la fila única se
+            * montaba sobre sí misma: "Guardados" salía escrito encima
+            * de "Para empresas" y nadie lo veía, porque casi nunca se
+            * mira a ese ancho. Pasó a `lg` (1024), y al meter los
+            * enlaces en recuadros —que suman unos 120 px de relleno—
+            * hubo que subirlo otra vez, a `xl` (1280). El número no es
+            * decorativo: es lo que mide la fila. Si se añade un enlace
+            * más, hay que volver a medir. */}
         <div className="flex items-center justify-between gap-3">
           {/* Izquierda: la marca y a dónde se puede ir. */}
-          <div className="flex min-w-0 items-center gap-6 xl:gap-9">
+          <div className="flex min-w-0 items-center gap-4 xl:gap-7">
             <Link href="/" className="shrink-0">
               <Image
                 src="/logo-full.png"
@@ -97,11 +115,11 @@ export async function Header() {
                 width={4275}
                 height={984}
                 priority
-                className="h-10 w-auto lg:h-14"
+                className="h-10 w-auto xl:h-14"
               />
             </Link>
 
-            <nav aria-label="Secciones" className="hidden items-center gap-6 lg:flex">
+            <nav aria-label="Secciones" className="hidden items-center gap-1 xl:flex">
               {enlaces.map((enlace) => (
                 <Link key={enlace.href} href={enlace.href} className={CLASES_ENLACE}>
                   {enlace.etiqueta}
@@ -113,10 +131,10 @@ export async function Header() {
           {/* Derecha: lo que es tuyo. Guardados y sesión son utilidades,
               no secciones, y por eso van más apagados y detrás de una
               línea: quien busca "para empresas" no tiene que leerlos. */}
-          <div className="flex shrink-0 items-center gap-3 sm:gap-4">
-            <span aria-hidden="true" className="hidden h-5 w-px bg-zinc-200 lg:block" />
+          <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
+            <span aria-hidden="true" className="hidden h-5 w-px bg-zinc-200 xl:block" />
 
-            <Link href="/favoritos" className={`hidden lg:inline ${CLASES_UTILIDAD}`}>
+            <Link href="/favoritos" className={`hidden xl:inline ${CLASES_UTILIDAD}`}>
               <span aria-hidden="true">♡</span> Guardados
             </Link>
 
@@ -148,10 +166,10 @@ export async function Header() {
             guardados. Se desplaza en horizontal en vez de partirse en
             dos alturas, que en un teléfono se comen la pantalla justo
             donde menos sobra. */}
-        <div className="relative lg:hidden">
+        <div className="relative xl:hidden">
           <nav
             aria-label="Secciones"
-            className="mt-2.5 flex items-center gap-4 overflow-x-auto pr-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="mt-2.5 flex items-center gap-1.5 overflow-x-auto pr-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {enlaces.map((enlace) => (
               <Link key={enlace.href} href={enlace.href} className={`shrink-0 ${CLASES_ENLACE}`}>
