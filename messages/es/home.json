@@ -187,54 +187,88 @@
     "texto": "No es una web con un formulario. Es lo que un club necesita para vender su patrocinio, cumplirlo y demostrarlo, sin pagar a nadie por hacerlo.",
     "lista": [
       {
+        "clave": "dossier",
         "titulo": "Dossier en PDF y en Word",
+        "corto": "En PDF para mandarlo y en Word para retocarlo.",
         "texto": "Se genera solo con los datos de tu ficha. El PDF para mandarlo tal cual; el Word para retocarlo, meter fotos o cambiar el orden."
       },
       {
+        "clave": "oportunidades",
         "titulo": "Creador de oportunidades",
+        "corto": "Qué vendes, a qué precio y cuántas plazas quedan.",
         "texto": "Qué vendes, a qué precio y cuántas plazas quedan. Con plantillas hechas para no partir de una hoja en blanco."
       },
       {
+        "clave": "tareas",
         "titulo": "Organizador de tareas",
+        "corto": "Lo prometido a cada empresa, con su fecha.",
         "texto": "Lo que le has prometido a cada empresa, con su fecha. Al entrar ves lo que toca hoy, y lo que se te ha pasado sale en rojo."
       },
       {
+        "clave": "informe",
         "titulo": "Informe de progreso por empresa",
+        "corto": "Lo que has cumplido, en un PDF para la empresa.",
         "texto": "Un PDF con lo cumplido y sus enlaces, para mandárselo a mitad de temporada, al final o al cerrar una colaboración corta."
       },
       {
+        "clave": "publico",
         "titulo": "Registro de público en los partidos",
+        "corto": "Cuánta gente vino a cada partido, y la media.",
         "texto": "Apuntas cuánta gente hubo en cada partido y salen la media, el total de la temporada y el mejor partido. Con un clic, esa media pasa a tu ficha."
       },
       {
+        "clave": "estadisticas",
         "titulo": "Estadísticas de tu ficha",
+        "corto": "Quién visita tu ficha y quién te escribe.",
         "texto": "Cuánta gente ha visitado tu página, cuántos han abierto tu contacto y cuántas empresas te han escrito. Por semana y por mes."
       },
       {
+        "clave": "solicitudes",
         "titulo": "Bandeja de solicitudes",
+        "corto": "Las empresas te escriben sin registrarse en nada.",
         "texto": "Las empresas te escriben desde tu página sin registrarse en nada, y a ti te llega el aviso por correo."
       },
       {
+        "clave": "patrocinadores",
         "titulo": "Tus patrocinadores, en su sitio",
+        "corto": "Quién ya confía en tu club, con su logo.",
         "texto": "Principal, oficial o colaborador, con su logo. Quien entra ve de un vistazo que hay empresas que ya confían en el club."
       },
       {
+        "clave": "prospectpro",
         "titulo": "Licencia de ProspectPro incluida",
+        "corto": "Para buscar tú las empresas de tu zona.",
         "texto": "La herramienta con la que buscas tú las empresas de tu zona y sacas a quién escribir. Va incluida en el plan."
       },
       {
+        "clave": "accion-social",
         "titulo": "Acción social del club",
+        "corto": "Lo que hace tu club fuera del campo.",
         "texto": "Las fotos de lo que hacéis fuera del campo: colegios, ayuntamiento, campañas, donaciones. Es lo que más pesa en muchas empresas."
       },
       {
+        "clave": "servicios",
         "titulo": "Servicios que buscas",
+        "corto": "Autobús, fisio, material: lo que no se paga con dinero.",
         "texto": "Autobús, fisioterapia, material, imprenta. No todo se paga con dinero, y esto abre la puerta al intercambio."
       },
       {
+        "clave": "pagina",
         "titulo": "Tu página pública de club",
+        "corto": "Escudo, equipos, palmarés e instalaciones.",
         "texto": "Escudo, fotos, equipos, categorías, palmarés e instalaciones. Una dirección que puedes mandar por WhatsApp sin que dé vergüenza."
       }
-    ]
+    ],
+    "destacadas": [
+      "pagina",
+      "oportunidades",
+      "solicitudes",
+      "tareas",
+      "dossier",
+      "informe"
+    ],
+    "hayMas": "Y {cuantas} herramientas más: el público de cada partido, las estadísticas de tu ficha, tus patrocinadores con su logo, ProspectPro para buscar empresas, la acción social del club y los servicios que necesitas.",
+    "verTodas": "Ver las {total} herramientas, una por una"
   },
   "panel": {
     "titulo": "Así funciona ApoyaClub por dentro",

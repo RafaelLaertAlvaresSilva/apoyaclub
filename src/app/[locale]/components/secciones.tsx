@@ -32,35 +32,71 @@ import { Pantallas } from "./Pantallas";
 
 type TextoConTitulo = { titulo: string; texto: string };
 
-/** Un icono por herramienta, por posición, junto a los textos de
- * `home.herramientas.lista`. Trazos sueltos en vez de una librería de
- * iconos: son doce dibujos y no compensa cargar un paquete entero. */
-const ICONOS_HERRAMIENTA = [
+/** Una de las doce. `corto` es la línea de la portada; `texto`, la
+ * larga de /para-clubes. */
+type Herramienta = { clave: string; titulo: string; corto: string; texto: string };
+
+/**
+ * Un icono por herramienta, buscado por su clave.
+ *
+ * Antes era una lista y el icono se elegía por POSICIÓN. Funcionaba
+ * hasta el día en que alguien reordenara los textos: entonces las doce
+ * herramientas se quedaban con el icono de la de al lado, y eso no lo
+ * detecta ningún test ni ningún compilador. Solo se ve, y tarde.
+ *
+ * Trazos sueltos en vez de una librería de iconos: son doce dibujos y
+ * no compensa cargar un paquete entero.
+ */
+const ICONO_DE_HERRAMIENTA: Record<string, string> = {
   // Dossier: un documento con su esquina doblada.
-  "M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7zm0 0v4h4M9 13h6M9 17h4",
+  dossier: "M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7zm0 0v4h4M9 13h6M9 17h4",
   // Oportunidades: un rayo.
-  "M13 2 3 14h7l-1 8 10-12h-7z",
+  oportunidades: "M13 2 3 14h7l-1 8 10-12h-7z",
   // Tareas: una lista con sus marcas.
-  "M10 6h10M10 12h10M10 18h10M4 6l1.2 1.2L7.5 5M4 12l1.2 1.2L7.5 10M4 18l1.2 1.2L7.5 16",
+  tareas: "M10 6h10M10 12h10M10 18h10M4 6l1.2 1.2L7.5 5M4 12l1.2 1.2L7.5 10M4 18l1.2 1.2L7.5 16",
   // Informe: barras.
-  "M3 21h18M6 21V11M12 21V4M18 21v-7",
+  informe: "M3 21h18M6 21V11M12 21V4M18 21v-7",
   // Público: gente.
-  "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M12 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",
+  publico:
+    "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M12 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",
   // Estadísticas: un ojo.
-  "M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Zm10 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z",
+  estadisticas: "M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Zm10 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z",
   // Solicitudes: un sobre.
-  "M3 6h18v12H3zM3 7l9 6 9-6",
+  solicitudes: "M3 6h18v12H3zM3 7l9 6 9-6",
   // Patrocinadores: un escudo.
-  "M12 3l8 3v5.5c0 4.7-3.4 8.4-8 9.5-4.6-1.1-8-4.8-8-9.5V6z",
+  patrocinadores: "M12 3l8 3v5.5c0 4.7-3.4 8.4-8 9.5-4.6-1.1-8-4.8-8-9.5V6z",
   // ProspectPro: una lupa.
-  "M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM21 21l-4.3-4.3",
+  prospectpro: "M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM21 21l-4.3-4.3",
   // Acción social: un corazón.
-  "M12 21S3 15.5 3 9.8A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 9 2.8C21 15.5 12 21 12 21Z",
+  "accion-social": "M12 21S3 15.5 3 9.8A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 9 2.8C21 15.5 12 21 12 21Z",
   // Servicios: una furgoneta.
-  "M3 6h11v11H3zM14 10h4l3 3v4h-7zM7.5 17a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0M16 17a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0",
+  servicios:
+    "M3 6h11v11H3zM14 10h4l3 3v4h-7zM7.5 17a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0M16 17a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0",
   // Tu página: una ventana de navegador.
-  "M3 5h18v14H3zM3 9h18M6.5 7h.01M9 7h.01",
-] as const;
+  pagina: "M3 5h18v14H3zM3 9h18M6.5 7h.01M9 7h.01",
+};
+
+/** Si algún día aparece una clave sin dibujo, un círculo antes que un
+ * hueco: se ve raro y se arregla, en vez de romper la página. */
+const ICONO_POR_DEFECTO = "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z";
+
+function IconoHerramienta({ clave }: { clave: string }) {
+  return (
+    <svg
+      width="21"
+      height="21"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d={ICONO_DE_HERRAMIENTA[clave] ?? ICONO_POR_DEFECTO} />
+    </svg>
+  );
+}
 
 /** Filo de color de cada tarjeta de oportunidad, por posición. */
 const ACENTOS_OPORTUNIDAD = ["bg-brand-navy", "bg-brand-teal-dark", "bg-brand-teal"] as const;
@@ -528,7 +564,7 @@ export async function SeccionDossier() {
  * dentro. */
 export async function SeccionPanelYHerramientas() {
   const t = await getTranslations("home");
-  const herramientas = t.raw("herramientas.lista") as TextoConTitulo[];
+  const herramientas = t.raw("herramientas.lista") as Herramienta[];
   const metricasPanel = t.raw("panel.metricas") as { numero: string; etiqueta: string }[];
 
   return (
@@ -574,22 +610,10 @@ export async function SeccionPanelYHerramientas() {
         </div>
 
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {herramientas.map((herramienta, indice) => (
-            <div key={herramienta.titulo} className="rounded-2xl border border-zinc-200 bg-white p-6">
+          {herramientas.map((herramienta) => (
+            <div key={herramienta.clave} className="rounded-2xl border border-zinc-200 bg-white p-6">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
-                <svg
-                  width="21"
-                  height="21"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d={ICONOS_HERRAMIENTA[indice % ICONOS_HERRAMIENTA.length]} />
-                </svg>
+                <IconoHerramienta clave={herramienta.clave} />
               </span>
               <h4 className="mt-4 font-extrabold text-brand-navy">{herramienta.titulo}</h4>
               <p className="mt-2 text-sm leading-relaxed text-zinc-600">{herramienta.texto}</p>
@@ -940,8 +964,92 @@ export async function SeccionPantallas() {
           estados={estados}
           nota={t("pantallas.nota")}
         />
+
+        <HerramientasClave />
       </div>
     </section>
+  );
+}
+
+/**
+ * Las seis herramientas de la portada, y el aviso de que hay más.
+ *
+ * Las cuatro pantallas de arriba enseñan el producto, pero solo cuatro
+ * trozos. Un club que se plantea pagar quiere saber qué más hay dentro,
+ * y la respuesta honesta —doce herramientas— no cabe en una portada de
+ * seis bloques.
+ *
+ * Así que seis aquí, con su nombre y una línea, y las otras seis
+ * nombradas en una frase debajo. El club se lleva la idea correcta
+ * ("hay bastante más de lo que estoy viendo") sin tener que leerse las
+ * doce, y quien quiera las doce tiene el enlace.
+ *
+ * Las seis no son "las mejores": son las del recorrido de un club.
+ * Montas tu página, publicas tus oportunidades, te escriben, cumples lo
+ * prometido, mandas el dossier y demuestras lo hecho. En ese orden, que
+ * es el de la vida real y el que hace que se entiendan entre ellas.
+ *
+ * Cuáles son las seis se decide en `messages`, no aquí: la lista de
+ * claves vive junto a los textos, que es donde alguien va a buscarla.
+ */
+async function HerramientasClave() {
+  const t = await getTranslations("home");
+  const todas = t.raw("herramientas.lista") as Herramienta[];
+  const claves = t.raw("herramientas.destacadas") as string[];
+
+  // Se respeta el orden de `destacadas`, no el de la lista larga: ahí
+  // está el recorrido. Y si una clave no existe —por un cambio de
+  // nombre— se cae de la portada en silencio en vez de pintar un hueco.
+  const destacadas = claves
+    .map((clave) => todas.find((herramienta) => herramienta.clave === clave))
+    .filter((herramienta): herramienta is Herramienta => herramienta !== undefined);
+
+  const cuantasMas = todas.length - destacadas.length;
+
+  return (
+    <div className="mt-20 border-t border-zinc-200 pt-14">
+      <div className="mx-auto max-w-2xl text-center">
+        <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+          {t("herramientas.eyebrow")}
+        </p>
+        <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-brand-navy sm:text-3xl">
+          {t("herramientas.titulo")}
+        </h3>
+      </div>
+
+      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {destacadas.map((herramienta) => (
+          <div
+            key={herramienta.clave}
+            className="flex gap-4 rounded-2xl border border-zinc-200 bg-white p-5"
+          >
+            <span className="inline-flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+              <IconoHerramienta clave={herramienta.clave} />
+            </span>
+            <div>
+              <h4 className="font-extrabold leading-snug text-brand-navy">{herramienta.titulo}</h4>
+              <p className="mt-1 text-sm leading-relaxed text-zinc-600">{herramienta.corto}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* El "y hay más". El número sale de la resta, no escrito a mano:
+          el día que se añada una herramienta, la portada lo dice sola. */}
+      {cuantasMas > 0 && (
+        <div className="mx-auto mt-8 max-w-3xl text-center">
+          <p className="text-[15px] leading-relaxed text-zinc-600">
+            {t("herramientas.hayMas", { cuantas: cuantasMas })}
+          </p>
+          <Link
+            href="/para-clubes#herramientas"
+            className="mt-4 inline-block text-sm font-bold text-brand-teal-dark underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
+          >
+            {t("herramientas.verTodas", { total: todas.length })}
+          </Link>
+        </div>
+      )}
+    </div>
   );
 }
 
