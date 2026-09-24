@@ -105,8 +105,21 @@ function FilaPatrocinador({
 
   return (
     <li className="px-4 py-3 text-sm">
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex min-w-0 items-start gap-3">
+      {/* La cabecera —logo, nombre y botones— en una fila que puede
+          partirse, y la descripción entera debajo.
+          *
+          * Antes iba todo en una sola fila: los cuatro botones son
+          * intocables (`shrink-0`) y en un teléfono se comen unos 220
+          * de los 330 px que hay. A la descripción le quedaban sesenta
+          * y pico, y salía a palabra por línea. Se leía en vertical,
+          * que es justo lo que no hace nadie. */}
+      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+        {/* El ancho mínimo es lo que hace que la fila se parta. Sin él,
+            `flex-1` deja que este bloque se encoja hasta cero: los
+            botones seguirían en su sitio y el que saldría a palabra por
+            línea sería el nombre. El problema cambiaría de sitio, no se
+            arreglaría. */}
+        <div className="flex min-w-[10rem] flex-1 items-start gap-3">
           {patrocinador.logoUrl ? (
             <Image
               src={patrocinador.logoUrl}
@@ -130,10 +143,6 @@ function FilaPatrocinador({
                 </span>
               )}
             </p>
-            {patrocinador.description && (
-              <p className="mt-0.5 text-zinc-600">{patrocinador.description}</p>
-            )}
-            {patrocinador.website && <p className="text-zinc-500">{patrocinador.website}</p>}
           </div>
         </div>
 
@@ -157,6 +166,20 @@ function FilaPatrocinador({
           />
         </div>
       </div>
+
+      {/* A todo el ancho. `whitespace-pre-line` porque el campo es un
+          textarea: si el club escribe dos líneas, se ven dos líneas.
+          Y `break-words` para que una palabra larga o una dirección
+          pegada no se salgan de la tarjeta. */}
+      {patrocinador.description && (
+        <p className="mt-2 whitespace-pre-line break-words text-zinc-600">
+          {patrocinador.description}
+        </p>
+      )}
+
+      {patrocinador.website && (
+        <p className="mt-1 break-words text-zinc-500">{patrocinador.website}</p>
+      )}
 
       {editando && (
         <div className="mt-4 space-y-4 border-t border-zinc-100 pt-4">
