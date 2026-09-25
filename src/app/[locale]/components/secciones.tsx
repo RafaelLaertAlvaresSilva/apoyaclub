@@ -1055,11 +1055,12 @@ function masDe(total: number, escalon: number): number {
  * 100", "más de 10"— porque con 112 ideas eso es verdad hoy y lo
  * seguirá siendo mañana, pase lo que pase con el catálogo.
  *
- * El ancho (`max-w-3xl`) está puesto para que caigan en 1 + 3: la de
- * las ideas, que es la más larga y la que más sorprende, sola arriba, y
- * las otras tres debajo. No hay que "arreglarlo" ensanchándolo — con
- * las cuatro buscando una sola fila quedan 3 + 1, y una pastilla suelta
- * al final se lee como un descuido en vez de como un énfasis.
+ * El ancho (`max-w-4xl`) está puesto para que caigan en 2 + 2, que es
+ * la única forma equilibrada con estos cuatro textos. Medido: a 3xl
+ * salen 1 + 2 + 1 y a 5xl vuelven a ser 2 + 2, así que 4xl es el
+ * mínimo que funciona. Si se cambia un texto hay que volver a mirarlo:
+ * una pastilla suelta al final se lee como un descuido, no como un
+ * énfasis.
  */
 export async function FuncionesDestacadas() {
   const t = await getTranslations("home");
@@ -1075,7 +1076,7 @@ export async function FuncionesDestacadas() {
   ];
 
   return (
-    <ul className="mx-auto mt-7 flex max-w-3xl flex-wrap items-center justify-center gap-x-3 gap-y-2.5">
+    <ul className="mx-auto mt-7 flex max-w-4xl flex-wrap items-center justify-center gap-x-3 gap-y-2.5">
       {funciones.map((funcion) => (
         <li
           key={funcion}

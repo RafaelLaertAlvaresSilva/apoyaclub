@@ -573,9 +573,9 @@
     "alternativa": "Tu navegador no puede reproducir este vídeo."
   },
   "funciones": {
-    "ideas": "Más de {ideas} ideas en más de {categorias} categorías",
+    "ideas": "Más de {ideas} ideas de patrocinio, repartidas en más de {categorias} categorías",
     "empresas": "Empresas y colaboradores",
-    "tareas": "Tus tareas, al día",
-    "dossier": "Dossier e informes"
+    "tareas": "Tus tareas con patrocinadores, al día",
+    "dossier": "Dossier e informes a un clic"
   }
 }
