@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 import {
   calcularAlcance,
   cifrasDePortada,
+  cifraLlana,
   cifrasDelInforme,
+  resumenLlano,
   unidadEnTexto,
   type CifraDeAlcance,
 } from "@/lib/alcance";
@@ -66,9 +68,42 @@ describe("calcularAlcance", () => {
     });
 
     const minimo = buscar(cifrasDelInforme(informe), "personasDistintas");
-    expect(minimo?.valor).toBe(800);
+    // Los socios, que es el grupo de personas más grande. Los 800
+    // seguidores de Instagram son más, pero no cuentan (ver abajo).
+    expect(minimo?.valor).toBe(320);
     expect(minimo?.valor).not.toBe(320 + 150 + 800 + 500 + 120);
     expect(minimo?.cuenta).toContain("No se suman");
+  });
+
+  it("los seguidores de redes no entran en las personas distintas", () => {
+    // Un club de barrio con 12.000 seguidores no tiene 12.000 personas
+    // alrededor: tiene cuentas, muchas de fuera del pueblo. Meterlas
+    // aquí convertía la única cifra que se presenta como "gente de
+    // verdad del club" en la más inflada del dossier.
+    const informe = calcularAlcance({
+      perfil: perfilDePrueba({
+        membersCount: 320,
+        followersByNetwork: { instagram: 12437 },
+      }),
+      equipos: [],
+      partidos: [],
+    });
+
+    const cifras = cifrasDelInforme(informe);
+    expect(buscar(cifras, "personasDistintas")?.valor).toBe(320);
+
+    // Pero siguen estando, con su nombre y sin disfraz.
+    expect(buscar(cifras, "seguidores-instagram")?.valor).toBe(12437);
+  });
+
+  it("sin socios ni familias, el mínimo es el público contado y no los seguidores", () => {
+    const informe = calcularAlcance({
+      perfil: perfilDePrueba({ followersByNetwork: { instagram: 9000 } }),
+      equipos: [equipoDePrueba({ playerCount: 60 })],
+      partidos: [partido({ fecha: "2025-09-14", publico: 240 })],
+    });
+
+    expect(buscar(cifrasDelInforme(informe), "personasDistintas")?.valor).toBe(240);
   });
 
   it("lista los seguidores red por red y no los suma", () => {
@@ -207,5 +242,105 @@ describe("unidadEnTexto", () => {
     expect(unidadEnTexto("personas", 240)).toBe("personas");
     expect(unidadEnTexto("personas", 1)).toBe("persona");
     expect(unidadEnTexto("asistencias", 4320)).toBe("asistencias");
+  });
+});
+
+describe("cifraLlana", () => {
+  it("dice entera cualquier cifra por debajo de diez mil", () => {
+    // Redondear una media contada partido a partido tira a la basura
+    // justo lo que la hace creíble.
+    expect(cifraLlana(240)).toBe("240");
+    expect(cifraLlana(9999)).toBe("9999");
+  });
+
+  it("redondea al millar a partir de diez mil, que es donde deja de leerse", () => {
+    expect(cifraLlana(12437)).toBe("12.000");
+    expect(cifraLlana(48320)).toBe("48.000");
+  });
+
+  it("sigue separando los millares cuando la cifra es enorme", () => {
+    // Pegarle ".000" al millar redondeado daba "1234.000" aquí.
+    expect(cifraLlana(1234000)).toBe("1.234.000");
+  });
+});
+
+describe("resumenLlano", () => {
+  it("no dice nada de un club sin cifras", () => {
+    const informe = calcularAlcance({ perfil: perfilDePrueba(), equipos: [], partidos: [] });
+    expect(resumenLlano(informe)).toEqual([]);
+  });
+
+  it("habla de lo que gana la empresa, no de lo que tiene el club", () => {
+    const informe = calcularAlcance({
+      perfil: perfilDePrueba({
+        youthFamiliesCount: 150,
+        followersByNetwork: { instagram: 800 },
+      }),
+      equipos: [equipoDePrueba({ playerCount: 120 })],
+      partidos: [
+        partido({ fecha: "2025-09-14", publico: 240 }),
+        partido({ fecha: "2025-09-21", publico: 240 }),
+      ],
+    });
+
+    const frases = resumenLlano(informe);
+
+    expect(frases[0]).toBe("Cada partido en casa lo ven unas 240 personas.");
+    expect(frases).toContain("120 jugadores visten la equipación del club cada semana.");
+    expect(frases).toContain(
+      "Detrás de la cantera hay 150 familias: padres, abuelos y hermanos que van al campo.",
+    );
+    expect(frases).toContain("Cuando el club publica en Instagram, lo pueden ver 800 personas.");
+  });
+
+  it("nunca pasa de cuatro frases: la quinta ya no se lee", () => {
+    const informe = calcularAlcance({
+      perfil: perfilDePrueba({
+        membersCount: 320,
+        youthFamiliesCount: 150,
+        estimatedReach: 9000,
+        followersByNetwork: { instagram: 800, facebook: 500, tiktok: 300 },
+      }),
+      equipos: [equipoDePrueba({ playerCount: 120 })],
+      partidos: [partido({ fecha: "2025-09-14", publico: 240 })],
+    });
+
+    expect(resumenLlano(informe).length).toBeLessThanOrEqual(4);
+  });
+
+  it("nombra solo la red mayor, nunca la suma de todas", () => {
+    const informe = calcularAlcance({
+      perfil: perfilDePrueba({ followersByNetwork: { instagram: 800, facebook: 500 } }),
+      equipos: [],
+      partidos: [],
+    });
+
+    const frases = resumenLlano(informe);
+    const deRedes = frases.filter((frase) => frase.includes("publica en"));
+
+    expect(deRedes).toHaveLength(1);
+    expect(deRedes[0]).toContain("800");
+    // 1.300 sería sumar a la misma persona dos veces.
+    expect(frases.join(" ")).not.toContain("1.300");
+  });
+
+  it("cae a los socios cuando el club no ha dicho cuántas familias tiene", () => {
+    const informe = calcularAlcance({
+      perfil: perfilDePrueba({ membersCount: 320 }),
+      equipos: [],
+      partidos: [],
+    });
+
+    expect(resumenLlano(informe)).toContain("El club tiene 320 socios en el pueblo.");
+  });
+
+  it("dice \"por partido\" y no \"en casa\" cuando no hay partidos en casa", () => {
+    const informe = calcularAlcance({
+      perfil: perfilDePrueba(),
+      equipos: [],
+      partidos: [partido({ fecha: "2025-09-14", publico: 90, enCasa: false })],
+    });
+
+    expect(resumenLlano(informe)[0]).toBe("Cada partido lo ven unas 90 personas.");
   });
 });

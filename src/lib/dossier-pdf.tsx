@@ -3,6 +3,7 @@ import {
   AVISO_DE_ORIGEN,
   calcularAlcance,
   cifrasDePortada,
+  resumenLlano,
   unidadEnTexto,
   type BloqueDeAlcance,
   type CifraDeAlcance,
@@ -188,6 +189,19 @@ const estilos = StyleSheet.create({
   tarjetaProcedencia: { fontSize: 7, color: COLOR_TEXTO_SUAVE, marginTop: 3, maxWidth: 150 },
   bloqueTitulo: { fontSize: 10, fontFamily: "Helvetica-Bold", color: COLOR_MARCA, marginBottom: 2 },
   bloqueExplicacion: { fontSize: 8, color: COLOR_TEXTO_SUAVE, marginBottom: 6, lineHeight: 1.4 },
+
+  // El resumen en cristiano. Va en un recuadro con el filo de color a
+  // la izquierda para que sea lo primero que encuentra el ojo al llegar
+  // a la página: quien solo lea esto ya se ha enterado.
+  resumenLlano: {
+    borderLeftWidth: 3,
+    borderLeftColor: COLOR_ACENTO,
+    paddingLeft: 10,
+    paddingVertical: 2,
+    marginBottom: 12,
+  },
+  resumenLlanoFrase: { fontSize: 11, lineHeight: 1.45, marginBottom: 3 },
+  resumenLlanoPie: { fontSize: 7.5, color: COLOR_TEXTO_SUAVE, marginTop: 3 },
   cuenta: { fontSize: 7.5, color: COLOR_TEXTO_SUAVE, marginTop: 4, lineHeight: 1.4 },
   avisoDeOrigen: { fontSize: 7.5, color: COLOR_TEXTO_SUAVE, marginTop: 4, fontFamily: "Helvetica-Oblique" },
 
@@ -397,6 +411,7 @@ function DossierDocumento({
    */
   const alcance = calcularAlcance({ perfil, equipos, partidos });
   const cifrasPortada = cifrasDePortada(alcance);
+  const frasesLlanas = resumenLlano(alcance);
 
   const masBarata = oportunidades.reduce<number | null>(
     (minimo, oportunidad) => (minimo == null || oportunidad.value < minimo ? oportunidad.value : minimo),
@@ -596,6 +611,24 @@ function DossierDocumento({
             titulo="Audiencia en cifras"
             descripcion="Las cifras van separadas según de dónde salen, y no se suman entre sí: la misma persona puede ser socio, padre de un jugador y seguidor en redes."
           >
+            {/* Primero en cristiano, y debajo las cifras con su
+                procedencia. Quien abre esto suele ser el dueño de un
+                comercio decidiendo en dos minutos, no un director de
+                marketing: si lo primero que se encuentra son ocho
+                tarjetas con su metodología, pasa la página. */}
+            {frasesLlanas.length > 0 && (
+              <View style={estilos.resumenLlano}>
+                {frasesLlanas.map((frase) => (
+                  <Text key={frase} style={estilos.resumenLlanoFrase}>
+                    {frase}
+                  </Text>
+                ))}
+                <Text style={estilos.resumenLlanoPie}>
+                  Las cifras exactas, y de dónde sale cada una, aquí debajo.
+                </Text>
+              </View>
+            )}
+
             {alcance.bloques.map((bloque) => (
               <BloqueDeAlcanceEnPdf key={bloque.id} bloque={bloque} />
             ))}

@@ -306,10 +306,18 @@ function bloqueDeclarado(perfil: ClubProfile | null, equipos: ClubTeam[]): Bloqu
  * Es el mayor de los grupos, no su suma. Si el club tiene 320 socios y
  * 150 familias, hay al menos 320 personas distintas —quizá más, porque
  * habrá familias que no sean socias— pero desde luego no 470.
+ *
+ * Y los seguidores de redes se quedan fuera, aunque sean el grupo más
+ * grande. Un club de barrio con 12.000 seguidores en Instagram no tiene
+ * 12.000 personas alrededor: tiene cuentas, muchas de fuera del pueblo,
+ * algunas que ni existen. Ponerlas aquí convertía esta cifra —la única
+ * que se presenta como "gente de verdad del club"— en la más inflada de
+ * todo el dossier, y es justo la que una empresa va a mirar con lupa.
+ * Los seguidores siguen en su tarjeta, con su nombre y sin disfraz.
  */
 function personasDistintas(declarado: BloqueDeAlcance, mediaEnCasa: number | null): CifraDeAlcance | null {
   const candidatas = declarado.cifras.filter(
-    (c) => c.unidad === "personas" && c.id !== "alcanceEscrito",
+    (c) => c.unidad === "personas" && c.id !== "alcanceEscrito" && !c.id.startsWith("seguidores-"),
   );
   const conPublico = mediaEnCasa != null
     ? [...candidatas, cifra("publico", "público de un partido", mediaEnCasa, "personas", "contado", "")]
@@ -538,6 +546,96 @@ export function cifrasDePortada(informe: InformeDeAlcance, cuantas = 4): CifraDe
   ]
     .filter((c): c is CifraDeAlcance => c !== null)
     .slice(0, cuantas);
+}
+
+/**
+ * Una cifra escrita para que se lea de un vistazo.
+ *
+ * Hasta diez mil se dice entera: 240 es 240, y redondear una media
+ * contada partido a partido a "unas 200" tira a la basura justo lo que
+ * la hace creíble. A partir de ahí el dígito exacto no lo retiene
+ * nadie —12.437 se lee como "doce mil y pico"— así que se redondea al
+ * millar y se dice así.
+ */
+export function cifraLlana(valor: number): string {
+  if (valor < 10000) return valor.toLocaleString("es-ES");
+
+  // Se redondea el número y se formatea después, en vez de pegarle
+  // ".000" al millar: con "48" pegar el sufijo daba "48.000", que está
+  // bien, pero con "1234" daba "1234.000" en vez de "1.234.000".
+  return (Math.round(valor / 1000) * 1000).toLocaleString("es-ES");
+}
+
+/**
+ * La audiencia del club en dos o tres frases que entiende cualquiera.
+ *
+ * El informe de arriba está bien hecho y por eso es difícil: separa lo
+ * contado de lo declarado y de lo deducido, no suma grupos que se
+ * solapan y enseña cada cuenta entera. Todo eso es lo que hace que una
+ * empresa se lo crea... si se lo lee.
+ *
+ * Y quien abre el dossier no suele ser un director de marketing: es el
+ * dueño de la ferretería de la esquina, que mira una página y decide.
+ * Ocho tarjetas con su procedencia debajo no se leen, se hojean.
+ *
+ * Así que esto va delante y dice lo mismo en cristiano. No sustituye a
+ * las cifras: las resume. Quien quiera comprobarlas las tiene justo
+ * debajo, con el recuento detrás de cada una.
+ *
+ * Las frases hablan de lo que la empresa gana, no de lo que el club
+ * tiene: "cada partido en casa lo ven 240 personas" dice más que
+ * "público medio: 240".
+ */
+export function resumenLlano(informe: InformeDeAlcance): string[] {
+  const todas = cifrasDelInforme(informe);
+  const porId = (id: string) => todas.find((c) => c.id === id) ?? null;
+  const frases: string[] = [];
+
+  const publico = porId("publicoMedio");
+  if (publico) {
+    // "unas" y no la cifra a secas: es una media, y decirla como si
+    // fuera un recuento exacto de este domingo sería pasarse.
+    const donde = publico.etiqueta.includes("en casa") ? " en casa" : "";
+    frases.push(`Cada partido${donde} lo ven unas ${cifraLlana(publico.valor)} personas.`);
+  }
+
+  const jugadores = porId("jugadores");
+  if (jugadores) {
+    frases.push(
+      `${cifraLlana(jugadores.valor)} jugadores visten la equipación del club cada semana.`,
+    );
+  }
+
+  const familias = porId("familias");
+  if (familias) {
+    frases.push(
+      `Detrás de la cantera hay ${cifraLlana(familias.valor)} familias: padres, abuelos y hermanos que van al campo.`,
+    );
+  } else {
+    const socios = porId("socios");
+    if (socios) {
+      frases.push(`El club tiene ${cifraLlana(socios.valor)} socios en el pueblo.`);
+    }
+  }
+
+  // Solo la red mayor. Sumar Instagram y Facebook sería contar dos
+  // veces a la misma persona, que es lo que este fichero entero evita.
+  const mayorRed = todas
+    .filter((c) => c.id.startsWith("seguidores-"))
+    .reduce<CifraDeAlcance | null>(
+      (mayor, c) => (mayor == null || c.valor > mayor.valor ? c : mayor),
+      null,
+    );
+  if (mayorRed) {
+    const red = mayorRed.etiqueta.replace("Seguidores en ", "");
+    frases.push(
+      `Cuando el club publica en ${red}, lo pueden ver ${cifraLlana(mayorRed.valor)} personas.`,
+    );
+  }
+
+  // Cuatro como mucho. La quinta frase ya no se lee, y este bloque
+  // existe justo para lo contrario.
+  return frases.slice(0, 4);
 }
 
 /** "personas" / "asistencias" / "partidos" / "equipos", en singular

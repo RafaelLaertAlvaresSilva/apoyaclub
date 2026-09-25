@@ -21,6 +21,7 @@ import {
   AVISO_DE_ORIGEN,
   calcularAlcance,
   cifrasDePortada,
+  resumenLlano,
   unidadEnTexto,
 } from "@/lib/alcance";
 import type { DatosDossier } from "@/lib/dossier-datos";
@@ -363,6 +364,15 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
         { color: GRIS, tamano: 20 },
       ),
     );
+
+    // El mismo resumen en cristiano que el PDF, y por el mismo motivo:
+    // quien abre esto decide en dos minutos y no se lee ocho tarjetas
+    // con su metodología. Va aquí también porque el día que una empresa
+    // compare el Word con el PDF del mismo club, los dos tienen que
+    // decir lo mismo.
+    for (const frase of resumenLlano(alcance)) {
+      cuerpo.push(parrafo(frase, { tamano: 22, espacioDespues: 40 }));
+    }
 
     for (const bloque of alcance.bloques) {
       cuerpo.push(parrafo(bloque.titulo, { negrita: true, tamano: 22, espacioDespues: 20 }));
