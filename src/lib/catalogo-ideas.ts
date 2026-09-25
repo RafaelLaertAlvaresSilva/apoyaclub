@@ -129,6 +129,7 @@ export const IDEAS: Idea[] = [
     duracion: "Un mes",
     periodo: "month",
     colaboracion: "money",
+    requiere: ["redes"],
   },
   {
     id: "equipo-patrocinador-de-partido",
@@ -140,6 +141,7 @@ export const IDEAS: Idea[] = [
     duracion: "Un partido",
     periodo: "match",
     colaboracion: "money",
+    requiere: ["equipos"],
   },
   {
     id: "equipo-desplazamientos",
@@ -214,6 +216,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "money",
+    requiere: ["equipos"],
   },
   {
     id: "equipacion-espalda",
@@ -225,6 +228,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "money",
+    requiere: ["equipos"],
   },
   {
     id: "equipacion-manga",
@@ -236,6 +240,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "money",
+    requiere: ["equipos"],
   },
   {
     id: "equipacion-pantalon",
@@ -247,6 +252,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "money",
+    requiere: ["equipos"],
   },
   {
     id: "equipacion-entrenamiento",
@@ -258,6 +264,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "mixed",
+    requiere: ["equipos"],
   },
   {
     id: "equipacion-chandal",
@@ -269,6 +276,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "mixed",
+    requiere: ["equipos"],
   },
   {
     id: "equipacion-mochilas",
@@ -280,6 +288,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "mixed",
+    requiere: ["equipos"],
   },
   {
     id: "equipacion-presentacion",
@@ -291,6 +300,7 @@ export const IDEAS: Idea[] = [
     duracion: "Una jornada",
     periodo: "event",
     colaboracion: "mixed",
+    requiere: ["equipos"],
   },
 
   // -------------------------------------------------------------------
@@ -390,7 +400,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "money",
-    requiere: ["publico"],
+    requiere: ["instalaciones"],
   },
 
   // -------------------------------------------------------------------
@@ -606,6 +616,7 @@ export const IDEAS: Idea[] = [
     duracion: "Un mes, renovable",
     periodo: "month",
     colaboracion: "mixed",
+    requiere: ["equipos"],
   },
   {
     id: "jugadores-patrocinado",
@@ -641,6 +652,7 @@ export const IDEAS: Idea[] = [
     duracion: "Una jornada",
     periodo: "event",
     colaboracion: "mixed",
+    requiere: ["equipos"],
   },
   {
     id: "jugadores-prueba-de-producto",
@@ -888,6 +900,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "money",
+    requiere: ["redes"],
   },
   {
     id: "contenido-fotografia",
@@ -899,6 +912,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "mixed",
+    requiere: ["redes"],
   },
   {
     id: "contenido-entrevistas",
@@ -910,6 +924,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "money",
+    requiere: ["redes"],
   },
   {
     id: "contenido-podcast",
@@ -921,6 +936,7 @@ export const IDEAS: Idea[] = [
     duracion: "Por temporada o por programa",
     periodo: "season",
     colaboracion: "money",
+    requiere: ["redes"],
   },
   {
     id: "contenido-reportaje",
@@ -932,6 +948,7 @@ export const IDEAS: Idea[] = [
     duracion: "Una pieza",
     periodo: "event",
     colaboracion: "mixed",
+    requiere: ["redes"],
   },
   {
     id: "contenido-detras-de-camaras",
@@ -943,7 +960,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "money",
-    requiere: ["equipos"],
+    requiere: ["equipos", "redes"],
   },
   {
     id: "contenido-cantera",
@@ -955,7 +972,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "money",
-    requiere: ["cantera"],
+    requiere: ["cantera", "redes"],
   },
   {
     id: "contenido-educativo",
@@ -967,6 +984,7 @@ export const IDEAS: Idea[] = [
     duracion: "Por pieza o por temporada",
     periodo: "season",
     colaboracion: "service",
+    requiere: ["redes"],
   },
 
   // -------------------------------------------------------------------
@@ -1038,6 +1056,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "money",
+    requiere: ["redes"],
   },
 
   // -------------------------------------------------------------------
@@ -1053,6 +1072,7 @@ export const IDEAS: Idea[] = [
     duracion: "Por partido o por temporada",
     periodo: "season",
     colaboracion: "money",
+    requiere: ["redes"],
   },
   {
     id: "retransmision-logo",
@@ -1064,6 +1084,7 @@ export const IDEAS: Idea[] = [
     duracion: "Por partido o por temporada",
     periodo: "match",
     colaboracion: "money",
+    requiere: ["redes"],
   },
   {
     id: "retransmision-descanso",
@@ -1075,6 +1096,7 @@ export const IDEAS: Idea[] = [
     duracion: "Por partido",
     periodo: "match",
     colaboracion: "mixed",
+    requiere: ["redes"],
   },
   {
     id: "retransmision-mvp",
@@ -1086,6 +1108,7 @@ export const IDEAS: Idea[] = [
     duracion: "Por partido o por temporada",
     periodo: "match",
     colaboracion: "mixed",
+    requiere: ["redes"],
   },
   {
     id: "retransmision-entrevista",
@@ -1097,6 +1120,7 @@ export const IDEAS: Idea[] = [
     duracion: "Por partido o por temporada",
     periodo: "match",
     colaboracion: "money",
+    requiere: ["redes"],
   },
   {
     id: "retransmision-clips",
@@ -1108,6 +1132,7 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "money",
+    requiere: ["redes"],
   },
 
   // -------------------------------------------------------------------

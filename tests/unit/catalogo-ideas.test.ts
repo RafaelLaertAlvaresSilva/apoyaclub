@@ -52,6 +52,59 @@ describe("el catálogo, por dentro", () => {
     }
   });
 
+  /**
+   * Una idea que el club no puede cumplir no se esconde: se enseña
+   * apagada y con el motivo ("añade tus redes sociales"). Por eso el
+   * requisito no es una restricción, es la ayuda — y olvidarlo deja al
+   * club delante de una idea que no puede hacer, sin saber por qué.
+   *
+   * Hay categorías en las que el requisito no admite discusión: no se
+   * vende el hueco de una camiseta sin equipos, ni un directo sin un
+   * sitio donde retransmitir. Esto lo sujeta para la idea 113.
+   */
+  it("cada categoría que depende de algo lo pide", () => {
+    const OBLIGATORIO: Partial<Record<(typeof IDEAS)[number]["categoria"], RequisitoIdea>> = {
+      equipaciones: "equipos",
+      instalaciones: "instalaciones",
+      redes: "redes",
+      cantera: "cantera",
+      // Un directo por Instagram o YouTube sigue necesitando la cuenta.
+      retransmisiones: "redes",
+      // Todo lo de "contenido" se entrega publicándolo en algún sitio.
+      contenido: "redes",
+    };
+
+    const sinPedirlo = IDEAS.filter((idea) => {
+      const obligatorio = OBLIGATORIO[idea.categoria];
+      return obligatorio != null && !(idea.requiere ?? []).includes(obligatorio);
+    }).map((idea) => idea.id);
+
+    expect(sinPedirlo).toEqual([]);
+  });
+
+  it("no pide requisitos que no existen", () => {
+    const validos: RequisitoIdea[] = ["equipos", "cantera", "instalaciones", "redes", "publico"];
+    for (const idea of IDEAS) {
+      for (const requisito of idea.requiere ?? []) {
+        expect(validos, `${idea.id} pide "${requisito}"`).toContain(requisito);
+      }
+    }
+  });
+
+  it("no repite el mismo requisito dos veces en una idea", () => {
+    for (const idea of IDEAS) {
+      const requisitos = idea.requiere ?? [];
+      expect(new Set(requisitos).size, idea.id).toBe(requisitos.length);
+    }
+  });
+
+  it("lo que el club necesita no le pide requisitos: lo pide él, no lo da", () => {
+    // Un club puede necesitar un autobús tenga la ficha como la tenga.
+    for (const idea of IDEAS.filter((una) => una.esNecesidad)) {
+      expect(idea.requiere ?? [], idea.id).toEqual([]);
+    }
+  });
+
   it("ninguna descripción se queda a medias", () => {
     for (const idea of IDEAS) {
       expect(idea.queEs.length, `${idea.id}`).toBeGreaterThan(30);
