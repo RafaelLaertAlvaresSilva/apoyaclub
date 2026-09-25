@@ -40,6 +40,7 @@ export type CategoriaIdea =
   | "intervalo"
   | "redes"
   | "familias"
+  | "tienda"
   | "visibilidad-local"
   | "contenido"
   | "digital"
@@ -65,6 +66,7 @@ export const CATEGORIAS_IDEA: {
   { id: "digital", etiqueta: "Digital", pista: "Tu web, tu newsletter, tu lista de socios." },
   { id: "retransmisiones", etiqueta: "Retransmisiones", pista: "Si retransmites partidos, aunque sea por Instagram." },
   { id: "familias", etiqueta: "Familias y socios", pista: "Descuentos y ventajas: la empresa gana clientes, no solo un logo." },
+  { id: "tienda", etiqueta: "Tienda del club", pista: "Lo que el club vende: ropa de otros años, productos propios y quien venda en tus partidos." },
   { id: "visibilidad-local", etiqueta: "Visibilidad local", pista: "El club saliendo del pabellón y entrando en el barrio." },
   { id: "servicios", etiqueta: "Lo que necesitas", pista: "Al revés: lo que te hace falta y una empresa puede cubrir." },
 ];
@@ -1316,6 +1318,114 @@ export const IDEAS: Idea[] = [
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "money",
+  },
+
+
+  // -------------------------------------------------------------------
+  // Tienda del club
+  //
+  // Un club de barrio tiene dos armarios llenos: el de las equipaciones
+  // de hace tres años que ya no le valen a nadie, y el de las ideas de
+  // merchandising que nunca hace porque no puede adelantar el dinero de
+  // una tirada de doscientos llaveros.
+  //
+  // Por eso todas las ideas de aquí llevan una empresa al otro lado. El
+  // club no pone dinero: pone el escudo, la gente y el sitio donde se
+  // vende. La empresa pone la produccion, el genero o la logistica, y a
+  // cambio va su marca en lo que se venda. Es la unica forma en la que
+  // un club sin caja monta una tienda.
+  // -------------------------------------------------------------------
+  {
+    id: "tienda-patrocinador-de-la-tienda",
+    categoria: "tienda",
+    tipo: "equipment",
+    titulo: "Patrocinador de la tienda del club",
+    queEs: "Una empresa paga la primera tirada de productos del club —gorras, sudaderas, llaveros— y el club los vende y se queda el dinero.",
+    queRecibeLaEmpresa: "Su marca junto al escudo en todo lo que el club venda esa temporada, y en el puesto donde se vende los días de partido.",
+    duracion: "Toda la temporada",
+    periodo: "season",
+    colaboracion: "mixed",
+  },
+  {
+    id: "tienda-personalizado-con-dorsal",
+    categoria: "tienda",
+    tipo: "equipment",
+    titulo: "Productos personalizados con el nombre y el dorsal",
+    queEs: "Llaveros, imanes, tazas o abrebotellas con el escudo del club y, detrás, el nombre y el número de camiseta de cada jugador o jugadora.",
+    queRecibeLaEmpresa: "Una imprenta o un taller de rotulación local se lleva el encargo, pone su marca en cada pieza y entra en la casa de todas las familias del club.",
+    duracion: "Toda la temporada",
+    periodo: "season",
+    colaboracion: "mixed",
+  },
+  {
+    id: "tienda-mercadillo-de-equipaciones",
+    categoria: "tienda",
+    tipo: "events_tournaments",
+    titulo: "Mercadillo de equipaciones de otros años",
+    queEs: "El club saca a la venta las equipaciones, chándales y mochilas de temporadas anteriores que están haciendo bulto en el almacén, a precio de segunda mano.",
+    queRecibeLaEmpresa: "Dar nombre a la jornada del mercadillo, con su marca en el cartel y en el puesto, delante de todas las familias que pasan a probar tallas.",
+    duracion: "Una jornada",
+    periodo: "event",
+    colaboracion: "mixed",
+    requiere: ["equipos"],
+  },
+  {
+    id: "tienda-venta-a-comision",
+    categoria: "tienda",
+    tipo: "venue_matches",
+    titulo: "Una empresa vende en tus partidos a cambio de comisión",
+    queEs: "Una tienda monta su puesto en los partidos de casa y vende sus productos ahí. El club se lleva un porcentaje de lo que venda.",
+    queRecibeLaEmpresa: "Un punto de venta con público garantizado cada jornada, sin alquiler y sin abrir un local nuevo.",
+    duracion: "Toda la temporada",
+    periodo: "season",
+    colaboracion: "mixed",
+    requiere: ["instalaciones"],
+  },
+  {
+    id: "tienda-prenda-oficial",
+    categoria: "tienda",
+    tipo: "equipment",
+    titulo: "La prenda oficial de la temporada",
+    queEs: "Una gorra, una bufanda o una camiseta de aficionado que el club saca cada temporada para que la lleve la gente de la grada, no los jugadores.",
+    queRecibeLaEmpresa: "Su logo junto al escudo en una prenda que la gente se pone por gusto y lleva puesta por el barrio todo el año.",
+    duracion: "Toda la temporada",
+    periodo: "season",
+    colaboracion: "mixed",
+  },
+  {
+    id: "tienda-ropa-de-paseo",
+    categoria: "tienda",
+    tipo: "equipment",
+    titulo: "Ropa de paseo del club",
+    queEs: "Chándal, sudadera y mochila con el escudo, para que las familias los compren y los niños los lleven al colegio, no solo a entrenar.",
+    queRecibeLaEmpresa: "Su marca en ropa que se lleva a diario fuera del pabellón, que es donde más se ve y donde ningún patrocinio llega.",
+    duracion: "Toda la temporada",
+    periodo: "season",
+    colaboracion: "mixed",
+    requiere: ["equipos"],
+  },
+  {
+    id: "tienda-lote-de-bienvenida",
+    categoria: "tienda",
+    tipo: "youth",
+    titulo: "Lote de bienvenida para los que llegan nuevos",
+    queEs: "Cada niño o niña que se apunta al club recibe un lote el primer día: mochila, botella, llavero y el escudo. Lo paga una empresa.",
+    queRecibeLaEmpresa: "Ser lo primero que una familia nueva se lleva a casa del club, con su marca en el lote y en la foto del primer día.",
+    duracion: "Toda la temporada",
+    periodo: "season",
+    colaboracion: "mixed",
+    requiere: ["cantera"],
+  },
+  {
+    id: "tienda-producto-con-el-escudo",
+    categoria: "tienda",
+    tipo: "in_kind",
+    titulo: "Un producto de la empresa con el escudo del club",
+    queEs: "La panadería saca el bollo del club, la bodega una etiqueta con el escudo, la heladería un sabor con el nombre del equipo. De cada unidad vendida, una parte va al club.",
+    queRecibeLaEmpresa: "Un producto que se vende solo en su barrio porque lleva el escudo de su equipo, y una razón para que el club lo cuente en todas sus redes.",
+    duracion: "Una temporada o una campaña",
+    periodo: "season",
+    colaboracion: "mixed",
   },
 
   // -------------------------------------------------------------------
