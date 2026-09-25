@@ -66,6 +66,8 @@ describe("el catálogo, por dentro", () => {
     const OBLIGATORIO: Partial<Record<(typeof IDEAS)[number]["categoria"], RequisitoIdea>> = {
       equipaciones: "equipos",
       instalaciones: "instalaciones",
+      // El descanso pasa en tu pabellón: sin sitio no hay descanso que vender.
+      intervalo: "instalaciones",
       redes: "redes",
       cantera: "cantera",
       // Un directo por Instagram o YouTube sigue necesitando la cuenta.

@@ -37,6 +37,7 @@ export type CategoriaIdea =
   | "eventos"
   | "torneos"
   | "instalaciones"
+  | "intervalo"
   | "redes"
   | "familias"
   | "visibilidad-local"
@@ -54,6 +55,7 @@ export const CATEGORIAS_IDEA: {
   { id: "equipos", etiqueta: "Equipos", pista: "Lo que rodea a un equipo entero durante la temporada." },
   { id: "equipaciones", etiqueta: "Equipaciones", pista: "Cada hueco de la ropa se vende por separado." },
   { id: "instalaciones", etiqueta: "Instalaciones", pista: "Lo que se ve en el pabellón o el campo un día de partido." },
+  { id: "intervalo", etiqueta: "Intervalo del partido", pista: "El descanso de un partido en casa: se vende por equipo, masculino y femenino por separado." },
   { id: "redes", etiqueta: "Redes sociales", pista: "Tu audiencia, que es más grande de lo que crees." },
   { id: "cantera", etiqueta: "Cantera", pista: "Los niños, sus familias y todo lo que arrastran." },
   { id: "jugadores", etiqueta: "Jugadores", pista: "Las personas del club, no el escudo." },
@@ -397,6 +399,117 @@ export const IDEAS: Idea[] = [
     titulo: "Menciones por megafonía",
     queEs: "El speaker nombra a la empresa en momentos concretos del partido: alineaciones, descanso, final.",
     queRecibeLaEmpresa: "Varias menciones habladas por partido, delante de todo el público presente.",
+    duracion: "Toda la temporada",
+    periodo: "season",
+    colaboracion: "money",
+    requiere: ["instalaciones"],
+  },
+
+
+  // -------------------------------------------------------------------
+  // Intervalo del partido
+  //
+  // El descanso es el único rato de un partido en el que el público
+  // está en la grada y no está mirando a la pista. Diez minutos, cada
+  // jornada, con la gente sentada y sin nada que hacer: es el hueco
+  // más desaprovechado que tiene un club, y no cuesta nada montarlo.
+  //
+  // Se vende por equipo, no por club. El descanso de los partidos en
+  // casa del primer equipo masculino y el del primer equipo femenino
+  // son dos huecos distintos, cada uno con su propio público, y el
+  // club puede venderlos a dos empresas que no compitan entre sí.
+  // -------------------------------------------------------------------
+  {
+    id: "intervalo-patrocinador-del-descanso",
+    categoria: "intervalo",
+    tipo: "venue_matches",
+    titulo: "Patrocinador del descanso",
+    queEs: "El descanso entero lleva el nombre de una empresa durante toda la temporada, en los partidos en casa de un equipo. El club elige cuál: el primer equipo masculino y el femenino se venden por separado, a dos empresas distintas si quiere.",
+    queRecibeLaEmpresa: "Que el speaker abra y cierre cada descanso con su nombre, su marca en lo que se monte durante esos minutos y la mención en la publicación del partido.",
+    duracion: "Toda la temporada",
+    periodo: "season",
+    colaboracion: "money",
+    requiere: ["instalaciones"],
+  },
+  {
+    id: "intervalo-sorteo",
+    categoria: "intervalo",
+    tipo: "venue_matches",
+    titulo: "Sorteo en el descanso",
+    queEs: "En el descanso se sortea algo entre el público presente. El premio lo pone la empresa: un vale, una cena, un producto suyo.",
+    queRecibeLaEmpresa: "Su producto en manos de un vecino delante de toda la grada, y el nombre repetido por megafonía antes, durante y después del sorteo.",
+    duracion: "Un partido",
+    periodo: "match",
+    colaboracion: "product",
+    requiere: ["instalaciones"],
+  },
+  {
+    id: "intervalo-reto-de-tiro",
+    categoria: "intervalo",
+    tipo: "venue_matches",
+    titulo: "El reto del descanso",
+    queEs: "Un espectador sale a la pista en el descanso e intenta un tiro. Si lo mete, la empresa le da el premio; si no, se lleva un detalle igual.",
+    queRecibeLaEmpresa: "El momento más comentado del partido con su nombre puesto, y un vídeo corto que la empresa puede publicar en sus propias redes.",
+    duracion: "Un partido",
+    periodo: "match",
+    colaboracion: "mixed",
+    requiere: ["instalaciones"],
+  },
+  {
+    id: "intervalo-minipartido-cantera",
+    categoria: "intervalo",
+    tipo: "youth",
+    titulo: "Minipartido de la cantera en el descanso",
+    queEs: "Los equipos pequeños del club juegan unos minutos en la pista grande durante el descanso, con sus familias en la grada.",
+    queRecibeLaEmpresa: "Su marca en el minipartido y las fotos de los niños jugando en la pista del primer equipo, que son las que más se comparten de todo el club.",
+    duracion: "Un partido",
+    periodo: "match",
+    colaboracion: "mixed",
+    requiere: ["instalaciones", "cantera"],
+  },
+  {
+    id: "intervalo-degustacion",
+    categoria: "intervalo",
+    tipo: "venue_matches",
+    titulo: "Degustación en el descanso",
+    queEs: "Una panadería, una heladería, un bar o cualquier empresa de comida reparte muestras entre el público durante el descanso.",
+    queRecibeLaEmpresa: "Que el barrio entero pruebe su producto el mismo día, sin montar una feria ni alquilar un puesto.",
+    duracion: "Un partido",
+    periodo: "match",
+    colaboracion: "product",
+    requiere: ["instalaciones"],
+  },
+  {
+    id: "intervalo-entrega-mvp",
+    categoria: "intervalo",
+    tipo: "venue_matches",
+    titulo: "Entrega del premio al jugador del partido",
+    queEs: "Alguien de la empresa baja a la pista y entrega el premio al mejor jugador o jugadora del partido delante del público.",
+    queRecibeLaEmpresa: "Salir en persona en la foto del premio, que es la que publica el club, el jugador y muchas veces el periódico local.",
+    duracion: "Toda la temporada",
+    periodo: "season",
+    colaboracion: "mixed",
+    requiere: ["instalaciones"],
+  },
+  {
+    id: "intervalo-photocall",
+    categoria: "intervalo",
+    tipo: "venue_matches",
+    titulo: "Photocall en el descanso",
+    queEs: "Un panel con el escudo del club y la marca de la empresa, montado a pie de pista para que la gente se haga fotos en el descanso.",
+    queRecibeLaEmpresa: "Su logo en todas las fotos que el público sube esa tarde, publicadas por ellos mismos y no por el club.",
+    duracion: "Toda la temporada",
+    periodo: "season",
+    colaboracion: "mixed",
+    requiere: ["instalaciones"],
+  },
+  {
+    id: "intervalo-anuncio-en-pista",
+    categoria: "intervalo",
+    tipo: "venue_matches",
+    titulo: "Anuncio en la pista durante el descanso",
+    queEs: "Durante los minutos del descanso suena el anuncio de la empresa por megafonía, o se proyecta su vídeo si el pabellón tiene pantalla.",
+    queRecibeLaEmpresa: "Un anuncio completo, no una mención suelta, con la grada llena y sin partido que mirar.",
     duracion: "Toda la temporada",
     periodo: "season",
     colaboracion: "money",
