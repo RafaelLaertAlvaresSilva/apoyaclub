@@ -43,6 +43,37 @@ const PESTANAS: { id: Pestana; etiqueta: string }[] = [
   { id: "comunidad", etiqueta: "Acción social" },
 ];
 
+/**
+ * Un botón del menú de secciones. Fuera del componente a propósito: si
+ * se define dentro, React lo ve como un componente nuevo en cada render
+ * y vuelve a montar los ocho botones cada vez.
+ */
+function BotonDeSeccion({
+  etiqueta,
+  abierta,
+  bloqueada,
+  alPulsar,
+}: {
+  etiqueta: string;
+  abierta: boolean;
+  bloqueada: boolean;
+  alPulsar: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      disabled={bloqueada}
+      onClick={alPulsar}
+      aria-current={abierta ? "page" : undefined}
+      className={`w-full whitespace-nowrap rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+        abierta ? "bg-teal-700 text-white" : "text-zinc-600 hover:bg-zinc-100"
+      }`}
+    >
+      {etiqueta}
+    </button>
+  );
+}
+
 export function PanelTabs({
   userId,
   perfil,
@@ -76,6 +107,9 @@ export function PanelTabs({
    * es la red por si algún día vuelve a pasar por otro motivo.
    */
   const [ultimaPestana, setUltimaPestana] = useState<Pestana>("identidad");
+
+  /** Solo para pantallas estrechas: si el desplegable está desplegado. */
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
   const esValida = IDS_PESTANA.has(ancla);
   if (esValida && ancla !== ultimaPestana) setUltimaPestana(ancla as Pestana);
@@ -175,32 +209,80 @@ export function PanelTabs({
     );
   }
 
+  /**
+   * Devuelve el manejador de pulsación de una sección, con el aviso de
+   * cambios sin guardar ya puesto. Devuelve la función en vez de hacer
+   * el trabajo para que el menú estrecho y la columna ancha compartan
+   * exactamente el mismo comportamiento.
+   */
+  function irA(id: Pestana) {
+    return () => {
+      if (!puedeSalir()) return;
+      setMenuAbierto(false);
+      // Cambiar el ancla es lo que abre la sección, porque el ancla es
+      // la única fuente de la verdad aquí.
+      window.location.hash = id;
+    };
+  }
+
+  const etiquetaActiva =
+    PESTANAS.find((pestana) => pestana.id === pestanaActiva)?.etiqueta ?? PESTANAS[0].etiqueta;
+
   return (
-    <div ref={contenedor} className="grid gap-6 lg:grid-cols-[200px_1fr]">
-      <nav className="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
-        {PESTANAS.map((pestana) => {
-          const bloqueada = pestana.id !== "identidad" && !perfilCreado;
-          return (
-            <button
-              key={pestana.id}
-              type="button"
-              disabled={bloqueada}
-              onClick={() => {
-                if (!puedeSalir()) return;
-                // Cambiar el ancla es lo que abre la pestaña, porque el
-                // ancla es la única fuente de la verdad aquí.
-                window.location.hash = pestana.id;
-              }}
-              className={`whitespace-nowrap rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
-                pestanaActiva === pestana.id
-                  ? "bg-teal-700 text-white"
-                  : "text-zinc-600 hover:bg-zinc-100"
-              }`}
-            >
-              {pestana.etiqueta}
-            </button>
-          );
-        })}
+    /* La columna de secciones solo a partir de `xl`. Desde `lg` el panel
+       ya saca su propio menú a la izquierda, y dos columnas seguidas
+       dejaban el formulario en poco más de cuatrocientos píxeles. */
+    <div ref={contenedor} className="grid gap-6 xl:grid-cols-[200px_1fr]">
+      {/* Pantallas estrechas: un desplegable. Antes era una fila que se
+          desplazaba de lado, así que de las ocho secciones se veían
+          cinco y media y las otras no existían para quien no supiera
+          que aquello se arrastraba. */}
+      <div className="xl:hidden">
+        <button
+          type="button"
+          onClick={() => setMenuAbierto((abierto) => !abierto)}
+          aria-expanded={menuAbierto}
+          className="flex w-full items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white px-4 py-3 text-left"
+        >
+          <span>
+            <span className="block text-xs font-bold uppercase tracking-wider text-zinc-500">
+              Sección de la ficha
+            </span>
+            <span className="mt-0.5 block text-sm font-semibold text-brand-navy">
+              {etiquetaActiva}
+            </span>
+          </span>
+          <span aria-hidden="true" className="text-lg leading-none text-zinc-500">
+            {menuAbierto ? "▴" : "▾"}
+          </span>
+        </button>
+
+        {menuAbierto && (
+          <div className="mt-2 grid gap-1 rounded-xl border border-zinc-200 bg-white p-2 sm:grid-cols-2">
+            {PESTANAS.map((pestana) => (
+              <BotonDeSeccion
+                key={pestana.id}
+                etiqueta={pestana.etiqueta}
+                abierta={pestanaActiva === pestana.id}
+                bloqueada={pestana.id !== "identidad" && !perfilCreado}
+                alPulsar={irA(pestana.id)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Pantallas anchas: la columna de siempre, entera y a la vista. */}
+      <nav className="hidden flex-col gap-2 xl:flex">
+        {PESTANAS.map((pestana) => (
+          <BotonDeSeccion
+                key={pestana.id}
+                etiqueta={pestana.etiqueta}
+                abierta={pestanaActiva === pestana.id}
+                bloqueada={pestana.id !== "identidad" && !perfilCreado}
+                alPulsar={irA(pestana.id)}
+              />
+        ))}
       </nav>
 
       <div>
