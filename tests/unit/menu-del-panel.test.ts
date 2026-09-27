@@ -54,8 +54,8 @@ describe("el menú del panel", () => {
     const titulos = [...MENU.matchAll(/titulo: "([^"]+)"/g)].map((m) => m[1]);
     expect(titulos).toEqual([
       "Mi club",
-      "Conseguir patrocinadores",
-      "Los que ya tienes",
+      "Buscar patrocinadores",
+      "Seguimiento",
       "Cuenta",
     ]);
   });

@@ -23,9 +23,9 @@ type Grupo = {
  * El reparto en cuatro apartados no es decorativo: separa dos trabajos
  * que el club hace en momentos distintos de la temporada.
  *
- *   - "Conseguir patrocinadores" es buscar: qué ofrezco, a quién se lo
+ *   - "Buscar patrocinadores" es eso: qué ofrezco, a quién se lo
  *     ofrezco, quién me ha escrito, qué le mando.
- *   - "Los que ya tienes" es cumplir: con quién he firmado y qué le he
+ *   - "Seguimiento" es cumplir: con quién he firmado y qué le he
  *     prometido.
  *
  * Antes estaban mezclados en una fila de once botones sin orden, con
@@ -51,7 +51,7 @@ const GRUPOS: Grupo[] = [
     ],
   },
   {
-    titulo: "Conseguir patrocinadores",
+    titulo: "Buscar patrocinadores",
     enlaces: [
       { id: "oportunidades", href: "/panel/oportunidades", etiqueta: "Oportunidades" },
       // La libreta de empresas a las que el club quiere escribir
@@ -64,7 +64,7 @@ const GRUPOS: Grupo[] = [
     ],
   },
   {
-    titulo: "Los que ya tienes",
+    titulo: "Seguimiento",
     enlaces: [
       { id: "patrocinadores", href: "/panel/patrocinadores", etiqueta: "Patrocinadores" },
       { id: "tareas", href: "/panel/tareas", etiqueta: "Tareas" },
@@ -130,7 +130,10 @@ function Lista({
       {GRUPOS.map((grupo) => (
         <div key={grupo.titulo ?? "inicio"}>
           {grupo.titulo && (
-            <p className="px-3 pb-1 pt-4 text-xs font-bold uppercase tracking-wider text-zinc-500">
+            /* Con fondo y no solo en gris: sobre una columna blanca, un
+               título en texto pequeño se confundía con un enlace más y
+               los cuatro apartados no se distinguían de un vistazo. */
+            <p className="mb-1 mt-4 rounded-lg bg-teal-100 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-teal-800">
               {grupo.titulo}
             </p>
           )}
