@@ -2,7 +2,6 @@ import { redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
-import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import {
   esVisiblePublicamente,
   etiquetaEstadoSuscripcion,
@@ -11,7 +10,6 @@ import {
 } from "@/lib/subscription-mappers";
 import { esAccesoRegalado } from "@/lib/acceso-gratuito";
 import { createClient } from "@/lib/supabase/server";
-import { PanelNav } from "../components/PanelNav";
 import { PLANES, esPlanValido, periodicidad, precioFormateado } from "@/lib/planes";
 import { abrirPortalCliente } from "./actions";
 import { SelectorDePlan } from "./components/SelectorDePlan";
@@ -96,7 +94,7 @@ export default async function SuscripcionPage({
   const confirmada = Boolean(suscripcion.stripeSubscriptionId);
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
+    <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
@@ -105,10 +103,8 @@ export default async function SuscripcionPage({
             Tu plan, tus facturas y tus datos de facturación. Desde aquí se cambia el método de pago y se cancela, sin llamar a nadie.
           </p>
         </div>
-        <CerrarSesionBoton />
       </div>
 
-      <PanelNav activo="suscripcion" />
 
       <section className="rounded-xl border border-zinc-200 bg-white p-6">
         {/* Volviendo de la pasarela de pago.

@@ -1,6 +1,5 @@
 import { redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
-import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import {
   clubRowToProfile,
   clubSponsorRowToSponsor,
@@ -22,10 +21,8 @@ import { MetricasClub } from "./components/MetricasClub";
 import { AvisoSolicitudes } from "./components/AvisoSolicitudes";
 import { PrimerosPasos } from "./components/PrimerosPasos";
 import { Recomendaciones } from "./components/Recomendaciones";
-import { PanelNav } from "./components/PanelNav";
 import { RecordatorioInforme } from "./tareas/components/RecordatorioInforme";
 import { TareasDeHoy } from "./components/TareasDeHoy";
-import { PanelTabs } from "./components/PanelTabs";
 
 export default async function PanelPage() {
   const t = await getTranslations("panel.perfil");
@@ -100,19 +97,14 @@ export default async function PanelPage() {
   const huecos = huecosDelPerfil(perfil, equipos, patrocinadores);
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">
-            {perfil?.name ?? nombreProvisional}
-          </h1>
-          {!perfil && <p className="mt-1 text-sm text-zinc-500">{user.email}</p>}
-        </div>
-        <CerrarSesionBoton />
+    <div className="flex w-full flex-1 flex-col gap-6 py-6">
+      <div>
+        <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
+        <h1 className="mt-1 text-2xl font-semibold text-zinc-900">
+          {perfil?.name ?? nombreProvisional}
+        </h1>
+        {!perfil && <p className="mt-1 text-sm text-zinc-500">{user.email}</p>}
       </div>
-
-      <PanelNav activo="perfil" />
 
       <AvisoSolicitudes sinAbrir={await contarSolicitudesNuevas()} />
 
@@ -127,11 +119,10 @@ export default async function PanelPage() {
       <PrimerosPasos pasos={pasosIniciales} />
 
       {/* Las dos juntas, y el progreso a un tercio: es un recordatorio,
-          no el contenido principal del panel. Cuando la ficha está
-          completa, `BarraProgreso` no pinta nada, así que aquí se deja
-          de partir la fila y las métricas ocupan todo el ancho — si no,
-          quedaría medio panel vacío esperando a una tarjeta que ya no
-          existe. */}
+          no el contenido principal. Cuando la ficha está completa,
+          `BarraProgreso` no pinta nada, así que aquí se deja de partir
+          la fila y las métricas ocupan todo el ancho — si no, quedaría
+          medio panel vacío esperando a una tarjeta que ya no existe. */}
       {huecos.length > 0 ? (
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
@@ -142,12 +133,6 @@ export default async function PanelPage() {
       ) : (
         <MetricasClub metricas={metricas} resumen={resumenDeVisitas} />
       )}
-
-      <PanelTabs
-        userId={user.id}
-        perfil={perfil}
-        equipos={equipos}
-      />
 
       <Recomendaciones recomendaciones={obtenerRecomendaciones()} />
     </div>

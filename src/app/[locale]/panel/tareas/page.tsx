@@ -1,11 +1,9 @@
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
-import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { createClient } from "@/lib/supabase/server";
 import { empresasConocidasDe, hoyISO } from "@/lib/tareas-patrocinio";
 import { obtenerTareasDelClub, obtenerUltimosInformes } from "@/lib/tareas-datos";
 import type { ClubSponsorRow } from "@/lib/club-mappers";
-import { PanelNav } from "../components/PanelNav";
 import { TareasDeHoy } from "../components/TareasDeHoy";
 import { RecordatorioInforme } from "./components/RecordatorioInforme";
 import { TareasManager } from "./components/TareasManager";
@@ -44,7 +42,7 @@ export default async function TareasPage() {
   const empresasConocidas = empresasConocidasDe(patrocinadores ?? [], tareas);
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
+    <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-teal-700">Panel del club</p>
@@ -54,10 +52,8 @@ export default async function TareasPage() {
             enseñar qué recibieron a cambio — y que renueven.
           </p>
         </div>
-        <CerrarSesionBoton />
       </div>
 
-      <PanelNav activo="tareas" />
 
       <TareasDeHoy tareas={tareas} />
 

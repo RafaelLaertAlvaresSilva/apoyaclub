@@ -327,7 +327,7 @@ export function RegistroDePublico({
                 {equiposDelClub.length === 0 && (
                   <p className="mt-1.5 text-xs text-zinc-500">
                     Todavía no tienes equipos en tu ficha.{" "}
-                    <Link href="/panel#equipos" className="font-medium text-teal-700 hover:underline">
+                    <Link href="/panel/perfil#equipos" className="font-medium text-teal-700 hover:underline">
                       Añádelos aquí
                     </Link>{" "}
                     y aparecerán en esta lista.

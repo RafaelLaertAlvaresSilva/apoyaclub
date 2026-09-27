@@ -1,8 +1,6 @@
 import { Link, redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
-import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { createClient } from "@/lib/supabase/server";
-import { PanelNav } from "../components/PanelNav";
 import { EliminarCuentaForm } from "./components/EliminarCuentaForm";
 
 /** Privacidad y datos del club (Fase 11): exportar y eliminar la cuenta. */
@@ -19,7 +17,7 @@ export default async function PrivacidadClubPage() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
+    <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
@@ -28,10 +26,8 @@ export default async function PrivacidadClubPage() {
             Qué datos guardamos de tu club, cómo descargarlos y cómo borrar la cuenta. Nada de esto depende de que estés al día con el pago.
           </p>
         </div>
-        <CerrarSesionBoton />
       </div>
 
-      <PanelNav activo="privacidad" />
 
       <section className="rounded-xl border border-zinc-200 bg-white p-6">
         <h2 className="text-base font-semibold text-zinc-900">{t("descargarMisDatos")}</h2>

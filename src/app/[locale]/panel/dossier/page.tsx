@@ -1,7 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
-import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { clubRowToProfile, clubSponsorRowToSponsor, clubTeamRowToTeam } from "@/lib/club-mappers";
 import type { ClubRow, ClubSponsorRow, ClubTeamRow } from "@/lib/club-mappers";
 import { dossierRowToConfig, type DossierRow } from "@/lib/dossier-mappers";
@@ -9,7 +8,6 @@ import { seccionesConContenido, seccionesPorDefecto } from "@/lib/dossier";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
 import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
 import { createClient } from "@/lib/supabase/server";
-import { PanelNav } from "../components/PanelNav";
 import { DossierManager } from "./components/DossierManager";
 
 export default async function DossierPage() {
@@ -72,7 +70,7 @@ export default async function DossierPage() {
   const configuracion = filaDossier ? dossierRowToConfig(filaDossier) : null;
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
+    <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
@@ -81,10 +79,8 @@ export default async function DossierPage() {
             El documento que le pasas a una empresa: tu club en un PDF, con las cifras y las oportunidades que tú elijas. También sale en Word, por si quieres retocarlo.
           </p>
         </div>
-        <CerrarSesionBoton />
       </div>
 
-      <PanelNav activo="dossier" />
 
       {!perfil ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">

@@ -43,7 +43,7 @@ describe("enlaces de los primeros pasos", () => {
       expect(PESTANAS_DEL_PANEL.has(paso.anclaDelPanel!)).toBe(true);
       // El href tiene que ir de la mano del ancla: si se separan, el
       // botón lleva a un sitio y abre otro.
-      expect(paso.href).toBe(`/panel#${paso.anclaDelPanel}`);
+      expect(paso.href).toBe(`/panel/perfil#${paso.anclaDelPanel}`);
     }
   });
 
@@ -77,7 +77,7 @@ describe("dónde se rellena cada sección del dossier", () => {
     for (const seccion of SECCIONES_DOSSIER) {
       if (seccion.donde.includes("#")) {
         const [ruta, ancla] = seccion.donde.split("#");
-        expect(ruta).toBe("/panel");
+        expect(ruta).toBe("/panel/perfil");
         expect(PESTANAS_DEL_PANEL.has(ancla)).toBe(true);
       } else {
         expect(PAGINAS_DEL_PANEL.has(seccion.donde)).toBe(true);

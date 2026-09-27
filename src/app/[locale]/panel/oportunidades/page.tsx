@@ -1,12 +1,10 @@
 import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
-import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { requisitosDelClub } from "@/lib/catalogo-ideas";
 import { clubRowToProfile, clubTeamRowToTeam, type ClubRow, type ClubTeamRow } from "@/lib/club-mappers";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
 import { createClient } from "@/lib/supabase/server";
-import { PanelNav } from "../components/PanelNav";
 import { OportunidadesManager } from "./components/OportunidadesManager";
 
 export default async function OportunidadesPage() {
@@ -51,7 +49,7 @@ export default async function OportunidadesPage() {
   const requisitos = [...requisitosDelClub(perfil, equipos)];
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
+    <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
@@ -60,10 +58,8 @@ export default async function OportunidadesPage() {
             Lo que tu club ofrece a una empresa a cambio de patrocinio, y lo que necesita a cambio de visibilidad. Es lo único de tu ficha donde una empresa puede hacer algo.
           </p>
         </div>
-        <CerrarSesionBoton />
       </div>
 
-      <PanelNav activo="oportunidades" />
 
       {!perfil ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">

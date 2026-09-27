@@ -1,12 +1,10 @@
 import { getLocale } from "next-intl/server";
-import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { Link, redirect } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { calcularAlcance } from "@/lib/alcance";
 import { reunirDatosDeAlcance } from "@/lib/alcance-datos";
 import { formatearNumero } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
-import { PanelNav } from "../components/PanelNav";
 import { AvisoDeOrigen, Bloque, Cifra } from "./components/BloquesDeAlcance";
 
 /**
@@ -39,7 +37,7 @@ export default async function AlcancePage() {
   const informe = calcularAlcance(datos);
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
+    <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-teal-700">Panel del club</p>
@@ -50,10 +48,8 @@ export default async function AlcancePage() {
             redes, y sumarla tres veces se nota enseguida.
           </p>
         </div>
-        <CerrarSesionBoton />
       </div>
 
-      <PanelNav activo="alcance" />
 
       {informe.titular && (
         <section className="rounded-2xl border border-teal-200 bg-white p-5">

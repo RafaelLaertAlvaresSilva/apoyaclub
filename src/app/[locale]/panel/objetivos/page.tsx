@@ -1,6 +1,5 @@
 import { getLocale } from "next-intl/server";
 import { redirect } from "@/i18n/navigation";
-import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { calcularAlcance, cifrasDelInforme } from "@/lib/alcance";
 import { reunirDatosDeAlcance } from "@/lib/alcance-datos";
 import { deportesDelClub } from "@/lib/dossier";
@@ -9,7 +8,6 @@ import { hoyParaElFormulario } from "@/lib/publico-partidos";
 import { obtenerProspectosDelClub } from "@/lib/prospectos-datos";
 import { SITE_URL } from "@/lib/site";
 import { createClient } from "@/lib/supabase/server";
-import { PanelNav } from "../components/PanelNav";
 import { ListaDeObjetivos } from "./components/ListaDeObjetivos";
 
 /**
@@ -72,7 +70,7 @@ export default async function ObjetivosPage() {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
+    <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-teal-700">Panel del club</p>
@@ -83,10 +81,8 @@ export default async function ObjetivosPage() {
             &quot;llámame en septiembre&quot; que nadie apuntó.
           </p>
         </div>
-        <CerrarSesionBoton />
       </div>
 
-      <PanelNav activo="objetivos" />
 
       <ListaDeObjetivos prospectos={prospectos} hoy={hoyParaElFormulario()} club={club} />
     </div>

@@ -1,9 +1,7 @@
 import { redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
-import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { contactRequestRowToContactRequest, type ContactRequestRow } from "@/lib/contact-request-mappers";
 import { createClient } from "@/lib/supabase/server";
-import { PanelNav } from "../components/PanelNav";
 import { SolicitudCard } from "./components/SolicitudCard";
 
 type ContactRequestConOportunidad = ContactRequestRow & {
@@ -41,7 +39,7 @@ export default async function SolicitudesPage() {
   }));
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
+    <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
@@ -50,10 +48,8 @@ export default async function SolicitudesPage() {
             Empresas que han escrito desde tu página pública. Contestar el mismo día es lo que más cierra acuerdos.
           </p>
         </div>
-        <CerrarSesionBoton />
       </div>
 
-      <PanelNav activo="solicitudes" />
 
       {solicitudes.length === 0 ? (
         <p className="rounded-xl border border-dashed border-zinc-300 bg-white p-6 text-center text-sm text-zinc-500">{t("todaviaNoHasRecibido")}</p>

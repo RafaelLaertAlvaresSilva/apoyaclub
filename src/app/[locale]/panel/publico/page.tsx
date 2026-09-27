@@ -1,10 +1,8 @@
 import { getLocale } from "next-intl/server";
 import { redirect } from "@/i18n/navigation";
-import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { etiquetaEquipo } from "@/lib/opportunities";
 import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
 import { createClient } from "@/lib/supabase/server";
-import { PanelNav } from "../components/PanelNav";
 import { RegistroDePublico } from "./components/RegistroDePublico";
 
 type FilaEquipo = { id: string; sport: string; category: string | null; gender: string | null };
@@ -56,7 +54,7 @@ export default async function PublicoPage() {
   }));
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
+    <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-teal-700">Panel del club</p>
@@ -67,10 +65,8 @@ export default async function PublicoPage() {
             empresa.
           </p>
         </div>
-        <CerrarSesionBoton />
       </div>
 
-      <PanelNav activo="publico" />
 
       <RegistroDePublico
         partidos={partidos}

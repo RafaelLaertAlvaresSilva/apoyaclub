@@ -148,7 +148,7 @@ export function huecosDelClub(club: DatosDelClub): Hueco[] {
   if (!cifrasEnTexto(club)) {
     huecos.push({
       que: "Cuánta gente sois: jugadores, familias, socios o público en los partidos",
-      donde: "/panel#audiencia",
+      donde: "/panel/perfil#audiencia",
     });
   }
 
@@ -160,7 +160,7 @@ export function huecosDelClub(club: DatosDelClub): Hueco[] {
   }
 
   if (!club.firmante) {
-    huecos.push({ que: "Quién firma el correo", donde: "/panel#identidad" });
+    huecos.push({ que: "Quién firma el correo", donde: "/panel/perfil#identidad" });
   }
 
   return huecos;

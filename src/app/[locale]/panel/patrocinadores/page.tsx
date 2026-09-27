@@ -1,10 +1,8 @@
 import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
-import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { clubSponsorRowToSponsor, type ClubSponsorRow } from "@/lib/club-mappers";
 import { createClient } from "@/lib/supabase/server";
-import { PanelNav } from "../components/PanelNav";
 import { PatrocinadoresForm } from "../components/PatrocinadoresForm";
 
 /**
@@ -42,7 +40,7 @@ export default async function PatrocinadoresPage() {
   const patrocinadores = (filasPatrocinadores ?? []).map(clubSponsorRowToSponsor);
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
+    <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-teal-700">Panel del club</p>
@@ -53,10 +51,8 @@ export default async function PatrocinadoresPage() {
             más convence a quien todavía no lo está.
           </p>
         </div>
-        <CerrarSesionBoton />
       </div>
 
-      <PanelNav activo="patrocinadores" />
 
       {/* Sin club creado no hay a qué colgar un patrocinador: la fila
           necesita un `club_id` que todavía no existe. */}

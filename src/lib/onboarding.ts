@@ -42,13 +42,13 @@ export function primerosPasos(
       // Con logo y descripción la página ya se puede enseñar; el resto
       // del perfil suma, pero no bloquea.
       hecho: !!perfil?.logoUrl && !!perfil?.description,
-      href: "/panel#identidad",
+      href: "/panel/perfil#identidad",
       anclaDelPanel: "identidad",
     },
     {
       id: "equipos",
       hecho: equipos.length > 0 || perfil?.youthTeamsCount != null,
-      href: "/panel#equipos",
+      href: "/panel/perfil#equipos",
       anclaDelPanel: "equipos",
     },
     {
