@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { SECCIONES_DOSSIER } from "@/lib/dossier";
 import { primerosPasos } from "@/lib/onboarding";
 import { huecosDelPerfil } from "@/lib/profile-completion";
+import { SECCIONES_DE_LA_FICHA } from "@/app/[locale]/panel/components/secciones-de-la-ficha";
 import { perfilDePrueba } from "../fixtures/club";
 
 /**
@@ -97,14 +96,12 @@ describe("dónde se rellena cada sección del dossier", () => {
  */
 describe("la lista de pestañas de estas pruebas", () => {
   it("son las mismas que monta el panel", () => {
-    const fuente = readFileSync(
-      join(__dirname, "..", "..", "src/app/[locale]/panel/components/PanelTabs.tsx"),
-      "utf8",
-    );
-    const bloque = fuente.slice(fuente.indexOf("const IDS_PESTANA"), fuente.indexOf("const PESTANAS"));
-    const delPanel = [...bloque.matchAll(/"([a-z]+)"/g)].map((encontrado) => encontrado[1]);
-
-    expect(delPanel.length).toBeGreaterThan(0);
-    for (const pestana of delPanel) expect(PESTANAS_DEL_PANEL.has(pestana)).toBe(true);
+    // Antes esto leía el archivo del formulario y lo recortaba entre
+    // dos nombres de variable. Cambiar uno de esos nombres dejaba el
+    // recorte a medio archivo y la comprobación pasaba mirando
+    // cualquier texto en minúsculas. Ahora se lee la lista de verdad.
+    for (const seccion of SECCIONES_DE_LA_FICHA) {
+      expect(PESTANAS_DEL_PANEL.has(seccion.id), `falta "${seccion.id}"`).toBe(true);
+    }
   });
 });

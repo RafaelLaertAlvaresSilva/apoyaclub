@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { ClubProfile, ClubTeam } from "@/lib/types";
+import { registrarGuardia } from "./guardia-sin-guardar";
+import { IDS_PESTANA, type Pestana } from "./secciones-de-la-ficha";
 import { AudienciaForm } from "./AudienciaForm";
 import { CanteraForm } from "./CanteraForm";
 import { ComunidadForm } from "./ComunidadForm";
@@ -10,69 +12,6 @@ import { HistoriaForm } from "./HistoriaForm";
 import { IdentidadForm } from "./IdentidadForm";
 import { InstalacionesForm } from "./InstalacionesForm";
 import { NivelDeportivoForm } from "./NivelDeportivoForm";
-
-type Pestana =
-  | "identidad"
-  | "nivel"
-  | "equipos"
-  | "instalaciones"
-  | "cantera"
-  | "historia"
-  | "audiencia"
-  | "comunidad";
-
-const IDS_PESTANA = new Set<string>([
-  "identidad",
-  "nivel",
-  "equipos",
-  "instalaciones",
-  "cantera",
-  "historia",
-  "audiencia",
-  "comunidad",
-]);
-
-const PESTANAS: { id: Pestana; etiqueta: string }[] = [
-  { id: "identidad", etiqueta: "Identidad" },
-  { id: "nivel", etiqueta: "Nivel deportivo" },
-  { id: "equipos", etiqueta: "Equipos" },
-  { id: "instalaciones", etiqueta: "Instalaciones" },
-  { id: "cantera", etiqueta: "Cantera" },
-  { id: "historia", etiqueta: "Historia" },
-  { id: "audiencia", etiqueta: "Audiencia" },
-  { id: "comunidad", etiqueta: "Acción social" },
-];
-
-/**
- * Un botón del menú de secciones. Fuera del componente a propósito: si
- * se define dentro, React lo ve como un componente nuevo en cada render
- * y vuelve a montar los ocho botones cada vez.
- */
-function BotonDeSeccion({
-  etiqueta,
-  abierta,
-  bloqueada,
-  alPulsar,
-}: {
-  etiqueta: string;
-  abierta: boolean;
-  bloqueada: boolean;
-  alPulsar: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      disabled={bloqueada}
-      onClick={alPulsar}
-      aria-current={abierta ? "page" : undefined}
-      className={`w-full whitespace-nowrap rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
-        abierta ? "bg-teal-700 text-white" : "text-zinc-600 hover:bg-zinc-100"
-      }`}
-    >
-      {etiqueta}
-    </button>
-  );
-}
 
 export function PanelTabs({
   userId,
@@ -107,9 +46,6 @@ export function PanelTabs({
    * es la red por si algún día vuelve a pasar por otro motivo.
    */
   const [ultimaPestana, setUltimaPestana] = useState<Pestana>("identidad");
-
-  /** Solo para pantallas estrechas: si el desplegable está desplegado. */
-  const [menuAbierto, setMenuAbierto] = useState(false);
 
   const esValida = IDS_PESTANA.has(ancla);
   if (esValida && ancla !== ultimaPestana) setUltimaPestana(ancla as Pestana);
@@ -210,81 +146,20 @@ export function PanelTabs({
   }
 
   /**
-   * Devuelve el manejador de pulsación de una sección, con el aviso de
-   * cambios sin guardar ya puesto. Devuelve la función en vez de hacer
-   * el trabajo para que el menú estrecho y la columna ancha compartan
-   * exactamente el mismo comportamiento.
+   * El menú del panel es quien cambia de sección ahora, y desde allí no
+   * se ven los campos de este formulario. Se le deja aquí la
+   * comprobación mientras esta pantalla está montada.
    */
-  function irA(id: Pestana) {
-    return () => {
-      if (!puedeSalir()) return;
-      setMenuAbierto(false);
-      // Cambiar el ancla es lo que abre la sección, porque el ancla es
-      // la única fuente de la verdad aquí.
-      window.location.hash = id;
-    };
-  }
-
-  const etiquetaActiva =
-    PESTANAS.find((pestana) => pestana.id === pestanaActiva)?.etiqueta ?? PESTANAS[0].etiqueta;
+  useEffect(() => {
+    registrarGuardia(puedeSalir);
+    return () => registrarGuardia(null);
+  });
 
   return (
-    /* La columna de secciones solo a partir de `xl`. Desde `lg` el panel
-       ya saca su propio menú a la izquierda, y dos columnas seguidas
-       dejaban el formulario en poco más de cuatrocientos píxeles. */
-    <div ref={contenedor} className="grid gap-6 xl:grid-cols-[200px_1fr]">
-      {/* Pantallas estrechas: un desplegable. Antes era una fila que se
-          desplazaba de lado, así que de las ocho secciones se veían
-          cinco y media y las otras no existían para quien no supiera
-          que aquello se arrastraba. */}
-      <div className="xl:hidden">
-        <button
-          type="button"
-          onClick={() => setMenuAbierto((abierto) => !abierto)}
-          aria-expanded={menuAbierto}
-          className="flex w-full items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white px-4 py-3 text-left"
-        >
-          <span>
-            <span className="block text-xs font-bold uppercase tracking-wider text-zinc-500">
-              Sección de la ficha
-            </span>
-            <span className="mt-0.5 block text-sm font-semibold text-brand-navy">
-              {etiquetaActiva}
-            </span>
-          </span>
-          <span aria-hidden="true" className="text-lg leading-none text-zinc-500">
-            {menuAbierto ? "▴" : "▾"}
-          </span>
-        </button>
-
-        {menuAbierto && (
-          <div className="mt-2 grid gap-1 rounded-xl border border-zinc-200 bg-white p-2 sm:grid-cols-2">
-            {PESTANAS.map((pestana) => (
-              <BotonDeSeccion
-                key={pestana.id}
-                etiqueta={pestana.etiqueta}
-                abierta={pestanaActiva === pestana.id}
-                bloqueada={pestana.id !== "identidad" && !perfilCreado}
-                alPulsar={irA(pestana.id)}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Pantallas anchas: la columna de siempre, entera y a la vista. */}
-      <nav className="hidden flex-col gap-2 xl:flex">
-        {PESTANAS.map((pestana) => (
-          <BotonDeSeccion
-                key={pestana.id}
-                etiqueta={pestana.etiqueta}
-                abierta={pestanaActiva === pestana.id}
-                bloqueada={pestana.id !== "identidad" && !perfilCreado}
-                alPulsar={irA(pestana.id)}
-              />
-        ))}
-      </nav>
-
+    /* Sin menú propio: las ocho secciones cuelgan de "Perfil del club"
+       en el menú del panel. Tener dos columnas de menú, una al lado de
+       la otra, era un menú de más y dejaba el formulario estrecho. */
+    <div ref={contenedor}>
       <div>
         {!perfilCreado && (
           <p className="mb-4 text-sm text-zinc-500">

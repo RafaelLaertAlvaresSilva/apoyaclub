@@ -71,6 +71,33 @@ describe("el menú del panel", () => {
 });
 
 /**
+ * Las ocho secciones de la ficha cuelgan de "Perfil del club" en este
+ * mismo menú. Si el formulario vuelve a montar el suyo, quedan dos
+ * columnas de menú una al lado de la otra y el formulario se queda sin
+ * ancho.
+ */
+describe("las secciones de la ficha", () => {
+  const TABS = leer(PANEL, "components", "PanelTabs.tsx");
+
+  it("las pinta el menú, no el formulario", () => {
+    expect(MENU).toContain("SECCIONES_DE_LA_FICHA");
+    expect(TABS).not.toContain("SECCIONES_DE_LA_FICHA");
+    expect(TABS).not.toContain("<nav");
+  });
+
+  it("el menú avisa de los cambios sin guardar antes de cambiar", () => {
+    expect(MENU).toContain("sePuedeSalir()");
+    expect(TABS).toContain("registrarGuardia(");
+  });
+
+  it("el menú no arrastra los formularios de la ficha", () => {
+    // Importar la lista desde `PanelTabs` metía sus ocho formularios en
+    // el paquete de todas las páginas del panel.
+    expect(MENU).not.toContain('from "./PanelTabs"');
+  });
+});
+
+/**
  * El formulario del club vive en `/panel/perfil` desde que se separó
  * de la portada. Los enlaces con ancla que llevan a una de sus
  * pestañas ("te falta rellenar la historia") tienen que apuntar ahí:

@@ -24,6 +24,10 @@ export default async function PanelLayout({ children }: { children: React.ReactN
   // pública" del menú. Un club sin ficha todavía no tiene slug: ahí el
   // enlace simplemente no se pinta.
   let paginaPublica: string | null = null;
+  // Si el club ya ha guardado nombre y localidad. Sin esa fila, en la
+  // ficha solo se puede rellenar la identidad, y el menú tiene que
+  // enseñar el resto de secciones apagadas en vez de dejar pulsarlas.
+  let perfilCreado = false;
 
   if (user && (user.app_metadata?.role as Role | undefined) === "club") {
     const { data } = await supabase
@@ -35,6 +39,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
       .maybeSingle<SubscriptionRow>();
     filaSuscripcion = data;
     const slug = (data as (SubscriptionRow & { slug?: string | null }) | null)?.slug;
+    perfilCreado = data != null;
     if (slug) paginaPublica = `/${await getLocale()}/club/${slug}`;
   }
 
@@ -47,7 +52,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
           páginas del panel no tienen que acordarse de ponerlo, ni de
           decir cuál es su sección (lo deduce de la dirección). */}
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-4 px-4 pt-6 sm:px-6 lg:flex-row lg:gap-6">
-        <PanelNav paginaPublica={paginaPublica} />
+        <PanelNav paginaPublica={paginaPublica} perfilCreado={perfilCreado} />
         <div className="flex min-w-0 flex-1 flex-col">{children}</div>
       </div>
     </>

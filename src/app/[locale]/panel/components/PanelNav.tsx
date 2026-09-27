@@ -18,11 +18,24 @@ import { MenuDelPanel } from "./MenuDelPanel";
  *     lo que hace que el patrocinio se cumpla en vez de quedarse en la
  *     cabeza del que lo firmó.
  */
-export async function PanelNav({ paginaPublica }: { paginaPublica: string | null }) {
+export async function PanelNav({
+  paginaPublica,
+  perfilCreado,
+}: {
+  paginaPublica: string | null;
+  perfilCreado: boolean;
+}) {
   const [sinAbrir, vencidas] = await Promise.all([
     contarSolicitudesNuevas(),
     contarTareasVencidas(),
   ]);
 
-  return <MenuDelPanel sinAbrir={sinAbrir} vencidas={vencidas} paginaPublica={paginaPublica} />;
+  return (
+    <MenuDelPanel
+      sinAbrir={sinAbrir}
+      vencidas={vencidas}
+      paginaPublica={paginaPublica}
+      perfilCreado={perfilCreado}
+    />
+  );
 }

@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { cerrarSesion } from "@/app/[locale]/actions";
-import { Link, usePathname } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { sePuedeSalir } from "./guardia-sin-guardar";
+import { SECCIONES_DE_LA_FICHA } from "./secciones-de-la-ficha";
 
 /**
  * Un apartado del menú. El `titulo` va en `null` para el primero, que
@@ -16,6 +18,8 @@ type Grupo = {
     etiqueta: string;
     /** Sale del panel: la página pública del club. */
     fuera?: boolean;
+    /** Si sus secciones cuelgan debajo, con una flecha para abrirlas. */
+    desplegable?: boolean;
   }[];
 };
 
@@ -40,7 +44,7 @@ const GRUPOS: Grupo[] = [
   {
     titulo: "Mi club",
     enlaces: [
-      { id: "perfil", href: "/panel/perfil", etiqueta: "Perfil del club" },
+      { id: "perfil", href: "/panel/perfil", etiqueta: "Perfil del club", desplegable: true },
       // El recuento de gente en los partidos (migración 0037): de aquí
       // sale la asistencia media que enseña la ficha.
       { id: "publico", href: "/panel/publico", etiqueta: "Público" },
@@ -112,18 +116,97 @@ function Cuenta({ valor, abierto }: { valor: number; abierto: boolean }) {
   );
 }
 
+/** Ancla actual de la dirección, sin la almohadilla. */
+function leerAncla(): string {
+  return window.location.hash.replace("#", "");
+}
+
+function suscribirseAlAncla(avisar: () => void): () => void {
+  window.addEventListener("hashchange", avisar);
+  return () => window.removeEventListener("hashchange", avisar);
+}
+
+/**
+ * Las ocho secciones de la ficha, colgando de "Perfil del club".
+ *
+ * Cuál está abierta lo manda el ancla de la dirección
+ * (`/panel/perfil#equipos`), igual que en el formulario: es la única
+ * fuente de la verdad, y es lo que hace que funcionen los enlaces de
+ * "te falta por rellenar" que llegan desde otras páginas.
+ */
+function SeccionesDeLaFicha({
+  perfilCreado,
+  alNavegar,
+}: {
+  perfilCreado: boolean;
+  alNavegar?: () => void;
+}) {
+  const router = useRouter();
+  const ruta = usePathname();
+  const ancla = useSyncExternalStore(suscribirseAlAncla, leerAncla, () => "");
+
+  const enLaFicha = ruta === "/panel/perfil";
+  const activa = enLaFicha && ancla ? ancla : enLaFicha ? "identidad" : "";
+
+  function irA(id: string) {
+    return () => {
+      // El formulario deja aquí su comprobación de campos sin guardar.
+      if (!sePuedeSalir()) return;
+      alNavegar?.();
+
+      // Estando ya en la ficha basta con mover el ancla, que es lo que
+      // el formulario escucha. Desde otra página hay que navegar.
+      if (enLaFicha) window.location.hash = id;
+      else router.push(`/panel/perfil#${id}`);
+    };
+  }
+
+  return (
+    <div className="mb-1 ml-3 flex flex-col gap-0.5 border-l border-zinc-200 pl-2">
+      {SECCIONES_DE_LA_FICHA.map((seccion) => {
+        // Sin club guardado (nombre y localidad) solo se puede rellenar
+        // la identidad: el resto necesita esa fila para guardarse.
+        const bloqueada = seccion.id !== "identidad" && !perfilCreado;
+
+        return (
+          <button
+            key={seccion.id}
+            type="button"
+            disabled={bloqueada}
+            onClick={irA(seccion.id)}
+            aria-current={activa === seccion.id ? "page" : undefined}
+            className={`rounded-lg px-3 py-2 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+              activa === seccion.id
+                ? "bg-teal-50 font-semibold text-teal-800"
+                : "font-medium text-zinc-500 hover:bg-zinc-100 hover:text-brand-navy"
+            }`}
+          >
+            {seccion.etiqueta}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function Lista({
   sinAbrir,
   vencidas,
   paginaPublica,
+  perfilCreado,
   alNavegar,
 }: {
   sinAbrir: number;
   vencidas: number;
   paginaPublica: string | null;
+  perfilCreado: boolean;
   alNavegar?: () => void;
 }) {
   const ruta = usePathname();
+
+  // Desplegado al entrar en la ficha, para no obligar a abrirlo cada
+  // vez; cerrado desde cualquier otra página, donde solo estorbaría.
+  const [fichaDesplegada, setFichaDesplegada] = useState(ruta === "/panel/perfil");
 
   return (
     <div className="flex flex-col gap-0.5">
@@ -143,17 +226,60 @@ function Lista({
             const contador =
               enlace.id === "solicitudes" ? sinAbrir : enlace.id === "tareas" ? vencidas : 0;
 
+            const clases = `${CLASES_ENLACE} ${
+              abierto
+                ? "bg-teal-700 font-semibold text-white"
+                : "font-medium text-zinc-600 hover:bg-zinc-100 hover:text-brand-navy"
+            }`;
+
+            if (enlace.desplegable) {
+              return (
+                <div key={enlace.id}>
+                  {/* El nombre lleva a la página y la flecha abre la
+                      lista: son dos cosas distintas y por eso son dos
+                      botones. Pulsar "Perfil del club" abre además las
+                      secciones, que es lo que se espera al entrar. */}
+                  <div className={`${clases} pr-1`}>
+                    <Link
+                      href={enlace.href}
+                      onClick={() => {
+                        setFichaDesplegada(true);
+                        alNavegar?.();
+                      }}
+                      aria-current={abierto ? "page" : undefined}
+                      className="flex-1"
+                    >
+                      {enlace.etiqueta}
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => setFichaDesplegada((desplegada) => !desplegada)}
+                      aria-expanded={fichaDesplegada}
+                      aria-label={
+                        fichaDesplegada
+                          ? "Ocultar las secciones de la ficha"
+                          : "Ver las secciones de la ficha"
+                      }
+                      className="rounded px-1.5 text-xs leading-none"
+                    >
+                      <span aria-hidden="true">{fichaDesplegada ? "▴" : "▾"}</span>
+                    </button>
+                  </div>
+
+                  {fichaDesplegada && (
+                    <SeccionesDeLaFicha perfilCreado={perfilCreado} alNavegar={alNavegar} />
+                  )}
+                </div>
+              );
+            }
+
             return (
               <Link
                 key={enlace.id}
                 href={enlace.href}
                 onClick={alNavegar}
                 aria-current={abierto ? "page" : undefined}
-                className={`${CLASES_ENLACE} ${
-                  abierto
-                    ? "bg-teal-700 font-semibold text-white"
-                    : "font-medium text-zinc-600 hover:bg-zinc-100 hover:text-brand-navy"
-                }`}
+                className={clases}
               >
                 {enlace.etiqueta}
                 <Cuenta valor={contador} abierto={abierto} />
@@ -210,10 +336,12 @@ export function MenuDelPanel({
   sinAbrir,
   vencidas,
   paginaPublica,
+  perfilCreado,
 }: {
   sinAbrir: number;
   vencidas: number;
   paginaPublica: string | null;
+  perfilCreado: boolean;
 }) {
   const [abierto, setAbierto] = useState(false);
   const ruta = usePathname();
@@ -249,7 +377,12 @@ export function MenuDelPanel({
       {/* Ordenador */}
       <aside className="hidden w-60 shrink-0 lg:block">
         <div className="sticky top-6 rounded-xl border border-zinc-200 bg-white p-2">
-          <Lista sinAbrir={sinAbrir} vencidas={vencidas} paginaPublica={paginaPublica} />
+          <Lista
+            sinAbrir={sinAbrir}
+            vencidas={vencidas}
+            paginaPublica={paginaPublica}
+            perfilCreado={perfilCreado}
+          />
         </div>
       </aside>
 
@@ -293,6 +426,7 @@ export function MenuDelPanel({
                 sinAbrir={sinAbrir}
                 vencidas={vencidas}
                 paginaPublica={paginaPublica}
+                perfilCreado={perfilCreado}
                 alNavegar={() => setAbierto(false)}
               />
             </div>
