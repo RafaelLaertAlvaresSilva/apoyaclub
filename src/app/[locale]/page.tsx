@@ -10,6 +10,7 @@ import {
   SeccionCtaFinal,
   SeccionHerramientasClave,
   SeccionPrecio,
+  SeccionSector,
   SeccionVideo,
 } from "./components/secciones";
 
@@ -179,6 +180,9 @@ export default async function Home() {
         <SeccionVideo />
         <SeccionComoFunciona />
         <SeccionHerramientasClave />
+        {/* Antes del precio: que el club lea lo que mueve el mercado
+            justo antes de ver lo que cuesta estar dentro. */}
+        <SeccionSector />
         <SeccionPrecio compacta />
         <SeccionCtaFinal />
       </main>

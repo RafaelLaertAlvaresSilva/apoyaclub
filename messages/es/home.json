@@ -304,6 +304,34 @@
     "texto": "Todo lo que pasa con tu club, en una pantalla: quién te ha visto, quién te ha escrito y qué te toca hacer hoy.",
     "nota": "Maqueta del panel con datos de muestra."
   },
+  "sector": {
+    "eyebrow": "El sector, en cifras",
+    "titulo": "No es un mercado pequeño.",
+    "subtitulo": "No son estimaciones nuestras: son los datos publicados del mercado español y europeo.",
+    "datos": [
+      {
+        "cifra": "2.180 M€",
+        "que": "Patrocinio deportivo en España, 2025",
+        "detalle": "Creció un 14 % en un año, por encima de Alemania y Reino Unido.",
+        "fuente": "ESA Sponsorship Market Overview 2026",
+        "quien": "Nielsen Sports · European Sponsorship Association"
+      },
+      {
+        "cifra": "24.790 M€",
+        "que": "Y en toda Europa",
+        "detalle": "El deporte se lleva el 72 % de los 34.450 M€ del patrocinio europeo.",
+        "fuente": "ESA Sponsorship Market Overview 2026",
+        "quien": "Nielsen Sports · European Sponsorship Association"
+      },
+      {
+        "cifra": "4,31 M",
+        "que": "Licencias federativas en España",
+        "detalle": "Cuatro millones largos de deportistas, repartidos en miles de clubes de pueblo y de barrio.",
+        "fuente": "Anuario de Estadísticas Deportivas 2025",
+        "quien": "Ministerio de Educación, FP y Deportes · datos de 2024"
+      }
+    ]
+  },
   "precio": {
     "titulo": "Precio transparente",
     "eyebrow": "Primer mes gratis",

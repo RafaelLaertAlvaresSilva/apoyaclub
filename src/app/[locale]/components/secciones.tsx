@@ -625,6 +625,76 @@ export async function SeccionPanelYHerramientas() {
 }
 
 /* ============================================================
+   EL SECTOR
+   ============================================================ */
+
+/**
+ * El sector, en cifras.
+ *
+ * Tres datos publicados —no estimaciones nuestras— sobre lo que mueve
+ * el patrocinio deportivo. Está justo antes del precio a propósito: que
+ * el club lea lo que mueve el mercado y acto seguido vea lo que cuesta
+ * estar dentro hace el precio más fácil de entender.
+ *
+ * Cada tarjeta lleva su fuente y su año escritos. Las cifras caducan —el
+ * informe de la ESA sale cada año— y con el año puesto envejecen
+ * diciendo la verdad en vez de mintiendo. Cuando salga el informe
+ * siguiente, aquí es donde se actualizan.
+ */
+export async function SeccionSector() {
+  const t = await getTranslations("home");
+  const datos = t.raw("sector.datos") as {
+    cifra: string;
+    que: string;
+    detalle: string;
+    fuente: string;
+    quien: string;
+  }[];
+
+  return (
+    <section className="border-t border-zinc-200 bg-white px-4 py-20 sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-6xl">
+        <div className="max-w-2xl">
+          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+            {t("sector.eyebrow")}
+          </p>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+            {t("sector.titulo")}
+          </h2>
+          <p className="mt-4 text-zinc-600">{t("sector.subtitulo")}</p>
+        </div>
+
+        <div className="mt-12 grid gap-5 md:grid-cols-3">
+          {datos.map((dato) => (
+            <div
+              key={dato.cifra}
+              className="flex flex-col rounded-2xl border border-zinc-200 bg-zinc-50 p-6"
+            >
+              {/* `tabular-nums` para que los millares de las tres
+                  tarjetas caigan alineados entre sí. */}
+              <p className="text-4xl font-extrabold tracking-tight text-brand-teal-dark tabular-nums">
+                {dato.cifra}
+              </p>
+              <p className="mt-2.5 font-bold text-brand-navy">{dato.que}</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-zinc-600">{dato.detalle}</p>
+
+              {/* `mt-auto` pega las fuentes al fondo: las tres tarjetas
+                  tienen textos de distinto largo y sin esto cada fuente
+                  quedaba a una altura. */}
+              <p className="mt-auto pt-5 text-xs leading-relaxed text-zinc-500">
+                {dato.fuente}
+                <br />
+                {dato.quien}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
    PRECIO
    ============================================================ */
 
