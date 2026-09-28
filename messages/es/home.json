@@ -235,10 +235,10 @@
         "texto": "Principal, oficial o colaborador, con su logo. Quien entra ve de un vistazo que hay empresas que ya confían en el club."
       },
       {
-        "clave": "prospectpro",
-        "titulo": "Licencia de ProspectPro incluida",
-        "corto": "Para buscar tú las empresas de tu zona.",
-        "texto": "La herramienta con la que buscas tú las empresas de tu zona y sacas a quién escribir. Va incluida en el plan."
+        "clave": "objetivos",
+        "titulo": "A quién escribir",
+        "corto": "Tu lista de empresas, con su estado.",
+        "texto": "La libreta de a quién le vas a proponer algo, ordenada por de dónde sale cada nombre: la familia del club, quien ya patrocina a un rival, el comercio de la zona. Con el estado de cada una y la próxima gestión anotada."
       },
       {
         "clave": "accion-social",
@@ -267,7 +267,7 @@
       "dossier",
       "informe"
     ],
-    "hayMas": "Y {cuantas} herramientas más: el público de cada partido, las estadísticas de tu ficha, tus patrocinadores con su logo, ProspectPro para buscar empresas, la acción social del club y los servicios que necesitas.",
+    "hayMas": "Y {cuantas} herramientas más: el público de cada partido, las estadísticas de tu ficha, tus patrocinadores con su logo, tu libreta de empresas a las que escribir, la acción social del club y los servicios que necesitas.",
     "verTodas": "Ver las {total} herramientas, una por una"
   },
   "panel": {
@@ -319,7 +319,7 @@
       "Tareas con tus patrocinadores",
       "Informe de patrocinio para cada empresa",
       "Estadísticas de visitas y contactos",
-      "Licencia de ProspectPro incluida"
+      "A quién escribir: tu lista de empresas, con seguimiento"
     ],
     "cta": "Prueba 1 mes gratis",
     "subtitulo": "El mismo producto en los tres. Lo único que cambia es cómo lo pagas.",

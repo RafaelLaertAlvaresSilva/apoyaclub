@@ -26,13 +26,46 @@ const RUTAS_ESTATICAS: { ruta: string; prioridad: number; frecuencia: "daily" | 
   { ruta: "/para-empresas", prioridad: 0.9, frecuencia: "weekly" },
   { ruta: "/buscar", prioridad: 0.9, frecuencia: "daily" },
   { ruta: "/servicios", prioridad: 0.8, frecuencia: "daily" },
+  { ruta: "/empresas", prioridad: 0.8, frecuencia: "daily" },
   { ruta: "/registro-club", prioridad: 0.8, frecuencia: "monthly" },
+  // Faltaba: estaba el alta de clubes y no la de empresas, así que a
+  // Google nunca se le dijo que existiera la puerta de entrada del
+  // otro lado del mercado.
+  { ruta: "/registro-empresa", prioridad: 0.8, frecuencia: "monthly" },
   { ruta: "/login", prioridad: 0.3, frecuencia: "monthly" },
   { ruta: "/aviso-legal", prioridad: 0.2, frecuencia: "monthly" },
   { ruta: "/privacidad", prioridad: 0.2, frecuencia: "monthly" },
   { ruta: "/cookies", prioridad: 0.2, frecuencia: "monthly" },
   { ruta: "/condiciones-de-uso", prioridad: 0.2, frecuencia: "monthly" },
 ];
+
+/**
+ * Las fichas de empresa, que hasta ahora tampoco salían.
+ *
+ * Es lo que una empresa se lleva por registrarse: una página suya que
+ * se encuentra buscando su nombre. Sin esto, la ficha existe pero nadie
+ * le ha dicho a Google que está ahí.
+ */
+async function empresasPublicas(): Promise<{ slug: string; updatedAt: string | null }[]> {
+  try {
+    const supabase = createPublicClient();
+    const { data, error } = await supabase
+      .from("company_public_profiles")
+      .select("slug, updated_at")
+      .not("slug", "is", null)
+      .order("updated_at", { ascending: false })
+      .limit(5000);
+
+    if (error || !data) return [];
+
+    return data.map((fila) => ({
+      slug: fila.slug as string,
+      updatedAt: (fila.updated_at as string | null) ?? null,
+    }));
+  } catch {
+    return [];
+  }
+}
 
 async function clubesPublicos(): Promise<{ slug: string; updatedAt: string | null }[]> {
   try {
@@ -58,7 +91,7 @@ async function clubesPublicos(): Promise<{ slug: string; updatedAt: string | nul
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const clubes = await clubesPublicos();
+  const [clubes, empresas] = await Promise.all([clubesPublicos(), empresasPublicas()]);
   const ahora = new Date();
 
   const estaticas = routing.locales.flatMap((locale) =>
@@ -79,5 +112,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   );
 
-  return [...estaticas, ...fichasDeClub];
+  const fichasDeEmpresa = routing.locales.flatMap((locale) =>
+    empresas.map((empresa) => ({
+      url: `${SITE_URL}/${locale}/empresas/${empresa.slug}`,
+      lastModified: empresa.updatedAt ? new Date(empresa.updatedAt) : ahora,
+      changeFrequency: "weekly" as const,
+      priority: 0.6,
+    })),
+  );
+
+  return [...estaticas, ...fichasDeClub, ...fichasDeEmpresa];
 }

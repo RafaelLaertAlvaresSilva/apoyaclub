@@ -64,8 +64,8 @@ const ICONO_DE_HERRAMIENTA: Record<string, string> = {
   solicitudes: "M3 6h18v12H3zM3 7l9 6 9-6",
   // Patrocinadores: un escudo.
   patrocinadores: "M12 3l8 3v5.5c0 4.7-3.4 8.4-8 9.5-4.6-1.1-8-4.8-8-9.5V6z",
-  // ProspectPro: una lupa.
-  prospectpro: "M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM21 21l-4.3-4.3",
+  // A quién escribir: una libreta con renglones.
+  objetivos: "M5 3h11l3 3v15H5zM8 8h8M8 12h8M8 16h5",
   // Acción social: un corazón.
   "accion-social": "M12 21S3 15.5 3 9.8A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 9 2.8C21 15.5 12 21 12 21Z",
   // Servicios: una furgoneta.
