@@ -80,10 +80,27 @@ describe("las herramientas", () => {
     }
   });
 
+  /**
+   * Las cuatro pastillas del hero comparten el mismo mapa de iconos que
+   * las herramientas, así que dos de sus claves no son herramientas. Se
+   * listan aquí a mano para que la prueba siga sirviendo de red: si
+   * alguien borra una herramienta y se deja su dibujo, salta igual.
+   */
+  const ICONOS_DEL_HERO = ["ideas", "empresas"];
+
   it("no sobran iconos de herramientas que ya no existen", () => {
-    const claves = HERRAMIENTAS.lista.map((herramienta) => herramienta.clave);
+    const claves = [
+      ...HERRAMIENTAS.lista.map((herramienta) => herramienta.clave),
+      ...ICONOS_DEL_HERO,
+    ];
     for (const clave of clavesConIcono()) {
       expect(claves, `sobra el icono de "${clave}"`).toContain(clave);
+    }
+  });
+
+  it("las pastillas del hero tienen su icono", () => {
+    for (const clave of ICONOS_DEL_HERO) {
+      expect(clavesConIcono(), `falta el icono de "${clave}"`).toContain(clave);
     }
   });
 });

@@ -14,6 +14,12 @@
     "cadenaEmpresa": "Empresa",
     "ctaSecundario": "Descubre cómo funciona"
   },
+  "puertas": {
+    "clubCta": "Soy un club",
+    "clubPie": "Descubre qué puedes ofrecer. Un mes gratis, sin permanencia.",
+    "empresaCta": "Soy una empresa o colaborador",
+    "empresaPie": "Encuentra oportunidades cerca de ti. Gratis y sin cuenta."
+  },
   "caminos": {
     "clubEtiqueta": "PARA CLUBES",
     "clubTitulo": "Tengo un club",
@@ -603,9 +609,13 @@
     "alternativa": "Tu navegador no puede reproducir este vídeo."
   },
   "funciones": {
-    "ideas": "Más de {ideas} ideas de patrocinio, repartidas en más de {categorias} categorías",
-    "empresas": "Empresas y colaboradores",
-    "tareas": "Tus tareas con patrocinadores, al día",
-    "dossier": "Dossier e informes a un clic"
+    "ideasTitulo": "Más de {ideas} ideas de patrocinio",
+    "ideasDetalle": "en más de {categorias} categorías",
+    "empresasTitulo": "Empresas y colaboradores",
+    "empresasDetalle": "más cerca de tu club",
+    "tareasTitulo": "Tus tareas al día",
+    "tareasDetalle": "con cada patrocinador",
+    "dossierTitulo": "Dossier e informes a un clic",
+    "dossierDetalle": "listos para compartir"
   }
 }

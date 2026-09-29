@@ -73,6 +73,12 @@ const ICONO_DE_HERRAMIENTA: Record<string, string> = {
     "M3 6h11v11H3zM14 10h4l3 3v4h-7zM7.5 17a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0M16 17a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0",
   // Tu página: una ventana de navegador.
   pagina: "M3 5h18v14H3zM3 9h18M6.5 7h.01M9 7h.01",
+  // Las dos que siguen no son herramientas del panel: son para las
+  // pastillas del hero, que comparten este mismo mapa.
+  // Ideas: una bombilla.
+  ideas: "M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9V16h7v-2.1A6 6 0 0 0 12 3Z",
+  // Empresas: un edificio con sus ventanas.
+  empresas: "M4 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16M14 10h5a1 1 0 0 1 1 1v10M3 21h18M7 8h3M7 12h3M7 16h3M17 14h0M17 18h0",
 };
 
 /** Si algún día aparece una clave sin dibujo, un círculo antes que un
@@ -1136,27 +1142,94 @@ export async function FuncionesDestacadas() {
   const t = await getTranslations("home");
 
   const funciones = [
-    t("funciones.ideas", {
-      ideas: masDe(TOTAL_DE_IDEAS, 100),
-      categorias: masDe(CATEGORIAS_IDEA.length, 10),
-    }),
-    t("funciones.empresas"),
-    t("funciones.tareas"),
-    t("funciones.dossier"),
+    {
+      clave: "ideas",
+      titulo: t("funciones.ideasTitulo", { ideas: masDe(TOTAL_DE_IDEAS, 100) }),
+      detalle: t("funciones.ideasDetalle", { categorias: masDe(CATEGORIAS_IDEA.length, 10) }),
+    },
+    { clave: "empresas", titulo: t("funciones.empresasTitulo"), detalle: t("funciones.empresasDetalle") },
+    { clave: "tareas", titulo: t("funciones.tareasTitulo"), detalle: t("funciones.tareasDetalle") },
+    { clave: "dossier", titulo: t("funciones.dossierTitulo"), detalle: t("funciones.dossierDetalle") },
   ];
 
   return (
-    <ul className="mx-auto mt-7 flex max-w-4xl flex-wrap items-center justify-center gap-x-3 gap-y-2.5">
+    <ul className="mx-auto mt-9 grid max-w-4xl gap-x-6 gap-y-5 text-left sm:grid-cols-2 lg:grid-cols-4">
       {funciones.map((funcion) => (
-        <li
-          key={funcion}
-          className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 py-2 text-[13px] font-semibold text-brand-navy shadow-sm sm:text-sm"
-        >
-          <Tic className="flex-none text-brand-teal" tamano={14} />
-          {funcion}
+        <li key={funcion.clave} className="flex items-start gap-3">
+          {/* El icono en su cuadrado de color, que es lo que hace que
+              la fila se escanee sin leerla: primero se ven cuatro
+              marcas, y solo después el texto de la que interesa. */}
+          <span className="flex size-10 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+            <IconoHerramienta clave={funcion.clave} />
+          </span>
+          <span className="min-w-0">
+            <span className="block text-[14px] font-bold leading-snug text-brand-navy">
+              {funcion.titulo}
+            </span>
+            <span className="mt-0.5 block text-[12.5px] leading-snug text-zinc-500">
+              {funcion.detalle}
+            </span>
+          </span>
         </li>
       ))}
     </ul>
+  );
+}
+
+/**
+ * Las dos puertas del hero: club o empresa.
+ *
+ * Eran dos tarjetas grandes con rótulo, titular, párrafo, botón,
+ * condiciones y un enlace de atajo — catorce líneas de texto para una
+ * pregunta de una palabra. Lo primero que hay que resolver al entrar no
+ * es convencer a nadie: es saber cuál de los dos eres, y para eso
+ * sobra todo menos el botón.
+ *
+ * El detalle de cada lado no se ha perdido: está entero en
+ * `/para-clubes` y `/para-empresas`, que es justo a donde llevan.
+ */
+export async function PuertasDelHero() {
+  const t = await getTranslations("home");
+
+  const puertas = [
+    {
+      href: "/para-clubes",
+      cta: t("puertas.clubCta"),
+      pie: t("puertas.clubPie"),
+      clases:
+        "bg-brand-teal-dark text-white hover:bg-brand-teal focus-visible:outline-brand-teal-dark",
+    },
+    {
+      href: "/para-empresas",
+      cta: t("puertas.empresaCta"),
+      pie: t("puertas.empresaPie"),
+      clases:
+        "border-2 border-brand-navy bg-white text-brand-navy hover:bg-brand-navy hover:text-white",
+    },
+  ] as const;
+
+  return (
+    <div className="mx-auto mt-10 grid max-w-3xl gap-5 sm:grid-cols-2">
+      {puertas.map((puerta) => (
+        <div key={puerta.href}>
+          <Link
+            href={puerta.href}
+            className={`group flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-base font-bold transition-colors sm:text-lg ${puerta.clases}`}
+          >
+            {puerta.cta}
+            {/* La flecha se mueve al pasar por encima: es lo que
+                distingue un botón de una caja de color. */}
+            <span
+              aria-hidden="true"
+              className="transition-transform group-hover:translate-x-1"
+            >
+              →
+            </span>
+          </Link>
+          <p className="mt-2.5 text-center text-[13px] leading-snug text-zinc-500">{puerta.pie}</p>
+        </div>
+      ))}
+    </div>
   );
 }
 

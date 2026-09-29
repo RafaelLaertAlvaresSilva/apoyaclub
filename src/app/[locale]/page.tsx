@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { CtaFijoMovil } from "./components/CtaFijoMovil";
 import {
@@ -9,6 +8,7 @@ import {
   SeccionComoFunciona,
   SeccionCtaFinal,
   SeccionHerramientasClave,
+  PuertasDelHero,
   SeccionPrecio,
   SeccionSector,
   SeccionVideo,
@@ -108,66 +108,15 @@ export default async function Home() {
                 es. Sin ellas, esto podría ser un listado, una agencia o
                 un curso. */}
             <FuncionesDestacadas />
-          </div>
 
-          {/* ============ LAS DOS PUERTAS ============ */}
-          {/* Lo primero que hay que resolver no es convencer: es saber
-              cuál de los dos eres. Hasta que eso no está claro, todo lo
-              demás le sobra a la mitad de quien está leyendo. */}
-          <div className="relative mx-auto mt-12 grid max-w-5xl gap-5 lg:grid-cols-2">
-            <div className="flex flex-col gap-3 rounded-3xl bg-gradient-to-br from-brand-navy to-brand-navy-dark p-8 text-white shadow-xl shadow-brand-navy/20 sm:p-10">
-              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal">
-                {t("caminos.clubEtiqueta")}
-              </p>
-              <h2 className="text-2xl font-extrabold sm:text-3xl">{t("caminos.clubTitulo")}</h2>
-              <p className="text-[15px] leading-relaxed text-white/80 sm:text-base">
-                {t("caminos.clubTexto")}
-              </p>
-
-              <div className="mt-5 sm:mt-auto sm:pt-5">
-                <Link
-                  href="/para-clubes"
-                  className="inline-flex w-full items-center justify-center rounded-2xl bg-brand-teal-dark px-6 py-4 text-base font-bold text-white transition-colors hover:bg-brand-teal sm:px-8"
-                >
-                  {t("caminos.clubCta")}
-                </Link>
-                <p className="mt-3 text-sm text-white/60">{t("caminos.clubCondiciones")}</p>
-                <Link
-                  href="/registro-club"
-                  className="mt-2 inline-block text-sm font-semibold text-brand-teal underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal"
-                >
-                  {t("caminos.clubAtajo")}
-                </Link>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-3 rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm sm:p-10">
-              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
-                {t("caminos.empresaEtiqueta")}
-              </p>
-              <h2 className="text-2xl font-extrabold text-brand-navy sm:text-3xl">
-                {t("caminos.empresaTitulo")}
-              </h2>
-              <p className="text-[15px] leading-relaxed text-zinc-600 sm:text-base">
-                {t("caminos.empresaTexto")}
-              </p>
-
-              <div className="mt-5 sm:mt-auto sm:pt-5">
-                <Link
-                  href="/para-empresas"
-                  className="inline-flex w-full items-center justify-center rounded-2xl border-2 border-brand-navy px-6 py-4 text-base font-bold text-brand-navy transition-colors hover:bg-brand-navy hover:text-white sm:px-8"
-                >
-                  {t("caminos.empresaCta")}
-                </Link>
-                <p className="mt-3 text-sm text-zinc-500">{t("caminos.empresaGratis")}</p>
-                <Link
-                  href="/buscar"
-                  className="mt-2 inline-block text-sm font-semibold text-brand-teal-dark underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
-                >
-                  {t("caminos.empresaAtajo")}
-                </Link>
-              </div>
-            </div>
+            {/* ============ LAS DOS PUERTAS ============ */}
+            {/* Lo primero que hay que resolver no es convencer: es
+                saber cuál de los dos eres. Hasta que eso no está claro,
+                todo lo demás le sobra a la mitad de quien está
+                leyendo. Eran dos tarjetas grandes con párrafo y
+                atajos; el detalle vive entero en /para-clubes y
+                /para-empresas, que es a donde llevan los botones. */}
+            <PuertasDelHero />
           </div>
 
           {/* CLUB -> OPORTUNIDAD -> EMPRESA. Es el concepto entero de
