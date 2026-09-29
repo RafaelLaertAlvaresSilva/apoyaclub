@@ -48,8 +48,12 @@
   --color-brand-teal: var(--brand-teal);
   --color-brand-teal-dark: var(--brand-teal-dark);
   --color-brand-teal-light: var(--brand-teal-light);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-texto);
+  --font-titular: var(--font-titulo);
+  /* Ya no se carga una monoespaciada aparte: se usaba en dos sitios
+     (la referencia de un error y la vista previa de un correo) y no
+     compensaba descargar una fuente entera para eso. */
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /*
    * Los tres grises más claros de Tailwind, redefinidos con el mismo
@@ -80,6 +84,43 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/*
+ * La serifa, solo en los titulares que de verdad lo son.
+ *
+ * Se hace aquí, en una regla, y no poniendo una clase en cada uno de
+ * los 139 titulares de la aplicación: así ninguno se queda fuera y el
+ * día que se cambie de fuente se cambia en un sitio.
+ *
+ * El corte no puede ser por etiqueta. Un `h1` siempre es el título de
+ * la página y la serifa lo luce, pero de los `h2` hay dos clases muy
+ * distintas: unos son titulares de sección (`text-3xl` para arriba) y
+ * otros —veintisiete— son rótulos de tarjeta y de formulario del
+ * panel, a `text-sm` o `text-base`. Una serifa a catorce píxeles y en
+ * negrita se lee peor y no aporta nada, así que esos se quedan como
+ * están.
+ *
+ * Por eso el `h2` entra por tamaño y no por etiqueta: un rótulo nuevo
+ * que alguien escriba pequeño se queda fuera solo, que es el lado por
+ * el que conviene equivocarse.
+ */
+h1,
+h2[class*="text-2xl"],
+h2[class*="text-3xl"],
+h2[class*="text-4xl"],
+h2[class*="text-5xl"] {
+  font-family: var(--font-titular), Georgia, "Times New Roman", serif;
+  /* Fraunces trae de fábrica más espacio entre letras del que quiere un
+     titular grande. */
+  letter-spacing: -0.015em;
+}
+
+/* La única excepción: el aviso de enlace caducado lleva un `h1` de
+   tamaño de párrafo. */
+h1[class*="text-lg"] {
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  letter-spacing: normal;
 }
 
 /* ---------------------------------------------------------------------

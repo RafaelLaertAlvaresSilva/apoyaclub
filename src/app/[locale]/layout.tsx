@@ -1,7 +1,7 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Public_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
 import { CookieBanner } from "@/components/CookieBanner";
 import { FavoritosProvider } from "@/components/Favoritos";
@@ -10,13 +10,30 @@ import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
 import "../globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+/**
+ * La tipografía de ApoyaClub.
+ *
+ * Antes eran las dos Geist, que son las que trae Next.js de fábrica.
+ * Funcionaban, pero son las mismas que lleva media web hecha con
+ * plantilla: lo primero que delata a una página barata es que usa la
+ * fuente que venía puesta.
+ *
+ * `Fraunces` va solo en los titulares. Es una serifa, y casi ninguna
+ * plataforma de este tipo la usa: eso es justamente lo que se nota, y
+ * lo que comunica —algo serio, cuidado, establecido— es lo que hace
+ * falta cuando le pides a una junta directiva el dinero del club.
+ *
+ * `Public Sans` va en todo lo demás. Está pensada para texto de
+ * administración pública, así que aguanta párrafos largos, formularios
+ * y tamaños pequeños sin cansar, que es el 90 % de esta aplicación.
+ */
+const tituloSerif = Fraunces({
+  variable: "--font-titulo",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const textoSans = Public_Sans({
+  variable: "--font-texto",
   subsets: ["latin"],
 });
 
@@ -80,7 +97,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[lo
   return (
     <html
       lang={locale}
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${tituloSerif.variable} ${textoSans.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         {/* Lo primero que encuentra quien navega con el teclado o con un
