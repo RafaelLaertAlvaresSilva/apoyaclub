@@ -1166,7 +1166,10 @@ export async function FuncionesDestacadas() {
             <span className="block text-[14px] font-bold leading-snug text-brand-navy">
               {funcion.titulo}
             </span>
-            <span className="mt-0.5 block text-[12.5px] leading-snug text-zinc-500">
+            {/* zinc-600 y no zinc-500: estas dos líneas caen encima de
+                la foto del fondo, y el gris más claro se quedaba corto
+                de contraste justo donde la imagen se ve más. */}
+            <span className="mt-0.5 block text-[12.5px] leading-snug text-zinc-600">
               {funcion.detalle}
             </span>
           </span>
