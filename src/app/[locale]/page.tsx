@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Header } from "@/components/Header";
 import { CtaFijoMovil } from "./components/CtaFijoMovil";
 import {
   CadenaDelConcepto,
+  FondoDeHeroe,
   FuncionesDestacadas,
   SeccionComoFunciona,
   SeccionCtaFinal,
@@ -70,43 +70,7 @@ export default async function Home() {
         {/* ============ HERO ============ */}
         <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-white to-zinc-50 px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-16">
           {/* ============ EL FONDO ============ */}
-          {/* La foto no se ve entera: se ve lo justo para que se
-              entienda de qué va esto —el partido a un lado, la reunión
-              al otro— y se apaga antes de estorbarle al texto.
-              *
-              * Son tres capas y cada una hace una cosa:
-              *   1. la foto, al 45 %;
-              *   2. una máscara que la desvanece por los cuatro bordes,
-              *      para que no haya un corte recto contra el fondo;
-              *   3. un velo blanco por encima, más denso en el centro,
-              *      que es justo donde caen el titular y los botones.
-              *
-              * `aria-hidden` y sin `alt`: es decoración. Un lector de
-              * pantalla que leyera "partido de balonmano y reunión de
-              * oficina" antes del titular solo estaría estorbando. */}
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-            <Image
-              src="/fondo-hero.webp"
-              alt=""
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover object-center opacity-45"
-              style={{
-                maskImage:
-                  "radial-gradient(ellipse 85% 75% at 50% 45%, #000 30%, transparent 80%)",
-                WebkitMaskImage:
-                  "radial-gradient(ellipse 85% 75% at 50% 45%, #000 30%, transparent 80%)",
-              }}
-            />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_42%,rgba(255,255,255,0.82),rgba(255,255,255,0.45)_60%,rgba(255,255,255,0)_100%)]" />
-            {/* Arriba y abajo, además de la máscara: el héroe empieza
-                pegado a la cabecera blanca y acaba pegado a la sección
-                siguiente, y sin estos dos desvanecidos la foto corta en
-                recto contra las dos. */}
-            <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-white to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-zinc-50" />
-          </div>
+          <FondoDeHeroe archivo="/fondo-hero.webp" tono="claro" />
 
           <div className="relative mx-auto max-w-3xl text-center">
             {/* Qué es esto, antes que nada. Quien llega no sabe si

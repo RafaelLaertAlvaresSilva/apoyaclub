@@ -317,21 +317,29 @@
     "subtitulo": "No son estimaciones nuestras: son los datos publicados del mercado español y europeo.",
     "datos": [
       {
+        "icono": "crecimiento",
         "cifra": "2.180 M€",
+        "insignia": "+14 % en un año",
         "que": "Patrocinio deportivo en España, 2025",
-        "detalle": "Creció un 14 % en un año, por encima de Alemania y Reino Unido.",
+        "detalle": "Creció por encima de Alemania y de Reino Unido.",
         "fuente": "ESA Sponsorship Market Overview 2026",
         "quien": "Nielsen Sports · European Sponsorship Association"
       },
       {
+        "icono": "europa",
         "cifra": "24.790 M€",
+        "insignia": "72 % del patrocinio europeo",
+        "proporcion": 72,
+        "pieDeBarra": "24.790 M€ de deporte sobre 34.450 M€ de patrocinio total",
         "que": "Y en toda Europa",
-        "detalle": "El deporte se lleva el 72 % de los 34.450 M€ del patrocinio europeo.",
+        "detalle": "De cada diez euros de patrocinio en Europa, siete van al deporte.",
         "fuente": "ESA Sponsorship Market Overview 2026",
         "quien": "Nielsen Sports · European Sponsorship Association"
       },
       {
+        "icono": "personas",
         "cifra": "4,31 M",
+        "insignia": "2ª cifra más alta registrada",
         "que": "Licencias federativas en España",
         "detalle": "Cuatro millones largos de deportistas, repartidos en miles de clubes de pueblo y de barrio.",
         "fuente": "Anuario de Estadísticas Deportivas 2025",

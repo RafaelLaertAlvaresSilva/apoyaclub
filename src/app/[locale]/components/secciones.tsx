@@ -112,6 +112,76 @@ const ACENTOS_OPORTUNIDAD = ["bg-brand-navy", "bg-brand-teal-dark", "bg-brand-te
    ============================================================ */
 
 /**
+ * La foto de fondo de un hero.
+ *
+ * Estaba escrita dos veces, copiada, en la portada y en la página de
+ * empresas. Aquí está una sola vez, que es como se descubrió el fallo
+ * de abajo: con dos copias, tocar una y olvidar la otra es cuestión de
+ * tiempo.
+ *
+ * EL FALLO DEL MÓVIL. El velo era un círculo (`radial-gradient`)
+ * centrado en el hero. En el ordenador el hero es ancho y bajo y el
+ * círculo lo cubre entero; en el móvil es estrecho y muy alto, así que
+ * el círculo solo tapa la franja del medio y por arriba y por abajo la
+ * foto sale a pelo, justo donde cae el texto. Medido en un móvil de
+ * 390 px: en la portada la foto desaparecía del todo y en la de
+ * empresas se comía el párrafo. Por eso el móvil lleva un velo plano
+ * —cubre toda la altura, no solo el centro— y el círculo se queda
+ * para `sm` en adelante.
+ *
+ * `tono` es del color de la foto, no del diseño. Una foto clara
+ * aguanta poco velo antes de desaparecer; una oscura necesita más
+ * antes de dejar leer. Con un solo ajuste para las dos, una de las
+ * dos siempre sale mal.
+ */
+export function FondoDeHeroe({
+  archivo,
+  tono,
+}: {
+  archivo: string;
+  tono: "claro" | "oscuro";
+}) {
+  const opacidad = tono === "claro" ? "opacity-75 sm:opacity-80" : "opacity-30 sm:opacity-40";
+  const veloMovil = tono === "claro" ? "bg-white/40" : "bg-white/65";
+  // La foto clara es casi blanca: si el velo aprieta tanto como en la
+  // oscura, desaparece. Cada tono lleva el suyo.
+  const veloOrdenador =
+    tono === "claro"
+      ? "bg-[radial-gradient(ellipse_60%_55%_at_50%_42%,rgba(255,255,255,0.62),rgba(255,255,255,0.28)_60%,rgba(255,255,255,0)_100%)]"
+      : "bg-[radial-gradient(ellipse_60%_55%_at_50%_42%,rgba(255,255,255,0.82),rgba(255,255,255,0.45)_60%,rgba(255,255,255,0)_100%)]";
+
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+      <Image
+        src={archivo}
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className={`object-cover object-[28%_center] sm:object-center ${opacidad}`}
+        style={{
+          maskImage: "radial-gradient(ellipse 85% 75% at 50% 45%, #000 30%, transparent 80%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 85% 75% at 50% 45%, #000 30%, transparent 80%)",
+        }}
+      />
+
+      {/* Móvil: velo plano, de arriba abajo. */}
+      <div className={`absolute inset-0 sm:hidden ${veloMovil}`} />
+
+      {/* Ordenador: velo en círculo, más denso en el centro, que es
+          donde caen el titular y los botones. */}
+      <div className={`absolute inset-0 hidden sm:block ${veloOrdenador}`} />
+
+      {/* Arriba y abajo: el hero empieza pegado a la cabecera blanca y
+          acaba pegado a la sección siguiente. */}
+      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white to-transparent sm:h-36" />
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-zinc-50 sm:h-40" />
+    </div>
+  );
+}
+
+/**
  * La pantalla que le toca a cada paso.
  *
  * Son capturas de verdad del panel, no dibujos: una plataforma que
@@ -742,10 +812,24 @@ export async function SeccionPanelYHerramientas() {
  * diciendo la verdad en vez de mintiendo. Cuando salga el informe
  * siguiente, aquí es donde se actualizan.
  */
+/** Los iconos de las tres cifras. Trazo suelto, sin relleno, para que
+ * peguen con los del resto de la portada. */
+const ICONO_DE_LA_CIFRA: Record<string, string> = {
+  crecimiento: "M3 17l6-6 4 4 7-7M21 8v5h-5",
+  europa:
+    "M12 3a9 9 0 100 18 9 9 0 000-18zM3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18",
+  personas:
+    "M16 20v-1.5a3.5 3.5 0 00-3.5-3.5h-5A3.5 3.5 0 004 18.5V20M10 11.5a3.25 3.25 0 100-6.5 3.25 3.25 0 000 6.5zM20 20v-1.5a3.5 3.5 0 00-2.6-3.4M15.5 5.2a3.25 3.25 0 010 6.1",
+};
+
 export async function SeccionSector() {
   const t = await getTranslations("home");
   const datos = t.raw("sector.datos") as {
+    icono: string;
     cifra: string;
+    insignia?: string;
+    proporcion?: number;
+    pieDeBarra?: string;
     que: string;
     detalle: string;
     fuente: string;
@@ -769,15 +853,58 @@ export async function SeccionSector() {
           {datos.map((dato) => (
             <div
               key={dato.cifra}
-              className="flex flex-col rounded-2xl border border-zinc-200 bg-zinc-50 p-6"
+              className="flex flex-col rounded-2xl border border-zinc-200 bg-zinc-50 p-6 transition-colors hover:border-brand-teal/40"
             >
+              <div className="flex items-start justify-between gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-6 w-6"
+                  >
+                    <path d={ICONO_DE_LA_CIFRA[dato.icono] ?? ICONO_POR_DEFECTO} />
+                  </svg>
+                </span>
+
+                {dato.insignia ? (
+                  <span className="rounded-full bg-brand-teal-light px-2.5 py-1 text-xs font-bold leading-tight text-brand-teal-dark">
+                    {dato.insignia}
+                  </span>
+                ) : null}
+              </div>
+
               {/* `tabular-nums` para que los millares de las tres
                   tarjetas caigan alineados entre sí. */}
-              <p className="text-4xl font-extrabold tracking-tight text-brand-teal-dark tabular-nums">
+              <p className="mt-5 text-4xl font-extrabold tracking-tight text-brand-teal-dark tabular-nums">
                 {dato.cifra}
               </p>
               <p className="mt-2.5 font-bold text-brand-navy">{dato.que}</p>
               <p className="mt-1.5 text-sm leading-relaxed text-zinc-600">{dato.detalle}</p>
+
+              {/* La única barra de la sección, y mide algo real: la parte
+                  del patrocinio europeo que se lleva el deporte. */}
+              {typeof dato.proporcion === "number" ? (
+                <div className="mt-4">
+                  <div
+                    className="h-2 w-full overflow-hidden rounded-full bg-zinc-200"
+                    role="img"
+                    aria-label={dato.pieDeBarra ?? `${dato.proporcion} %`}
+                  >
+                    <div
+                      className="h-full rounded-full bg-brand-teal"
+                      style={{ width: `${dato.proporcion}%` }}
+                    />
+                  </div>
+                  {dato.pieDeBarra ? (
+                    <p className="mt-2 text-xs leading-relaxed text-zinc-500">{dato.pieDeBarra}</p>
+                  ) : null}
+                </div>
+              ) : null}
 
               {/* `mt-auto` pega las fuentes al fondo: las tres tarjetas
                   tienen textos de distinto largo y sin esto cada fuente

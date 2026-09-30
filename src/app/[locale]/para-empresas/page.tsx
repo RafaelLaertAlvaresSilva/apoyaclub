@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { MenuDeSecciones, type SeccionDelMenu } from "../components/MenuDeSecciones";
-import { SeccionBuscadorEmpresas, SeccionContacto, Tic } from "../components/secciones";
+import {
+  FondoDeHeroe,
+  SeccionBuscadorEmpresas,
+  SeccionContacto,
+  Tic,
+} from "../components/secciones";
 
 /**
  * Todo lo que una empresa o un colaborador necesita saber.
@@ -51,35 +55,7 @@ export default async function ParaEmpresasPage() {
       <main id="contenido" className="flex-1">
         {/* ============ HERO ============ */}
         <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-white to-zinc-50 px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-16">
-          {/* El mismo tratamiento que el fondo de la portada, y a
-              propósito: las dos páginas se ven seguidas —se llega aquí
-              desde el botón "Soy una empresa"— y si el desvanecido
-              fuera distinto se notaría el salto.
-              *
-              * Foto al 45 %, máscara radial que la apaga por los
-              bordes, velo blanco más denso en el centro donde cae el
-              texto, y dos degradados arriba y abajo para que no corte
-              en recto contra la cabecera ni contra la sección
-              siguiente. */}
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-            <Image
-              src="/fondo-empresas.webp"
-              alt=""
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover object-center opacity-45"
-              style={{
-                maskImage:
-                  "radial-gradient(ellipse 85% 75% at 50% 45%, #000 30%, transparent 80%)",
-                WebkitMaskImage:
-                  "radial-gradient(ellipse 85% 75% at 50% 45%, #000 30%, transparent 80%)",
-              }}
-            />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_42%,rgba(255,255,255,0.82),rgba(255,255,255,0.45)_60%,rgba(255,255,255,0)_100%)]" />
-            <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-white to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-zinc-50" />
-          </div>
+          <FondoDeHeroe archivo="/fondo-empresas.webp" tono="oscuro" />
 
           <div className="relative mx-auto max-w-3xl text-center">
             <span className="mb-6 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-brand-teal-dark">
