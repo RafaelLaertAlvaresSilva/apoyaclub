@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/Badge";
@@ -110,6 +111,66 @@ const ACENTOS_OPORTUNIDAD = ["bg-brand-navy", "bg-brand-teal-dark", "bg-brand-te
    CÓMO FUNCIONA
    ============================================================ */
 
+/**
+ * La pantalla que le toca a cada paso.
+ *
+ * Son capturas de verdad del panel, no dibujos: una plataforma que
+ * enseña una interfaz inventada se nota, y lo que hay que demostrar
+ * aquí es justamente que esto existe y funciona.
+ *
+ * La clave manda, no el orden. Si algún día se reordenan los pasos en
+ * `home.json`, cada uno se lleva su pantalla; con una lista por
+ * posición se quedarían cruzados y eso no lo detecta ningún test.
+ */
+const PANTALLA_DEL_PASO: Record<string, { archivo: string; alt: string }> = {
+  CREA: {
+    archivo: "/paso-perfil.webp",
+    alt: "La ficha del club en ApoyaClub, con sus apartados: identidad, equipos, instalaciones, cantera.",
+  },
+  PUBLICA: {
+    archivo: "/paso-oportunidades.webp",
+    alt: "La pantalla de oportunidades, con el catálogo de ideas por categorías abierto.",
+  },
+  CONTACTA: {
+    archivo: "/paso-solicitudes.webp",
+    alt: "La bandeja de solicitudes, con el mensaje de una empresa y su estado.",
+  },
+  CRECE: {
+    archivo: "/paso-tareas.webp",
+    alt: "Las tareas con cada patrocinador, con sus fechas y el botón de generar el informe.",
+  },
+};
+
+/**
+ * El portátil.
+ *
+ * Dibujado con dos divs y no con una foto de un portátil: pesa cero,
+ * se ve nítido en cualquier pantalla y no hay que buscar una foto con
+ * la perspectiva correcta para cada captura.
+ */
+function Portatil({ archivo, alt }: { archivo: string; alt: string }) {
+  return (
+    <div>
+      <div className="rounded-2xl bg-brand-navy p-2.5 pb-3 shadow-2xl shadow-brand-navy/40">
+        <Image
+          src={archivo}
+          alt={alt}
+          width={1200}
+          height={600}
+          sizes="(min-width: 1024px) 46rem, 100vw"
+          className="block w-full rounded-md"
+        />
+      </div>
+      {/* La peana, un poco más ancha que la pantalla, con la muesca
+          del centro. Es lo que hace que se lea como un portátil y no
+          como una captura enmarcada. */}
+      <div className="relative -mx-[5%] h-2.5 rounded-b-xl bg-gradient-to-b from-zinc-300 to-zinc-400">
+        <span className="absolute left-1/2 top-0 h-1 w-20 -translate-x-1/2 rounded-b-sm bg-zinc-400" />
+      </div>
+    </div>
+  );
+}
+
 export async function SeccionComoFunciona() {
   const t = await getTranslations("home");
   const pasos = t.raw("comoFunciona.pasos") as (TextoConTitulo & { clave: string })[];
@@ -126,22 +187,56 @@ export async function SeccionComoFunciona() {
           </h2>
         </div>
 
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {pasos.map((paso, indice) => (
-            <div key={paso.clave} className="rounded-3xl border border-zinc-200 bg-white p-7">
-              <span className="text-4xl font-extrabold tabular-nums text-brand-teal/40">
-                {String(indice + 1).padStart(2, "0")}
-              </span>
-              <p className="mt-3 text-sm font-extrabold uppercase tracking-wider text-brand-teal-dark">
-                {paso.clave}
-              </p>
-              <h3 className="mt-2 text-lg font-extrabold leading-snug text-brand-navy">
-                {paso.titulo}
-              </h3>
-              <p className="mt-3 text-[15px] leading-relaxed text-zinc-600">{paso.texto}</p>
-            </div>
-          ))}
+        {/* Una fila por paso, alternando el lado del portátil. Eran
+            cuatro columnas estrechas, donde una captura saldría del
+            tamaño de un sello y no se leería nada.
+            *
+            * En el móvil no se alterna: todas las filas ponen el texto
+            * arriba y la pantalla debajo. Alternar en una sola columna
+            * no se ve, y lo único que consigue es que en la mitad de
+            * los pasos leas la imagen antes de saber de qué va. */}
+        <div className="mt-16 flex flex-col gap-14 sm:gap-16">
+          {pasos.map((paso, indice) => {
+            const pantalla = PANTALLA_DEL_PASO[paso.clave];
+            const invertido = indice % 2 === 1;
+
+            return (
+              <div
+                key={paso.clave}
+                className="grid items-center gap-8 lg:grid-cols-[1fr_1.3fr] lg:gap-14"
+              >
+                <div className={invertido ? "lg:order-2" : undefined}>
+                  <span className="text-4xl font-extrabold tabular-nums text-brand-teal/45">
+                    {String(indice + 1).padStart(2, "0")}
+                  </span>
+                  <p className="mt-3 text-sm font-extrabold uppercase tracking-wider text-brand-teal-dark">
+                    {paso.clave}
+                  </p>
+                  <h3 className="mt-2 text-2xl font-extrabold leading-snug text-brand-navy">
+                    {paso.titulo}
+                  </h3>
+                  <p className="mt-3 max-w-md text-[15px] leading-relaxed text-zinc-600">
+                    {paso.texto}
+                  </p>
+                </div>
+
+                {pantalla && (
+                  <div className={invertido ? "lg:order-1" : undefined}>
+                    <Portatil archivo={pantalla.archivo} alt={pantalla.alt} />
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
+
+        {/* Se dice que son de verdad, y se dice que los datos no. Las
+            dos cosas importan: la primera es lo que hace creíble a la
+            sección, y la segunda evita que alguien piense que esos
+            patrocinadores son clientes de alguien. */}
+        <p className="mt-12 text-center text-xs text-zinc-500">
+          {t("comoFunciona.pieDeFoto")}
+        </p>
       </div>
     </section>
   );
