@@ -27,6 +27,9 @@ const RUTAS_ESTATICAS: { ruta: string; prioridad: number; frecuencia: "daily" | 
   { ruta: "/buscar", prioridad: 0.9, frecuencia: "daily" },
   { ruta: "/servicios", prioridad: 0.8, frecuencia: "daily" },
   { ruta: "/empresas", prioridad: 0.8, frecuencia: "daily" },
+  // La bifurcación: es la que enlaza la cabecera, así que es la que
+  // Google va a ver más veces.
+  { ruta: "/registro", prioridad: 0.8, frecuencia: "monthly" },
   { ruta: "/registro-club", prioridad: 0.8, frecuencia: "monthly" },
   // Faltaba: estaba el alta de clubes y no la de empresas, así que a
   // Google nunca se le dijo que existiera la puerta de entrada del

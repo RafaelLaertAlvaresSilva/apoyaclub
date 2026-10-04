@@ -36,7 +36,7 @@ describe("el menú del teléfono", () => {
   it("lleva dentro todo lo que ya no cabe arriba", () => {
     // Los tres de la navegación llegan por la lista que le pasa la
     // cabecera; estos cuatro están escritos dentro del cajón.
-    for (const destino of ["/favoritos", "/registro-club", "/login"]) {
+    for (const destino of ["/favoritos", "/registro", "/login"]) {
       expect(MENU, `falta ${destino} en el cajón del móvil`).toContain(`href="${destino}"`);
     }
   });

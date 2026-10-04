@@ -157,7 +157,7 @@ export async function Header() {
                   Iniciar sesión
                 </Link>
                 <span className="hidden xl:block">
-                  <Button href="/registro-club" size="sm">
+                  <Button href="/registro" size="sm">
                     Crea tu página
                   </Button>
                 </span>

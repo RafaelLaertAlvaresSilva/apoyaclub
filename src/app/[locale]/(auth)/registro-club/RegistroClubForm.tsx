@@ -95,6 +95,17 @@ export function RegistroClubForm() {
       </form>
 
       <div className="space-y-2 text-center text-sm text-zinc-500">
+        {/* La salida para quien ha llegado aquí por error. El formulario
+            de la empresa lleva desde siempre el enlace simétrico hacia
+            este; este se quedó sin el suyo, con el texto ya traducido y
+            sin pintar, así que una empresa que caía en esta página no
+            tenía forma de salir más que volviendo atrás. */}
+        <p>
+          {t("eresEmpresa")}{" "}
+          <Link href="/registro-empresa" className="font-medium text-teal-700 hover:underline">
+            {t("registrateAqui")}
+          </Link>
+        </p>
         <p>
           {tComun("yaTienesCuenta")}{" "}
           <Link href="/login" className="font-medium text-teal-700 hover:underline">

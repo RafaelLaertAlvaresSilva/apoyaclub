@@ -176,7 +176,7 @@ export function MenuMovil({
               ) : (
                 <>
                   <Link
-                    href="/registro-club"
+                    href="/registro"
                     className="rounded-xl bg-brand-teal-dark px-4 py-3.5 text-center text-base font-bold text-white transition-colors hover:bg-brand-navy"
                   >
                     Crea tu página
