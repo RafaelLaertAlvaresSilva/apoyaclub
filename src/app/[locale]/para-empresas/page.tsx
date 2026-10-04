@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { MenuDeSecciones, type SeccionDelMenu } from "../components/MenuDeSecciones";
 import {
   FondoDeHeroe,
+  SeccionBeneficiosEmpresa,
   SeccionBuscadorEmpresas,
   SeccionContacto,
   Tic,
@@ -34,6 +35,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const SECCIONES: SeccionDelMenu[] = [
+  { id: "beneficios", etiqueta: "Por qué te interesa" },
   { id: "empresas", etiqueta: "Qué puedes patrocinar" },
   { id: "como", etiqueta: "Cómo funciona" },
   { id: "colaborar", etiqueta: "Formas de colaborar" },
@@ -88,6 +90,11 @@ export default async function ParaEmpresasPage() {
         </section>
 
         <MenuDeSecciones secciones={SECCIONES} />
+
+        {/* Lo primero después de la portada: quien acaba de pulsar "soy
+            una empresa" todavía no sabe por qué debería seguir
+            leyendo. */}
+        <SeccionBeneficiosEmpresa />
 
         <SeccionBuscadorEmpresas />
 

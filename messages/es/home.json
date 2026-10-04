@@ -711,6 +711,71 @@
       "titulo": "Hay un club a diez minutos de tu negocio",
       "texto": "Mira qué está buscando. Puede que sea justo lo que tú puedes dar.",
       "cta": "Ver oportunidades cerca de mí"
+    },
+    "beneficios": {
+      "eyebrow": "Lo que gana tu empresa",
+      "titulo": "Tu marca, más cerca de las personas",
+      "subtitulo": "Conecta con clubes de tu zona, deja algo que se queda en tu barrio y forma parte de una comunidad activa.",
+      "tarjetas": [
+        {
+          "clave": "visibilidad",
+          "titulo": "Mayor visibilidad local",
+          "texto": "Tu marca en las equipaciones, en las instalaciones, en los eventos y en los canales digitales del club. Delante de la gente de tu calle, no de una audiencia comprada."
+        },
+        {
+          "clave": "comunidad",
+          "titulo": "Una comunidad de verdad",
+          "texto": "Deportistas, familias y seguidores de tu zona que ya se conocen entre sí. Lo que ven en el club lo comentan en el bar, en el grupo del equipo y en el colegio."
+        },
+        {
+          "clave": "reputacion",
+          "titulo": "Reputación de marca",
+          "texto": "Asocias tu empresa a cosas que se ven desde fuera: salud, esfuerzo, trabajo en equipo e inclusión. Y a un club con nombre y cara, no a un eslogan."
+        },
+        {
+          "clave": "fiscal",
+          "titulo": "Ventaja fiscal",
+          "texto": "El patrocinio deportivo es un gasto de publicidad y se deduce en el Impuesto de Sociedades como cualquier otra acción de marketing. Consúltalo con tu asesoría para tu caso.",
+          "aviso": "No confundir con los donativos, que llevan otro régimen (Ley 49/2002)."
+        },
+        {
+          "clave": "medida",
+          "titulo": "A tu medida",
+          "texto": "Tú eliges la forma: equipaciones, un torneo, el intervalo de los partidos, becas para la cantera, material o contenidos digitales. No hay paquetes cerrados."
+        },
+        {
+          "clave": "impacto",
+          "titulo": "Impacto donde vives",
+          "texto": "Lo que pones se queda en tu pueblo o tu barrio: en la cantera, en las instalaciones y en las familias que las usan cada semana."
+        }
+      ],
+      "franjaTitulo": "El deporte base es un escaparate enorme, y está al lado de tu negocio",
+      "franja": [
+        {
+          "clave": "deportistas",
+          "cifra": "4,31 millones",
+          "que": "de deportistas federados en España",
+          "fuente": "Anuario de Estadísticas Deportivas 2025 · Ministerio de Educación, FP y Deportes (datos de 2024)"
+        },
+        {
+          "clave": "clubes",
+          "cifra": "77.038",
+          "que": "clubes deportivos federados",
+          "fuente": "Consejo Superior de Deportes · Estadística de Deporte Federado (datos de 2023)"
+        },
+        {
+          "clave": "mercado",
+          "cifra": "2.180 M€",
+          "que": "de patrocinio en España en 2025, un 14 % más que el año anterior",
+          "fuente": "ESA Sponsorship Market Overview 2026 · Nielsen Sports"
+        },
+        {
+          "clave": "digital",
+          "cifra": "Y además, digital",
+          "que": "Redes sociales, la página del club, contenidos y eventos: lo que patrocinas también se ve en el móvil",
+          "fuente": ""
+        }
+      ]
     }
   },
   "video": {

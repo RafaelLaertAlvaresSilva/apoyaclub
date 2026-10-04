@@ -539,6 +539,176 @@ export async function SeccionPaginaClub() {
  * dentro tiene muchos más filtros; enseñarlos todos aquí haría que
  * pareciera complicado justo en el momento en que hay que parecer
  * fácil. */
+/** Los iconos de las seis razones. */
+const ICONO_DEL_BENEFICIO: Record<string, React.ReactNode> = {
+  visibilidad: (
+    <>
+      <path d="M3 11v2a1 1 0 001 1h2l4 4V6L6 10H4a1 1 0 00-1 1z" />
+      <path d="M15 8.5a4 4 0 010 7M18 6a7.5 7.5 0 010 12" />
+    </>
+  ),
+  comunidad: (
+    <>
+      <path d="M16 20v-1.5a3.5 3.5 0 00-3.5-3.5h-5A3.5 3.5 0 004 18.5V20M10 11.5a3.25 3.25 0 100-6.5 3.25 3.25 0 000 6.5zM20 20v-1.5a3.5 3.5 0 00-2.6-3.4M15.5 5.2a3.25 3.25 0 010 6.1" />
+    </>
+  ),
+  reputacion: (
+    <>
+      <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+    </>
+  ),
+  fiscal: (
+    <>
+      <path d="M6 3h8l5 5v13H6z" />
+      <path d="M14 3v5h5" />
+      <path d="M14 12h-3.5a1.5 1.5 0 000 3h2a1.5 1.5 0 010 3H9M11.5 11v8" />
+    </>
+  ),
+  medida: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="12" cy="12" r="0.6" fill="currentColor" />
+    </>
+  ),
+  impacto: (
+    <>
+      <path d="M5 20c0-7 4-11 14-11 0 7-4 11-14 11z" />
+      <path d="M5 20c2-5 5-7 9-8.5" />
+    </>
+  ),
+};
+
+/**
+ * Por qué a una empresa le interesa, y los números del sector que lo
+ * sostienen.
+ *
+ * Va justo debajo de la portada de /para-empresas: quien acaba de
+ * pulsar "soy una empresa" todavía no sabe por qué debería seguir
+ * leyendo, y esto se lo dice antes que ninguna otra cosa.
+ *
+ * Un aviso para quien toque esto después. La maqueta de la que salió
+ * esta sección traía un porcentaje con fuente en cada tarjeta —"el 77 %
+ * de los consumidores...", Nielsen; "el 85 %...", Cone Communications;
+ * "hasta un 40 % de deducción fiscal", Ley 49/2002—. Ninguno se pudo
+ * verificar, el último era directamente falso (el 40 % es de los
+ * donativos, no del patrocinio, que es un gasto de publicidad) y el
+ * estudio de Cone que se citaba como de 2023 es de 2017. Las tarjetas
+ * se quedaron con el argumento y sin el número.
+ *
+ * Las tres cifras de la franja sí están comprobadas y llevan su fuente
+ * con el año del dato. Si se añade una cuarta, que venga con lo mismo.
+ */
+export async function SeccionBeneficiosEmpresa() {
+  const t = await getTranslations("home");
+  const tarjetas = t.raw("paraEmpresas.beneficios.tarjetas") as {
+    clave: string;
+    titulo: string;
+    texto: string;
+    aviso?: string;
+  }[];
+  const franja = t.raw("paraEmpresas.beneficios.franja") as {
+    clave: string;
+    cifra: string;
+    que: string;
+    fuente: string;
+  }[];
+
+  return (
+    <section
+      id="beneficios"
+      className="scroll-mt-32 border-b border-zinc-200 bg-white px-4 py-20 sm:px-6 sm:py-24"
+    >
+      <div className="mx-auto max-w-6xl">
+        <div className="max-w-2xl">
+          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+            {t("paraEmpresas.beneficios.eyebrow")}
+          </p>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+            {t("paraEmpresas.beneficios.titulo")}
+          </h2>
+          <p className="mt-4 leading-relaxed text-zinc-600">
+            {t("paraEmpresas.beneficios.subtitulo")}
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {tarjetas.map((tarjeta) => (
+            <div
+              key={tarjeta.clave}
+              className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 transition-colors hover:border-brand-teal/40"
+            >
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-6 w-6"
+                >
+                  {ICONO_DEL_BENEFICIO[tarjeta.clave] ?? ICONO_POR_DEFECTO}
+                </svg>
+              </span>
+
+              <h3 className="mt-4 font-extrabold text-brand-navy">{tarjeta.titulo}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-600">{tarjeta.texto}</p>
+
+              {/* La única tarjeta con letra pequeña, y la lleva por un
+                  motivo: es la que habla de impuestos. */}
+              {tarjeta.aviso ? (
+                <p className="mt-3 border-t border-zinc-200 pt-3 text-xs leading-relaxed text-zinc-500">
+                  {tarjeta.aviso}
+                </p>
+              ) : null}
+            </div>
+          ))}
+        </div>
+
+        {/* La franja de cifras, sobre la foto. Es un titular y no una
+            cita entre comillas: una frase entrecomillada sin nadie que
+            la firme parece el testimonio de alguien, y aquí no lo dice
+            nadie más que la propia web. */}
+        <div className="relative isolate mt-6 overflow-hidden rounded-3xl bg-brand-navy p-8 sm:p-10">
+          <Image
+            src="/fondo-beneficios.webp"
+            alt=""
+            fill
+            loading="lazy"
+            sizes="(min-width: 1152px) 1152px, 100vw"
+            aria-hidden="true"
+            className="-z-10 object-cover object-center opacity-45"
+          />
+          {/* El velo azul va por encima de la foto y por debajo del
+              texto: sin él, las cifras en blanco caen sobre el cielo
+              naranja del atardecer y dejan de leerse. */}
+          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-brand-navy/55" />
+
+          <h3 className="max-w-2xl text-xl font-extrabold leading-snug text-white sm:text-2xl">
+            {t("paraEmpresas.beneficios.franjaTitulo")}
+          </h3>
+
+          <dl className="mt-8 grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
+            {franja.map((dato) => (
+              <div key={dato.clave}>
+                <dt className="text-2xl font-extrabold tracking-tight text-brand-teal-light tabular-nums">
+                  {dato.cifra}
+                </dt>
+                <dd className="mt-1.5 text-sm leading-relaxed text-white/85">{dato.que}</dd>
+                {dato.fuente ? (
+                  <dd className="mt-2 text-[11px] leading-relaxed text-white/55">{dato.fuente}</dd>
+                ) : null}
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export async function SeccionBuscadorEmpresas() {
   const t = await getTranslations("home");
   const resultadosEjemplo = t.raw("empresas.resultados") as {
