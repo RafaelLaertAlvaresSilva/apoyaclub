@@ -313,37 +313,124 @@
   },
   "sector": {
     "eyebrow": "El sector, en cifras",
-    "titulo": "No es un mercado pequeño.",
-    "subtitulo": "No son estimaciones nuestras: son los datos publicados del mercado español y europeo.",
-    "datos": [
+    "titulo": "Un mercado grande.",
+    "tituloResalte": "Y en crecimiento.",
+    "subtitulo": "No son estimaciones nuestras. Todas las cifras de países son del mismo informe y del mismo año, para que se puedan comparar de verdad.",
+    "paises": [
       {
-        "icono": "crecimiento",
+        "clave": "es",
+        "nombre": "Patrocinio en España",
+        "anio": "2025",
         "cifra": "2.180 M€",
-        "insignia": "+14 % en un año",
-        "que": "Patrocinio deportivo en España, 2025",
-        "detalle": "Creció por encima de Alemania y de Reino Unido.",
-        "fuente": "ESA Sponsorship Market Overview 2026",
-        "quien": "Nielsen Sports · European Sponsorship Association"
+        "insignia": "+14 %",
+        "insigniaPie": "vs. 2024",
+        "texto": "El mercado de patrocinio en España llegó a 2.180 millones de euros en 2025. Es el que más creció de los cinco grandes de Europa."
       },
       {
-        "icono": "europa",
-        "cifra": "24.790 M€",
-        "insignia": "72 % del patrocinio europeo",
-        "proporcion": 72,
-        "pieDeBarra": "24.790 M€ de deporte sobre 34.450 M€ de patrocinio total",
-        "que": "Y en toda Europa",
-        "detalle": "De cada diez euros de patrocinio en Europa, siete van al deporte.",
-        "fuente": "ESA Sponsorship Market Overview 2026",
-        "quien": "Nielsen Sports · European Sponsorship Association"
+        "clave": "gb",
+        "nombre": "Patrocinio en Reino Unido",
+        "anio": "2025",
+        "cifra": "6.150 M€",
+        "insignia": "+10,5 %",
+        "insigniaPie": "vs. 2024",
+        "texto": "El segundo mercado de Europa, con 6.150 millones de euros en 2025 y un crecimiento del 10,5 %."
       },
       {
-        "icono": "personas",
-        "cifra": "4,31 M",
-        "insignia": "2ª cifra más alta registrada",
-        "que": "Licencias federativas en España",
-        "detalle": "Cuatro millones largos de deportistas, repartidos en miles de clubes de pueblo y de barrio.",
-        "fuente": "Anuario de Estadísticas Deportivas 2025",
-        "quien": "Ministerio de Educación, FP y Deportes · datos de 2024"
+        "clave": "it",
+        "nombre": "Patrocinio en Italia",
+        "anio": "2025",
+        "cifra": "2.010 M€",
+        "insignia": "+5 %",
+        "insigniaPie": "vs. 2024",
+        "texto": "El mercado italiano alcanzó los 2.010 millones de euros en 2025, con un crecimiento del 5 %."
+      },
+      {
+        "clave": "fr",
+        "nombre": "Patrocinio en Francia",
+        "anio": "2025",
+        "cifra": "1.850 M€",
+        "insignia": "+10,3 %",
+        "insigniaPie": "vs. 2024",
+        "texto": "El mercado francés alcanzó los 1.850 millones de euros en 2025, con un crecimiento del 10,3 %."
+      }
+    ],
+    "comparativa": {
+      "titulo": "Los cinco grandes mercados de Europa",
+      "subtitulo": "Millones de euros, 2025",
+      "barras": [
+        {
+          "clave": "de",
+          "nombre": "Alemania",
+          "cifra": "6.260 M€",
+          "valor": 6260,
+          "destacada": false
+        },
+        {
+          "clave": "gb",
+          "nombre": "Reino Unido",
+          "cifra": "6.150 M€",
+          "valor": 6150,
+          "destacada": false
+        },
+        {
+          "clave": "es",
+          "nombre": "España",
+          "cifra": "2.180 M€",
+          "valor": 2180,
+          "destacada": true
+        },
+        {
+          "clave": "it",
+          "nombre": "Italia",
+          "cifra": "2.010 M€",
+          "valor": 2010,
+          "destacada": false
+        },
+        {
+          "clave": "fr",
+          "nombre": "Francia",
+          "cifra": "1.850 M€",
+          "valor": 1850,
+          "destacada": false
+        }
+      ]
+    },
+    "europa": {
+      "titulo": "El patrocinio deportivo en Europa",
+      "subtitulo": "Reparto del mercado de patrocinio, 2025",
+      "porcentaje": 72,
+      "centroCifra": "24.790 M€",
+      "centroTexto": "al deporte",
+      "texto": "El deporte se lleva el 72 % del patrocinio europeo: 24.790 de los 34.450 millones de euros que se mueven en total.",
+      "leyenda": [
+        {
+          "etiqueta": "Patrocinio deportivo",
+          "cifra": "24.790 M€",
+          "porcentaje": "72 %",
+          "fuerte": true
+        },
+        {
+          "etiqueta": "Resto de sectores",
+          "cifra": "9.660 M€",
+          "porcentaje": "28 %",
+          "fuerte": false
+        }
+      ]
+    },
+    "licencias": {
+      "titulo": "Licencias federativas en España",
+      "cifra": "4,31 millones",
+      "anio": "2024",
+      "texto": "4.315.809 licencias federativas en 2024, la segunda cifra más alta registrada. Esos deportistas están repartidos en miles de clubes de pueblo y de barrio."
+    },
+    "fuentes": [
+      {
+        "quien": "España, Reino Unido, Italia, Francia y Alemania",
+        "que": "ESA Sponsorship Market Overview 2026. Nielsen Sports · European Sponsorship Association (datos de 2025)."
+      },
+      {
+        "quien": "Licencias en España",
+        "que": "Anuario de Estadísticas Deportivas 2025. Ministerio de Educación, Formación Profesional y Deportes (datos de 2024)."
       }
     ]
   },

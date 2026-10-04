@@ -812,111 +812,287 @@ export async function SeccionPanelYHerramientas() {
  * diciendo la verdad en vez de mintiendo. Cuando salga el informe
  * siguiente, aquí es donde se actualizan.
  */
-/** Los iconos de las tres cifras. Trazo suelto, sin relleno, para que
- * peguen con los del resto de la portada. */
-const ICONO_DE_LA_CIFRA: Record<string, string> = {
-  crecimiento: "M3 17l6-6 4 4 7-7M21 8v5h-5",
-  europa:
-    "M12 3a9 9 0 100 18 9 9 0 000-18zM3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18",
-  personas:
-    "M16 20v-1.5a3.5 3.5 0 00-3.5-3.5h-5A3.5 3.5 0 004 18.5V20M10 11.5a3.25 3.25 0 100-6.5 3.25 3.25 0 000 6.5zM20 20v-1.5a3.5 3.5 0 00-2.6-3.4M15.5 5.2a3.25 3.25 0 010 6.1",
-};
+/** Las banderas, dibujadas a mano dentro de un círculo. No se usan los
+ * emoji de bandera (🇪🇸) porque Windows no los pinta: en Chrome sobre
+ * Windows salen las dos letras del país en vez de la bandera. */
+function Bandera({ pais }: { pais: string }) {
+  const id = `bandera-${pais}`;
+  const dibujos: Record<string, React.ReactNode> = {
+    es: (
+      <>
+        <rect width="24" height="24" fill="#c60b1e" />
+        <rect y="6" width="24" height="12" fill="#ffc400" />
+      </>
+    ),
+    fr: (
+      <>
+        <rect width="8" height="24" fill="#002395" />
+        <rect x="8" width="8" height="24" fill="#fff" />
+        <rect x="16" width="8" height="24" fill="#ed2939" />
+      </>
+    ),
+    it: (
+      <>
+        <rect width="8" height="24" fill="#008c45" />
+        <rect x="8" width="8" height="24" fill="#f4f5f0" />
+        <rect x="16" width="8" height="24" fill="#cd212a" />
+      </>
+    ),
+    de: (
+      <>
+        <rect width="24" height="8" fill="#000" />
+        <rect y="8" width="24" height="8" fill="#dd0000" />
+        <rect y="16" width="24" height="8" fill="#ffce00" />
+      </>
+    ),
+    gb: (
+      <>
+        <rect width="24" height="24" fill="#012169" />
+        <path d="M0 0l24 24M24 0L0 24" stroke="#fff" strokeWidth="5" />
+        <path d="M0 0l24 24M24 0L0 24" stroke="#c8102e" strokeWidth="3" />
+        <path d="M12 0v24M0 12h24" stroke="#fff" strokeWidth="8" />
+        <path d="M12 0v24M0 12h24" stroke="#c8102e" strokeWidth="4.5" />
+      </>
+    ),
+  };
+
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-full w-full"
+      preserveAspectRatio="xMidYMid slice"
+    >
+      <clipPath id={id}>
+        <circle cx="12" cy="12" r="12" />
+      </clipPath>
+      <g clipPath={`url(#${id})`}>{dibujos[pais] ?? <rect width="24" height="24" fill="#d4d4d8" />}</g>
+    </svg>
+  );
+}
 
 export async function SeccionSector() {
   const t = await getTranslations("home");
-  const datos = t.raw("sector.datos") as {
-    icono: string;
+
+  const paises = t.raw("sector.paises") as {
+    clave: string;
+    nombre: string;
+    anio: string;
     cifra: string;
-    insignia?: string;
-    proporcion?: number;
-    pieDeBarra?: string;
-    que: string;
-    detalle: string;
-    fuente: string;
-    quien: string;
+    insignia: string;
+    insigniaPie: string;
+    texto: string;
   }[];
+  const comparativa = t.raw("sector.comparativa") as {
+    titulo: string;
+    subtitulo: string;
+    barras: { clave: string; nombre: string; cifra: string; valor: number; destacada: boolean }[];
+  };
+  const europa = t.raw("sector.europa") as {
+    titulo: string;
+    subtitulo: string;
+    porcentaje: number;
+    centroCifra: string;
+    centroTexto: string;
+    texto: string;
+    leyenda: { etiqueta: string; cifra: string; porcentaje: string; fuerte: boolean }[];
+  };
+  const licencias = t.raw("sector.licencias") as {
+    titulo: string;
+    cifra: string;
+    anio: string;
+    texto: string;
+  };
+  const fuentes = t.raw("sector.fuentes") as { quien: string; que: string }[];
+
+  // Las barras se miden contra la más larga, no contra una escala
+  // inventada: así la proporción entre países es la real.
+  const mayor = Math.max(...comparativa.barras.map((b) => b.valor));
+
+  // El donut: un círculo al que se le pinta sólo un trozo del borde.
+  const radio = 42;
+  const vuelta = 2 * Math.PI * radio;
+  const trozo = (europa.porcentaje / 100) * vuelta;
 
   return (
     <section className="border-t border-zinc-200 bg-white px-4 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-6xl">
-        <div className="max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
-            {t("sector.eyebrow")}
-          </p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
-            {t("sector.titulo")}
-          </h2>
-          <p className="mt-4 text-zinc-600">{t("sector.subtitulo")}</p>
-        </div>
+        <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+          {t("sector.eyebrow")}
+        </p>
+        <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+          {t("sector.titulo")}
+          <br className="hidden sm:block" />{" "}
+          <span className="text-brand-teal-dark">{t("sector.tituloResalte")}</span>
+        </h2>
+        <p className="mt-4 max-w-3xl text-zinc-600">{t("sector.subtitulo")}</p>
 
-        <div className="mt-12 grid gap-5 md:grid-cols-3">
-          {datos.map((dato) => (
+        {/* Fila 1: un país por tarjeta. */}
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {paises.map((pais) => (
             <div
-              key={dato.cifra}
-              className="flex flex-col rounded-2xl border border-zinc-200 bg-zinc-50 p-6 transition-colors hover:border-brand-teal/40"
+              key={pais.clave}
+              className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5 transition-colors hover:border-brand-teal/40"
             >
-              <div className="flex items-start justify-between gap-3">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
-                  <svg
-                    aria-hidden="true"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-6 w-6"
-                  >
-                    <path d={ICONO_DE_LA_CIFRA[dato.icono] ?? ICONO_POR_DEFECTO} />
-                  </svg>
+              <div className="flex items-center gap-2.5">
+                <span className="h-9 w-9 shrink-0 overflow-hidden rounded-full ring-1 ring-zinc-300">
+                  <Bandera pais={pais.clave} />
                 </span>
-
-                {dato.insignia ? (
-                  <span className="rounded-full bg-brand-teal-light px-2.5 py-1 text-xs font-bold leading-tight text-brand-teal-dark">
-                    {dato.insignia}
+                {/* `whitespace-nowrap`: sin esto "2.180 M€" se parte en dos
+                    líneas en cuanto la tarjeta se estrecha. */}
+                <p className="whitespace-nowrap text-[1.65rem] font-extrabold leading-none tracking-tight text-brand-teal-dark tabular-nums">
+                  {pais.cifra}
+                </p>
+                <span className="ml-auto shrink-0 rounded-lg bg-brand-teal-light px-2 py-1 text-center">
+                  <span className="block whitespace-nowrap text-[13px] font-extrabold leading-tight text-brand-teal-dark tabular-nums">
+                    {pais.insignia}
                   </span>
-                ) : null}
+                  <span className="block whitespace-nowrap text-[11px] leading-tight text-brand-teal-dark/80">
+                    {pais.insigniaPie}
+                  </span>
+                </span>
               </div>
 
-              {/* `tabular-nums` para que los millares de las tres
-                  tarjetas caigan alineados entre sí. */}
-              <p className="mt-5 text-4xl font-extrabold tracking-tight text-brand-teal-dark tabular-nums">
-                {dato.cifra}
-              </p>
-              <p className="mt-2.5 font-bold text-brand-navy">{dato.que}</p>
-              <p className="mt-1.5 text-sm leading-relaxed text-zinc-600">{dato.detalle}</p>
-
-              {/* La única barra de la sección, y mide algo real: la parte
-                  del patrocinio europeo que se lleva el deporte. */}
-              {typeof dato.proporcion === "number" ? (
-                <div className="mt-4">
-                  <div
-                    className="h-2 w-full overflow-hidden rounded-full bg-zinc-200"
-                    role="img"
-                    aria-label={dato.pieDeBarra ?? `${dato.proporcion} %`}
-                  >
-                    <div
-                      className="h-full rounded-full bg-brand-teal"
-                      style={{ width: `${dato.proporcion}%` }}
-                    />
-                  </div>
-                  {dato.pieDeBarra ? (
-                    <p className="mt-2 text-xs leading-relaxed text-zinc-500">{dato.pieDeBarra}</p>
-                  ) : null}
-                </div>
-              ) : null}
-
-              {/* `mt-auto` pega las fuentes al fondo: las tres tarjetas
-                  tienen textos de distinto largo y sin esto cada fuente
-                  quedaba a una altura. */}
-              <p className="mt-auto pt-5 text-xs leading-relaxed text-zinc-500">
-                {dato.fuente}
-                <br />
-                {dato.quien}
-              </p>
+              <p className="mt-3 font-bold text-brand-navy">{pais.nombre}</p>
+              <p className="text-sm text-zinc-500">{pais.anio}</p>
+              <p className="mt-2.5 text-sm leading-relaxed text-zinc-600">{pais.texto}</p>
             </div>
           ))}
         </div>
+
+        {/* Fila 2: la comparativa, el reparto europeo y las licencias. */}
+        <div className="mt-4 grid gap-4 lg:grid-cols-[1.4fr_1fr_1fr]">
+          {/* Comparativa por país */}
+          <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
+            <h3 className="font-bold text-brand-navy">{comparativa.titulo}</h3>
+            <p className="text-sm text-zinc-500">{comparativa.subtitulo}</p>
+
+            <ul className="mt-5 space-y-3">
+              {comparativa.barras.map((barra) => (
+                <li key={barra.clave} className="flex items-center gap-3">
+                  <span className="h-5 w-5 shrink-0 overflow-hidden rounded-full ring-1 ring-zinc-300">
+                    <Bandera pais={barra.clave} />
+                  </span>
+                  <span className="w-24 shrink-0 text-sm font-medium text-brand-navy">
+                    {barra.nombre}
+                  </span>
+                  <span className="h-3 min-w-0 flex-1 overflow-hidden rounded-full bg-zinc-200">
+                    <span
+                      className={`block h-full rounded-full ${
+                        barra.destacada ? "bg-brand-teal-dark" : "bg-brand-navy/55"
+                      }`}
+                      style={{ width: `${(barra.valor / mayor) * 100}%` }}
+                    />
+                  </span>
+                  <span
+                    className={`w-20 shrink-0 text-right text-sm tabular-nums ${
+                      barra.destacada
+                        ? "font-extrabold text-brand-teal-dark"
+                        : "font-medium text-zinc-600"
+                    }`}
+                  >
+                    {barra.cifra}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Reparto del patrocinio europeo */}
+          <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
+            <h3 className="font-bold text-brand-navy">{europa.titulo}</h3>
+            <p className="text-sm text-zinc-500">{europa.subtitulo}</p>
+
+            <div className="mt-5 flex items-center gap-5">
+              <div className="relative h-28 w-28 shrink-0">
+                <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r={radio}
+                    fill="none"
+                    stroke="var(--color-brand-navy)"
+                    strokeOpacity="0.2"
+                    strokeWidth="14"
+                  />
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r={radio}
+                    fill="none"
+                    stroke="var(--color-brand-teal-dark)"
+                    strokeWidth="14"
+                    strokeDasharray={`${trozo} ${vuelta - trozo}`}
+                    strokeLinecap="butt"
+                  />
+                </svg>
+                <span className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                  <span className="text-xl font-extrabold leading-none text-brand-navy tabular-nums">
+                    {europa.porcentaje} %
+                  </span>
+                  <span className="mt-1 text-[11px] leading-tight text-zinc-500">
+                    {europa.centroTexto}
+                  </span>
+                </span>
+              </div>
+
+              <ul className="min-w-0 space-y-2.5 text-sm">
+                {europa.leyenda.map((fila) => (
+                  <li key={fila.etiqueta}>
+                    <span className="flex items-center gap-2">
+                      <span
+                        aria-hidden="true"
+                        className={`h-2.5 w-2.5 shrink-0 rounded-full ${
+                          fila.fuerte ? "bg-brand-teal-dark" : "bg-brand-navy/20"
+                        }`}
+                      />
+                      <span className="font-medium text-brand-navy">{fila.etiqueta}</span>
+                    </span>
+                    <span className="ml-4.5 block text-zinc-600 tabular-nums">
+                      {fila.cifra} ({fila.porcentaje})
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <p className="mt-4 text-sm leading-relaxed text-zinc-600">{europa.texto}</p>
+          </div>
+
+          {/* Licencias federativas */}
+          <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-6 w-6"
+              >
+                <path d="M16 20v-1.5a3.5 3.5 0 00-3.5-3.5h-5A3.5 3.5 0 004 18.5V20M10 11.5a3.25 3.25 0 100-6.5 3.25 3.25 0 000 6.5zM20 20v-1.5a3.5 3.5 0 00-2.6-3.4M15.5 5.2a3.25 3.25 0 010 6.1" />
+              </svg>
+            </span>
+            <h3 className="mt-4 font-bold text-brand-navy">{licencias.titulo}</h3>
+            <p className="mt-3 text-3xl font-extrabold tracking-tight text-brand-teal-dark tabular-nums">
+              {licencias.cifra}
+            </p>
+            <p className="text-sm text-zinc-500">{licencias.anio}</p>
+            <p className="mt-2.5 text-sm leading-relaxed text-zinc-600">{licencias.texto}</p>
+          </div>
+        </div>
+
+        {/* Las fuentes, al pie y completas: es lo que sostiene la sección. */}
+        <dl className="mt-6 grid gap-x-8 gap-y-2 border-t border-zinc-200 pt-5 text-xs leading-relaxed text-zinc-500 sm:grid-cols-2">
+          {fuentes.map((fuente) => (
+            <div key={fuente.quien}>
+              <dt className="inline font-semibold text-zinc-600">{fuente.quien}: </dt>
+              <dd className="inline">{fuente.que}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
   );
