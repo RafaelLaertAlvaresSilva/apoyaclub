@@ -82,8 +82,10 @@ describe("los beneficios para empresas", () => {
     const fiscal = BENEFICIOS.tarjetas.find((t) => t.clave === "fiscal");
     expect(fiscal, "no está la tarjeta fiscal").toBeDefined();
     expect(fiscal!.texto).toContain("gasto de publicidad");
-    // Y avisa de la figura con la que se confunde.
-    expect(fiscal!.aviso ?? "").toContain("donativos");
+    // Y avisa de la figura con la que se confunde. En singular o en
+    // plural: lo que importa es que el aviso esté, no cómo esté
+    // redactado.
+    expect(fiscal!.aviso ?? "").toContain("donativo");
   });
 
   it("no vuelven los porcentajes fiscales que no existen", () => {

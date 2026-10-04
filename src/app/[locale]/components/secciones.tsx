@@ -672,14 +672,14 @@ export async function SeccionBeneficiosEmpresa() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-9 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {tarjetas.map((tarjeta) => (
             <div
               key={tarjeta.clave}
-              className="flex flex-col rounded-2xl border border-zinc-200 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-colors hover:border-brand-teal/50"
+              className="flex flex-col rounded-2xl border border-zinc-200 bg-white/90 p-5 shadow-sm backdrop-blur-sm transition-colors hover:border-brand-teal/50"
             >
-              <div className="flex items-start gap-3.5">
-                <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+              <div className="flex items-start gap-3">
+                <span className="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-brand-teal-light text-brand-teal-dark">
                   <svg
                     aria-hidden="true"
                     viewBox="0 0 24 24"
@@ -688,40 +688,39 @@ export async function SeccionBeneficiosEmpresa() {
                     strokeWidth="1.7"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="h-6 w-6"
+                    className="h-5 w-5"
                   >
                     {ICONO_DEL_BENEFICIO[tarjeta.clave] ?? ICONO_POR_DEFECTO}
                   </svg>
                 </span>
-                <h3 className="pt-1.5 font-extrabold leading-snug text-brand-navy">
+                <h3 className="pt-1 font-extrabold leading-snug text-brand-navy">
                   {tarjeta.titulo}
                 </h3>
               </div>
 
-              <p className="mt-3.5 text-sm leading-relaxed text-zinc-600">{tarjeta.texto}</p>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-600">{tarjeta.texto}</p>
 
               {/* El recuadro del dato. `mt-auto` lo pega abajo: los seis
                   textos miden distinto y sin esto cada recuadro quedaba
                   a una altura, que es lo que hace que una rejilla de
                   tarjetas parezca descuadrada. */}
-              <div className="mt-auto pt-5">
-                <div className="rounded-xl bg-brand-teal-light/60 p-4">
-                  <p className="text-xl font-extrabold tracking-tight text-brand-teal-dark tabular-nums">
+              <div className="mt-auto pt-4">
+                <div className="rounded-xl bg-brand-teal-light/60 px-4 py-3.5">
+                  <p className="text-lg font-extrabold leading-tight tracking-tight text-brand-teal-dark tabular-nums">
                     {tarjeta.cifra}
                   </p>
-                  <p className="mt-1 text-sm leading-relaxed text-brand-navy">{tarjeta.dato}</p>
-                  <p className="mt-2.5 text-[11px] leading-relaxed text-zinc-500">
+                  <p className="mt-1 text-[13px] leading-snug text-brand-navy">{tarjeta.dato}</p>
+                  {/* La fuente y, en la única tarjeta que lo lleva, el
+                      aviso: en el mismo párrafo y no en dos. Son seis
+                      tarjetas en una rejilla de tres columnas, y todas
+                      crecen hasta la altura de la más alta: cada bloque
+                      de más que lleve una abre un hueco blanco en las
+                      otras dos de su fila. */}
+                  <p className="mt-2 text-[11px] leading-snug text-zinc-500">
                     {tarjeta.fuente}
+                    {tarjeta.aviso ? ` · ${tarjeta.aviso}` : ""}
                   </p>
                 </div>
-
-                {/* La única tarjeta con letra pequeña debajo, y la lleva
-                    por un motivo: es la que habla de impuestos. */}
-                {tarjeta.aviso ? (
-                  <p className="mt-2.5 text-[11px] leading-relaxed text-zinc-500">
-                    {tarjeta.aviso}
-                  </p>
-                ) : null}
               </div>
             </div>
           ))}
