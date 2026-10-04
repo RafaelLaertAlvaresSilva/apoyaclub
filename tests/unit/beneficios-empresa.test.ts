@@ -1,85 +1,98 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { CATEGORIAS_IDEA, TOTAL_DE_IDEAS } from "@/lib/catalogo-ideas";
 
 const RAIZ = process.cwd();
 
-const HOME = JSON.parse(
-  readFileSync(join(RAIZ, "messages", "es", "home.json"), "utf8"),
-) as Record<string, never>;
+const SECCIONES = readFileSync(
+  join(RAIZ, "src", "app", "[locale]", "components", "secciones.tsx"),
+  "utf8",
+);
 
-type Tarjeta = { clave: string; titulo: string; texto: string; aviso?: string };
-type Dato = { clave: string; cifra: string; que: string; fuente: string };
+type Tarjeta = {
+  clave: string;
+  titulo: string;
+  texto: string;
+  cifra: string;
+  dato: string;
+  fuente: string;
+  aviso?: string;
+};
 
-const BENEFICIOS = (HOME as unknown as {
-  paraEmpresas: {
-    beneficios: { tarjetas: Tarjeta[]; franja: Dato[] };
-  };
-}).paraEmpresas.beneficios;
+const BENEFICIOS = (
+  JSON.parse(readFileSync(join(RAIZ, "messages", "es", "home.json"), "utf8")) as {
+    paraEmpresas: { beneficios: { tarjetas: Tarjeta[]; franja: unknown[] } };
+  }
+).paraEmpresas.beneficios;
 
-/** Todo el texto de la sección, de una tirada. */
 const TEXTO = JSON.stringify(BENEFICIOS);
 
 /**
  * La sección de beneficios para empresas, y lo que NO puede volver a
  * entrar en ella.
  *
- * La maqueta de la que salió traía seis porcentajes con fuente, uno por
- * tarjeta. Ninguno se pudo verificar y uno era directamente falso:
- * "hasta un 40 % de deducción fiscal por patrocinio deportivo", citando
- * la Ley 49/2002. Ese 35-40 % existe, pero es una deducción en cuota
- * para DONATIVOS; el patrocinio es un contrato publicitario y se deduce
- * de la base, como cualquier gasto de marketing. Son regímenes
- * distintos, y decirle a una empresa que se deduce el 40 % por
- * patrocinar es una afirmación que su asesoría desmiente en la primera
- * llamada.
+ * Esta sección se montó dos veces a partir de dos maquetas generadas
+ * con IA, y las dos traían un dato con fuente en cada tarjeta. En las
+ * dos, ninguno se pudo encontrar publicado:
  *
- * Esta prueba no puede comprobar que un dato sea cierto. Lo que hace es
- * más modesto y más útil: cada cifra de la franja tiene que llevar su
- * fuente escrita, y la tarjeta fiscal no puede volver a prometer un
- * porcentaje de deducción. Si alguien pega otra vez la maqueta, salta.
+ *   - "el 77 % de los consumidores…", Nielsen Sports (2021)
+ *   - "el 70 % de las familias…", UEFA (2021)
+ *   - "el 85 % de los consumidores…", Cone Communications (2023) — y el
+ *     último estudio CSR de Cone es de 2017
+ *   - "el 63 % de las marcas…", IEG Sponsorship Report (2022)
+ *   - "el 64 % de las empresas…", Asociación Española de la
+ *     Comunicación (2022), organismo que no se encuentra con ese nombre
+ *
+ * Y el dato fiscal fue falso de dos formas seguidas: "hasta un 40 % de
+ * deducción" (eso es de los donativos) y luego "deducción del 25 %,
+ * 35 % en algunos casos" (el 25 % es el TIPO del impuesto, no una
+ * deducción, y el 35 % no existe en el Impuesto sobre Sociedades).
+ *
+ * La segunda maqueta añadió numeritos en superíndice sobre las mismas
+ * cifras, sin bibliografía detrás. Un superíndice no es una fuente.
+ *
+ * Una prueba no puede comprobar que un dato sea cierto. Lo que hace
+ * esta es acotar: cada cifra lleva fuente escrita, la tarjeta fiscal no
+ * promete deducciones que no existen, y las dos cifras que salen del
+ * propio producto cuadran con el código. Si alguien vuelve a pegar la
+ * maqueta, salta.
  */
 describe("los beneficios para empresas", () => {
-  it("están las seis razones", () => {
+  it("están las seis razones, y cada una con su dato", () => {
     expect(BENEFICIOS.tarjetas).toHaveLength(6);
     for (const tarjeta of BENEFICIOS.tarjetas) {
-      expect(tarjeta.titulo.length, `"${tarjeta.clave}" sin título`).toBeGreaterThan(3);
-      expect(tarjeta.texto.length, `"${tarjeta.clave}" sin texto`).toBeGreaterThan(30);
+      expect(tarjeta.cifra, `"${tarjeta.clave}" sin cifra`).toBeTruthy();
+      expect(tarjeta.dato.length, `"${tarjeta.clave}" sin explicación`).toBeGreaterThan(20);
+      expect(tarjeta.fuente, `"${tarjeta.clave}" no dice de dónde sale`).toBeTruthy();
     }
   });
 
-  it("ninguna razón se apoya en un porcentaje", () => {
-    // No es que un porcentaje esté prohibido: es que los que traía la
-    // maqueta eran inventados. Si algún día hay uno de verdad, irá en
-    // la franja, que es donde se escribe la fuente.
-    for (const tarjeta of BENEFICIOS.tarjetas) {
-      const conPorcentaje = `${tarjeta.titulo} ${tarjeta.texto}`.match(/\d+\s*%/);
-      expect(conPorcentaje, `"${tarjeta.clave}" ha vuelto a meter un porcentaje`).toBeNull();
-    }
+  it("las cifras del propio producto cuadran con el código", () => {
+    // Estas dos son las más comprobables de todas, y por eso son las
+    // que más fácil se quedan obsoletas: basta con añadir una idea al
+    // catálogo para que la web mienta.
+    const medida = BENEFICIOS.tarjetas.find((t) => t.clave === "medida");
+    expect(medida, "no está la tarjeta de acciones a medida").toBeDefined();
+    expect(medida!.cifra).toContain(String(TOTAL_DE_IDEAS));
+    expect(medida!.dato).toContain(String(CATEGORIAS_IDEA.length));
   });
 
-  it("la tarjeta fiscal no promete una deducción en cuota", () => {
+  it("la tarjeta fiscal dice lo que de verdad pasa", () => {
     const fiscal = BENEFICIOS.tarjetas.find((t) => t.clave === "fiscal");
     expect(fiscal, "no está la tarjeta fiscal").toBeDefined();
     expect(fiscal!.texto).toContain("gasto de publicidad");
     // Y avisa de la figura con la que se confunde.
     expect(fiscal!.aviso ?? "").toContain("donativos");
-    expect(TEXTO).not.toMatch(/40\s*%/);
   });
 
-  it("cada cifra de la franja lleva su fuente y el año del dato", () => {
-    const conCifra = BENEFICIOS.franja.filter((d) => /\d/.test(d.cifra));
-    expect(conCifra.length, "la franja se ha quedado sin cifras").toBeGreaterThanOrEqual(3);
-
-    for (const dato of conCifra) {
-      expect(dato.fuente, `"${dato.clave}" no dice de dónde sale`).toBeTruthy();
-      expect(dato.fuente, `"${dato.clave}" no dice de qué año es`).toMatch(/20\d\d/);
-    }
+  it("no vuelven los porcentajes fiscales que no existen", () => {
+    // El 40 % es de los donativos. El 35 % no es ningún tipo del IS.
+    expect(TEXTO).not.toMatch(/40\s*%/);
+    expect(TEXTO).not.toMatch(/35\s*%/);
   });
 
   it("no vuelven las fuentes que no se pudieron verificar", () => {
-    // Las seis de la maqueta. Si reaparece cualquiera, es que alguien
-    // ha vuelto a pegar los datos sin comprobarlos.
     for (const sospechosa of [
       "Nielsen Sports (2021)",
       "UEFA (2021)",
@@ -92,5 +105,16 @@ describe("los beneficios para empresas", () => {
         sospechosa,
       );
     }
+  });
+
+  it("la foto de fondo es solo de ordenador", () => {
+    // En el teléfono la sección son seis tarjetas de texto apiladas: la
+    // foto no se vería más que en los huecos, y pesa 103 KB.
+    const fondo = SECCIONES.slice(
+      SECCIONES.indexOf('src="/fondo-beneficios.webp"') - 400,
+      SECCIONES.indexOf('src="/fondo-beneficios.webp"') + 200,
+    );
+    expect(fondo).toContain("hidden lg:block");
+    expect(fondo).toContain('loading="lazy"');
   });
 });

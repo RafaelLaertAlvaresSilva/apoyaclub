@@ -548,15 +548,9 @@ const ICONO_DEL_BENEFICIO: Record<string, React.ReactNode> = {
     </>
   ),
   comunidad: (
-    <>
-      <path d="M16 20v-1.5a3.5 3.5 0 00-3.5-3.5h-5A3.5 3.5 0 004 18.5V20M10 11.5a3.25 3.25 0 100-6.5 3.25 3.25 0 000 6.5zM20 20v-1.5a3.5 3.5 0 00-2.6-3.4M15.5 5.2a3.25 3.25 0 010 6.1" />
-    </>
+    <path d="M16 20v-1.5a3.5 3.5 0 00-3.5-3.5h-5A3.5 3.5 0 004 18.5V20M10 11.5a3.25 3.25 0 100-6.5 3.25 3.25 0 000 6.5zM20 20v-1.5a3.5 3.5 0 00-2.6-3.4M15.5 5.2a3.25 3.25 0 010 6.1" />
   ),
-  reputacion: (
-    <>
-      <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
-    </>
-  ),
+  reputacion: <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />,
   fiscal: (
     <>
       <path d="M6 3h8l5 5v13H6z" />
@@ -579,25 +573,52 @@ const ICONO_DEL_BENEFICIO: Record<string, React.ReactNode> = {
   ),
 };
 
+/** Los iconos de la franja de cierre. */
+const ICONO_DEL_CIERRE: Record<string, React.ReactNode> = {
+  gratis: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M9 9.5h5M9 14.5h5M11 7v10" />
+    </>
+  ),
+  directo: (
+    <>
+      <path d="M4 5h16v11H8l-4 4V5z" />
+      <path d="M8.5 10.5h7" />
+    </>
+  ),
+  digital: (
+    <>
+      <rect x="7" y="2.5" width="10" height="19" rx="2.5" />
+      <path d="M11 18.5h2" />
+    </>
+  ),
+};
+
 /**
- * Por qué a una empresa le interesa, y los números del sector que lo
- * sostienen.
+ * Por qué a una empresa le interesa, con el dato que sostiene cada
+ * razón.
  *
  * Va justo debajo de la portada de /para-empresas: quien acaba de
  * pulsar "soy una empresa" todavía no sabe por qué debería seguir
  * leyendo, y esto se lo dice antes que ninguna otra cosa.
  *
- * Un aviso para quien toque esto después. La maqueta de la que salió
- * esta sección traía un porcentaje con fuente en cada tarjeta —"el 77 %
- * de los consumidores...", Nielsen; "el 85 %...", Cone Communications;
- * "hasta un 40 % de deducción fiscal", Ley 49/2002—. Ninguno se pudo
- * verificar, el último era directamente falso (el 40 % es de los
- * donativos, no del patrocinio, que es un gasto de publicidad) y el
- * estudio de Cone que se citaba como de 2023 es de 2017. Las tarjetas
- * se quedaron con el argumento y sin el número.
+ * AVISO PARA QUIEN TOQUE ESTO DESPUÉS. La maqueta de la que salió
+ * traía un porcentaje con fuente en cada tarjeta: "el 77 % de los
+ * consumidores…" (Nielsen), "el 70 % de las familias…" (UEFA), "el
+ * 85 %…" (Cone Communications), "el 63 % de las marcas…" (IEG), "el
+ * 64 % de las empresas…" (Asociación Española de la Comunicación).
+ * Ninguno se pudo encontrar publicado, el estudio de Cone que se
+ * citaba como de 2023 es de 2017, y el dato fiscal era falso de dos
+ * maneras seguidas: primero prometía "hasta un 40 % de deducción"
+ * (eso es de los donativos, no del patrocinio) y después "deducción
+ * del 25 %, 35 % en algunos casos" (el 25 % es el TIPO del impuesto,
+ * no una deducción, y el 35 % no existe en el IS español).
  *
- * Las tres cifras de la franja sí están comprobadas y llevan su fuente
- * con el año del dato. Si se añade una cuarta, que venga con lo mismo.
+ * Las seis cifras que hay ahora están comprobadas y dos de ellas se
+ * pueden contar aquí mismo: las 128 ideas y las 16 categorías salen
+ * de `catalogo-ideas.ts`, y hay una prueba que lo verifica. Si se
+ * añade una séptima, que venga con su fuente y su año.
  */
 export async function SeccionBeneficiosEmpresa() {
   const t = await getTranslations("home");
@@ -605,26 +626,45 @@ export async function SeccionBeneficiosEmpresa() {
     clave: string;
     titulo: string;
     texto: string;
+    cifra: string;
+    dato: string;
+    fuente: string;
     aviso?: string;
   }[];
-  const franja = t.raw("paraEmpresas.beneficios.franja") as {
+  const cierre = t.raw("paraEmpresas.beneficios.franja") as {
     clave: string;
-    cifra: string;
-    que: string;
-    fuente: string;
+    titulo: string;
+    texto: string;
   }[];
 
   return (
     <section
       id="beneficios"
-      className="scroll-mt-32 border-b border-zinc-200 bg-white px-4 py-20 sm:px-6 sm:py-24"
+      className="relative isolate scroll-mt-32 overflow-hidden border-b border-zinc-200 bg-white px-4 py-20 sm:px-6 sm:py-24"
     >
+      {/* La foto, solo de ordenador. En el teléfono esta sección son
+          seis tarjetas de texto apiladas y una foto detrás no se vería
+          más que en los huecos: peso de descarga a cambio de nada. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 hidden lg:block">
+        <Image
+          src="/fondo-beneficios.webp"
+          alt=""
+          fill
+          loading="lazy"
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-white/80" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white to-transparent" />
+      </div>
+
       <div className="mx-auto max-w-6xl">
         <div className="max-w-2xl">
           <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
             {t("paraEmpresas.beneficios.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl">
             {t("paraEmpresas.beneficios.titulo")}
           </h2>
           <p className="mt-4 leading-relaxed text-zinc-600">
@@ -632,77 +672,100 @@ export async function SeccionBeneficiosEmpresa() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {tarjetas.map((tarjeta) => (
             <div
               key={tarjeta.clave}
-              className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 transition-colors hover:border-brand-teal/40"
+              className="flex flex-col rounded-2xl border border-zinc-200 bg-white/90 p-6 shadow-sm backdrop-blur-sm transition-colors hover:border-brand-teal/50"
             >
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.7"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-6 w-6"
-                >
-                  {ICONO_DEL_BENEFICIO[tarjeta.clave] ?? ICONO_POR_DEFECTO}
-                </svg>
-              </span>
+              <div className="flex items-start gap-3.5">
+                <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-6 w-6"
+                  >
+                    {ICONO_DEL_BENEFICIO[tarjeta.clave] ?? ICONO_POR_DEFECTO}
+                  </svg>
+                </span>
+                <h3 className="pt-1.5 font-extrabold leading-snug text-brand-navy">
+                  {tarjeta.titulo}
+                </h3>
+              </div>
 
-              <h3 className="mt-4 font-extrabold text-brand-navy">{tarjeta.titulo}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-600">{tarjeta.texto}</p>
+              <p className="mt-3.5 text-sm leading-relaxed text-zinc-600">{tarjeta.texto}</p>
 
-              {/* La única tarjeta con letra pequeña, y la lleva por un
-                  motivo: es la que habla de impuestos. */}
-              {tarjeta.aviso ? (
-                <p className="mt-3 border-t border-zinc-200 pt-3 text-xs leading-relaxed text-zinc-500">
-                  {tarjeta.aviso}
-                </p>
-              ) : null}
+              {/* El recuadro del dato. `mt-auto` lo pega abajo: los seis
+                  textos miden distinto y sin esto cada recuadro quedaba
+                  a una altura, que es lo que hace que una rejilla de
+                  tarjetas parezca descuadrada. */}
+              <div className="mt-auto pt-5">
+                <div className="rounded-xl bg-brand-teal-light/60 p-4">
+                  <p className="text-xl font-extrabold tracking-tight text-brand-teal-dark tabular-nums">
+                    {tarjeta.cifra}
+                  </p>
+                  <p className="mt-1 text-sm leading-relaxed text-brand-navy">{tarjeta.dato}</p>
+                  <p className="mt-2.5 text-[11px] leading-relaxed text-zinc-500">
+                    {tarjeta.fuente}
+                  </p>
+                </div>
+
+                {/* La única tarjeta con letra pequeña debajo, y la lleva
+                    por un motivo: es la que habla de impuestos. */}
+                {tarjeta.aviso ? (
+                  <p className="mt-2.5 text-[11px] leading-relaxed text-zinc-500">
+                    {tarjeta.aviso}
+                  </p>
+                ) : null}
+              </div>
             </div>
           ))}
         </div>
 
-        {/* La franja de cifras, sobre la foto. Es un titular y no una
-            cita entre comillas: una frase entrecomillada sin nadie que
-            la firme parece el testimonio de alguien, y aquí no lo dice
-            nadie más que la propia web. */}
-        <div className="relative isolate mt-6 overflow-hidden rounded-3xl bg-brand-navy p-8 sm:p-10">
-          <Image
-            src="/fondo-beneficios.webp"
-            alt=""
-            fill
-            loading="lazy"
-            sizes="(min-width: 1152px) 1152px, 100vw"
-            aria-hidden="true"
-            className="-z-10 object-cover object-center opacity-45"
-          />
-          {/* El velo azul va por encima de la foto y por debajo del
-              texto: sin él, las cifras en blanco caen sobre el cielo
-              naranja del atardecer y dejan de leerse. */}
-          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-brand-navy/55" />
-
+        {/* La franja de cierre. Sin cifras a propósito: las seis están
+            arriba, y repetirlas aquí no las hace más ciertas. Lo que
+            falta a estas alturas no es otro dato, es el botón. */}
+        <div className="mt-6 rounded-3xl bg-brand-navy p-8 sm:p-10">
           <h3 className="max-w-2xl text-xl font-extrabold leading-snug text-white sm:text-2xl">
             {t("paraEmpresas.beneficios.franjaTitulo")}
           </h3>
 
-          <dl className="mt-8 grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
-            {franja.map((dato) => (
-              <div key={dato.clave}>
-                <dt className="text-2xl font-extrabold tracking-tight text-brand-teal-light tabular-nums">
-                  {dato.cifra}
-                </dt>
-                <dd className="mt-1.5 text-sm leading-relaxed text-white/85">{dato.que}</dd>
-                {dato.fuente ? (
-                  <dd className="mt-2 text-[11px] leading-relaxed text-white/55">{dato.fuente}</dd>
-                ) : null}
+          <div className="mt-8 grid gap-7 sm:grid-cols-3">
+            {cierre.map((bloque) => (
+              <div key={bloque.clave} className="flex gap-3.5">
+                <span className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-white/10 text-brand-teal-light">
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-5 w-5"
+                  >
+                    {ICONO_DEL_CIERRE[bloque.clave] ?? ICONO_POR_DEFECTO}
+                  </svg>
+                </span>
+                <div className="min-w-0">
+                  <p className="font-bold text-white">{bloque.titulo}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-white/75">{bloque.texto}</p>
+                </div>
               </div>
             ))}
-          </dl>
+          </div>
+
+          <Link
+            href="/buscar?busca=patrocinios"
+            className="mt-9 inline-flex items-center justify-center rounded-xl bg-brand-teal-light px-6 py-3.5 font-bold text-brand-navy transition-colors hover:bg-white"
+          >
+            {t("paraEmpresas.beneficios.franjaCta")}
+          </Link>
         </div>
       </div>
     </section>
