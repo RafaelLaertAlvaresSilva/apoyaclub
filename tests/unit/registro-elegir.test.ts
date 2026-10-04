@@ -9,7 +9,7 @@ function leer(...trozos: string[]): string {
 }
 
 const CABECERA = leer("src", "components", "Header.tsx");
-const MENU_MOVIL = leer("src", "components", "MenuMovil.tsx");
+const MENU_CABECERA = leer("src", "components", "MenuDeLaCabecera.tsx");
 const ELEGIR = leer("src", "app", "[locale]", "registro", "page.tsx");
 const FORM_CLUB = leer(
   "src",
@@ -44,15 +44,17 @@ const SITEMAP = leer("src", "app", "sitemap.ts");
  */
 describe("elegir club o empresa al registrarse", () => {
   it("el botón de la cabecera pregunta en vez de decidir", () => {
-    expect(CABECERA).toContain('href="/registro"');
+    // El destino va dentro de una condición —con sesión lleva al
+    // panel—, así que se busca la cadena, no el atributo entero.
+    expect(CABECERA).toContain('"/registro"');
     expect(CABECERA, "la cabecera vuelve a llevar derecho al alta de club").not.toContain(
-      'href="/registro-club"',
+      "/registro-club",
     );
   });
 
-  it("el menú del teléfono hace lo mismo", () => {
-    expect(MENU_MOVIL).toContain('href="/registro"');
-    expect(MENU_MOVIL).not.toContain('href="/registro-club"');
+  it("el menú hace lo mismo", () => {
+    expect(MENU_CABECERA).toContain('href="/registro"');
+    expect(MENU_CABECERA).not.toContain('href="/registro-club"');
   });
 
   it("la bifurcación ofrece las dos puertas", () => {

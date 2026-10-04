@@ -3,36 +3,25 @@ import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { RUTA_POR_ROL, type Role } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
-import { MenuMovil } from "@/components/MenuMovil";
+import { MenuDeLaCabecera } from "@/components/MenuDeLaCabecera";
 
 /**
- * Cabecera pública compartida (Fase 1, reordenada en la Fase 17).
+ * Cabecera pública compartida.
  *
  * Antes vivía copiada a mano dentro de la landing y no existía en el
  * resto de páginas públicas (buscador, ficha de club, legales), que se
  * quedaban sin forma de volver al inicio o acceder.
  *
- * La reordenación de la Fase 17 arregla cuatro cosas:
+ * Hoy es una sola fila a cualquier ancho: el logo, un botón verde y el
+ * menú. Lo que hay detrás de ese menú está en `MenuDeLaCabecera`, y la
+ * razón de que esté ahí y no desplegado aquí está explicada en ese
+ * archivo.
  *
- *   - Los enlaces no decían para quién eran. "Buscar clubes" y
- *     "Empresas", uno al lado del otro, son dos herramientas de dos
- *     públicos distintos: un club leía "Buscar clubes" y entendía que
- *     era para buscar OTROS clubes, y una empresa leía "Empresas" y
- *     entendía que era su puerta, cuando el directorio es justo lo
- *     contrario —quién puede ayudar a un club—. Ahora quien no ha
- *     entrado ve las dos puertas por su nombre: "Para clubes" y "Para
- *     empresas".
- *   - Navegar y las utilidades pesaban lo mismo. Cuatro enlaces grises
- *     en fila y un botón, todos del mismo tamaño y color, no son una
- *     jerarquía. Ahora la navegación va pegada al logo y lo personal
- *     —guardados, sesión— va a la derecha, más claro y detrás de una
- *     separación.
- *   - El corazón suelto en el ordenador no le decía a nadie qué había
- *     detrás. Lleva su palabra, igual que ya la llevaba en el móvil.
- *   - Los enlaces no cambiaban al entrar. Un club con la sesión abierta
- *     no necesita que le expliquen qué es ApoyaClub: ahí la cabecera
- *     enseña las herramientas (buscador y directorio) en vez de las dos
- *     páginas de presentación.
+ * Los enlaces cambian según haya sesión o no. Quien no ha entrado ve
+ * las dos puertas por su nombre —"Para clubes" y "Para empresas"—
+ * porque todavía no sabe cuál es la suya. Un club con la sesión abierta
+ * no necesita que le expliquen qué es ApoyaClub: ahí salen las
+ * herramientas, el buscador y el directorio de empresas.
  *
  * El logo (`public/logo-full.png`) es el archivo original del usuario
  * recortado y reescalado en alta resolución, con el eslogan
@@ -62,24 +51,6 @@ const ENLACES_CON_SESION = [
   { href: "/empresas", etiqueta: "Empresas" },
 ] as const;
 
-/**
- * Cada enlace, dentro de su recuadro.
- *
- * Eran texto suelto, y desde que la página tiene fondo la cabecera es
- * la única franja blanca de arriba: las palabras flotaban en ella sin
- * que nada dijera que se podían pulsar.
- *
- * El relleno es el mismo tono del fondo de la página, así que los
- * recuadros se leen como botones sin gritar. La jerarquía no la hace
- * la forma —todos son recuadros— sino el color: cinco en gris claro y
- * uno, el de crear la página, en verde. Un solo botón de color en una
- * cabecera se ve antes que cinco compitiendo.
- */
-const CLASES_BASE_ENLACE =
-  "rounded-lg bg-zinc-50 px-2.5 py-1.5 text-sm font-medium transition-colors hover:bg-zinc-100";
-const CLASES_ENLACE = `${CLASES_BASE_ENLACE} text-brand-navy`;
-const CLASES_UTILIDAD = `${CLASES_BASE_ENLACE} text-zinc-600 hover:text-brand-navy`;
-
 export async function Header() {
   const supabase = await createClient();
   const {
@@ -93,79 +64,49 @@ export async function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white">
       <div className="mx-auto w-full max-w-6xl px-4 py-3 sm:px-6">
-        {/* Todo en una fila no cabe hasta bien entrado el escritorio: el
-            logo solo ya se come 243 px, y con los tres enlaces, los
-            guardados, la sesión y el botón hacen falta unos 1.050. Por
-            debajo de eso los enlaces bajan a una segunda fila.
+        {/* Una sola fila, a cualquier ancho: el logo a la izquierda y a
+            la derecha el botón verde y el menú.
             *
-            * El corte estuvo en `sm` (640 px) y ahí la fila única se
-            * montaba sobre sí misma: "Guardados" salía escrito encima
-            * de "Para empresas" y nadie lo veía, porque casi nunca se
-            * mira a ese ancho. Pasó a `lg` (1024), y al meter los
-            * enlaces en recuadros —que suman unos 120 px de relleno—
-            * hubo que subirlo otra vez, a `xl` (1280). El número no es
-            * decorativo: es lo que mide la fila. Si se añade un enlace
-            * más, hay que volver a medir. */}
+            * Antes aquí se intentaba meter todo —tres enlaces, los
+            * guardados, la sesión y el botón— y no cabía hasta los
+            * 1.280 px. Por debajo de eso había que partirlo en dos
+            * filas, y ese reparto se rompía solo cada vez que se
+            * añadía un enlace: a 640 px "Guardados" llegó a salir
+            * escrito encima de "Para empresas" durante semanas.
+            *
+            * Con todo dentro del menú ya no hay nada que medir, y la
+            * cabecera ocupa lo mismo en un teléfono que en un
+            * ordenador.
+            *
+            * Fuera se queda un solo botón, el verde: es la única cosa
+            * de esta barra que no es navegar. Un botón de color solo,
+            * en una barra blanca, se ve antes que cinco compitiendo. */}
         <div className="flex items-center justify-between gap-3">
-          {/* Izquierda: la marca y a dónde se puede ir. */}
-          <div className="flex min-w-0 items-center gap-4 xl:gap-7">
-            <Link href="/" className="shrink-0">
-              <Image
-                src="/logo-full.png"
-                alt="ApoyaClub"
-                width={4275}
-                height={984}
-                priority
-                className="h-10 w-auto xl:h-14"
-              />
-            </Link>
+          <Link href="/" className="min-w-0 shrink">
+            <Image
+              src="/logo-full.png"
+              alt="ApoyaClub"
+              width={4275}
+              height={984}
+              priority
+              className="h-10 w-auto sm:h-12"
+            />
+          </Link>
 
-            <nav aria-label="Secciones" className="hidden items-center gap-1 xl:flex">
-              {enlaces.map((enlace) => (
-                <Link key={enlace.href} href={enlace.href} className={CLASES_ENLACE}>
-                  {enlace.etiqueta}
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-          {/* Derecha: lo que es tuyo. Guardados y sesión son utilidades,
-              no secciones, y por eso van más apagados y detrás de una
-              línea: quien busca "para empresas" no tiene que leerlos. */}
           <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
-            <span aria-hidden="true" className="hidden h-5 w-px bg-zinc-200 xl:block" />
+            {/* Por debajo de 640 px no cabe junto al logo y al menú, y
+                ahí vive dentro del cajón. El envoltorio lo esconde en
+                vez de hacerlo el propio botón: `hidden` y el
+                `inline-flex` que lleva de serie son los dos reglas de
+                `display`, y cuál gana depende del orden en que Tailwind
+                las escriba, no del orden en que se pongan aquí. */}
+            <span className="hidden sm:block">
+              <Button href={accesoDirecto ? accesoDirecto.href : "/registro"} size="sm">
+                {accesoDirecto ? accesoDirecto.etiqueta : "Crea tu página"}
+              </Button>
+            </span>
 
-            <Link href="/favoritos" className={`hidden xl:inline ${CLASES_UTILIDAD}`}>
-              <span aria-hidden="true">♡</span> Guardados
-            </Link>
-
-            {/* En el teléfono estos dos viven dentro del menú. El
-                envoltorio los esconde en vez de hacerlo el propio
-                botón: `hidden` y el `inline-flex` que lleva de serie
-                son los dos reglas de `display`, y cuál gana depende
-                del orden en que Tailwind las escriba, no del orden en
-                que se pongan aquí. */}
-            {accesoDirecto ? (
-              <span className="hidden xl:block">
-                <Button href={accesoDirecto.href} size="sm">
-                  {accesoDirecto.etiqueta}
-                </Button>
-              </span>
-            ) : (
-              <>
-                <Link href="/login" className={`hidden xl:inline ${CLASES_UTILIDAD}`}>
-                  Iniciar sesión
-                </Link>
-                <span className="hidden xl:block">
-                  <Button href="/registro" size="sm">
-                    Crea tu página
-                  </Button>
-                </span>
-              </>
-            )}
-
-            {/* En el teléfono, todo lo de arriba vive aquí dentro. */}
-            <MenuMovil enlaces={enlaces} accesoDirecto={accesoDirecto} />
+            <MenuDeLaCabecera enlaces={enlaces} accesoDirecto={accesoDirecto} />
           </div>
         </div>
 

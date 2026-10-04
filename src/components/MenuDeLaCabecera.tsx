@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 
 /**
- * El menú de la cabecera en el teléfono.
+ * El menú de la cabecera, en cualquier pantalla.
  *
  * Antes la cabecera gastaba dos filas en el móvil: arriba el logo con
  * "Entrar" y "Empezar", y debajo una tira de enlaces que se desplazaba
@@ -27,7 +27,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 
 type Enlace = { href: string; etiqueta: string };
 
-export function MenuMovil({
+export function MenuDeLaCabecera({
   enlaces,
   accesoDirecto,
 }: {
@@ -80,7 +80,7 @@ export function MenuMovil({
     "flex items-center justify-between rounded-xl bg-zinc-50 px-4 py-3.5 text-base font-semibold text-brand-navy transition-colors hover:bg-zinc-100";
 
   return (
-    <div className="xl:hidden">
+    <div>
       <button
         type="button"
         onClick={() => setAbierto(true)}
@@ -166,10 +166,15 @@ export function MenuMovil({
                 banner de cookies, que también vive ahí y en la misma
                 capa: los botones estaban, pero no se veían. */}
             <div className="flex flex-col gap-2.5 border-t border-zinc-200 p-4">
+              {/* `sm:hidden` en el botón verde: a partir de ahí vive
+                  fuera, en la barra, y tenerlo en los dos sitios a la
+                  vez es decirle dos veces lo mismo a quien abre el
+                  menú. Por debajo de 640 px fuera no cabe, y entonces
+                  este es el único. */}
               {accesoDirecto ? (
                 <Link
                   href={accesoDirecto.href}
-                  className="rounded-xl bg-brand-teal-dark px-4 py-3.5 text-center text-base font-bold text-white transition-colors hover:bg-brand-navy"
+                  className="rounded-xl bg-brand-teal-dark px-4 py-3.5 text-center text-base font-bold text-white transition-colors hover:bg-brand-navy sm:hidden"
                 >
                   {accesoDirecto.etiqueta}
                 </Link>
@@ -177,7 +182,7 @@ export function MenuMovil({
                 <>
                   <Link
                     href="/registro"
-                    className="rounded-xl bg-brand-teal-dark px-4 py-3.5 text-center text-base font-bold text-white transition-colors hover:bg-brand-navy"
+                    className="rounded-xl bg-brand-teal-dark px-4 py-3.5 text-center text-base font-bold text-white transition-colors hover:bg-brand-navy sm:hidden"
                   >
                     Crea tu página
                   </Link>
