@@ -137,17 +137,36 @@ const ACENTOS_OPORTUNIDAD = ["bg-brand-navy", "bg-brand-teal-dark", "bg-brand-te
 export function FondoDeHeroe({
   archivo,
   tono,
+  velo = "normal",
 }: {
   archivo: string;
   tono: "claro" | "oscuro";
+  /**
+   * Cuánto aprieta el velo blanco que va entre la foto y el texto.
+   *
+   * No basta con el tono. Dos fotos igual de claras pueden necesitar
+   * velos muy distintos según *dónde* tengan el contraste: la del
+   * pabellón de "Para clubes" lleva el sol de frente justo detrás del
+   * titular, y con el velo normal el texto se pierde contra el
+   * resplandor. La de la portada tiene ahí las gradas, que son
+   * uniformes, y aguanta con menos.
+   */
+  velo?: "normal" | "fuerte";
 }) {
+  const fuerte = velo === "fuerte";
   const opacidad = tono === "claro" ? "opacity-75 sm:opacity-80" : "opacity-30 sm:opacity-40";
-  const veloMovil = tono === "claro" ? "bg-white/40" : "bg-white/65";
+  const veloMovil = tono === "claro" ? (fuerte ? "bg-white/58" : "bg-white/40") : "bg-white/65";
   // La foto clara es casi blanca: si el velo aprieta tanto como en la
   // oscura, desaparece. Cada tono lleva el suyo.
+  //
+  // El fuerte, además de apretar más en el centro, abre la elipse: el
+  // texto de estas portadas baja hasta los botones, y una mancha
+  // estrecha dejaba fuera justo las dos últimas líneas.
   const veloOrdenador =
     tono === "claro"
-      ? "bg-[radial-gradient(ellipse_60%_55%_at_50%_42%,rgba(255,255,255,0.62),rgba(255,255,255,0.28)_60%,rgba(255,255,255,0)_100%)]"
+      ? fuerte
+        ? "bg-[radial-gradient(ellipse_72%_70%_at_50%_45%,rgba(255,255,255,0.86),rgba(255,255,255,0.52)_62%,rgba(255,255,255,0)_100%)]"
+        : "bg-[radial-gradient(ellipse_60%_55%_at_50%_42%,rgba(255,255,255,0.62),rgba(255,255,255,0.28)_60%,rgba(255,255,255,0)_100%)]"
       : "bg-[radial-gradient(ellipse_60%_55%_at_50%_42%,rgba(255,255,255,0.82),rgba(255,255,255,0.45)_60%,rgba(255,255,255,0)_100%)]";
 
   return (

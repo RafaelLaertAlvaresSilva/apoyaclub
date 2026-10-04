@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { CtaFijoMovil } from "../components/CtaFijoMovil";
 import { MenuDeSecciones, type SeccionDelMenu } from "../components/MenuDeSecciones";
 import {
+  FondoDeHeroe,
   FuncionesDestacadas,
   SeccionComoFunciona,
   SeccionContacto,
@@ -53,10 +54,13 @@ export default async function ParaClubesPage() {
 
       <main id="contenido" className="flex-1 pb-24 sm:pb-0">
         <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-white to-zinc-50 px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-16">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-brand-teal/10 blur-3xl"
-          />
+          {/* La misma foto desvanecida que llevan la portada y la
+              página de las empresas, en vez de la mancha verde
+              difuminada que había aquí: las tres puertas de entrada se
+              parecen entre sí. `claro` porque esta foto es un pabellón
+              a contraluz, casi blanco, y necesita menos velo encima que
+              la oscura de empresas. */}
+          <FondoDeHeroe archivo="/fondo-clubes.webp" tono="claro" velo="fuerte" />
 
           <div className="relative mx-auto max-w-3xl text-center">
             <span className="mb-6 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-brand-teal-dark">
