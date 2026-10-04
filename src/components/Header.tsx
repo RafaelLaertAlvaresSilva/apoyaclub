@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { RUTA_POR_ROL, type Role } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
+import { MenuMovil } from "@/components/MenuMovil";
 
 /**
  * Cabecera pública compartida (Fase 1, reordenada en la Fase 17).
@@ -138,54 +139,36 @@ export async function Header() {
               <span aria-hidden="true">♡</span> Guardados
             </Link>
 
+            {/* En el teléfono estos dos viven dentro del menú. El
+                envoltorio los esconde en vez de hacerlo el propio
+                botón: `hidden` y el `inline-flex` que lleva de serie
+                son los dos reglas de `display`, y cuál gana depende
+                del orden en que Tailwind las escriba, no del orden en
+                que se pongan aquí. */}
             {accesoDirecto ? (
-              <Button href={accesoDirecto.href} size="sm">
-                <span className="sm:hidden">Mi panel</span>
-                <span className="hidden sm:inline">{accesoDirecto.etiqueta}</span>
-              </Button>
+              <span className="hidden xl:block">
+                <Button href={accesoDirecto.href} size="sm">
+                  {accesoDirecto.etiqueta}
+                </Button>
+              </span>
             ) : (
               <>
-                {/* También en el móvil. Antes solo salía abajo del todo,
-                    al final de la segunda fila, que es el último sitio
-                    donde mira quien ya tiene cuenta. */}
-                <Link href="/login" className={CLASES_UTILIDAD}>
-                  <span className="sm:hidden">Entrar</span>
-                  <span className="hidden sm:inline">Iniciar sesión</span>
+                <Link href="/login" className={`hidden xl:inline ${CLASES_UTILIDAD}`}>
+                  Iniciar sesión
                 </Link>
-                <Button href="/registro-club" size="sm">
-                  <span className="sm:hidden">Empezar</span>
-                  <span className="hidden sm:inline">Crea tu página</span>
-                </Button>
+                <span className="hidden xl:block">
+                  <Button href="/registro-club" size="sm">
+                    Crea tu página
+                  </Button>
+                </span>
               </>
             )}
+
+            {/* En el teléfono, todo lo de arriba vive aquí dentro. */}
+            <MenuMovil enlaces={enlaces} accesoDirecto={accesoDirecto} />
           </div>
         </div>
 
-        {/* La segunda fila, solo en el teléfono. Con el texto entero: un
-            corazón suelto no le dice a nadie que ahí están sus clubes
-            guardados. Se desplaza en horizontal en vez de partirse en
-            dos alturas, que en un teléfono se comen la pantalla justo
-            donde menos sobra. */}
-        <div className="relative xl:hidden">
-          <nav
-            aria-label="Secciones"
-            className="mt-2.5 flex items-center gap-1.5 overflow-x-auto pr-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          >
-            {enlaces.map((enlace) => (
-              <Link key={enlace.href} href={enlace.href} className={`shrink-0 ${CLASES_ENLACE}`}>
-                {enlace.etiqueta}
-              </Link>
-            ))}
-            <Link href="/favoritos" className={`shrink-0 ${CLASES_ENLACE}`}>
-              <span aria-hidden="true">♡</span> Guardados
-            </Link>
-          </nav>
-
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-white to-transparent"
-          />
-        </div>
       </div>
     </header>
   );
