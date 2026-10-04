@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
+import { FondoDeAcceso } from "@/components/FondoDeAcceso";
 
 /**
  * La bifurcación del registro.
@@ -59,7 +60,12 @@ export default async function RegistroPage() {
     <>
       <Header />
 
-      <main id="contenido" className="flex-1 bg-zinc-50 px-4 py-9 sm:px-6 sm:py-20">
+      <main
+        id="contenido"
+        className="relative isolate flex-1 bg-zinc-50 px-4 py-9 sm:px-6 sm:py-20"
+      >
+        <FondoDeAcceso />
+
         <div className="mx-auto max-w-4xl">
           <div className="mx-auto max-w-xl text-center">
             <h1 className="text-2xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
@@ -73,7 +79,7 @@ export default async function RegistroPage() {
               <Link
                 key={opcion.clave}
                 href={opcion.href}
-                className="group flex flex-col rounded-2xl border border-zinc-200 bg-white p-5 transition-colors hover:border-brand-teal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-dark sm:p-7"
+                className="group flex flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-xl transition-colors hover:border-brand-teal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-dark sm:p-7"
               >
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark sm:h-12 sm:w-12">
                   <svg

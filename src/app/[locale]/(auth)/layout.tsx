@@ -1,4 +1,5 @@
 import { BarraLogo } from "@/components/BarraLogo";
+import { FondoDeAcceso } from "@/components/FondoDeAcceso";
 
 export default function AuthLayout({
   children,
@@ -8,9 +9,14 @@ export default function AuthLayout({
   return (
     <>
       <BarraLogo />
-      <div className="flex flex-1 items-center justify-center bg-zinc-50 px-4 py-12">
+      <div className="relative isolate flex flex-1 items-center justify-center bg-zinc-50 px-4 py-12">
+        <FondoDeAcceso />
+
         <div className="w-full max-w-md space-y-6">
-          <div className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-zinc-200">
+          {/* La sombra sube de `shadow-sm` a `shadow-xl`: sobre el gris
+              plano de antes bastaba una línea, pero encima de una foto
+              el recuadro necesita despegarse para que se lea. */}
+          <div className="rounded-2xl bg-white p-8 shadow-xl ring-1 ring-zinc-200">
             {children}
           </div>
         </div>
