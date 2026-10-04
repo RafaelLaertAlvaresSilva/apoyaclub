@@ -1,7 +1,7 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { Fraunces, Public_Sans } from "next/font/google";
+import { Caveat, Fraunces, Public_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
 import { CookieBanner } from "@/components/CookieBanner";
 import { FavoritosProvider } from "@/components/Favoritos";
@@ -35,6 +35,19 @@ const tituloSerif = Fraunces({
 const textoSans = Public_Sans({
   variable: "--font-texto",
   subsets: ["latin"],
+});
+
+/* `Caveat` es letra manuscrita y sirve para una sola cosa: la nota al
+ * margen de la sección de precios, y solo en pantallas de ordenador.
+ * Por eso lleva `preload: false`: cargarla antes que nada retrasaría la
+ * portada entera por un adorno que la mitad de las visitas, las del
+ * teléfono, no llegan a ver. Con `swap`, mientras tanto se lee en la
+ * tipografía normal. */
+const letraAMano = Caveat({
+  variable: "--font-mano",
+  subsets: ["latin"],
+  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -97,7 +110,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[lo
   return (
     <html
       lang={locale}
-      className={`${tituloSerif.variable} ${textoSans.variable} h-full antialiased`}
+      className={`${tituloSerif.variable} ${textoSans.variable} ${letraAMano.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         {/* Lo primero que encuentra quien navega con el teclado o con un

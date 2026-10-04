@@ -454,7 +454,25 @@
     "plazasFundador": "Solo 50 plazas",
     "gratisPrimerMes": "Empiezas con un mes gratis, en cualquiera de los tres.",
     "cancelar": "Cancela cuando quieras.",
-    "resumenCondiciones": "Un mes gratis en cualquiera de los tres · IVA incluido · Sin permanencia · Comisión del 0 %"
+    "resumenCondiciones": "Un mes gratis en cualquiera de los tres · IVA incluido · Sin permanencia · Comisión del 0 %",
+    "nota": "Invierte en el futuro de tu club.",
+    "franja": [
+      {
+        "clave": "cubre",
+        "titulo": "Una sola colaboración puede cubrir varios meses",
+        "texto": "Si consigues o mantienes un único patrocinador, el coste de ApoyaClub queda más que cubierto."
+      },
+      {
+        "clave": "renueva",
+        "titulo": "Organiza, cumple y renueva",
+        "texto": "No solo conseguir patrocinadores. Gestiona todo lo que prometes, demuestra resultados y haz que vuelvan a confiar en tu club."
+      },
+      {
+        "clave": "segura",
+        "titulo": "Sin ataduras",
+        "texto": "Primer mes gratis · Sin permanencia · Cancela cuando quieras · IVA incluido · Comisión del 0 %"
+      }
+    ]
   },
   "faq": {
     "titulo": "Preguntas frecuentes",

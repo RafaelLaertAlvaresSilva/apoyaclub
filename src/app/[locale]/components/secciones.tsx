@@ -1110,13 +1110,140 @@ export async function SeccionSector() {
  * `compacta` es la versión de la portada: los tres precios y poco más.
  * La lista de todo lo que incluye es larga y quien está comparando de
  * verdad ya ha entrado en la página de clubes. */
+/** Los iconos de la franja de abajo del precio. */
+const ICONO_DE_LA_FRANJA: Record<string, React.ReactNode> = {
+  cubre: (
+    <>
+      <path d="M3 17l5-5 3.5 3.5L20 7" />
+      <path d="M20 12V7h-5" />
+    </>
+  ),
+  renueva: (
+    <>
+      <path d="M20.5 11.5a8.5 8.5 0 00-15.2-5.2M3.5 12.5a8.5 8.5 0 0015.2 5.2" />
+      <path d="M20.5 5.5v6h-6M3.5 18.5v-6h6" />
+    </>
+  ),
+  segura: (
+    <>
+      <path d="M12 3l7 3v5.5c0 4.3-3 8-7 9.5-4-1.5-7-5.2-7-9.5V6l7-3z" />
+      <path d="M9 12l2 2 4-4" />
+    </>
+  ),
+};
+
+/**
+ * La nota al margen, escrita a mano.
+ *
+ * Solo a partir de `lg`. En un teléfono las tres tarjetas van una
+ * debajo de otra y no hay margen donde ponerla: acabaría de pie
+ * forzado encima del título, sumando una frase más a una pantalla que
+ * ya tiene bastante texto.
+ *
+ * `aria-hidden` en la flecha y no en la frase: la frase dice algo y un
+ * lector de pantalla debe leerla; la flecha solo señala.
+ */
+function NotaDelPrecio({ texto }: { texto: string }) {
+  return (
+    <div className="pointer-events-none absolute right-0 top-0 hidden w-60 select-none lg:block xl:w-64">
+      {/* `--font-mano` es la variable que pone next/font en el <html>.
+          No se pasa por un token de `@theme inline`, porque ese modo
+          mete los valores dentro de las utilidades y no publica la
+          variable: `var(...)` llegaba vacía y la frase salía en la
+          tipografía de los titulares. */}
+      <p className="text-right text-[1.6rem] leading-tight text-brand-navy [font-family:var(--font-mano),'Segoe_Script','Bradley_Hand',cursive] xl:text-3xl">
+        {texto}
+      </p>
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 120 90"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="ml-auto mt-2 h-16 w-28 text-brand-navy"
+      >
+        <path d="M108 8c4 30-12 58-44 70" />
+        <path d="M80 76l-16 2 4-16" />
+      </svg>
+    </div>
+  );
+}
+
+/**
+ * La franja de tres razones, debajo de los planes.
+ *
+ * Tampoco sale en el teléfono. Ahí la sección ya son tres tarjetas de
+ * plan apiladas, y añadir tres bloques más de texto detrás es pedirle
+ * a alguien que lea seis cosas seguidas en una pantalla de 6 pulgadas
+ * para decidir una compra de 29,90 €. En el ordenador caben en una
+ * fila y se leen de un vistazo, que es justo cuando ayudan.
+ */
+function FranjaDelPrecio({
+  bloques,
+}: {
+  bloques: { clave: string; titulo: string; texto: string }[];
+}) {
+  return (
+    <div className="mt-12 hidden rounded-3xl border border-zinc-200 bg-white/80 p-8 backdrop-blur-sm lg:grid lg:grid-cols-3 lg:gap-8">
+      {bloques.map((bloque) => (
+        <div key={bloque.clave} className="flex gap-4">
+          <span className="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-brand-teal-light text-brand-teal-dark">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-6 w-6"
+            >
+              {ICONO_DE_LA_FRANJA[bloque.clave] ?? ICONO_POR_DEFECTO}
+            </svg>
+          </span>
+          <div className="min-w-0">
+            <p className="font-extrabold leading-snug text-brand-navy">{bloque.titulo}</p>
+            <p className="mt-1.5 text-sm leading-relaxed text-zinc-600">{bloque.texto}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }) {
   const t = await getTranslations("home");
   const ventajas = t.raw("precio.ventajas") as string[];
+  const franja = t.raw("precio.franja") as { clave: string; titulo: string; texto: string }[];
 
   return (
-    <section id="precio" className="scroll-mt-32 bg-zinc-50 px-4 py-20 sm:px-6 sm:py-28">
-      <div className="mx-auto max-w-6xl">
+    <section
+      id="precio"
+      className="relative scroll-mt-32 overflow-hidden bg-zinc-50 px-4 py-20 sm:px-6 sm:py-28"
+    >
+      {/* La foto del campo, muy apagada y desvanecida por arriba y por
+          abajo. Las tarjetas son blancas y van encima: si la foto
+          pesara más, los precios dejarían de leerse, que es lo único
+          que esta sección tiene que conseguir. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <Image
+          src="/fondo-precio.webp"
+          alt=""
+          fill
+          loading="lazy"
+          sizes="100vw"
+          className="object-cover object-center opacity-25"
+        />
+        <div className="absolute inset-0 bg-zinc-50/60" />
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-zinc-50 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-zinc-50 to-transparent" />
+      </div>
+
+      <div className="relative mx-auto max-w-6xl">
+        <NotaDelPrecio texto={t("precio.nota")} />
+
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
             {t("precio.eyebrow")}
@@ -1174,17 +1301,26 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
 
         {/* Tres líneas de letra pequeña, una debajo de otra, no se leen:
             se saltan. En la portada van resumidas en una. */}
-        {compacta ? (
-          <p className="mt-7 text-center text-sm text-zinc-600">
-            {t("precio.resumenCondiciones")}
-          </p>
-        ) : (
-          <>
-            <p className="mt-7 text-center text-sm text-zinc-600">{t("precio.gratisPrimerMes")}</p>
-            <p className="mt-1 text-center text-sm text-zinc-500">{t("precio.cancelar")}</p>
-            <p className="mt-1 text-center text-sm text-zinc-500">{t("precio.comision")}</p>
-          </>
-        )}
+        {/* `lg:hidden`: a partir de ahí lo dice la tercera tarjeta de la
+            franja de abajo, y repetir las mismas condiciones dos veces
+            en el mismo pantallazo las hace menos creíbles, no más. */}
+        <div className="lg:hidden">
+          {compacta ? (
+            <p className="mt-7 text-center text-sm text-zinc-600">
+              {t("precio.resumenCondiciones")}
+            </p>
+          ) : (
+            <>
+              <p className="mt-7 text-center text-sm text-zinc-600">
+                {t("precio.gratisPrimerMes")}
+              </p>
+              <p className="mt-1 text-center text-sm text-zinc-500">{t("precio.cancelar")}</p>
+              <p className="mt-1 text-center text-sm text-zinc-500">{t("precio.comision")}</p>
+            </>
+          )}
+        </div>
+
+        <FranjaDelPrecio bloques={franja} />
 
         {!compacta && (
           <div className="mx-auto mt-12 max-w-3xl rounded-3xl border border-zinc-200 bg-white p-8">
