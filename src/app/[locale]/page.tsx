@@ -3,7 +3,6 @@ import { getTranslations } from "next-intl/server";
 import { Header } from "@/components/Header";
 import { CtaFijoMovil } from "./components/CtaFijoMovil";
 import {
-  CadenaDelConcepto,
   FondoDeHeroe,
   FuncionesDestacadas,
   SeccionComoFunciona,
@@ -112,12 +111,6 @@ export default async function Home() {
                 atajos; el detalle vive entero en /para-clubes y
                 /para-empresas, que es a donde llevan los botones. */}
             <PuertasDelHero />
-          </div>
-
-          {/* CLUB -> OPORTUNIDAD -> EMPRESA. Es el concepto entero de
-              ApoyaClub en tres palabras, y por eso está en el hero. */}
-          <div className="relative mt-14">
-            <CadenaDelConcepto />
           </div>
         </section>
 
