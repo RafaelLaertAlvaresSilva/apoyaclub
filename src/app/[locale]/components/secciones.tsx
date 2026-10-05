@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { CATEGORIAS_IDEA, TOTAL_DE_IDEAS } from "@/lib/catalogo-ideas";
 import { PLANES_EN_ORDEN, periodicidad, precioFormateado } from "@/lib/planes";
 import { FormularioContacto } from "./FormularioContacto";
+import { QuePuedesOfrecer } from "./QuePuedesOfrecer";
 
 /**
  * Las secciones largas de la portada, sueltas.
@@ -337,7 +338,6 @@ export async function SeccionComoFunciona() {
 
 export async function SeccionQueOfrece() {
   const t = await getTranslations("home");
-  const queOfrece = t.raw("ofrece.tarjetas") as string[];
 
   return (
     <section id="clubes" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
@@ -350,16 +350,13 @@ export async function SeccionQueOfrece() {
         </h2>
       </div>
 
-      <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-        {queOfrece.map((cosa) => (
-          <div
-            key={cosa}
-            className="rounded-2xl border border-zinc-200 bg-white px-4 py-5 text-center shadow-sm transition-colors hover:border-brand-teal/50"
-          >
-            <span className="text-sm font-bold text-brand-navy sm:text-[15px]">{cosa}</span>
-          </div>
-        ))}
-      </div>
+      {/* Las pastillas salen de `CATEGORIAS_IDEA`, no de los textos.
+          Antes eran una lista escrita a mano en `home.json` que se
+          había quedado en catorce mientras el catálogo tenía dieciséis.
+          Ver el comentario de `QuePuedesOfrecer`. */}
+      <QuePuedesOfrecer />
+
+      <p className="mt-4 text-center text-sm text-zinc-500">{t("ofrece.pie")}</p>
 
       <div className="mx-auto mt-12 max-w-2xl text-center">
         <p className="text-xl font-extrabold leading-snug text-brand-navy sm:text-2xl">
