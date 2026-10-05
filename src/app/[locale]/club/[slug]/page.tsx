@@ -23,6 +23,7 @@ import { Link } from "@/i18n/navigation";
 import { CompartirBoton } from "./components/CompartirBoton";
 import { DatosDeContacto } from "./components/DatosDeContacto";
 import { FotoAmpliable } from "./components/FotoAmpliable";
+import { DatosDestacados, datosDestacados } from "./components/DatosDestacados";
 import { IndiceDeSecciones } from "./components/IndiceDeSecciones";
 import { ListaConVerMas } from "./components/ListaConVerMas";
 import { RegistrarVisita } from "./components/RegistrarVisita";
@@ -108,6 +109,9 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
 
   const deportes = deportesDelClub(equipos);
   const ubicacion = [perfil.city, perfil.province].filter(Boolean).join(", ");
+  // La ficha en una línea, debajo del logo. Solo con lo que el club
+  // haya rellenado: ver `DatosDestacados`.
+  const destacados = datosDestacados(perfil, equipos, deportes, ubicacion);
   const urlPublica = `${SITE_URL}/${locale}/club/${perfil.slug}`;
 
   // La portada es ahora un campo propio (migración 0025). Si el club
@@ -977,13 +981,15 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                   </span>
                 )}
               </div>
-              <p className="mt-1 text-sm text-zinc-600 sm:text-base">
-                {[deportes.join(" · "), ubicacion].filter(Boolean).join(" · ")}
-              </p>
+              {/* Aquí había una línea gris con "deporte · ciudad". Lo
+                  dice ahora la fila de datos de abajo, con su icono y
+                  con dos datos más. Repetirlo sería decir lo mismo dos
+                  veces en cuatro centímetros. */}
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex shrink-0 flex-col gap-2.5 sm:items-end">
+            <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap">
             {/* Guardar el club para luego. Sin cuenta se queda en este
                 navegador; con cuenta de empresa, en la cuenta. */}
             <BotonFavorito
@@ -997,21 +1003,35 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                 veces en la misma página: "Contactar" baja justo al
                 apartado donde vuelve a salir. Dos botones que hacen lo
                 mismo, uno al lado del otro, obligan a elegir sin motivo. */}
-            <a
-              href="#contacto"
-              className="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
-            >
-              {t("portada.contactar")}
-            </a>
+              <a
+                href="#contacto"
+                className="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
+              >
+                {t("portada.contactar")}
+              </a>
+            </div>
+
+            {/* El sitio web y el vídeo, debajo de los botones y no en una
+                fila propia más abajo. Son enlaces que llevan FUERA de
+                ApoyaClub, así que viven con los otros botones de acción
+                y no entre el contenido de la ficha. */}
+            {mostrarEnlaces && (perfil.website || perfil.videoUrl) && (
+              <div className="flex flex-wrap gap-2 sm:justify-end">
+                {perfil.website && (
+                  <EnlaceSecundario href={perfil.website}>Sitio web</EnlaceSecundario>
+                )}
+                {perfil.videoUrl && (
+                  <EnlaceSecundario href={perfil.videoUrl}>Vídeo de presentación</EnlaceSecundario>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
-        {mostrarEnlaces && (
-          <div className="mx-auto mt-4 max-w-5xl px-4 sm:px-6">
-            <div className="flex flex-wrap gap-2">
-              {perfil.website && <EnlaceSecundario href={perfil.website}>Sitio web</EnlaceSecundario>}
-              {perfil.videoUrl && <EnlaceSecundario href={perfil.videoUrl}>Vídeo de presentación</EnlaceSecundario>}
-            </div>
+        {/* La ficha en una línea, debajo del logo. */}
+        {destacados.length > 0 && (
+          <div className="mx-auto mt-5 max-w-5xl px-4 sm:px-6">
+            <DatosDestacados datos={destacados} />
           </div>
         )}
 
