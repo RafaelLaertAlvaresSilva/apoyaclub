@@ -463,68 +463,216 @@ export async function SeccionOportunidades() {
    LA PÁGINA DEL CLUB
    ============================================================ */
 
+/**
+ * Los cuatro iconos de las ventajas de tener página.
+ *
+ * Dibujados con el mismo trazo que el resto de la web (24x24,
+ * `currentColor`, sin relleno): tres de ellos ya existían en otras
+ * secciones y se repiten aquí a propósito, porque son el mismo
+ * concepto. El del apretón de manos viene de Lucide (licencia ISC).
+ */
+const ICONO_DE_LA_VENTAJA: Record<string, React.ReactNode> = {
+  visibilidad: (
+    <path d="M16 20v-1.5a3.5 3.5 0 00-3.5-3.5h-5A3.5 3.5 0 004 18.5V20M10 11.5a3.25 3.25 0 100-6.5 3.25 3.25 0 000 6.5zM20 20v-1.5a3.5 3.5 0 00-2.6-3.4M15.5 5.2a3.25 3.25 0 010 6.1" />
+  ),
+  comunidad: <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />,
+  oportunidades: (
+    <>
+      <path d="m11 17 2 2a1 1 0 1 0 3-3" />
+      <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />
+      <path d="m21 3 1 11h-2" />
+      <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />
+      <path d="M3 4h8" />
+    </>
+  ),
+  gestion: (
+    <>
+      <path d="M8 4h8v5a4 4 0 01-8 0z" />
+      <path d="M8 5.5H5.5A2.5 2.5 0 008 8M16 5.5h2.5A2.5 2.5 0 0116 8M12 13v3.5M8.5 20h7" />
+    </>
+  ),
+};
+
+const VENTAJAS_DE_LA_PAGINA = ["visibilidad", "comunidad", "oportunidades", "gestion"] as const;
+
+/**
+ * La foto del pabellón de pádel, desvanecida, detrás de la sección.
+ *
+ * No usa `FondoDeHeroe` y no es un olvido: aquel vela la foto con un
+ * degradado radial centrado, porque los tres héroes que lo llevan
+ * tienen el texto en el medio. Aquí el texto está todo a la izquierda y
+ * la pantalla a la derecha, así que el velo va de lado: casi opaco
+ * donde hay que leer y más fino donde solo hay foto. Con el radial
+ * centrado, el párrafo de la izquierda se quedaba sobre la parte sin
+ * velar.
+ *
+ * Arriba y abajo se funde con el `zinc-50` de la página para que la
+ * foto no empiece y acabe con un corte recto.
+ */
+function FondoDeLaPaginaDelClub() {
+  return (
+    /* Sin `-z-10`, igual que `FondoDeHeroe`. Con él la foto no se veía:
+       un ancestro de esta sección lleva `bg-zinc-50`, y un hijo con
+       capa negativa se va DETRÁS de ese fondo, no detrás del texto. Lo
+       que pone el texto por delante es que su `<div>` viene después y
+       lleva `relative`. */
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+      <Image
+        src="/fondo-pagina-club.webp"
+        alt=""
+        fill
+        sizes="100vw"
+        loading="lazy"
+        /* Desenfocada y un poco más grande que su hueco. Nítida
+           competía con la captura del monitor —dos imágenes con detalle
+           peleando por la misma mirada— y dejaba las pelotas de la
+           esquina justo debajo de "Oportunidades". Desenfocada se lee
+           como lo que es: el fondo. El `scale` está porque el desenfoque
+           difumina también los bordes y, sin agrandarla, quedaba una
+           franja clara pegada a los cuatro lados. */
+        className="scale-110 object-cover object-center blur-[3px]"
+      />
+
+      {/* En el teléfono el texto ocupa todo el ancho, así que el velo
+          tiene que ser parejo y fuerte: ahí no hay un lado libre. */}
+      <div className="absolute inset-0 bg-white/78 lg:hidden" />
+
+      {/* En el ordenador, de izquierda a derecha: 93% de blanco donde
+          empieza el texto y 40% donde acaba la foto. El primer intento
+          iba de 95% a 46% y con la foto al 70% de opacidad, y el
+          resultado era un gris plano: no se veía que hubiera una foto
+          detrás. La foto va ahora a opacidad entera y es el velo, solo
+          el velo, el que decide dónde se ve y dónde no. */}
+      <div className="absolute inset-0 hidden bg-[linear-gradient(to_right,rgba(255,255,255,0.93),rgba(255,255,255,0.84)_38%,rgba(255,255,255,0.52)_66%,rgba(255,255,255,0.40)_100%)] lg:block" />
+
+      <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-zinc-50 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-zinc-50 to-transparent" />
+    </div>
+  );
+}
+
+/**
+ * La página del club, enseñada en la pantalla de un ordenador.
+ *
+ * Antes aquí había una maqueta dibujada con `<div>`: una portada de
+ * color liso, un escudo inventado y cuatro números —"12,4k seguidores",
+ * "48k de alcance"— que no eran de nadie. Enseñaba la idea de una
+ * página, no una página. Ahora es una captura de una página de verdad,
+ * con sus datos de verdad, dentro de un monitor.
+ *
+ * Eso cambia lo que hay que cuidar: una captura envejece. Si la ficha
+ * del club cambia de forma, esta imagen se queda contando la de antes,
+ * y no hay prueba que avise de eso. Por eso la captura es del club del
+ * propio autor y no de un cliente: cuando deje de parecerse, se vuelve
+ * a hacer.
+ */
 export async function SeccionPaginaClub() {
   const t = await getTranslations("home");
 
   return (
     <section
       id="tu-pagina"
-      className="mx-auto grid max-w-6xl scroll-mt-32 items-center gap-14 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[0.85fr_1.15fr]"
+      className="relative scroll-mt-32 overflow-hidden px-4 py-20 sm:px-6 sm:py-28"
     >
-      <div>
-        <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
-          {t("paginaClub.eyebrow")}
-        </p>
-        <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl">
-          {t("paginaClub.titulo")}
-        </h2>
-        <p className="mt-5 leading-relaxed text-zinc-600">{t("paginaClub.texto")}</p>
-        <p className="mt-4 leading-relaxed text-zinc-600">{t("paginaClub.texto2")}</p>
-      </div>
+      <FondoDeLaPaginaDelClub />
 
-      <div className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-xl shadow-brand-navy/10">
-        <div className="flex items-center gap-1.5 border-b border-zinc-200 bg-zinc-100 px-4 py-2.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
-          <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
-          <span className="h-2.5 w-2.5 rounded-full bg-zinc-300" aria-hidden="true" />
-          <span className="ml-2 truncate text-xs text-zinc-500">{t("paginaClub.maqueta.url")}</span>
+      <div className="relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <div>
+          {/* El epígrafe con su rayita al lado, como en el diseño. */}
+          <div className="flex items-center gap-3">
+            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+              {t("paginaClub.eyebrow")}
+            </p>
+            <span className="h-px w-12 flex-none bg-brand-teal/50" aria-hidden="true" />
+          </div>
+
+          <h2 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl">
+            {t("paginaClub.titulo")}
+          </h2>
+          <p className="mt-5 leading-relaxed text-zinc-600">{t("paginaClub.texto")}</p>
+          <p className="mt-4 leading-relaxed text-zinc-600">{t("paginaClub.texto2")}</p>
+
+          {/* Dos y dos, no cuatro en fila: aquí solo hay media pantalla
+              de ancho, y en cuatro columnas "Gestión sencilla" se parte
+              en tres líneas y descoloca a las otras tres. */}
+          <ul className="mt-9 grid grid-cols-2 gap-x-5 gap-y-7">
+            {VENTAJAS_DE_LA_PAGINA.map((ventaja) => (
+              <li key={ventaja}>
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-[22px] w-[22px]"
+                  >
+                    {ICONO_DE_LA_VENTAJA[ventaja]}
+                  </svg>
+                </span>
+                <p className="mt-3 text-[15px] font-bold text-brand-navy">
+                  {t(`paginaClub.ventajas.${ventaja}.titulo`)}
+                </p>
+                <p className="mt-1 text-sm leading-relaxed text-zinc-600">
+                  {t(`paginaClub.ventajas.${ventaja}.texto`)}
+                </p>
+              </li>
+            ))}
+          </ul>
         </div>
-        <div className="h-32 bg-gradient-to-br from-brand-navy to-brand-teal-dark" />
-        <div className="px-6">
-          <div className="-mt-8 flex h-16 w-16 items-center justify-center rounded-2xl border-4 border-white bg-white shadow-md">
-            <svg
-              width="26"
-              height="26"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="var(--brand-teal-dark)"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M12 2l3 7h7l-5.5 4.2L18.5 21 12 16.8 5.5 21l2-7.8L2 9h7z" />
-            </svg>
-          </div>
-        </div>
-        <div className="px-6 pb-6 pt-3.5">
-          <div className="text-[17px] font-extrabold text-brand-navy">
-            {t("paginaClub.maqueta.nombre")}
-          </div>
-          <div className="mt-2 flex flex-wrap gap-2">
-            <Badge tone="teal">{t("paginaClub.maqueta.etiqueta1")}</Badge>
-            <Badge tone="teal">{t("paginaClub.maqueta.etiqueta2")}</Badge>
-            <Badge tone="neutral">{t("paginaClub.maqueta.etiqueta3")}</Badge>
-          </div>
-          <div className="mt-4 grid grid-cols-4 gap-2.5 border-t border-zinc-100 pt-4">
-            <DatoMaqueta numero="12,4k" etiqueta={t("paginaClub.maqueta.seguidores")} />
-            <DatoMaqueta numero="48k" etiqueta={t("paginaClub.maqueta.alcance")} />
-            <DatoMaqueta numero="9" etiqueta={t("paginaClub.maqueta.equipos")} />
-            <DatoMaqueta numero="3" etiqueta={t("paginaClub.maqueta.oportunidades")} />
-          </div>
-        </div>
+
+        <MonitorConLaPagina
+          url={t("paginaClub.maqueta.url")}
+          alt={t("paginaClub.maqueta.alt")}
+        />
       </div>
     </section>
+  );
+}
+
+/**
+ * El monitor: marco, barra de navegador, captura, cuello y peana.
+ *
+ * El marco y la peana son `<div>` de color, no una imagen de un
+ * ordenador: una foto de monitor obliga a encajar la captura dentro con
+ * perspectiva y se ve mal en cuanto cambia el ancho. Dibujado, se
+ * adapta solo.
+ */
+function MonitorConLaPagina({ url, alt }: { url: string; alt: string }) {
+  return (
+    <div className="mx-auto w-full max-w-[560px] lg:max-w-none">
+      <div className="overflow-hidden rounded-2xl border-[10px] border-zinc-800 bg-zinc-800 shadow-2xl shadow-brand-navy/25 sm:border-[12px]">
+        <div className="overflow-hidden rounded-md bg-white">
+          <div className="flex items-center gap-1.5 bg-zinc-100 px-3 py-2">
+            <span className="h-2 w-2 rounded-full bg-zinc-300" aria-hidden="true" />
+            <span className="h-2 w-2 rounded-full bg-zinc-300" aria-hidden="true" />
+            <span className="h-2 w-2 rounded-full bg-zinc-300" aria-hidden="true" />
+            <span className="ml-2 truncate rounded bg-white px-2 py-0.5 text-[10px] text-zinc-500">
+              {url}
+            </span>
+          </div>
+
+          <Image
+            src="/pagina-club-ejemplo.webp"
+            alt={alt}
+            width={1331}
+            height={577}
+            loading="lazy"
+            sizes="(max-width: 1024px) 92vw, 560px"
+            className="block h-auto w-full"
+          />
+        </div>
+      </div>
+
+      {/* El cuello y la peana. `aria-hidden` porque no son información:
+          lo que hay que leer es la captura, y su texto va en el `alt`. */}
+      <div aria-hidden="true">
+        <div className="mx-auto h-5 w-16 bg-zinc-800" />
+        <div className="mx-auto h-2.5 w-36 rounded-full bg-zinc-800" />
+      </div>
+    </div>
   );
 }
 
@@ -2021,15 +2169,6 @@ export async function PuertasDelHero() {
 /* ============================================================
    PIEZAS SUELTAS
    ============================================================ */
-
-function DatoMaqueta({ numero, etiqueta }: { numero: string; etiqueta: string }) {
-  return (
-    <div>
-      <div className="text-base font-extrabold text-brand-navy">{numero}</div>
-      <div className="text-[11px] text-zinc-500">{etiqueta}</div>
-    </div>
-  );
-}
 
 /** Una casilla del buscador de empresas: la pregunta y la respuesta. */
 function CasillaFiltro({ etiqueta, valor }: { etiqueta: string; valor: string }) {

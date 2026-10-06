@@ -175,14 +175,25 @@
     "texto2": "Y siempre visibles, tus oportunidades de patrocinio disponibles.",
     "maqueta": {
       "url": "apoyaclub.com/club/tu-club",
-      "nombre": "Nombre del club",
-      "etiqueta1": "Fútbol",
-      "etiqueta2": "Cantera",
-      "etiqueta3": "3ª RFEF",
-      "seguidores": "Seguidores",
-      "alcance": "Alcance",
-      "equipos": "Equipos",
-      "oportunidades": "Oportunidades"
+      "alt": "La página pública de un club en ApoyaClub: foto de portada, escudo, nombre y, debajo, el deporte, la máxima categoría, los jugadores, los equipos de cantera y la ciudad."
+    },
+    "ventajas": {
+      "visibilidad": {
+        "titulo": "Visibilidad",
+        "texto": "Muestra la identidad de tu club y llega a más personas."
+      },
+      "comunidad": {
+        "titulo": "Comunidad",
+        "texto": "Conecta con deportistas, familias y aficionados."
+      },
+      "oportunidades": {
+        "titulo": "Oportunidades",
+        "texto": "Atrae patrocinadores y colaboradores."
+      },
+      "gestion": {
+        "titulo": "Gestión sencilla",
+        "texto": "Actualiza tu club en pocos minutos."
+      }
     }
   },
   "herramientas": {
