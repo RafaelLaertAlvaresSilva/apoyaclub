@@ -81,7 +81,12 @@ export default async function RenovacionesPage() {
       </div>
 
       {avisan > 0 && (
-        <p className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+        /* Mismo molde que `AvisoError` y `AvisoExito`
+           (`src/components/AvisoError.tsx`), que son los avisos del
+           resto de la web: `rounded-lg`, borde al 200, fondo al 50 y
+           texto al 800. El que había aquí era más alto y más oscuro
+           que cualquier otro aviso del panel. */
+        <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
           Tienes <strong>{avisan}</strong>{" "}
           {avisan === 1 ? "renovación que necesita" : "renovaciones que necesitan"} que escribas
           ya.
