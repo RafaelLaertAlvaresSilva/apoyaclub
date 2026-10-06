@@ -89,6 +89,9 @@ export function patrocinadorDePrueba(cambios: Partial<ClubSponsor> = {}): ClubSp
     sortOrder: 0,
     contactEmail: null,
     notifiedAt: null,
+    renewalDate: null,
+    agreementEndsOn: null,
+    renewalNotes: null,
     ...cambios,
   };
 }

@@ -34,8 +34,12 @@ describe("el menú del panel", () => {
 
   // Sin esto, un cambio que rompiera la forma del archivo dejaría la
   // lista vacía y las comprobaciones de abajo pasarían sin mirar nada.
-  it("encuentra los doce destinos del menú", () => {
-    expect(destinos).toHaveLength(12);
+  it("encuentra los trece destinos del menú", () => {
+    // Trece desde que "Renovaciones" entró en Seguimiento (migración
+    // 0050). Este número está escrito a mano a propósito: si alguien
+    // añade o quita un apartado, esta prueba se lo recuerda y le hace
+    // mirar las de abajo, que son las que de verdad comprueban algo.
+    expect(destinos).toHaveLength(13);
   });
 
   it("todos sus enlaces llevan a una página que existe", () => {

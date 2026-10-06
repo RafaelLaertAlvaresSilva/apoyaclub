@@ -104,6 +104,12 @@ export type ClubSponsorRow = {
   sort_order: number | null;
   contact_email?: string | null;
   notified_at?: string | null;
+  // Opcionales a propósito: hasta que no se aplique la migración 0050
+  // estas columnas no existen, y la aplicación tiene que seguir
+  // funcionando sin ellas.
+  renewal_date?: string | null;
+  agreement_ends_on?: string | null;
+  renewal_notes?: string | null;
 };
 
 export function clubRowToProfile(row: ClubRow): ClubProfile {
@@ -195,6 +201,9 @@ export function clubSponsorRowToSponsor(row: ClubSponsorRow): ClubSponsor {
     sortOrder: row.sort_order ?? 0,
     contactEmail: row.contact_email ?? null,
     notifiedAt: row.notified_at ?? null,
+    renewalDate: row.renewal_date ?? null,
+    agreementEndsOn: row.agreement_ends_on ?? null,
+    renewalNotes: row.renewal_notes ?? null,
   };
 }
 

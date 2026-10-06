@@ -71,6 +71,10 @@ const GRUPOS: Grupo[] = [
     titulo: "Seguimiento",
     enlaces: [
       { id: "patrocinadores", href: "/panel/patrocinadores", etiqueta: "Patrocinadores" },
+      // Hasta cuándo dura cada patrocinio y cuándo toca escribir
+      // (migración 0050). Va aquí y no en "Buscar patrocinadores"
+      // porque renovar no es captar: es cumplir con quien ya está.
+      { id: "renovaciones", href: "/panel/renovaciones", etiqueta: "Renovaciones" },
       { id: "tareas", href: "/panel/tareas", etiqueta: "Tareas" },
     ],
   },
@@ -192,12 +196,14 @@ function SeccionesDeLaFicha({
 function Lista({
   sinAbrir,
   vencidas,
+  renovaciones,
   paginaPublica,
   perfilCreado,
   alNavegar,
 }: {
   sinAbrir: number;
   vencidas: number;
+  renovaciones: number;
   paginaPublica: string | null;
   perfilCreado: boolean;
   alNavegar?: () => void;
@@ -224,7 +230,13 @@ function Lista({
           {grupo.enlaces.map((enlace) => {
             const abierto = estaAbierto(ruta, enlace.href);
             const contador =
-              enlace.id === "solicitudes" ? sinAbrir : enlace.id === "tareas" ? vencidas : 0;
+              enlace.id === "solicitudes"
+                ? sinAbrir
+                : enlace.id === "tareas"
+                  ? vencidas
+                  : enlace.id === "renovaciones"
+                    ? renovaciones
+                    : 0;
 
             const clases = `${CLASES_ENLACE} ${
               abierto
@@ -335,11 +347,13 @@ function Lista({
 export function MenuDelPanel({
   sinAbrir,
   vencidas,
+  renovaciones,
   paginaPublica,
   perfilCreado,
 }: {
   sinAbrir: number;
   vencidas: number;
+  renovaciones: number;
   paginaPublica: string | null;
   perfilCreado: boolean;
 }) {
@@ -370,7 +384,7 @@ export function MenuDelPanel({
     };
   }, [abierto]);
 
-  const avisos = sinAbrir + vencidas;
+  const avisos = sinAbrir + vencidas + renovaciones;
 
   return (
     <>
@@ -389,6 +403,7 @@ export function MenuDelPanel({
           <Lista
             sinAbrir={sinAbrir}
             vencidas={vencidas}
+            renovaciones={renovaciones}
             paginaPublica={paginaPublica}
             perfilCreado={perfilCreado}
           />
@@ -434,6 +449,7 @@ export function MenuDelPanel({
               <Lista
                 sinAbrir={sinAbrir}
                 vencidas={vencidas}
+                renovaciones={renovaciones}
                 paginaPublica={paginaPublica}
                 perfilCreado={perfilCreado}
                 alNavegar={() => setAbierto(false)}

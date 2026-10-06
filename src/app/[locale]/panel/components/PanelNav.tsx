@@ -1,4 +1,5 @@
 import { contarSolicitudesNuevas } from "@/lib/contact-requests";
+import { contarRenovacionesQueAvisanDelClub } from "@/lib/renovaciones-datos";
 import { contarTareasVencidas } from "@/lib/tareas-datos";
 import { MenuDelPanel } from "./MenuDelPanel";
 
@@ -25,15 +26,17 @@ export async function PanelNav({
   paginaPublica: string | null;
   perfilCreado: boolean;
 }) {
-  const [sinAbrir, vencidas] = await Promise.all([
+  const [sinAbrir, vencidas, renovaciones] = await Promise.all([
     contarSolicitudesNuevas(),
     contarTareasVencidas(),
+    contarRenovacionesQueAvisanDelClub(),
   ]);
 
   return (
     <MenuDelPanel
       sinAbrir={sinAbrir}
       vencidas={vencidas}
+      renovaciones={renovaciones}
       paginaPublica={paginaPublica}
       perfilCreado={perfilCreado}
     />

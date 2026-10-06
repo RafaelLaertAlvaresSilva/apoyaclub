@@ -205,6 +205,14 @@ export type ClubSponsor = {
   contactEmail: string | null;
   /** Cuándo se le mandó el agradecimiento. Solo se manda una vez. */
   notifiedAt: string | null;
+  /** Cuándo toca escribir para hablar de la renovación (migración 0050).
+   * No es cuándo acaba el acuerdo: es cuándo hay que ponerse, que
+   * siempre va antes. */
+  renewalDate: string | null;
+  /** Cuándo acaba el acuerdo (migración 0050). */
+  agreementEndsOn: string | null;
+  /** Qué se acordó y qué recordar al escribir (migración 0050). */
+  renewalNotes: string | null;
 };
 
 /** Nombre que se enseña para la categoría de un patrocinador. */
