@@ -1095,7 +1095,7 @@ export async function SeccionEmbudo() {
   const estadosEmbudo = t.raw("embudo.estados") as { nombre: string; texto: string }[];
 
   return (
-    <section id="seguimiento" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
+    <section id="seguimiento" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-14 sm:px-6 sm:py-28">
       <div className="mx-auto max-w-2xl text-center">
         <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
           {t("embudo.eyebrow")}
@@ -1109,21 +1109,39 @@ export async function SeccionEmbudo() {
       {/* Sin esta línea, las cuatro casillas son cuatro palabras
           sueltas: nadie sabe si hay que elegir una, si son opciones o
           si van en orden. */}
-      <p className="mt-10 text-center text-sm font-semibold text-brand-navy">
+      <p className="mt-8 text-center text-sm font-semibold text-brand-navy sm:mt-10">
         {t("embudo.comoSeLee")}
       </p>
 
-      <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* LAS MISMAS CUATRO CASILLAS Y LAS MISMAS PALABRAS, EN MENOS CAJA.
+          En el teléfono eran cuatro tarjetas sueltas, cada una con su
+          borde, su sombra y 24 px de relleno por lado, y el número
+          encima del nombre en vez de a su lado: 704 px para cuatro
+          frases cortas.
+
+          Ahora, en el teléfono, las cuatro van dentro de un solo
+          recuadro separadas por una raya, y el número va al lado del
+          nombre. A partir de `sm` vuelven a ser cuatro tarjetas con sus
+          flechas, que es donde esa forma se entiende.
+
+          Es la MISMA lista, con las mismas clases cambiando de
+          significado según el ancho, no dos listas con una escondida:
+          duplicar el contenido para enseñar uno u otro deja el texto dos
+          veces en la página y da el doble de trabajo cada vez que se
+          cambia una palabra. */}
+      <ol className="mt-6 divide-y divide-zinc-200 overflow-hidden rounded-2xl border border-zinc-200 bg-white sm:grid sm:gap-4 sm:divide-y-0 sm:border-0 sm:bg-transparent sm:grid-cols-2 lg:grid-cols-4">
         {estadosEmbudo.map((estado, indice) => (
           <li
             key={estado.nombre}
-            className="relative rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm"
+            className="relative p-4 sm:rounded-2xl sm:border sm:border-zinc-200 sm:bg-white sm:p-6 sm:shadow-sm"
           >
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-teal-light text-sm font-extrabold text-brand-teal-dark">
-              {indice + 1}
-            </span>
-            <h3 className="mt-4 font-extrabold text-brand-navy">{estado.nombre}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-600">{estado.texto}</p>
+            <div className="flex items-center gap-2.5 sm:block">
+              <span className="inline-flex h-7 w-7 flex-none items-center justify-center rounded-full bg-brand-teal-light text-sm font-extrabold text-brand-teal-dark sm:h-8 sm:w-8">
+                {indice + 1}
+              </span>
+              <h3 className="font-extrabold text-brand-navy sm:mt-4">{estado.nombre}</h3>
+            </div>
+            <p className="mt-1.5 text-sm leading-relaxed text-zinc-600 sm:mt-2">{estado.texto}</p>
 
             {/* La flecha entre casillas solo tiene sentido cuando van en
                 fila; apiladas en el móvil sobra. */}
@@ -1145,14 +1163,14 @@ export async function SeccionEmbudo() {
           Era `bg-zinc-50`, que funcionaba cuando el fondo de la página
           era blanco; desde que el fondo es el lienzo —del mismo tono—
           esta caja desaparecía del todo. */}
-      <div className="mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-center gap-3 rounded-2xl border border-zinc-200 bg-white px-6 py-5 text-center">
+      <div className="mx-auto mt-5 flex max-w-3xl flex-wrap items-center justify-center gap-2.5 rounded-2xl border border-zinc-200 bg-white px-5 py-4 text-center sm:mt-6 sm:gap-3 sm:px-6 sm:py-5">
         <span className="rounded-full border border-zinc-300 bg-white px-4 py-1.5 text-sm font-semibold text-zinc-500">
           {t("embudo.descartada")}
         </span>
         <span className="text-sm leading-relaxed text-zinc-600">{t("embudo.descartadaTexto")}</span>
       </div>
 
-      <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] font-medium leading-relaxed text-brand-navy sm:text-base">
+      <p className="mx-auto mt-8 max-w-2xl text-center text-[15px] font-medium leading-relaxed text-brand-navy sm:mt-10 sm:text-base">
         {t("embudo.cierre")}
       </p>
     </section>
@@ -1163,56 +1181,20 @@ export async function SeccionEmbudo() {
    DOSSIER
    ============================================================ */
 
-export async function SeccionDossier() {
-  const t = await getTranslations("home");
+/* La sección suelta "Dossier automático" vivía aquí.
+ *
+ * Decía lo mismo que la primera de las doce herramientas que venía
+ * justo debajo —"Dossier en PDF y en Word"—: el mismo argumento, dos
+ * veces seguidas, con su propio título, su párrafo y un botón de
+ * mentira. 719 px en un teléfono para no añadir nada.
+ *
+ * Lo único suyo que no estaba repetido era la maqueta de las dos hojas,
+ * que es la única vez en toda la web que se ve qué pinta tiene un
+ * dossier. Eso no se tira: se ha mudado dentro de la tarjeta del
+ * dossier, que es donde está el argumento. Así se ve lo mismo y se
+ * dice una sola vez.
+ */
 
-  return (
-    <section className="bg-zinc-50 px-4 py-20 sm:px-6 sm:py-28">
-      <div className="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-2">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
-            {t("dossier.eyebrow")}
-          </p>
-          <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl">
-            {t("dossier.titulo")}
-          </h2>
-          <p className="mt-5 leading-relaxed text-zinc-600">{t("dossier.texto")}</p>
-          <span className="mt-8 inline-flex items-center gap-2.5 rounded-2xl bg-brand-navy px-7 py-4 text-base font-bold text-white">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M12 3v12M7 11l5 5 5-5M4 21h16" />
-            </svg>
-            {t("dossier.boton")}
-          </span>
-        </div>
-
-        {/* Maqueta de las dos primeras hojas del dossier. */}
-        <div className="flex justify-center gap-5">
-          <HojaDeDossier />
-          <HojaDeDossier segunda />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
-   EL PANEL Y LAS HERRAMIENTAS
-   ============================================================ */
-
-/** La lista entera, no una muestra. Un club que se plantea pagar 29,90 €
- * al mes está comparando con "me lo hago yo con un PDF y una hoja de
- * cálculo", y esa comparación solo se gana enseñando todo lo que hay
- * dentro. */
 export async function SeccionPanelYHerramientas() {
   const t = await getTranslations("home");
   const herramientas = t.raw("herramientas.lista") as Herramienta[];
@@ -1260,14 +1242,68 @@ export async function SeccionPanelYHerramientas() {
           <p className="mt-4 leading-relaxed text-zinc-600">{t("herramientas.texto")}</p>
         </div>
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {/* DOCE HERRAMIENTAS, CADA UNA CON SU PÁRRAFO LARGO, ERAN 4.033 px
+            en un teléfono: el 21 % de toda la página, más que ninguna
+            otra sección. Y no sobraba ninguna herramienta —son las doce
+            que trae el plan— sino el párrafo de cada una, que ahí
+            seguido se lee como un muro.
+
+            Ahora se ve la línea corta y el párrafo largo se abre al
+            pulsar. El texto corto ya estaba escrito (`corto`, el que usa
+            la portada), así que no hay nada nuevo que redactar ni nada
+            que se pierda: los dos textos siguen en la página, uno a la
+            vista y otro a un toque.
+
+            Es `<details>` y no un botón con estado: no necesita
+            JavaScript, se abre con el teclado, se puede buscar dentro
+            con Ctrl+F y los buscadores leen el texto de dentro aunque
+            esté cerrado. */}
+        <div className="mt-12 grid items-start gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {herramientas.map((herramienta) => (
-            <div key={herramienta.clave} className="rounded-2xl border border-zinc-200 bg-white p-6">
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
-                <IconoHerramienta clave={herramienta.clave} />
-              </span>
-              <h4 className="mt-4 font-extrabold text-brand-navy">{herramienta.titulo}</h4>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-600">{herramienta.texto}</p>
+            <div
+              key={herramienta.clave}
+              className="rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6"
+            >
+              <details className="group">
+                <summary className="flex cursor-pointer list-none items-start gap-3 [&::-webkit-details-marker]:hidden">
+                  <span className="inline-flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+                    <IconoHerramienta clave={herramienta.clave} />
+                  </span>
+
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-extrabold text-brand-navy">
+                      {herramienta.titulo}
+                    </span>
+                    <span className="mt-1 block text-sm leading-relaxed text-zinc-600">
+                      {herramienta.corto}
+                    </span>
+                  </span>
+
+                  <span
+                    aria-hidden="true"
+                    className="mt-1 flex-none text-zinc-400 transition-transform group-open:rotate-180"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </span>
+                </summary>
+
+                <p className="mt-3 border-t border-zinc-100 pt-3 text-sm leading-relaxed text-zinc-600">
+                  {herramienta.texto}
+                </p>
+              </details>
+
+              {/* La maqueta del dossier, que antes tenía sección propia.
+                  Va FUERA del `<details>` y no dentro: es la única vez
+                  en toda la web que se ve qué pinta tiene un dossier, y
+                  escondida tras un clic no la vería casi nadie. */}
+              {herramienta.clave === "dossier" && (
+                <div className="mt-5 flex justify-center gap-4">
+                  <HojaDeDossier pequena />
+                  <HojaDeDossier pequena segunda />
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -2266,13 +2302,21 @@ function CasillaFiltro({ etiqueta, valor }: { etiqueta: string; valor: string })
 }
 
 /** Hoja del dossier: líneas grises, sin texto inventado. */
-function HojaDeDossier({ segunda = false }: { segunda?: boolean }) {
+/** `pequena` es la que va dentro de la tarjeta de la herramienta, que
+ * tiene un tercio del ancho que tenía la sección suelta de antes. */
+function HojaDeDossier({
+  segunda = false,
+  pequena = false,
+}: {
+  segunda?: boolean;
+  pequena?: boolean;
+}) {
   return (
     <div
       aria-hidden="true"
-      className={`w-36 flex-none rounded-xl border border-zinc-200 bg-white p-4 shadow-xl shadow-brand-navy/10 sm:w-44 ${
-        segunda ? "mt-8 rotate-2" : "-rotate-2"
-      }`}
+      className={`flex-none rounded-xl border border-zinc-200 bg-white p-4 shadow-xl shadow-brand-navy/10 ${
+        pequena ? "w-28" : "w-36 sm:w-44"
+      } ${segunda ? "mt-8 rotate-2" : "-rotate-2"}`}
     >
       <div className="mb-3 h-2 w-3/5 rounded bg-brand-navy" />
       <div className="mb-1.5 h-1 w-full rounded bg-zinc-200" />

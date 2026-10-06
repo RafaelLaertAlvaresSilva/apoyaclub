@@ -563,7 +563,7 @@
     "eyebrow": "Cuando una empresa te escribe",
     "titulo": "No se te pierde ningún mensaje",
     "texto": "Cada empresa que te escribe aparece en una lista dentro de tu panel. Tú la vas moviendo según cómo va la conversación, y de un vistazo ves a quién tienes pendiente de contestar.",
-    "comoSeLee": "Así se mueve un mensaje, de izquierda a derecha:",
+    "comoSeLee": "Así se mueve un mensaje, paso a paso:",
     "estados": [
       {
         "nombre": "Nueva",
@@ -585,12 +585,6 @@
     "descartada": "Descartada",
     "descartadaTexto": "Si la empresa no encajaba, la apartas y deja de molestar. No se borra: el año que viene puede volver a interesarte.",
     "cierre": "En resumen: te escriben, lo ves todo en un sitio, y cuando cerráis el acuerdo ApoyaClub te va recordando lo que te toca hacer para cumplirlo."
-  },
-  "dossier": {
-    "eyebrow": "Dossier automático",
-    "titulo": "Tu club, presentado como merece",
-    "texto": "Crea tu información una vez y genera un dossier profesional para compartir con empresas. En PDF para mandarlo y en Word por si quieres retocarlo.",
-    "boton": "Generar dossier"
   },
   "ctaFijo": {
     "texto": "Prueba 1 mes gratis"

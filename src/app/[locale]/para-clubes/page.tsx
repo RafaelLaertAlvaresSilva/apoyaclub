@@ -10,7 +10,6 @@ import {
   SeccionComoFunciona,
   SeccionContacto,
   SeccionCtaFinal,
-  SeccionDossier,
   SeccionEmbudo,
   SeccionFaq,
   SeccionOportunidades,
@@ -103,7 +102,6 @@ export default async function ParaClubesPage() {
         <SeccionOportunidades />
         <SeccionPaginaClub />
         <SeccionEmbudo />
-        <SeccionDossier />
         <SeccionPanelYHerramientas />
         <SeccionPrecio />
         <SeccionFaq />
