@@ -102,6 +102,20 @@ export function datosDestacados(
   ].filter((dato): dato is Dato => Boolean(dato));
 }
 
+/**
+ * TODO LO QUE SE ENCOGE, SE ENCOGE SOLO EN EL TELÉFONO (`sm:` devuelve
+ * el tamaño de antes). En una pantalla de 390 px las cinco tarjetas
+ * llevaban el relleno y la letra del ordenador y ocupaban tres filas
+ * largas: la ficha empezaba por el nombre del club y seguía con un
+ * muro de cajas antes de llegar a nada más.
+ *
+ * Se toca el relleno, el cuadro del icono y el cuerpo de la letra. NO
+ * se toca la disposición: siguen siendo dos columnas con el icono
+ * encima del texto. Ponerlo al lado es justo lo que se probó y se
+ * descartó —ver el comentario de abajo—, porque deja al valor con dos
+ * tercios del ancho y parte "Primera Nacional (M) · División Oro (F)"
+ * en cuatro líneas, que es más alto, no menos.
+ */
 export function DatosDestacados({ datos }: { datos: Dato[] }) {
   if (datos.length === 0) return null;
 
@@ -126,13 +140,13 @@ export function DatosDestacados({ datos }: { datos: Dato[] }) {
              * el último se quedaría solo y a media anchura: ahí ocupa la
              * fila entera. A partir de `md` son cinco columnas y esto ya
              * no hace falta. */
-          className={`flex min-w-0 flex-col gap-2 rounded-xl border border-zinc-200 bg-white px-3 py-3 sm:px-3.5 ${
+          className={`flex min-w-0 flex-col gap-1.5 rounded-xl border border-zinc-200 bg-white px-2.5 py-2.5 sm:gap-2 sm:px-3.5 sm:py-3 ${
             indice === datos.length - 1 && datos.length % 2 === 1
               ? "col-span-2 md:col-span-1"
               : ""
           }`}
         >
-          <span className="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-teal-50 text-teal-700">
+          <span className="flex h-7 w-7 flex-none items-center justify-center rounded-lg bg-teal-50 text-teal-700 sm:h-8 sm:w-8">
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
@@ -141,14 +155,14 @@ export function DatosDestacados({ datos }: { datos: Dato[] }) {
               strokeWidth="1.7"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-[18px] w-[18px]"
+              className="h-4 w-4 sm:h-[18px] sm:w-[18px]"
             >
               {ICONO[dato.clave]}
             </svg>
           </span>
 
           <div className="min-w-0">
-            <dt className="text-[11px] font-medium uppercase tracking-wide text-zinc-500">
+            <dt className="text-[10px] font-medium uppercase tracking-wide text-zinc-500 sm:text-[11px]">
               {dato.etiqueta}
             </dt>
             {/* Sin `truncate`: el valor se parte en dos líneas antes
@@ -157,7 +171,7 @@ export function DatosDestacados({ datos }: { datos: Dato[] }) {
                 "Primera Naci…" deja al club sin decir en qué compite,
                 que es justo lo que se vino a mirar. La tarjeta crece y
                 sus vecinas crecen con ella (`items-stretch`). */}
-            <dd className="text-sm font-bold leading-snug text-zinc-900">{dato.valor}</dd>
+            <dd className="text-[13px] font-bold leading-snug text-zinc-900 sm:text-sm">{dato.valor}</dd>
           </div>
         </div>
       ))}

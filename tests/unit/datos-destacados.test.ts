@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { datosDestacados } from "@/app/[locale]/club/[slug]/components/DatosDestacados";
 import { equipoDePrueba, perfilDePrueba } from "../fixtures/club";
@@ -99,5 +101,54 @@ describe("los datos destacados de un club", () => {
       "cantera",
       "ubicacion",
     ]);
+  });
+});
+
+/**
+ * Lo encogido para el teléfono tiene que seguir siendo grande en el
+ * ordenador.
+ *
+ * Las cinco tarjetas y la portada se hicieron más pequeñas SOLO en el
+ * teléfono: ahí la portada se comía 256 px —media pantalla— antes de
+ * llegar al nombre del club, y las tarjetas llevaban el relleno y la
+ * letra del ordenador. En el ordenador las dos cosas estaban bien.
+ *
+ * El fallo que esto vigila es silencioso. Basta con que alguien quite
+ * un `sm:` al retocar una clase para que el ordenador se encoja
+ * también, y nadie lo vería: quien toca esto lo está mirando en el
+ * teléfono, que es donde se pidió el cambio. La web se quedaría con
+ * una ficha diminuta en pantalla grande hasta que un club se quejara.
+ *
+ * Por eso se comprueban por parejas: el tamaño pequeño y el `sm:` que
+ * devuelve el de antes. Si mañana hay que cambiar una medida, se
+ * cambia aquí también —ese es el trabajo que esta prueba pide a
+ * cambio—, pero no se puede borrar media pareja sin enterarse.
+ */
+describe("las medidas de la ficha en el teléfono", () => {
+  const RAIZ = join(process.cwd(), "src", "app", "[locale]", "club", "[slug]");
+  const TARJETAS = readFileSync(join(RAIZ, "components", "DatosDestacados.tsx"), "utf8");
+  const PAGINA = readFileSync(join(RAIZ, "page.tsx"), "utf8");
+
+  // Sin esto, un archivo renombrado o vacío dejaría pasar todo lo demás.
+  it("encuentra los dos archivos", () => {
+    expect(TARJETAS).toContain("export function DatosDestacados");
+    expect(PAGINA).toContain("object-cover");
+  });
+
+  it("la portada es más baja en el teléfono y sigue alta en el ordenador", () => {
+    expect(PAGINA).toContain("h-44 w-full overflow-hidden");
+    expect(PAGINA).toContain("sm:h-80");
+  });
+
+  it.each([
+    ["el relleno de la tarjeta", "px-2.5 py-2.5", "sm:px-3.5 sm:py-3"],
+    ["el hueco de dentro", "gap-1.5", "sm:gap-2"],
+    ["el cuadro del icono", "h-7 w-7", "sm:h-8 sm:w-8"],
+    ["el icono", "h-4 w-4", "sm:h-[18px] sm:w-[18px]"],
+    ["el rótulo", "text-[10px]", "sm:text-[11px]"],
+    ["el valor", "text-[13px]", "sm:text-sm"],
+  ])("%s se encoge en el teléfono y vuelve a su tamaño en el ordenador", (_, movil, ordenador) => {
+    expect(TARJETAS).toContain(movil);
+    expect(TARJETAS).toContain(ordenador);
   });
 });

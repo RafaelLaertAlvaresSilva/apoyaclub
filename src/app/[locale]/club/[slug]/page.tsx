@@ -913,9 +913,15 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
       <Header />
 
       <header className="relative">
-        {/* Portada de lado a lado. Más alta que antes: es lo primero que
-            ve una empresa y con 224 px apenas se distinguía la foto. */}
-        <div className="relative h-64 w-full overflow-hidden bg-gradient-to-br from-teal-600 to-teal-800 sm:h-80">
+        {/* Portada de lado a lado.
+            En el ordenador es alta a propósito: es lo primero que ve una
+            empresa y con 224 px apenas se distinguía la foto.
+            En el teléfono no: ahí 256 px se comían media pantalla antes
+            de llegar al nombre del club, y lo que una empresa viene a
+            leer —quién es y en qué compite— quedaba fuera. 176 px siguen
+            siendo una franja que se ve, y quien quiera la foto entera
+            tiene "Ver foto completa", que para eso está. */}
+        <div className="relative h-44 w-full overflow-hidden bg-gradient-to-br from-teal-600 to-teal-800 sm:h-80">
           {portada && (
             <Image
               src={portada}
