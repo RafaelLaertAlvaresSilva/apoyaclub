@@ -105,23 +105,34 @@ export function datosDestacados(
 export function DatosDestacados({ datos }: { datos: Dato[] }) {
   if (datos.length === 0) return null;
 
-  // Fila horizontal que salta de línea si no cabe, en vez de una línea
-  // forzada. Forzándola, el club con dos categorías —masculina y
-  // femenina— dejaba a los demás datos en "Balon…" y "Benidorm, A…", y
-  // cortar "Benidorm, Alicante" es perder justo el dato por el que una
-  // empresa mira esta ficha. Con la mayoría de clubes los cinco caben
-  // de una tirada igual.
+  // Una rejilla y no una fila que se reparte sola: con `flex`, cada
+  // tarjeta medía lo que medía su texto, y al club con dos categorías
+  // —masculina y femenina— se le iba la quinta a una segunda fila,
+  // suelta y a media anchura. En rejilla las cinco miden lo mismo y
+  // acaban a la misma altura, y el valor largo se parte en dos líneas
+  // en vez de descolocar a las demás.
   return (
-    <dl className="flex flex-wrap items-stretch gap-2 sm:gap-3">
-      {datos.map((dato) => (
+    <dl className="grid grid-cols-2 items-stretch gap-2 sm:gap-3 md:grid-cols-5">
+      {datos.map((dato, indice) => (
         <div
           key={dato.clave}
-          /* `items-start` y no `items-center`: cuando un valor ocupa
-             tres líneas, el icono centrado se queda flotando a media
-             altura y la tarjeta parece mal montada. */
-          className="flex min-w-0 flex-1 basis-[calc(50%-0.25rem)] items-start gap-2.5 rounded-xl border border-zinc-200 bg-white px-3 py-2.5 sm:flex-none sm:basis-auto sm:px-3.5"
+          /* El icono arriba y el texto debajo, no en dos columnas. Al
+             lado, al texto le quedaban dos tercios del ancho y "Primera
+             Nacional (M) · Primera Autonómica (F)" se partía en cuatro
+             líneas, estirando a las otras cuatro tarjetas con él. Encima,
+             el texto usa la tarjeta entera y se queda en dos.
+             *
+             * En el teléfono van de dos en dos, así que con cinco datos
+             * el último se quedaría solo y a media anchura: ahí ocupa la
+             * fila entera. A partir de `md` son cinco columnas y esto ya
+             * no hace falta. */
+          className={`flex min-w-0 flex-col gap-2 rounded-xl border border-zinc-200 bg-white px-3 py-3 sm:px-3.5 ${
+            indice === datos.length - 1 && datos.length % 2 === 1
+              ? "col-span-2 md:col-span-1"
+              : ""
+          }`}
         >
-          <span className="mt-0.5 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-teal-50 text-teal-700">
+          <span className="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-teal-50 text-teal-700">
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"

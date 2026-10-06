@@ -376,7 +376,16 @@ export function MenuDelPanel({
     <>
       {/* Ordenador */}
       <aside className="hidden w-60 shrink-0 lg:block">
-        <div className="sticky top-6 rounded-xl border border-zinc-200 bg-white p-2">
+        {/* `max-h` + `overflow-y-auto`: el menú tiene cuatro grupos y,
+            con el de "Perfil del club" desplegado, pasa de lo que mide
+            una pantalla de portátil. Al ser `sticky` no se desplazaba
+            con la página, así que las últimas opciones —entre ellas
+            "Cerrar sesión"— no había forma de alcanzarlas. Ahora el
+            propio menú se desplaza por dentro.
+            *
+            * El 3rem son los `top-6` de arriba más el mismo hueco
+            * abajo, para que no acabe pegado al borde de la ventana. */}
+        <div className="sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto overscroll-contain rounded-xl border border-zinc-200 bg-white p-2">
           <Lista
             sinAbrir={sinAbrir}
             vencidas={vencidas}

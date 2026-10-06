@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { RUTA_POR_ROL, type Role } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
+import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { MenuDeLaCabecera } from "@/components/MenuDeLaCabecera";
 
 /**
@@ -100,6 +101,16 @@ export async function Header() {
                 `inline-flex` que lleva de serie son los dos reglas de
                 `display`, y cuál gana depende del orden en que Tailwind
                 las escriba, no del orden en que se pongan aquí. */}
+            {/* Con la sesión abierta, la salida al lado de la entrada.
+                Hasta ahora, desde las páginas públicas no había ninguna
+                forma de cerrar sesión: había que entrar al panel para
+                encontrarla. */}
+            {accesoDirecto && (
+              <span className="hidden sm:block">
+                <CerrarSesionBoton />
+              </span>
+            )}
+
             <span className="hidden sm:block">
               <Button href={accesoDirecto ? accesoDirecto.href : "/registro"} size="sm">
                 {accesoDirecto ? accesoDirecto.etiqueta : "Crea tu página"}

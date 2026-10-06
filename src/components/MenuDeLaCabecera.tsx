@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
+import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 
 /**
  * El menú de la cabecera, en cualquier pantalla.
@@ -172,12 +173,22 @@ export function MenuDeLaCabecera({
                   menú. Por debajo de 640 px fuera no cabe, y entonces
                   este es el único. */}
               {accesoDirecto ? (
-                <Link
-                  href={accesoDirecto.href}
-                  className="rounded-xl bg-brand-teal-dark px-4 py-3.5 text-center text-base font-bold text-white transition-colors hover:bg-brand-navy sm:hidden"
-                >
-                  {accesoDirecto.etiqueta}
-                </Link>
+                <>
+                  <Link
+                    href={accesoDirecto.href}
+                    className="rounded-xl bg-brand-teal-dark px-4 py-3.5 text-center text-base font-bold text-white transition-colors hover:bg-brand-navy sm:hidden"
+                  >
+                    {accesoDirecto.etiqueta}
+                  </Link>
+
+                  {/* La salida, debajo de la entrada. En el teléfono el
+                      botón verde vive aquí dentro, así que esta va con
+                      él; a partir de `sm` los dos están fuera, en la
+                      barra. */}
+                  <span className="sm:hidden">
+                    <CerrarSesionBoton ancho />
+                  </span>
+                </>
               ) : (
                 <>
                   <Link
