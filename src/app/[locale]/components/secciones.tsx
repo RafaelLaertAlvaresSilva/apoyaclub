@@ -594,28 +594,44 @@ export async function SeccionPaginaClub() {
 
           {/* Dos y dos, no cuatro en fila: aquí solo hay media pantalla
               de ancho, y en cuatro columnas "Gestión sencilla" se parte
-              en tres líneas y descoloca a las otras tres. */}
-          <ul className="mt-9 grid grid-cols-2 gap-x-5 gap-y-7">
+              en tres líneas y descoloca a las otras tres.
+
+              EL ICONO VA AL LADO DEL TÍTULO A PARTIR DE `lg`, no encima.
+              Encima, los cuatro puntos medían 559 px desde el epígrafe y
+              en una pantalla de portátil los dos de abajo se quedaban
+              cortados: se veía el icono y no lo que ponía. Al lado, el
+              icono y el título comparten línea y cada punto pierde 32 px
+              —el alto del icono más su margen—, que por cuatro puntos y
+              con el hueco un poco más corto son los 70 px que faltaban.
+
+              Solo a partir de `lg` porque es donde esto se pone en dos
+              columnas y la altura empieza a importar. Por debajo va todo
+              en una columna, se baja desplazándose y el icono encima se
+              lee mejor; además, en un teléfono "Gestión sencilla" al
+              lado de un icono de 44 px no cabe en una línea. */}
+          <ul className="mt-8 grid grid-cols-2 gap-x-5 gap-y-6">
             {VENTAJAS_DE_LA_PAGINA.map((ventaja) => (
               <li key={ventaja}>
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
-                  <svg
-                    aria-hidden="true"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-[22px] w-[22px]"
-                  >
-                    {ICONO_DE_LA_VENTAJA[ventaja]}
-                  </svg>
-                </span>
-                <p className="mt-3 text-[15px] font-bold text-brand-navy">
-                  {t(`paginaClub.ventajas.${ventaja}.titulo`)}
-                </p>
-                <p className="mt-1 text-sm leading-relaxed text-zinc-600">
+                <div className="lg:flex lg:items-center lg:gap-3">
+                  <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-[22px] w-[22px]"
+                    >
+                      {ICONO_DE_LA_VENTAJA[ventaja]}
+                    </svg>
+                  </span>
+                  <p className="mt-3 text-[15px] font-bold text-brand-navy lg:mt-0">
+                    {t(`paginaClub.ventajas.${ventaja}.titulo`)}
+                  </p>
+                </div>
+                <p className="mt-1 text-sm leading-relaxed text-zinc-600 lg:mt-2">
                   {t(`paginaClub.ventajas.${ventaja}.texto`)}
                 </p>
               </li>
