@@ -82,6 +82,27 @@ describe("la sección de la página del club", () => {
   });
 
   /**
+   * La captura del teléfono, igual que la del monitor: lleva contenido
+   * —el nombre del club, su categoría, sus números— así que necesita su
+   * propia descripción, y una distinta de la del ordenador. Reutilizar
+   * la del monitor diría dos veces lo mismo a quien use un lector de
+   * pantalla, sin aclarar que son dos vistas del mismo sitio.
+   */
+  it("la captura del teléfono lleva su propia descripción", () => {
+    const telefono = SECCIONES.slice(
+      SECCIONES.indexOf("function TelefonoConLaPagina"),
+      SECCIONES.indexOf("function MonitorConLaPagina"),
+    );
+    expect(telefono.length).toBeGreaterThan(200);
+    expect(telefono).toContain('src="/pagina-club-telefono.webp"');
+    expect(telefono).toContain("alt={alt}");
+
+    const delTelefono = TEXTOS.paginaClub.maqueta.altTelefono;
+    expect(delTelefono.length).toBeGreaterThan(40);
+    expect(delTelefono).not.toBe(TEXTOS.paginaClub.maqueta.alt);
+  });
+
+  /**
    * La foto de fondo no aporta información: es decoración, y si un
    * lector de pantalla la anuncia solo molesta.
    */

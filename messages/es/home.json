@@ -175,7 +175,8 @@
     "texto2": "Y siempre visibles, tus oportunidades de patrocinio disponibles.",
     "maqueta": {
       "url": "apoyaclub.com/club/tu-club",
-      "alt": "La página pública de un club en ApoyaClub: foto de portada, escudo, nombre y, debajo, el deporte, la máxima categoría, los jugadores, los equipos de cantera y la ciudad."
+      "alt": "La página pública de un club en ApoyaClub: foto de portada, escudo, nombre y, debajo, el deporte, la máxima categoría, los jugadores, los equipos de cantera y la ciudad.",
+      "altTelefono": "La misma página de club vista en un teléfono: la portada, el escudo, el nombre, los botones de compartir y contactar, y los datos del club debajo."
     },
     "ventajas": {
       "visibilidad": {

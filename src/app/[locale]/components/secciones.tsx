@@ -639,12 +639,81 @@ export async function SeccionPaginaClub() {
           </ul>
         </div>
 
-        <MonitorConLaPagina
+        <MaquetasDeLaPagina
           url={t("paginaClub.maqueta.url")}
           alt={t("paginaClub.maqueta.alt")}
+          altTelefono={t("paginaClub.maqueta.altTelefono")}
         />
       </div>
     </section>
+  );
+}
+
+/**
+ * Las dos maquetas, una al lado de la otra: el monitor y el teléfono.
+ *
+ * El teléfono no es un adorno ni una repetición del monitor. La mitad
+ * larga de las visitas a la ficha de un club llega desde un enlace
+ * compartido por WhatsApp, y eso se abre en un teléfono. Un club que se
+ * está planteando pagar quiere ver cómo le queda SU página ahí, no solo
+ * en una pantalla grande que a lo mejor no usa nadie.
+ *
+ * Pegadas por abajo (`items-end`) y no centradas: son dos aparatos
+ * apoyados en la misma mesa. Centrados, el teléfono flota a media
+ * altura y se nota que son dos imágenes pegadas.
+ *
+ * El teléfono se lleva un porcentaje del ancho y no una medida fija,
+ * para que la pareja se encoja junta. Con un ancho fijo, en una
+ * pantalla estrecha el teléfono se comía la mitad del hueco y el
+ * monitor se quedaba en un sello.
+ */
+function MaquetasDeLaPagina({
+  url,
+  alt,
+  altTelefono,
+}: {
+  url: string;
+  alt: string;
+  altTelefono: string;
+}) {
+  return (
+    <div className="mx-auto flex w-full max-w-[560px] items-end gap-3 sm:gap-4 lg:max-w-none">
+      <MonitorConLaPagina url={url} alt={alt} />
+      <TelefonoConLaPagina alt={altTelefono} />
+    </div>
+  );
+}
+
+/**
+ * El teléfono: marco oscuro de esquinas muy redondeadas y dentro la
+ * captura.
+ *
+ * La captura entra con la barra de direcciones de Chrome y sin la barra
+ * de estado de Android. La barra de direcciones se queda porque enseña
+ * la dirección de verdad, igual que la barra dibujada del monitor; la
+ * hora y el porcentaje de batería del teléfono de quien hizo la captura
+ * no pintan nada en la web.
+ *
+ * Sin muesca ni altavoz dibujados: a este tamaño serían dos píxeles
+ * grises sobre una barra que ya es negra, y no se distinguirían de
+ * suciedad. Lo que hace que se lea como un teléfono es la proporción
+ * alta y el redondeo, no los detalles.
+ */
+function TelefonoConLaPagina({ alt }: { alt: string }) {
+  return (
+    <div className="w-[26%] flex-none lg:w-[22%]">
+      <div className="overflow-hidden rounded-[1.4rem] border-4 border-zinc-800 bg-zinc-800 shadow-xl shadow-brand-navy/25 sm:rounded-[1.7rem] sm:border-[6px]">
+        <Image
+          src="/pagina-club-telefono.webp"
+          alt={alt}
+          width={640}
+          height={1243}
+          loading="lazy"
+          sizes="(max-width: 1024px) 28vw, 140px"
+          className="block h-auto w-full rounded-[1.1rem]"
+        />
+      </div>
+    </div>
   );
 }
 
@@ -658,7 +727,7 @@ export async function SeccionPaginaClub() {
  */
 function MonitorConLaPagina({ url, alt }: { url: string; alt: string }) {
   return (
-    <div className="mx-auto w-full max-w-[560px] lg:max-w-none">
+    <div className="min-w-0 flex-1">
       <div className="overflow-hidden rounded-2xl border-[10px] border-zinc-800 bg-zinc-800 shadow-2xl shadow-brand-navy/25 sm:border-[12px]">
         <div className="overflow-hidden rounded-md bg-white">
           <div className="flex items-center gap-1.5 bg-zinc-100 px-3 py-2">
