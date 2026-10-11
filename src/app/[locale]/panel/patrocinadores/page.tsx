@@ -2,6 +2,7 @@ import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import { clubSponsorRowToSponsor, type ClubSponsorRow } from "@/lib/club-mappers";
+import { documentosDelClub } from "@/lib/documentos-datos";
 import { createClient } from "@/lib/supabase/server";
 import { PatrocinadoresForm } from "../components/PatrocinadoresForm";
 
@@ -39,6 +40,12 @@ export default async function PatrocinadoresPage() {
 
   const patrocinadores = (filasPatrocinadores ?? []).map(clubSponsorRowToSponsor);
 
+  // Los papeles de cada patrocinio (migración 0051). Se piden todos de
+  // una vez y se reparten, en vez de una consulta por empresa. Van como
+  // objeto llano porque cruzan al componente de cliente, y un `Map` no
+  // cruza esa frontera.
+  const documentos = Object.fromEntries(await documentosDelClub(supabase, user.id));
+
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
@@ -65,7 +72,11 @@ export default async function PatrocinadoresPage() {
           y podrás añadir tus patrocinadores.
         </div>
       ) : (
-        <PatrocinadoresForm userId={user.id} patrocinadores={patrocinadores} />
+        <PatrocinadoresForm
+          userId={user.id}
+          patrocinadores={patrocinadores}
+          documentos={documentos}
+        />
       )}
     </div>
   );

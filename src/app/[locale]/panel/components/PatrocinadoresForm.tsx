@@ -7,6 +7,8 @@ import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
+import type { DocumentoDePatrocinio } from "@/lib/documentos-patrocinio";
+import { DocumentosDelPatrocinador } from "../patrocinadores/components/DocumentosDelPatrocinador";
 import { NIVELES_PATROCINADOR, type ClubSponsor, type SponsorTier } from "@/lib/types";
 import {
   agregarPatrocinador,
@@ -38,9 +40,16 @@ const NOMBRE_NIVEL: Record<SponsorTier, string> = {
 export function PatrocinadoresForm({
   userId,
   patrocinadores,
+  documentos = {},
 }: {
   userId: string;
   patrocinadores: ClubSponsor[];
+  /* Los papeles de cada patrocinio (migración 0051), por id de
+     patrocinador. Un objeto llano y no un `Map` porque esto cruza la
+     frontera entre servidor y cliente. Con valor por defecto para que
+     la pantalla siga funcionando si la migración todavía no está
+     aplicada y la consulta devuelve vacío. */
+  documentos?: Record<string, DocumentoDePatrocinio[]>;
 }) {
   const t = useTranslations("panel.perfil2");
   const [estado, formAction] = useActionState(agregarPatrocinador, null);
@@ -65,6 +74,7 @@ export function PatrocinadoresForm({
                     key={patrocinador.id}
                     userId={userId}
                     patrocinador={patrocinador}
+                    documentos={documentos[patrocinador.id] ?? []}
                     esPrimero={ordenados[0]?.id === patrocinador.id}
                     esUltimo={ordenados[ordenados.length - 1]?.id === patrocinador.id}
                   />
@@ -92,11 +102,13 @@ export function PatrocinadoresForm({
 function FilaPatrocinador({
   userId,
   patrocinador,
+  documentos,
   esPrimero,
   esUltimo,
 }: {
   userId: string;
   patrocinador: ClubSponsor;
+  documentos: DocumentoDePatrocinio[];
   esPrimero: boolean;
   esUltimo: boolean;
 }) {
@@ -184,6 +196,11 @@ function FilaPatrocinador({
       {editando && (
         <div className="mt-4 space-y-4 border-t border-zinc-100 pt-4">
           <FormularioEditarPatrocinador userId={userId} patrocinador={patrocinador} />
+          <DocumentosDelPatrocinador
+            patrocinadorId={patrocinador.id}
+            nombre={patrocinador.name}
+            documentos={documentos}
+          />
           <AvisoAlPatrocinador patrocinador={patrocinador} />
         </div>
       )}

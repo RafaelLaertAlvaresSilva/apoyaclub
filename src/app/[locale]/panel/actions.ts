@@ -9,6 +9,7 @@ import { consumirLimite } from "@/lib/rate-limit";
 import { SITE_URL } from "@/lib/site";
 import { routing } from "@/i18n/routing";
 import { CONSENT_TYPES, LEGAL_VERSIONS } from "@/lib/legal";
+import { BUCKET_DOCUMENTOS, rutasDeLosDocumentos } from "@/lib/documentos-datos";
 import { createClient } from "@/lib/supabase/server";
 import { NIVELES_PATROCINADOR } from "@/lib/types";
 import type { CommunityAction, Milestone, Role, SponsorTier, TeamLevel } from "@/lib/types";
@@ -1183,6 +1184,15 @@ export async function eliminarPatrocinador(formData: FormData): Promise<EstadoGu
   const id = String(formData.get("id") ?? "");
   if (!id) return { error: "No se ha podido identificar qué borrar." };
 
+  // Los archivos del patrocinio (migración 0051), ANTES de borrar la
+  // fila. Al borrar al patrocinador, la base de datos se lleva sola las
+  // filas de sus documentos por la clave ajena, pero NO los archivos:
+  // el almacén no sabe nada de claves ajenas. Si se borrara primero el
+  // patrocinador, esas rutas ya no se podrían averiguar y los archivos
+  // se quedarían ocupando sitio para siempre, sin ninguna pantalla
+  // desde la que llegar a ellos.
+  const rutasDeDocumentos = await rutasDeLosDocumentos(supabase, user.id, id);
+
   const { error } = await supabase
     .from("club_sponsors")
     .delete()
@@ -1190,6 +1200,13 @@ export async function eliminarPatrocinador(formData: FormData): Promise<EstadoGu
     .eq("club_id", user.id);
 
   if (error) return fallo("eliminarPatrocinador", error, "No se ha podido borrar. Inténtalo de nuevo.");
+
+  // Después de borrar la fila, no antes: si el borrado falla, el
+  // patrocinador se queda con sus papeles en vez de quedarse con la
+  // ficha y sin ellos.
+  if (rutasDeDocumentos.length > 0) {
+    await supabase.storage.from(BUCKET_DOCUMENTOS).remove(rutasDeDocumentos);
+  }
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };

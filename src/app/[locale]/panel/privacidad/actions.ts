@@ -6,6 +6,7 @@ import type { User } from "@supabase/supabase-js";
 import { BUCKET_MEDIA_CLUB } from "@/lib/club-storage";
 import { obtenerStripe } from "@/lib/stripe/client";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { BUCKET_DOCUMENTOS, todasLasRutasDelClub } from "@/lib/documentos-datos";
 import { createClient } from "@/lib/supabase/server";
 import type { Role } from "@/lib/types";
 
@@ -86,6 +87,20 @@ export async function eliminarCuentaClub(
       const rutas = archivos.map((archivo) => `${user.id}/${carpeta}/${archivo.name}`);
       await supabase.storage.from(BUCKET_MEDIA_CLUB).remove(rutas);
     }
+  }
+
+  // Los contratos y las facturas (migración 0051), que viven en otro
+  // almacén. Las FILAS se van solas al borrar el usuario, por la clave
+  // ajena; los ARCHIVOS no, porque el almacén no sabe nada de claves
+  // ajenas. Si no se barren aquí, el derecho de supresión se queda a
+  // medias: el club desaparece y sus contratos siguen guardados.
+  //
+  // Y hay que leer las rutas ANTES de borrar al usuario, que es lo que
+  // se hace unas líneas más abajo: después ya no habría filas de donde
+  // sacarlas.
+  const rutasDeDocumentos = await todasLasRutasDelClub(supabase, user.id);
+  if (rutasDeDocumentos.length > 0) {
+    await supabase.storage.from(BUCKET_DOCUMENTOS).remove(rutasDeDocumentos);
   }
 
   const admin = createAdminClient();
