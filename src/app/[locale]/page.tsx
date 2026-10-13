@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Header } from "@/components/Header";
+import { VideoDeLaPortada } from "./components/VideoDeLaPortada";
 import { CtaFijoMovil } from "./components/CtaFijoMovil";
 import {
   FondoDeHeroe,
@@ -71,7 +72,22 @@ export default async function Home() {
           {/* ============ EL FONDO ============ */}
           <FondoDeHeroe archivo="/fondo-hero.webp" tono="claro" />
 
-          <div className="relative mx-auto max-w-3xl text-center">
+          {/* ============ DOS COLUMNAS: EL MENSAJE Y EL VÍDEO ============
+              Antes el mensaje iba centrado y a todo el ancho, y el vídeo
+              no estaba. La idea de ponerlos uno al lado del otro es que
+              quien entra vea las dos cosas sin bajar.
+
+              La columna del vídeo es FIJA y estrecha (300 px), no la
+              mitad. El vídeo es vertical: a media columna mediría 818 px
+              de alto y empujaría los botones "Soy un club" y "Soy una
+              empresa" fuera de la pantalla de un portátil — justo lo que
+              este cambio quiere evitar.
+
+              Y hasta `lg` no hay dos columnas: en un teléfono se apilan,
+              con el mensaje arriba y el vídeo debajo. Al lado, en 390 px
+              de ancho, no caben ni uno ni otro. */}
+          <div className="relative mx-auto grid max-w-6xl items-center gap-10 text-center lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-14 lg:text-left">
+            <div className="min-w-0">
             {/* Qué es esto, antes que nada. Quien llega no sabe si
                 ApoyaClub es un patrocinador, un intermediario o una
                 herramienta, y de las tres solo una es verdad. */}
@@ -94,14 +110,14 @@ export default async function Home() {
             <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl lg:text-5xl">
               {t("hero.tituloParte1")}
             </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-xl font-bold leading-snug text-brand-teal-dark sm:text-2xl">
+            <p className="mx-auto mt-4 max-w-2xl text-xl font-bold leading-snug text-brand-teal-dark sm:text-2xl lg:mx-0">
               {t("hero.tituloParte2")}
             </p>
 
             {/* La promesa dice para qué sirve; estas cuatro dicen qué
                 es. Sin ellas, esto podría ser un listado, una agencia o
                 un curso. */}
-            <FuncionesDestacadas />
+            <FuncionesDestacadas enColumna />
 
             {/* ============ LAS DOS PUERTAS ============ */}
             {/* Lo primero que hay que resolver no es convencer: es
@@ -110,7 +126,14 @@ export default async function Home() {
                 leyendo. Eran dos tarjetas grandes con párrafo y
                 atajos; el detalle vive entero en /para-clubes y
                 /para-empresas, que es a donde llevan los botones. */}
-            <PuertasDelHero />
+            <PuertasDelHero enColumna />
+            </div>
+
+            <VideoDeLaPortada
+              src="/portada-video.mp4"
+              poster="/portada-video-poster.webp"
+              etiqueta={t("video.etiquetaPortada")}
+            />
           </div>
         </section>
 

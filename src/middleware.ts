@@ -124,8 +124,21 @@ export async function middleware(request: NextRequest) {
   return intlResponse;
 }
 
+/**
+ * Por dónde NO pasa el middleware.
+ *
+ * Lo que no esté en esta lista pasa por aquí, y next-intl le pone
+ * delante el idioma: `/portada-video.mp4` se convierte en
+ * `/es/portada-video.mp4`, que no existe. Así que un archivo estático
+ * cuya extensión falte aquí no se sirve — devuelve un 307 y el
+ * navegador se queda sin él, sin ningún error que lo explique.
+ *
+ * Pasó con el vídeo de la portada: las imágenes estaban en la lista y
+ * los vídeos no, y el `.mp4` nunca llegaba a cargarse. Hay una prueba
+ * que lo vigila (`middleware-estaticos.test.ts`).
+ */
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|mp4|webm|mov|m4v|woff|woff2|pdf|txt|xml)$).*)",
   ],
 };

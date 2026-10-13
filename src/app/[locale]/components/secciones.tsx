@@ -266,7 +266,16 @@ export async function SeccionComoFunciona() {
   const pasos = t.raw("comoFunciona.pasos") as (TextoConTitulo & { clave: string })[];
 
   return (
-    <section id="como-funciona" className="scroll-mt-32 bg-zinc-50 px-4 py-20 sm:px-6 sm:py-28">
+    /* `overflow-x-hidden` por la peana del portátil: es un 5 % más
+       ancha que la pantalla a propósito —es lo que la hace parecer un
+       portátil— y en un teléfono ese 5 % se sale del ancho de la
+       página y aparece una barra de desplazamiento horizontal. Se
+       recorta aquí en vez de estrechar la peana, para no tocar el
+       dibujo. */
+    <section
+      id="como-funciona"
+      className="scroll-mt-32 overflow-x-hidden bg-zinc-50 px-4 py-20 sm:px-6 sm:py-28"
+    >
       <div className="mx-auto max-w-6xl">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
@@ -2189,7 +2198,7 @@ function masDe(total: number, escalon: number): number {
  * una pastilla suelta al final se lee como un descuido, no como un
  * énfasis.
  */
-export async function FuncionesDestacadas() {
+export async function FuncionesDestacadas({ enColumna = false }: { enColumna?: boolean }) {
   const t = await getTranslations("home");
 
   const funciones = [
@@ -2204,7 +2213,15 @@ export async function FuncionesDestacadas() {
   ];
 
   return (
-    <ul className="mx-auto mt-9 grid max-w-4xl gap-x-6 gap-y-5 text-left sm:grid-cols-2 lg:grid-cols-4">
+    /* Cuatro en fila cuando ocupa el ancho entero; de dos en dos
+       cuando vive en la columna del héroe, al lado del vídeo. En
+       media pantalla, cuatro columnas dejan a "Más de 100 ideas de
+       patrocinio" en cinco líneas. */
+    <ul
+      className={`mt-9 grid gap-x-6 gap-y-5 text-left sm:grid-cols-2 ${
+        enColumna ? "max-w-none" : "mx-auto max-w-4xl lg:grid-cols-4"
+      }`}
+    >
       {funciones.map((funcion) => (
         <li key={funcion.clave} className="flex items-start gap-3">
           {/* El icono en su cuadrado de color, que es lo que hace que
@@ -2242,7 +2259,7 @@ export async function FuncionesDestacadas() {
  * El detalle de cada lado no se ha perdido: está entero en
  * `/para-clubes` y `/para-empresas`, que es justo a donde llevan.
  */
-export async function PuertasDelHero() {
+export async function PuertasDelHero({ enColumna = false }: { enColumna?: boolean }) {
   const t = await getTranslations("home");
 
   const puertas = [
@@ -2263,7 +2280,9 @@ export async function PuertasDelHero() {
   ] as const;
 
   return (
-    <div className="mx-auto mt-10 grid max-w-3xl gap-5 sm:grid-cols-2">
+    <div
+      className={`mt-10 grid gap-5 sm:grid-cols-2 ${enColumna ? "max-w-none" : "mx-auto max-w-3xl"}`}
+    >
       {puertas.map((puerta) => (
         <div key={puerta.href}>
           <Link
@@ -2280,7 +2299,13 @@ export async function PuertasDelHero() {
               →
             </span>
           </Link>
-          <p className="mt-2.5 text-center text-[13px] leading-snug text-zinc-500">{puerta.pie}</p>
+          <p
+            className={`mt-2.5 text-[13px] leading-snug text-zinc-500 ${
+              enColumna ? "text-center lg:text-left" : "text-center"
+            }`}
+          >
+            {puerta.pie}
+          </p>
         </div>
       ))}
     </div>

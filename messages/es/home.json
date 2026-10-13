@@ -783,7 +783,8 @@
     "eyebrow": "En un minuto",
     "titulo": "Mira ApoyaClub por dentro",
     "texto": "Un club de verdad, de principio a fin: la página, una oportunidad publicada y una empresa escribiendo.",
-    "alternativa": "Tu navegador no puede reproducir este vídeo."
+    "alternativa": "Tu navegador no puede reproducir este vídeo.",
+    "etiquetaPortada": "Vídeo de presentación de ApoyaClub: qué es, cómo descubres oportunidades de patrocinio y cómo gestionas a tus patrocinadores."
   },
   "funciones": {
     "ideasTitulo": "Más de {ideas} ideas de patrocinio",
