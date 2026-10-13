@@ -119,3 +119,45 @@ describe("los enlaces a las pestañas de la ficha", () => {
     expect(sospechosos).toEqual([]);
   });
 });
+
+/**
+ * La flecha que abre las secciones de la ficha.
+ *
+ * Era el carácter "▾" a 12 px. Dos problemas, y los dos del mismo
+ * tipo que el de las banderas de "El sector, en cifras": un símbolo
+ * escrito como texto lo dibuja cada sistema a su manera, y en Windows
+ * ese se queda tan pequeño que parece un punto. Además, 12 px de
+ * carácter no son una zona que se pueda acertar con el dedo.
+ *
+ * Ahora es un icono dibujado dentro de un botón de 32 px. Esta prueba
+ * está para que no se vuelva a escribir como texto.
+ */
+describe("la flecha de las secciones de la ficha", () => {
+  const boton = MENU.slice(
+    MENU.indexOf('aria-label={'),
+    MENU.indexOf("</button>", MENU.indexOf('aria-label={')),
+  );
+
+  it("encuentra el botón", () => {
+    expect(boton).toContain("secciones de la ficha");
+  });
+
+  it("es un icono dibujado y no un carácter de texto", () => {
+    expect(boton).toContain("<svg");
+
+    // Sin los comentarios: el que explica por qué se quitó el carácter
+    // lo contiene, y sin esto la prueba se caía por su propia
+    // explicación.
+    const codigo = boton.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+    expect(codigo).not.toContain("▾");
+    expect(codigo).not.toContain("▴");
+  });
+
+  it("el botón mide lo bastante para acertarlo con el dedo", () => {
+    expect(boton).toContain("h-8 w-8");
+  });
+
+  it("la flecha gira al abrirse, para decir en qué estado está", () => {
+    expect(boton).toContain("rotate-180");
+  });
+});

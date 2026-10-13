@@ -272,9 +272,36 @@ function Lista({
                           ? "Ocultar las secciones de la ficha"
                           : "Ver las secciones de la ficha"
                       }
-                      className="rounded px-1.5 text-xs leading-none"
+                      /* Un cuadrado de 32 px y no un texto con relleno:
+                         antes era el carácter "▾" a 12 px, que en Windows
+                         se dibuja más pequeño todavía y acababa
+                         pareciendo un punto. Y como zona para pulsar,
+                         un carácter de 12 px en un teléfono es imposible
+                         de acertar. */
+                      /* `black/10` y no `white/15`: esta fila es blanca cuando el
+                         apartado está cerrado y verde oscuro cuando está
+                         abierto, y un velo blanco sobre blanco no se ve.
+                         Oscurecer funciona encima de los dos. */
+                      className="flex h-8 w-8 flex-none items-center justify-center rounded-lg transition-colors hover:bg-black/10"
                     >
-                      <span aria-hidden="true">{fichaDesplegada ? "▴" : "▾"}</span>
+                      {/* Dibujada y no escrita: la flecha es la misma de
+                          las otras listas desplegables de la web, se ve
+                          igual en todos los sistemas y gira al abrirse,
+                          que es lo que dice si está abierta o cerrada. */}
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className={`h-[18px] w-[18px] transition-transform duration-200 ${
+                          fichaDesplegada ? "rotate-180" : ""
+                        }`}
+                      >
+                        <path d="M6 9l6 6 6-6" />
+                      </svg>
                     </button>
                   </div>
 
