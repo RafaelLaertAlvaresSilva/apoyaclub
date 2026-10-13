@@ -17,10 +17,13 @@ export function OportunidadesManager({
   oportunidades,
   equipos = [],
   requisitos,
+  slugDelClub = null,
 }: {
   oportunidades: Opportunity[];
   equipos?: ClubTeam[];
   requisitos?: RequisitoIdea[];
+  /** La dirección pública del club, o null si todavía no tiene ficha. */
+  slugDelClub?: string | null;
 }) {
   const t = useTranslations("panel.oportunidades");
   const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>("todas");
@@ -99,7 +102,12 @@ export function OportunidadesManager({
       ) : (
         <ul className="space-y-3">
           {visibles.map((oportunidad) => (
-            <TarjetaOportunidad key={oportunidad.id} oportunidad={oportunidad} equipos={equipos} />
+            <TarjetaOportunidad
+              key={oportunidad.id}
+              oportunidad={oportunidad}
+              equipos={equipos}
+              slugDelClub={slugDelClub}
+            />
           ))}
         </ul>
       )}

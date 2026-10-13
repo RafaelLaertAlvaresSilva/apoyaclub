@@ -68,7 +68,15 @@ export default async function OportunidadesPage() {
           para poder publicar oportunidades de patrocinio.
         </div>
       ) : (
-        <OportunidadesManager oportunidades={oportunidades} equipos={equipos} requisitos={requisitos} />
+        <OportunidadesManager
+          oportunidades={oportunidades}
+          equipos={equipos}
+          requisitos={requisitos}
+          /* Para el botón de ver la oportunidad como la ve una
+             empresa. Va en `null` mientras el club no haya guardado
+             su ficha: sin ficha no hay página pública a la que ir. */
+          slugDelClub={perfil?.slug ?? null}
+        />
       )}
     </div>
   );

@@ -43,12 +43,19 @@ describe("qué puede ofrecer un club", () => {
     expect(SECCIONES).not.toContain('t.raw("ofrece.tarjetas")');
   });
 
-  it("todas las categorías tienen icono", () => {
-    // Sin icono, la pastilla sale con un círculo genérico y nadie se
-    // entera hasta que mira la página.
-    const conIcono = [...COMPONENTE.matchAll(/^ {2}"?([a-z-]+)"?: \(/gm)].map((m) => m[1]);
-    const sinIcono = CATEGORIAS_IDEA.filter((c) => !conIcono.includes(c.id)).map((c) => c.id);
-    expect(sinIcono, `sin icono: ${sinIcono.join(", ")}`).toHaveLength(0);
+  it("cada pastilla pide su icono al componente común", () => {
+    // Los dibujos ya no viven aquí: están en
+    // `src/components/IconoDeCategoria.tsx`, porque el panel pinta los
+    // mismos. Que haya uno por categoría lo comprueba
+    // `tests/unit/iconos-de-categoria.test.ts`, que lo mira contra la
+    // lista que exporta el componente en vez de rebuscar en el código.
+    //
+    // Lo que se comprueba aquí es que esta sección siga pidiéndoselos a
+    // él: si alguien vuelve a pegar los dibujos en este archivo, el día
+    // que se cambie uno se cambiaría solo en un sitio.
+    expect(COMPONENTE).toContain('from "@/components/IconoDeCategoria"');
+    expect(COMPONENTE).toContain("<IconoDeCategoria categoria={");
+    expect(COMPONENTE, "han vuelto los dibujos a este archivo").not.toMatch(/<path\s+d="/);
   });
 
   it("todas las categorías tienen pista que enseñar", () => {

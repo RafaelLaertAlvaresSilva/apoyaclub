@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { IconoDeCategoria } from "@/components/IconoDeCategoria";
 import {
   CATEGORIAS_IDEA,
   ideasParaElClub,
@@ -52,12 +53,21 @@ export function CatalogoDeIdeas({
             key={entrada.id}
             type="button"
             onClick={() => setCategoria(categoria === entrada.id ? null : entrada.id)}
-            className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+            /* `inline-flex` para que el símbolo y el nombre vayan en
+               la misma línea y centrados. Con el `block` de antes, el
+               símbolo se colocaba sobre la línea de base del texto y
+               quedaba un par de píxeles más abajo. */
+            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
               categoria === entrada.id
                 ? "bg-teal-700 text-white"
                 : "border border-zinc-300 bg-white text-zinc-700 hover:border-teal-500 hover:text-teal-700"
             }`}
           >
+            {/* El mismo símbolo que esta categoría tiene en la página
+                pública: sale del mismo sitio, así que no pueden
+                separarse. Hereda el color de la pastilla, que cambia a
+                blanco al seleccionarla. */}
+            <IconoDeCategoria categoria={entrada.id} className="h-3.5 w-3.5 flex-none" />
             {entrada.etiqueta}
           </button>
         ))}

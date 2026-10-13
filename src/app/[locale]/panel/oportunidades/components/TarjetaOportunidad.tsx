@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { useActionState, useState } from "react";
 import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
 import type { ClubTeam, Opportunity, OpportunityStatus } from "@/lib/types";
@@ -34,9 +35,12 @@ const ESTILO_ESTADO: Record<OpportunityStatus, string> = {
 export function TarjetaOportunidad({
   oportunidad,
   equipos = [],
+  slugDelClub = null,
 }: {
   oportunidad: Opportunity;
   equipos?: ClubTeam[];
+  /** La dirección pública del club, o null si todavía no tiene ficha. */
+  slugDelClub?: string | null;
 }) {
   const t = useTranslations("panel.oportunidades");
   const [enEdicion, setEnEdicion] = useState(false);
@@ -133,6 +137,30 @@ export function TarjetaOportunidad({
               </form>
             ))}
           </div>
+        )}
+
+        {/* VER LA OPORTUNIDAD COMO LA VE UNA EMPRESA.
+            El club escribe en un formulario y no tiene forma de saber
+            qué sale de ahí; esto le lleva a la página de verdad.
+
+            NO SIEMPRE SE ENSEÑA, y eso es lo importante: la página
+            pública de una oportunidad necesita dos cosas, que el club
+            tenga ficha (`slug`) y que la oportunidad no esté archivada
+            —el listado público filtra por `archived_at is null`—. Sin
+            alguna de las dos, el enlace llevaría a una página de error,
+            que es peor que no tener botón. */}
+        {slugDelClub && !oportunidad.archivedAt && (
+          <Link
+            href={`/club/${slugDelClub}/oportunidad/${oportunidad.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-teal-700 transition-colors hover:bg-teal-50"
+          >
+            {t("visualizar")}
+            {/* La flecha dice que se abre en otra pestaña antes de
+                pulsarla, que es cuando sirve saberlo. */}
+            <span aria-hidden="true">↗</span>
+          </Link>
         )}
 
         <button

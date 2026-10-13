@@ -105,7 +105,8 @@
     "todosLosEstados": "Todos los estados",
     "tuPerfil": "tu perfil",
     "valorDeMayorA": "Valor: de mayor a menor",
-    "valorDeMenorA": "Valor: de menor a mayor"
+    "valorDeMenorA": "Valor: de menor a mayor",
+    "visualizar": "Visualizar"
   },
   "perfil": {
     "anadeCadaEquipoDel": "Añade cada equipo del club: deporte, categoría, género y si es primer equipo o cantera.",
