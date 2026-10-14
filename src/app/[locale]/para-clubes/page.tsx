@@ -3,7 +3,11 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { CtaFijoMovil } from "../components/CtaFijoMovil";
-import { MenuDeSecciones, type SeccionDelMenu } from "../components/MenuDeSecciones";
+import { VideoDeLaPortada } from "../components/VideoDeLaPortada";
+import {
+  MenuDeSecciones,
+  type SeccionDelMenu,
+} from "../components/MenuDeSecciones";
 import {
   FondoDeHeroe,
   FuncionesDestacadas,
@@ -59,39 +63,59 @@ export default async function ParaClubesPage() {
               parecen entre sí. `claro` porque esta foto es un pabellón
               a contraluz, casi blanco, y necesita menos velo encima que
               la oscura de empresas. */}
-          <FondoDeHeroe archivo="/fondo-clubes.webp" tono="claro" velo="fuerte" />
+          <FondoDeHeroe
+            archivo="/fondo-clubes.webp"
+            tono="claro"
+            velo="fuerte"
+          />
 
-          <div className="relative mx-auto max-w-3xl text-center">
-            <span className="mb-6 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-brand-teal-dark">
-              {t("paraClubes.etiqueta")}
-            </span>
+          {/* Dos columnas igual que la portada: el mensaje a la
+              izquierda y el vídeo a la derecha, para que quien entra lea
+              y vea a la vez. En móvil y tableta va en una sola columna,
+              con el mensaje arriba y el vídeo debajo — al lado, en
+              390 px de ancho, no caben ni uno ni otro. */}
+          <div className="relative mx-auto grid max-w-6xl items-center gap-10 text-center lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-14 lg:text-left">
+            <div className="min-w-0">
+              <span className="mb-6 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-brand-teal-dark">
+                {t("paraClubes.etiqueta")}
+              </span>
 
-            <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl lg:text-5xl">
-              {t("paraClubes.titulo")}
-            </h1>
-            <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-zinc-600 sm:text-lg">
-              {t("paraClubes.texto")}
-            </p>
+              <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl lg:text-5xl">
+                {t("paraClubes.titulo")}
+              </h1>
+              <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-zinc-600 sm:text-lg lg:mx-0">
+                {t("paraClubes.texto")}
+              </p>
 
-            <FuncionesDestacadas />
+              {/* `enColumna`: de dos en dos y no de cuatro en fila. En
+                  media pantalla, cuatro columnas parten "Más de 100
+                  ideas de patrocinio" en cinco líneas. */}
+              <FuncionesDestacadas enColumna />
 
-            <div className="mt-9 flex flex-col items-center gap-3">
-              <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
-                <Link
-                  href="/registro-club"
-                  className="inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-navy"
-                >
-                  {t("hero.cta")}
-                </Link>
-                <a
-                  href="#como-funciona"
-                  className="inline-flex items-center justify-center rounded-full border border-zinc-300 bg-white px-8 py-4 text-base font-bold text-brand-navy transition-colors hover:bg-zinc-50"
-                >
-                  {t("hero.ctaSecundario")}
-                </a>
+              <div className="mt-9 flex flex-col items-center gap-3 lg:items-start">
+                <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
+                  <Link
+                    href="/registro-club"
+                    className="inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-navy"
+                  >
+                    {t("hero.cta")}
+                  </Link>
+                  <a
+                    href="#como-funciona"
+                    className="inline-flex items-center justify-center rounded-full border border-zinc-300 bg-white px-8 py-4 text-base font-bold text-brand-navy transition-colors hover:bg-zinc-50"
+                  >
+                    {t("hero.ctaSecundario")}
+                  </a>
+                </div>
+                <p className="text-sm text-zinc-500">{t("hero.condiciones")}</p>
               </div>
-              <p className="text-sm text-zinc-500">{t("hero.condiciones")}</p>
             </div>
+
+            <VideoDeLaPortada
+              src="/para-clubes-video.mp4"
+              poster="/para-clubes-video-poster.webp"
+              etiqueta={t("video.etiquetaParaClubes")}
+            />
           </div>
         </section>
 
@@ -109,7 +133,10 @@ export default async function ParaClubesPage() {
         <SeccionContacto />
       </main>
 
-      <CtaFijoMovil texto={t("ctaFijo.texto")} condiciones={t("ctaFinal.condiciones")} />
+      <CtaFijoMovil
+        texto={t("ctaFijo.texto")}
+        condiciones={t("ctaFinal.condiciones")}
+      />
     </div>
   );
 }

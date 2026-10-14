@@ -784,7 +784,8 @@
     "titulo": "Mira ApoyaClub por dentro",
     "texto": "Un club de verdad, de principio a fin: la página, una oportunidad publicada y una empresa escribiendo.",
     "alternativa": "Tu navegador no puede reproducir este vídeo.",
-    "etiquetaPortada": "Vídeo de presentación de ApoyaClub: qué es, cómo descubres oportunidades de patrocinio y cómo gestionas a tus patrocinadores."
+    "etiquetaPortada": "Vídeo de presentación de ApoyaClub: qué es, cómo descubres oportunidades de patrocinio y cómo gestionas a tus patrocinadores.",
+    "etiquetaParaClubes": "Vídeo de presentación para clubes: qué es ApoyaClub, las más de 100 ideas de patrocinio, las herramientas para gestionar tareas y acuerdos, y cómo demuestras resultados a tus patrocinadores."
   },
   "funciones": {
     "ideasTitulo": "Más de {ideas} ideas de patrocinio",
