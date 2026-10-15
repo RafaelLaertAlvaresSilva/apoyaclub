@@ -44,7 +44,12 @@ const GRUPOS: Grupo[] = [
   {
     titulo: "Mi club",
     enlaces: [
-      { id: "perfil", href: "/panel/perfil", etiqueta: "Perfil del club", desplegable: true },
+      {
+        id: "perfil",
+        href: "/panel/perfil",
+        etiqueta: "Perfil del club",
+        desplegable: true,
+      },
       // El recuento de gente en los partidos (migración 0037): de aquí
       // sale la asistencia media que enseña la ficha.
       { id: "publico", href: "/panel/publico", etiqueta: "Público" },
@@ -57,12 +62,24 @@ const GRUPOS: Grupo[] = [
   {
     titulo: "Buscar patrocinadores",
     enlaces: [
-      { id: "oportunidades", href: "/panel/oportunidades", etiqueta: "Oportunidades" },
+      {
+        id: "oportunidades",
+        href: "/panel/oportunidades",
+        etiqueta: "Oportunidades",
+      },
       // La libreta de empresas a las que el club quiere escribir
       // (migración 0041). Va pegada a Oportunidades porque es el paso
       // siguiente: ya sabes qué ofreces, ahora a quién.
-      { id: "objetivos", href: "/panel/objetivos", etiqueta: "A quién escribir" },
-      { id: "solicitudes", href: "/panel/solicitudes", etiqueta: "Solicitudes" },
+      {
+        id: "objetivos",
+        href: "/panel/objetivos",
+        etiqueta: "A quién escribir",
+      },
+      {
+        id: "solicitudes",
+        href: "/panel/solicitudes",
+        etiqueta: "Solicitudes",
+      },
       // Ya no es solo PDF: también sale en Word.
       { id: "dossier", href: "/panel/dossier", etiqueta: "Dossier" },
     ],
@@ -70,18 +87,30 @@ const GRUPOS: Grupo[] = [
   {
     titulo: "Seguimiento",
     enlaces: [
-      { id: "patrocinadores", href: "/panel/patrocinadores", etiqueta: "Patrocinadores" },
+      {
+        id: "patrocinadores",
+        href: "/panel/patrocinadores",
+        etiqueta: "Patrocinadores",
+      },
       // Hasta cuándo dura cada patrocinio y cuándo toca escribir
       // (migración 0050). Va aquí y no en "Buscar patrocinadores"
       // porque renovar no es captar: es cumplir con quien ya está.
-      { id: "renovaciones", href: "/panel/renovaciones", etiqueta: "Renovaciones" },
+      {
+        id: "renovaciones",
+        href: "/panel/renovaciones",
+        etiqueta: "Renovaciones",
+      },
       { id: "tareas", href: "/panel/tareas", etiqueta: "Tareas" },
     ],
   },
   {
     titulo: "Cuenta",
     enlaces: [
-      { id: "suscripcion", href: "/panel/suscripcion", etiqueta: "Suscripción" },
+      {
+        id: "suscripcion",
+        href: "/panel/suscripcion",
+        etiqueta: "Suscripción",
+      },
       { id: "privacidad", href: "/panel/privacidad", etiqueta: "Privacidad" },
     ],
   },
@@ -104,8 +133,21 @@ function estaAbierto(ruta: string, href: string): boolean {
   return ruta === href || ruta.startsWith(`${href}/`);
 }
 
+/**
+ * Cada entrada del menú es un botón con su borde, no un texto suelto.
+ *
+ * Antes solo se veía recuadrada la que estaba abierta, y las demás eran
+ * una lista de palabras: había que leerlas para saber dónde acababa una
+ * y empezaba otra. Con el borde se cuentan de un vistazo, igual que el
+ * interruptor de modo oscuro de la barra de arriba.
+ *
+ * `border` va en las clases comunes y NO en las de cada estado: si lo
+ * pusiera solo el estado apagado, al encenderse perdería los 2 px del
+ * borde y la entrada daría un salto. Lo que cambia por estado es el
+ * color del borde, nunca si lo lleva.
+ */
 const CLASES_ENLACE =
-  "flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm transition-colors";
+  "flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors";
 
 function Cuenta({ valor, abierto }: { valor: number; abierto: boolean }) {
   if (valor <= 0) return null;
@@ -166,7 +208,10 @@ function SeccionesDeLaFicha({
   }
 
   return (
-    <div className="mb-1 ml-3 flex flex-col gap-0.5 border-l border-zinc-200 pl-2">
+    /* Sin la línea vertical que había antes: con cada sección ya
+       recuadrada, el raíl al lado se leía como una segunda caja. La
+       sangría sola basta para ver que cuelgan de "Perfil del club". */
+    <div className="mb-1 ml-3 flex flex-col gap-1 pl-2">
       {SECCIONES_DE_LA_FICHA.map((seccion) => {
         // Sin club guardado (nombre y localidad) solo se puede rellenar
         // la identidad: el resto necesita esa fila para guardarse.
@@ -179,10 +224,10 @@ function SeccionesDeLaFicha({
             disabled={bloqueada}
             onClick={irA(seccion.id)}
             aria-current={activa === seccion.id ? "page" : undefined}
-            className={`rounded-lg px-3 py-2 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+            className={`rounded-lg border px-3 py-1.5 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
               activa === seccion.id
-                ? "bg-teal-50 font-semibold text-teal-800"
-                : "font-medium text-zinc-500 hover:bg-zinc-100 hover:text-titular"
+                ? "border-teal-200 bg-teal-50 font-semibold text-teal-800"
+                : "border-zinc-200 font-medium text-zinc-500 hover:border-zinc-300 hover:bg-zinc-100 hover:text-titular"
             }`}
           >
             {seccion.etiqueta}
@@ -212,10 +257,12 @@ function Lista({
 
   // Desplegado al entrar en la ficha, para no obligar a abrirlo cada
   // vez; cerrado desde cualquier otra página, donde solo estorbaría.
-  const [fichaDesplegada, setFichaDesplegada] = useState(ruta === "/panel/perfil");
+  const [fichaDesplegada, setFichaDesplegada] = useState(
+    ruta === "/panel/perfil",
+  );
 
   return (
-    <div className="flex flex-col gap-0.5">
+    <div className="flex flex-col gap-1.5">
       {GRUPOS.map((grupo) => (
         <div key={grupo.titulo ?? "inicio"}>
           {grupo.titulo && (
@@ -238,10 +285,12 @@ function Lista({
                     ? renovaciones
                     : 0;
 
+            // El borde del abierto es de SU PROPIO color: encima del
+            // relleno verde, un borde gris se vería como un cerco.
             const clases = `${CLASES_ENLACE} ${
               abierto
-                ? "bg-accion font-semibold text-sobre-color"
-                : "font-medium text-zinc-600 hover:bg-zinc-100 hover:text-titular"
+                ? "border-accion bg-accion font-semibold text-sobre-color"
+                : "border-zinc-200 font-medium text-zinc-600 hover:border-zinc-300 hover:bg-zinc-100 hover:text-titular"
             }`;
 
             if (enlace.desplegable) {
@@ -265,7 +314,9 @@ function Lista({
                     </Link>
                     <button
                       type="button"
-                      onClick={() => setFichaDesplegada((desplegada) => !desplegada)}
+                      onClick={() =>
+                        setFichaDesplegada((desplegada) => !desplegada)
+                      }
                       aria-expanded={fichaDesplegada}
                       aria-label={
                         fichaDesplegada
@@ -306,7 +357,10 @@ function Lista({
                   </div>
 
                   {fichaDesplegada && (
-                    <SeccionesDeLaFicha perfilCreado={perfilCreado} alNavegar={alNavegar} />
+                    <SeccionesDeLaFicha
+                      perfilCreado={perfilCreado}
+                      alNavegar={alNavegar}
+                    />
                   )}
                 </div>
               );
@@ -336,7 +390,7 @@ function Lista({
               target="_blank"
               rel="noopener noreferrer"
               onClick={alNavegar}
-              className={`${CLASES_ENLACE} font-medium text-zinc-500 hover:bg-zinc-100 hover:text-titular`}
+              className={`${CLASES_ENLACE} border-zinc-200 font-medium text-zinc-500 hover:border-zinc-300 hover:bg-zinc-100 hover:text-titular`}
             >
               Ver tu página pública
               <span aria-hidden="true">↗</span>
@@ -350,7 +404,7 @@ function Lista({
             <form action={cerrarSesion}>
               <button
                 type="submit"
-                className={`${CLASES_ENLACE} w-full font-medium text-zinc-600 hover:bg-zinc-100 hover:text-titular`}
+                className={`${CLASES_ENLACE} w-full border-zinc-200 font-medium text-zinc-600 hover:border-zinc-300 hover:bg-zinc-100 hover:text-titular`}
               >
                 Cerrar sesión
               </button>
