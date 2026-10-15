@@ -15,6 +15,10 @@ const CLUBES = readFileSync(
   join(RAIZ, "src", "app", "[locale]", "para-clubes", "page.tsx"),
   "utf8",
 );
+const EMPRESAS = readFileSync(
+  join(RAIZ, "src", "app", "[locale]", "para-empresas", "page.tsx"),
+  "utf8",
+);
 
 function sinComentarios(fuente: string): string {
   return fuente.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
@@ -109,10 +113,11 @@ describe("los mandos del vídeo", () => {
  * tragaba el .mp4 y lo redirigía, así que el vídeo no cargaba NUNCA en
  * producción sin que apareciera ningún error.
  */
-describe("los dos vídeos de la web", () => {
+describe("los tres vídeos de la web", () => {
   it.each([
     ["la portada", "portada-video"],
     ["para clubes", "para-clubes-video"],
+    ["para empresas", "para-empresas-video"],
   ])("%s tiene su vídeo y su imagen de espera", (_, base) => {
     const video = statSync(join(RAIZ, "public", `${base}.mp4`));
     const poster = statSync(join(RAIZ, "public", `${base}-poster.webp`));
@@ -130,10 +135,11 @@ describe("los dos vídeos de la web", () => {
     expect(middleware).toContain("mp4");
   });
 
-  it("las dos páginas usan el mismo reproductor", () => {
+  it("las tres páginas usan el mismo reproductor", () => {
     for (const [nombre, pagina] of [
       ["la portada", PORTADA],
       ["para clubes", CLUBES],
+      ["para empresas", EMPRESAS],
     ] as const) {
       expect(pagina, `${nombre} no usa VideoDeLaPortada`).toContain(
         "<VideoDeLaPortada",
@@ -142,12 +148,19 @@ describe("los dos vídeos de la web", () => {
     }
     expect(PORTADA).toContain('src="/portada-video.mp4"');
     expect(CLUBES).toContain('src="/para-clubes-video.mp4"');
+    expect(EMPRESAS).toContain('src="/para-empresas-video.mp4"');
   });
 
   it("cada vídeo lleva su propia descripción para quien no lo ve", () => {
-    // La misma etiqueta en los dos sería mentir en uno de ellos.
+    // La misma etiqueta en los tres sería mentir en dos de ellos.
     expect(PORTADA).toContain('t("video.etiquetaPortada")');
     expect(CLUBES).toContain('t("video.etiquetaParaClubes")');
+    // En esta página `t` está acotado a `home.paraEmpresas`, así que
+    // el texto del vídeo —que vive en `home.video`— se pide con un
+    // segundo traductor. Si alguien lo cambia por `t(...)` a secas,
+    // next-intl no encuentra la clave y la página revienta entera.
+    expect(EMPRESAS).toContain('tVideo("etiquetaParaEmpresas")');
+    expect(EMPRESAS).toContain('getTranslations("home.video")');
 
     const textos = JSON.parse(
       readFileSync(join(RAIZ, "messages", "es", "home.json"), "utf8"),
@@ -156,12 +169,16 @@ describe("los dos vídeos de la web", () => {
     };
     expect(textos.video.etiquetaPortada.length).toBeGreaterThan(40);
     expect(textos.video.etiquetaParaClubes.length).toBeGreaterThan(40);
-    expect(textos.video.etiquetaParaClubes).not.toBe(
+    expect(textos.video.etiquetaParaEmpresas.length).toBeGreaterThan(40);
+    const etiquetas = [
       textos.video.etiquetaPortada,
-    );
+      textos.video.etiquetaParaClubes,
+      textos.video.etiquetaParaEmpresas,
+    ];
+    expect(new Set(etiquetas).size).toBe(3);
   });
 
-  it("para clubes tiene el texto a la izquierda y el vídeo a la derecha", () => {
+  it("las tres portadas llevan el texto a la izquierda y el vídeo a la derecha", () => {
     // Lo mismo que la portada: una rejilla de dos columnas sólo a
     // partir de `lg`, porque a 390 px no caben uno al lado del otro.
     expect(CLUBES).toContain("lg:grid-cols-[minmax(0,1fr)_auto]");
@@ -171,5 +188,22 @@ describe("los dos vídeos de la web", () => {
     expect(CLUBES.indexOf("<VideoDeLaPortada")).toBeGreaterThan(
       CLUBES.indexOf('t("paraClubes.titulo")'),
     );
+
+    expect(EMPRESAS).toContain("lg:grid-cols-[minmax(0,1fr)_auto]");
+    expect(EMPRESAS.indexOf("<VideoDeLaPortada")).toBeGreaterThan(
+      EMPRESAS.indexOf('t("titulo")'),
+    );
+  });
+
+  it("la página de empresas no se trae las funciones del club", () => {
+    // Las cuatro pastillas del héroe de clubes hablan de ideas de
+    // patrocinio, tareas y dossier: son las herramientas que compra el
+    // club. Puestas aquí, al comercio de barrio no le dicen nada y le
+    // devuelven la idea —que esta página existe justo para quitarle—
+    // de que esto es un producto de pago para él.
+    // Sin comentarios: ahí arriba, en la propia página, hay uno que
+    // explica justamente por qué NO están, y nombrarlas basta para
+    // que esta comprobación se dispare sola.
+    expect(sinComentarios(EMPRESAS)).not.toContain("FuncionesDestacadas");
   });
 });

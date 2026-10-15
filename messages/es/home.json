@@ -785,7 +785,8 @@
     "texto": "Un club de verdad, de principio a fin: la página, una oportunidad publicada y una empresa escribiendo.",
     "alternativa": "Tu navegador no puede reproducir este vídeo.",
     "etiquetaPortada": "Vídeo de presentación de ApoyaClub: qué es, cómo descubres oportunidades de patrocinio y cómo gestionas a tus patrocinadores.",
-    "etiquetaParaClubes": "Vídeo de presentación para clubes: qué es ApoyaClub, las más de 100 ideas de patrocinio, las herramientas para gestionar tareas y acuerdos, y cómo demuestras resultados a tus patrocinadores."
+    "etiquetaParaClubes": "Vídeo de presentación para clubes: qué es ApoyaClub, las más de 100 ideas de patrocinio, las herramientas para gestionar tareas y acuerdos, y cómo demuestras resultados a tus patrocinadores.",
+  "etiquetaParaEmpresas": "Vídeo de presentación para empresas y colaboradores: qué oportunidades de patrocinio puedes ver sin registrarte, cómo filtrarlas por provincia, deporte y presupuesto, y cómo contactar directamente con el club."
   },
   "funciones": {
     "ideasTitulo": "Más de {ideas} ideas de patrocinio",

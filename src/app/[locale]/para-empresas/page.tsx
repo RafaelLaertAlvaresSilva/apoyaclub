@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
+import { VideoDeLaPortada } from "../components/VideoDeLaPortada";
 import { MenuDeSecciones, type SeccionDelMenu } from "../components/MenuDeSecciones";
 import {
   FondoDeHeroe,
@@ -45,6 +46,7 @@ const SECCIONES: SeccionDelMenu[] = [
 
 export default async function ParaEmpresasPage() {
   const t = await getTranslations("home.paraEmpresas");
+  const tVideo = await getTranslations("home.video");
   const pasos = t.raw("pasos") as { titulo: string; texto: string }[];
   const formas = t.raw("formas.lista") as string[];
   const ventajas = t.raw("cuenta.ventajas") as { titulo: string; texto: string }[];
@@ -59,33 +61,56 @@ export default async function ParaEmpresasPage() {
         <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-white to-zinc-50 px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-16">
           <FondoDeHeroe archivo="/fondo-empresas.webp" tono="oscuro" />
 
-          <div className="relative mx-auto max-w-3xl text-center">
-            <span className="mb-6 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-accion-tinta">
-              {t("etiqueta")}
-            </span>
+          {/* Dos columnas, igual que la portada y la página de clubes:
+              el mensaje a la izquierda y el vídeo a la derecha, para
+              que quien entra lea y vea a la vez. En móvil y tableta va
+              en una sola columna, con el mensaje arriba y el vídeo
+              debajo — al lado, en 390 px de ancho, no caben ni uno ni
+              otro.
 
-            <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-titular sm:text-4xl lg:text-5xl">
-              {t("titulo")}
-            </h1>
-            <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-zinc-600 sm:text-lg">
-              {t("texto")}
-            </p>
+              AQUÍ NO VAN LAS `FuncionesDestacadas` que sí lleva la
+              página de clubes. Esas cuatro pastillas hablan de ideas
+              de patrocinio, tareas y dossier: son las herramientas
+              que compra el club. A un comercio de barrio no le dicen
+              nada y, peor, le hacen pensar otra vez que esto es un
+              producto de pago para él. */}
+          <div className="relative mx-auto grid max-w-6xl items-center gap-10 text-center lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-14 lg:text-left">
+            <div className="min-w-0">
+              <span className="mb-6 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-accion-tinta">
+                {t("etiqueta")}
+              </span>
 
-            <div className="mt-9 flex w-full flex-col items-stretch gap-3 sm:mx-auto sm:w-auto sm:flex-row sm:items-center sm:justify-center">
-              <Link
-                href="/buscar?busca=patrocinios"
-                className="inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-sobre-color shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-navy"
-              >
-                {t("cta")}
-              </Link>
-              <Link
-                href="/buscar?busca=necesidades"
-                className="inline-flex items-center justify-center rounded-full border-2 border-amber-300 bg-amber-50 px-8 py-4 text-base font-bold text-amber-900 transition-colors hover:border-amber-400 hover:bg-amber-100"
-              >
-                {t("ctaNecesidades")}
-              </Link>
+              <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-titular sm:text-4xl lg:text-5xl">
+                {t("titulo")}
+              </h1>
+              <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-zinc-600 sm:text-lg lg:mx-0">
+                {t("texto")}
+              </p>
+
+              <div className="mt-9 flex flex-col items-center gap-3 lg:items-start">
+                <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
+                  <Link
+                    href="/buscar?busca=patrocinios"
+                    className="inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-sobre-color shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-navy"
+                  >
+                    {t("cta")}
+                  </Link>
+                  <Link
+                    href="/buscar?busca=necesidades"
+                    className="inline-flex items-center justify-center rounded-full border-2 border-amber-300 bg-amber-50 px-8 py-4 text-base font-bold text-amber-900 transition-colors hover:border-amber-400 hover:bg-amber-100"
+                  >
+                    {t("ctaNecesidades")}
+                  </Link>
+                </div>
+                <p className="text-sm font-medium text-zinc-600">{t("gratis")}</p>
+              </div>
             </div>
-            <p className="mt-4 text-sm font-medium text-zinc-600">{t("gratis")}</p>
+
+            <VideoDeLaPortada
+              src="/para-empresas-video.mp4"
+              poster="/para-empresas-video-poster.webp"
+              etiqueta={tVideo("etiquetaParaEmpresas")}
+            />
           </div>
         </section>
 
