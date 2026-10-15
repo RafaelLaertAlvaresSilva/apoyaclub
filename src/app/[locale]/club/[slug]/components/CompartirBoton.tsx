@@ -48,7 +48,7 @@ export function CompartirBoton({ url, titulo }: { url: string; titulo: string })
         Compartir enlace
       </button>
       {mensaje && (
-        <span className="absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-2 py-1 text-xs text-white shadow-lg">
+        <span className="absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-2 py-1 text-xs text-sobre-color shadow-lg">
           {mensaje}
         </span>
       )}

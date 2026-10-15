@@ -166,11 +166,11 @@ export default async function AdminClubesPage({
             type="search"
             defaultValue={buscar ?? ""}
             placeholder="Nombre, localidad o correo"
-            className="w-full max-w-xs rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-brand-teal-dark focus:outline-none focus:ring-1 focus:ring-brand-teal-dark"
+            className="w-full max-w-xs rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-accion-tinta focus:outline-none focus:ring-1 focus:ring-accion-tinta"
           />
           <button
             type="submit"
-            className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy"
+            className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
           >
             Buscar
           </button>

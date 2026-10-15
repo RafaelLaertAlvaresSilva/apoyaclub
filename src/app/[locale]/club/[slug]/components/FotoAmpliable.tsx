@@ -62,10 +62,10 @@ export function FotoAmpliable({
         type="button"
         onClick={abrir}
         aria-label={textoAbrir}
-        className="absolute inset-0 z-10 flex cursor-zoom-in items-end justify-end p-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+        className="absolute inset-0 z-10 flex cursor-zoom-in items-end justify-end p-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-sobre-color"
       >
         {conEtiqueta && (
-          <span className="pointer-events-none inline-flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm">
+          <span className="pointer-events-none inline-flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 text-xs font-medium text-sobre-color backdrop-blur-sm">
             <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" className="h-3.5 w-3.5">
               <path d="M3 3h5v2H5v3H3V3Zm9 0h5v5h-2V5h-3V3ZM3 12h2v3h3v2H3v-5Zm12 0h2v5h-5v-2h3v-3Z" />
             </svg>
@@ -96,7 +96,7 @@ export function FotoAmpliable({
               type="button"
               onClick={cerrar}
               aria-label={textoCerrar}
-              className="absolute top-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm hover:bg-black/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="absolute top-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-black/60 text-sobre-color backdrop-blur-sm hover:bg-black/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-sobre-color"
             >
               <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" className="h-5 w-5">
                 <path d="M6.3 4.9 4.9 6.3 8.6 10l-3.7 3.7 1.4 1.4L10 11.4l3.7 3.7 1.4-1.4L11.4 10l3.7-3.7-1.4-1.4L10 8.6 6.3 4.9Z" />

@@ -93,7 +93,7 @@ export function ListaDeGuardados() {
         </p>
         <Link
           href="/buscar"
-          className="mt-4 inline-block rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy"
+          className="mt-4 inline-block rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
         >
           Buscar clubes
         </Link>
@@ -171,7 +171,7 @@ export function ListaDeGuardados() {
               >
                 <div className="min-w-0 flex-1">
                   {oportunidad.esNecesidad && (
-                    <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-accion-tinta">
                       Lo necesitan
                     </p>
                   )}
@@ -202,7 +202,7 @@ export function ListaDeGuardados() {
         <p className="rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-600">
           Esto se guarda solo en este navegador: desde otro dispositivo no lo verás, y si borras
           los datos de navegación se pierde.{" "}
-          <Link href="/registro-empresa" className="font-medium text-brand-teal-dark underline">
+          <Link href="/registro-empresa" className="font-medium text-accion-tinta underline">
             Crea una cuenta gratis
           </Link>{" "}
           y se te guarda en todos. Lo que ya tienes marcado se viene contigo.

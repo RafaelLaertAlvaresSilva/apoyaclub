@@ -44,7 +44,19 @@ export default async function PanelLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <>
+    /*
+     * `tema-panel` es el interruptor del modo oscuro, y vive aquí a
+     * propósito: solo el panel se pone oscuro. La página pública del
+     * club es el escaparate que ve una empresa, de día y en su
+     * oficina, y esa se queda clara siempre.
+     *
+     * Lleva su propio fondo (`bg-zinc-50`, que dentro de la envoltura
+     * ya es el gris carbón) y `min-h-dvh` porque el fondo del `body`
+     * lo pinta el layout de arriba, que es el mismo para toda la web:
+     * sin esto, una pantalla corta dejaría ver una franja clara por
+     * debajo.
+     */
+    <div className="tema-panel flex min-h-dvh flex-1 flex-col bg-zinc-50">
       <BarraLogo />
       {filaSuscripcion && <AvisoSuscripcion suscripcion={subscriptionRowToInfo(filaSuscripcion)} />}
 
@@ -55,6 +67,6 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         <PanelNav paginaPublica={paginaPublica} perfilCreado={perfilCreado} />
         <div className="flex min-w-0 flex-1 flex-col">{children}</div>
       </div>
-    </>
+    </div>
   );
 }

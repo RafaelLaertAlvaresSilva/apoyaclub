@@ -119,7 +119,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[lo
             él hay que pasar por la cabecera entera en cada página. */}
         <a
           href="#contenido"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-navy focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-navy focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-sobre-color"
         >
           Saltar al contenido
         </a>

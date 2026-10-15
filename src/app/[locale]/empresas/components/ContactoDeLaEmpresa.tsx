@@ -56,7 +56,7 @@ export function ContactoDeLaEmpresa({ slug }: { slug: string }) {
           type="button"
           onClick={mostrar}
           disabled={cargando}
-          className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy disabled:opacity-60"
+          className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy disabled:opacity-60"
         >
           {cargando ? "Un momento…" : "Ver datos de contacto"}
         </button>
@@ -77,7 +77,7 @@ export function ContactoDeLaEmpresa({ slug }: { slug: string }) {
           href={contacto.web}
           target="_blank"
           rel="noopener noreferrer nofollow"
-          className="font-medium text-brand-teal-dark hover:underline"
+          className="font-medium text-accion-tinta hover:underline"
         >
           Escríbele por su web
         </a>
@@ -103,7 +103,7 @@ export function ContactoDeLaEmpresa({ slug }: { slug: string }) {
         {contacto.email && (
           <a
             href={`mailto:${contacto.email}`}
-            className="rounded-lg bg-brand-teal-dark px-4 py-2 font-medium text-white transition-colors hover:bg-brand-navy"
+            className="rounded-lg bg-brand-teal-dark px-4 py-2 font-medium text-sobre-color transition-colors hover:bg-brand-navy"
           >
             {contacto.email}
           </a>
@@ -111,7 +111,7 @@ export function ContactoDeLaEmpresa({ slug }: { slug: string }) {
         {contacto.telefono && (
           <a
             href={`tel:${contacto.telefono.replace(/\s/g, "")}`}
-            className="rounded-lg border border-brand-teal-dark px-4 py-2 font-medium text-brand-teal-dark transition-colors hover:bg-teal-50"
+            className="rounded-lg border border-accion-tinta px-4 py-2 font-medium text-accion-tinta transition-colors hover:bg-teal-50"
           >
             {contacto.telefono}
           </a>

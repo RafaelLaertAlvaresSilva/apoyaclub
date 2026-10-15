@@ -37,17 +37,17 @@ export function BarraDePlazas({
   return (
     <div>
       <div className="mb-1.5 flex items-baseline justify-between gap-2">
-        <span className={`text-xs font-medium ${oscuro ? "text-white/70" : "text-zinc-600"}`}>
+        <span className={`text-xs font-medium ${oscuro ? "text-sobre-color/70" : "text-zinc-600"}`}>
           {cubiertas} de {total} {etiqueta}
         </span>
         <span
           className={`text-xs font-semibold ${
             completa
               ? oscuro
-                ? "text-white"
+                ? "text-sobre-color"
                 : "text-teal-700"
               : oscuro
-                ? "text-white/70"
+                ? "text-sobre-color/70"
                 : "text-zinc-500"
           }`}
         >
@@ -64,7 +64,7 @@ export function BarraDePlazas({
       >
         <div
           className={`h-full rounded-full transition-[width] ${
-            completa ? "bg-teal-600" : "bg-teal-500"
+            completa ? "bg-medidor" : "bg-teal-500"
           }`}
           style={{ width: `${porcentaje}%` }}
         />

@@ -16,7 +16,7 @@ export function EmpresaNav({ activo }: { activo: SeccionEmpresa }) {
           key={enlace.id}
           href={enlace.href}
           className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-            activo === enlace.id ? "bg-teal-700 text-white" : "text-zinc-600 hover:bg-zinc-100"
+            activo === enlace.id ? "bg-accion text-sobre-color" : "text-zinc-600 hover:bg-zinc-100"
           }`}
         >
           {enlace.etiqueta}
@@ -25,7 +25,7 @@ export function EmpresaNav({ activo }: { activo: SeccionEmpresa }) {
 
       <Link
         href="/buscar"
-        className="ml-auto rounded-lg px-3 py-1.5 text-sm font-medium text-brand-teal-dark hover:bg-zinc-100"
+        className="ml-auto rounded-lg px-3 py-1.5 text-sm font-medium text-accion-tinta hover:bg-zinc-100"
       >
         Buscar clubes
       </Link>

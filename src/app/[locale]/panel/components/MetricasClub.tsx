@@ -131,7 +131,7 @@ function Tarjeta({
     <div className="rounded-lg border border-zinc-200 p-3">
       <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{etiqueta}</dt>
       <dd className="mt-1 flex items-baseline gap-2">
-        <span className="text-xl font-bold tabular-nums text-brand-navy">{dato.actual}</span>
+        <span className="text-xl font-bold tabular-nums text-titular">{dato.actual}</span>
         {porcentaje !== null && porcentaje !== 0 && (
           <span
             className={`text-xs font-semibold ${porcentaje > 0 ? "text-teal-700" : "text-amber-700"}`}

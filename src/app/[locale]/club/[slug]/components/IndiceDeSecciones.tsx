@@ -21,7 +21,7 @@ const DESTACADAS = ["oportunidades", "servicios"] as const;
  * veces. El `display` se pone fuera, en cada sitio donde se usan.
  */
 const CLASES_PASTILLA = "items-center rounded-full px-4 py-2 text-sm transition-colors";
-const CLASES_DESTACADA = `inline-flex ${CLASES_PASTILLA} bg-teal-700 font-semibold text-white hover:bg-teal-800`;
+const CLASES_DESTACADA = `inline-flex ${CLASES_PASTILLA} bg-accion font-semibold text-sobre-color hover:bg-accion-fuerte`;
 const CLASES_NORMAL = `${CLASES_PASTILLA} border border-zinc-300 bg-white font-medium text-zinc-700 hover:border-teal-600 hover:text-teal-700`;
 
 /**

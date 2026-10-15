@@ -15,12 +15,12 @@ type Props = {
 };
 
 const CLASES_PRIMARIA =
-  "inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800";
+  "inline-flex items-center gap-2 rounded-lg bg-accion px-4 py-2.5 text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte";
 const CLASES_SECUNDARIA =
   "inline-flex items-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100";
 
 const clasesCampo =
-  "w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-brand-teal-dark focus:outline-none focus:ring-1 focus:ring-brand-teal-dark";
+  "w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-accion-tinta focus:outline-none focus:ring-1 focus:ring-accion-tinta";
 
 /**
  * "Escribir al club": el formulario con el que una empresa contacta,
@@ -97,7 +97,7 @@ export function SolicitarContactoBoton({
                 <button
                   type="button"
                   onClick={() => setAbierto(false)}
-                  className="mt-5 rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-800"
+                  className="mt-5 rounded-lg bg-accion px-5 py-2.5 text-sm font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte"
                 >
                   Cerrar
                 </button>
@@ -194,7 +194,7 @@ function BotonDeEnvio() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-800 disabled:opacity-60"
+      className="rounded-lg bg-accion px-5 py-2.5 text-sm font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte disabled:opacity-60"
     >
       {pending ? "Enviando…" : "Enviar mensaje"}
     </button>

@@ -30,7 +30,7 @@ export function BajaForm({ token }: { token: string }) {
         </p>
         <Link
           href="/empresa"
-          className="mt-4 inline-block rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy"
+          className="mt-4 inline-block rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
         >
           Ir a mi panel
         </Link>

@@ -112,7 +112,7 @@ function Cuenta({ valor, abierto }: { valor: number; abierto: boolean }) {
   return (
     <span
       className={`ml-auto inline-flex min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 text-xs font-bold ${
-        abierto ? "bg-white text-teal-700" : "bg-red-600 text-white"
+        abierto ? "bg-white text-teal-700" : "bg-peligro text-sobre-color"
       }`}
     >
       {valor}
@@ -182,7 +182,7 @@ function SeccionesDeLaFicha({
             className={`rounded-lg px-3 py-2 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
               activa === seccion.id
                 ? "bg-teal-50 font-semibold text-teal-800"
-                : "font-medium text-zinc-500 hover:bg-zinc-100 hover:text-brand-navy"
+                : "font-medium text-zinc-500 hover:bg-zinc-100 hover:text-titular"
             }`}
           >
             {seccion.etiqueta}
@@ -240,8 +240,8 @@ function Lista({
 
             const clases = `${CLASES_ENLACE} ${
               abierto
-                ? "bg-teal-700 font-semibold text-white"
-                : "font-medium text-zinc-600 hover:bg-zinc-100 hover:text-brand-navy"
+                ? "bg-accion font-semibold text-sobre-color"
+                : "font-medium text-zinc-600 hover:bg-zinc-100 hover:text-titular"
             }`;
 
             if (enlace.desplegable) {
@@ -336,7 +336,7 @@ function Lista({
               target="_blank"
               rel="noopener noreferrer"
               onClick={alNavegar}
-              className={`${CLASES_ENLACE} font-medium text-zinc-500 hover:bg-zinc-100 hover:text-brand-navy`}
+              className={`${CLASES_ENLACE} font-medium text-zinc-500 hover:bg-zinc-100 hover:text-titular`}
             >
               Ver tu página pública
               <span aria-hidden="true">↗</span>
@@ -350,7 +350,7 @@ function Lista({
             <form action={cerrarSesion}>
               <button
                 type="submit"
-                className={`${CLASES_ENLACE} w-full font-medium text-zinc-600 hover:bg-zinc-100 hover:text-brand-navy`}
+                className={`${CLASES_ENLACE} w-full font-medium text-zinc-600 hover:bg-zinc-100 hover:text-titular`}
               >
                 Cerrar sesión
               </button>
@@ -443,7 +443,7 @@ export function MenuDelPanel({
           type="button"
           onClick={() => setAbierto(true)}
           aria-expanded={abierto}
-          className="flex w-full items-center gap-3 rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold text-brand-navy"
+          className="flex w-full items-center gap-3 rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold text-titular"
         >
           <span aria-hidden="true" className="flex flex-col gap-[3px]">
             <span className="block h-0.5 w-4 rounded bg-current" />
@@ -452,7 +452,7 @@ export function MenuDelPanel({
           </span>
           Menú del panel
           {avisos > 0 && (
-            <span className="ml-auto inline-flex min-w-5 items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">
+            <span className="ml-auto inline-flex min-w-5 items-center justify-center rounded-full bg-peligro px-1.5 py-0.5 text-xs font-bold text-sobre-color">
               {avisos}
             </span>
           )}
@@ -461,7 +461,7 @@ export function MenuDelPanel({
         {abierto && (
           <div className="fixed inset-0 z-50 flex">
             <div
-              className="absolute inset-0 bg-zinc-900/40"
+              className="absolute inset-0 bg-black/40"
               onClick={() => setAbierto(false)}
               aria-hidden="true"
             />

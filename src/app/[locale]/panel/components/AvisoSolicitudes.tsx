@@ -26,7 +26,7 @@ export function AvisoSolicitudes({ sinAbrir }: { sinAbrir: number }) {
       </p>
       <Link
         href="/panel/solicitudes"
-        className="mt-3 inline-flex items-center rounded-lg bg-teal-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-800"
+        className="mt-3 inline-flex items-center rounded-lg bg-accion px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte"
       >
         {sinAbrir === 1 ? "Ver la solicitud" : "Ver las solicitudes"}
       </Link>

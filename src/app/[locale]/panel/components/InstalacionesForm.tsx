@@ -67,7 +67,7 @@ export function InstalacionesForm({
                       manejarResultado(await eliminarFotoInstalacion(foto));
                     })
                   }
-                  className="absolute -right-2 -top-2 hidden h-6 w-6 items-center justify-center rounded-full bg-red-600 text-xs text-white group-hover:flex"
+                  className="absolute -right-2 -top-2 hidden h-6 w-6 items-center justify-center rounded-full bg-peligro text-xs text-sobre-color group-hover:flex"
                   aria-label="Quitar foto"
                 >
                   ×

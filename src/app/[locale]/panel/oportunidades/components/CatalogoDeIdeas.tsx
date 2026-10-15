@@ -59,7 +59,7 @@ export function CatalogoDeIdeas({
                quedaba un par de píxeles más abajo. */
             className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
               categoria === entrada.id
-                ? "bg-teal-700 text-white"
+                ? "bg-accion text-sobre-color"
                 : "border border-zinc-300 bg-white text-zinc-700 hover:border-teal-500 hover:text-teal-700"
             }`}
           >
@@ -99,7 +99,7 @@ export function CatalogoDeIdeas({
                       <button
                         type="button"
                         onClick={() => onElegir(idea)}
-                        className="rounded-lg bg-teal-700 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-teal-800"
+                        className="rounded-lg bg-accion px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte"
                       >
                         Usar esta idea
                       </button>

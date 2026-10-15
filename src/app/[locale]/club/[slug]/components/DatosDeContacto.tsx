@@ -72,7 +72,7 @@ export function DatosDeContacto({
           type="button"
           onClick={mostrar}
           disabled={cargando}
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-teal-700 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-teal-800 disabled:opacity-60"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-accion px-5 py-3 text-sm font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte disabled:opacity-60"
         >
           {cargando ? "Cargando…" : textoBoton}
         </button>
@@ -108,7 +108,7 @@ export function DatosDeContacto({
         {contacto.email && (
           <a
             href={`mailto:${contacto.email}`}
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-accion px-4 py-2.5 text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte"
           >
             {textoEmail}
           </a>

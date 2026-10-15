@@ -109,7 +109,7 @@ export function TareasManager({
         />
       ) : (
         <details className="group rounded-xl border border-zinc-200 bg-white">
-          <summary className="flex cursor-pointer list-none items-center gap-2 px-5 py-4 text-sm font-medium text-brand-teal-dark [&::-webkit-details-marker]:hidden">
+          <summary className="flex cursor-pointer list-none items-center gap-2 px-5 py-4 text-sm font-medium text-accion-tinta [&::-webkit-details-marker]:hidden">
             <span aria-hidden="true" className="text-base leading-none">+</span>
             Apuntar algo nuevo
           </summary>
@@ -137,7 +137,7 @@ export function TareasManager({
               onClick={() => setFiltro(opcion.id)}
               className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
                 filtro === opcion.id
-                  ? "bg-teal-700 text-white"
+                  ? "bg-accion text-sobre-color"
                   : "border border-zinc-300 text-zinc-600 hover:bg-zinc-100"
               }`}
             >
@@ -159,7 +159,7 @@ export function TareasManager({
                 <div className="mb-2 flex flex-wrap items-baseline gap-2">
                   <h3 className="font-semibold text-zinc-900">{grupo.empresa}</h3>
                   {grupo.caducadas > 0 && (
-                    <span className="rounded-full bg-red-600 px-2 py-0.5 text-xs font-bold text-white">
+                    <span className="rounded-full bg-peligro px-2 py-0.5 text-xs font-bold text-sobre-color">
                       {grupo.caducadas} vencida{grupo.caducadas === 1 ? "" : "s"}
                     </span>
                   )}

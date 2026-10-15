@@ -234,7 +234,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
               línea diminuta en mayúsculas, así que al bajar por la ficha
               lo único que la empresa puede hacer parecía un pie de foto
               y lo que solo informa parecía lo principal. */}
-          <h2 className="text-xl font-semibold text-brand-teal-dark sm:text-2xl">
+          <h2 className="text-xl font-semibold text-accion-tinta sm:text-2xl">
             {t("oportunidades.titulo")}
           </h2>
           {loQueOfrece.length === 0 ? (
@@ -292,13 +292,13 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     <p className="text-sm text-zinc-600">{oportunidad.description}</p>
                   )}
                   {oportunidad.exclusivity && (
-                    <p className="text-xs font-medium text-brand-teal-dark">
+                    <p className="text-xs font-medium text-accion-tinta">
                       {t("oportunidades.exclusiva", { sector: oportunidad.exclusivity })}
                     </p>
                   )}
                   {esPorPlazas(oportunidad) && (
                     <div className="space-y-1.5">
-                      <p className="text-xs font-medium text-brand-teal-dark">
+                      <p className="text-xs font-medium text-accion-tinta">
                         {t("oportunidades.plazas", {
                           libres: plazasLibres(oportunidad),
                           total: oportunidad.slotsTotal ?? 0,
@@ -329,7 +329,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                         donde se puede compartir esta sola. */}
                     <Link
                       href={`/club/${perfil.slug}/oportunidad/${oportunidad.id}`}
-                      className="inline-flex items-center rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:border-brand-teal-dark hover:text-brand-teal-dark"
+                      className="inline-flex items-center rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:border-accion-tinta hover:text-accion-tinta"
                     >
                       Ver ficha
                     </Link>
@@ -372,7 +372,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
       nodo: (
         <section id="servicios" className="scroll-mt-24 pt-8">
           <div className="rounded-2xl border border-teal-200 bg-teal-50 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold text-brand-teal-dark sm:text-2xl">
+            <h2 className="text-xl font-semibold text-accion-tinta sm:text-2xl">
               {t("servicios.titulo")}
             </h2>
             <p className="mt-2 text-sm text-zinc-700">{t("servicios.descripcion")}</p>
@@ -430,7 +430,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                         donde se puede compartir esta sola. */}
                     <Link
                       href={`/club/${perfil.slug}/oportunidad/${oportunidad.id}`}
-                      className="inline-flex items-center rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:border-brand-teal-dark hover:text-brand-teal-dark"
+                      className="inline-flex items-center rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:border-accion-tinta hover:text-accion-tinta"
                     >
                       Ver ficha
                     </Link>
@@ -527,7 +527,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     : ""}
                 </p>
                 {equipo.competitionLevel && (
-                  <p className="mt-2 text-sm font-medium text-brand-teal-dark">
+                  <p className="mt-2 text-sm font-medium text-accion-tinta">
                     {equipo.competitionLevel}
                   </p>
                 )}
@@ -1011,7 +1011,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                 mismo, uno al lado del otro, obligan a elegir sin motivo. */}
               <a
                 href="#contacto"
-                className="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
+                className="inline-flex items-center gap-2 rounded-lg bg-accion px-4 py-2.5 text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte"
               >
                 {t("portada.contactar")}
               </a>

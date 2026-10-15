@@ -70,8 +70,8 @@ describe("los botones del informe", () => {
   it("el PDF manda y el Word acompaña", () => {
     // Relleno contra perfilado. Dos rellenos iguales obligarían a leer
     // para saber cuál es el que se le manda al patrocinador.
-    expect(CODIGO).toContain("bg-brand-teal-dark text-white");
-    expect(CODIGO).toContain("bg-white text-teal-800");
+    expect(CODIGO).toContain("bg-brand-teal-dark text-sobre-color");
+    expect(CODIGO).toContain("bg-white text-accion-tinta");
     expect(CODIGO).toContain("principal\n");
   });
 
@@ -82,8 +82,9 @@ describe("los botones del informe", () => {
     // y quedarían desalineados.
     expect(CODIGO).toMatch(/rounded-lg border /);
     expect(CODIGO).toContain("border-brand-teal-dark bg-brand-teal-dark");
-    // `border-brand-teal-dark` sí (es el color del borde); `border ` a
-    // secas no, que sería declarar la utilidad dos veces.
+    // El borde del relleno es de su propio color (invisible). Si fuera
+    // de la TINTA, en oscuro saldría un contorno verde claro alrededor
+    // del botón.
     const color = CODIGO.match(/const color = principal[\s\S]*?;/)?.[0] ?? "";
     expect(color).not.toMatch(/\bborder(?![-\w])/);
   });

@@ -66,7 +66,7 @@ export function CamposDeContacto({ contacto }: { contacto: ContactoEmpresa }) {
             type="checkbox"
             name="contactoPublico"
             defaultChecked={contacto.publico}
-            className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+            className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
           />
           <span>
             <span className="block font-medium text-zinc-900">

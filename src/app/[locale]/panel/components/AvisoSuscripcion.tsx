@@ -70,7 +70,7 @@ export function AvisoSuscripcion({ suscripcion }: { suscripcion: ClubSubscriptio
     <div
       role="status"
       className={`px-4 py-2.5 text-center text-sm font-medium ${
-        grave ? "bg-red-600 text-white" : "bg-amber-500 text-amber-950"
+        grave ? "bg-peligro text-sobre-color" : "bg-aviso text-sobre-aviso"
       }`}
     >
       {mensaje}{" "}

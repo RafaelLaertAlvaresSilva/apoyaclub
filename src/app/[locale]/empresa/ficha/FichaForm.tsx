@@ -165,7 +165,7 @@ export function FichaForm({ datos, userId }: { datos: DatosFicha; userId: string
             type="checkbox"
             name="enElDirectorio"
             defaultChecked={datos.enElDirectorio}
-            className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+            className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
           />
           <span>
             <span className="block font-medium text-zinc-900">
@@ -188,7 +188,7 @@ export function FichaForm({ datos, userId }: { datos: DatosFicha; userId: string
             type="checkbox"
             name="quiereAvisos"
             defaultChecked={datos.quiereAvisos}
-            className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+            className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
           />
           <span>
             <span className="block font-medium text-zinc-900">

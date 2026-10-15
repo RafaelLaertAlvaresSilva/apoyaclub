@@ -61,7 +61,7 @@ export function OfertasManager({
         <button
           type="button"
           onClick={() => setCreando(true)}
-          className="self-start rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy"
+          className="self-start rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
         >
           + Publicar otra cosa
         </button>

@@ -37,7 +37,7 @@ export function BarraLogo() {
             un logo se puede pulsar: el enlace lo dice con palabras. */}
         <Link
           href="/"
-          className="shrink-0 text-sm font-medium text-zinc-600 transition hover:text-brand-navy"
+          className="shrink-0 text-sm font-medium text-zinc-600 transition hover:text-titular"
         >
           Volver a la portada
         </Link>

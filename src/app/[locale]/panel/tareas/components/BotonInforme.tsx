@@ -88,9 +88,12 @@ function Descarga({
   // Los DOS llevan borde, y el del relleno es de su propio color y no
   // se ve. Es para que midan igual: con borde solo en uno, ese sale dos
   // píxeles más alto que su compañero y quedan desalineados.
+  // El borde del relleno va con `bg-` y no con la tinta: tiene que ser
+  // EL MISMO color que su fondo para no verse. Con la tinta, que en
+  // oscuro es verde claro, el botón salía con un contorno luminoso.
   const color = principal
-    ? "border-brand-teal-dark bg-brand-teal-dark text-white shadow-sm hover:border-teal-800 hover:bg-teal-800"
-    : "border-teal-600 bg-white text-teal-800 hover:bg-teal-50";
+    ? "border-brand-teal-dark bg-brand-teal-dark text-sobre-color shadow-sm hover:border-accion-fuerte hover:bg-accion-fuerte"
+    : "border-accion-tinta bg-white text-accion-tinta hover:bg-teal-50";
 
   return (
     <form method="post" action="/panel/tareas/informe">

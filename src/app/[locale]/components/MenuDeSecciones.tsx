@@ -115,8 +115,8 @@ export function MenuDeSecciones({ secciones }: { secciones: SeccionDelMenu[] }) 
             aria-current={activa === seccion.id ? "true" : undefined}
             className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
               activa === seccion.id
-                ? "bg-brand-navy text-white"
-                : "text-zinc-600 hover:bg-zinc-100 hover:text-brand-navy"
+                ? "bg-brand-navy text-sobre-color"
+                : "text-zinc-600 hover:bg-zinc-100 hover:text-titular"
             }`}
           >
             {seccion.etiqueta}

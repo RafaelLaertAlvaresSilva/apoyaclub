@@ -126,7 +126,7 @@ export function EscribirCorreo({
                   name="asunto"
                   checked={indiceAsunto === indice}
                   onChange={() => setIndiceAsunto(indice)}
-                  className="mt-1 h-3.5 w-3.5 border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+                  className="mt-1 h-3.5 w-3.5 border-zinc-300 text-teal-600 focus:ring-accion-tinta"
                 />
                 <span>{opcion}</span>
               </label>
@@ -171,7 +171,7 @@ export function EscribirCorreo({
           <button
             type="button"
             onClick={() => void copiar()}
-            className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy"
+            className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
           >
             {copiado ? "Copiado" : "Copiar el correo"}
           </button>

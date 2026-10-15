@@ -36,13 +36,13 @@ export default function RevisaTuCorreoPage() {
           ¿Te equivocaste al escribir el correo?{" "}
           <a
             href={`mailto:${TITULAR.email}?subject=${encodeURIComponent("No me llega el correo de confirmación")}`}
-            className="font-medium text-brand-teal-dark hover:underline"
+            className="font-medium text-accion-tinta hover:underline"
           >
             Escríbenos
           </a>{" "}
           y lo arreglamos.
         </p>
-        <Link href="/login" className="inline-block font-medium text-brand-teal-dark hover:underline">
+        <Link href="/login" className="inline-block font-medium text-accion-tinta hover:underline">
           {tComun("volverALogin")}
         </Link>
       </div>

@@ -78,7 +78,7 @@ export function MenuDeLaCabecera({
   const resto = enlaces.filter((enlace) => enlace.href !== "/buscar");
 
   const CLASE_FILA =
-    "flex items-center justify-between rounded-xl bg-zinc-50 px-4 py-3.5 text-base font-semibold text-brand-navy transition-colors hover:bg-zinc-100";
+    "flex items-center justify-between rounded-xl bg-zinc-50 px-4 py-3.5 text-base font-semibold text-titular transition-colors hover:bg-zinc-100";
 
   return (
     <div>
@@ -87,7 +87,7 @@ export function MenuDeLaCabecera({
         onClick={() => setAbierto(true)}
         aria-expanded={abierto}
         aria-label="Abrir el menú"
-        className="flex h-11 w-11 items-center justify-center rounded-lg bg-zinc-50 text-brand-navy transition-colors hover:bg-zinc-100"
+        className="flex h-11 w-11 items-center justify-center rounded-lg bg-zinc-50 text-titular transition-colors hover:bg-zinc-100"
       >
         <span aria-hidden="true" className="flex flex-col gap-[5px]">
           <span className="block h-0.5 w-5 rounded bg-current" />
@@ -112,7 +112,7 @@ export function MenuDeLaCabecera({
                 type="button"
                 onClick={() => setAbierto(false)}
                 aria-label="Cerrar el menú"
-                className="flex h-10 w-10 items-center justify-center rounded-lg text-2xl leading-none text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-brand-navy"
+                className="flex h-10 w-10 items-center justify-center rounded-lg text-2xl leading-none text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-titular"
               >
                 <span aria-hidden="true">×</span>
               </button>
@@ -122,7 +122,7 @@ export function MenuDeLaCabecera({
               {destacado && (
                 <Link
                   href={destacado.href}
-                  className="flex items-center gap-3 rounded-xl bg-brand-teal-dark px-4 py-4 text-white transition-colors hover:bg-brand-navy"
+                  className="flex items-center gap-3 rounded-xl bg-brand-teal-dark px-4 py-4 text-sobre-color transition-colors hover:bg-brand-navy"
                 >
                   <svg
                     aria-hidden="true"
@@ -141,7 +141,7 @@ export function MenuDeLaCabecera({
                     <span className="block text-base font-bold leading-tight">
                       {destacado.etiqueta}
                     </span>
-                    <span className="block text-sm leading-snug text-white/80">
+                    <span className="block text-sm leading-snug text-sobre-color/80">
                       Mira qué clubes hay cerca de ti
                     </span>
                   </span>
@@ -176,7 +176,7 @@ export function MenuDeLaCabecera({
                 <>
                   <Link
                     href={accesoDirecto.href}
-                    className="rounded-xl bg-brand-teal-dark px-4 py-3.5 text-center text-base font-bold text-white transition-colors hover:bg-brand-navy sm:hidden"
+                    className="rounded-xl bg-brand-teal-dark px-4 py-3.5 text-center text-base font-bold text-sobre-color transition-colors hover:bg-brand-navy sm:hidden"
                   >
                     {accesoDirecto.etiqueta}
                   </Link>
@@ -193,13 +193,13 @@ export function MenuDeLaCabecera({
                 <>
                   <Link
                     href="/registro"
-                    className="rounded-xl bg-brand-teal-dark px-4 py-3.5 text-center text-base font-bold text-white transition-colors hover:bg-brand-navy sm:hidden"
+                    className="rounded-xl bg-brand-teal-dark px-4 py-3.5 text-center text-base font-bold text-sobre-color transition-colors hover:bg-brand-navy sm:hidden"
                   >
                     Crea tu página
                   </Link>
                   <Link
                     href="/login"
-                    className="rounded-xl border border-zinc-300 px-4 py-3.5 text-center text-base font-semibold text-brand-navy transition-colors hover:bg-zinc-50"
+                    className="rounded-xl border border-zinc-300 px-4 py-3.5 text-center text-base font-semibold text-titular transition-colors hover:bg-zinc-50"
                   >
                     Iniciar sesión
                   </Link>

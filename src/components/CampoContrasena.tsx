@@ -21,7 +21,7 @@ import { useState } from "react";
  */
 
 export const CLASES_CAMPO_ACCESO =
-  "w-full rounded-lg border border-zinc-300 px-3 py-2 text-base focus:border-brand-teal-dark focus:outline-none focus:ring-1 focus:ring-brand-teal-dark";
+  "w-full rounded-lg border border-zinc-300 px-3 py-2 text-base focus:border-accion-tinta focus:outline-none focus:ring-1 focus:ring-accion-tinta";
 
 export function CampoContrasena({
   id,
@@ -65,7 +65,7 @@ export function CampoContrasena({
           type="button"
           onClick={() => setVisible((puesto) => !puesto)}
           aria-pressed={visible}
-          className="absolute inset-y-0 right-0 rounded-r-lg px-3 text-sm font-medium text-teal-700 hover:bg-teal-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal-dark"
+          className="absolute inset-y-0 right-0 rounded-r-lg px-3 text-sm font-medium text-teal-700 hover:bg-teal-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accion-tinta"
         >
           {visible ? "Ocultar" : "Mostrar"}
         </button>

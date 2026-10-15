@@ -20,7 +20,7 @@ export function BotonEnviar({ children }: { children: React.ReactNode }) {
     <Button type="submit" size="lg" disabled={pending} className="w-full">
       {pending && (
         <span
-          className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
+          className="h-4 w-4 animate-spin rounded-full border-2 border-sobre-color/40 border-t-sobre-color"
           aria-hidden="true"
         />
       )}

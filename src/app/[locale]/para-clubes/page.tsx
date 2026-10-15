@@ -76,11 +76,11 @@ export default async function ParaClubesPage() {
               390 px de ancho, no caben ni uno ni otro. */}
           <div className="relative mx-auto grid max-w-6xl items-center gap-10 text-center lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-14 lg:text-left">
             <div className="min-w-0">
-              <span className="mb-6 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-brand-teal-dark">
+              <span className="mb-6 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-accion-tinta">
                 {t("paraClubes.etiqueta")}
               </span>
 
-              <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl lg:text-5xl">
+              <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-titular sm:text-4xl lg:text-5xl">
                 {t("paraClubes.titulo")}
               </h1>
               <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-zinc-600 sm:text-lg lg:mx-0">
@@ -96,13 +96,13 @@ export default async function ParaClubesPage() {
                 <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
                   <Link
                     href="/registro-club"
-                    className="inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-navy"
+                    className="inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-sobre-color shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-navy"
                   >
                     {t("hero.cta")}
                   </Link>
                   <a
                     href="#como-funciona"
-                    className="inline-flex items-center justify-center rounded-full border border-zinc-300 bg-white px-8 py-4 text-base font-bold text-brand-navy transition-colors hover:bg-zinc-50"
+                    className="inline-flex items-center justify-center rounded-full border border-zinc-300 bg-white px-8 py-4 text-base font-bold text-titular transition-colors hover:bg-zinc-50"
                   >
                     {t("hero.ctaSecundario")}
                   </a>

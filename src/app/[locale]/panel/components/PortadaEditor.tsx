@@ -105,7 +105,7 @@ export function PortadaEditor({
                   onClick={() =>
                     iniciarTransicion(async () => manejar(await guardarPosicionPortada(posicion)))
                   }
-                  className="mt-2 rounded-lg bg-teal-700 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-teal-800 disabled:opacity-60"
+                  className="mt-2 rounded-lg bg-accion px-3 py-1.5 text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte disabled:opacity-60"
                 >
                   {guardando ? "Guardando…" : "Guardar encuadre"}
                 </button>

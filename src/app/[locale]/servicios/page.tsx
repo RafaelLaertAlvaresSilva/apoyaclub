@@ -67,7 +67,7 @@ export default async function PaginaServicios({
 
       <header className="border-b border-zinc-200 bg-white">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 py-8">
-          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+          <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
             {t("eyebrow")}
           </p>
           <h1 className="mt-2 text-2xl font-bold text-zinc-900 sm:text-3xl">{t("titulo")}</h1>
@@ -112,12 +112,12 @@ export default async function PaginaServicios({
 
           <button
             type="submit"
-            className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy"
+            className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
           >
             {t("filtrar")}
           </button>
 
-          <Link href="/buscar" className="ml-auto text-sm font-medium text-brand-teal-dark hover:underline">
+          <Link href="/buscar" className="ml-auto text-sm font-medium text-accion-tinta hover:underline">
             {t("verPatrocinios")}
           </Link>
         </form>
@@ -147,7 +147,7 @@ export default async function PaginaServicios({
                 className="flex flex-col gap-2 rounded-xl border border-zinc-200 bg-white p-4"
               >
                 {servicio.categoriaNecesidad && (
-                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-accion-tinta">
                     {ETIQUETA_CATEGORIA_NECESIDAD[servicio.categoriaNecesidad]}
                   </p>
                 )}
@@ -170,13 +170,13 @@ export default async function PaginaServicios({
                   <span className="flex flex-wrap items-center gap-2">
                     <Link
                       href={`/club/${servicio.clubSlug}/oportunidad/${servicio.opportunityId}`}
-                      className="rounded-lg border border-brand-teal-dark px-3 py-1.5 text-xs font-medium text-brand-teal-dark transition-colors hover:bg-teal-50"
+                      className="rounded-lg border border-accion-tinta px-3 py-1.5 text-xs font-medium text-accion-tinta transition-colors hover:bg-teal-50"
                     >
                       Ver ficha
                     </Link>
                     <Link
                       href={`/club/${servicio.clubSlug}`}
-                      className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-brand-navy"
+                      className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-medium text-sobre-color transition-colors hover:bg-brand-navy"
                     >
                       {t("verClub")}
                     </Link>

@@ -19,7 +19,7 @@ export default function CuentaEliminadaPage() {
           <p className="text-sm text-zinc-600">{t("hemosBorradoTuCuenta")}</p>
           <Link
             href="/"
-            className="inline-block rounded-lg bg-teal-700 px-6 py-3 font-medium text-white transition-colors hover:bg-teal-800"
+            className="inline-block rounded-lg bg-accion px-6 py-3 font-medium text-sobre-color transition-colors hover:bg-accion-fuerte"
           >{t("volverAlInicio")}</Link>
         </div>
       </div>

@@ -75,7 +75,7 @@ export function CtaFijoMovil({ texto, condiciones }: { texto: string; condicione
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-zinc-200 bg-white/95 px-4 py-3 backdrop-blur sm:hidden">
       <Link
         href="/registro-club"
-        className="flex w-full items-center justify-center rounded-full bg-brand-teal-dark px-6 py-3.5 text-base font-bold text-white"
+        className="flex w-full items-center justify-center rounded-full bg-brand-teal-dark px-6 py-3.5 text-base font-bold text-sobre-color"
       >
         {texto}
       </Link>

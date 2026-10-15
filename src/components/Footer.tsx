@@ -49,20 +49,20 @@ export function Footer() {
   return (
     <footer className="border-t border-zinc-200 bg-brand-navy-dark">
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-        <div className="grid gap-10 border-b border-white/10 pb-11 sm:grid-cols-[1.3fr_1fr_1fr_1fr]">
+        <div className="grid gap-10 border-b border-sobre-color/10 pb-11 sm:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <div>
-            <p className="text-lg font-extrabold text-white">{t("apoyaclub")}</p>
-            <p className="mt-3 max-w-xs text-sm text-white/55">{t("descripcion")}</p>
-            <Link href="/para-clubes#contacto" className="mt-4 inline-block text-sm font-medium text-white/70 hover:text-white">
+            <p className="text-lg font-extrabold text-sobre-color">{t("apoyaclub")}</p>
+            <p className="mt-3 max-w-xs text-sm text-sobre-color/55">{t("descripcion")}</p>
+            <Link href="/para-clubes#contacto" className="mt-4 inline-block text-sm font-medium text-sobre-color/70 hover:text-sobre-color">
               {t("contacto")}
             </Link>
           </div>
 
           <div>
-            <p className="mb-3.5 text-sm font-bold text-white">{t("clubes.titulo")}</p>
+            <p className="mb-3.5 text-sm font-bold text-sobre-color">{t("clubes.titulo")}</p>
             <div className="flex flex-col gap-2.5">
               {ENLACES_CLUBES.map((enlace) => (
-                <Link key={enlace.clave} href={enlace.href} className="text-sm text-white/55 hover:text-white">
+                <Link key={enlace.clave} href={enlace.href} className="text-sm text-sobre-color/55 hover:text-sobre-color">
                   {t(`clubes.${enlace.clave}`)}
                 </Link>
               ))}
@@ -70,10 +70,10 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="mb-3.5 text-sm font-bold text-white">{t("empresas.titulo")}</p>
+            <p className="mb-3.5 text-sm font-bold text-sobre-color">{t("empresas.titulo")}</p>
             <div className="flex flex-col gap-2.5">
               {ENLACES_EMPRESAS.map((enlace) => (
-                <Link key={enlace.clave} href={enlace.href} className="text-sm text-white/55 hover:text-white">
+                <Link key={enlace.clave} href={enlace.href} className="text-sm text-sobre-color/55 hover:text-sobre-color">
                   {t(`empresas.${enlace.clave}`)}
                 </Link>
               ))}
@@ -81,10 +81,10 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="mb-3.5 text-sm font-bold text-white">{t("legalTitulo")}</p>
+            <p className="mb-3.5 text-sm font-bold text-sobre-color">{t("legalTitulo")}</p>
             <div className="flex flex-col gap-2.5">
               {ENLACES_LEGALES.map((enlace) => (
-                <Link key={enlace.href} href={enlace.href} className="text-sm text-white/55 hover:text-white">
+                <Link key={enlace.href} href={enlace.href} className="text-sm text-sobre-color/55 hover:text-sobre-color">
                   {t(`enlaces.${enlace.clave}`)}
                 </Link>
               ))}
@@ -92,7 +92,7 @@ export function Footer() {
           </div>
         </div>
 
-        <p className="pt-6 text-xs text-white/40">
+        <p className="pt-6 text-xs text-sobre-color/40">
           © {new Date().getFullYear()} {t("derechos")}. {t("derechosReservados")}
         </p>
       </div>

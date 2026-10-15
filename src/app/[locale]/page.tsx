@@ -91,7 +91,7 @@ export default async function Home() {
             {/* Qué es esto, antes que nada. Quien llega no sabe si
                 ApoyaClub es un patrocinador, un intermediario o una
                 herramienta, y de las tres solo una es verdad. */}
-            <span className="mb-6 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-brand-teal-dark">
+            <span className="mb-6 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold tracking-wide text-accion-tinta">
               {t("hero.etiqueta")}
             </span>
 
@@ -107,10 +107,10 @@ export default async function Home() {
                 * las cuatro pastillas de aquí abajo, pero en prosa y
                 * peor. Dos listas seguidas de las mismas cosas no
                 * convencen el doble: cansan. */}
-            <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl lg:text-5xl">
+            <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-titular sm:text-4xl lg:text-5xl">
               {t("hero.tituloParte1")}
             </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-xl font-bold leading-snug text-brand-teal-dark sm:text-2xl lg:mx-0">
+            <p className="mx-auto mt-4 max-w-2xl text-xl font-bold leading-snug text-accion-tinta sm:text-2xl lg:mx-0">
               {t("hero.tituloParte2")}
             </p>
 

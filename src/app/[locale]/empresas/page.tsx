@@ -66,7 +66,7 @@ export default async function PaginaEmpresas({
 
       <header className="border-b border-zinc-200 bg-white">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 py-8">
-          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+          <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
             Empresas
           </p>
           <h1 className="mt-2 text-2xl font-bold text-zinc-900 sm:text-3xl">
@@ -135,7 +135,7 @@ export default async function PaginaEmpresas({
 
           <button
             type="submit"
-            className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy"
+            className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
           >
             Filtrar
           </button>
@@ -150,7 +150,7 @@ export default async function PaginaEmpresas({
             </p>
             <Link
               href="/registro-empresa"
-              className="mt-4 inline-block rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy"
+              className="mt-4 inline-block rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
             >
               Publicar lo que ofrezco
             </Link>
@@ -170,7 +170,7 @@ export default async function PaginaEmpresas({
 function TarjetaOfertaPublica({ oferta }: { oferta: OfertaPublica }) {
   return (
     <li className="flex flex-col gap-2 rounded-xl border border-zinc-200 bg-white p-4">
-      <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
+      <p className="text-xs font-semibold uppercase tracking-wide text-accion-tinta">
         {ETIQUETA_TIPO_OFERTA[oferta.tipo]}
         {oferta.categoria && ` · ${ETIQUETA_CATEGORIA_NECESIDAD[oferta.categoria]}`}
       </p>
@@ -204,7 +204,7 @@ function TarjetaOfertaPublica({ oferta }: { oferta: OfertaPublica }) {
         </div>
         <Link
           href={`/empresas/${oferta.empresaSlug}`}
-          className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-brand-navy"
+          className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-medium text-sobre-color transition-colors hover:bg-brand-navy"
         >
           Ver empresa
         </Link>

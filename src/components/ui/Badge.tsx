@@ -4,8 +4,8 @@ type Tono = "neutral" | "teal" | "navy" | "warning" | "danger";
 
 const CLASES_TONO: Record<Tono, string> = {
   neutral: "bg-zinc-100 text-zinc-700",
-  teal: "bg-brand-teal-light text-brand-teal-dark",
-  navy: "bg-brand-navy/10 text-brand-navy",
+  teal: "bg-brand-teal-light text-accion-tinta",
+  navy: "bg-brand-navy/10 text-titular",
   warning: "bg-amber-100 text-amber-800",
   danger: "bg-red-100 text-red-700",
 };

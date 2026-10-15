@@ -68,7 +68,7 @@ export default async function RegistroPage() {
 
         <div className="mx-auto max-w-4xl">
           <div className="mx-auto max-w-xl text-center">
-            <h1 className="text-2xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+            <h1 className="text-2xl font-extrabold tracking-tight text-titular sm:text-4xl">
               {t("titulo")}
             </h1>
             <p className="mt-3 leading-relaxed text-zinc-600">{t("subtitulo")}</p>
@@ -79,9 +79,9 @@ export default async function RegistroPage() {
               <Link
                 key={opcion.clave}
                 href={opcion.href}
-                className="group flex flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-xl transition-colors hover:border-brand-teal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-dark sm:p-7"
+                className="group flex flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-xl transition-colors hover:border-brand-teal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accion-tinta sm:p-7"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark sm:h-12 sm:w-12">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-teal-light text-accion-tinta sm:h-12 sm:w-12">
                   <svg
                     aria-hidden="true"
                     viewBox="0 0 24 24"
@@ -96,10 +96,10 @@ export default async function RegistroPage() {
                   </svg>
                 </span>
 
-                <h2 className="mt-4 text-lg font-extrabold text-brand-navy sm:mt-5 sm:text-xl">
+                <h2 className="mt-4 text-lg font-extrabold text-titular sm:mt-5 sm:text-xl">
                   {t(`${opcion.clave}.titulo`)}
                 </h2>
-                <p className="mt-1 text-sm font-bold text-brand-teal-dark">
+                <p className="mt-1 text-sm font-bold text-accion-tinta">
                   {t(`${opcion.clave}.precio`)}
                 </p>
                 <p className="mt-2.5 text-sm leading-relaxed text-zinc-600 sm:text-base">
@@ -109,7 +109,7 @@ export default async function RegistroPage() {
                 {/* `mt-auto`: los dos textos no miden lo mismo y sin esto
                     cada botón quedaba a una altura distinta. */}
                 <span className="mt-auto pt-5">
-                  <span className="inline-flex items-center gap-2 rounded-lg bg-brand-teal-dark px-4 py-2.5 text-sm font-bold text-white transition-colors group-hover:bg-brand-navy sm:text-base">
+                  <span className="inline-flex items-center gap-2 rounded-lg bg-brand-teal-dark px-4 py-2.5 text-sm font-bold text-sobre-color transition-colors group-hover:bg-brand-navy sm:text-base">
                     {t(`${opcion.clave}.boton`)}
                     <span aria-hidden="true">→</span>
                   </span>
@@ -123,7 +123,7 @@ export default async function RegistroPage() {
               {t("mirarAntes")}{" "}
               <Link
                 href="/buscar"
-                className="font-semibold text-brand-teal-dark underline underline-offset-4"
+                className="font-semibold text-accion-tinta underline underline-offset-4"
               >
                 {t("mirarAntesEnlace")}
               </Link>
@@ -132,7 +132,7 @@ export default async function RegistroPage() {
               {t("yaTienesCuenta")}{" "}
               <Link
                 href="/login"
-                className="font-semibold text-brand-teal-dark underline underline-offset-4"
+                className="font-semibold text-accion-tinta underline underline-offset-4"
               >
                 {t("iniciaSesion")}
               </Link>

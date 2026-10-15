@@ -38,6 +38,111 @@
    * botones y etiquetas de la aplicación. Este llega a 5,5:1. */
   --brand-teal-dark: #0f766e;
   --brand-teal-light: #ccfbf1;
+
+  /* =================================================================
+   * TINTA Y SUPERFICIE: la separación que hace posible el modo oscuro
+   * =================================================================
+   *
+   * El problema: `text-white` y `bg-white` son el mismo color para el
+   * navegador, pero significan cosas opuestas. Uno es la TINTA que va
+   * encima de un botón verde; el otro es la SUPERFICIE de una tarjeta.
+   * En oscuro, la superficie tiene que volverse gris carbón y la tinta
+   * tiene que seguir siendo blanca. Con un solo color eso no se puede.
+   *
+   * Lo mismo pasaba con el verde: `bg-teal-700` era el fondo de 38
+   * botones y `text-teal-700` el color de 55 textos. Al aclarar el
+   * verde para que los textos se leyeran sobre fondo oscuro, los 38
+   * botones se quedaban en verde pálido con letras blancas encima.
+   *
+   * Estos cinco son SUPERFICIES SÓLIDAS: no se invierten nunca, porque
+   * siempre llevan algo blanco escrito encima.
+   */
+  --sobre-color: #fff;
+  --accion: #0f766e; /* el teal-700 de siempre */
+  --accion-fuerte: #115e59; /* teal-800 */
+  --medidor: #0d9488; /* teal-600 */
+  --peligro: #dc2626; /* red-600 */
+  --peligro-fuerte: #b91c1c; /* red-700 */
+  /* La pastilla de aviso, con su propia tinta. Antes era `bg-amber-500
+   * text-white`, que son 2,1:1 de contraste: ilegible, y llevaba
+   * tiempo publicado. El ámbar es claro; encima va tinta oscura. */
+  --aviso: #f59e0b; /* amber-500 */
+  --sobre-aviso: oklch(27.9% 0.077 45.635); /* amber-950 */
+
+  /* Y la tinta de la marca, aparte de su superficie: `--brand-navy` es
+   * el fondo de un botón y a la vez el color de 75 titulares. En
+   * oscuro, el fondo tiene que seguir siendo oscuro (lleva texto
+   * blanco) y el titular tiene que aclararse. */
+  --titular: var(--brand-navy);
+  --accion-tinta: var(--brand-teal-dark);
+
+  /*
+   * LA PLACA DE LOS LOGOS.
+   *
+   * Los escudos y los logos de patrocinadores los suben los clubes, y
+   * vienen hechos para fondo blanco: muchos son letras negras sobre
+   * transparente. Sobre una tarjeta oscura, esos desaparecen del todo
+   * —no se ven mal, no se ven— y no hay forma de arreglarlo desde
+   * aquí, porque el archivo es del usuario.
+   *
+   * Así que el logo no se pinta sobre la tarjeta: se pinta sobre una
+   * placa propia, casi blanca, que NO se invierte. Es pequeña (44 px)
+   * y con su borde, así que no deshace el modo oscuro: lo que ilumina
+   * una pantalla es la superficie grande, no un cuadradito.
+   */
+  --placa: #fff;
+  --placa-borde: var(--lienzo-borde);
+
+  /* =================================================================
+   * LA TINTA Y LAS SUPERFICIES QUE SÍ CAMBIAN
+   * =================================================================
+   *
+   * Aquí abajo están los valores de HOY, calcados de Tailwind uno a
+   * uno. Puestos así, en modo claro no se mueve un píxel; lo que se
+   * gana es que el modo oscuro del panel pueda redefinirlos en un solo
+   * sitio, en vez de ir fichero por fichero por los 2.589 colores que
+   * tiene la aplicación escritos a mano.
+   */
+  --superficie: #fff; /* las tarjetas */
+
+  --gris-300: oklch(87.1% 0.006 286.286);
+  --gris-400: oklch(70.5% 0.015 286.067);
+  --gris-500: oklch(55.2% 0.016 285.938);
+  --gris-600: oklch(44.2% 0.017 285.786);
+  --gris-700: oklch(37% 0.013 285.805);
+  --gris-800: oklch(27.4% 0.006 286.033);
+  --gris-900: oklch(21% 0.006 285.885);
+
+  --verde-50: oklch(98.4% 0.014 180.72);
+  --verde-100: oklch(95.3% 0.051 180.801);
+  --verde-200: oklch(91% 0.096 180.426);
+  --verde-300: oklch(85.5% 0.138 181.071);
+  --verde-500: oklch(70.4% 0.14 182.503);
+  --verde-600: oklch(60% 0.118 184.704);
+  --verde-700: oklch(51.1% 0.096 186.391);
+  --verde-800: oklch(43.7% 0.078 188.216);
+  --verde-900: oklch(38.6% 0.063 188.416);
+
+  --rojo-50: oklch(97.1% 0.013 17.38);
+  --rojo-100: oklch(93.6% 0.032 17.717);
+  --rojo-200: oklch(88.5% 0.062 18.334);
+  --rojo-300: oklch(80.8% 0.114 19.571);
+  --rojo-500: oklch(63.7% 0.237 25.331);
+  --rojo-600: oklch(57.7% 0.245 27.325);
+  --rojo-700: oklch(50.5% 0.213 27.518);
+  --rojo-800: oklch(44.4% 0.177 26.899);
+  --rojo-900: oklch(39.6% 0.141 25.723);
+
+  --ambar-50: oklch(98.7% 0.022 95.277);
+  --ambar-100: oklch(96.2% 0.059 95.617);
+  --ambar-200: oklch(92.4% 0.12 95.746);
+  --ambar-300: oklch(87.9% 0.169 91.605);
+  --ambar-500: oklch(76.9% 0.188 70.08);
+  --ambar-600: oklch(66.6% 0.179 58.318);
+  --ambar-700: oklch(55.5% 0.163 48.998);
+  --ambar-800: oklch(47.3% 0.137 46.201);
+  --ambar-900: oklch(41.4% 0.112 45.904);
+  --ambar-950: oklch(27.9% 0.077 45.635);
 }
 
 @theme inline {
@@ -69,6 +174,62 @@
   --color-zinc-50: var(--lienzo);
   --color-zinc-100: var(--lienzo-hondo);
   --color-zinc-200: var(--lienzo-borde);
+
+  /* El resto de la escala, y los colores de estado, por las variables
+     de arriba. Mismo valor que antes; lo que cambia es que ahora hay
+     un interruptor. */
+  --color-white: var(--superficie);
+  --color-sobre-color: var(--sobre-color);
+  --color-accion: var(--accion);
+  --color-accion-fuerte: var(--accion-fuerte);
+  --color-medidor: var(--medidor);
+  --color-peligro: var(--peligro);
+  --color-peligro-fuerte: var(--peligro-fuerte);
+  --color-aviso: var(--aviso);
+  --color-sobre-aviso: var(--sobre-aviso);
+  --color-titular: var(--titular);
+  --color-accion-tinta: var(--accion-tinta);
+  --color-placa: var(--placa);
+  --color-placa-borde: var(--placa-borde);
+
+  --color-zinc-300: var(--gris-300);
+  --color-zinc-400: var(--gris-400);
+  --color-zinc-500: var(--gris-500);
+  --color-zinc-600: var(--gris-600);
+  --color-zinc-700: var(--gris-700);
+  --color-zinc-800: var(--gris-800);
+  --color-zinc-900: var(--gris-900);
+
+  --color-teal-50: var(--verde-50);
+  --color-teal-100: var(--verde-100);
+  --color-teal-200: var(--verde-200);
+  --color-teal-300: var(--verde-300);
+  --color-teal-500: var(--verde-500);
+  --color-teal-600: var(--verde-600);
+  --color-teal-700: var(--verde-700);
+  --color-teal-800: var(--verde-800);
+  --color-teal-900: var(--verde-900);
+
+  --color-red-50: var(--rojo-50);
+  --color-red-100: var(--rojo-100);
+  --color-red-200: var(--rojo-200);
+  --color-red-300: var(--rojo-300);
+  --color-red-500: var(--rojo-500);
+  --color-red-600: var(--rojo-600);
+  --color-red-700: var(--rojo-700);
+  --color-red-800: var(--rojo-800);
+  --color-red-900: var(--rojo-900);
+
+  --color-amber-50: var(--ambar-50);
+  --color-amber-100: var(--ambar-100);
+  --color-amber-200: var(--ambar-200);
+  --color-amber-300: var(--ambar-300);
+  --color-amber-500: var(--ambar-500);
+  --color-amber-600: var(--ambar-600);
+  --color-amber-700: var(--ambar-700);
+  --color-amber-800: var(--ambar-800);
+  --color-amber-900: var(--ambar-900);
+  --color-amber-950: var(--ambar-950);
 }
 
 /*
@@ -146,5 +307,144 @@ h1[class*="text-lg"] {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* =====================================================================
+ * EL MODO OSCURO DEL PANEL
+ * =====================================================================
+ *
+ * Solo el panel, y solo si el móvil o el ordenador lo piden. La página
+ * pública del club y la portada se quedan claras: las lee un comercial
+ * de una empresa, de día, en su oficina.
+ *
+ * LAS TARJETAS NO SON BLANCAS, y esto es lo único que de verdad importa
+ * de todo este bloque. Una tarjeta blanca sobre fondo negro emite casi
+ * la misma luz que la pantalla clara —medido: 54 % frente al 94 % de
+ * hoy y al 13 % de esto— y además pone blanco puro pegado a negro puro,
+ * que es el contraste más agresivo que existe y hace vibrar las letras
+ * a quien tiene astigmatismo. En oscuro, destacar no es ser blanco: es
+ * ser UN ESCALÓN MÁS CLARO que lo que tienes alrededor. Por eso el
+ * fondo está en 16 % de claridad y las tarjetas en 21 %.
+ *
+ * La escala se invierte entera: lo que era el gris más claro pasa a ser
+ * el fondo, y lo que era el texto casi negro pasa a ser el texto casi
+ * blanco. Se conserva el tono (el punto de azul de la marca) y se baja
+ * el color de los tintes, porque un verde o un ámbar con la misma
+ * saturación sobre fondo oscuro se ve fosforito.
+ * ===================================================================== */
+@media (prefers-color-scheme: dark) {
+  .tema-panel {
+    /* Para que los desplegables, los calendarios y la barra de
+       desplazamiento que pinta el navegador salgan oscuros también. Sin
+       esto, abrir un selector de fecha es un fogonazo blanco. */
+    color-scheme: dark;
+
+    /*
+     * El color del texto HEREDADO, no solo el de las clases.
+     *
+     * Sin esta línea, lo que escribes en un campo es invisible: un
+     * `<input>` no lleva clase de color, hereda la del `body`, y la del
+     * `body` la pone el layout de toda la web, que es claro. Se veía
+     * el campo, se veía el cursor, y la letra no aparecía. No da ningún
+     * error: simplemente escribes a ciegas.
+     */
+    color: var(--gris-900);
+
+    /* El lienzo y las tarjetas. */
+    --lienzo: oklch(16% 0.008 260);
+    --lienzo-hondo: oklch(23% 0.009 260);
+    --lienzo-borde: oklch(31% 0.009 260);
+    --superficie: oklch(21% 0.008 260);
+
+    /* La escala de grises, del revés. 300 y 400 son bordes y cosas
+       apagadas; del 500 para arriba son textos. */
+    --gris-300: oklch(38% 0.009 260);
+    --gris-400: oklch(52% 0.011 260);
+    --gris-500: oklch(70% 0.013 260);
+    --gris-600: oklch(79% 0.011 260);
+    --gris-700: oklch(86% 0.008 260);
+    --gris-800: oklch(92% 0.005 260);
+    --gris-900: oklch(96% 0.003 260);
+
+    /* El verde. Del 50 al 200 son fondos de aviso y pastillas: oscuros
+       y con poco color. Del 300 para arriba son textos y bordes. */
+    --verde-50: oklch(25% 0.032 186);
+    --verde-100: oklch(30% 0.045 186);
+    --verde-200: oklch(38% 0.058 186);
+    --verde-300: oklch(84% 0.118 181);
+    --verde-500: oklch(74% 0.13 182);
+    --verde-600: oklch(80% 0.122 182);
+    --verde-700: oklch(85% 0.112 182);
+    --verde-800: oklch(89% 0.092 182);
+    --verde-900: oklch(93% 0.07 182);
+
+    /* El rojo de los errores. */
+    --rojo-50: oklch(26% 0.055 25);
+    --rojo-100: oklch(31% 0.075 25);
+    --rojo-200: oklch(39% 0.095 25);
+    --rojo-300: oklch(80% 0.1 22);
+    --rojo-500: oklch(70% 0.17 25);
+    --rojo-600: oklch(76% 0.145 25);
+    --rojo-700: oklch(82% 0.12 25);
+    --rojo-800: oklch(87% 0.095 25);
+    --rojo-900: oklch(92% 0.07 25);
+
+    /* El ámbar de los avisos. */
+    --ambar-50: oklch(26% 0.04 60);
+    --ambar-100: oklch(31% 0.055 60);
+    --ambar-200: oklch(39% 0.07 60);
+    --ambar-300: oklch(86% 0.13 85);
+    --ambar-500: oklch(78% 0.145 75);
+    --ambar-600: oklch(85% 0.13 80);
+    --ambar-700: oklch(89% 0.115 85);
+    --ambar-800: oklch(92% 0.095 88);
+    --ambar-900: oklch(95% 0.075 90);
+    --ambar-950: oklch(97% 0.055 92);
+
+    /* El azul marino de la marca es casi negro: como texto sobre fondo
+       oscuro no se vería. Encima de un botón sigue valiendo, pero ahí
+       quien manda es `--accion`. */
+    /* Estos tres SON FONDOS de botón y llevan texto blanco encima, así
+     * que se quedan oscuros. Medido: por encima del 50 % de claridad,
+     * el blanco encima baja de 4,5:1 y deja de leerse. */
+    --brand-navy: oklch(42% 0.05 245);
+    --brand-navy-dark: oklch(35% 0.045 245);
+    --brand-teal-dark: oklch(47% 0.09 186);
+    --brand-teal-light: oklch(32% 0.05 186);
+
+    /* La TINTA de la marca sí se aclara: son titulares y enlaces. */
+    --titular: oklch(90% 0.035 245);
+    --accion-tinta: oklch(84% 0.115 182);
+
+    /* Blanco roto y no blanco puro: un cuadradito de blanco puro sobre
+     * una tarjeta de carbón es un punto de luz que pica. Y el borde se
+     * aclara para que la placa se despegue de la tarjeta. */
+    --placa: oklch(95% 0.002 260);
+    --placa-borde: oklch(70% 0.008 260);
+
+    /*
+     * Los botones sólidos suben un poco, lo justo para no parecer un
+     * agujero en la pantalla. Siguen llevando texto blanco encima
+     * (`--sobre-color`), que por eso no se invierte nunca.
+     */
+    --accion: oklch(47% 0.09 186);
+    /* El estado con el ratón encima se OSCURECE, igual que en claro.
+     * Aclararlo habría sido lo intuitivo, pero entonces el texto
+     * blanco del botón se cae por debajo de 4,5:1. */
+    --accion-fuerte: oklch(40% 0.075 186);
+    --medidor: oklch(72% 0.135 182);
+    --peligro: oklch(52% 0.2 26);
+    --peligro-fuerte: oklch(45% 0.175 26);
+
+    /* La pastilla de aviso al revés que en claro: ámbar brillante con
+     * tinta casi negra. */
+    --aviso: oklch(76% 0.145 75);
+    --sobre-aviso: oklch(20% 0.04 60);
+
+    /* Las sombras no se ven sobre fondo oscuro: lo que separa una
+       tarjeta del fondo es su propio color, no la sombra. Quitarlas
+       evita el halo gris sucio que dejan. */
+    --tw-shadow-color: transparent;
   }
 }

@@ -106,7 +106,7 @@ export function IdentidadForm({
                 alt="Logo del club"
                 width={64}
                 height={64}
-                className="h-16 w-16 rounded-lg border border-zinc-200 bg-white object-contain p-1"
+                className="h-16 w-16 rounded-lg border border-placa-borde bg-placa object-contain p-1.5"
                 unoptimized
               />
             ) : (
@@ -146,7 +146,7 @@ export function IdentidadForm({
                   });
                 }
               }}
-              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
             />{t("confirmoQueLasFotos")}</label>
 
           <div className="flex flex-wrap gap-3">
@@ -168,7 +168,7 @@ export function IdentidadForm({
                       manejarErrorAccion(resultado);
                     })
                   }
-                  className="absolute -right-2 -top-2 hidden h-6 w-6 items-center justify-center rounded-full bg-red-600 text-xs text-white group-hover:flex"
+                  className="absolute -right-2 -top-2 hidden h-6 w-6 items-center justify-center rounded-full bg-peligro text-xs text-sobre-color group-hover:flex"
                   aria-label="Quitar foto"
                 >
                   ×
@@ -385,7 +385,7 @@ export function IdentidadForm({
               type="checkbox"
               name="contactPublicConsent"
               defaultChecked={perfil?.contactPublicConsent ?? true}
-              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
             />
             <span>
               <span className="font-medium text-zinc-900">

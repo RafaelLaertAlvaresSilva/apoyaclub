@@ -37,7 +37,7 @@ export default async function Pagina({ params }: { params: Promise<{ slug: strin
 
       <div className="mx-auto w-full max-w-4xl flex-1 px-4 sm:px-6 py-6">
         <nav className="text-sm text-zinc-500">
-          <Link href={`/club/${perfil.slug}`} className="font-medium text-brand-teal-dark hover:underline">
+          <Link href={`/club/${perfil.slug}`} className="font-medium text-accion-tinta hover:underline">
             {perfil.name}
           </Link>
         </nav>

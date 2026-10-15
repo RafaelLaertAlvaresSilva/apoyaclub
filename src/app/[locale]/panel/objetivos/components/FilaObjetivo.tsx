@@ -109,7 +109,7 @@ export function FilaObjetivo({
         <button
           type="button"
           onClick={() => setEscribiendo((valor) => !valor)}
-          className="mr-1 rounded-lg bg-brand-teal-dark px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-brand-navy"
+          className="mr-1 rounded-lg bg-brand-teal-dark px-3 py-1 text-xs font-medium text-sobre-color transition-colors hover:bg-brand-navy"
         >
           {escribiendo ? "Cerrar" : "Escribirle"}
         </button>

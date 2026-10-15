@@ -39,7 +39,7 @@ export default async function PaginaBuscar({ searchParams }: { searchParams: Pro
           {/* La otra dirección: lo que los clubes necesitan (migración 0016). */}
           <Link
             href="/servicios"
-            className="mt-3 inline-block text-sm font-medium text-brand-teal-dark hover:underline"
+            className="mt-3 inline-block text-sm font-medium text-accion-tinta hover:underline"
           >
             {t("verServicios")}
           </Link>

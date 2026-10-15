@@ -148,7 +148,7 @@ export function DocumentosDelPatrocinador({
             <select
               name="tipo"
               defaultValue="contrato"
-              className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-brand-teal-dark focus:outline-none focus:ring-1 focus:ring-brand-teal-dark"
+              className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-accion-tinta focus:outline-none focus:ring-1 focus:ring-accion-tinta"
             >
               {TIPOS_DE_DOCUMENTO.map((tipo) => (
                 <option key={tipo.id} value={tipo.id}>
@@ -180,7 +180,7 @@ export function DocumentosDelPatrocinador({
             <button
               type="submit"
               disabled={enviando}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy disabled:pointer-events-none disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy disabled:pointer-events-none disabled:opacity-50"
             >
               {enviando ? "Subiendo…" : "Guardar documento"}
             </button>

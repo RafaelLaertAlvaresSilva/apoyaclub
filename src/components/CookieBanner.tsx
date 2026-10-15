@@ -123,7 +123,7 @@ export function CookieBanner() {
           <button
             type="button"
             onClick={() => elegir("accepted")}
-            className="rounded-lg bg-teal-700 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-teal-800"
+            className="rounded-lg bg-accion px-5 py-3 text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte"
           >{t("aceptar")}</button>
         </div>
       </div>

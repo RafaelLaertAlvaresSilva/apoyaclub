@@ -91,7 +91,7 @@ export function ResultadosBuscador({
             id="orden"
             value={filtros.orden ?? "novedad"}
             onChange={(evento) => cambiarOrden(evento.target.value as FiltrosBusqueda["orden"])}
-            className="rounded-lg border border-zinc-300 px-2 py-1.5 text-sm focus:border-brand-teal-dark focus:outline-none focus:ring-1 focus:ring-brand-teal-dark"
+            className="rounded-lg border border-zinc-300 px-2 py-1.5 text-sm focus:border-accion-tinta focus:outline-none focus:ring-1 focus:ring-accion-tinta"
           >
             {OPCIONES_ORDEN.map((opcion) => (
               <option key={opcion.id} value={opcion.id}>
@@ -154,7 +154,7 @@ function BotonVista({
       type="button"
       onClick={onClick}
       className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-        activo ? "bg-teal-700 text-white" : "text-zinc-600 hover:bg-zinc-100"
+        activo ? "bg-accion text-sobre-color" : "text-zinc-600 hover:bg-zinc-100"
       }`}
     >
       {children}
@@ -242,7 +242,7 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
         {oportunidad.teamLabel && <p className="mt-0.5 text-xs text-zinc-500">{oportunidad.teamLabel}</p>}
         {oportunidad.description && <p className="mt-1 line-clamp-2 text-sm text-zinc-600">{oportunidad.description}</p>}
         {oportunidad.exclusivity && (
-          <p className="mt-1 text-xs font-medium text-brand-teal-dark">
+          <p className="mt-1 text-xs font-medium text-accion-tinta">
             {tTarjeta("exclusiva", { sector: oportunidad.exclusivity })}
           </p>
         )}
@@ -263,7 +263,7 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
 
       {esPorPlazas(oportunidad) && (
         <div className="space-y-1.5">
-          <p className="text-xs font-medium text-brand-teal-dark">
+          <p className="text-xs font-medium text-accion-tinta">
             {tTarjeta("plazas", {
               libres: plazasLibres(oportunidad),
               total: oportunidad.slotsTotal ?? 0,
@@ -298,7 +298,7 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
           </Link>
           <Link
             href={`/club/${oportunidad.clubSlug}`}
-            className="rounded-lg bg-teal-700 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-teal-800"
+            className="rounded-lg bg-accion px-3 py-1.5 text-xs font-medium text-sobre-color transition-colors hover:bg-accion-fuerte"
           >
             {tTarjeta("verClub")}
           </Link>
@@ -340,7 +340,7 @@ function TarjetaClub({ club }: { club: ResultadoClub }) {
 
       <Link
         href={`/club/${club.clubSlug}`}
-        className="mt-auto rounded-lg bg-teal-700 px-3 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-teal-800"
+        className="mt-auto rounded-lg bg-accion px-3 py-2 text-center text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte"
       >
         Ver página del club
       </Link>
@@ -382,7 +382,7 @@ function EstadoVacio({ filtros, vista }: { filtros: FiltrosBusqueda; vista: Vist
             onClick={() =>
               router.push(`/buscar?${filtrosAQueryString({ ...filtros, radioKm: filtros.radioKm! * 2 }, vista)}`)
             }
-            className="rounded-lg bg-teal-700 px-4 py-2 text-sm font-medium text-white hover:bg-teal-800"
+            className="rounded-lg bg-accion px-4 py-2 text-sm font-medium text-sobre-color hover:bg-accion-fuerte"
           >
             {tVacio("ampliarRadio", { km: filtros.radioKm! * 2 })}
           </button>
@@ -398,7 +398,7 @@ function EstadoVacio({ filtros, vista }: { filtros: FiltrosBusqueda; vista: Vist
         ) : (
           <Link
             href="/servicios"
-            className="rounded-lg bg-teal-700 px-4 py-2 text-sm font-medium text-white hover:bg-teal-800"
+            className="rounded-lg bg-accion px-4 py-2 text-sm font-medium text-sobre-color hover:bg-accion-fuerte"
           >
             {tVacio("verQueNecesitan")}
           </Link>

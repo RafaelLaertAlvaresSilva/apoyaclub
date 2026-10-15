@@ -27,9 +27,9 @@ import { BarraDePlazas } from "@/components/BarraDePlazas";
 import { OportunidadForm } from "./OportunidadForm";
 
 const ESTILO_ESTADO: Record<OpportunityStatus, string> = {
-  available: "bg-teal-700 text-white",
-  reserved: "bg-amber-500 text-white",
-  closed: "bg-zinc-400 text-white",
+  available: "bg-accion text-sobre-color",
+  reserved: "bg-aviso text-sobre-aviso",
+  closed: "bg-zinc-400 text-sobre-color",
 };
 
 export function TarjetaOportunidad({
@@ -90,7 +90,7 @@ export function TarjetaOportunidad({
             {equipoAsociado ? ` · ${equipoAsociado.sport} ${equipoAsociado.category ?? ""}`.trimEnd() : ""}
           </p>
           {oportunidad.exclusivity && (
-            <p className="mt-1 text-xs font-medium text-brand-teal-dark">
+            <p className="mt-1 text-xs font-medium text-accion-tinta">
               En exclusiva para el sector: {oportunidad.exclusivity}
             </p>
           )}

@@ -36,7 +36,7 @@ export function ListadoDeOportunidades({
         </p>
         <Link
           href={`/club/${slug}`}
-          className="mt-4 inline-block text-sm font-medium text-brand-teal-dark hover:underline"
+          className="mt-4 inline-block text-sm font-medium text-accion-tinta hover:underline"
         >
           Volver a su ficha
         </Link>
@@ -52,11 +52,11 @@ export function ListadoDeOportunidades({
             href={`/club/${slug}/oportunidad/${oportunidad.id}`}
             className={`flex h-full flex-col gap-2 rounded-xl border p-5 transition-colors ${
               esNecesidad
-                ? "border-teal-200 bg-teal-50 hover:border-brand-teal-dark"
-                : "border-zinc-200 bg-white hover:border-brand-teal-dark"
+                ? "border-teal-200 bg-teal-50 hover:border-accion-tinta"
+                : "border-zinc-200 bg-white hover:border-accion-tinta"
             }`}
           >
-            <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
+            <p className="text-xs font-semibold uppercase tracking-wide text-accion-tinta">
               {esNecesidad
                 ? oportunidad.categoriaNecesidad
                   ? ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]
@@ -95,7 +95,7 @@ export function ListadoDeOportunidades({
               ) : (
                 <span />
               )}
-              <span className="text-sm font-medium text-brand-teal-dark">Ver ficha →</span>
+              <span className="text-sm font-medium text-accion-tinta">Ver ficha →</span>
             </div>
           </Link>
         </li>

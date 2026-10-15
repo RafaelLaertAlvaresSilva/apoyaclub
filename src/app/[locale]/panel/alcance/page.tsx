@@ -128,7 +128,7 @@ export default async function AlcancePage() {
                 </div>
                 <Link
                   href={falta.ruta}
-                  className="shrink-0 rounded-lg bg-teal-700 px-3 py-1.5 text-center text-sm font-medium text-white hover:bg-teal-800"
+                  className="shrink-0 rounded-lg bg-accion px-3 py-1.5 text-center text-sm font-medium text-sobre-color hover:bg-accion-fuerte"
                 >
                   {falta.rutaEtiqueta}
                 </Link>

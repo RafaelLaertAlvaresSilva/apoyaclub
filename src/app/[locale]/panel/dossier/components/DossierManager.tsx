@@ -129,11 +129,11 @@ export function DossierManager({
                 <Link
                   key={seccion.id}
                   href={seccion.donde}
-                  className="group flex items-start gap-3 rounded-lg border border-dashed border-zinc-300 bg-zinc-50/60 p-3 text-sm transition-colors hover:border-brand-teal-dark hover:bg-teal-50"
+                  className="group flex items-start gap-3 rounded-lg border border-dashed border-zinc-300 bg-zinc-50/60 p-3 text-sm transition-colors hover:border-accion-tinta hover:bg-teal-50"
                 >
                   <span
                     aria-hidden="true"
-                    className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border border-zinc-300 text-xs font-bold leading-none text-zinc-400 group-hover:border-brand-teal-dark group-hover:text-brand-teal-dark"
+                    className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border border-zinc-300 text-xs font-bold leading-none text-zinc-400 group-hover:border-accion-tinta group-hover:text-accion-tinta"
                   >
                     +
                   </span>
@@ -143,7 +143,7 @@ export function DossierManager({
                     </span>
                     <span className="block text-xs text-zinc-500">
                       Todavía no has añadido datos.{" "}
-                      <span className="font-medium text-brand-teal-dark underline">
+                      <span className="font-medium text-accion-tinta underline">
                         Añadirlos ahora
                       </span>
                     </span>
@@ -162,7 +162,7 @@ export function DossierManager({
                   name="sections"
                   value={seccion.id}
                   defaultChecked={seccionesIniciales.includes(seccion.id)}
-                  className="mt-0.5 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+                  className="mt-0.5 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
                 />
                 <span>
                   <span className="block font-medium text-zinc-900">{seccion.etiqueta}</span>
@@ -197,7 +197,7 @@ export function DossierManager({
                     name="opportunityIds"
                     value={oportunidad.id}
                     defaultChecked={oportunidadesIniciales.has(oportunidad.id)}
-                    className="rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+                    className="rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
                   />
                   <span className="font-medium text-zinc-900">{oportunidad.title}</span>
                 </span>
@@ -254,7 +254,7 @@ export function DossierManager({
               type="checkbox"
               name="shareEnabled"
               defaultChecked={configuracion?.shareEnabled ?? false}
-              className="rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+              className="rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
             />{t("activarEnlacePublico")}</label>
 
           <Campo etiqueta="Caducidad (opcional)" ayuda={t("dejaloEnBlancoPara")}>
@@ -310,14 +310,14 @@ function BotonDescarga({
       disabled={bloqueado}
       className={`flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
         destacado
-          ? "bg-teal-700 text-white hover:bg-teal-800"
+          ? "bg-accion text-sobre-color hover:bg-accion-fuerte"
           : "border border-teal-600 text-teal-700 hover:bg-teal-50"
       }`}
     >
       {ocupado && (
         <span
           className={`h-4 w-4 animate-spin rounded-full border-2 ${
-            destacado ? "border-white/40 border-t-white" : "border-teal-600/40 border-t-teal-600"
+            destacado ? "border-sobre-color/40 border-t-sobre-color" : "border-teal-600/40 border-t-teal-600"
           }`}
           aria-hidden="true"
         />

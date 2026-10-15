@@ -19,7 +19,7 @@ export function AdminNav({ activo }: { activo: SeccionAdmin }) {
           href={enlace.href}
           className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
             activo === enlace.id
-              ? "bg-teal-700 text-white"
+              ? "bg-accion text-sobre-color"
               : "text-zinc-600 hover:bg-zinc-100"
           }`}
         >

@@ -95,7 +95,7 @@ export default async function PaginaOportunidad({
         {/* De dónde viene esto, siempre a la vista: quien llega por un
             enlace compartido no sabe de qué club le están hablando. */}
         <nav className="flex flex-wrap items-center gap-2 text-sm text-zinc-500">
-          <Link href={`/club/${perfil.slug}`} className="font-medium text-brand-teal-dark hover:underline">
+          <Link href={`/club/${perfil.slug}`} className="font-medium text-accion-tinta hover:underline">
             {perfil.name}
           </Link>
           <span aria-hidden="true">›</span>
@@ -107,7 +107,7 @@ export default async function PaginaOportunidad({
         <article className="mt-4 rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="min-w-0">
-              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+              <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
                 {esNecesidad
                   ? `Lo necesitamos${oportunidad.categoriaNecesidad ? ` · ${ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]}` : ""}`
                   : `${ETIQUETA_TIPO_OPORTUNIDAD[oportunidad.opportunityType]}${
@@ -188,7 +188,7 @@ export default async function PaginaOportunidad({
         </article>
 
         <p className="mt-6 text-center text-sm text-zinc-500">
-          <Link href={`/club/${perfil.slug}`} className="font-medium text-brand-teal-dark hover:underline">
+          <Link href={`/club/${perfil.slug}`} className="font-medium text-accion-tinta hover:underline">
             Ver la ficha completa de {perfil.name}
           </Link>
         </p>

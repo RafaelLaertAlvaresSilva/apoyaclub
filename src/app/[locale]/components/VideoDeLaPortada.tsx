@@ -189,7 +189,7 @@ export function VideoDeLaPortada({
           style={{
             background: `linear-gradient(to right, var(--brand-teal-dark) ${avance}%, #e4e4e7 ${avance}%)`,
           }}
-          className="h-1.5 w-full cursor-pointer appearance-none rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-dark [&::-moz-range-thumb]:h-3.5 [&::-moz-range-thumb]:w-3.5 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-brand-teal-dark [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-brand-teal-dark [&::-webkit-slider-thumb]:shadow"
+          className="h-1.5 w-full cursor-pointer appearance-none rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accion-tinta [&::-moz-range-thumb]:h-3.5 [&::-moz-range-thumb]:w-3.5 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-brand-teal-dark [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-brand-teal-dark [&::-webkit-slider-thumb]:shadow"
         />
 
         {/* Tres columnas para que los tres mandos de en medio queden
@@ -209,7 +209,7 @@ export function VideoDeLaPortada({
             <button
               type="button"
               onClick={alternarMarcha}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-teal-dark text-white transition-colors hover:bg-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-dark"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-teal-dark text-sobre-color transition-colors hover:bg-accion-fuerte focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accion-tinta"
             >
               <span className="sr-only">
                 {enMarcha ? "Pausar el vídeo" : "Reanudar el vídeo"}
@@ -255,7 +255,7 @@ function Mando({
       onClick={al}
       aria-pressed={pulsado}
       title={nombre}
-      className="flex h-9 w-9 items-center justify-center rounded-full text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-brand-teal-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-dark"
+      className="flex h-9 w-9 items-center justify-center rounded-full text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-accion-tinta focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accion-tinta"
     >
       <span className="sr-only">{nombre}</span>
       {children}

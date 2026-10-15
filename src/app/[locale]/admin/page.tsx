@@ -35,7 +35,7 @@ function TarjetaMetrica({
     encendida
       ? "border-amber-300 bg-amber-50"
       : "border-zinc-200 bg-white"
-  } ${href ? "transition-colors hover:border-brand-teal-dark" : ""}`;
+  } ${href ? "transition-colors hover:border-accion-tinta" : ""}`;
 
   const contenido = (
     <>

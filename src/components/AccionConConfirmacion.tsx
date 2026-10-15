@@ -112,7 +112,7 @@ function BotonSi({ texto, enCurso }: { texto: string; enCurso: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="rounded bg-red-600 px-2.5 py-1 text-xs font-semibold text-white transition-colors hover:bg-red-700 disabled:opacity-60"
+      className="rounded bg-peligro px-2.5 py-1 text-xs font-semibold text-sobre-color transition-colors hover:bg-peligro-fuerte disabled:opacity-60"
     >
       {pending ? enCurso : texto}
     </button>

@@ -22,7 +22,7 @@ const ESTILO_BLOQUE: Record<OrigenDeCifra, { borde: string; fondo: string; etiqu
   contado: {
     borde: "border-teal-200",
     fondo: "bg-teal-50",
-    etiqueta: "bg-teal-700 text-white",
+    etiqueta: "bg-accion text-sobre-color",
     texto: "text-teal-900",
   },
   declarado: {
@@ -34,7 +34,7 @@ const ESTILO_BLOQUE: Record<OrigenDeCifra, { borde: string; fondo: string; etiqu
   deducido: {
     borde: "border-amber-200",
     fondo: "bg-amber-50",
-    etiqueta: "bg-amber-600 text-white",
+    etiqueta: "bg-aviso text-sobre-aviso",
     texto: "text-amber-900",
   },
 };

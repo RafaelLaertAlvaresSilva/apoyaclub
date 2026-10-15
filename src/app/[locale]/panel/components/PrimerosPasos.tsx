@@ -19,19 +19,19 @@ export function PrimerosPasos({ pasos }: { pasos: PasoInicial[] }) {
 
   return (
     <section className="rounded-xl border border-brand-teal/30 bg-brand-teal-light/40 p-5">
-      <h2 className="text-base font-semibold text-brand-navy">{t("titulo")}</h2>
+      <h2 className="text-base font-semibold text-titular">{t("titulo")}</h2>
       <p className="mt-1 text-sm text-zinc-600">{t("subtitulo")}</p>
 
       <ol className="mt-4 flex flex-col gap-2">
         {pasos.map((paso, indice) => (
           <li
             key={paso.id}
-            className="flex flex-wrap items-center gap-3 rounded-lg border border-white bg-white/70 px-4 py-3"
+            className="flex flex-wrap items-center gap-3 rounded-lg border border-sobre-color bg-white/70 px-4 py-3"
           >
             <span
               aria-hidden
               className={`flex h-6 w-6 flex-none items-center justify-center rounded-full text-xs font-bold ${
-                paso.hecho ? "bg-brand-teal-dark text-white" : "bg-white text-zinc-500 ring-1 ring-zinc-300"
+                paso.hecho ? "bg-brand-teal-dark text-sobre-color" : "bg-white text-zinc-500 ring-1 ring-zinc-300"
               }`}
             >
               {paso.hecho ? "✓" : indice + 1}
@@ -53,14 +53,14 @@ export function PrimerosPasos({ pasos }: { pasos: PasoInicial[] }) {
                 // parecía muerto.
                 <a
                   href={`#${paso.anclaDelPanel}`}
-                  className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-brand-navy"
+                  className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-brand-navy"
                 >
                   {t(`${paso.id}.accion`)}
                 </a>
               ) : (
                 <Link
                   href={paso.href}
-                  className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-brand-navy"
+                  className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-brand-navy"
                 >
                   {t(`${paso.id}.accion`)}
                 </Link>

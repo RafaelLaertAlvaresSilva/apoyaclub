@@ -57,13 +57,13 @@ export function QuePuedesOfrecer() {
               type="button"
               onClick={() => setAbierta(estaAbierta ? null : categoria.id)}
               aria-expanded={estaAbierta}
-              className="group relative flex h-[150px] w-full flex-col items-center justify-center overflow-hidden rounded-2xl border border-zinc-200 bg-white px-3 text-center shadow-sm transition-colors hover:border-brand-teal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-dark sm:h-[136px]"
+              className="group relative flex h-[150px] w-full flex-col items-center justify-center overflow-hidden rounded-2xl border border-zinc-200 bg-white px-3 text-center shadow-sm transition-colors hover:border-brand-teal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accion-tinta sm:h-[136px]"
             >
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-teal-light text-accion-tinta">
                 <IconoDeCategoria categoria={categoria.id} className="h-5 w-5" />
               </span>
 
-              <span className="mt-2.5 text-sm font-bold leading-snug text-brand-navy">
+              <span className="mt-2.5 text-sm font-bold leading-snug text-titular">
                 {categoria.etiqueta}
               </span>
 
@@ -73,7 +73,7 @@ export function QuePuedesOfrecer() {
                   el `hover` se perdería y la pista parpadearía sin
                   parar. */}
               <span
-                className={`pointer-events-none absolute inset-0 flex items-center justify-center bg-brand-navy px-3.5 text-[12.5px] leading-snug text-white transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100 ${
+                className={`pointer-events-none absolute inset-0 flex items-center justify-center bg-brand-navy px-3.5 text-[12.5px] leading-snug text-sobre-color transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100 ${
                   estaAbierta ? "opacity-100" : "opacity-0"
                 }`}
               >

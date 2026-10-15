@@ -80,7 +80,7 @@ export function OfertaForm({
                   value={opcion.id}
                   checked={tipo === opcion.id}
                   onChange={() => setTipo(opcion.id)}
-                  className="h-4 w-4 border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+                  className="h-4 w-4 border-zinc-300 text-teal-600 focus:ring-accion-tinta"
                 />
                 <span className="font-medium text-zinc-900">{opcion.etiqueta}</span>
               </span>

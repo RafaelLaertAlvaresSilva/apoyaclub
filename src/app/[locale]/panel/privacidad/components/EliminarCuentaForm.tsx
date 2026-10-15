@@ -13,11 +13,11 @@ function BotonEliminar() {
     <button
       type="submit"
       disabled={pending}
-      className="flex items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 font-medium text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+      className="flex items-center justify-center gap-2 rounded-lg bg-peligro px-4 py-2.5 font-medium text-sobre-color transition-colors hover:bg-peligro-fuerte disabled:cursor-not-allowed disabled:opacity-60"
     >
       {pending && (
         <span
-          className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
+          className="h-4 w-4 animate-spin rounded-full border-2 border-sobre-color/40 border-t-sobre-color"
           aria-hidden="true"
         />
       )}

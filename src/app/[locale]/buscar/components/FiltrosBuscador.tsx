@@ -125,7 +125,7 @@ export function FiltrosBuscador({
           {OPCIONES_BUSCA.map((opcion) => (
             <label
               key={opcion.id}
-              className="cursor-pointer border-r border-zinc-200 px-2 py-2 text-center text-xs font-medium text-zinc-600 last:border-r-0 has-checked:bg-teal-700 has-checked:text-white"
+              className="cursor-pointer border-r border-zinc-200 px-2 py-2 text-center text-xs font-medium text-zinc-600 last:border-r-0 has-checked:bg-accion has-checked:text-sobre-color"
             >
               <input
                 type="radio"
@@ -290,7 +290,7 @@ export function FiltrosBuscador({
                 value={forma.id}
                 defaultChecked={filtrosIniciales.formasColaboracion?.includes(forma.id) ?? false}
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
-                className="rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+                className="rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
               />
               {forma.etiqueta}
             </label>
@@ -309,7 +309,7 @@ export function FiltrosBuscador({
                 value={nivel.id}
                 defaultChecked={filtrosIniciales.niveles?.includes(nivel.id) ?? false}
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
-                className="rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+                className="rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
               />
               {nivel.etiqueta}
             </label>
@@ -328,7 +328,7 @@ export function FiltrosBuscador({
                 value={tipo.id}
                 defaultChecked={filtrosIniciales.tipos?.includes(tipo.id) ?? false}
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
-                className="rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+                className="rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
               />
               {tipo.etiqueta}
             </label>
@@ -347,7 +347,7 @@ export function FiltrosBuscador({
                 value={objetivo.id}
                 defaultChecked={filtrosIniciales.objetivos?.includes(objetivo.id) ?? false}
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
-                className="rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+                className="rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
               />
               {objetivo.etiqueta}
             </label>
@@ -365,7 +365,7 @@ export function FiltrosBuscador({
       <div className="flex gap-2">
         <button
           type="submit"
-          className="flex-1 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-800"
+          className="flex-1 rounded-lg bg-accion px-4 py-2.5 text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte"
         >
           {t("verResultados")}
         </button>

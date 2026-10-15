@@ -37,13 +37,13 @@ export function FichaDeOportunidad({
     <div className="flex flex-col gap-6">
       {beneficios.length > 0 && (
         <section>
-          <h3 className="text-sm font-bold uppercase tracking-wide text-brand-teal-dark">
+          <h3 className="text-sm font-bold uppercase tracking-wide text-accion-tinta">
             La empresa recibe
           </h3>
           <ul className="mt-3 flex flex-col gap-2">
             {beneficios.map((beneficio, indice) => (
               <li key={`${beneficio.texto}-${indice}`} className="flex items-start gap-2.5 text-zinc-800">
-                <span aria-hidden="true" className="mt-0.5 text-brand-teal-dark">✓</span>
+                <span aria-hidden="true" className="mt-0.5 text-accion-tinta">✓</span>
                 <span>
                   {beneficio.cantidad && (
                     <span className="font-semibold">{beneficio.cantidad}&nbsp;×&nbsp;</span>

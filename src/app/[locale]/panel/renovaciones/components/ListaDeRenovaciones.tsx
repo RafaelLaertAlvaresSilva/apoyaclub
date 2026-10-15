@@ -23,7 +23,7 @@ import { guardarRenovacion, type EstadoGuardado } from "../actions";
  * horaria, "faltan 2", y React avisaría de que el HTML no coincide.
  *
  * LOS COLORES SON LOS DEL PANEL, no unos propios. Esta sección nació
- * escrita a mano —botón en `bg-teal-700`, campos con su propio borde, y
+ * escrita a mano —botón en `bg-accion`, campos con su propio borde, y
  * la tarjeta del estado "sin fecha" en `bg-zinc-50` y con el borde a
  * rayas— y el resultado era que, al lado de Patrocinadores o de "A
  * quién escribir", parecía otra web: allí la tarjeta es blanca siempre

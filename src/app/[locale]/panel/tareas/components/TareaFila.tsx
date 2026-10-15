@@ -98,7 +98,7 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
             <button
               type="button"
               onClick={() => setPidiendoPrueba(true)}
-              className="rounded-lg bg-teal-700 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-teal-800"
+              className="rounded-lg bg-accion px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte"
             >
               Marcar hecho
             </button>
@@ -205,7 +205,7 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
           <div className="flex flex-wrap gap-2">
             <button
               type="submit"
-              className="rounded-lg bg-teal-700 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-teal-800"
+              className="rounded-lg bg-accion px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte"
             >
               Guardar cambios
             </button>
@@ -234,7 +234,7 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
               name="pruebaUrl"
               type="url"
               placeholder="https://instagram.com/p/…"
-              className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-brand-teal-dark focus:outline-none focus:ring-1 focus:ring-brand-teal-dark"
+              className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-accion-tinta focus:outline-none focus:ring-1 focus:ring-accion-tinta"
             />
           </label>
           <p className="mt-1 text-xs text-zinc-500">
@@ -244,7 +244,7 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
           <div className="mt-2 flex gap-2">
             <button
               type="submit"
-              className="rounded-lg bg-teal-700 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-teal-800"
+              className="rounded-lg bg-accion px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte"
             >
               Guardar como hecho
             </button>

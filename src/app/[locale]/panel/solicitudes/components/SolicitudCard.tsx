@@ -3,10 +3,10 @@ import type { ContactRequest, ContactRequestStatus } from "@/lib/types";
 import { cambiarEstadoSolicitud } from "../actions";
 
 const ESTILO_ESTADO: Record<ContactRequestStatus, string> = {
-  new: "bg-teal-700 text-white",
-  seen: "bg-sky-500 text-white",
-  in_conversation: "bg-amber-500 text-white",
-  closed: "bg-zinc-400 text-white",
+  new: "bg-accion text-sobre-color",
+  seen: "bg-sky-500 text-sobre-color",
+  in_conversation: "bg-aviso text-sobre-aviso",
+  closed: "bg-zinc-400 text-sobre-color",
   discarded: "bg-zinc-300 text-zinc-600",
 };
 

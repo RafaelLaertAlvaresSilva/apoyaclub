@@ -31,7 +31,7 @@ export function DetalleDeVisitas({ resumen }: { resumen: ResumenDeVisitas }) {
               type="button"
               onClick={() => setVentana(opcion)}
               className={`rounded-md px-3 py-1 text-xs font-medium transition-colors ${
-                ventana === opcion ? "bg-teal-700 text-white" : "text-zinc-600 hover:bg-zinc-100"
+                ventana === opcion ? "bg-accion text-sobre-color" : "text-zinc-600 hover:bg-zinc-100"
               }`}
             >
               {opcion === "semana" ? "Últimos 7 días" : "Últimos 30 días"}
@@ -66,7 +66,7 @@ function Dato({ valor, etiqueta, ayuda }: { valor: number; etiqueta: string; ayu
   return (
     <div className="rounded-lg bg-zinc-50 p-3">
       <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{etiqueta}</dt>
-      <dd className="mt-1 text-xl font-bold tabular-nums text-brand-navy">{valor}</dd>
+      <dd className="mt-1 text-xl font-bold tabular-nums text-titular">{valor}</dd>
       <p className="mt-1 text-xs leading-snug text-zinc-500">{ayuda}</p>
     </div>
   );

@@ -99,7 +99,7 @@ export default async function PaginaEmpresa({ params }: { params: Promise<{ slug
                 href={empresa.website}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
-                className="mt-1 inline-block text-sm font-medium text-brand-teal-dark hover:underline"
+                className="mt-1 inline-block text-sm font-medium text-accion-tinta hover:underline"
               >
                 Ver su web
               </a>
@@ -128,7 +128,7 @@ export default async function PaginaEmpresa({ params }: { params: Promise<{ slug
             <ul className="mt-3 grid gap-3 sm:grid-cols-2">
               {ofertas.map((oferta) => (
                 <li key={oferta.id} className="rounded-xl border border-teal-200 bg-teal-50 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-teal-dark">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-accion-tinta">
                     {ETIQUETA_TIPO_OFERTA[oferta.tipo]}
                     {oferta.categoria && ` · ${ETIQUETA_CATEGORIA_NECESIDAD[oferta.categoria]}`}
                   </p>
@@ -164,7 +164,7 @@ export default async function PaginaEmpresa({ params }: { params: Promise<{ slug
         </section>
 
         <p className="mt-8 text-center text-sm text-zinc-500">
-          <Link href="/empresas" className="font-medium text-brand-teal-dark hover:underline">
+          <Link href="/empresas" className="font-medium text-accion-tinta hover:underline">
             Ver todas las empresas
           </Link>
         </p>

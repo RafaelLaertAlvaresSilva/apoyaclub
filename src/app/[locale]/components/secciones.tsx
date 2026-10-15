@@ -278,10 +278,10 @@ export async function SeccionComoFunciona() {
     >
       <div className="mx-auto max-w-6xl">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+          <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
             {t("comoFunciona.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
             {t("comoFunciona.titulo")}
           </h2>
         </div>
@@ -308,10 +308,10 @@ export async function SeccionComoFunciona() {
                   <span className="text-4xl font-extrabold tabular-nums text-brand-teal/45">
                     {String(indice + 1).padStart(2, "0")}
                   </span>
-                  <p className="mt-3 text-sm font-extrabold uppercase tracking-wider text-brand-teal-dark">
+                  <p className="mt-3 text-sm font-extrabold uppercase tracking-wider text-accion-tinta">
                     {paso.clave}
                   </p>
-                  <h3 className="mt-2 text-2xl font-extrabold leading-snug text-brand-navy">
+                  <h3 className="mt-2 text-2xl font-extrabold leading-snug text-titular">
                     {paso.titulo}
                   </h3>
                   <p className="mt-3 max-w-md text-[15px] leading-relaxed text-zinc-600">
@@ -351,10 +351,10 @@ export async function SeccionQueOfrece() {
   return (
     <section id="clubes" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
       <div className="mx-auto max-w-3xl text-center">
-        <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+        <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
           {t("ofrece.eyebrow")}
         </p>
-        <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl">
+        <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-titular sm:text-4xl">
           {t("ofrece.titulo")}
         </h2>
       </div>
@@ -368,7 +368,7 @@ export async function SeccionQueOfrece() {
       <p className="mt-4 text-center text-sm text-zinc-500">{t("ofrece.pie")}</p>
 
       <div className="mx-auto mt-12 max-w-2xl text-center">
-        <p className="text-xl font-extrabold leading-snug text-brand-navy sm:text-2xl">
+        <p className="text-xl font-extrabold leading-snug text-titular sm:text-2xl">
           {t("ofrece.cierre1")}
         </p>
         <p className="mt-4 text-[15px] leading-relaxed text-zinc-600 sm:text-base">
@@ -404,10 +404,10 @@ export async function SeccionOportunidades() {
           <p className="text-xs font-bold uppercase tracking-wider text-brand-teal">
             {t("oportunidades.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-sobre-color sm:text-4xl">
             {t("oportunidades.titulo")}
           </h2>
-          <p className="mt-4 leading-relaxed text-white/70">{t("oportunidades.texto")}</p>
+          <p className="mt-4 leading-relaxed text-sobre-color/70">{t("oportunidades.texto")}</p>
         </div>
 
         <div className="mt-14 grid gap-6 lg:grid-cols-3">
@@ -421,12 +421,12 @@ export async function SeccionOportunidades() {
                 <Badge tone="teal" className="self-start">
                   {oportunidad.categoria.toUpperCase()}
                 </Badge>
-                <h3 className="mt-4 text-lg font-extrabold leading-snug text-brand-navy">
+                <h3 className="mt-4 text-lg font-extrabold leading-snug text-titular">
                   {oportunidad.titulo}
                 </h3>
 
                 <p className="mt-3">
-                  <span className="text-3xl font-extrabold tracking-tight text-brand-navy">
+                  <span className="text-3xl font-extrabold tracking-tight text-titular">
                     {oportunidad.precio}
                   </span>
                   {oportunidad.periodo && (
@@ -454,7 +454,7 @@ export async function SeccionOportunidades() {
                   ))}
                 </ul>
 
-                <span className="mt-7 inline-flex w-full items-center justify-center rounded-2xl bg-brand-navy px-6 py-3.5 text-sm font-bold text-white">
+                <span className="mt-7 inline-flex w-full items-center justify-center rounded-2xl bg-brand-navy px-6 py-3.5 text-sm font-bold text-sobre-color">
                   {oportunidad.cta}
                 </span>
               </div>
@@ -462,7 +462,7 @@ export async function SeccionOportunidades() {
           ))}
         </div>
 
-        <p className="mt-8 text-center text-xs text-white/50">{t("oportunidades.nota")}</p>
+        <p className="mt-8 text-center text-xs text-sobre-color/50">{t("oportunidades.nota")}</p>
       </div>
     </section>
   );
@@ -589,13 +589,13 @@ export async function SeccionPaginaClub() {
         <div>
           {/* El epígrafe con su rayita al lado, como en el diseño. */}
           <div className="flex items-center gap-3">
-            <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+            <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
               {t("paginaClub.eyebrow")}
             </p>
             <span className="h-px w-12 flex-none bg-brand-teal/50" aria-hidden="true" />
           </div>
 
-          <h2 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl">
+          <h2 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-titular sm:text-4xl">
             {t("paginaClub.titulo")}
           </h2>
           <p className="mt-5 leading-relaxed text-zinc-600">{t("paginaClub.texto")}</p>
@@ -622,7 +622,7 @@ export async function SeccionPaginaClub() {
             {VENTAJAS_DE_LA_PAGINA.map((ventaja) => (
               <li key={ventaja}>
                 <div className="lg:flex lg:items-center lg:gap-3">
-                  <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+                  <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-accion-tinta">
                     <svg
                       aria-hidden="true"
                       viewBox="0 0 24 24"
@@ -636,7 +636,7 @@ export async function SeccionPaginaClub() {
                       {ICONO_DE_LA_VENTAJA[ventaja]}
                     </svg>
                   </span>
-                  <p className="mt-3 text-[15px] font-bold text-brand-navy lg:mt-0">
+                  <p className="mt-3 text-[15px] font-bold text-titular lg:mt-0">
                     {t(`paginaClub.ventajas.${ventaja}.titulo`)}
                   </p>
                 </div>
@@ -900,10 +900,10 @@ export async function SeccionBeneficiosEmpresa() {
 
       <div className="mx-auto max-w-6xl">
         <div className="max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+          <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
             {t("paraEmpresas.beneficios.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-titular sm:text-4xl">
             {t("paraEmpresas.beneficios.titulo")}
           </h2>
           <p className="mt-4 leading-relaxed text-zinc-600">
@@ -918,7 +918,7 @@ export async function SeccionBeneficiosEmpresa() {
               className="flex flex-col rounded-2xl border border-zinc-200 bg-white/90 p-5 shadow-sm backdrop-blur-sm transition-colors hover:border-brand-teal/50"
             >
               <div className="flex items-start gap-3">
-                <span className="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-brand-teal-light text-brand-teal-dark">
+                <span className="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-brand-teal-light text-accion-tinta">
                   <svg
                     aria-hidden="true"
                     viewBox="0 0 24 24"
@@ -932,7 +932,7 @@ export async function SeccionBeneficiosEmpresa() {
                     {ICONO_DEL_BENEFICIO[tarjeta.clave] ?? ICONO_POR_DEFECTO}
                   </svg>
                 </span>
-                <h3 className="pt-1 font-extrabold leading-snug text-brand-navy">
+                <h3 className="pt-1 font-extrabold leading-snug text-titular">
                   {tarjeta.titulo}
                 </h3>
               </div>
@@ -945,10 +945,10 @@ export async function SeccionBeneficiosEmpresa() {
                   tarjetas parezca descuadrada. */}
               <div className="mt-auto pt-4">
                 <div className="rounded-xl bg-brand-teal-light/60 px-4 py-3.5">
-                  <p className="text-lg font-extrabold leading-tight tracking-tight text-brand-teal-dark tabular-nums">
+                  <p className="text-lg font-extrabold leading-tight tracking-tight text-accion-tinta tabular-nums">
                     {tarjeta.cifra}
                   </p>
-                  <p className="mt-1 text-[13px] leading-snug text-brand-navy">{tarjeta.dato}</p>
+                  <p className="mt-1 text-[13px] leading-snug text-titular">{tarjeta.dato}</p>
                   {/* La fuente y, en la única tarjeta que lo lleva, el
                       aviso: en el mismo párrafo y no en dos. Son seis
                       tarjetas en una rejilla de tres columnas, y todas
@@ -969,7 +969,7 @@ export async function SeccionBeneficiosEmpresa() {
             arriba, y repetirlas aquí no las hace más ciertas. Lo que
             falta a estas alturas no es otro dato, es el botón. */}
         <div className="mt-6 rounded-3xl bg-brand-navy p-8 sm:p-10">
-          <h3 className="max-w-2xl text-xl font-extrabold leading-snug text-white sm:text-2xl">
+          <h3 className="max-w-2xl text-xl font-extrabold leading-snug text-sobre-color sm:text-2xl">
             {t("paraEmpresas.beneficios.franjaTitulo")}
           </h3>
 
@@ -991,8 +991,8 @@ export async function SeccionBeneficiosEmpresa() {
                   </svg>
                 </span>
                 <div className="min-w-0">
-                  <p className="font-bold text-white">{bloque.titulo}</p>
-                  <p className="mt-1 text-sm leading-relaxed text-white/75">{bloque.texto}</p>
+                  <p className="font-bold text-sobre-color">{bloque.titulo}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-sobre-color/75">{bloque.texto}</p>
                 </div>
               </div>
             ))}
@@ -1000,7 +1000,7 @@ export async function SeccionBeneficiosEmpresa() {
 
           <Link
             href="/buscar?busca=patrocinios"
-            className="mt-9 inline-flex items-center justify-center rounded-xl bg-brand-teal-light px-6 py-3.5 font-bold text-brand-navy transition-colors hover:bg-white"
+            className="mt-9 inline-flex items-center justify-center rounded-xl bg-brand-teal-light px-6 py-3.5 font-bold text-titular transition-colors hover:bg-white"
           >
             {t("paraEmpresas.beneficios.franjaCta")}
           </Link>
@@ -1023,10 +1023,10 @@ export async function SeccionBuscadorEmpresas() {
     <section id="empresas" className="scroll-mt-32 bg-zinc-50 px-4 py-20 sm:px-6 sm:py-28">
       <div className="mx-auto max-w-6xl">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+          <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
             {t("empresas.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
             {t("empresas.titulo")}
           </h2>
           <p className="mt-4 leading-relaxed text-zinc-600">{t("empresas.texto")}</p>
@@ -1062,7 +1062,7 @@ export async function SeccionBuscadorEmpresas() {
             />
           </div>
 
-          <span className="mt-5 flex w-full items-center justify-center rounded-2xl bg-brand-teal-dark px-6 py-4 text-base font-bold text-white">
+          <span className="mt-5 flex w-full items-center justify-center rounded-2xl bg-brand-teal-dark px-6 py-4 text-base font-bold text-sobre-color">
             {t("empresas.filtros.buscar")}
           </span>
         </Link>
@@ -1076,11 +1076,11 @@ export async function SeccionBuscadorEmpresas() {
               <Badge tone="teal" className="mb-3 self-start">
                 {resultado.categoria.toUpperCase()}
               </Badge>
-              <h3 className="text-[15px] font-bold leading-snug text-brand-navy">
+              <h3 className="text-[15px] font-bold leading-snug text-titular">
                 {resultado.titulo}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-zinc-500">{resultado.texto}</p>
-              <div className="mt-4 text-xl font-extrabold text-brand-navy">{resultado.precio}</div>
+              <div className="mt-4 text-xl font-extrabold text-titular">{resultado.precio}</div>
             </div>
           ))}
         </div>
@@ -1106,10 +1106,10 @@ export async function SeccionEmbudo() {
   return (
     <section id="seguimiento" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-14 sm:px-6 sm:py-28">
       <div className="mx-auto max-w-2xl text-center">
-        <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+        <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
           {t("embudo.eyebrow")}
         </p>
-        <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl">
+        <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-titular sm:text-4xl">
           {t("embudo.titulo")}
         </h2>
         <p className="mt-4 leading-relaxed text-zinc-600">{t("embudo.texto")}</p>
@@ -1118,7 +1118,7 @@ export async function SeccionEmbudo() {
       {/* Sin esta línea, las cuatro casillas son cuatro palabras
           sueltas: nadie sabe si hay que elegir una, si son opciones o
           si van en orden. */}
-      <p className="mt-8 text-center text-sm font-semibold text-brand-navy sm:mt-10">
+      <p className="mt-8 text-center text-sm font-semibold text-titular sm:mt-10">
         {t("embudo.comoSeLee")}
       </p>
 
@@ -1145,10 +1145,10 @@ export async function SeccionEmbudo() {
             className="relative p-4 sm:rounded-2xl sm:border sm:border-zinc-200 sm:bg-white sm:p-6 sm:shadow-sm"
           >
             <div className="flex items-center gap-2.5 sm:block">
-              <span className="inline-flex h-7 w-7 flex-none items-center justify-center rounded-full bg-brand-teal-light text-sm font-extrabold text-brand-teal-dark sm:h-8 sm:w-8">
+              <span className="inline-flex h-7 w-7 flex-none items-center justify-center rounded-full bg-brand-teal-light text-sm font-extrabold text-accion-tinta sm:h-8 sm:w-8">
                 {indice + 1}
               </span>
-              <h3 className="font-extrabold text-brand-navy sm:mt-4">{estado.nombre}</h3>
+              <h3 className="font-extrabold text-titular sm:mt-4">{estado.nombre}</h3>
             </div>
             <p className="mt-1.5 text-sm leading-relaxed text-zinc-600 sm:mt-2">{estado.texto}</p>
 
@@ -1179,7 +1179,7 @@ export async function SeccionEmbudo() {
         <span className="text-sm leading-relaxed text-zinc-600">{t("embudo.descartadaTexto")}</span>
       </div>
 
-      <p className="mx-auto mt-8 max-w-2xl text-center text-[15px] font-medium leading-relaxed text-brand-navy sm:mt-10 sm:text-base">
+      <p className="mx-auto mt-8 max-w-2xl text-center text-[15px] font-medium leading-relaxed text-titular sm:mt-10 sm:text-base">
         {t("embudo.cierre")}
       </p>
     </section>
@@ -1213,10 +1213,10 @@ export async function SeccionPanelYHerramientas() {
     <section id="herramientas" className="scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
       <div className="mx-auto max-w-6xl">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+          <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
             {t("panel.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
             {t("panel.titulo")}
           </h2>
           <p className="mt-4 leading-relaxed text-zinc-600">{t("panel.texto")}</p>
@@ -1225,27 +1225,27 @@ export async function SeccionPanelYHerramientas() {
         {/* Maqueta del panel del club. */}
         <div className="mx-auto mt-12 max-w-4xl rounded-3xl bg-brand-navy-dark p-6 shadow-2xl shadow-brand-navy-dark/30 sm:p-9">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <p className="text-lg font-extrabold text-white sm:text-xl">{t("panel.saludo")}</p>
-            <span className="rounded-full bg-brand-teal-dark px-5 py-2.5 text-sm font-bold text-white">
+            <p className="text-lg font-extrabold text-sobre-color sm:text-xl">{t("panel.saludo")}</p>
+            <span className="rounded-full bg-brand-teal-dark px-5 py-2.5 text-sm font-bold text-sobre-color">
               {t("panel.boton")}
             </span>
           </div>
           <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {metricasPanel.map((metrica) => (
               <div key={metrica.etiqueta} className="rounded-2xl bg-white/[0.07] p-4">
-                <div className="text-2xl font-extrabold text-white">{metrica.numero}</div>
-                <div className="mt-0.5 text-xs text-white/60">{metrica.etiqueta}</div>
+                <div className="text-2xl font-extrabold text-sobre-color">{metrica.numero}</div>
+                <div className="mt-0.5 text-xs text-sobre-color/60">{metrica.etiqueta}</div>
               </div>
             ))}
           </div>
-          <p className="mt-5 text-center text-xs text-white/40">{t("panel.nota")}</p>
+          <p className="mt-5 text-center text-xs text-sobre-color/40">{t("panel.nota")}</p>
         </div>
 
         <div className="mx-auto mt-20 max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+          <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
             {t("herramientas.eyebrow")}
           </p>
-          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-brand-navy sm:text-3xl">
+          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-titular sm:text-3xl">
             {t("herramientas.titulo")}
           </h3>
           <p className="mt-4 leading-relaxed text-zinc-600">{t("herramientas.texto")}</p>
@@ -1275,12 +1275,12 @@ export async function SeccionPanelYHerramientas() {
             >
               <details className="group">
                 <summary className="flex cursor-pointer list-none items-start gap-3 [&::-webkit-details-marker]:hidden">
-                  <span className="inline-flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+                  <span className="inline-flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-accion-tinta">
                     <IconoHerramienta clave={herramienta.clave} />
                   </span>
 
                   <span className="min-w-0 flex-1">
-                    <span className="block font-extrabold text-brand-navy">
+                    <span className="block font-extrabold text-titular">
                       {herramienta.titulo}
                     </span>
                     <span className="mt-1 block text-sm leading-relaxed text-zinc-600">
@@ -1443,13 +1443,13 @@ export async function SeccionSector() {
   return (
     <section className="border-t border-zinc-200 bg-white px-4 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-6xl">
-        <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+        <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
           {t("sector.eyebrow")}
         </p>
-        <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+        <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
           {t("sector.titulo")}
           <br className="hidden sm:block" />{" "}
-          <span className="text-brand-teal-dark">{t("sector.tituloResalte")}</span>
+          <span className="text-accion-tinta">{t("sector.tituloResalte")}</span>
         </h2>
         <p className="mt-4 max-w-3xl text-zinc-600">{t("sector.subtitulo")}</p>
 
@@ -1466,20 +1466,20 @@ export async function SeccionSector() {
                 </span>
                 {/* `whitespace-nowrap`: sin esto "2.180 M€" se parte en dos
                     líneas en cuanto la tarjeta se estrecha. */}
-                <p className="whitespace-nowrap text-[1.65rem] font-extrabold leading-none tracking-tight text-brand-teal-dark tabular-nums">
+                <p className="whitespace-nowrap text-[1.65rem] font-extrabold leading-none tracking-tight text-accion-tinta tabular-nums">
                   {pais.cifra}
                 </p>
                 <span className="ml-auto shrink-0 rounded-lg bg-brand-teal-light px-2 py-1 text-center">
-                  <span className="block whitespace-nowrap text-[13px] font-extrabold leading-tight text-brand-teal-dark tabular-nums">
+                  <span className="block whitespace-nowrap text-[13px] font-extrabold leading-tight text-accion-tinta tabular-nums">
                     {pais.insignia}
                   </span>
-                  <span className="block whitespace-nowrap text-[11px] leading-tight text-brand-teal-dark/80">
+                  <span className="block whitespace-nowrap text-[11px] leading-tight text-accion-tinta/80">
                     {pais.insigniaPie}
                   </span>
                 </span>
               </div>
 
-              <p className="mt-3 font-bold text-brand-navy">{pais.nombre}</p>
+              <p className="mt-3 font-bold text-titular">{pais.nombre}</p>
               <p className="text-sm text-zinc-500">{pais.anio}</p>
               <p className="mt-2.5 text-sm leading-relaxed text-zinc-600">{pais.texto}</p>
             </div>
@@ -1490,7 +1490,7 @@ export async function SeccionSector() {
         <div className="mt-4 grid gap-4 lg:grid-cols-[1.4fr_1fr_1fr]">
           {/* Comparativa por país */}
           <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
-            <h3 className="font-bold text-brand-navy">{comparativa.titulo}</h3>
+            <h3 className="font-bold text-titular">{comparativa.titulo}</h3>
             <p className="text-sm text-zinc-500">{comparativa.subtitulo}</p>
 
             <ul className="mt-5 space-y-3">
@@ -1499,7 +1499,7 @@ export async function SeccionSector() {
                   <span className="h-5 w-5 shrink-0 overflow-hidden rounded-full ring-1 ring-zinc-300">
                     <Bandera pais={barra.clave} />
                   </span>
-                  <span className="w-24 shrink-0 text-sm font-medium text-brand-navy">
+                  <span className="w-24 shrink-0 text-sm font-medium text-titular">
                     {barra.nombre}
                   </span>
                   <span className="h-3 min-w-0 flex-1 overflow-hidden rounded-full bg-zinc-200">
@@ -1513,7 +1513,7 @@ export async function SeccionSector() {
                   <span
                     className={`w-20 shrink-0 text-right text-sm tabular-nums ${
                       barra.destacada
-                        ? "font-extrabold text-brand-teal-dark"
+                        ? "font-extrabold text-accion-tinta"
                         : "font-medium text-zinc-600"
                     }`}
                   >
@@ -1526,7 +1526,7 @@ export async function SeccionSector() {
 
           {/* Reparto del patrocinio europeo */}
           <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
-            <h3 className="font-bold text-brand-navy">{europa.titulo}</h3>
+            <h3 className="font-bold text-titular">{europa.titulo}</h3>
             <p className="text-sm text-zinc-500">{europa.subtitulo}</p>
 
             <div className="mt-5 flex items-center gap-5">
@@ -1553,7 +1553,7 @@ export async function SeccionSector() {
                   />
                 </svg>
                 <span className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                  <span className="text-xl font-extrabold leading-none text-brand-navy tabular-nums">
+                  <span className="text-xl font-extrabold leading-none text-titular tabular-nums">
                     {europa.porcentaje} %
                   </span>
                   <span className="mt-1 text-[11px] leading-tight text-zinc-500">
@@ -1572,7 +1572,7 @@ export async function SeccionSector() {
                           fila.fuerte ? "bg-brand-teal-dark" : "bg-brand-navy/20"
                         }`}
                       />
-                      <span className="font-medium text-brand-navy">{fila.etiqueta}</span>
+                      <span className="font-medium text-titular">{fila.etiqueta}</span>
                     </span>
                     <span className="ml-4.5 block text-zinc-600 tabular-nums">
                       {fila.cifra} ({fila.porcentaje})
@@ -1587,7 +1587,7 @@ export async function SeccionSector() {
 
           {/* Licencias federativas */}
           <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-teal-light text-accion-tinta">
               <svg
                 aria-hidden="true"
                 viewBox="0 0 24 24"
@@ -1601,8 +1601,8 @@ export async function SeccionSector() {
                 <path d="M16 20v-1.5a3.5 3.5 0 00-3.5-3.5h-5A3.5 3.5 0 004 18.5V20M10 11.5a3.25 3.25 0 100-6.5 3.25 3.25 0 000 6.5zM20 20v-1.5a3.5 3.5 0 00-2.6-3.4M15.5 5.2a3.25 3.25 0 010 6.1" />
               </svg>
             </span>
-            <h3 className="mt-4 font-bold text-brand-navy">{licencias.titulo}</h3>
-            <p className="mt-3 text-3xl font-extrabold tracking-tight text-brand-teal-dark tabular-nums">
+            <h3 className="mt-4 font-bold text-titular">{licencias.titulo}</h3>
+            <p className="mt-3 text-3xl font-extrabold tracking-tight text-accion-tinta tabular-nums">
               {licencias.cifra}
             </p>
             <p className="text-sm text-zinc-500">{licencias.anio}</p>
@@ -1677,7 +1677,7 @@ function NotaDelPrecio({ texto }: { texto: string }) {
           mete los valores dentro de las utilidades y no publica la
           variable: `var(...)` llegaba vacía y la frase salía en la
           tipografía de los titulares. */}
-      <p className="text-right text-[1.6rem] leading-tight text-brand-navy [font-family:var(--font-mano),'Segoe_Script','Bradley_Hand',cursive] xl:text-3xl">
+      <p className="text-right text-[1.6rem] leading-tight text-titular [font-family:var(--font-mano),'Segoe_Script','Bradley_Hand',cursive] xl:text-3xl">
         {texto}
       </p>
       <svg
@@ -1688,7 +1688,7 @@ function NotaDelPrecio({ texto }: { texto: string }) {
         strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="ml-auto mt-2 h-16 w-28 text-brand-navy"
+        className="ml-auto mt-2 h-16 w-28 text-titular"
       >
         <path d="M108 8c4 30-12 58-44 70" />
         <path d="M80 76l-16 2 4-16" />
@@ -1715,7 +1715,7 @@ function FranjaDelPrecio({
     <div className="mt-12 hidden rounded-3xl border border-zinc-200 bg-white/80 p-8 backdrop-blur-sm lg:grid lg:grid-cols-3 lg:gap-8">
       {bloques.map((bloque) => (
         <div key={bloque.clave} className="flex gap-4">
-          <span className="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-brand-teal-light text-brand-teal-dark">
+          <span className="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-brand-teal-light text-accion-tinta">
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
@@ -1730,7 +1730,7 @@ function FranjaDelPrecio({
             </svg>
           </span>
           <div className="min-w-0">
-            <p className="font-extrabold leading-snug text-brand-navy">{bloque.titulo}</p>
+            <p className="font-extrabold leading-snug text-titular">{bloque.titulo}</p>
             <p className="mt-1.5 text-sm leading-relaxed text-zinc-600">{bloque.texto}</p>
           </div>
         </div>
@@ -1771,10 +1771,10 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
         <NotaDelPrecio texto={t("precio.nota")} />
 
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+          <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
             {t("precio.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
             {t("precio.titulo")}
           </h2>
           <p className="mt-4 text-zinc-600">{t("precio.subtitulo")}</p>
@@ -1791,7 +1791,7 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
               }`}
             >
               <div className="flex items-baseline justify-between gap-2">
-                <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+                <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
                   {plan.nombre}
                 </p>
                 {plan.limitado && (
@@ -1802,7 +1802,7 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
               </div>
 
               <p className="mt-3">
-                <span className="text-4xl font-extrabold tracking-tight text-brand-navy">
+                <span className="text-4xl font-extrabold tracking-tight text-titular">
                   {precioFormateado(plan)}
                 </span>{" "}
                 <span className="text-base text-zinc-500">{periodicidad(plan)}</span>
@@ -1815,8 +1815,8 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
                 href="/registro-club"
                 className={`mt-auto inline-flex w-full items-center justify-center rounded-2xl px-6 py-4 text-base font-bold transition-colors ${
                   plan.destacado
-                    ? "bg-brand-teal-dark text-white shadow-lg shadow-brand-teal/30 hover:bg-brand-navy"
-                    : "border border-zinc-300 text-brand-navy hover:bg-zinc-50"
+                    ? "bg-brand-teal-dark text-sobre-color shadow-lg shadow-brand-teal/30 hover:bg-brand-navy"
+                    : "border border-zinc-300 text-titular hover:bg-zinc-50"
                 }`}
               >
                 {t("precio.cta")}
@@ -1850,7 +1850,7 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
 
         {!compacta && (
           <div className="mx-auto mt-12 max-w-3xl rounded-3xl border border-zinc-200 bg-white p-8">
-            <p className="text-center text-sm font-bold uppercase tracking-wider text-brand-navy">
+            <p className="text-center text-sm font-bold uppercase tracking-wider text-titular">
               {t("precio.todoIncluye")}
             </p>
             <div className="mt-7 grid gap-3.5 text-left sm:grid-cols-2">
@@ -1883,7 +1883,7 @@ export async function SeccionFaq({ limite }: { limite?: number } = {}) {
 
   return (
     <section id="faq" className="mx-auto max-w-3xl scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
-      <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+      <h2 className="text-center text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
         {t("faq.titulo")}
       </h2>
 
@@ -1893,7 +1893,7 @@ export async function SeccionFaq({ limite }: { limite?: number } = {}) {
             key={item.pregunta}
             className="group rounded-2xl border border-zinc-200 bg-white p-6 open:border-brand-teal/40"
           >
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-brand-navy marker:content-none">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-titular marker:content-none">
               {item.pregunta}
               <span className="flex-none text-zinc-500 transition-transform group-open:rotate-45">
                 +
@@ -1908,7 +1908,7 @@ export async function SeccionFaq({ limite }: { limite?: number } = {}) {
         <p className="mt-6 text-center">
           <Link
             href="/para-clubes#faq"
-            className="text-sm font-bold text-brand-teal-dark underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
+            className="text-sm font-bold text-accion-tinta underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
           >
             {t("faq.verTodas")}
           </Link>
@@ -1962,21 +1962,21 @@ export async function SeccionCtaFinal() {
         className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-brand-teal/15 blur-3xl"
       />
       <div className="relative mx-auto max-w-2xl">
-        <h2 className="text-3xl font-extrabold leading-tight text-white sm:text-4xl">
+        <h2 className="text-3xl font-extrabold leading-tight text-sobre-color sm:text-4xl">
           {t("ctaFinal.tituloLinea1")}
           <br />
           {t("ctaFinal.tituloLinea2")}
         </h2>
-        <p className="mx-auto mt-5 max-w-xl leading-relaxed text-white/70">
+        <p className="mx-auto mt-5 max-w-xl leading-relaxed text-sobre-color/70">
           {t("ctaFinal.subtexto")}
         </p>
         <Link
           href="/registro-club"
-          className="mt-9 inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-white shadow-lg shadow-brand-teal/40 transition-colors hover:bg-brand-teal"
+          className="mt-9 inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-sobre-color shadow-lg shadow-brand-teal/40 transition-colors hover:bg-brand-teal"
         >
           {t("ctaFinal.cta")}
         </Link>
-        <p className="mt-4 text-sm text-white/60">{t("ctaFinal.condiciones")}</p>
+        <p className="mt-4 text-sm text-sobre-color/60">{t("ctaFinal.condiciones")}</p>
       </div>
     </section>
   );
@@ -1987,7 +1987,7 @@ export async function SeccionContacto() {
 
   return (
     <section id="contacto" className="mx-auto max-w-xl px-4 py-20 sm:px-6 sm:py-28">
-      <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+      <h2 className="text-center text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
         {t("contacto.titulo")}
       </h2>
       <p className="mt-3 text-center text-zinc-600">{t("contacto.texto")}</p>
@@ -2023,10 +2023,10 @@ export async function SeccionVideo() {
   return (
     <section className="px-4 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-2xl text-center">
-        <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+        <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
           {t("video.eyebrow")}
         </p>
-        <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+        <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
           {t("video.titulo")}
         </h2>
         <p className="mt-4 leading-relaxed text-zinc-600">{t("video.texto")}</p>
@@ -2096,10 +2096,10 @@ export async function SeccionHerramientasClave() {
     <section id="herramientas" className="scroll-mt-32 px-4 py-20 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-6xl">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-dark">
+          <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
             {t("herramientas.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
             {t("herramientas.titulo")}
           </h2>
           <p className="mt-4 leading-relaxed text-zinc-600">{t("herramientas.texto")}</p>
@@ -2111,11 +2111,11 @@ export async function SeccionHerramientasClave() {
               key={herramienta.clave}
               className="flex gap-4 rounded-2xl border border-zinc-200 bg-white p-5"
             >
-              <span className="inline-flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+              <span className="inline-flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-accion-tinta">
                 <IconoHerramienta clave={herramienta.clave} />
               </span>
               <div>
-                <h3 className="font-extrabold leading-snug text-brand-navy">
+                <h3 className="font-extrabold leading-snug text-titular">
                   {herramienta.titulo}
                 </h3>
                 <p className="mt-1 text-sm leading-relaxed text-zinc-600">{herramienta.corto}</p>
@@ -2133,7 +2133,7 @@ export async function SeccionHerramientasClave() {
             </p>
             <Link
               href="/para-clubes#herramientas"
-              className="mt-4 inline-block text-sm font-bold text-brand-teal-dark underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
+              className="mt-4 inline-block text-sm font-bold text-accion-tinta underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
             >
               {t("herramientas.verTodas", { total: todas.length })}
             </Link>
@@ -2227,11 +2227,11 @@ export async function FuncionesDestacadas({ enColumna = false }: { enColumna?: b
           {/* El icono en su cuadrado de color, que es lo que hace que
               la fila se escanee sin leerla: primero se ven cuatro
               marcas, y solo después el texto de la que interesa. */}
-          <span className="flex size-10 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-brand-teal-dark">
+          <span className="flex size-10 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-accion-tinta">
             <IconoHerramienta clave={funcion.clave} />
           </span>
           <span className="min-w-0">
-            <span className="block text-[14px] font-bold leading-snug text-brand-navy">
+            <span className="block text-[14px] font-bold leading-snug text-titular">
               {funcion.titulo}
             </span>
             {/* zinc-600 y no zinc-500: estas dos líneas caen encima de
@@ -2268,14 +2268,14 @@ export async function PuertasDelHero({ enColumna = false }: { enColumna?: boolea
       cta: t("puertas.clubCta"),
       pie: t("puertas.clubPie"),
       clases:
-        "bg-brand-teal-dark text-white hover:bg-brand-teal focus-visible:outline-brand-teal-dark",
+        "bg-brand-teal-dark text-sobre-color hover:bg-brand-teal focus-visible:outline-accion-tinta",
     },
     {
       href: "/para-empresas",
       cta: t("puertas.empresaCta"),
       pie: t("puertas.empresaPie"),
       clases:
-        "border-2 border-brand-navy bg-white text-brand-navy hover:bg-brand-navy hover:text-white",
+        "border-2 border-titular bg-white text-titular hover:bg-brand-navy hover:text-sobre-color",
     },
   ] as const;
 
@@ -2321,7 +2321,7 @@ function CasillaFiltro({ etiqueta, valor }: { etiqueta: string; valor: string })
   return (
     <div className="rounded-2xl border border-zinc-200 px-5 py-3.5">
       <div className="text-[11px] font-bold uppercase tracking-wide text-zinc-500">{etiqueta}</div>
-      <div className="mt-0.5 text-base font-bold text-brand-navy">{valor}</div>
+      <div className="mt-0.5 text-base font-bold text-titular">{valor}</div>
     </div>
   );
 }

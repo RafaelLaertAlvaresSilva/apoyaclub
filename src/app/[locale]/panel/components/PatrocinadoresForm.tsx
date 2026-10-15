@@ -138,7 +138,7 @@ function FilaPatrocinador({
               alt={patrocinador.name}
               width={32}
               height={32}
-              className="h-8 w-8 shrink-0 rounded bg-white object-contain"
+              className="h-8 w-8 shrink-0 rounded border border-placa-borde bg-placa object-contain p-0.5"
               unoptimized
             />
           ) : (
@@ -257,7 +257,7 @@ function AvisoAlPatrocinador({ patrocinador }: { patrocinador: ClubSponsor }) {
         <input
           type="checkbox"
           name="confirmaRelacion"
-          className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+          className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
         />
         <span>
           Confirmo que esta empresa colabora con mi club y que tengo relación con esa dirección
@@ -369,7 +369,7 @@ function CamposPatrocinador({
             <input
               type="checkbox"
               name="noAvisar"
-              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
             />
             <span>
               No enviar el correo a esta empresa
@@ -461,7 +461,7 @@ function CamposPatrocinador({
               alt="Logo del patrocinador"
               width={40}
               height={40}
-              className="h-10 w-10 rounded bg-white object-contain"
+              className="h-10 w-10 rounded border border-placa-borde bg-placa object-contain p-1"
               unoptimized
             />
           )}

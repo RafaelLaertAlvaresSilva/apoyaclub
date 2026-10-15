@@ -74,7 +74,7 @@ export function RegistroClubForm() {
             type="checkbox"
             name="aceptaTerminos"
             required
-            className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-brand-teal-dark"
+            className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
           />
           <span>
             {tComun("aceptoParte1")}{" "}

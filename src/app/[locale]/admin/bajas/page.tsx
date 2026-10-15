@@ -145,7 +145,7 @@ function FilaBaja({ club }: { club: ClubQueSeVa }) {
       <td className="px-4 py-3">
         {/* La cuenta borrada ya no tiene ficha que abrir. */}
         {club.slug ? (
-          <Link href={`/club/${club.slug}`} className="font-medium text-brand-teal-dark hover:underline">
+          <Link href={`/club/${club.slug}`} className="font-medium text-accion-tinta hover:underline">
             {club.nombre}
           </Link>
         ) : (

@@ -232,7 +232,7 @@ export function RegistroDePublico({
                   </p>
                   <button
                     type="submit"
-                    className="rounded-lg bg-teal-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-800"
+                    className="rounded-lg bg-accion px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte"
                   >
                     Usar esta media en mi ficha
                   </button>
