@@ -36,11 +36,14 @@ export function TarjetaOportunidad({
   oportunidad,
   equipos = [],
   slugDelClub = null,
+  userId,
 }: {
   oportunidad: Opportunity;
   equipos?: ClubTeam[];
   /** La dirección pública del club, o null si todavía no tiene ficha. */
   slugDelClub?: string | null;
+  /** El identificador del club, para subir las fotos al almacén. */
+  userId: string;
 }) {
   const t = useTranslations("panel.oportunidades");
   const [enEdicion, setEnEdicion] = useState(false);
@@ -50,12 +53,14 @@ export function TarjetaOportunidad({
       <EditorOportunidad
         oportunidad={oportunidad}
         equipos={equipos}
+        userId={userId}
         onCerrar={() => setEnEdicion(false)}
       />
     );
   }
 
-  const equipoAsociado = equipos.find((equipo) => equipo.id === oportunidad.teamId) ?? null;
+  const equipoAsociado =
+    equipos.find((equipo) => equipo.id === oportunidad.teamId) ?? null;
 
   return (
     <li className="rounded-xl border border-zinc-200 bg-white p-5">
@@ -81,13 +86,17 @@ export function TarjetaOportunidad({
               </span>
             )}
             {oportunidad.archivedAt && (
-              <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-500">{t("archivada")}</span>
+              <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-500">
+                {t("archivada")}
+              </span>
             )}
           </div>
           <p className="mt-0.5 text-sm text-zinc-500">
             {ETIQUETA_TIPO_OPORTUNIDAD[oportunidad.opportunityType]}
             {oportunidad.duration ? ` · ${oportunidad.duration}` : ""}
-            {equipoAsociado ? ` · ${equipoAsociado.sport} ${equipoAsociado.category ?? ""}`.trimEnd() : ""}
+            {equipoAsociado
+              ? ` · ${equipoAsociado.sport} ${equipoAsociado.category ?? ""}`.trimEnd()
+              : ""}
           </p>
           {oportunidad.exclusivity && (
             <p className="mt-1 text-xs font-medium text-accion-tinta">
@@ -95,7 +104,9 @@ export function TarjetaOportunidad({
             </p>
           )}
           {oportunidad.description && (
-            <p className="mt-2 text-sm text-zinc-600">{oportunidad.description}</p>
+            <p className="mt-2 text-sm text-zinc-600">
+              {oportunidad.description}
+            </p>
           )}
 
           {/* Cuando hace falta más de una empresa, el club necesita ver
@@ -167,7 +178,9 @@ export function TarjetaOportunidad({
           type="button"
           onClick={() => setEnEdicion(true)}
           className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
-        >{t("editar")}</button>
+        >
+          {t("editar")}
+        </button>
 
         <form action={compartirComoPlantilla}>
           <input type="hidden" name="id" value={oportunidad.id} />
@@ -185,7 +198,9 @@ export function TarjetaOportunidad({
           <button
             type="submit"
             className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
-          >{t("duplicar")}</button>
+          >
+            {t("duplicar")}
+          </button>
         </form>
 
         {oportunidad.archivedAt ? (
@@ -194,7 +209,9 @@ export function TarjetaOportunidad({
             <button
               type="submit"
               className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
-            >{t("restaurar")}</button>
+            >
+              {t("restaurar")}
+            </button>
           </form>
         ) : (
           <form action={archivarOportunidad}>
@@ -202,7 +219,9 @@ export function TarjetaOportunidad({
             <button
               type="submit"
               className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
-            >{t("archivar")}</button>
+            >
+              {t("archivar")}
+            </button>
           </form>
         )}
 
@@ -227,16 +246,19 @@ function EditorOportunidad({
   oportunidad,
   onCerrar,
   equipos,
+  userId,
 }: {
   oportunidad: Opportunity;
   onCerrar: () => void;
   equipos: ClubTeam[];
+  userId: string;
 }) {
   const [estado, formAction] = useActionState(actualizarOportunidad, null);
 
   return (
     <li className="rounded-xl border border-teal-200 bg-white p-6">
       <OportunidadForm
+        userId={userId}
         idOportunidad={oportunidad.id}
         accion={formAction}
         estado={estado}
@@ -261,6 +283,7 @@ function EditorOportunidad({
           slotsTaken: oportunidad.slotsTaken,
           esNecesidad: oportunidad.esNecesidad,
           categoriaNecesidad: oportunidad.categoriaNecesidad,
+          fotos: oportunidad.fotos,
           beneficios: oportunidad.beneficios,
           acciones: oportunidad.acciones,
           frecuencia: oportunidad.frecuencia,

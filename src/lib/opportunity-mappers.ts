@@ -41,6 +41,9 @@ export type OpportunityRow = {
   starts_on?: string | null;
   ends_on?: string | null;
   requirements?: string | null;
+  // Opcional: hay consultas escritas antes de la migración 0052 que no
+  // la piden, y el mapeador tiene que sobrevivir a eso.
+  photos?: string[] | null;
   archived_at: string | null;
   created_at: string;
   updated_at: string;
@@ -75,6 +78,9 @@ export function opportunityRowToOpportunity(row: OpportunityRow): Opportunity {
     // dentro lo escribió una versión anterior del formulario.
     beneficios: leerBeneficios(row.benefits),
     acciones: leerAcciones(row.actions),
+    // `?? []` y no a secas: una consulta anterior a la migración 0052
+    // no trae la columna, y sin esto la ficha reventaría al recorrerla.
+    fotos: row.photos ?? [],
     frecuencia: row.frequency ?? null,
     desde: row.starts_on ?? null,
     hasta: row.ends_on ?? null,

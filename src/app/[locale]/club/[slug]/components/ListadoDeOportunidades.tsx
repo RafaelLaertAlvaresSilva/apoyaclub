@@ -1,3 +1,5 @@
+import Image from "next/image";
+import { fotoDePortada } from "@/lib/fotos-de-oportunidad";
 import { Link } from "@/i18n/navigation";
 import { BarraDePlazas } from "@/components/BarraDePlazas";
 import {
@@ -64,18 +66,37 @@ export function ListadoDeOportunidades({
                 : ETIQUETA_TIPO_OPORTUNIDAD[oportunidad.opportunityType]}
             </p>
 
+            {/* La miniatura, cuando la hay (migración 0052). Sin marco
+                gris cuando no: al principio casi ninguna tendrá foto y
+                una rejilla de huecos vacíos se ve peor que el texto. */}
+            {fotoDePortada(oportunidad.fotos) && (
+              <Image
+                src={fotoDePortada(oportunidad.fotos)!}
+                alt=""
+                width={600}
+                height={300}
+                unoptimized
+                className="aspect-[2/1] w-full rounded-lg border border-zinc-200 bg-zinc-100 object-cover"
+              />
+            )}
+
             <p className="font-semibold text-zinc-900">{oportunidad.title}</p>
 
             {/* Lo que recibe la empresa dice mucho más que la
                 descripción, así que manda cuando está rellenado. */}
             {oportunidad.beneficios.length > 0 ? (
               <p className="text-sm text-zinc-600">
-                {oportunidad.beneficios.slice(0, 3).map(beneficioEnTexto).join(" · ")}
+                {oportunidad.beneficios
+                  .slice(0, 3)
+                  .map(beneficioEnTexto)
+                  .join(" · ")}
                 {oportunidad.beneficios.length > 3 && " …"}
               </p>
             ) : (
               oportunidad.description && (
-                <p className="line-clamp-3 text-sm text-zinc-600">{oportunidad.description}</p>
+                <p className="line-clamp-3 text-sm text-zinc-600">
+                  {oportunidad.description}
+                </p>
               )
             )}
 
@@ -95,7 +116,9 @@ export function ListadoDeOportunidades({
               ) : (
                 <span />
               )}
-              <span className="text-sm font-medium text-accion-tinta">Ver ficha →</span>
+              <span className="text-sm font-medium text-accion-tinta">
+                Ver ficha →
+              </span>
             </div>
           </Link>
         </li>

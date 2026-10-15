@@ -20,9 +20,17 @@ import {
   plazasLibres,
 } from "@/lib/opportunities";
 import { BarraDePlazas } from "@/components/BarraDePlazas";
-import { agruparPorClub, type FiltrosBusqueda, type PaginaBusqueda, type ResultadoClub, type ResultadoOportunidad, type VistaBusqueda } from "@/lib/search-types";
+import {
+  agruparPorClub,
+  type FiltrosBusqueda,
+  type PaginaBusqueda,
+  type ResultadoClub,
+  type ResultadoOportunidad,
+  type VistaBusqueda,
+} from "@/lib/search-types";
 
-const formatoDistancia = (km: number) => (km < 10 ? `${km.toFixed(1)} km` : `${Math.round(km)} km`);
+const formatoDistancia = (km: number) =>
+  km < 10 ? `${km.toFixed(1)} km` : `${Math.round(km)} km`;
 
 export function ResultadosBuscador({
   filtros,
@@ -36,7 +44,9 @@ export function ResultadosBuscador({
   const t = useTranslations("buscar.resultados");
   const router = useRouter();
   const [vista, setVista] = useState<VistaBusqueda>(vistaInicial);
-  const [oportunidades, setOportunidades] = useState<ResultadoOportunidad[]>(paginaInicial.resultados);
+  const [oportunidades, setOportunidades] = useState<ResultadoOportunidad[]>(
+    paginaInicial.resultados,
+  );
   const [hayMas, setHayMas] = useState(paginaInicial.hayMas);
   const [total, setTotal] = useState(paginaInicial.total);
   const [cargando, setCargando] = useState(false);
@@ -51,16 +61,22 @@ export function ResultadosBuscador({
   }
 
   function cambiarOrden(orden: FiltrosBusqueda["orden"]) {
-    router.push(`/buscar?${filtrosAQueryString({ ...filtros, orden }, vista)}`, { scroll: false });
+    router.push(
+      `/buscar?${filtrosAQueryString({ ...filtros, orden }, vista)}`,
+      { scroll: false },
+    );
   }
 
   async function cargarMas() {
     setCargando(true);
     try {
       const qs = filtrosAQueryString(filtros, vista);
-      const respuesta = await fetch(`/api/buscar?${qs}&desde=${oportunidades.length}`);
+      const respuesta = await fetch(
+        `/api/buscar?${qs}&desde=${oportunidades.length}`,
+      );
       if (!respuesta.ok) return;
-      const pagina = (await respuesta.json()) as PaginaBusqueda<ResultadoOportunidad>;
+      const pagina =
+        (await respuesta.json()) as PaginaBusqueda<ResultadoOportunidad>;
       setOportunidades((actual) => [...actual, ...pagina.resultados]);
       setHayMas(pagina.hayMas);
       setTotal(pagina.total);
@@ -75,10 +91,16 @@ export function ResultadosBuscador({
     <div className="min-w-0 flex-1 space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-1 rounded-lg border border-zinc-200 bg-white p-1">
-          <BotonVista activo={vista === "oportunidad"} onClick={() => cambiarVista("oportunidad")}>
+          <BotonVista
+            activo={vista === "oportunidad"}
+            onClick={() => cambiarVista("oportunidad")}
+          >
             {t("porOportunidad")}
           </BotonVista>
-          <BotonVista activo={vista === "club"} onClick={() => cambiarVista("club")}>
+          <BotonVista
+            activo={vista === "club"}
+            onClick={() => cambiarVista("club")}
+          >
             {t("porClub")}
           </BotonVista>
         </div>
@@ -90,7 +112,9 @@ export function ResultadosBuscador({
           <select
             id="orden"
             value={filtros.orden ?? "novedad"}
-            onChange={(evento) => cambiarOrden(evento.target.value as FiltrosBusqueda["orden"])}
+            onChange={(evento) =>
+              cambiarOrden(evento.target.value as FiltrosBusqueda["orden"])
+            }
             className="rounded-lg border border-zinc-300 px-2 py-1.5 text-sm focus:border-accion-tinta focus:outline-none focus:ring-1 focus:ring-accion-tinta"
           >
             {OPCIONES_ORDEN.map((opcion) => (
@@ -113,7 +137,10 @@ export function ResultadosBuscador({
       ) : vista === "oportunidad" ? (
         <ul className="grid gap-3 sm:grid-cols-2">
           {oportunidades.map((oportunidad) => (
-            <TarjetaOportunidad key={oportunidad.opportunityId} oportunidad={oportunidad} />
+            <TarjetaOportunidad
+              key={oportunidad.opportunityId}
+              oportunidad={oportunidad}
+            />
           ))}
         </ul>
       ) : (
@@ -154,7 +181,9 @@ function BotonVista({
       type="button"
       onClick={onClick}
       className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-        activo ? "bg-accion text-sobre-color" : "text-zinc-600 hover:bg-zinc-100"
+        activo
+          ? "bg-accion text-sobre-color"
+          : "text-zinc-600 hover:bg-zinc-100"
       }`}
     >
       {children}
@@ -164,7 +193,13 @@ function BotonVista({
 
 function Logo({ url, nombre }: { url: string | null; nombre: string }) {
   return url ? (
-    <Image src={url} alt={nombre} width={40} height={40} className="h-10 w-10 shrink-0 rounded-lg border border-zinc-200 bg-white object-contain p-0.5" />
+    <Image
+      src={url}
+      alt={nombre}
+      width={40}
+      height={40}
+      className="h-10 w-10 shrink-0 rounded-lg border border-zinc-200 bg-white object-contain p-0.5"
+    />
   ) : (
     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-sm font-bold text-teal-700">
       {nombre.charAt(0).toUpperCase()}
@@ -195,12 +230,18 @@ function Ubicacion({
   );
 }
 
-function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad }) {
+function TarjetaOportunidad({
+  oportunidad,
+}: {
+  oportunidad: ResultadoOportunidad;
+}) {
   const tTarjeta = useTranslations("buscar.resultados");
   const etiquetas = [
     ETIQUETA_TIPO_OPORTUNIDAD[oportunidad.opportunityType],
     oportunidad.period ? ETIQUETA_PERIODO[oportunidad.period] : null,
-    oportunidad.collaborationType ? ETIQUETA_FORMA_COLABORACION[oportunidad.collaborationType] : null,
+    oportunidad.collaborationType
+      ? ETIQUETA_FORMA_COLABORACION[oportunidad.collaborationType]
+      : null,
   ].filter((etiqueta): etiqueta is string => !!etiqueta);
 
   return (
@@ -208,13 +249,39 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
       <div className="flex items-start gap-3">
         <Logo url={oportunidad.clubLogoUrl} nombre={oportunidad.clubName} />
         <div className="min-w-0 flex-1">
-          <Link href={`/club/${oportunidad.clubSlug}`} className="text-sm font-medium text-zinc-700 hover:underline">
+          <Link
+            href={`/club/${oportunidad.clubSlug}`}
+            className="text-sm font-medium text-zinc-700 hover:underline"
+          >
             {oportunidad.clubName}
           </Link>
-          <Ubicacion ciudad={oportunidad.clubCity} provincia={oportunidad.clubProvince} distanceKm={oportunidad.distanceKm} />
+          <Ubicacion
+            ciudad={oportunidad.clubCity}
+            provincia={oportunidad.clubProvince}
+            distanceKm={oportunidad.distanceKm}
+          />
         </div>
-        <BotonFavorito tipo="oportunidad" id={oportunidad.opportunityId} nombre={oportunidad.title} />
+        <BotonFavorito
+          tipo="oportunidad"
+          id={oportunidad.opportunityId}
+          nombre={oportunidad.title}
+        />
       </div>
+
+      {/* La miniatura, cuando la hay (migración 0052). Nada de marco
+          gris cuando no: casi ninguna oportunidad tendrá foto al
+          principio, y veinte huecos vacíos seguidos se ven peor que la
+          lista de texto que había. */}
+      {oportunidad.foto && (
+        <Image
+          src={oportunidad.foto}
+          alt=""
+          width={600}
+          height={300}
+          unoptimized
+          className="aspect-[2/1] w-full rounded-lg border border-zinc-200 bg-zinc-100 object-cover"
+        />
+      )}
 
       <div>
         <div className="flex flex-wrap items-center gap-2">
@@ -239,8 +306,16 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
             </span>
           )}
         </div>
-        {oportunidad.teamLabel && <p className="mt-0.5 text-xs text-zinc-500">{oportunidad.teamLabel}</p>}
-        {oportunidad.description && <p className="mt-1 line-clamp-2 text-sm text-zinc-600">{oportunidad.description}</p>}
+        {oportunidad.teamLabel && (
+          <p className="mt-0.5 text-xs text-zinc-500">
+            {oportunidad.teamLabel}
+          </p>
+        )}
+        {oportunidad.description && (
+          <p className="mt-1 line-clamp-2 text-sm text-zinc-600">
+            {oportunidad.description}
+          </p>
+        )}
         {oportunidad.exclusivity && (
           <p className="mt-1 text-xs font-medium text-accion-tinta">
             {tTarjeta("exclusiva", { sector: oportunidad.exclusivity })}
@@ -250,12 +325,18 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
 
       <div className="flex flex-wrap gap-1.5">
         {etiquetas.map((etiqueta) => (
-          <span key={etiqueta} className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600">
+          <span
+            key={etiqueta}
+            className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600"
+          >
             {etiqueta}
           </span>
         ))}
         {oportunidad.objectives.map((objetivo) => (
-          <span key={objetivo} className="rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-medium text-teal-700">
+          <span
+            key={objetivo}
+            className="rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-medium text-teal-700"
+          >
             {ETIQUETA_OBJETIVO[objetivo]}
           </span>
         ))}
@@ -281,7 +362,9 @@ function TarjetaOportunidad({ oportunidad }: { oportunidad: ResultadoOportunidad
         <p className="text-lg font-bold text-teal-700">
           {formatoValorOportunidad.format(oportunidad.value)}
           {esPorPlazas(oportunidad) && (
-            <span className="ml-1 text-xs font-medium text-zinc-500">{tTarjeta("porEmpresa")}</span>
+            <span className="ml-1 text-xs font-medium text-zinc-500">
+              {tTarjeta("porEmpresa")}
+            </span>
           )}
         </p>
         <span className="flex flex-wrap items-center gap-2">
@@ -321,21 +404,31 @@ function TarjetaClub({ club }: { club: ResultadoClub }) {
         <Logo url={club.clubLogoUrl} nombre={club.clubName} />
         <div className="min-w-0 flex-1">
           <p className="font-semibold text-zinc-900">{club.clubName}</p>
-          <Ubicacion ciudad={club.clubCity} provincia={club.clubProvince} distanceKm={club.distanceKm} />
+          <Ubicacion
+            ciudad={club.clubCity}
+            provincia={club.clubProvince}
+            distanceKm={club.distanceKm}
+          />
         </div>
         <BotonFavorito tipo="club" id={club.clubId} nombre={club.clubName} />
       </div>
 
       <div className="flex flex-wrap gap-1.5">
         {club.opportunityTypes.map((tipo) => (
-          <span key={tipo} className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600">
+          <span
+            key={tipo}
+            className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600"
+          >
             {ETIQUETA_TIPO_OPORTUNIDAD[tipo]}
           </span>
         ))}
       </div>
 
       <p className="text-sm text-zinc-600">
-        {tClub("oportunidadesDelClub", { total: club.opportunitiesCount, rango })}
+        {tClub("oportunidadesDelClub", {
+          total: club.opportunitiesCount,
+          rango,
+        })}
       </p>
 
       <Link
@@ -348,7 +441,13 @@ function TarjetaClub({ club }: { club: ResultadoClub }) {
   );
 }
 
-function EstadoVacio({ filtros, vista }: { filtros: FiltrosBusqueda; vista: VistaBusqueda }) {
+function EstadoVacio({
+  filtros,
+  vista,
+}: {
+  filtros: FiltrosBusqueda;
+  vista: VistaBusqueda;
+}) {
   const tVacio = useTranslations("buscar.resultados");
   const router = useRouter();
   // El orden y la pestaña de "qué buscas" no son filtros: vienen
@@ -380,7 +479,9 @@ function EstadoVacio({ filtros, vista }: { filtros: FiltrosBusqueda; vista: Vist
           <button
             type="button"
             onClick={() =>
-              router.push(`/buscar?${filtrosAQueryString({ ...filtros, radioKm: filtros.radioKm! * 2 }, vista)}`)
+              router.push(
+                `/buscar?${filtrosAQueryString({ ...filtros, radioKm: filtros.radioKm! * 2 }, vista)}`,
+              )
             }
             className="rounded-lg bg-accion px-4 py-2 text-sm font-medium text-sobre-color hover:bg-accion-fuerte"
           >

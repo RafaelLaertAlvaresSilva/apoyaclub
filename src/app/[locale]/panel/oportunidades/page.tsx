@@ -2,8 +2,16 @@ import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { requisitosDelClub } from "@/lib/catalogo-ideas";
-import { clubRowToProfile, clubTeamRowToTeam, type ClubRow, type ClubTeamRow } from "@/lib/club-mappers";
-import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
+import {
+  clubRowToProfile,
+  clubTeamRowToTeam,
+  type ClubRow,
+  type ClubTeamRow,
+} from "@/lib/club-mappers";
+import {
+  opportunityRowToOpportunity,
+  type OpportunityRow,
+} from "@/lib/opportunity-mappers";
 import { createClient } from "@/lib/supabase/server";
 import { OportunidadesManager } from "./components/OportunidadesManager";
 
@@ -21,7 +29,11 @@ export default async function OportunidadesPage() {
     return redirect({ href: "/login", locale });
   }
 
-  const [{ data: filaClub }, { data: filasOportunidades }, { data: filasEquipos }] = await Promise.all([
+  const [
+    { data: filaClub },
+    { data: filasOportunidades },
+    { data: filasEquipos },
+  ] = await Promise.all([
     supabase.from("clubs").select("*").eq("id", user.id).maybeSingle<ClubRow>(),
     supabase
       .from("opportunities")
@@ -40,7 +52,9 @@ export default async function OportunidadesPage() {
   ]);
 
   const perfil = filaClub ? clubRowToProfile(filaClub) : null;
-  const oportunidades = (filasOportunidades ?? []).map(opportunityRowToOpportunity);
+  const oportunidades = (filasOportunidades ?? []).map(
+    opportunityRowToOpportunity,
+  );
   const equipos = (filasEquipos ?? []).map(clubTeamRowToTeam);
 
   // Qué ideas del catálogo puede ofrecer de verdad este club. Se calcula
@@ -52,19 +66,29 @@ export default async function OportunidadesPage() {
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("oportunidadesDePatrocinio")}</h1>
+          <p className="text-sm font-medium text-teal-700">
+            {t("panelDelClub")}
+          </p>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">
+            {t("oportunidadesDePatrocinio")}
+          </h1>
           <p className="mt-1 max-w-2xl text-sm text-zinc-600">
-            Lo que tu club ofrece a una empresa a cambio de patrocinio, y lo que necesita a cambio de visibilidad. Es lo único de tu ficha donde una empresa puede hacer algo.
+            Lo que tu club ofrece a una empresa a cambio de patrocinio, y lo que
+            necesita a cambio de visibilidad. Es lo único de tu ficha donde una
+            empresa puede hacer algo.
           </p>
         </div>
       </div>
 
-
       {!perfil ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
           Completa primero la identidad del club (nombre y localidad) en{" "}
-          <Link href="/panel" className="font-medium text-teal-700 hover:underline">{t("tuPerfil")}</Link>{" "}
+          <Link
+            href="/panel"
+            className="font-medium text-teal-700 hover:underline"
+          >
+            {t("tuPerfil")}
+          </Link>{" "}
           para poder publicar oportunidades de patrocinio.
         </div>
       ) : (
@@ -76,6 +100,7 @@ export default async function OportunidadesPage() {
              empresa. Va en `null` mientras el club no haya guardado
              su ficha: sin ficha no hay página pública a la que ir. */
           slugDelClub={perfil?.slug ?? null}
+          userId={user.id}
         />
       )}
     </div>

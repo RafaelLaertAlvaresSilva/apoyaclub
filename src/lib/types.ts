@@ -349,6 +349,12 @@ export type Opportunity = {
    * `esNecesidad` es true. */
   categoriaNecesidad: CategoriaNecesidad | null;
   /**
+   * Hasta tres fotos de lo que se ofrece (migración 0052). La primera
+   * es la que sale de miniatura en el buscador. Vacío es lo normal:
+   * casi ninguna oportunidad tendrá fotos el primer día.
+   */
+  fotos: string[];
+  /**
    * La ficha detallada (migración 0049): qué recibe la empresa, quién
    * se encarga de cada cosa y bajo qué condiciones. Vacías mientras el
    * club no las rellene; la oportunidad se ve igual sin ellas.

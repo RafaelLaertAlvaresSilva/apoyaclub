@@ -16,6 +16,7 @@ import {
 import { SITE_URL } from "@/lib/site";
 import { CompartirBoton } from "../../components/CompartirBoton";
 import { FichaDeOportunidad } from "../../components/FichaDeOportunidad";
+import { FotosDeLaOportunidad } from "../../components/FotosDeLaOportunidad";
 import { SolicitarContactoBoton } from "../../components/SolicitarContactoBoton";
 import { obtenerClubPublico } from "../../data";
 
@@ -50,7 +51,8 @@ export async function generateMetadata({
   const resumen =
     oportunidad.beneficios.length > 0
       ? oportunidad.beneficios.map(beneficioEnTexto).join(" · ")
-      : (oportunidad.description ?? `Oportunidad de patrocinio con ${perfil.name}.`);
+      : (oportunidad.description ??
+        `Oportunidad de patrocinio con ${perfil.name}.`);
 
   return {
     title: `${oportunidad.title} — ${perfil.name}`,
@@ -85,7 +87,9 @@ export default async function PaginaOportunidad({
 
   const esNecesidad = oportunidad.esNecesidad;
   const urlPublica = `${SITE_URL}/es/club/${perfil.slug}/oportunidad/${oportunidad.id}`;
-  const volverA = esNecesidad ? `/club/${perfil.slug}/necesidades` : `/club/${perfil.slug}/oportunidades`;
+  const volverA = esNecesidad
+    ? `/club/${perfil.slug}/necesidades`
+    : `/club/${perfil.slug}/oportunidades`;
 
   return (
     <div className="flex flex-1 flex-col bg-zinc-50">
@@ -95,7 +99,10 @@ export default async function PaginaOportunidad({
         {/* De dónde viene esto, siempre a la vista: quien llega por un
             enlace compartido no sabe de qué club le están hablando. */}
         <nav className="flex flex-wrap items-center gap-2 text-sm text-zinc-500">
-          <Link href={`/club/${perfil.slug}`} className="font-medium text-accion-tinta hover:underline">
+          <Link
+            href={`/club/${perfil.slug}`}
+            className="font-medium text-accion-tinta hover:underline"
+          >
             {perfil.name}
           </Link>
           <span aria-hidden="true">›</span>
@@ -132,8 +139,18 @@ export default async function PaginaOportunidad({
             )}
           </div>
 
+          {/* Las fotos van justo debajo del titular y ANTES del texto:
+              quien abre esto quiere ver qué le ofrecen, y una foto se
+              entiende en medio segundo. */}
+          <FotosDeLaOportunidad
+            fotos={oportunidad.fotos}
+            titulo={oportunidad.title}
+          />
+
           {oportunidad.description && (
-            <p className="mt-4 whitespace-pre-line text-zinc-700">{oportunidad.description}</p>
+            <p className="mt-4 whitespace-pre-line text-zinc-700">
+              {oportunidad.description}
+            </p>
           )}
 
           {/* El precio solo en lo que se vende. En una necesidad, lo que
@@ -142,7 +159,9 @@ export default async function PaginaOportunidad({
             <p className="mt-4 text-2xl font-bold text-zinc-900">
               {formatoValorOportunidad.format(oportunidad.value)}
               {esPorPlazas(oportunidad) && (
-                <span className="ml-1 text-sm font-medium text-zinc-500">{t("oportunidades.porEmpresa")}</span>
+                <span className="ml-1 text-sm font-medium text-zinc-500">
+                  {t("oportunidades.porEmpresa")}
+                </span>
               )}
             </p>
           )}
@@ -183,12 +202,18 @@ export default async function PaginaOportunidad({
               {t("oportunidades.solicitar")}
             </SolicitarContactoBoton>
 
-            <CompartirBoton url={urlPublica} titulo={`${oportunidad.title} — ${perfil.name}`} />
+            <CompartirBoton
+              url={urlPublica}
+              titulo={`${oportunidad.title} — ${perfil.name}`}
+            />
           </div>
         </article>
 
         <p className="mt-6 text-center text-sm text-zinc-500">
-          <Link href={`/club/${perfil.slug}`} className="font-medium text-accion-tinta hover:underline">
+          <Link
+            href={`/club/${perfil.slug}`}
+            className="font-medium text-accion-tinta hover:underline"
+          >
             Ver la ficha completa de {perfil.name}
           </Link>
         </p>

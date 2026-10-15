@@ -18,12 +18,15 @@ export function OportunidadesManager({
   equipos = [],
   requisitos,
   slugDelClub = null,
+  userId,
 }: {
   oportunidades: Opportunity[];
   equipos?: ClubTeam[];
   requisitos?: RequisitoIdea[];
   /** La dirección pública del club, o null si todavía no tiene ficha. */
   slugDelClub?: string | null;
+  /** El identificador del club, para subir las fotos al almacén. */
+  userId: string;
 }) {
   const t = useTranslations("panel.oportunidades");
   const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>("todas");
@@ -36,7 +39,9 @@ export function OportunidadesManager({
     );
 
     if (filtroEstado !== "todas") {
-      lista = lista.filter((oportunidad) => oportunidad.status === filtroEstado);
+      lista = lista.filter(
+        (oportunidad) => oportunidad.status === filtroEstado,
+      );
     }
 
     lista = [...lista].sort((a, b) => {
@@ -50,15 +55,24 @@ export function OportunidadesManager({
 
   return (
     <div className="space-y-6">
-      <NuevaOportunidad key={oportunidades.length} equipos={equipos} requisitos={requisitos} />
+      <NuevaOportunidad
+        key={oportunidades.length}
+        equipos={equipos}
+        requisitos={requisitos}
+        userId={userId}
+      />
 
       <div className="rounded-xl border border-zinc-200 bg-white p-4">
         <div className="flex flex-wrap items-end gap-4">
           <div>
-            <label className="mb-1 block text-xs font-medium text-zinc-500">{t("estado")}</label>
+            <label className="mb-1 block text-xs font-medium text-zinc-500">
+              {t("estado")}
+            </label>
             <select
               value={filtroEstado}
-              onChange={(evento) => setFiltroEstado(evento.target.value as FiltroEstado)}
+              onChange={(evento) =>
+                setFiltroEstado(evento.target.value as FiltroEstado)
+              }
               className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm"
             >
               <option value="todas">{t("todosLosEstados")}</option>
@@ -71,7 +85,9 @@ export function OportunidadesManager({
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-medium text-zinc-500">{t("ordenarPorValor")}</label>
+            <label className="mb-1 block text-xs font-medium text-zinc-500">
+              {t("ordenarPorValor")}
+            </label>
             <select
               value={orden}
               onChange={(evento) => setOrden(evento.target.value as Orden)}
@@ -89,7 +105,9 @@ export function OportunidadesManager({
               checked={mostrarArchivadas}
               onChange={(evento) => setMostrarArchivadas(evento.target.checked)}
               className="h-4 w-4 rounded border-zinc-300"
-            />{t("mostrarArchivadas")}</label>
+            />
+            {t("mostrarArchivadas")}
+          </label>
         </div>
       </div>
 
@@ -107,6 +125,7 @@ export function OportunidadesManager({
               oportunidad={oportunidad}
               equipos={equipos}
               slugDelClub={slugDelClub}
+              userId={userId}
             />
           ))}
         </ul>

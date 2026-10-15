@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 import { agruparPorClub } from "@/lib/search-types";
 import type { ResultadoOportunidad } from "@/lib/search-types";
 
-function oportunidad(cambios: Partial<ResultadoOportunidad> = {}): ResultadoOportunidad {
+function oportunidad(
+  cambios: Partial<ResultadoOportunidad> = {},
+): ResultadoOportunidad {
   return {
     opportunityId: "o1",
     clubId: "c1",
@@ -11,6 +13,7 @@ function oportunidad(cambios: Partial<ResultadoOportunidad> = {}): ResultadoOpor
     clubCity: "Valencia",
     clubProvince: "Valencia",
     clubLogoUrl: null,
+    foto: null,
     title: "Camiseta de entrenamiento",
     description: null,
     opportunityType: "equipment",
@@ -39,7 +42,12 @@ describe("agruparPorClub", () => {
     const clubes = agruparPorClub([
       oportunidad({ opportunityId: "o1", value: 100 }),
       oportunidad({ opportunityId: "o2", value: 900 }),
-      oportunidad({ opportunityId: "o3", clubId: "c2", clubSlug: "club-dos", clubName: "Club Dos" }),
+      oportunidad({
+        opportunityId: "o3",
+        clubId: "c2",
+        clubSlug: "club-dos",
+        clubName: "Club Dos",
+      }),
     ]);
 
     expect(clubes).toHaveLength(2);

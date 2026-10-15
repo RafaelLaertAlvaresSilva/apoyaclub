@@ -6,8 +6,14 @@ import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BloquePlegable } from "@/components/BloquePlegable";
 import type { Accion, Beneficio } from "@/lib/ficha-oportunidad";
 import { EditorDeLaFicha } from "./EditorDeLaFicha";
+import { FotosDeLaOportunidad } from "./FotosDeLaOportunidad";
 import { BotonEnviar } from "@/components/BotonEnviar";
-import { Campo, SeccionCard, clasesInput, clasesTextarea } from "@/app/[locale]/panel/components/SeccionCard";
+import {
+  Campo,
+  SeccionCard,
+  clasesInput,
+  clasesTextarea,
+} from "@/app/[locale]/panel/components/SeccionCard";
 import {
   CATEGORIAS_NECESIDAD,
   ESTADOS_OPORTUNIDAD,
@@ -32,6 +38,8 @@ import type { EstadoGuardado } from "../actions";
 
 export type ValoresOportunidad = {
   title?: string;
+  /** Hasta tres fotos de lo que se ofrece (migración 0052). */
+  fotos?: string[];
   description?: string | null;
   opportunityType?: OpportunityType;
   value?: number;
@@ -76,6 +84,7 @@ export function OportunidadForm({
   textoBoton,
   onCancelar,
   equipos = [],
+  userId,
 }: {
   titulo?: string;
   idOportunidad?: string;
@@ -85,6 +94,12 @@ export function OportunidadForm({
   mostrarEstado?: boolean;
   textoBoton: string;
   onCancelar?: () => void;
+  /**
+   * El identificador del club, que necesita el subidor de imágenes: el
+   * almacén guarda cada archivo en la carpeta de quien lo sube y la
+   * política solo deja escribir en la propia.
+   */
+  userId: string;
   /** Equipos del club, para poder asociar la oportunidad a uno concreto. */
   equipos?: ClubTeam[];
 }) {
@@ -92,7 +107,9 @@ export function OportunidadForm({
 
   // Qué clase de oportunidad es. Cambia lo que se enseña debajo, así
   // que vive en el componente y no solo en el formulario.
-  const [esNecesidad, setEsNecesidad] = useState(valoresIniciales?.esNecesidad ?? false);
+  const [esNecesidad, setEsNecesidad] = useState(
+    valoresIniciales?.esNecesidad ?? false,
+  );
 
   const contenidoFormulario = (
     <form action={accion} className="space-y-4">
@@ -105,11 +122,15 @@ export function OportunidadForm({
           revés, y para un fisioterapeuta del barrio es probablemente
           la mejor oportunidad que hay en la plataforma. */}
       <fieldset className="rounded-lg border border-zinc-200 p-4">
-        <legend className="px-1 text-sm font-medium text-zinc-700">¿Qué es esto?</legend>
+        <legend className="px-1 text-sm font-medium text-zinc-700">
+          ¿Qué es esto?
+        </legend>
         <div className="grid gap-2 sm:grid-cols-2">
           <label
             className={`flex cursor-pointer gap-2.5 rounded-lg border p-3 transition-colors ${
-              esNecesidad ? "border-zinc-200 hover:bg-zinc-50" : "border-teal-500 bg-teal-50"
+              esNecesidad
+                ? "border-zinc-200 hover:bg-zinc-50"
+                : "border-teal-500 bg-teal-50"
             }`}
           >
             <input
@@ -121,7 +142,9 @@ export function OportunidadForm({
               className="mt-0.5"
             />
             <span>
-              <span className="block text-sm font-medium text-zinc-900">Ofrezco patrocinio</span>
+              <span className="block text-sm font-medium text-zinc-900">
+                Ofrezco patrocinio
+              </span>
               <span className="block text-xs text-zinc-500">
                 Doy visibilidad a la empresa y ella aporta dinero.
               </span>
@@ -130,7 +153,9 @@ export function OportunidadForm({
 
           <label
             className={`flex cursor-pointer gap-2.5 rounded-lg border p-3 transition-colors ${
-              esNecesidad ? "border-amber-500 bg-amber-50" : "border-zinc-200 hover:bg-zinc-50"
+              esNecesidad
+                ? "border-amber-500 bg-amber-50"
+                : "border-zinc-200 hover:bg-zinc-50"
             }`}
           >
             <input
@@ -164,7 +189,9 @@ export function OportunidadForm({
                 defaultValue={valoresIniciales?.categoriaNecesidad ?? ""}
                 className={clasesInput}
               >
-                <option value="" disabled>Elige qué necesitas</option>
+                <option value="" disabled>
+                  Elige qué necesitas
+                </option>
                 {CATEGORIAS_NECESIDAD.map((categoria) => (
                   <option key={categoria.id} value={categoria.id}>
                     {categoria.etiqueta}
@@ -195,7 +222,9 @@ export function OportunidadForm({
           defaultValue={valoresIniciales?.opportunityType ?? ""}
           className={clasesInput}
         >
-          <option value="" disabled>{t("eligeUnTipo")}</option>
+          <option value="" disabled>
+            {t("eligeUnTipo")}
+          </option>
           {TIPOS_OPORTUNIDAD.map((tipo) => (
             <option key={tipo.id} value={tipo.id}>
               {tipo.etiqueta}
@@ -204,14 +233,21 @@ export function OportunidadForm({
         </select>
       </Campo>
 
-      <Campo
-        etiqueta={t("queIncluye")}
-        ayuda={t("describeConDetalleQue")}
-      >
+      <Campo etiqueta={t("queIncluye")} ayuda={t("describeConDetalleQue")}>
         <textarea
           name="description"
           defaultValue={valoresIniciales?.description ?? ""}
           className={clasesTextarea}
+        />
+      </Campo>
+
+      <Campo
+        etiqueta="Fotos"
+        ayuda="Opcional, hasta tres. Lo que de verdad convence a una empresa es ver la pared donde irá su lona, el autobús o la equipación."
+      >
+        <FotosDeLaOportunidad
+          userId={userId}
+          iniciales={valoresIniciales?.fotos ?? []}
         />
       </Campo>
 
@@ -225,13 +261,13 @@ export function OportunidadForm({
         </Campo>
 
         {/* El precio, solo cuando el club ofrece patrocinio.
-            *
-            * Si lo que publica es que NECESITA un fisio o un autobús,
-            * no hay precio que poner: lo que se ofrece es el servicio
-            * en sí, y a cambio va visibilidad. Pedirle un importe
-            * obligatorio dejaba al club mirando una casilla que no sabe
-            * rellenar, y lo que acababa escribiendo era un cero que
-            * luego salía publicado. */}
+         *
+         * Si lo que publica es que NECESITA un fisio o un autobús,
+         * no hay precio que poner: lo que se ofrece es el servicio
+         * en sí, y a cambio va visibilidad. Pedirle un importe
+         * obligatorio dejaba al club mirando una casilla que no sabe
+         * rellenar, y lo que acababa escribiendo era un cero que
+         * luego salía publicado. */}
         {!esNecesidad && (
           <Campo etiqueta="Valor (€) *" ayuda={t("loFijasTuLa")}>
             <input
@@ -248,13 +284,13 @@ export function OportunidadForm({
       </div>
 
       {/* A partir de aquí, todo opcional.
-          *
-          * Publicar la primera oportunidad es lo que tiene que pasar
-          * para que esto sirva de algo, y la pantalla pedía catorce
-          * cosas de golpe —periodo, forma de colaboración, nivel,
-          * exclusividad, equipo, plazas y seis casillas de objetivo—
-          * cuando solo hacen falta tres. Parecía un impreso
-          * administrativo justo en el momento que más cuesta. */}
+       *
+       * Publicar la primera oportunidad es lo que tiene que pasar
+       * para que esto sirva de algo, y la pantalla pedía catorce
+       * cosas de golpe —periodo, forma de colaboración, nivel,
+       * exclusividad, equipo, plazas y seis casillas de objetivo—
+       * cuando solo hacen falta tres. Parecía un impreso
+       * administrativo justo en el momento que más cuesta. */}
       {/* La ficha: lo que convierte un precio en un acuerdo. Va antes
           de "Más detalles" porque importa mucho más que el nivel de
           patrocinador o el periodo, y abierta cuando ya tiene algo
@@ -278,7 +314,10 @@ export function OportunidadForm({
         />
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <Campo etiqueta="Frecuencia" ayuda="Cada cuánto: mensual, por partido en casa…">
+          <Campo
+            etiqueta="Frecuencia"
+            ayuda="Cada cuánto: mensual, por partido en casa…"
+          >
             <input
               name="frecuencia"
               maxLength={120}
@@ -288,7 +327,11 @@ export function OportunidadForm({
             />
           </Campo>
 
-          <Campo etiqueta="Desde / hasta" grupo ayuda="Opcional. Cuándo empieza y cuándo acaba.">
+          <Campo
+            etiqueta="Desde / hasta"
+            grupo
+            ayuda="Opcional. Cuándo empieza y cuándo acaba."
+          >
             <div className="flex gap-2">
               <input
                 name="desde"
@@ -309,7 +352,10 @@ export function OportunidadForm({
         </div>
 
         <div className="mt-4">
-          <Campo etiqueta="Otros requisitos" ayuda="Cualquier cosa que convenga dejar por escrito.">
+          <Campo
+            etiqueta="Otros requisitos"
+            ayuda="Cualquier cosa que convenga dejar por escrito."
+          >
             <textarea
               name="requisitos"
               maxLength={1000}
@@ -325,141 +371,148 @@ export function OportunidadForm({
         resumen="Nivel, plazas, exclusividad, a quién va dirigida… Nada de esto hace falta para publicar: puedes rellenarlo luego."
         abierto={!!idOportunidad}
       >
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Campo
-          etiqueta={t("periodo")}
-          ayuda={t("aQueSeRefiere")}
-        >
-          <select
-            name="period"
-            defaultValue={valoresIniciales?.period ?? ""}
-            className={clasesInput}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Campo etiqueta={t("periodo")} ayuda={t("aQueSeRefiere")}>
+            <select
+              name="period"
+              defaultValue={valoresIniciales?.period ?? ""}
+              className={clasesInput}
+            >
+              <option value="">{t("sinEspecificar")}</option>
+              {PERIODOS_OPORTUNIDAD.map((periodo) => (
+                <option key={periodo.id} value={periodo.id}>
+                  {periodo.etiqueta}
+                </option>
+              ))}
+            </select>
+          </Campo>
+
+          <Campo
+            etiqueta={t("formaDeColaboracion")}
+            ayuda={t("comoPuedeAportarLa")}
           >
-            <option value="">{t("sinEspecificar")}</option>
-            {PERIODOS_OPORTUNIDAD.map((periodo) => (
-              <option key={periodo.id} value={periodo.id}>
-                {periodo.etiqueta}
-              </option>
-            ))}
-          </select>
-        </Campo>
-
-        <Campo etiqueta={t("formaDeColaboracion")} ayuda={t("comoPuedeAportarLa")}>
-          <select
-            name="collaborationType"
-            defaultValue={valoresIniciales?.collaborationType ?? ""}
-            className={clasesInput}
-          >
-            <option value="">{t("sinEspecificar")}</option>
-            {FORMAS_COLABORACION.map((forma) => (
-              <option key={forma.id} value={forma.id}>
-                {forma.etiqueta}
-              </option>
-            ))}
-          </select>
-        </Campo>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Campo
-          etiqueta={t("nivelDePatrocinador")}
-          ayuda={t("esLoPrimeroQue")}
-        >
-          <select
-            name="sponsorLevel"
-            defaultValue={valoresIniciales?.sponsorLevel ?? "libre"}
-            className={clasesInput}
-          >
-            {NIVELES_PATROCINIO.map((nivel) => (
-              <option key={nivel.id} value={nivel.id}>
-                {nivel.etiqueta}
-              </option>
-            ))}
-          </select>
-        </Campo>
-
-        <Campo
-          etiqueta={t("exclusividadDeSector")}
-          ayuda={t("siLaEmpresaQue")}
-        >
-          <input
-            name="exclusivity"
-            defaultValue={valoresIniciales?.exclusivity ?? ""}
-            className={clasesInput}
-          />
-        </Campo>
-      </div>
-
-      {equipos.length > 0 && (
-        <Campo
-          etiqueta={t("equipoAsociado")}
-          ayuda="Si la oportunidad es de un equipo concreto (el primer equipo, un equipo de cantera). Déjalo en blanco si es del club entero."
-        >
-          <select name="teamId" defaultValue={valoresIniciales?.teamId ?? ""} className={clasesInput}>
-            <option value="">{t("todoElClub")}</option>
-            {equipos.map((equipo) => (
-              <option key={equipo.id} value={equipo.id}>
-                {etiquetaEquipo(equipo) ?? equipo.sport}
-              </option>
-            ))}
-          </select>
-        </Campo>
-      )}
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Campo
-          etiqueta={esNecesidad ? "Cuántos colaboradores necesitas" : t("plazas")}
-          ayuda={
-            esNecesidad
-              ? "Si con uno te vale, déjalo vacío. A partir de dos sale una barra con lo que llevas cubierto."
-              : t("plazasAyuda")
-          }
-        >
-          <input
-            name="slotsTotal"
-            type="number"
-            min={0}
-            step={1}
-            defaultValue={valoresIniciales?.slotsTotal ?? ""}
-            className={clasesInput}
-          />
-        </Campo>
-
-        <Campo
-          etiqueta={esNecesidad ? "Cuántos tienes ya" : t("plazasCubiertas")}
-          ayuda={t("plazasCubiertasAyuda")}
-        >
-          <input
-            name="slotsTaken"
-            type="number"
-            min={0}
-            step={1}
-            defaultValue={valoresIniciales?.slotsTaken ?? 0}
-            className={clasesInput}
-          />
-        </Campo>
-      </div>
-
-      <Campo
-        grupo
-        etiqueta={t("objetivo")}
-        ayuda={t("aQuePublicoO")}
-      >
-        <div className="grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-3">
-          {OBJETIVOS_OPORTUNIDAD.map((objetivo) => (
-            <label key={objetivo.id} className="flex items-center gap-2 text-sm text-zinc-700">
-              <input
-                type="checkbox"
-                name="objectives"
-                value={objetivo.id}
-                defaultChecked={valoresIniciales?.objectives?.includes(objetivo.id) ?? false}
-                className="rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
-              />
-              {objetivo.etiqueta}
-            </label>
-          ))}
+            <select
+              name="collaborationType"
+              defaultValue={valoresIniciales?.collaborationType ?? ""}
+              className={clasesInput}
+            >
+              <option value="">{t("sinEspecificar")}</option>
+              {FORMAS_COLABORACION.map((forma) => (
+                <option key={forma.id} value={forma.id}>
+                  {forma.etiqueta}
+                </option>
+              ))}
+            </select>
+          </Campo>
         </div>
-      </Campo>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Campo
+            etiqueta={t("nivelDePatrocinador")}
+            ayuda={t("esLoPrimeroQue")}
+          >
+            <select
+              name="sponsorLevel"
+              defaultValue={valoresIniciales?.sponsorLevel ?? "libre"}
+              className={clasesInput}
+            >
+              {NIVELES_PATROCINIO.map((nivel) => (
+                <option key={nivel.id} value={nivel.id}>
+                  {nivel.etiqueta}
+                </option>
+              ))}
+            </select>
+          </Campo>
+
+          <Campo
+            etiqueta={t("exclusividadDeSector")}
+            ayuda={t("siLaEmpresaQue")}
+          >
+            <input
+              name="exclusivity"
+              defaultValue={valoresIniciales?.exclusivity ?? ""}
+              className={clasesInput}
+            />
+          </Campo>
+        </div>
+
+        {equipos.length > 0 && (
+          <Campo
+            etiqueta={t("equipoAsociado")}
+            ayuda="Si la oportunidad es de un equipo concreto (el primer equipo, un equipo de cantera). Déjalo en blanco si es del club entero."
+          >
+            <select
+              name="teamId"
+              defaultValue={valoresIniciales?.teamId ?? ""}
+              className={clasesInput}
+            >
+              <option value="">{t("todoElClub")}</option>
+              {equipos.map((equipo) => (
+                <option key={equipo.id} value={equipo.id}>
+                  {etiquetaEquipo(equipo) ?? equipo.sport}
+                </option>
+              ))}
+            </select>
+          </Campo>
+        )}
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Campo
+            etiqueta={
+              esNecesidad ? "Cuántos colaboradores necesitas" : t("plazas")
+            }
+            ayuda={
+              esNecesidad
+                ? "Si con uno te vale, déjalo vacío. A partir de dos sale una barra con lo que llevas cubierto."
+                : t("plazasAyuda")
+            }
+          >
+            <input
+              name="slotsTotal"
+              type="number"
+              min={0}
+              step={1}
+              defaultValue={valoresIniciales?.slotsTotal ?? ""}
+              className={clasesInput}
+            />
+          </Campo>
+
+          <Campo
+            etiqueta={esNecesidad ? "Cuántos tienes ya" : t("plazasCubiertas")}
+            ayuda={t("plazasCubiertasAyuda")}
+          >
+            <input
+              name="slotsTaken"
+              type="number"
+              min={0}
+              step={1}
+              defaultValue={valoresIniciales?.slotsTaken ?? 0}
+              className={clasesInput}
+            />
+          </Campo>
+        </div>
+
+        <Campo grupo etiqueta={t("objetivo")} ayuda={t("aQuePublicoO")}>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-3">
+            {OBJETIVOS_OPORTUNIDAD.map((objetivo) => (
+              <label
+                key={objetivo.id}
+                className="flex items-center gap-2 text-sm text-zinc-700"
+              >
+                <input
+                  type="checkbox"
+                  name="objectives"
+                  value={objetivo.id}
+                  defaultChecked={
+                    valoresIniciales?.objectives?.includes(objetivo.id) ?? false
+                  }
+                  className="rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
+                />
+                {objetivo.etiqueta}
+              </label>
+            ))}
+          </div>
+        </Campo>
       </BloquePlegable>
 
       {mostrarEstado && (
@@ -479,7 +532,9 @@ export function OportunidadForm({
       )}
 
       <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
-      <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />
+      <AvisoExito
+        mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null}
+      />
 
       <div className="flex gap-2">
         <BotonEnviar>{textoBoton}</BotonEnviar>
@@ -488,7 +543,9 @@ export function OportunidadForm({
             type="button"
             onClick={onCancelar}
             className="rounded-lg border border-zinc-300 px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
-          >{t("cancelar")}</button>
+          >
+            {t("cancelar")}
+          </button>
         )}
       </div>
     </form>

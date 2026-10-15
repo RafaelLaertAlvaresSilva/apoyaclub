@@ -86,6 +86,12 @@ export type ResultadoOportunidad = {
   esNecesidad: boolean;
   /** Qué necesita, cuando `esNecesidad` es true. */
   categoriaNecesidad: CategoriaNecesidad | null;
+  /**
+   * La foto que sale de miniatura en los resultados, o null si la
+   * oportunidad no tiene ninguna (migración 0052). Null es lo normal:
+   * casi ninguna la tendrá el primer día.
+   */
+  foto: string | null;
   /** Porcentaje de ficha rellenada del club (0-100). */
   profileScore: number;
   /** El mismo porcentaje en decenas: es lo que ordena en "recomendado". */
@@ -123,7 +129,9 @@ export type PaginaBusqueda<T> = {
 };
 
 /** Agrupa resultados de oportunidad en resultados por club (vista "por club" del buscador). */
-export function agruparPorClub(oportunidades: ResultadoOportunidad[]): ResultadoClub[] {
+export function agruparPorClub(
+  oportunidades: ResultadoOportunidad[],
+): ResultadoClub[] {
   const mapa = new Map<string, ResultadoClub>();
 
   for (const oportunidad of oportunidades) {

@@ -1,12 +1,18 @@
 "use server";
 
-import { leerAcciones, leerBeneficios, type Accion, type Beneficio } from "@/lib/ficha-oportunidad";
+import {
+  leerAcciones,
+  leerBeneficios,
+  type Accion,
+  type Beneficio,
+} from "@/lib/ficha-oportunidad";
 
 import { revalidatePath } from "next/cache";
 import { avisarDeFallo } from "@/lib/monitoring";
 import type { User } from "@supabase/supabase-js";
 import { leerCategoriaNecesidad } from "@/lib/opportunities";
 import { createClient } from "@/lib/supabase/server";
+import { fotosLimpias } from "@/lib/fotos-de-oportunidad";
 import type {
   BudgetPeriod,
   CategoriaNecesidad,
@@ -18,7 +24,8 @@ import type {
   SponsorLevel,
 } from "@/lib/types";
 
-export type EstadoGuardado = { error: string; ok?: false } | { ok: true; error?: undefined } | null;
+export type EstadoGuardado =
+  { error: string; ok?: false } | { ok: true; error?: undefined } | null;
 
 /**
  * Un fallo de base de datos, con su motivo apuntado.
@@ -33,7 +40,11 @@ export type EstadoGuardado = { error: string; ok?: false } | { ok: true; error?:
  * pasa cuando se añade una columna y el intermediario de Supabase
  * sigue con el esquema viejo en memoria.
  */
-function fallo(operacion: string, error: unknown, mensaje: string): EstadoGuardado {
+function fallo(
+  operacion: string,
+  error: unknown,
+  mensaje: string,
+): EstadoGuardado {
   avisarDeFallo("publico", `No se ha podido ${operacion}`, error);
 
   const detalle = String(
@@ -82,10 +93,19 @@ const TIPOS_VALIDOS: OpportunityType[] = [
   "in_kind",
 ];
 
-const ESTADOS_VALIDOS: OpportunityStatus[] = ["available", "reserved", "closed"];
+const ESTADOS_VALIDOS: OpportunityStatus[] = [
+  "available",
+  "reserved",
+  "closed",
+];
 
 // Fase 7: campos nuevos, todos opcionales.
-const FORMAS_VALIDAS: CollaborationType[] = ["money", "product", "service", "mixed"];
+const FORMAS_VALIDAS: CollaborationType[] = [
+  "money",
+  "product",
+  "service",
+  "mixed",
+];
 const PERIODOS_VALIDOS: BudgetPeriod[] = ["match", "month", "season", "event"];
 const OBJETIVOS_VALIDOS: ObjectiveTag[] = [
   "familias",
@@ -101,7 +121,12 @@ const OBJETIVOS_VALIDOS: ObjectiveTag[] = [
   "rsc",
 ];
 
-const NIVELES_VALIDOS: SponsorLevel[] = ["principal", "oficial", "colaborador", "libre"];
+const NIVELES_VALIDOS: SponsorLevel[] = [
+  "principal",
+  "oficial",
+  "colaborador",
+  "libre",
+];
 
 /**
  * Igual que `obtenerClubActual` de `app/panel/actions.ts`: recupera el
@@ -110,7 +135,8 @@ const NIVELES_VALIDOS: SponsorLevel[] = ["principal", "oficial", "colaborador", 
  * Action se valida a sí misma por si se invocara desde otro sitio.
  */
 async function obtenerClubActual(): Promise<
-  { supabase: Awaited<ReturnType<typeof createClient>>; user: User } | { error: string }
+  | { supabase: Awaited<ReturnType<typeof createClient>>; user: User }
+  | { error: string }
 > {
   const supabase = await createClient();
   const {
@@ -143,7 +169,10 @@ function leerTexto(formData: FormData, campo: string): string | null {
  * y `leerAcciones` tiran las líneas sin texto, recortan las largas y
  * descartan lo que no tenga la forma esperada.
  */
-function leerFicha(formData: FormData): { benefits: Beneficio[]; actions: Accion[] } {
+function leerFicha(formData: FormData): {
+  benefits: Beneficio[];
+  actions: Accion[];
+} {
   const trozo = (campo: string): unknown => {
     try {
       return JSON.parse(String(formData.get(campo) ?? "[]"));
@@ -175,12 +204,16 @@ function leerValor(formData: FormData): number | null {
 
 function leerTipo(formData: FormData): OpportunityType | null {
   const valor = String(formData.get("opportunityType") ?? "");
-  return (TIPOS_VALIDOS as string[]).includes(valor) ? (valor as OpportunityType) : null;
+  return (TIPOS_VALIDOS as string[]).includes(valor)
+    ? (valor as OpportunityType)
+    : null;
 }
 
 function leerEstado(formData: FormData): OpportunityStatus | null {
   const valor = String(formData.get("status") ?? "");
-  return (ESTADOS_VALIDOS as string[]).includes(valor) ? (valor as OpportunityStatus) : null;
+  return (ESTADOS_VALIDOS as string[]).includes(valor)
+    ? (valor as OpportunityStatus)
+    : null;
 }
 
 // Fase 7: forma de colaboración y periodo son opcionales ("Sin
@@ -188,17 +221,23 @@ function leerEstado(formData: FormData): OpportunityStatus | null {
 // una casilla múltiple: puede haber cero, una o varias marcadas.
 function leerFormaColaboracion(formData: FormData): CollaborationType | null {
   const valor = String(formData.get("collaborationType") ?? "");
-  return (FORMAS_VALIDAS as string[]).includes(valor) ? (valor as CollaborationType) : null;
+  return (FORMAS_VALIDAS as string[]).includes(valor)
+    ? (valor as CollaborationType)
+    : null;
 }
 
 function leerPeriodo(formData: FormData): BudgetPeriod | null {
   const valor = String(formData.get("period") ?? "");
-  return (PERIODOS_VALIDOS as string[]).includes(valor) ? (valor as BudgetPeriod) : null;
+  return (PERIODOS_VALIDOS as string[]).includes(valor)
+    ? (valor as BudgetPeriod)
+    : null;
 }
 
 function leerNivelPatrocinio(formData: FormData): SponsorLevel {
   const valor = String(formData.get("sponsorLevel") ?? "");
-  return (NIVELES_VALIDOS as string[]).includes(valor) ? (valor as SponsorLevel) : "libre";
+  return (NIVELES_VALIDOS as string[]).includes(valor)
+    ? (valor as SponsorLevel)
+    : "libre";
 }
 
 /**
@@ -229,12 +268,21 @@ async function leerEquipo(
  * (migración 0017). Menos de dos plazas no es un reparto: se guarda como
  * null, que es el caso normal de un único patrocinador.
  */
-function leerPlazas(formData: FormData): { total: number | null; cubiertas: number } {
+function leerPlazas(formData: FormData): {
+  total: number | null;
+  cubiertas: number;
+} {
   const total = Number.parseInt(String(formData.get("slotsTotal") ?? ""), 10);
-  if (!Number.isFinite(total) || total < 2) return { total: null, cubiertas: 0 };
+  if (!Number.isFinite(total) || total < 2)
+    return { total: null, cubiertas: 0 };
 
-  const cubiertas = Number.parseInt(String(formData.get("slotsTaken") ?? "0"), 10);
-  const validas = Number.isFinite(cubiertas) ? Math.min(Math.max(cubiertas, 0), total) : 0;
+  const cubiertas = Number.parseInt(
+    String(formData.get("slotsTaken") ?? "0"),
+    10,
+  );
+  const validas = Number.isFinite(cubiertas)
+    ? Math.min(Math.max(cubiertas, 0), total)
+    : 0;
 
   return { total, cubiertas: validas };
 }
@@ -254,15 +302,35 @@ function leerNecesidad(formData: FormData): {
 
   return {
     esNecesidad: true,
-    categoria: leerCategoriaNecesidad(String(formData.get("categoriaNecesidad") ?? "")),
+    categoria: leerCategoriaNecesidad(
+      String(formData.get("categoriaNecesidad") ?? ""),
+    ),
   };
+}
+
+/**
+ * Las fotos (migración 0052).
+ *
+ * Llegan como un campo repetido, una dirección por foto, porque el
+ * subidor ya las ha mandado al almacén y aquí solo viaja dónde quedaron.
+ *
+ * Se SANEA en vez de rechazar: quita vacías, repetidas, direcciones que
+ * no son de nuestro almacén y lo que pase del tope. Tirarle el
+ * formulario atrás al club por una foto repetida —que sale sola de
+ * pulsar dos veces el botón— sería castigarle por un fallo nuestro, y
+ * la base de datos tiene su propia regla para lo que de verdad importa.
+ */
+function leerFotos(formData: FormData): string[] {
+  return fotosLimpias(formData.getAll("fotos").map((valor) => String(valor)));
 }
 
 function leerObjetivos(formData: FormData): ObjectiveTag[] {
   return formData
     .getAll("objectives")
     .map((valor) => String(valor))
-    .filter((valor): valor is ObjectiveTag => (OBJETIVOS_VALIDOS as string[]).includes(valor));
+    .filter((valor): valor is ObjectiveTag =>
+      (OBJETIVOS_VALIDOS as string[]).includes(valor),
+    );
 }
 
 // ---------------------------------------------------------------------
@@ -317,9 +385,15 @@ export async function crearOportunidad(
     slots_taken: plazas.cubiertas,
     is_need: necesidad.esNecesidad,
     need_category: necesidad.categoria,
+    photos: leerFotos(formData),
   });
 
-  if (error) return fallo("crear la oportunidad", error, "No se ha podido crear la oportunidad.");
+  if (error)
+    return fallo(
+      "crear la oportunidad",
+      error,
+      "No se ha podido crear la oportunidad.",
+    );
 
   refrescarFichaPublica();
   return { ok: true };
@@ -382,12 +456,18 @@ export async function actualizarOportunidad(
       slots_taken: plazas.cubiertas,
       is_need: necesidad.esNecesidad,
       need_category: necesidad.categoria,
+      photos: leerFotos(formData),
       status,
     })
     .eq("id", id)
     .eq("club_id", user.id);
 
-  if (error) return fallo("guardar la oportunidad", error, "No se ha podido guardar la oportunidad.");
+  if (error)
+    return fallo(
+      "guardar la oportunidad",
+      error,
+      "No se ha podido guardar la oportunidad.",
+    );
 
   refrescarFichaPublica();
   return { ok: true };
@@ -396,7 +476,9 @@ export async function actualizarOportunidad(
 // ---------------------------------------------------------------------
 // Cambiar estado (un clic): disponible / reservada / cerrada
 // ---------------------------------------------------------------------
-export async function cambiarEstadoOportunidad(formData: FormData): Promise<void> {
+export async function cambiarEstadoOportunidad(
+  formData: FormData,
+): Promise<void> {
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return;
   const { supabase, user } = contexto;
@@ -428,7 +510,7 @@ export async function duplicarOportunidad(formData: FormData): Promise<void> {
   const { data: original } = await supabase
     .from("opportunities")
     .select(
-      "title, description, opportunity_type, value, duration, period, collaboration_type, objectives, sponsor_level, exclusivity, team_id, slots_total, is_need, need_category, benefits, actions, frequency, starts_on, ends_on, requirements",
+      "title, description, opportunity_type, value, duration, period, collaboration_type, objectives, sponsor_level, exclusivity, team_id, slots_total, is_need, need_category, benefits, actions, frequency, starts_on, ends_on, requirements, photos",
     )
     .eq("id", id)
     .eq("club_id", user.id)
@@ -461,6 +543,10 @@ export async function duplicarOportunidad(formData: FormData): Promise<void> {
     slots_taken: 0,
     is_need: original.is_need,
     need_category: original.need_category,
+    // La copia se lleva las mismas fotos: apuntan al mismo archivo del
+    // almacén, que no se duplica. Si el club cambia las de una, la otra
+    // se queda con las suyas, porque lo que se copió fue la lista.
+    photos: original.photos ?? [],
   });
 
   refrescarFichaPublica();
@@ -506,7 +592,9 @@ export async function restaurarOportunidad(formData: FormData): Promise<void> {
 // ---------------------------------------------------------------------
 // Eliminar
 // ---------------------------------------------------------------------
-export async function eliminarOportunidad(formData: FormData): Promise<EstadoGuardado> {
+export async function eliminarOportunidad(
+  formData: FormData,
+): Promise<EstadoGuardado> {
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -514,13 +602,31 @@ export async function eliminarOportunidad(formData: FormData): Promise<EstadoGua
   const id = String(formData.get("id") ?? "");
   if (!id) return { error: "No se ha podido identificar qué borrar." };
 
+  /**
+   * NO SE BORRAN LAS FOTOS DEL ALMACÉN, y no es un olvido.
+   *
+   * Al duplicar una oportunidad, la copia se queda con las MISMAS
+   * direcciones: no se copia el archivo, se copia la lista. Así que un
+   * barrido aquí —borrar los archivos de la que se elimina— dejaría a
+   * la copia con las imágenes rotas, y el club no entendería por qué.
+   *
+   * Quedan archivos sueltos en el almacén, sí. Son pocos: solo los de
+   * las oportunidades que alguien borra, ya comprimidos en el
+   * navegador. Si algún día compensa barrerlos, hay que comprobar antes
+   * que ninguna otra oportunidad del club siga apuntando a ellos.
+   */
   const { error } = await supabase
     .from("opportunities")
     .delete()
     .eq("id", id)
     .eq("club_id", user.id);
 
-  if (error) return fallo("borrar la oportunidad", error, "No se ha podido borrar. Inténtalo de nuevo.");
+  if (error)
+    return fallo(
+      "borrar la oportunidad",
+      error,
+      "No se ha podido borrar. Inténtalo de nuevo.",
+    );
 
   refrescarFichaPublica();
   return { ok: true };
@@ -537,7 +643,9 @@ export async function eliminarOportunidad(formData: FormData): Promise<EstadoGua
  * Si ya la había compartido, el índice único de la tabla lo ignora en
  * vez de duplicarla.
  */
-export async function compartirComoPlantilla(formData: FormData): Promise<void> {
+export async function compartirComoPlantilla(
+  formData: FormData,
+): Promise<void> {
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return;
   const { supabase, user } = contexto;
@@ -550,7 +658,11 @@ export async function compartirComoPlantilla(formData: FormData): Promise<void> 
     .select("title, description, opportunity_type")
     .eq("id", id)
     .eq("club_id", user.id)
-    .maybeSingle<{ title: string; description: string | null; opportunity_type: OpportunityType }>();
+    .maybeSingle<{
+      title: string;
+      description: string | null;
+      opportunity_type: OpportunityType;
+    }>();
 
   if (!oportunidad) return;
 

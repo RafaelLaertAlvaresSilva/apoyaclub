@@ -1,4 +1,10 @@
-import { cajaDelimitadora, distanciaKm, geocodificarDireccion, type Coordenadas } from "@/lib/geocoding";
+import { fotoDePortada } from "@/lib/fotos-de-oportunidad";
+import {
+  cajaDelimitadora,
+  distanciaKm,
+  geocodificarDireccion,
+  type Coordenadas,
+} from "@/lib/geocoding";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createPublicClient } from "@/lib/supabase/public";
 import { etiquetaEquipo } from "@/lib/opportunities";
@@ -26,7 +32,14 @@ import {
 // cliente. Se reexportan aquí para que el resto del código del
 // servidor solo tenga que importar de `lib/search`.
 export { agruparPorClub };
-export type { FiltrosBusqueda, OrdenBusqueda, PaginaBusqueda, ResultadoClub, ResultadoOportunidad, VistaBusqueda };
+export type {
+  FiltrosBusqueda,
+  OrdenBusqueda,
+  PaginaBusqueda,
+  ResultadoClub,
+  ResultadoOportunidad,
+  VistaBusqueda,
+};
 
 /**
  * Buscador público de oportunidades y clubes (`/buscar`, Fase 7).
@@ -85,9 +98,14 @@ type FilaBusqueda = {
   club_profile_score: number | null;
   /** El mismo porcentaje en decenas (0-10), que es como se ordena. */
   club_visibility_bucket: number | null;
+  /** Opcional: la vista no la trae hasta aplicar la migración 0052. */
+  photos?: string[] | null;
 };
 
-function filaAResultado(fila: FilaBusqueda, centro: Coordenadas | null): ResultadoOportunidad {
+function filaAResultado(
+  fila: FilaBusqueda,
+  centro: Coordenadas | null,
+): ResultadoOportunidad {
   return {
     opportunityId: fila.opportunity_id,
     clubId: fila.club_id,
@@ -99,7 +117,10 @@ function filaAResultado(fila: FilaBusqueda, centro: Coordenadas | null): Resulta
     title: fila.title,
     description: fila.description,
     opportunityType: fila.opportunity_type,
-    value: typeof fila.value === "string" ? Number.parseFloat(fila.value) : fila.value,
+    value:
+      typeof fila.value === "string"
+        ? Number.parseFloat(fila.value)
+        : fila.value,
     duration: fila.duration,
     period: fila.period,
     collaborationType: fila.collaboration_type,
@@ -109,6 +130,7 @@ function filaAResultado(fila: FilaBusqueda, centro: Coordenadas | null): Resulta
     slotsTaken: fila.slots_taken ?? 0,
     esNecesidad: fila.is_need ?? false,
     categoriaNecesidad: fila.need_category,
+    foto: fotoDePortada(fila.photos),
     profileScore: fila.club_profile_score ?? 0,
     visibilityBucket: fila.club_visibility_bucket ?? 0,
     exclusivity: fila.exclusivity,
@@ -120,7 +142,10 @@ function filaAResultado(fila: FilaBusqueda, centro: Coordenadas | null): Resulta
     createdAt: fila.opportunity_created_at,
     distanceKm:
       centro && fila.club_latitude != null && fila.club_longitude != null
-        ? distanciaKm(centro, { latitude: fila.club_latitude, longitude: fila.club_longitude })
+        ? distanciaKm(centro, {
+            latitude: fila.club_latitude,
+            longitude: fila.club_longitude,
+          })
         : null,
   };
 }
@@ -130,9 +155,14 @@ function sanear(texto: string): string {
   return texto.replace(/[,()%]/g, " ").trim();
 }
 
-async function resolverCentro(filtros: FiltrosBusqueda): Promise<Coordenadas | null> {
+async function resolverCentro(
+  filtros: FiltrosBusqueda,
+): Promise<Coordenadas | null> {
   if (!filtros.radioKm || !filtros.ubicacion) return null;
-  return geocodificarDireccion({ city: filtros.ubicacion, province: filtros.provincia });
+  return geocodificarDireccion({
+    city: filtros.ubicacion,
+    province: filtros.provincia,
+  });
 }
 
 /**
@@ -142,8 +172,15 @@ async function resolverCentro(filtros: FiltrosBusqueda): Promise<Coordenadas | n
  * contrario. Las oportunidades no están ligadas a un equipo concreto,
  * así que el filtro se aplica a nivel de club.
  */
-async function clubesConEquipoCoincidente(filtros: FiltrosBusqueda): Promise<string[] | null> {
-  if (!filtros.deporte && !filtros.categoria && !filtros.genero && !filtros.nivelEquipo) {
+async function clubesConEquipoCoincidente(
+  filtros: FiltrosBusqueda,
+): Promise<string[] | null> {
+  if (
+    !filtros.deporte &&
+    !filtros.categoria &&
+    !filtros.genero &&
+    !filtros.nivelEquipo
+  ) {
     return null;
   }
 
@@ -153,7 +190,8 @@ async function clubesConEquipoCoincidente(filtros: FiltrosBusqueda): Promise<str
   if (filtros.deporte) consulta = consulta.eq("sport", filtros.deporte);
   if (filtros.categoria) consulta = consulta.eq("category", filtros.categoria);
   if (filtros.genero) consulta = consulta.eq("gender", filtros.genero);
-  if (filtros.nivelEquipo) consulta = consulta.eq("team_level", filtros.nivelEquipo);
+  if (filtros.nivelEquipo)
+    consulta = consulta.eq("team_level", filtros.nivelEquipo);
 
   const { data } = await consulta.returns<{ club_id: string }[]>();
   return Array.from(new Set((data ?? []).map((fila) => fila.club_id)));
@@ -181,14 +219,19 @@ async function registrarBusqueda(
     // salido: es la mitad de "tu mes en ApoyaClub" que el club ve en su
     // panel (migración 0014). Un club aparece una vez por búsqueda,
     // aunque salgan tres oportunidades suyas.
-    const clubesQueAparecen = Array.from(new Set(resultado.resultados.map((fila) => fila.clubId)));
+    const clubesQueAparecen = Array.from(
+      new Set(resultado.resultados.map((fila) => fila.clubId)),
+    );
     if (clubesQueAparecen.length > 0) {
       await admin
         .from("club_search_appearances")
         .insert(clubesQueAparecen.map((clubId) => ({ club_id: clubId })));
     }
   } catch (excepcion) {
-    console.error("[search_logs] No se ha podido registrar la búsqueda:", excepcion);
+    console.error(
+      "[search_logs] No se ha podido registrar la búsqueda:",
+      excepcion,
+    );
   }
 }
 
@@ -211,10 +254,14 @@ export async function buscarOportunidades(
     .select("*", usaGeo ? undefined : { count: "exact" });
 
   if (clubIds) consulta = consulta.in("club_id", clubIds);
-  if (filtros.provincia) consulta = consulta.eq("club_province", filtros.provincia);
-  if (filtros.tipos && filtros.tipos.length > 0) consulta = consulta.in("opportunity_type", filtros.tipos);
-  if (filtros.presupuestoMin != null) consulta = consulta.gte("value", filtros.presupuestoMin);
-  if (filtros.presupuestoMax != null) consulta = consulta.lte("value", filtros.presupuestoMax);
+  if (filtros.provincia)
+    consulta = consulta.eq("club_province", filtros.provincia);
+  if (filtros.tipos && filtros.tipos.length > 0)
+    consulta = consulta.in("opportunity_type", filtros.tipos);
+  if (filtros.presupuestoMin != null)
+    consulta = consulta.gte("value", filtros.presupuestoMin);
+  if (filtros.presupuestoMax != null)
+    consulta = consulta.lte("value", filtros.presupuestoMax);
   if (filtros.periodo) consulta = consulta.eq("period", filtros.periodo);
   if (filtros.formasColaboracion && filtros.formasColaboracion.length > 0) {
     consulta = consulta.in("collaboration_type", filtros.formasColaboracion);
@@ -227,7 +274,8 @@ export async function buscarOportunidades(
   if (filtros.busca === "patrocinios") consulta = consulta.eq("is_need", false);
   if (filtros.busca === "necesidades") {
     consulta = consulta.eq("is_need", true);
-    if (filtros.necesidad) consulta = consulta.eq("need_category", filtros.necesidad);
+    if (filtros.necesidad)
+      consulta = consulta.eq("need_category", filtros.necesidad);
   }
   if (filtros.niveles && filtros.niveles.length > 0) {
     consulta = consulta.in("sponsor_level", filtros.niveles);
@@ -245,7 +293,9 @@ export async function buscarOportunidades(
     // simple por ciudad o código postal, sin distancia real.
     const texto = sanear(filtros.ubicacion);
     if (texto) {
-      consulta = consulta.or(`club_city.ilike.%${texto}%,club_postal_code.ilike.${texto}%`);
+      consulta = consulta.or(
+        `club_city.ilike.%${texto}%,club_postal_code.ilike.${texto}%`,
+      );
     }
   }
 
@@ -258,19 +308,29 @@ export async function buscarOportunidades(
       // Orden por defecto: tramo de ficha completa y, dentro del tramo,
       // lo más reciente. Ver `OrdenBusqueda` en search-types.
       consulta = consulta
-        .order("club_visibility_bucket", { ascending: false, nullsFirst: false })
+        .order("club_visibility_bucket", {
+          ascending: false,
+          nullsFirst: false,
+        })
         .order("opportunity_created_at", { ascending: false });
     }
-    consulta = consulta.range(paginacion.offset, paginacion.offset + paginacion.limite - 1);
+    consulta = consulta.range(
+      paginacion.offset,
+      paginacion.offset + paginacion.limite - 1,
+    );
   } else {
-    consulta = consulta.order("opportunity_created_at", { ascending: false }).limit(TAMANO_LOTE_GEO);
+    consulta = consulta
+      .order("opportunity_created_at", { ascending: false })
+      .limit(TAMANO_LOTE_GEO);
   }
 
   const { data, count } = await consulta.returns<FilaBusqueda[]>();
   let resultados = (data ?? []).map((fila) => filaAResultado(fila, centro));
 
   if (usaRadio) {
-    resultados = resultados.filter((r) => r.distanceKm != null && r.distanceKm <= filtros.radioKm!);
+    resultados = resultados.filter(
+      (r) => r.distanceKm != null && r.distanceKm <= filtros.radioKm!,
+    );
   }
 
   if (!usaGeo) {
@@ -286,20 +346,29 @@ export async function buscarOportunidades(
   if (filtros.orden === "valor") {
     resultados.sort((a, b) => b.value - a.value);
   } else if (filtros.orden === "novedad") {
-    resultados.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    resultados.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
   } else if (filtros.orden === "cercania") {
-    resultados.sort((a, b) => (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity));
+    resultados.sort(
+      (a, b) => (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity),
+    );
   } else {
     // Con radio, "recomendado" sigue mandando la distancia primero (para
     // eso ha puesto un radio), y desempata la ficha más completa.
     resultados.sort((a, b) => {
-      const porDistancia = (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity);
+      const porDistancia =
+        (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity);
       if (porDistancia !== 0) return porDistancia;
       return b.visibilityBucket - a.visibilityBucket;
     });
   }
 
-  const pagina = resultados.slice(paginacion.offset, paginacion.offset + paginacion.limite);
+  const pagina = resultados.slice(
+    paginacion.offset,
+    paginacion.offset + paginacion.limite,
+  );
   const resultado = {
     resultados: pagina,
     hayMas: resultados.length > paginacion.offset + paginacion.limite,
@@ -324,13 +393,19 @@ export async function obtenerOpcionesEquipo(): Promise<{
   const { data } = await supabase
     .from("club_teams")
     .select("sport, category, gender")
-    .returns<{ sport: string; category: string | null; gender: string | null }[]>();
+    .returns<
+      { sport: string; category: string | null; gender: string | null }[]
+    >();
 
   const filas = data ?? [];
   const unico = (valores: (string | null)[]) =>
-    Array.from(new Set(valores.map((valor) => valor?.trim()).filter((valor): valor is string => !!valor))).sort(
-      (a, b) => a.localeCompare(b, "es"),
-    );
+    Array.from(
+      new Set(
+        valores
+          .map((valor) => valor?.trim())
+          .filter((valor): valor is string => !!valor),
+      ),
+    ).sort((a, b) => a.localeCompare(b, "es"));
 
   return {
     deportes: unico(filas.map((fila) => fila.sport)),
@@ -348,7 +423,11 @@ export async function obtenerProvinciasDisponibles(): Promise<string[]> {
     .not("province", "is", null)
     .returns<{ province: string | null }[]>();
 
-  return Array.from(new Set((data ?? []).map((fila) => fila.province).filter((valor): valor is string => !!valor))).sort(
-    (a, b) => a.localeCompare(b, "es"),
-  );
+  return Array.from(
+    new Set(
+      (data ?? [])
+        .map((fila) => fila.province)
+        .filter((valor): valor is string => !!valor),
+    ),
+  ).sort((a, b) => a.localeCompare(b, "es"));
 }
