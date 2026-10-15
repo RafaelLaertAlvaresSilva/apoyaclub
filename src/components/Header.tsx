@@ -24,7 +24,8 @@ import { MenuDeLaCabecera } from "@/components/MenuDeLaCabecera";
  * no necesita que le expliquen qué es ApoyaClub: ahí salen las
  * herramientas, el buscador y el directorio de empresas.
  *
- * El logo (`public/logo-full.png`) es el archivo original del usuario
+ * El logo (`public/logo-full-claro.webp`) es el del usuario, con el
+ * fondo blanco quitado
  * recortado y reescalado en alta resolución, con el eslogan
  * "CONECTA · IMPULSA · CRECE" incluido. `next/image` sirve el tamaño
  * justo para cada pantalla, así que no pesa lo que pesa el archivo
@@ -59,7 +60,8 @@ export async function Header() {
   } = await supabase.auth.getUser();
 
   const rol = user?.app_metadata?.role as Role | undefined;
-  const accesoDirecto = user && rol ? { href: RUTA_POR_ROL[rol], etiqueta: "Ir a mi panel" } : null;
+  const accesoDirecto =
+    user && rol ? { href: RUTA_POR_ROL[rol], etiqueta: "Ir a mi panel" } : null;
   const enlaces = accesoDirecto ? ENLACES_CON_SESION : ENLACES_DE_VISITA;
 
   return (
@@ -85,10 +87,10 @@ export async function Header() {
         <div className="flex items-center justify-between gap-3">
           <Link href="/" className="min-w-0 shrink">
             <Image
-              src="/logo-full.png"
+              src="/logo-full-claro.webp"
               alt="ApoyaClub"
-              width={4275}
-              height={984}
+              width={950}
+              height={210}
               priority
               className="h-10 w-auto sm:h-12"
             />
@@ -112,7 +114,10 @@ export async function Header() {
             )}
 
             <span className="hidden sm:block">
-              <Button href={accesoDirecto ? accesoDirecto.href : "/registro"} size="sm">
+              <Button
+                href={accesoDirecto ? accesoDirecto.href : "/registro"}
+                size="sm"
+              >
                 {accesoDirecto ? accesoDirecto.etiqueta : "Crea tu página"}
               </Button>
             </span>
@@ -120,7 +125,6 @@ export async function Header() {
             <MenuDeLaCabecera enlaces={enlaces} accesoDirecto={accesoDirecto} />
           </div>
         </div>
-
       </div>
     </header>
   );

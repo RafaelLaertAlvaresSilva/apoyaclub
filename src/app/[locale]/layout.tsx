@@ -9,6 +9,7 @@ import { Footer } from "@/components/Footer";
 import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
 import "../globals.css";
+import { GuionDelTema } from "./panel/components/GuionDelTema";
 
 /**
  * La tipografía de ApoyaClub.
@@ -60,7 +61,8 @@ export const metadata: Metadata = {
   // acceso y registro no ponían ninguno: la pestaña decía "ApoyaClub" a
   // secas, y /registro-club está en el mapa del sitio que lee Google.
   title: {
-    default: "ApoyaClub — Conecta tu club deportivo con empresas patrocinadoras",
+    default:
+      "ApoyaClub — Conecta tu club deportivo con empresas patrocinadoras",
     template: "%s | ApoyaClub",
   },
   description: "Conecta tu club deportivo con empresas patrocinadoras.",
@@ -97,7 +99,10 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export default async function RootLayout({ children, params }: LayoutProps<"/[locale]">) {
+export default async function RootLayout({
+  children,
+  params,
+}: LayoutProps<"/[locale]">) {
   const { locale } = await params;
 
   // Cualquier segmento que no sea un idioma soportado (o que el propio
@@ -113,6 +118,13 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[lo
       className={`${tituloSerif.variable} ${textoSans.variable} ${letraAMano.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        {/* LO PRIMERO DE TODO, antes incluso del salto al contenido:
+            decide si el panel va en claro o en oscuro. Tiene que estar
+            aquí arriba para ejecutarse antes de que el navegador pinte
+            nada; más abajo deja un fotograma de fogonazo claro. Él solo
+            comprueba si estamos en el panel y, si no, no hace nada. */}
+        <GuionDelTema />
+
         {/* Lo primero que encuentra quien navega con el teclado o con un
             lector de pantalla. Está escondido hasta que se le da el
             foco, y entonces salta a la vista arriba a la izquierda: sin

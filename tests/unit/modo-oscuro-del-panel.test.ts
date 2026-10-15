@@ -35,8 +35,9 @@ const TSX_PANEL: Fichero[] = TSX_TODO.filter((f) => f.ruta.includes("/panel/"));
 
 /** El bloque oscuro, para mirar dentro de él y no en todo el fichero. */
 const BLOQUE_OSCURO =
-  CSS.match(/@media \(prefers-color-scheme: dark\)\s*\{[\s\S]*?\n\}\n/)?.[0] ??
-  "";
+  CSS.match(
+    /html\[data-tema-panel="oscuro"\] \.tema-panel \{[\s\S]*?\n\}\n/,
+  )?.[0] ?? "";
 
 /**
  * El modo oscuro del panel.
@@ -49,7 +50,21 @@ const BLOQUE_OSCURO =
  */
 describe("el tema oscuro existe y está acotado al panel", () => {
   it("se enciende con el ajuste del sistema", () => {
-    expect(CSS).toContain("@media (prefers-color-scheme: dark)");
+    // Ya no lo decide el CSS: lo decide el guion, que mira el ajuste
+    // del sistema Y la elección guardada del club.
+    const guion = readFileSync(
+      join(
+        RAIZ,
+        "src",
+        "app",
+        "[locale]",
+        "panel",
+        "components",
+        "GuionDelTema.tsx",
+      ),
+      "utf8",
+    );
+    expect(guion).toContain("prefers-color-scheme: dark");
     expect(BLOQUE_OSCURO, "no se encuentra el bloque oscuro").not.toBe("");
     expect(BLOQUE_OSCURO).toContain(".tema-panel");
   });

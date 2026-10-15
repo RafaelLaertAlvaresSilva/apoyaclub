@@ -1,10 +1,14 @@
 import { getLocale } from "next-intl/server";
 import { BarraLogo } from "@/components/BarraLogo";
-import { subscriptionRowToInfo, type SubscriptionRow } from "@/lib/subscription-mappers";
+import {
+  subscriptionRowToInfo,
+  type SubscriptionRow,
+} from "@/lib/subscription-mappers";
 import { createClient } from "@/lib/supabase/server";
 import type { Role } from "@/lib/types";
 import { AvisoSuscripcion } from "./components/AvisoSuscripcion";
 import { PanelNav } from "./components/PanelNav";
+import { InterruptorDeTema } from "./components/InterruptorDeTema";
 
 /**
  * Envuelve todas las páginas de `/panel` (Fase 10) para mostrar, si
@@ -13,7 +17,11 @@ import { PanelNav } from "./components/PanelNav";
  * la ruta); este layout no redirige a nadie, solo añade el aviso
  * cuando hay una sesión de club válida.
  */
-export default async function PanelLayout({ children }: { children: React.ReactNode }) {
+export default async function PanelLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -38,7 +46,8 @@ export default async function PanelLayout({ children }: { children: React.ReactN
       .eq("id", user.id)
       .maybeSingle<SubscriptionRow>();
     filaSuscripcion = data;
-    const slug = (data as (SubscriptionRow & { slug?: string | null }) | null)?.slug;
+    const slug = (data as (SubscriptionRow & { slug?: string | null }) | null)
+      ?.slug;
     perfilCreado = data != null;
     if (slug) paginaPublica = `/${await getLocale()}/club/${slug}`;
   }
@@ -57,8 +66,12 @@ export default async function PanelLayout({ children }: { children: React.ReactN
      * debajo.
      */
     <div className="tema-panel flex min-h-dvh flex-1 flex-col bg-zinc-50">
-      <BarraLogo />
-      {filaSuscripcion && <AvisoSuscripcion suscripcion={subscriptionRowToInfo(filaSuscripcion)} />}
+      <BarraLogo extra={<InterruptorDeTema />} />
+      {filaSuscripcion && (
+        <AvisoSuscripcion
+          suscripcion={subscriptionRowToInfo(filaSuscripcion)}
+        />
+      )}
 
       {/* El menú vive aquí y no dentro de cada página: así las once
           páginas del panel no tienen que acordarse de ponerlo, ni de

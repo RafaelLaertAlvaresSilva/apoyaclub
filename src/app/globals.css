@@ -314,9 +314,18 @@ h1[class*="text-lg"] {
  * EL MODO OSCURO DEL PANEL
  * =====================================================================
  *
- * Solo el panel, y solo si el móvil o el ordenador lo piden. La página
- * pública del club y la portada se quedan claras: las lee un comercial
- * de una empresa, de día, en su oficina.
+ * Solo el panel. La página pública del club y la portada se quedan
+ * claras: las lee un comercial de una empresa, de día, en su oficina.
+ *
+ * NO SE MIRA `prefers-color-scheme` AQUÍ, y es a propósito. Se mira
+ * una sola vez, en el guion que corre antes de que se pinte la página
+ * (`GuionDelTema`), que resuelve el ajuste del sistema Y la elección
+ * guardada del club y deja escrito `data-tema-panel` en el <html>.
+ *
+ * Hacerlo así deja UNA sola copia de esta paleta. Con el botón, la
+ * otra forma era repetir estas sesenta líneas dos veces —una para el
+ * `@media` y otra para la elección a mano— y el día que se cambiara un
+ * gris se cambiaría en una de las dos.
  *
  * LAS TARJETAS NO SON BLANCAS, y esto es lo único que de verdad importa
  * de todo este bloque. Una tarjeta blanca sobre fondo negro emite casi
@@ -333,118 +342,166 @@ h1[class*="text-lg"] {
  * el color de los tintes, porque un verde o un ámbar con la misma
  * saturación sobre fondo oscuro se ve fosforito.
  * ===================================================================== */
-@media (prefers-color-scheme: dark) {
-  .tema-panel {
-    /* Para que los desplegables, los calendarios y la barra de
-       desplazamiento que pinta el navegador salgan oscuros también. Sin
-       esto, abrir un selector de fecha es un fogonazo blanco. */
-    color-scheme: dark;
+html[data-tema-panel="oscuro"] .tema-panel {
+  /* Para que los desplegables, los calendarios y la barra de
+     desplazamiento que pinta el navegador salgan oscuros también. Sin
+     esto, abrir un selector de fecha es un fogonazo blanco. */
+  color-scheme: dark;
 
-    /*
-     * El color del texto HEREDADO, no solo el de las clases.
-     *
-     * Sin esta línea, lo que escribes en un campo es invisible: un
-     * `<input>` no lleva clase de color, hereda la del `body`, y la del
-     * `body` la pone el layout de toda la web, que es claro. Se veía
-     * el campo, se veía el cursor, y la letra no aparecía. No da ningún
-     * error: simplemente escribes a ciegas.
-     */
-    color: var(--gris-900);
+  /*
+   * El color del texto HEREDADO, no solo el de las clases.
+   *
+   * Sin esta línea, lo que escribes en un campo es invisible: un
+   * `<input>` no lleva clase de color, hereda la del `body`, y la del
+   * `body` la pone el layout de toda la web, que es claro. Se veía
+   * el campo, se veía el cursor, y la letra no aparecía. No da ningún
+   * error: simplemente escribes a ciegas.
+   */
+  color: var(--gris-900);
 
-    /* El lienzo y las tarjetas. */
-    --lienzo: oklch(16% 0.008 260);
-    --lienzo-hondo: oklch(23% 0.009 260);
-    --lienzo-borde: oklch(31% 0.009 260);
-    --superficie: oklch(21% 0.008 260);
+  /* El lienzo y las tarjetas. */
+  --lienzo: oklch(16% 0.008 260);
+  --lienzo-hondo: oklch(23% 0.009 260);
+  --lienzo-borde: oklch(31% 0.009 260);
+  --superficie: oklch(21% 0.008 260);
 
-    /* La escala de grises, del revés. 300 y 400 son bordes y cosas
-       apagadas; del 500 para arriba son textos. */
-    --gris-300: oklch(38% 0.009 260);
-    --gris-400: oklch(52% 0.011 260);
-    --gris-500: oklch(70% 0.013 260);
-    --gris-600: oklch(79% 0.011 260);
-    --gris-700: oklch(86% 0.008 260);
-    --gris-800: oklch(92% 0.005 260);
-    --gris-900: oklch(96% 0.003 260);
+  /* La escala de grises, del revés. 300 y 400 son bordes y cosas
+     apagadas; del 500 para arriba son textos. */
+  --gris-300: oklch(38% 0.009 260);
+  --gris-400: oklch(52% 0.011 260);
+  --gris-500: oklch(70% 0.013 260);
+  --gris-600: oklch(79% 0.011 260);
+  --gris-700: oklch(86% 0.008 260);
+  --gris-800: oklch(92% 0.005 260);
+  --gris-900: oklch(96% 0.003 260);
 
-    /* El verde. Del 50 al 200 son fondos de aviso y pastillas: oscuros
-       y con poco color. Del 300 para arriba son textos y bordes. */
-    --verde-50: oklch(25% 0.032 186);
-    --verde-100: oklch(30% 0.045 186);
-    --verde-200: oklch(38% 0.058 186);
-    --verde-300: oklch(84% 0.118 181);
-    --verde-500: oklch(74% 0.13 182);
-    --verde-600: oklch(80% 0.122 182);
-    --verde-700: oklch(85% 0.112 182);
-    --verde-800: oklch(89% 0.092 182);
-    --verde-900: oklch(93% 0.07 182);
+  /* El verde. Del 50 al 200 son fondos de aviso y pastillas: oscuros
+     y con poco color. Del 300 para arriba son textos y bordes. */
+  --verde-50: oklch(25% 0.032 186);
+  --verde-100: oklch(30% 0.045 186);
+  --verde-200: oklch(38% 0.058 186);
+  --verde-300: oklch(84% 0.118 181);
+  --verde-500: oklch(74% 0.13 182);
+  --verde-600: oklch(80% 0.122 182);
+  --verde-700: oklch(85% 0.112 182);
+  --verde-800: oklch(89% 0.092 182);
+  --verde-900: oklch(93% 0.07 182);
 
-    /* El rojo de los errores. */
-    --rojo-50: oklch(26% 0.055 25);
-    --rojo-100: oklch(31% 0.075 25);
-    --rojo-200: oklch(39% 0.095 25);
-    --rojo-300: oklch(80% 0.1 22);
-    --rojo-500: oklch(70% 0.17 25);
-    --rojo-600: oklch(76% 0.145 25);
-    --rojo-700: oklch(82% 0.12 25);
-    --rojo-800: oklch(87% 0.095 25);
-    --rojo-900: oklch(92% 0.07 25);
+  /* El rojo de los errores. */
+  --rojo-50: oklch(26% 0.055 25);
+  --rojo-100: oklch(31% 0.075 25);
+  --rojo-200: oklch(39% 0.095 25);
+  --rojo-300: oklch(80% 0.1 22);
+  --rojo-500: oklch(70% 0.17 25);
+  --rojo-600: oklch(76% 0.145 25);
+  --rojo-700: oklch(82% 0.12 25);
+  --rojo-800: oklch(87% 0.095 25);
+  --rojo-900: oklch(92% 0.07 25);
 
-    /* El ámbar de los avisos. */
-    --ambar-50: oklch(26% 0.04 60);
-    --ambar-100: oklch(31% 0.055 60);
-    --ambar-200: oklch(39% 0.07 60);
-    --ambar-300: oklch(86% 0.13 85);
-    --ambar-500: oklch(78% 0.145 75);
-    --ambar-600: oklch(85% 0.13 80);
-    --ambar-700: oklch(89% 0.115 85);
-    --ambar-800: oklch(92% 0.095 88);
-    --ambar-900: oklch(95% 0.075 90);
-    --ambar-950: oklch(97% 0.055 92);
+  /* El ámbar de los avisos. */
+  --ambar-50: oklch(26% 0.04 60);
+  --ambar-100: oklch(31% 0.055 60);
+  --ambar-200: oklch(39% 0.07 60);
+  --ambar-300: oklch(86% 0.13 85);
+  --ambar-500: oklch(78% 0.145 75);
+  --ambar-600: oklch(85% 0.13 80);
+  --ambar-700: oklch(89% 0.115 85);
+  --ambar-800: oklch(92% 0.095 88);
+  --ambar-900: oklch(95% 0.075 90);
+  --ambar-950: oklch(97% 0.055 92);
 
-    /* El azul marino de la marca es casi negro: como texto sobre fondo
-       oscuro no se vería. Encima de un botón sigue valiendo, pero ahí
-       quien manda es `--accion`. */
-    /* Estos tres SON FONDOS de botón y llevan texto blanco encima, así
-     * que se quedan oscuros. Medido: por encima del 50 % de claridad,
-     * el blanco encima baja de 4,5:1 y deja de leerse. */
-    --brand-navy: oklch(42% 0.05 245);
-    --brand-navy-dark: oklch(35% 0.045 245);
-    --brand-teal-dark: oklch(47% 0.09 186);
-    --brand-teal-light: oklch(32% 0.05 186);
+  /* El azul marino de la marca es casi negro: como texto sobre fondo
+     oscuro no se vería. Encima de un botón sigue valiendo, pero ahí
+     quien manda es `--accion`. */
+  /* Estos tres SON FONDOS de botón y llevan texto blanco encima, así
+   * que se quedan oscuros. Medido: por encima del 50 % de claridad,
+   * el blanco encima baja de 4,5:1 y deja de leerse. */
+  --brand-navy: oklch(42% 0.05 245);
+  --brand-navy-dark: oklch(35% 0.045 245);
+  --brand-teal-dark: oklch(47% 0.09 186);
+  --brand-teal-light: oklch(32% 0.05 186);
 
-    /* La TINTA de la marca sí se aclara: son titulares y enlaces. */
-    --titular: oklch(90% 0.035 245);
-    --accion-tinta: oklch(84% 0.115 182);
+  /* La TINTA de la marca sí se aclara: son titulares y enlaces. */
+  --titular: oklch(90% 0.035 245);
+  --accion-tinta: oklch(84% 0.115 182);
 
-    /* Blanco roto y no blanco puro: un cuadradito de blanco puro sobre
-     * una tarjeta de carbón es un punto de luz que pica. Y el borde se
-     * aclara para que la placa se despegue de la tarjeta. */
-    --placa: oklch(95% 0.002 260);
-    --placa-borde: oklch(70% 0.008 260);
+  /* Blanco roto y no blanco puro: un cuadradito de blanco puro sobre
+   * una tarjeta de carbón es un punto de luz que pica. Y el borde se
+   * aclara para que la placa se despegue de la tarjeta. */
+  --placa: oklch(95% 0.002 260);
+  --placa-borde: oklch(70% 0.008 260);
 
-    /*
-     * Los botones sólidos suben un poco, lo justo para no parecer un
-     * agujero en la pantalla. Siguen llevando texto blanco encima
-     * (`--sobre-color`), que por eso no se invierte nunca.
-     */
-    --accion: oklch(47% 0.09 186);
-    /* El estado con el ratón encima se OSCURECE, igual que en claro.
-     * Aclararlo habría sido lo intuitivo, pero entonces el texto
-     * blanco del botón se cae por debajo de 4,5:1. */
-    --accion-fuerte: oklch(40% 0.075 186);
-    --medidor: oklch(72% 0.135 182);
-    --peligro: oklch(52% 0.2 26);
-    --peligro-fuerte: oklch(45% 0.175 26);
+  /*
+   * Los botones sólidos suben un poco, lo justo para no parecer un
+   * agujero en la pantalla. Siguen llevando texto blanco encima
+   * (`--sobre-color`), que por eso no se invierte nunca.
+   */
+  --accion: oklch(47% 0.09 186);
+  /* El estado con el ratón encima se OSCURECE, igual que en claro.
+   * Aclararlo habría sido lo intuitivo, pero entonces el texto
+   * blanco del botón se cae por debajo de 4,5:1. */
+  --accion-fuerte: oklch(40% 0.075 186);
+  --medidor: oklch(72% 0.135 182);
+  --peligro: oklch(52% 0.2 26);
+  --peligro-fuerte: oklch(45% 0.175 26);
 
-    /* La pastilla de aviso al revés que en claro: ámbar brillante con
-     * tinta casi negra. */
-    --aviso: oklch(76% 0.145 75);
-    --sobre-aviso: oklch(20% 0.04 60);
+  /* La pastilla de aviso al revés que en claro: ámbar brillante con
+   * tinta casi negra. */
+  --aviso: oklch(76% 0.145 75);
+  --sobre-aviso: oklch(20% 0.04 60);
 
-    /* Las sombras no se ven sobre fondo oscuro: lo que separa una
-       tarjeta del fondo es su propio color, no la sombra. Quitarlas
-       evita el halo gris sucio que dejan. */
-    --tw-shadow-color: transparent;
-  }
+  /* Las sombras no se ven sobre fondo oscuro: lo que separa una
+     tarjeta del fondo es su propio color, no la sombra. Quitarlas
+     evita el halo gris sucio que dejan. */
+  --tw-shadow-color: transparent;
+}
+
+/*
+ * QUÉ SE ENSEÑA EN CADA TEMA.
+ *
+ * Lo usan dos cosas: el logo (el de siempre lleva un fondo blanco
+ * pegado y sobre la barra oscura salía un cuadrado; el de la versión
+ * oscura tiene transparencia) y el rótulo del botón de modo oscuro.
+ *
+ * Se hace con CSS y no desde JavaScript a propósito: así lo correcto ya
+ * viene escrito en el HTML que manda el servidor y no hay ni un
+ * parpadeo al entrar. Y escrito en CSS normal y no con una clase
+ * rebuscada de Tailwind porque la regla tiene que mirar un atributo del
+ * <html> desde un elemento que está cuatro niveles más abajo.
+ *
+ * Lo del tema oscuro está escondido por defecto, de modo que en toda la
+ * web pública —y en las zonas de empresa, administración y acceso, que
+ * comparten la misma barra— se ve lo de siempre.
+ */
+.logo-oscuro,
+.solo-tema-oscuro {
+  display: none;
+}
+
+html[data-tema-panel="oscuro"] .tema-panel :is(.logo-claro, .solo-tema-claro) {
+  display: none;
+}
+
+html[data-tema-panel="oscuro"] .tema-panel .logo-oscuro {
+  display: block;
+}
+
+html[data-tema-panel="oscuro"] .tema-panel .solo-tema-oscuro {
+  display: inline-flex;
+}
+
+/*
+ * El fondo de la página entera, mientras se está en el panel oscuro.
+ *
+ * Sin esto hay UN FOTOGRAMA de fogonazo: el `body` lleva el fondo claro
+ * que vale para toda la web, y el navegador lo pinta antes de llegar a
+ * pintar la envoltura del panel. Medido grabando lo que el navegador
+ * pinta de verdad: un fotograma claro al entrar, y justo de noche, que
+ * es cuando se usa el modo oscuro.
+ *
+ * El atributo solo está puesto mientras se está en el panel: lo pone el
+ * guion al cargar y lo quita el interruptor al salir.
+ */
+html[data-tema-panel="oscuro"] body {
+  background: oklch(16% 0.008 260);
 }
