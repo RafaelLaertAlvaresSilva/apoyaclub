@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useActionState, useState } from "react";
@@ -24,6 +25,7 @@ import {
   restaurarOportunidad,
 } from "../actions";
 import { BarraDePlazas } from "@/components/BarraDePlazas";
+import { fotoDePortada } from "@/lib/fotos-de-oportunidad";
 import { OportunidadForm } from "./OportunidadForm";
 
 const ESTILO_ESTADO: Record<OpportunityStatus, string> = {
@@ -61,65 +63,86 @@ export function TarjetaOportunidad({
 
   const equipoAsociado =
     equipos.find((equipo) => equipo.id === oportunidad.teamId) ?? null;
+  const portada = fotoDePortada(oportunidad.fotos);
 
   return (
     <li className="rounded-xl border border-zinc-200 bg-white p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 className="font-semibold text-zinc-900">{oportunidad.title}</h3>
-            {oportunidad.sponsorLevel !== "libre" && (
-              <span
-                className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                  CLASES_NIVEL_PATROCINIO[oportunidad.sponsorLevel]
-                }`}
-              >
-                {ETIQUETA_NIVEL_PATROCINIO[oportunidad.sponsorLevel]}
-              </span>
+        <div className="flex min-w-0 flex-1 items-start gap-4">
+          {/* LA MINIATURA, para que el club vea de un vistazo qué foto
+              lleva cada oportunidad sin abrirla. `object-contain` y no
+              `cover`: muchas fotos son carteles con texto, y recortarlas
+              se come justo el texto. Sin foto no se pinta hueco. */}
+          {portada && (
+            <Image
+              src={portada}
+              alt=""
+              width={192}
+              height={192}
+              unoptimized
+              className="h-20 w-20 shrink-0 rounded-lg border border-zinc-200 bg-zinc-50 object-contain sm:h-24 sm:w-24"
+            />
+          )}
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="font-semibold text-zinc-900">
+                {oportunidad.title}
+              </h3>
+              {oportunidad.sponsorLevel !== "libre" && (
+                <span
+                  className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                    CLASES_NIVEL_PATROCINIO[oportunidad.sponsorLevel]
+                  }`}
+                >
+                  {ETIQUETA_NIVEL_PATROCINIO[oportunidad.sponsorLevel]}
+                </span>
+              )}
+              {oportunidad.esNecesidad && (
+                <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                  Lo necesitamos
+                  {oportunidad.categoriaNecesidad
+                    ? ` · ${ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]}`
+                    : ""}
+                </span>
+              )}
+              {oportunidad.archivedAt && (
+                <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-500">
+                  {t("archivada")}
+                </span>
+              )}
+            </div>
+            <p className="mt-0.5 text-sm text-zinc-500">
+              {ETIQUETA_TIPO_OPORTUNIDAD[oportunidad.opportunityType]}
+              {oportunidad.duration ? ` · ${oportunidad.duration}` : ""}
+              {equipoAsociado
+                ? ` · ${equipoAsociado.sport} ${equipoAsociado.category ?? ""}`.trimEnd()
+                : ""}
+            </p>
+            {oportunidad.exclusivity && (
+              <p className="mt-1 text-xs font-medium text-accion-tinta">
+                En exclusiva para el sector: {oportunidad.exclusivity}
+              </p>
             )}
-            {oportunidad.esNecesidad && (
-              <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
-                Lo necesitamos
-                {oportunidad.categoriaNecesidad
-                  ? ` · ${ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]}`
-                  : ""}
-              </span>
+            {oportunidad.description && (
+              <p className="mt-2 text-sm text-zinc-600">
+                {oportunidad.description}
+              </p>
             )}
-            {oportunidad.archivedAt && (
-              <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-500">
-                {t("archivada")}
-              </span>
+
+            {/* Cuando hace falta más de una empresa, el club necesita ver
+              cuántas lleva sin ponerse a restar. */}
+            {esPorPlazas(oportunidad) && (
+              <div className="mt-3 max-w-xs">
+                <BarraDePlazas
+                  slotsTotal={oportunidad.slotsTotal}
+                  slotsTaken={oportunidad.slotsTaken}
+                  etiqueta={
+                    oportunidad.esNecesidad ? "colaboradores" : "plazas"
+                  }
+                />
+              </div>
             )}
           </div>
-          <p className="mt-0.5 text-sm text-zinc-500">
-            {ETIQUETA_TIPO_OPORTUNIDAD[oportunidad.opportunityType]}
-            {oportunidad.duration ? ` · ${oportunidad.duration}` : ""}
-            {equipoAsociado
-              ? ` · ${equipoAsociado.sport} ${equipoAsociado.category ?? ""}`.trimEnd()
-              : ""}
-          </p>
-          {oportunidad.exclusivity && (
-            <p className="mt-1 text-xs font-medium text-accion-tinta">
-              En exclusiva para el sector: {oportunidad.exclusivity}
-            </p>
-          )}
-          {oportunidad.description && (
-            <p className="mt-2 text-sm text-zinc-600">
-              {oportunidad.description}
-            </p>
-          )}
-
-          {/* Cuando hace falta más de una empresa, el club necesita ver
-              cuántas lleva sin ponerse a restar. */}
-          {esPorPlazas(oportunidad) && (
-            <div className="mt-3 max-w-xs">
-              <BarraDePlazas
-                slotsTotal={oportunidad.slotsTotal}
-                slotsTaken={oportunidad.slotsTaken}
-                etiqueta={oportunidad.esNecesidad ? "colaboradores" : "plazas"}
-              />
-            </div>
-          )}
         </div>
 
         <p className="whitespace-nowrap text-lg font-bold text-teal-700">

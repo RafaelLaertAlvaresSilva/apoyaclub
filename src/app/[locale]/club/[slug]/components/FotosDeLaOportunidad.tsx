@@ -35,14 +35,16 @@ export function FotosDeLaOportunidad({
       {/* La primera manda y va a tamaño grande; las otras dos debajo,
           pequeñas. Un mosaico de tres iguales reparte la atención entre
           las tres, y el club ya eligió cuál era la buena al ponerla la
-          primera. */}
+          primera.
+          Se ve ENTERA, con su proporción: muchas fotos son carteles con
+          texto, y un marco fijo con `object-cover` les cortaba el titular. */}
       <Image
         src={principal}
         alt={`${titulo} — foto principal`}
         width={1200}
         height={800}
         unoptimized
-        className="aspect-[3/2] w-full rounded-xl border border-zinc-200 bg-zinc-100 object-cover"
+        className="h-auto max-h-[80vh] w-full rounded-xl border border-zinc-200 bg-zinc-50 object-contain"
       />
 
       {resto.length > 0 && (
@@ -55,7 +57,7 @@ export function FotosDeLaOportunidad({
                 width={600}
                 height={400}
                 unoptimized
-                className="aspect-[3/2] w-full rounded-lg border border-zinc-200 bg-zinc-100 object-cover"
+                className="aspect-[3/2] w-full rounded-lg border border-zinc-200 bg-zinc-50 object-contain"
               />
             </li>
           ))}

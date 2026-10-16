@@ -279,7 +279,7 @@ function TarjetaOportunidad({
           width={600}
           height={300}
           unoptimized
-          className="aspect-[2/1] w-full rounded-lg border border-zinc-200 bg-zinc-100 object-cover"
+          className="aspect-[2/1] w-full rounded-lg border border-zinc-200 bg-zinc-50 object-contain"
         />
       )}
 
