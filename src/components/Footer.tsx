@@ -43,26 +43,34 @@ const ENLACES_LEGALES = [
  * textos viven en `messages/es/common.json` (espacio de nombres
  * `footer`), nunca escritos sueltos en el JSX.
  */
+/*
+ * LA ZONA PULSABLE. Cada enlace mide 44 px de alto en el móvil (36 en
+ * pantallas anchas), aunque la letra sea pequeña: con el texto solo y
+ * 10 px de hueco entre uno y otro, en un teléfono era fácil pulsar
+ * "Privacidad" queriendo "Cookies". El alto lo pone el propio enlace
+ * (`min-h-11`), no el hueco entre ellos, para que el dedo acierte en
+ * toda la franja y no solo encima de las letras.
+ */
 export function Footer() {
   const t = useTranslations("common.footer");
 
   return (
-    <footer className="border-t border-zinc-200 bg-brand-navy-dark">
+    <footer className="border-t border-zinc-200 bg-brand-navy-dark print:hidden">
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 border-b border-sobre-color/10 pb-11 sm:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <div>
             <p className="text-lg font-extrabold text-sobre-color">{t("apoyaclub")}</p>
             <p className="mt-3 max-w-xs text-sm text-sobre-color/55">{t("descripcion")}</p>
-            <Link href="/para-clubes#contacto" className="mt-4 inline-block text-sm font-medium text-sobre-color/70 hover:text-sobre-color">
+            <Link href="/para-clubes#contacto" className="mt-2 inline-flex min-h-11 items-center text-sm font-medium text-sobre-color/70 hover:text-sobre-color">
               {t("contacto")}
             </Link>
           </div>
 
           <div>
             <p className="mb-3.5 text-sm font-bold text-sobre-color">{t("clubes.titulo")}</p>
-            <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col items-start">
               {ENLACES_CLUBES.map((enlace) => (
-                <Link key={enlace.clave} href={enlace.href} className="text-sm text-sobre-color/55 hover:text-sobre-color">
+                <Link key={enlace.clave} href={enlace.href} className="inline-flex min-h-11 items-center text-sm text-sobre-color/55 hover:text-sobre-color sm:min-h-9">
                   {t(`clubes.${enlace.clave}`)}
                 </Link>
               ))}
@@ -71,9 +79,9 @@ export function Footer() {
 
           <div>
             <p className="mb-3.5 text-sm font-bold text-sobre-color">{t("empresas.titulo")}</p>
-            <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col items-start">
               {ENLACES_EMPRESAS.map((enlace) => (
-                <Link key={enlace.clave} href={enlace.href} className="text-sm text-sobre-color/55 hover:text-sobre-color">
+                <Link key={enlace.clave} href={enlace.href} className="inline-flex min-h-11 items-center text-sm text-sobre-color/55 hover:text-sobre-color sm:min-h-9">
                   {t(`empresas.${enlace.clave}`)}
                 </Link>
               ))}
@@ -82,9 +90,9 @@ export function Footer() {
 
           <div>
             <p className="mb-3.5 text-sm font-bold text-sobre-color">{t("legalTitulo")}</p>
-            <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col items-start">
               {ENLACES_LEGALES.map((enlace) => (
-                <Link key={enlace.href} href={enlace.href} className="text-sm text-sobre-color/55 hover:text-sobre-color">
+                <Link key={enlace.href} href={enlace.href} className="inline-flex min-h-11 items-center text-sm text-sobre-color/55 hover:text-sobre-color sm:min-h-9">
                   {t(`enlaces.${enlace.clave}`)}
                 </Link>
               ))}

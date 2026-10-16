@@ -47,7 +47,7 @@ export function FotosDeLaOportunidad({
         width={1200}
         height={800}
         unoptimized
-        className="mx-auto h-auto max-h-[70vh] w-full rounded-xl border border-zinc-200 bg-zinc-50 object-contain sm:w-2/3"
+        className="mx-auto h-auto max-h-[70vh] w-full rounded-xl border border-zinc-200 bg-zinc-50 object-contain sm:w-2/3 print:max-h-[7cm] print:w-auto"
       />
 
       {resto.length > 0 && (

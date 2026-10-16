@@ -505,3 +505,25 @@ html[data-tema-panel="oscuro"] .tema-panel .solo-tema-oscuro {
 html[data-tema-panel="oscuro"] body {
   background: oklch(16% 0.008 260);
 }
+
+/* ---------------------------------------------------------------------
+ * Al imprimir (la ficha de una oportunidad, sobre todo): márgenes de
+ * hoja normales y los colores de fondo tal cual. Sin
+ * `print-color-adjust`, el navegador quita los fondos para ahorrar
+ * tinta y las etiquetas de color de la ficha salen en blanco.
+ * ------------------------------------------------------------------- */
+@media print {
+  @page {
+    margin: 1.5cm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    /* El aviso de cookies reserva su alto por abajo mientras está
+       puesto; en papel no sale, así que ese hueco tampoco. */
+    padding-bottom: 0 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

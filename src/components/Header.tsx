@@ -65,7 +65,7 @@ export async function Header() {
   const enlaces = accesoDirecto ? ENLACES_CON_SESION : ENLACES_DE_VISITA;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white">
+    <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white print:hidden">
       <div className="mx-auto w-full max-w-6xl px-4 py-3 sm:px-6">
         {/* Una sola fila, a cualquier ancho: el logo a la izquierda y a
             la derecha el botón verde y el menú.

@@ -105,25 +105,39 @@ export function CookieBanner() {
       ref={caja}
       role="dialog"
       aria-label="Aviso de cookies"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-zinc-200 bg-white px-4 py-4 shadow-[0_-4px_12px_rgba(0,0,0,0.06)]"
+      className="fixed inset-x-0 bottom-0 z-50 print:hidden border-t border-zinc-200 bg-white px-3 py-2.5 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] sm:px-4 sm:py-4"
     >
-      <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-3 sm:flex-row sm:justify-between">
-        <p className="text-sm text-zinc-600">
-          Usamos cookies técnicas necesarias para que ApoyaClub funcione. Puedes aceptar o
-          rechazar las cookies no técnicas; más información en nuestra{" "}
-          <Link href="/cookies" className="font-medium text-teal-700 hover:underline">{t("politicaDeCookies")}</Link>
+      {/* EN EL MÓVIL, UNA FRANJA BAJA Y NO UNA CAJA.
+          Con el texto entero y los botones debajo medía 171 px en un
+          teléfono, y en la portada tapaba medio botón "Soy un club",
+          que es justo lo primero que hay que pulsar. Ahora el texto es
+          corto, va al lado de los botones y la franja se queda en unos
+          60 px. En pantallas anchas cabe todo en una línea y se deja el
+          texto completo. Los dos botones siguen con el mismo peso: el
+          RGPD no deja que "Rechazar" sea más difícil que "Aceptar". */}
+      <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3">
+        <p className="text-xs leading-snug text-zinc-600 sm:text-sm">
+          <span className="sm:hidden">Usamos cookies técnicas. </span>
+          <span className="hidden sm:inline">
+            Usamos cookies técnicas necesarias para que ApoyaClub funcione. Puedes aceptar o
+            rechazar las cookies no técnicas; más información en nuestra{" "}
+          </span>
+          <Link href="/cookies" className="font-medium text-teal-700 underline sm:no-underline sm:hover:underline">
+            <span className="sm:hidden">Más información</span>
+            <span className="hidden sm:inline">{t("politicaDeCookies")}</span>
+          </Link>
           .
         </p>
         <div className="flex shrink-0 gap-2">
           <button
             type="button"
             onClick={() => elegir("rejected")}
-            className="rounded-lg border border-zinc-300 px-5 py-3 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
+            className="min-h-10 rounded-lg border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 sm:px-5 sm:py-3"
           >{t("rechazar")}</button>
           <button
             type="button"
             onClick={() => elegir("accepted")}
-            className="rounded-lg bg-accion px-5 py-3 text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte"
+            className="min-h-10 rounded-lg bg-accion px-3 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte sm:px-5 sm:py-3"
           >{t("aceptar")}</button>
         </div>
       </div>
