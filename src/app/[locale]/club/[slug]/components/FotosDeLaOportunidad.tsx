@@ -37,14 +37,17 @@ export function FotosDeLaOportunidad({
           las tres, y el club ya eligió cuál era la buena al ponerla la
           primera.
           Se ve ENTERA, con su proporción: muchas fotos son carteles con
-          texto, y un marco fijo con `object-cover` les cortaba el titular. */}
+          texto, y un marco fijo con `object-cover` les cortaba el titular.
+          A dos tercios del ancho y centrada en pantallas grandes: a todo
+          lo ancho un cartel cuadrado se comía la página entera. En el
+          móvil, todo el ancho, que ahí ya es poco. */}
       <Image
         src={principal}
         alt={`${titulo} — foto principal`}
         width={1200}
         height={800}
         unoptimized
-        className="h-auto max-h-[80vh] w-full rounded-xl border border-zinc-200 bg-zinc-50 object-contain"
+        className="mx-auto h-auto max-h-[70vh] w-full rounded-xl border border-zinc-200 bg-zinc-50 object-contain sm:w-2/3"
       />
 
       {resto.length > 0 && (
