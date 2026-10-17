@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { ClubProfile, ClubTeam } from "@/lib/types";
 import { registrarGuardia } from "./guardia-sin-guardar";
@@ -22,6 +23,7 @@ export function PanelTabs({
   perfil: ClubProfile | null;
   equipos: ClubTeam[];
 }) {
+  const t = useTranslations("panel.menu");
   const contenedor = useRef<HTMLDivElement>(null);
 
   // Hasta que no exista el club (nombre + localidad guardados), solo se
@@ -140,9 +142,7 @@ export function PanelTabs({
    * hay y el club ha dicho que le da igual. */
   function puedeSalir(): boolean {
     if (!haySinGuardar()) return true;
-    return window.confirm(
-      "Tienes cambios sin guardar en esta pestaña. Si sales ahora se pierden.",
-    );
+    return window.confirm(t("cambiosSinGuardar"));
   }
 
   /**
@@ -163,8 +163,7 @@ export function PanelTabs({
       <div>
         {!perfilCreado && (
           <p className="mb-4 text-sm text-zinc-500">
-            Completa la identidad del club (nombre y localidad) para desbloquear el resto de
-            secciones.
+            {t("completaParaDesbloquear")}
           </p>
         )}
 

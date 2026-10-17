@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { etiquetador } from "@/lib/etiquetas-traducidas";
 import { useMemo, useState } from "react";
 import type { ClubTeam, Opportunity, OpportunityStatus } from "@/lib/types";
 import type { RequisitoIdea } from "@/lib/catalogo-ideas";
@@ -29,6 +30,7 @@ export function OportunidadesManager({
   userId: string;
 }) {
   const t = useTranslations("panel.oportunidades");
+  const E = etiquetador(useTranslations("common.etiquetas"));
   const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>("todas");
   const [orden, setOrden] = useState<Orden>("recientes");
   const [mostrarArchivadas, setMostrarArchivadas] = useState(false);
@@ -78,7 +80,7 @@ export function OportunidadesManager({
               <option value="todas">{t("todosLosEstados")}</option>
               {ESTADOS_OPORTUNIDAD.map((estadoOpcion) => (
                 <option key={estadoOpcion.id} value={estadoOpcion.id}>
-                  {estadoOpcion.etiqueta}
+                  {E.estadoOportunidad(estadoOpcion.id)}
                 </option>
               ))}
             </select>
@@ -114,8 +116,8 @@ export function OportunidadesManager({
       {visibles.length === 0 ? (
         <p className="rounded-xl border border-dashed border-zinc-300 p-6 text-center text-sm text-zinc-500">
           {oportunidades.length === 0
-            ? "Todavía no has creado ninguna oportunidad. Empieza con el botón de arriba."
-            : "No hay oportunidades que coincidan con estos filtros."}
+            ? t("ningunaCreada")
+            : t("ningunaConFiltros")}
         </p>
       ) : (
         <ul className="space-y-3">

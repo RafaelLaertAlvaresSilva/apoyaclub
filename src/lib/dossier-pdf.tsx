@@ -1,6 +1,5 @@
 import { Document, Image, Page, StyleSheet, Text, View, renderToBuffer } from "@react-pdf/renderer";
 import {
-  AVISO_DE_ORIGEN,
   calcularAlcance,
   cifrasDePortada,
   resumenLlano,
@@ -8,6 +7,7 @@ import {
   type BloqueDeAlcance,
   type CifraDeAlcance,
 } from "@/lib/alcance";
+import { traductorDelAlcanceEnEspanol } from "@/lib/traductor-espanol";
 import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
 import type { DatosDossier } from "@/lib/dossier-datos";
 import { deportesDelClub, seccionesConContenido } from "@/lib/dossier";
@@ -311,11 +311,12 @@ function Tarjeta({ etiqueta, valor }: { etiqueta: string; valor: string }) {
  * puesto a ojo, y es lo único que hace que la empresa se lo crea.
  */
 function TarjetaDeAlcance({ cifra }: { cifra: CifraDeAlcance }) {
+  const tAlcance = traductorDelAlcanceEnEspanol();
   return (
     <View style={estilos.tarjeta}>
       <Text style={estilos.tarjetaValor}>
         {formatoNumero.format(cifra.valor)}{" "}
-        <Text style={estilos.tarjetaUnidad}>{unidadEnTexto(cifra.unidad, cifra.valor)}</Text>
+        <Text style={estilos.tarjetaUnidad}>{unidadEnTexto(cifra.unidad, cifra.valor, tAlcance)}</Text>
       </Text>
       <Text style={estilos.tarjetaEtiqueta}>{cifra.etiqueta}</Text>
       <Text style={estilos.tarjetaProcedencia}>{cifra.procedencia}</Text>
@@ -409,9 +410,10 @@ function DossierDocumento({
    * dejaba de creerse también lo que sí era cierto. Ahora se enseña la
    * red mayor y nada más.
    */
-  const alcance = calcularAlcance({ perfil, equipos, partidos });
+  const tAlcance = traductorDelAlcanceEnEspanol();
+  const alcance = calcularAlcance({ perfil, equipos, partidos }, tAlcance);
   const cifrasPortada = cifrasDePortada(alcance);
-  const frasesLlanas = resumenLlano(alcance);
+  const frasesLlanas = resumenLlano(alcance, tAlcance);
 
   const masBarata = oportunidades.reduce<number | null>(
     (minimo, oportunidad) => (minimo == null || oportunidad.value < minimo ? oportunidad.value : minimo),
@@ -632,7 +634,7 @@ function DossierDocumento({
             {alcance.bloques.map((bloque) => (
               <BloqueDeAlcanceEnPdf key={bloque.id} bloque={bloque} />
             ))}
-            <Text style={estilos.avisoDeOrigen}>{AVISO_DE_ORIGEN}</Text>
+            <Text style={estilos.avisoDeOrigen}>{tAlcance("avisoDeOrigen")}</Text>
           </Seccion>
         )}
 

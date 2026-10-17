@@ -1,0 +1,109 @@
+{
+  "solicitudContacto": {
+    "asunto": "{empresa} wants to get in touch with you on ApoyaClub",
+    "eyebrow": "New contact request on ApoyaClub",
+    "titulo": "{empresa} wants to get in touch with {club}",
+    "sobreOportunidad": "About the opportunity:",
+    "sobreElClub": "About your club in general (no specific opportunity).",
+    "sector": "Sector",
+    "localidad": "Town",
+    "web": "Website",
+    "presupuesto": "Approximate budget",
+    "boton": "See and reply in your dashboard",
+    "pie": "ApoyaClub only puts the two sides in touch: the conversation and any agreement are handled directly between the club and the business.",
+    "persona": "Who’s writing",
+    "correo": "Email",
+    "telefono": "Phone"
+  },
+  "caducidadSuscripcion": {
+    "asunto": "{dias, plural, one {# day} other {# days}} until your ApoyaClub subscription expires",
+    "eyebrow": "Your ApoyaClub subscription expires soon",
+    "titulo": "{dias, plural, one {# day} other {# days}} until {club} loses visibility",
+    "texto": "You have cancelled your subscription and on {fecha} you’ll lose access: your public page and your opportunities will no longer be visible to businesses (your data isn’t deleted).",
+    "texto2": "If it was a mistake or you want to carry on, you can reactivate it at any time before that date.",
+    "boton": "Manage my subscription"
+  },
+  "contactoLanding": {
+    "asunto": "New contact message: {nombre}",
+    "eyebrow": "New message from the ApoyaClub contact form"
+  },
+  "errores": {
+    "envio": "The email couldn’t be sent."
+  },
+  "bienvenidaClub": {
+    "asunto": "Welcome to ApoyaClub, {club}",
+    "eyebrow": "Your account is now active",
+    "titulo": "Let’s get {club}’s page ready",
+    "texto": "You have a free month to get everything ready. In three steps you’ll have something to show a business:",
+    "paso1": "Upload your logo and a photo, and say in two lines who you are.",
+    "paso2": "Add your teams and your youth team and audience figures: it’s what a business looks at.",
+    "paso3": "Create your first sponsorship opportunity, even if it’s just €50.",
+    "boton": "Complete my page",
+    "pie": "When it’s ready, share your link on WhatsApp with local businesses: that’s what works best."
+  },
+  "bienvenidaEmpresa": {
+    "asunto": "Welcome to ApoyaClub",
+    "eyebrow": "Your account is now active",
+    "titulo": "Find clubs near you and sponsor from €50",
+    "texto": "Access is free and we don’t charge commission: you deal directly with the club. You can filter by sport, distance, budget and goal.",
+    "boton": "Explore clubs",
+    "pie": "If you complete your business profile, it’s much easier for the club to reply to you."
+  },
+  "respuestaDelClub": {
+    "asuntoConversacion": "{club} wants to talk to you",
+    "asuntoDescartada": "{club} has reviewed your request",
+    "eyebrow": "News about your request on ApoyaClub",
+    "tituloConversacion": "{club} has started the conversation",
+    "tituloDescartada": "{club} has closed your request for now",
+    "textoConversacion": "The club has marked your request as “in conversation”. From here you carry on between yourselves: ApoyaClub isn’t involved in the agreement.",
+    "textoDescartada": "It doesn’t always fit: it may be down to dates, budget or the opportunity already being taken. There are more clubs looking for sponsors near you.",
+    "sobreOportunidad": "About the opportunity:",
+    "botonConversacion": "See the club",
+    "botonDescartada": "Find other clubs"
+  },
+  "solicitudSinAbrir": {
+    "asunto": "{total, plural, one {You have # unopened request} other {You have # unopened requests}}",
+    "eyebrow": "A business is waiting",
+    "titulo": "{total, plural, one {# business has written to you and is still waiting for a reply} other {# businesses have written to you and are still waiting for a reply}}",
+    "texto": "The oldest has been waiting {dias, plural, one {# day} other {# days}}. Replying quickly is the difference between a sponsorship and a forgotten email.",
+    "boton": "See my requests"
+  },
+  "finDePrueba": {
+    "asunto": "{dias, plural, one {# day} other {# days}} left of your free month on ApoyaClub",
+    "eyebrow": "Your free month ends soon",
+    "titulo": "{dias, plural, one {# day} other {# days}} of trial left for {club}",
+    "texto": "On {fecha} your €29.90/month subscription (VAT included) will start. You don’t need to do anything to continue; if you’d rather not carry on, you can cancel from your dashboard before that date and you won’t be charged.",
+    "boton": "See my subscription"
+  },
+  "fichaIncompleta": {
+    "asunto": "Your profile is {porcentaje}% complete and that costs you visibility",
+    "eyebrow": "Some information is missing",
+    "titulo": "{club}, your profile is {porcentaje}% complete",
+    "texto": "Clubs with the most complete profiles appear first in search. What you’re missing most right now:",
+    "cierre": "It takes ten minutes and you only have to do it once.",
+    "boton": "Complete my profile"
+  },
+  "avisoPatrocinador": {
+    "asunto": "{club} has added you as a sponsor on its page",
+    "eyebrow": "Thank you for supporting sport",
+    "titulo": "{club} says thank you",
+    "texto": "{club} has created its sponsorship page and included you among the businesses that support it. Thank you for being there: without businesses like yours, many grassroots clubs wouldn’t make it to the end of the season.",
+    "texto2": "On its page you can see how you appear, with your logo and your sponsor category. It’s public, so you can share it too.",
+    "boton": "See the club’s page",
+    "pieMotivo": "You’re receiving this email because {club} has listed you as one of its sponsors and provided this address. It’s sent by the club through ApoyaClub, the tool it uses to manage its page. This is a one-off notice: we won’t write to you again. If you’d rather be removed from its page, reply to this email and the club will take care of it."
+  },
+  "necesidadesQueEncajan": {
+    "asunto": "{cuantas, plural, one {A club is looking for what you offer} other {# clubs are looking for what you offer}}",
+    "eyebrow": "This might suit you",
+    "titulo": "{cuantas, plural, one {A club is looking for this} other {These # clubs are looking for something you offer}}",
+    "texto": "They’ve been published on ApoyaClub and match what {empresa} offers. If any of them interests you, write to them directly: you don’t need anything prepared.",
+    "yMas": "{cuantas, plural, one {And # more is waiting.} other {And # more are waiting.}}",
+    "boton": "See everything clubs are looking for",
+    "pie": "You’re receiving this because you published what your business offers on ApoyaClub. You can stop receiving these notices whenever you like: {enlaceBaja}",
+    "enlaceBaja": "unsubscribe"
+  },
+  "comun": {
+    "tuClub": "your club",
+    "tuEmpresa": "your business"
+  }
+}

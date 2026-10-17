@@ -1,0 +1,109 @@
+{
+  "solicitudContacto": {
+    "asunto": "{empresa} quer contactar-te no ApoyaClub",
+    "eyebrow": "Novo pedido de contacto no ApoyaClub",
+    "titulo": "{empresa} quer contactar o {club}",
+    "sobreOportunidad": "Sobre a oportunidade:",
+    "sobreElClub": "Sobre o teu clube em geral (sem uma oportunidade concreta).",
+    "sector": "Setor",
+    "localidad": "Localidade",
+    "web": "Site",
+    "presupuesto": "Orçamento indicativo",
+    "boton": "Ver e responder no teu painel",
+    "pie": "O ApoyaClub só põe as duas partes em contacto: a conversa e qualquer acordo são tratados diretamente entre o clube e a empresa.",
+    "persona": "Quem escreve",
+    "correo": "E-mail",
+    "telefono": "Telefone"
+  },
+  "caducidadSuscripcion": {
+    "asunto": "{dias, plural, one {Falta # dia} other {Faltam # dias}} para a tua subscrição do ApoyaClub expirar",
+    "eyebrow": "A tua subscrição do ApoyaClub expira em breve",
+    "titulo": "{dias, plural, one {Falta # dia} other {Faltam # dias}} para o {club} perder visibilidade",
+    "texto": "Cancelaste a tua subscrição e a {fecha} vais perder o acesso: a tua página pública e as tuas oportunidades deixarão de estar visíveis para as empresas (os teus dados não são apagados).",
+    "texto2": "Se foi um engano ou queres continuar, podes reativá-la a qualquer momento antes dessa data.",
+    "boton": "Gerir a minha subscrição"
+  },
+  "contactoLanding": {
+    "asunto": "Nova mensagem de contacto: {nombre}",
+    "eyebrow": "Nova mensagem a partir do formulário de contacto do ApoyaClub"
+  },
+  "errores": {
+    "envio": "Não foi possível enviar o e-mail."
+  },
+  "bienvenidaClub": {
+    "asunto": "Bem-vindo ao ApoyaClub, {club}",
+    "eyebrow": "A tua conta já está ativa",
+    "titulo": "Vamos preparar a página do {club}",
+    "texto": "Tens um mês grátis para deixar tudo pronto. Com três passos já tens algo para mostrar a uma empresa:",
+    "paso1": "Carrega o logótipo e uma foto, e conta em duas linhas quem são.",
+    "paso2": "Adiciona as tuas equipas e os dados da formação e da audiência: é o que uma empresa vê.",
+    "paso3": "Cria a tua primeira oportunidade de patrocínio, mesmo que seja de 50 €.",
+    "boton": "Completar a minha página",
+    "pie": "Quando estiver pronta, partilha a tua ligação por WhatsApp com as empresas da tua zona: é o que melhor funciona."
+  },
+  "bienvenidaEmpresa": {
+    "asunto": "Bem-vindo ao ApoyaClub",
+    "eyebrow": "A tua conta já está ativa",
+    "titulo": "Procura clubes da tua zona e patrocina a partir de 50 €",
+    "texto": "O acesso é gratuito e não cobramos comissão: falas diretamente com o clube. Podes filtrar por modalidade, distância, orçamento e objetivo.",
+    "boton": "Explorar clubes",
+    "pie": "Se completares o perfil da tua empresa, é muito mais fácil para o clube responder-te."
+  },
+  "respuestaDelClub": {
+    "asuntoConversacion": "O {club} quer falar contigo",
+    "asuntoDescartada": "O {club} reviu o teu pedido",
+    "eyebrow": "Novidades sobre o teu pedido no ApoyaClub",
+    "tituloConversacion": "O {club} abriu a conversa",
+    "tituloDescartada": "O {club} fechou o teu pedido por agora",
+    "textoConversacion": "O clube marcou o teu pedido como «em conversa». A partir daqui continuam por vossa conta: o ApoyaClub não intervém no acordo.",
+    "textoDescartada": "Nem sempre encaixa: pode ser uma questão de datas, de orçamento ou de já terem essa oportunidade preenchida. Há mais clubes à procura de patrocinador na tua zona.",
+    "sobreOportunidad": "Sobre a oportunidade:",
+    "botonConversacion": "Ver o clube",
+    "botonDescartada": "Procurar outros clubes"
+  },
+  "solicitudSinAbrir": {
+    "asunto": "{total, plural, one {Tens # pedido por abrir} other {Tens # pedidos por abrir}}",
+    "eyebrow": "Uma empresa está à espera",
+    "titulo": "{total, plural, one {# empresa escreveu-te e continua sem resposta} other {# empresas escreveram-te e continuam sem resposta}}",
+    "texto": "O mais antigo está à espera há {dias, plural, one {# dia} other {# dias}}. Responder depressa é a diferença entre um patrocínio e um e-mail esquecido.",
+    "boton": "Ver os meus pedidos"
+  },
+  "finDePrueba": {
+    "asunto": "{dias, plural, one {Falta # dia} other {Faltam # dias}} do teu mês grátis no ApoyaClub",
+    "eyebrow": "O teu mês grátis termina em breve",
+    "titulo": "{dias, plural, one {Falta # dia} other {Faltam # dias}} de período experimental para o {club}",
+    "texto": "A {fecha} começa a subscrição de 29,90 €/mês com IVA incluído. Não tens de fazer nada para continuar; se preferires não continuar, podes cancelar no teu painel antes dessa data e não te será cobrado nada.",
+    "boton": "Ver a minha subscrição"
+  },
+  "fichaIncompleta": {
+    "asunto": "A tua ficha está a {porcentaje}% e isso tira-te visibilidade",
+    "eyebrow": "Falta-te informação",
+    "titulo": "{club}, a tua ficha está a {porcentaje}%",
+    "texto": "Na pesquisa aparecem primeiro os clubes com a ficha mais completa. O que mais te falta neste momento:",
+    "cierre": "São dez minutos e não é preciso voltar a fazê-lo.",
+    "boton": "Completar a minha ficha"
+  },
+  "avisoPatrocinador": {
+    "asunto": "O {club} adicionou-vos como patrocinadores na sua página",
+    "eyebrow": "Obrigado por apoiarem o desporto",
+    "titulo": "O {club} agradece-vos",
+    "texto": "O {club} criou a sua página de patrocínio e incluiu-vos entre as empresas que o apoiam. Obrigado por estarem aí: sem empresas como a vossa, muitos clubes de formação não chegariam ao fim da temporada.",
+    "texto2": "Na página podem ver como aparecem, com o vosso logótipo e a vossa categoria de patrocinador. É pública, por isso também a podem partilhar.",
+    "boton": "Ver a página do clube",
+    "pieMotivo": "Recebem este e-mail porque o {club} vos indicou como seu patrocinador e forneceu este endereço. É enviado pelo clube através do ApoyaClub, a ferramenta com que gere a sua página. É um aviso único: não voltaremos a escrever-vos. Se preferirem ser retirados da página, respondam a este e-mail e o clube trata disso."
+  },
+  "necesidadesQueEncajan": {
+    "asunto": "{cuantas, plural, one {Um clube procura o que ofereces} other {# clubes procuram o que ofereces}}",
+    "eyebrow": "Pode interessar-te",
+    "titulo": "{cuantas, plural, one {Um clube está à procura disto} other {Estes # clubes estão à procura de algo que ofereces}}",
+    "texto": "Foram publicados no ApoyaClub e encaixam no que a {empresa} oferece. Se algum te interessar, escreve-lhe diretamente: não precisas de ter nada preparado.",
+    "yMas": "{cuantas, plural, one {E há mais # à espera.} other {E há mais # à espera.}}",
+    "boton": "Ver tudo o que os clubes procuram",
+    "pie": "Recebes isto porque publicaste no ApoyaClub o que a tua empresa oferece. Podes deixar de receber estes avisos quando quiseres: {enlaceBaja}",
+    "enlaceBaja": "cancelar a subscrição"
+  },
+  "comun": {
+    "tuClub": "o teu clube",
+    "tuEmpresa": "a tua empresa"
+  }
+}

@@ -50,7 +50,7 @@ export async function registrarEmpresa(
     email,
     password,
     options: {
-      data: { name: nombre, role: "empresa" },
+      data: { name: nombre, role: "empresa", idioma: locale },
       emailRedirectTo: `${origin}/${locale}/auth/callback`,
     },
   });

@@ -1,5 +1,6 @@
 "use server";
 
+import { getLocale, getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
 import { registrarConsentimiento } from "@/lib/consent";
@@ -7,7 +8,6 @@ import { enviarEmailAvisoPatrocinador } from "@/lib/email/resend";
 import { geocodificarDireccion } from "@/lib/geocoding";
 import { consumirLimite } from "@/lib/rate-limit";
 import { SITE_URL } from "@/lib/site";
-import { routing } from "@/i18n/routing";
 import { CONSENT_TYPES, LEGAL_VERSIONS } from "@/lib/legal";
 import { BUCKET_DOCUMENTOS, rutasDeLosDocumentos } from "@/lib/documentos-datos";
 import { createClient } from "@/lib/supabase/server";
@@ -38,18 +38,19 @@ const AVISOS_PATROCINADOR_AL_DIA = 20;
 async function obtenerClubActual(): Promise<
   { supabase: Awaited<ReturnType<typeof createClient>>; user: User } | { error: string }
 > {
+  const t = await getTranslations("panel.acciones");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
+    return { error: t("tuSesionCaducadoVuelveIniciar") };
   }
 
   const rol = user.app_metadata?.role as Role | undefined;
   if (rol !== "club") {
-    return { error: "Esta acción solo está disponible para clubes." };
+    return { error: t("estaAccionSoloEstaDisponible") };
   }
 
   return { supabase, user };
@@ -86,7 +87,8 @@ function leerBooleano(formData: FormData, campo: string): boolean {
  * cuando el que prueba la web es el que la ha encargado, esconderle la
  * causa no protege a nadie.
  */
-function fallo(operacion: string, error: unknown, mensaje: string): { error: string } {
+async function fallo(operacion: string, error: unknown, mensaje: string): Promise<{ error: string }> {
+  const t = await getTranslations("panel.acciones");
   const detalle = error as { message?: string; code?: string; details?: string; hint?: string } | null;
 
   console.error(
@@ -112,7 +114,7 @@ function fallo(operacion: string, error: unknown, mensaje: string): { error: str
   if (esFalloDePermisos(detalle)) {
     return {
       error:
-        "Tu sesión no tiene permiso para guardar. Cierra sesión, vuelve a entrar e inténtalo otra vez. Si sigue pasando, escríbenos.",
+        t("tuSesionTienePermisoPara"),
     };
   }
 
@@ -135,6 +137,7 @@ export async function guardarIdentidad(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -142,8 +145,8 @@ export async function guardarIdentidad(
   const name = leerTexto(formData, "name");
   const city = leerTexto(formData, "city");
 
-  if (!name) return { error: "Indica el nombre del club." };
-  if (!city) return { error: "Indica la localidad del club." };
+  if (!name) return { error: t("indicaNombreClub") };
+  if (!city) return { error: t("indicaLocalidadClub") };
 
   const socialLinks = {
     instagram: leerTexto(formData, "instagram") ?? undefined,
@@ -160,7 +163,7 @@ export async function guardarIdentidad(
   // Se comprueba aquí además de en la base de datos para poder decir qué
   // pasa: un fallo de restricción llegaría como "no se ha podido guardar".
   if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(contactEmail)) {
-    return { error: "El correo de contacto no parece válido." };
+    return { error: t("correoContactoPareceValido") };
   }
   const contactPublicConsent = leerBooleano(formData, "contactPublicConsent");
 
@@ -201,7 +204,7 @@ export async function guardarIdentidad(
   // de `name` antes siquiera de darse cuenta de que la fila ya existía.
   const { error } = await supabase.from("clubs").upsert(datosClub, { onConflict: "id" });
 
-  if (error) return fallo("guardarIdentidad", error, "No se ha podido guardar. Inténtalo de nuevo.");
+  if (error) return fallo("guardarIdentidad", error, t("podidoGuardarIntentaloNuevo"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -209,6 +212,7 @@ export async function guardarIdentidad(
 
 /** Guarda la URL del logo ya subido a Storage (ver ImageUploader). */
 export async function guardarLogo(url: string): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -218,7 +222,7 @@ export async function guardarLogo(url: string): Promise<EstadoGuardado> {
     .update({ logo_url: url })
     .eq("id", user.id);
 
-  if (error) return fallo("guardarLogo", error, "No se ha podido guardar el logo.");
+  if (error) return fallo("guardarLogo", error, t("podidoGuardarLogo"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -226,13 +230,14 @@ export async function guardarLogo(url: string): Promise<EstadoGuardado> {
 
 /** Guarda la imagen de cabecera de la ficha (migración 0025). */
 export async function guardarPortada(url: string): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const { error } = await supabase.from("clubs").update({ cover_url: url }).eq("id", user.id);
 
-  if (error) return fallo("guardarPortada", error, "No se ha podido guardar la portada.");
+  if (error) return fallo("guardarPortada", error, t("podidoGuardarPortada"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -246,11 +251,12 @@ export async function guardarPortada(url: string): Promise<EstadoGuardado> {
  * las veces.
  */
 export async function guardarPosicionPortada(posicion: number): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
-  if (!Number.isFinite(posicion)) return { error: "Posición no válida." };
+  if (!Number.isFinite(posicion)) return { error: t("posicionValida") };
   const acotada = Math.min(100, Math.max(0, Math.round(posicion)));
 
   const { error } = await supabase
@@ -258,7 +264,7 @@ export async function guardarPosicionPortada(posicion: number): Promise<EstadoGu
     .update({ cover_position: acotada })
     .eq("id", user.id);
 
-  if (error) return fallo("guardarPosicionPortada", error, "No se ha podido guardar el encuadre.");
+  if (error) return fallo("guardarPosicionPortada", error, t("podidoGuardarEncuadre"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -266,13 +272,14 @@ export async function guardarPosicionPortada(posicion: number): Promise<EstadoGu
 
 /** Quita la imagen de cabecera (no borra el archivo de Storage). */
 export async function quitarPortada(): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const { error } = await supabase.from("clubs").update({ cover_url: null }).eq("id", user.id);
 
-  if (error) return fallo("quitarPortada", error, "No se ha podido quitar la portada.");
+  if (error) return fallo("quitarPortada", error, t("podidoQuitarPortada"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -280,6 +287,7 @@ export async function quitarPortada(): Promise<EstadoGuardado> {
 
 /** Añade una foto (ya subida a Storage) a la galería del club. */
 export async function agregarFoto(url: string): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -296,7 +304,7 @@ export async function agregarFoto(url: string): Promise<EstadoGuardado> {
     .update({ photo_urls: [...fotosActuales, url] })
     .eq("id", user.id);
 
-  if (error) return fallo("guardarFoto", error, "No se ha podido guardar la foto.");
+  if (error) return fallo("guardarFoto", error, t("podidoGuardarFoto"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -304,6 +312,7 @@ export async function agregarFoto(url: string): Promise<EstadoGuardado> {
 
 /** Quita una foto de la galería del club (no borra el archivo de Storage). */
 export async function eliminarFoto(url: string): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -320,7 +329,7 @@ export async function eliminarFoto(url: string): Promise<EstadoGuardado> {
     .update({ photo_urls: fotosActuales.filter((foto) => foto !== url) })
     .eq("id", user.id);
 
-  if (error) return fallo("quitarFoto", error, "No se ha podido quitar la foto.");
+  if (error) return fallo("quitarFoto", error, t("podidoQuitarFoto"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -353,6 +362,7 @@ export async function guardarNivelDeportivo(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -375,7 +385,7 @@ export async function guardarNivelDeportivo(
     })
     .eq("id", user.id);
 
-  if (error) return fallo("guardarNivelDeportivo", error, "No se ha podido guardar. Inténtalo de nuevo.");
+  if (error) return fallo("guardarNivelDeportivo", error, t("podidoGuardarIntentaloNuevo"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -388,12 +398,13 @@ export async function agregarEquipo(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const sport = leerTexto(formData, "sport");
-  if (!sport) return { error: "Indica el deporte del equipo." };
+  if (!sport) return { error: t("indicaDeporteEquipo") };
 
   const teamLevelValor = String(formData.get("teamLevel") ?? "");
   const teamLevel: TeamLevel = teamLevelValor === "cantera" ? "cantera" : "primer_equipo";
@@ -410,7 +421,7 @@ export async function agregarEquipo(
     achievements: leerTexto(formData, "achievements"),
   });
 
-  if (error) return fallo("agregarEquipo", error, "No se ha podido añadir el equipo.");
+  if (error) return fallo("agregarEquipo", error, t("podidoAnadirEquipo"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -428,15 +439,16 @@ export async function actualizarEquipo(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const id = String(formData.get("id") ?? "");
-  if (!id) return { error: "No se sabe qué equipo cambiar." };
+  if (!id) return { error: t("sabeEquipoCambiar") };
 
   const sport = leerTexto(formData, "sport");
-  if (!sport) return { error: "Indica el deporte del equipo." };
+  if (!sport) return { error: t("indicaDeporteEquipo") };
 
   const teamLevelValor = String(formData.get("teamLevel") ?? "");
   const teamLevel: TeamLevel = teamLevelValor === "cantera" ? "cantera" : "primer_equipo";
@@ -455,7 +467,7 @@ export async function actualizarEquipo(
     .eq("id", id)
     .eq("club_id", user.id);
 
-  if (error) return fallo("actualizarEquipo", error, "No se han podido guardar los cambios del equipo.");
+  if (error) return fallo("actualizarEquipo", error, t("hanPodidoGuardarCambiosEquipo"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -470,6 +482,7 @@ export async function actualizarEquipo(
  * habría sido garantizar que nadie las cambia.
  */
 export async function guardarFotoEquipo(equipoId: string, url: string | null): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -480,19 +493,20 @@ export async function guardarFotoEquipo(equipoId: string, url: string | null): P
     .eq("id", equipoId)
     .eq("club_id", user.id);
 
-  if (error) return fallo("guardarFotoEquipo", error, "No se ha podido guardar la foto.");
+  if (error) return fallo("guardarFotoEquipo", error, t("podidoGuardarFoto"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
 }
 
 export async function eliminarEquipo(formData: FormData): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const id = String(formData.get("id") ?? "");
-  if (!id) return { error: "No se ha podido identificar qué borrar." };
+  if (!id) return { error: t("podidoIdentificarBorrar") };
 
   const { error } = await supabase
     .from("club_teams")
@@ -500,7 +514,7 @@ export async function eliminarEquipo(formData: FormData): Promise<EstadoGuardado
     .eq("id", id)
     .eq("club_id", user.id);
 
-  if (error) return fallo("eliminarEquipo", error, "No se ha podido borrar. Inténtalo de nuevo.");
+  if (error) return fallo("eliminarEquipo", error, t("podidoBorrarIntentaloNuevo"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -513,6 +527,7 @@ export async function guardarCantera(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -526,7 +541,7 @@ export async function guardarCantera(
     })
     .eq("id", user.id);
 
-  if (error) return fallo("guardarCantera", error, "No se ha podido guardar. Inténtalo de nuevo.");
+  if (error) return fallo("guardarCantera", error, t("podidoGuardarIntentaloNuevo"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -547,6 +562,7 @@ export async function guardarInstalaciones(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -559,7 +575,7 @@ export async function guardarInstalaciones(
     })
     .eq("id", user.id);
 
-  if (error) return fallo("guardarInstalaciones", error, "No se ha podido guardar. Inténtalo de nuevo.");
+  if (error) return fallo("guardarInstalaciones", error, t("podidoGuardarIntentaloNuevo"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -567,6 +583,7 @@ export async function guardarInstalaciones(
 
 /** Añade una foto de las instalaciones (ya subida a Storage). */
 export async function agregarFotoInstalacion(url: string): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -583,7 +600,7 @@ export async function agregarFotoInstalacion(url: string): Promise<EstadoGuardad
     .update({ facilities_photos: [...actuales, url] })
     .eq("id", user.id);
 
-  if (error) return fallo("agregarFotoInstalacion", error, "No se ha podido guardar la foto.");
+  if (error) return fallo("agregarFotoInstalacion", error, t("podidoGuardarFoto"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -591,6 +608,7 @@ export async function agregarFotoInstalacion(url: string): Promise<EstadoGuardad
 
 /** Quita una foto de las instalaciones (no borra el archivo de Storage). */
 export async function eliminarFotoInstalacion(url: string): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -607,7 +625,7 @@ export async function eliminarFotoInstalacion(url: string): Promise<EstadoGuarda
     .update({ facilities_photos: actuales.filter((foto) => foto !== url) })
     .eq("id", user.id);
 
-  if (error) return fallo("eliminarFotoInstalacion", error, "No se ha podido quitar la foto.");
+  if (error) return fallo("eliminarFotoInstalacion", error, t("podidoQuitarFoto"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -620,6 +638,7 @@ export async function guardarHistoria(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -628,7 +647,7 @@ export async function guardarHistoria(
   try {
     milestones = sanearHitos(JSON.parse(String(formData.get("milestones") ?? "[]")));
   } catch {
-    return { error: "Los hitos no tienen un formato válido." };
+    return { error: t("hitosTienenFormatoValido") };
   }
 
   const { error } = await supabase
@@ -639,7 +658,7 @@ export async function guardarHistoria(
     })
     .eq("id", user.id);
 
-  if (error) return fallo("guardarHistoria", error, "No se ha podido guardar. Inténtalo de nuevo.");
+  if (error) return fallo("guardarHistoria", error, t("podidoGuardarIntentaloNuevo"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -734,6 +753,7 @@ export async function guardarAudiencia(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -756,7 +776,7 @@ export async function guardarAudiencia(
     })
     .eq("id", user.id);
 
-  if (error) return fallo("guardarAudiencia", error, "No se ha podido guardar. Inténtalo de nuevo.");
+  if (error) return fallo("guardarAudiencia", error, t("podidoGuardarIntentaloNuevo"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -769,6 +789,7 @@ export async function guardarComunidad(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -779,7 +800,7 @@ export async function guardarComunidad(
       JSON.parse(String(formData.get("communityActions") ?? "[]")),
     );
   } catch {
-    return { error: "Las acciones no tienen un formato válido." };
+    return { error: t("accionesTienenFormatoValido") };
   }
 
   const { error } = await supabase
@@ -787,7 +808,7 @@ export async function guardarComunidad(
     .update({ community_actions: communityActions })
     .eq("id", user.id);
 
-  if (error) return fallo("guardarComunidad", error, "No se ha podido guardar. Inténtalo de nuevo.");
+  if (error) return fallo("guardarComunidad", error, t("podidoGuardarIntentaloNuevo"));
 
   revalidatePath(RUTA_PANEL);
   return { ok: true };
@@ -800,22 +821,23 @@ export async function agregarPatrocinador(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const name = leerTexto(formData, "name");
-  if (!name) return { error: "Indica el nombre del patrocinador." };
+  if (!name) return { error: t("indicaNombrePatrocinador") };
 
-  const nivel = leerNivelPatrocinador(formData);
+  const nivel = await leerNivelPatrocinador(formData);
   if ("error" in nivel) return { error: nivel.error };
 
   const descripcion = leerTexto(formData, "description");
   if (descripcion && descripcion.length > 400) {
-    return { error: "El texto del patrocinador no puede pasar de 400 caracteres." };
+    return { error: t("textoPatrocinadorPuedePasar400") };
   }
 
-  const correoEmpresa = leerCorreoEmpresa(formData);
+  const correoEmpresa = await leerCorreoEmpresa(formData);
   if ("error" in correoEmpresa) return { error: correoEmpresa.error };
 
   // Va al final de su categoría: el club reordena después si quiere.
@@ -844,7 +866,7 @@ export async function agregarPatrocinador(
     .select("id")
     .maybeSingle<{ id: string }>();
 
-  if (error) return fallo("agregarPatrocinador", error, "No se ha podido añadir el patrocinador.");
+  if (error) return fallo("agregarPatrocinador", error, t("podidoAnadirPatrocinador"));
 
   revalidatePath(RUTA_PANEL);
 
@@ -859,9 +881,9 @@ export async function agregarPatrocinador(
   if (correoEmpresa.valor && nuevo?.id && !leerBooleano(formData, "noAvisar")) {
     const aviso = await enviarAvisoAPatrocinador(supabase, user, nuevo.id);
     if ("error" in aviso) {
-      return { ok: true, nota: `Patrocinador guardado, pero el aviso no ha salido: ${aviso.error}` };
+      return { ok: true, nota: t("guardadoSinAviso", { error: aviso.error }) };
     }
-    return { ok: true, nota: `Guardado. Se le ha mandado el agradecimiento a ${name}.` };
+    return { ok: true, nota: t("guardadoConAviso", { nombre: name }) };
   }
 
   return { ok: true };
@@ -876,25 +898,26 @@ export async function editarPatrocinador(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const id = leerTexto(formData, "id");
-  if (!id) return { error: "No se ha podido identificar el patrocinador." };
+  if (!id) return { error: t("podidoIdentificarPatrocinador") };
 
   const name = leerTexto(formData, "name");
-  if (!name) return { error: "Indica el nombre del patrocinador." };
+  if (!name) return { error: t("indicaNombrePatrocinador") };
 
-  const nivel = leerNivelPatrocinador(formData);
+  const nivel = await leerNivelPatrocinador(formData);
   if ("error" in nivel) return { error: nivel.error };
 
   const descripcion = leerTexto(formData, "description");
   if (descripcion && descripcion.length > 400) {
-    return { error: "El texto del patrocinador no puede pasar de 400 caracteres." };
+    return { error: t("textoPatrocinadorPuedePasar400") };
   }
 
-  const correoEmpresa = leerCorreoEmpresa(formData);
+  const correoEmpresa = await leerCorreoEmpresa(formData);
   if ("error" in correoEmpresa) return { error: correoEmpresa.error };
 
   const logoUrl = leerTexto(formData, "logoUrl");
@@ -914,7 +937,7 @@ export async function editarPatrocinador(
     .eq("id", id)
     .eq("club_id", user.id);
 
-  if (error) return fallo("editarPatrocinador", error, "No se han podido guardar los cambios.");
+  if (error) return fallo("editarPatrocinador", error, t("hanPodidoGuardarCambios"));
 
   revalidatePath(RUTA_PANEL);
 
@@ -928,10 +951,10 @@ export async function editarPatrocinador(
       // "Ya se le avisó" no es un fallo del que haya que informar: es
       // lo normal al editar cualquier otra cosa de un patrocinador al
       // que ya se escribió en su día.
-      if (aviso.error.startsWith("A esta empresa ya se le avisó")) return { ok: true };
-      return { ok: true, nota: `Cambios guardados, pero el aviso no ha salido: ${aviso.error}` };
+      if ("yaAvisado" in aviso) return { ok: true };
+      return { ok: true, nota: t("cambiosSinAviso", { error: aviso.error }) };
     }
-    return { ok: true, nota: `Cambios guardados. Se le ha mandado el agradecimiento a ${name}.` };
+    return { ok: true, nota: t("cambiosConAviso", { nombre: name }) };
   }
 
   return { ok: true };
@@ -989,11 +1012,12 @@ export async function moverPatrocinador(formData: FormData): Promise<void> {
 }
 
 /** Correo de la empresa patrocinadora, validado o vacío. */
-function leerCorreoEmpresa(formData: FormData): { valor: string | null } | { error: string } {
+async function leerCorreoEmpresa(formData: FormData): Promise<{ valor: string | null } | { error: string }> {
+  const t = await getTranslations("panel.acciones");
   const correo = leerTexto(formData, "contactEmail");
   if (!correo) return { valor: null };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(correo)) {
-    return { error: "El correo de la empresa no parece válido." };
+    return { error: t("correoEmpresaPareceValido") };
   }
   return { valor: correo };
 }
@@ -1038,7 +1062,8 @@ async function enviarAvisoAPatrocinador(
   supabase: Awaited<ReturnType<typeof createClient>>,
   user: User,
   patrocinadorId: string,
-): Promise<{ ok: true } | { error: string }> {
+): Promise<{ ok: true } | { error: string; yaAvisado?: true }> {
+  const t = await getTranslations("panel.acciones");
   const { data: patrocinador } = await supabase
     .from("club_sponsors")
     .select("id, name, contact_email, notified_at")
@@ -1051,10 +1076,10 @@ async function enviarAvisoAPatrocinador(
       notified_at: string | null;
     }>();
 
-  if (!patrocinador) return { error: "No se ha encontrado ese patrocinador." };
-  if (!patrocinador.contact_email) return { error: "Añade primero el correo de la empresa." };
+  if (!patrocinador) return { error: t("encontradoEsePatrocinador") };
+  if (!patrocinador.contact_email) return { error: t("anadePrimeroCorreoEmpresa") };
   if (patrocinador.notified_at) {
-    return { error: "A esta empresa ya se le avisó. Solo se le escribe una vez." };
+    return { error: t("estaEmpresaYaLeAviso"), yaAvisado: true };
   }
 
   const dentroDelCupo = await consumirLimite({
@@ -1065,7 +1090,7 @@ async function enviarAvisoAPatrocinador(
   });
 
   if (!dentroDelCupo) {
-    return { error: `Has avisado a ${AVISOS_PATROCINADOR_AL_DIA} empresas hoy. Continúa mañana.` };
+    return { error: t("cupoAvisos", { n: AVISOS_PATROCINADOR_AL_DIA }) };
   }
 
   const { data: club } = await supabase
@@ -1075,7 +1100,7 @@ async function enviarAvisoAPatrocinador(
     .maybeSingle<{ name: string; slug: string; contact_email: string | null }>();
 
   if (!club?.slug) {
-    return { error: "Completa antes la identidad de tu club: el correo lleva el enlace a tu página." };
+    return { error: t("completaAntesIdentidadTuClub") };
   }
 
   // La confirmación se guarda ANTES de enviar. Si el envío fallara, lo
@@ -1087,10 +1112,14 @@ async function enviarAvisoAPatrocinador(
     .eq("id", patrocinador.id)
     .eq("club_id", user.id);
 
+  // La empresa no tiene cuenta: se le escribe en el idioma en el que el
+  // club tiene abierto el panel, que es el que comparten.
+  const idioma = await getLocale();
   const resultado = await enviarEmailAvisoPatrocinador({
+    idioma,
     empresaEmail: patrocinador.contact_email,
     clubNombre: club.name,
-    urlFicha: `${SITE_URL}/${routing.defaultLocale}/club/${club.slug}`,
+    urlFicha: `${SITE_URL}/${idioma}/club/${club.slug}`,
     responderA: club.contact_email ?? user.email ?? undefined,
   });
 
@@ -1098,8 +1127,8 @@ async function enviarAvisoAPatrocinador(
     return {
       error:
         resultado.error === "Envío de email no configurado todavía."
-          ? "El envío de correos todavía no está configurado en la plataforma."
-          : "No se ha podido enviar el aviso. Inténtalo más tarde.",
+          ? t("correosSinConfigurar")
+          : t("avisoNoEnviado"),
     };
   }
 
@@ -1122,17 +1151,18 @@ export async function avisarPatrocinador(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const id = leerTexto(formData, "id");
-  if (!id) return { error: "No se ha podido identificar el patrocinador." };
+  if (!id) return { error: t("podidoIdentificarPatrocinador") };
 
   if (!leerBooleano(formData, "confirmaRelacion")) {
     return {
       error:
-        "Marca la confirmación: hace falta que declares que esta empresa colabora contigo y que tienes relación con esa dirección.",
+        t("marcaConfirmacionHaceFaltaDeclares"),
     };
   }
 
@@ -1148,9 +1178,10 @@ export async function avisarPatrocinador(
  * escribir una etiqueta propia; el resto de niveles la dejan a null,
  * como exige la restricción de la migración 0019.
  */
-function leerNivelPatrocinador(
+async function leerNivelPatrocinador(
   formData: FormData,
-): { tier: SponsorTier; tierLabel: string | null } | { error: string } {
+): Promise<{ tier: SponsorTier; tierLabel: string | null } | { error: string }> {
+  const t = await getTranslations("panel.acciones");
   const valor = String(formData.get("tier") ?? "colaborador");
   const tier = NIVELES_PATROCINADOR.includes(valor as SponsorTier)
     ? (valor as SponsorTier)
@@ -1160,10 +1191,10 @@ function leerNivelPatrocinador(
 
   const etiqueta = leerTexto(formData, "tierLabel");
   if (!etiqueta) {
-    return { error: 'Escribe cómo quieres llamar a esta categoría (por ejemplo, "Patrocinador técnico").' };
+    return { error: t("escribeNombreCategoria") };
   }
   if (etiqueta.length > 40) {
-    return { error: "El nombre de la categoría no puede pasar de 40 caracteres." };
+    return { error: t("nombreCategoriaPuedePasar40") };
   }
 
   return { tier, tierLabel: etiqueta };
@@ -1177,12 +1208,13 @@ function leerAnio(formData: FormData, campo: string): number | null {
 }
 
 export async function eliminarPatrocinador(formData: FormData): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const id = String(formData.get("id") ?? "");
-  if (!id) return { error: "No se ha podido identificar qué borrar." };
+  if (!id) return { error: t("podidoIdentificarBorrar") };
 
   // Los archivos del patrocinio (migración 0051), ANTES de borrar la
   // fila. Al borrar al patrocinador, la base de datos se lleva sola las
@@ -1199,7 +1231,7 @@ export async function eliminarPatrocinador(formData: FormData): Promise<EstadoGu
     .eq("id", id)
     .eq("club_id", user.id);
 
-  if (error) return fallo("eliminarPatrocinador", error, "No se ha podido borrar. Inténtalo de nuevo.");
+  if (error) return fallo("eliminarPatrocinador", error, t("podidoBorrarIntentaloNuevo"));
 
   // Después de borrar la fila, no antes: si el borrado falla, el
   // patrocinador se queda con sus papeles en vez de quedarse con la

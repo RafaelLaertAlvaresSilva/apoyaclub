@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { Recomendacion } from "@/lib/recomendaciones";
 
 /**
@@ -9,14 +10,19 @@ import type { Recomendacion } from "@/lib/recomendaciones";
  * derecho a saber si la recomendación de su proveedor es interesada.
  */
 export function Recomendaciones({ recomendaciones }: { recomendaciones: Recomendacion[] }) {
+  const t = useTranslations("panel.recomendaciones");
+  // Las herramientas conocidas tienen sus textos traducidos en
+  // `panel.recomendaciones.herramientas.<id>`; una nueva que todavía no
+  // los tenga sale con el texto de `lib/recomendaciones.ts`.
+  const texto = (id: string, campo: string, original: string) =>
+    t.has(`herramientas.${id}.${campo}`) ? t(`herramientas.${id}.${campo}`) : original;
   if (recomendaciones.length === 0) return null;
 
   return (
     <section className="rounded-xl border border-zinc-200 bg-white p-5">
-      <h2 className="text-base font-semibold text-zinc-900">Herramientas que te pueden ayudar</h2>
+      <h2 className="text-base font-semibold text-zinc-900">{t("herramientasTePuedenAyudar")}</h2>
       <p className="mt-1 text-sm text-zinc-500">
-        Son de otras empresas, no de ApoyaClub. Te las damos porque a un club de base le
-        resuelven algo que nosotros no hacemos: encontrar a quién enseñarle tu dossier.
+        {t("sonOtrasEmpresasNo")}
       </p>
 
       <ul className="mt-4 space-y-3">
@@ -26,20 +32,22 @@ export function Recomendaciones({ recomendaciones }: { recomendaciones: Recomend
               <p className="font-medium text-zinc-900">{recomendacion.nombre}</p>
               {recomendacion.modo === "incluida" ? (
                 <span className="rounded-full bg-teal-50 px-2.5 py-1 text-xs font-semibold text-teal-700">
-                  Incluida en tu cuota
+                  {t("incluidaCuota")}
                 </span>
               ) : (
                 recomendacion.precio && (
-                  <p className="text-sm text-zinc-500">{recomendacion.precio}</p>
+                  <p className="text-sm text-zinc-500">{texto(recomendacion.id, "precio", recomendacion.precio)}</p>
                 )
               )}
             </div>
 
-            <p className="mt-1 text-sm text-zinc-600">{recomendacion.queEs}</p>
-            <p className="mt-2 text-sm text-zinc-700">{recomendacion.paraQue}</p>
+            <p className="mt-1 text-sm text-zinc-600">{texto(recomendacion.id, "queEs", recomendacion.queEs)}</p>
+            <p className="mt-2 text-sm text-zinc-700">{texto(recomendacion.id, "paraQue", recomendacion.paraQue)}</p>
 
             {recomendacion.comoSeActiva && (
-              <p className="mt-2 text-sm font-medium text-teal-700">{recomendacion.comoSeActiva}</p>
+              <p className="mt-2 text-sm font-medium text-teal-700">
+                {texto(recomendacion.id, "comoSeActiva", recomendacion.comoSeActiva)}
+              </p>
             )}
 
             <div className="mt-3 flex flex-wrap items-center gap-3">
@@ -49,12 +57,11 @@ export function Recomendaciones({ recomendaciones }: { recomendaciones: Recomend
                 rel="noreferrer nofollow"
                 className="inline-flex items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
               >
-                {recomendacion.modo === "incluida" ? "Entrar en" : "Ver"} {recomendacion.nombre} ↗
+                {recomendacion.modo === "incluida" ? t("entrar") : t("ver")} {recomendacion.nombre} ↗
               </a>
               {recomendacion.conComision && (
                 <p className="text-xs text-zinc-500">
-                  Si contratas desde este enlace, ApoyaClub recibe una comisión. No compartimos
-                  ningún dato tuyo con ellos.
+                  {t("siContratasDesdeEste")}
                 </p>
               )}
             </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { cerrarSesion } from "@/app/[locale]/actions";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
@@ -117,6 +118,17 @@ const GRUPOS: Grupo[] = [
 ];
 
 /**
+ * Los títulos de los grupos se comparan en español (`grupo.titulo ===
+ * "Mi club"`) y se enseñan traducidos con esta clave.
+ */
+const CLAVE_DEL_GRUPO: Record<string, string> = {
+  "Mi club": "miClub",
+  "Buscar patrocinadores": "buscar",
+  Seguimiento: "seguimiento",
+  Cuenta: "cuenta",
+};
+
+/**
  * Qué apartado está abierto, mirando la dirección en vez de recibirlo
  * como dato.
  *
@@ -187,6 +199,7 @@ function SeccionesDeLaFicha({
   perfilCreado: boolean;
   alNavegar?: () => void;
 }) {
+  const t = useTranslations("panel.menu");
   const router = useRouter();
   const ruta = usePathname();
   const ancla = useSyncExternalStore(suscribirseAlAncla, leerAncla, () => "");
@@ -226,11 +239,10 @@ function SeccionesDeLaFicha({
             aria-current={activa === seccion.id ? "page" : undefined}
             className={`rounded-lg border px-3 py-1.5 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
               activa === seccion.id
-                ? "border-teal-200 bg-teal-50 font-semibold text-teal-800"
-                : "border-zinc-200 font-medium text-zinc-500 hover:border-zinc-300 hover:bg-zinc-100 hover:text-titular"
+                ? "border-teal-200 bg-teal-50 font-semibold text-teal-800" : "border-zinc-200 font-medium text-zinc-500 hover:border-zinc-300 hover:bg-zinc-100 hover:text-titular"
             }`}
           >
-            {seccion.etiqueta}
+            {t(`secciones.${seccion.id}`)}
           </button>
         );
       })}
@@ -253,6 +265,7 @@ function Lista({
   perfilCreado: boolean;
   alNavegar?: () => void;
 }) {
+  const t = useTranslations("panel.menu");
   const ruta = usePathname();
 
   // Desplegado al entrar en la ficha, para no obligar a abrirlo cada
@@ -270,7 +283,7 @@ function Lista({
                título en texto pequeño se confundía con un enlace más y
                los cuatro apartados no se distinguían de un vistazo. */
             <p className="mb-1 mt-4 rounded-lg bg-teal-100 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-teal-800">
-              {grupo.titulo}
+              {t(`grupos.${CLAVE_DEL_GRUPO[grupo.titulo] ?? "cuenta"}`)}
             </p>
           )}
 
@@ -289,8 +302,7 @@ function Lista({
             // relleno verde, un borde gris se vería como un cerco.
             const clases = `${CLASES_ENLACE} ${
               abierto
-                ? "border-accion bg-accion font-semibold text-sobre-color"
-                : "border-zinc-200 font-medium text-zinc-600 hover:border-zinc-300 hover:bg-zinc-100 hover:text-titular"
+                ? "border-accion bg-accion font-semibold text-sobre-color" : "border-zinc-200 font-medium text-zinc-600 hover:border-zinc-300 hover:bg-zinc-100 hover:text-titular"
             }`;
 
             if (enlace.desplegable) {
@@ -310,7 +322,7 @@ function Lista({
                       aria-current={abierto ? "page" : undefined}
                       className="flex-1"
                     >
-                      {enlace.etiqueta}
+                      {t(`enlaces.${enlace.id}`)}
                     </Link>
                     <button
                       type="button"
@@ -320,8 +332,7 @@ function Lista({
                       aria-expanded={fichaDesplegada}
                       aria-label={
                         fichaDesplegada
-                          ? "Ocultar las secciones de la ficha"
-                          : "Ver las secciones de la ficha"
+                          ? t("ocultarSeccionesFicha") : t("verSeccionesFicha")
                       }
                       /* Un cuadrado de 32 px y no un texto con relleno:
                          antes era el carácter "▾" a 12 px, que en Windows
@@ -374,7 +385,7 @@ function Lista({
                 aria-current={abierto ? "page" : undefined}
                 className={clases}
               >
-                {enlace.etiqueta}
+                {t(`enlaces.${enlace.id}`)}
                 <Cuenta valor={contador} abierto={abierto} />
               </Link>
             );
@@ -392,7 +403,7 @@ function Lista({
               onClick={alNavegar}
               className={`${CLASES_ENLACE} border-zinc-200 font-medium text-zinc-500 hover:border-zinc-300 hover:bg-zinc-100 hover:text-titular`}
             >
-              Ver tu página pública
+              {t("verPaginaPublica")}
               <span aria-hidden="true">↗</span>
             </a>
           )}
@@ -406,7 +417,7 @@ function Lista({
                 type="submit"
                 className={`${CLASES_ENLACE} w-full border-zinc-200 font-medium text-zinc-600 hover:border-zinc-300 hover:bg-zinc-100 hover:text-titular`}
               >
-                Cerrar sesión
+                {t("cerrarSesion")}
               </button>
             </form>
           )}
@@ -438,6 +449,7 @@ export function MenuDelPanel({
   paginaPublica: string | null;
   perfilCreado: boolean;
 }) {
+  const t = useTranslations("panel.menu");
   const [abierto, setAbierto] = useState(false);
   const ruta = usePathname();
 
@@ -525,7 +537,7 @@ export function MenuDelPanel({
                 onClick={() => setAbierto(false)}
                 className="mb-1 self-end rounded-lg px-3 py-2 text-sm font-medium text-zinc-500 hover:bg-zinc-100"
               >
-                Cerrar
+                {t("cerrar")}
               </button>
               <Lista
                 sinAbrir={sinAbrir}

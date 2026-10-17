@@ -101,5 +101,9 @@
     "boton": "Ver todo lo que buscan los clubes",
     "pie": "Recibes esto porque publicaste lo que tu empresa ofrece en ApoyaClub. Puedes dejar de recibir estos avisos cuando quieras: {enlaceBaja}",
     "enlaceBaja": "darse de baja"
+  },
+  "comun": {
+    "tuClub": "tu club",
+    "tuEmpresa": "tu empresa"
   }
 }

@@ -43,5 +43,12 @@ export async function iniciarSesion(
   const destino = esRutaSegura(next) ? next : rol ? RUTA_POR_ROL[rol] : "/";
   const locale = await getLocale();
 
+  // El idioma en el que se le escribirán los avisos por correo: el de
+  // la página desde la que entra. Si falla no pasa nada, se queda el
+  // que tuviera; no es motivo para no dejarle entrar.
+  if (data.user && data.user.user_metadata?.idioma !== locale) {
+    await supabase.auth.updateUser({ data: { idioma: locale } }).catch(() => undefined);
+  }
+
   return redirect({ href: destino, locale });
 }

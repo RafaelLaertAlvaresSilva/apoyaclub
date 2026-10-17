@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
 import { avisarDeFallo } from "@/lib/monitoring";
@@ -14,14 +15,15 @@ const RUTA_TAREAS = "/panel/tareas";
 async function obtenerClubActual(): Promise<
   { supabase: Awaited<ReturnType<typeof createClient>>; user: User } | { error: string }
 > {
+  const t = await getTranslations("panel.acciones");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
+  if (!user) return { error: t("tuSesionCaducadoVuelveIniciar") };
   if ((user.app_metadata?.role as Role | undefined) !== "club") {
-    return { error: "Esta acción solo está disponible para clubes." };
+    return { error: t("estaAccionSoloEstaDisponible") };
   }
 
   return { supabase, user };
@@ -76,11 +78,12 @@ async function comprobarPatrocinador(
  * más rápida de que el club deje de apuntar nada.
  */
 export async function crearTareas(_previo: EstadoGuardado, formData: FormData): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerClubActual();
   if ("error" in sesion) return { error: sesion.error };
 
   const empresa = leerTexto(formData, "empresa");
-  if (!empresa) return { error: "Escribe para qué empresa es." };
+  if (!empresa) return { error: t("escribeParaEmpresa") };
 
   const textos = (campo: string) => formData.getAll(campo).map((valor) => String(valor));
   const leidas = prepararLineas({
@@ -88,6 +91,12 @@ export async function crearTareas(_previo: EstadoGuardado, formData: FormData): 
     inicios: textos("inicio"),
     fines: textos("fin"),
     notas: textos("notas"),
+  }, {
+    faltaAccion: t("lineas.faltaAccion"),
+    faltaFin: (accion) => t("lineas.faltaFin", { accion }),
+    inicioNoVale: (accion) => t("lineas.inicioNoVale", { accion }),
+    inicioDespues: (accion) => t("lineas.inicioDespues", { accion }),
+    ninguna: t("lineas.ninguna"),
   });
 
   if ("error" in leidas) return { error: leidas.error };
@@ -120,7 +129,7 @@ export async function crearTareas(_previo: EstadoGuardado, formData: FormData): 
   // falta.
   const { error } = await sesion.supabase.from("club_sponsor_tasks").insert(filas);
 
-  if (error) return fallo("crear las tareas", error, "No se ha podido guardar. Inténtalo de nuevo.");
+  if (error) return fallo("crear las tareas", error, t("podidoGuardarIntentaloNuevo"));
 
   revalidatePath(RUTA_TAREAS);
   revalidatePath("/panel");
@@ -128,6 +137,7 @@ export async function crearTareas(_previo: EstadoGuardado, formData: FormData): 
 }
 
 export async function editarTarea(_previo: EstadoGuardado, formData: FormData): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerClubActual();
   if ("error" in sesion) return { error: sesion.error };
 
@@ -137,12 +147,12 @@ export async function editarTarea(_previo: EstadoGuardado, formData: FormData): 
   const fin = leerFecha(formData, "fin");
   const inicio = leerFecha(formData, "inicio");
 
-  if (!id) return { error: "No se ha encontrado la tarea." };
-  if (!empresa) return { error: "Escribe para qué empresa es." };
-  if (!accion) return { error: "Escribe qué hay que hacer." };
-  if (!fin) return { error: "Pon la fecha límite." };
+  if (!id) return { error: t("encontradoTarea") };
+  if (!empresa) return { error: t("escribeParaEmpresa") };
+  if (!accion) return { error: t("escribeHayHacer") };
+  if (!fin) return { error: t("ponFechaLimite") };
   if (inicio && inicio > fin) {
-    return { error: "La fecha de inicio no puede ser posterior a la fecha límite." };
+    return { error: t("fechaInicioPuedeSerPosterior") };
   }
 
   const { error } = await sesion.supabase
@@ -157,7 +167,7 @@ export async function editarTarea(_previo: EstadoGuardado, formData: FormData): 
     .eq("id", id)
     .eq("club_id", sesion.user.id);
 
-  if (error) return fallo("editar la tarea", error, "No se ha podido guardar. Inténtalo de nuevo.");
+  if (error) return fallo("editar la tarea", error, t("podidoGuardarIntentaloNuevo"));
 
   revalidatePath(RUTA_TAREAS);
   revalidatePath("/panel");
@@ -176,15 +186,16 @@ export async function cambiarEstadoTarea(
   _previo: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerClubActual();
   if ("error" in sesion) return { error: sesion.error };
 
   const id = leerTexto(formData, "id");
   const estado = leerTexto(formData, "estado");
 
-  if (!id) return { error: "No se ha encontrado la tarea." };
+  if (!id) return { error: t("encontradoTarea") };
   if (estado !== "pendiente" && estado !== "hecho" && estado !== "cancelado") {
-    return { error: "Estado no válido." };
+    return { error: t("estadoValido") };
   }
 
   const prueba = leerTexto(formData, "pruebaUrl");
@@ -203,7 +214,7 @@ export async function cambiarEstadoTarea(
     .eq("club_id", sesion.user.id);
 
   if (error) {
-    return fallo("cambiar el estado de la tarea", error, "No se ha podido guardar. Inténtalo de nuevo.");
+    return fallo("cambiar el estado de la tarea", error, t("podidoGuardarIntentaloNuevo"));
   }
 
   revalidatePath(RUTA_TAREAS);
@@ -212,11 +223,12 @@ export async function cambiarEstadoTarea(
 }
 
 export async function borrarTarea(_previo: EstadoGuardado, formData: FormData): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerClubActual();
   if ("error" in sesion) return { error: sesion.error };
 
   const id = leerTexto(formData, "id");
-  if (!id) return { error: "No se ha encontrado la tarea." };
+  if (!id) return { error: t("encontradoTarea") };
 
   const { error } = await sesion.supabase
     .from("club_sponsor_tasks")
@@ -224,7 +236,7 @@ export async function borrarTarea(_previo: EstadoGuardado, formData: FormData): 
     .eq("id", id)
     .eq("club_id", sesion.user.id);
 
-  if (error) return fallo("borrar la tarea", error, "No se ha podido borrar. Inténtalo de nuevo.");
+  if (error) return fallo("borrar la tarea", error, t("podidoBorrarIntentaloNuevo"));
 
   revalidatePath(RUTA_TAREAS);
   revalidatePath("/panel");
@@ -238,11 +250,12 @@ export async function borrarTarea(_previo: EstadoGuardado, formData: FormData): 
  * de que el club deje de usar esto.
  */
 export async function repetirTarea(_previo: EstadoGuardado, formData: FormData): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerClubActual();
   if ("error" in sesion) return { error: sesion.error };
 
   const id = leerTexto(formData, "id");
-  if (!id) return { error: "No se ha encontrado la tarea." };
+  if (!id) return { error: t("encontradoTarea") };
 
   const { data: original, error: errorLectura } = await sesion.supabase
     .from("club_sponsor_tasks")
@@ -259,7 +272,7 @@ export async function repetirTarea(_previo: EstadoGuardado, formData: FormData):
     }>();
 
   if (errorLectura || !original) {
-    return fallo("repetir la tarea", errorLectura, "No se ha podido repetir. Inténtalo de nuevo.");
+    return fallo("repetir la tarea", errorLectura, t("podidoRepetirIntentaloNuevo"));
   }
 
   const unMesDespues = (fecha: string | null): string | null => {
@@ -279,7 +292,7 @@ export async function repetirTarea(_previo: EstadoGuardado, formData: FormData):
     status: "pendiente",
   });
 
-  if (error) return fallo("repetir la tarea", error, "No se ha podido repetir. Inténtalo de nuevo.");
+  if (error) return fallo("repetir la tarea", error, t("podidoRepetirIntentaloNuevo"));
 
   revalidatePath(RUTA_TAREAS);
   revalidatePath("/panel");

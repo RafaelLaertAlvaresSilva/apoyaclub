@@ -162,7 +162,8 @@ export function empresasPendientesDeInforme(
 const formatoMes = new Intl.DateTimeFormat("es-ES", { month: "long", year: "numeric" });
 const formatoDia = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "long" });
 
-function aFecha(iso: string): Date {
+/** La fecha "AAAA-MM-DD…" como día local, para formatearla en el panel. */
+export function aFecha(iso: string): Date {
   const [anio, mes, dia] = iso.slice(0, 10).split("-").map(Number);
   return new Date(anio, mes - 1, dia);
 }

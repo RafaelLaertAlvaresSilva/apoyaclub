@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
@@ -15,6 +16,7 @@ import { TareasManager } from "./components/TareasManager";
  * empresas. Es la libreta del club, no un escaparate.
  */
 export default async function TareasPage() {
+  const t = await getTranslations("panel.tareas.cabecera");
   const supabase = await createClient();
   const {
     data: { user },
@@ -45,12 +47,9 @@ export default async function TareasPage() {
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel del club</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Tareas con tus patrocinadores</h1>
-          <p className="mt-1 text-sm text-zinc-600">
-            Lo que le has prometido a cada empresa y para cuándo. Es lo que hace que en junio puedas
-            enseñar qué recibieron a cambio — y que renueven.
-          </p>
+          <p className="text-sm font-medium text-teal-700">{t("panel")}</p>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("titulo")}</h1>
+          <p className="mt-1 text-sm text-zinc-600">{t("texto")}</p>
         </div>
       </div>
 

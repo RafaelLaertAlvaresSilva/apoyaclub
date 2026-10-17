@@ -7,7 +7,7 @@ import { routing } from "@/i18n/routing";
 const RAIZ = process.cwd();
 
 /**
- * Los tres idiomas de la parte pública: español, portugués e inglés.
+ * Los tres idiomas de la web: español, portugués e inglés.
  *
  * Lo que se comprueba aquí es lo que, si se rompe, no avisa en ningún
  * otro sitio: una frase nueva escrita en español y olvidada en los
@@ -15,10 +15,11 @@ const RAIZ = process.cwd();
  * inglesa (la carga de mensajes rellena lo que falta con el español,
  * a propósito, para no romper nada). Esta prueba es la que avisa.
  *
- * El panel, los correos y el administrador todavía no están traducidos:
- * sus archivos no se comprueban.
+ * Están traducidos la parte pública, el panel del club y los correos.
+ * El panel de empresa y el administrador todavía no: sus archivos no
+ * se comprueban.
  */
-const PUBLICOS = ["common", "home", "auth", "club", "buscar", "servicios"] as const;
+const TRADUCIDOS = ["common", "home", "auth", "club", "buscar", "servicios", "panel", "emails"] as const;
 const OTROS = ["pt", "en"] as const;
 
 /** Campos que, dentro de una lista, son identificadores y no se
@@ -78,9 +79,9 @@ describe("los idiomas de la web", () => {
   });
 
   for (const idioma of OTROS) {
-    it(`en ${idioma} está todo lo público que hay en español`, () => {
+    it(`en ${idioma} está todo lo traducido que hay en español`, () => {
       const errores: string[] = [];
-      for (const nombre of PUBLICOS) comparar(leer("es", nombre), leer(idioma, nombre), `${idioma}/${nombre}`, errores);
+      for (const nombre of TRADUCIDOS) comparar(leer("es", nombre), leer(idioma, nombre), `${idioma}/${nombre}`, errores);
       expect(errores).toEqual([]);
     });
   }
@@ -88,7 +89,7 @@ describe("los idiomas de la web", () => {
   it("ningún texto tiene el formato roto (variables, plurales, enlaces)", () => {
     const errores: string[] = [];
     for (const idioma of ["es", ...OTROS]) {
-      for (const nombre of PUBLICOS) {
+      for (const nombre of TRADUCIDOS) {
         const lista: [string, string][] = [];
         textos(leer(idioma, nombre), `${idioma}/${nombre}`, lista);
         for (const [ruta, texto] of lista) {

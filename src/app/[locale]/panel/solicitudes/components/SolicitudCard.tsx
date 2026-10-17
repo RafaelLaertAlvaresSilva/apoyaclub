@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+import { useIntlLocale } from "@/i18n/use-intl-locale";
 import { ESTADOS_SOLICITUD } from "@/lib/contact-requests";
 import type { ContactRequest, ContactRequestStatus } from "@/lib/types";
 import { cambiarEstadoSolicitud } from "../actions";
@@ -10,8 +12,6 @@ const ESTILO_ESTADO: Record<ContactRequestStatus, string> = {
   discarded: "bg-zinc-300 text-zinc-600",
 };
 
-const formatoFecha = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric" });
-
 export function SolicitudCard({
   solicitud,
   opportunityTitle,
@@ -22,10 +22,14 @@ export function SolicitudCard({
   // Desde que no hay cuentas de empresa (migración 0034), lo que
   // identifica al remitente es lo que escribió en el formulario. Las
   // solicitudes de antes no lo traen: ahí el nombre no se puede saber.
+  const t = useTranslations("panel.solicitudes");
+  const formatoFecha = new Intl.DateTimeFormat(useIntlLocale(), {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
   const titular =
-    solicitud.remitenteEmpresa ||
-    solicitud.remitenteNombre ||
-    "Solicitud anterior (sin datos de contacto)";
+    solicitud.remitenteEmpresa || solicitud.remitenteNombre || t("solicitudAnterior");
 
   return (
     <li className="rounded-xl border border-zinc-200 bg-white p-5">
@@ -36,11 +40,11 @@ export function SolicitudCard({
             <span
               className={`rounded-full px-2 py-0.5 text-xs font-medium ${ESTILO_ESTADO[solicitud.status]}`}
             >
-              {ESTADOS_SOLICITUD.find((estado) => estado.id === solicitud.status)?.etiqueta}
+              {t(`estados.${solicitud.status}`)}
             </span>
           </div>
           <p className="mt-0.5 text-sm text-zinc-500">
-            {opportunityTitle ? `Sobre: ${opportunityTitle}` : "Sobre el club en general"}
+            {opportunityTitle ? t("sobre", { titulo: opportunityTitle }) : t("sobreElClub")}
             {" · "}
             {formatoFecha.format(new Date(solicitud.createdAt))}
           </p>
@@ -49,11 +53,11 @@ export function SolicitudCard({
 
       <div className="mt-3 grid gap-1 text-sm text-zinc-600 sm:grid-cols-2">
         {solicitud.remitenteNombre && solicitud.remitenteEmpresa && (
-          <p>Persona: {solicitud.remitenteNombre}</p>
+          <p>{t("persona", { nombre: solicitud.remitenteNombre })}</p>
         )}
         {solicitud.remitenteEmail && (
           <p>
-            Correo:{" "}
+            {t("correo")}{" "}
             <a
               href={`mailto:${solicitud.remitenteEmail}`}
               className="font-medium text-teal-700 hover:underline"
@@ -64,7 +68,7 @@ export function SolicitudCard({
         )}
         {solicitud.remitenteTelefono && (
           <p>
-            Teléfono:{" "}
+            {t("telefono")}{" "}
             <a
               href={`tel:${solicitud.remitenteTelefono.replace(/\s+/g, "")}`}
               className="font-medium text-teal-700 hover:underline"
@@ -93,7 +97,7 @@ export function SolicitudCard({
                   : "bg-white text-zinc-500 hover:bg-zinc-50"
               }`}
             >
-              {estadoOpcion.etiqueta}
+              {t(`estados.${estadoOpcion.id}`)}
             </button>
           </form>
         ))}

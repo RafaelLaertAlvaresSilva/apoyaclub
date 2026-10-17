@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import {
   leerAcciones,
   leerBeneficios,
@@ -40,11 +41,12 @@ export type EstadoGuardado =
  * pasa cuando se añade una columna y el intermediario de Supabase
  * sigue con el esquema viejo en memoria.
  */
-function fallo(
+async function fallo(
   operacion: string,
   error: unknown,
   mensaje: string,
-): EstadoGuardado {
+): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   avisarDeFallo("publico", `No se ha podido ${operacion}`, error);
 
   const detalle = String(
@@ -54,7 +56,7 @@ function fallo(
   if (detalle.includes("schema cache") || detalle.includes("column")) {
     return {
       error:
-        "La base de datos todavía no reconoce alguno de los campos nuevos. Escríbenos a info@apoyaclub.com y lo dejamos listo en un momento.",
+        t("baseDatosTodaviaReconoceAlguno"),
     };
   }
 
@@ -138,18 +140,19 @@ async function obtenerClubActual(): Promise<
   | { supabase: Awaited<ReturnType<typeof createClient>>; user: User }
   | { error: string }
 > {
+  const t = await getTranslations("panel.acciones");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
+    return { error: t("tuSesionCaducadoVuelveIniciar") };
   }
 
   const rol = user.app_metadata?.role as Role | undefined;
   if (rol !== "club") {
-    return { error: "Esta acción solo está disponible para clubes." };
+    return { error: t("estaAccionSoloEstaDisponible") };
   }
 
   return { supabase, user };
@@ -340,15 +343,16 @@ export async function crearOportunidad(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const title = leerTexto(formData, "title");
-  if (!title) return { error: "Indica el nombre de la oportunidad." };
+  if (!title) return { error: t("indicaNombreOportunidad") };
 
   const opportunityType = leerTipo(formData);
-  if (!opportunityType) return { error: "Elige un tipo de oportunidad." };
+  if (!opportunityType) return { error: t("eligeTipoOportunidad") };
 
   const plazas = leerPlazas(formData);
   const necesidad = leerNecesidad(formData);
@@ -357,10 +361,10 @@ export async function crearOportunidad(
   // servicio, y a cambio va visibilidad. El formulario ni siquiera
   // enseña la casilla en ese caso, así que aquí no puede exigirse.
   const value = necesidad.esNecesidad ? 0 : leerValor(formData);
-  if (value === null) return { error: "Indica un valor válido (0 o más)." };
+  if (value === null) return { error: t("indicaValorValido0O") };
 
   if (necesidad.esNecesidad && !necesidad.categoria) {
-    return { error: "Elige qué servicio o producto necesitas." };
+    return { error: t("eligeServicioOProductoNecesitas") };
   }
 
   const { error } = await supabase.from("opportunities").insert({
@@ -392,7 +396,7 @@ export async function crearOportunidad(
     return fallo(
       "crear la oportunidad",
       error,
-      "No se ha podido crear la oportunidad.",
+      t("podidoCrearOportunidad"),
     );
 
   refrescarFichaPublica();
@@ -406,18 +410,19 @@ export async function actualizarOportunidad(
   _estadoPrevio: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const id = String(formData.get("id") ?? "");
-  if (!id) return { error: "Oportunidad no encontrada." };
+  if (!id) return { error: t("oportunidadEncontrada") };
 
   const title = leerTexto(formData, "title");
-  if (!title) return { error: "Indica el nombre de la oportunidad." };
+  if (!title) return { error: t("indicaNombreOportunidad") };
 
   const opportunityType = leerTipo(formData);
-  if (!opportunityType) return { error: "Elige un tipo de oportunidad." };
+  if (!opportunityType) return { error: t("eligeTipoOportunidad") };
 
   const status = leerEstado(formData) ?? "available";
   const plazas = leerPlazas(formData);
@@ -427,10 +432,10 @@ export async function actualizarOportunidad(
   // servicio, y a cambio va visibilidad. El formulario ni siquiera
   // enseña la casilla en ese caso, así que aquí no puede exigirse.
   const value = necesidad.esNecesidad ? 0 : leerValor(formData);
-  if (value === null) return { error: "Indica un valor válido (0 o más)." };
+  if (value === null) return { error: t("indicaValorValido0O") };
 
   if (necesidad.esNecesidad && !necesidad.categoria) {
-    return { error: "Elige qué servicio o producto necesitas." };
+    return { error: t("eligeServicioOProductoNecesitas") };
   }
 
   const { error } = await supabase
@@ -466,7 +471,7 @@ export async function actualizarOportunidad(
     return fallo(
       "guardar la oportunidad",
       error,
-      "No se ha podido guardar la oportunidad.",
+      t("podidoGuardarOportunidad"),
     );
 
   refrescarFichaPublica();
@@ -500,6 +505,7 @@ export async function cambiarEstadoOportunidad(
 // Duplicar
 // ---------------------------------------------------------------------
 export async function duplicarOportunidad(formData: FormData): Promise<void> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return;
   const { supabase, user } = contexto;
@@ -520,7 +526,7 @@ export async function duplicarOportunidad(formData: FormData): Promise<void> {
 
   await supabase.from("opportunities").insert({
     club_id: user.id,
-    title: `${original.title} (copia)`,
+    title: t("copia", { titulo: original.title }),
     description: original.description,
     opportunity_type: original.opportunity_type,
     value: original.value,
@@ -595,12 +601,13 @@ export async function restaurarOportunidad(formData: FormData): Promise<void> {
 export async function eliminarOportunidad(
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const id = String(formData.get("id") ?? "");
-  if (!id) return { error: "No se ha podido identificar qué borrar." };
+  if (!id) return { error: t("podidoIdentificarBorrar") };
 
   /**
    * NO SE BORRAN LAS FOTOS DEL ALMACÉN, y no es un olvido.
@@ -625,7 +632,7 @@ export async function eliminarOportunidad(
     return fallo(
       "borrar la oportunidad",
       error,
-      "No se ha podido borrar. Inténtalo de nuevo.",
+      t("podidoBorrarIntentaloNuevo"),
     );
 
   refrescarFichaPublica();

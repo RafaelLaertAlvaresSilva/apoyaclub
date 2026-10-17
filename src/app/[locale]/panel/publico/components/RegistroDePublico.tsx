@@ -1,9 +1,11 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { Link } from "@/i18n/navigation";
+import { useIntlLocale } from "@/i18n/use-intl-locale";
 import {
   agruparPorEquipo,
   agruparPorMes,
@@ -15,8 +17,6 @@ import {
 } from "@/lib/publico-partidos";
 import { guardarPartido, usarMediaEnLaFicha } from "../actions";
 import { PartidoFila } from "./PartidoFila";
-
-const formatoNumero = new Intl.NumberFormat("es-ES");
 
 const clasesInput =
   "w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none transition-colors focus:border-teal-600 focus:ring-2 focus:ring-teal-100";
@@ -37,6 +37,9 @@ export function RegistroDePublico({
   equiposDelClub: { id: string; etiqueta: string }[];
   mediaEnLaFicha: number | null;
 }) {
+  const t = useTranslations("panel.publico");
+  const intlLocale = useIntlLocale();
+  const formatoNumero = new Intl.NumberFormat(intlLocale);
   const [estadoAlta, alta] = useActionState(guardarPartido, null);
   const [estadoMedia, copiarMedia] = useActionState(usarMediaEnLaFicha, null);
   const [abierto, setAbierto] = useState(partidos.length === 0);
@@ -59,8 +62,11 @@ export function RegistroDePublico({
   // Si el club renombra un equipo en su ficha, su historial de público
   // se enseña con el nombre nuevo.
   const etiquetasPorId = new Map(equiposDelClub.map((equipo) => [equipo.id, equipo.etiqueta]));
-  const porEquipo = ultima ? agruparPorEquipo(ultima.partidos, etiquetasPorId) : [];
-  const porMes = ultima ? agruparPorMes(ultima.partidos) : [];
+  const porEquipo = ultima ? agruparPorEquipo(ultima.partidos, etiquetasPorId, {
+        equipoBorrado: t("equipoBorrado"),
+        sinEquipo: t("sinEquipoAsignado"),
+      }) : [];
+  const porMes = ultima ? agruparPorMes(ultima.partidos, intlLocale) : [];
 
   return (
     <div className="flex flex-col gap-6">
@@ -69,20 +75,18 @@ export function RegistroDePublico({
         <section className="rounded-xl border border-zinc-200 bg-white p-5">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <h2 className="text-base font-semibold text-zinc-900">
-              Temporada {ultima.temporada}
+              {t("temporada", { temporada: ultima.temporada })}
             </h2>
             <p className="text-xs text-zinc-500">
-              {ultima.resumen.partidos === 1
-                ? "1 partido apuntado"
-                : `${ultima.resumen.partidos} partidos apuntados`}
+              {t("partidosApuntados", { n: ultima.resumen.partidos })}
             </p>
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             <Dato
               numero={formatoNumero.format(ultima.resumen.total)}
-              etiqueta="Personas en total"
-              detalle="Sumando todos los partidos apuntados"
+              etiqueta={t("personasEnTotal")}
+              detalle={t("sumandoTodos")}
             />
             <Dato
               numero={
@@ -90,13 +94,11 @@ export function RegistroDePublico({
                   ? formatoNumero.format(ultima.resumenEnCasa.media)
                   : "—"
               }
-              etiqueta="Media en casa"
+              etiqueta={t("mediaEnCasa")}
               detalle={
                 ultima.resumenEnCasa.partidos > 0
-                  ? `Sobre ${ultima.resumenEnCasa.partidos} partido${
-                      ultima.resumenEnCasa.partidos === 1 ? "" : "s"
-                    } en casa`
-                  : "Aún no hay partidos en casa apuntados"
+                  ? t("sobrePartidosEnCasa", { n: ultima.resumenEnCasa.partidos })
+                  : t("aunNoHayEnCasa")
               }
             />
             {/* El mejor, de los de casa. Salía de todos los partidos, así
@@ -109,11 +111,11 @@ export function RegistroDePublico({
                   ? formatoNumero.format(ultima.resumenEnCasa.mejor.publico)
                   : "—"
               }
-              etiqueta="Mejor partido en casa"
+              etiqueta={t("mejorEnCasa")}
               detalle={
                 ultima.resumenEnCasa.mejor
-                  ? `${ultima.resumenEnCasa.mejor.rival}, ${fechaLarga(ultima.resumenEnCasa.mejor.fecha)}`
-                  : "Aún no hay partidos en casa apuntados"
+                  ? `${ultima.resumenEnCasa.mejor.rival}, ${fechaLarga(ultima.resumenEnCasa.mejor.fecha, intlLocale)}`
+                  : t("aunNoHayEnCasa")
               }
             />
           </div>
@@ -121,11 +123,8 @@ export function RegistroDePublico({
           {/* ---- Equipo por equipo ---- */}
           {porEquipo.length > 0 && (
             <div className="mt-6">
-              <h3 className="text-sm font-semibold text-zinc-900">Equipo por equipo</h3>
-              <p className="mt-0.5 text-xs text-zinc-500">
-                No todos los equipos llevan la misma gente, y una empresa que patrocina al
-                femenino sénior quiere el número de ese equipo, no la media del club.
-              </p>
+              <h3 className="text-sm font-semibold text-zinc-900">{t("equipoPorEquipo")}</h3>
+              <p className="mt-0.5 text-xs text-zinc-500">{t("equipoPorEquipoTexto")}</p>
 
               <ul className="mt-3 flex flex-col gap-2">
                 {porEquipo.map((equipo) => (
@@ -138,10 +137,10 @@ export function RegistroDePublico({
                     <div className="min-w-0">
                       <p className="truncate text-sm font-medium text-zinc-900">{equipo.etiqueta}</p>
                       <p className="text-xs text-zinc-500">
-                        {equipo.resumen.partidos} partido{equipo.resumen.partidos === 1 ? "" : "s"}
+                        {t("partidos", { n: equipo.resumen.partidos })}
                         {equipo.resumenEnCasa.partidos > 0 &&
-                          ` · ${equipo.resumenEnCasa.partidos} en casa`}
-                        {` · ${formatoNumero.format(equipo.resumen.total)} personas en total`}
+                          ` · ${t("enCasaCuantos", { n: equipo.resumenEnCasa.partidos })}`}
+                        {` · ${t("personasEnTotalCuantas", { personas: formatoNumero.format(equipo.resumen.total) })}`}
                       </p>
                     </div>
 
@@ -154,7 +153,7 @@ export function RegistroDePublico({
                             : "—"}
                       </p>
                       <p className="text-xs text-zinc-500">
-                        {equipo.resumenEnCasa.media != null ? "de media en casa" : "de media"}
+                        {equipo.resumenEnCasa.media != null ? t("deMediaEnCasa") : t("deMedia")}
                       </p>
                     </div>
                   </li>
@@ -163,8 +162,7 @@ export function RegistroDePublico({
 
               {porEquipo.some((equipo) => equipo.sinAsignar) && (
                 <p className="mt-2 text-xs text-zinc-500">
-                  Los partidos sin equipo asignado son de antes de que se pudiera elegir. Cuentan
-                  para el total de la temporada, pero no para ningún equipo.
+                  {t("sinEquipoNota")}
                 </p>
               )}
             </div>
@@ -173,19 +171,17 @@ export function RegistroDePublico({
           {/* ---- Mes a mes ---- */}
           {porMes.length > 1 && (
             <div className="mt-6">
-              <h3 className="text-sm font-semibold text-zinc-900">Mes a mes</h3>
-              <p className="mt-0.5 text-xs text-zinc-500">
-                Para ver si la grada crece según avanza la temporada.
-              </p>
+              <h3 className="text-sm font-semibold text-zinc-900">{t("mesAMes")}</h3>
+              <p className="mt-0.5 text-xs text-zinc-500">{t("mesAMesTexto")}</p>
 
               <div className="mt-3 overflow-x-auto">
                 <table className="w-full min-w-[380px] text-left text-sm">
                   <thead className="text-xs uppercase tracking-wide text-zinc-500">
                     <tr>
-                      <th className="pb-2 font-medium">Mes</th>
-                      <th className="pb-2 text-right font-medium">Partidos</th>
-                      <th className="pb-2 text-right font-medium">Total</th>
-                      <th className="pb-2 text-right font-medium">Media</th>
+                      <th className="pb-2 font-medium">{t("mes")}</th>
+                      <th className="pb-2 text-right font-medium">{t("partidosColumna")}</th>
+                      <th className="pb-2 text-right font-medium">{t("total")}</th>
+                      <th className="pb-2 text-right font-medium">{t("media")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-100">
@@ -216,32 +212,32 @@ export function RegistroDePublico({
             <div className="mt-4 rounded-lg bg-zinc-50 p-4">
               {yaEstaEnLaFicha ? (
                 <p className="text-sm text-zinc-600">
-                  Tu ficha enseña <strong>{formatoNumero.format(media)}</strong> personas de
-                  asistencia media, que es justo lo que sale de estos partidos.
+                  {t.rich("fichaYaEnsena", {
+                    media: formatoNumero.format(media),
+                    fuerte: (trozo) => <strong>{trozo}</strong>,
+                  })}
                 </p>
               ) : (
                 <form action={copiarMedia} className="flex flex-wrap items-center gap-3">
                   <p className="min-w-0 flex-1 text-sm text-zinc-600">
-                    En tu ficha pone{" "}
-                    <strong>
-                      {mediaEnLaFicha != null
-                        ? `${formatoNumero.format(mediaEnLaFicha)} personas`
-                        : "que no lo has puesto"}
-                    </strong>
-                    . Con estos partidos salen <strong>{formatoNumero.format(media)}</strong>.
+                    {t.rich(mediaEnLaFicha != null ? "fichaPone" : "fichaSinMedia", {
+                      enFicha: mediaEnLaFicha != null ? formatoNumero.format(mediaEnLaFicha) : "",
+                      media: formatoNumero.format(media),
+                      fuerte: (trozo) => <strong>{trozo}</strong>,
+                    })}
                   </p>
                   <button
                     type="submit"
                     className="rounded-lg bg-accion px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte"
                   >
-                    Usar esta media en mi ficha
+                    {t("usarMedia")}
                   </button>
                 </form>
               )}
 
               <AvisoError mensaje={estadoMedia?.error ?? null} />
               <AvisoExito
-                mensaje={estadoMedia?.ok ? "Media copiada a tu ficha." : null}
+                mensaje={estadoMedia?.ok ? t("mediaCopiada") : null}
               />
             </div>
           )}
@@ -251,14 +247,14 @@ export function RegistroDePublico({
       {/* ---- Apuntar un partido ---- */}
       <section className="rounded-xl border border-zinc-200 bg-white p-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-base font-semibold text-zinc-900">Apuntar un partido</h2>
+          <h2 className="text-base font-semibold text-zinc-900">{t("apuntarPartido")}</h2>
           {partidos.length > 0 && (
             <button
               type="button"
               onClick={() => setAbierto((valor) => !valor)}
               className="rounded-lg px-3 py-1.5 text-sm font-medium text-teal-700 transition-colors hover:bg-teal-50"
             >
-              {abierto ? "Cerrar" : "+ Añadir partido"}
+              {abierto ? t("cerrar") : t("anadirPartido")}
             </button>
           )}
         </div>
@@ -266,7 +262,7 @@ export function RegistroDePublico({
         {abierto && (
           <form action={alta} className="mt-4 flex flex-col gap-4">
             <div className="grid gap-4 sm:grid-cols-2">
-              <Campo etiqueta="Fecha del partido">
+              <Campo etiqueta={t("fechaPartido")}>
                 <input
                   type="date"
                   name="fecha"
@@ -275,22 +271,22 @@ export function RegistroDePublico({
                   className={clasesInput}
                 />
               </Campo>
-              <Campo etiqueta="Rival">
+              <Campo etiqueta={t("rival")}>
                 <input
                   name="rival"
                   required
                   maxLength={120}
-                  placeholder="C.D. Ejemplo"
+                  placeholder={t("rivalEjemplo")}
                   className={clasesInput}
                 />
               </Campo>
-              <Campo etiqueta="¿Dónde se jugó?">
+              <Campo etiqueta={t("dondeSeJugo")}>
                 <select name="donde" defaultValue="casa" className={clasesInput}>
-                  <option value="casa">En casa</option>
-                  <option value="fuera">Fuera</option>
+                  <option value="casa">{t("enCasa")}</option>
+                  <option value="fuera">{t("fuera")}</option>
                 </select>
               </Campo>
-              <Campo etiqueta="Cuánta gente hubo">
+              <Campo etiqueta={t("cuantaGente")}>
                 <input
                   name="publico"
                   required
@@ -299,69 +295,70 @@ export function RegistroDePublico({
                   className={clasesInput}
                 />
               </Campo>
-              <Campo etiqueta="Equipo">
+              <Campo etiqueta={t("equipo")}>
                 <select
                   name="equipoId"
                   value={equipoElegido}
                   onChange={(evento) => setEquipoElegido(evento.target.value)}
                   className={clasesInput}
                 >
-                  <option value="">Sin especificar</option>
+                  <option value="">{t("sinEspecificar")}</option>
                   {equiposDelClub.map((equipo) => (
                     <option key={equipo.id} value={equipo.id}>
                       {equipo.etiqueta}
                     </option>
                   ))}
-                  <option value="otro">Otro (escribirlo)</option>
+                  <option value="otro">{t("otroEscribirlo")}</option>
                 </select>
 
                 {equipoElegido === "otro" && (
                   <input
                     name="equipo"
                     maxLength={120}
-                    placeholder="Alevín mixto, filial…"
+                    placeholder={t("equipoEjemplo")}
                     className={`${clasesInput} mt-2`}
                   />
                 )}
 
                 {equiposDelClub.length === 0 && (
                   <p className="mt-1.5 text-xs text-zinc-500">
-                    Todavía no tienes equipos en tu ficha.{" "}
-                    <Link href="/panel/perfil#equipos" className="font-medium text-teal-700 hover:underline">
-                      Añádelos aquí
-                    </Link>{" "}
-                    y aparecerán en esta lista.
+                    {t.rich("sinEquipos", {
+                      enlace: (trozo) => (
+                        <Link href="/panel/perfil#equipos" className="font-medium text-teal-700 hover:underline">
+                          {trozo}
+                        </Link>
+                      ),
+                    })}
                   </p>
                 )}
               </Campo>
-              <Campo etiqueta="Competición (opcional)">
+              <Campo etiqueta={t("competicion")}>
                 <input
                   name="competicion"
                   maxLength={120}
-                  placeholder="Liga, copa, amistoso…"
+                  placeholder={t("competicionEjemplo")}
                   className={clasesInput}
                 />
               </Campo>
             </div>
 
-            <Campo etiqueta="Notas (opcional)">
+            <Campo etiqueta={t("notas")}>
               <input
                 name="notas"
                 maxLength={1000}
-                placeholder="Derbi, día del club, lluvia…"
+                placeholder={t("notasEjemplo")}
                 className={clasesInput}
               />
             </Campo>
 
             <p className="text-xs text-zinc-500">
-              No hace falta una cifra exacta: una estimación honesta del aforo vale, y es lo que
-              hace que la media de tu ficha sea defendible.
+              {t("estimacion")}
             </p>
 
             <AvisoError mensaje={estadoAlta?.error ?? null} />
-            <AvisoExito mensaje={estadoAlta?.ok ? "Partido apuntado." : null} />
+            <AvisoExito mensaje={estadoAlta?.ok ? t("partidoApuntado") : null} />
 
-            <BotonEnviar>Guardar partido</BotonEnviar>
+            <BotonEnviar>{t("guardarPartido")}</BotonEnviar>
           </form>
         )}
       </section>
@@ -369,7 +366,7 @@ export function RegistroDePublico({
       {/* ---- La lista, por temporadas ---- */}
       {temporadas.length === 0 ? (
         <p className="rounded-xl border border-dashed border-zinc-300 bg-white p-8 text-center text-sm text-zinc-500">
-          Todavía no has apuntado ningún partido. Empieza por el último que jugasteis en casa.
+          {t("ningunPartido")}
         </p>
       ) : (
         temporadas.map((temporada) => (
@@ -379,14 +376,15 @@ export function RegistroDePublico({
           >
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="text-base font-semibold text-zinc-900">
-                Temporada {temporada.temporada}
+                {t("temporada", { temporada: temporada.temporada })}
               </h2>
               <p className="text-xs text-zinc-500">
-                {formatoNumero.format(temporada.resumen.total)} personas en{" "}
-                {temporada.resumen.partidos} partido
-                {temporada.resumen.partidos === 1 ? "" : "s"}
+                {t("personasEnPartidos", {
+                  personas: formatoNumero.format(temporada.resumen.total),
+                  n: temporada.resumen.partidos,
+                })}
                 {temporada.resumen.media != null &&
-                  ` · media de ${formatoNumero.format(temporada.resumen.media)}`}
+                  ` · ${t("mediaDe", { media: formatoNumero.format(temporada.resumen.media) })}`}
               </p>
             </div>
 

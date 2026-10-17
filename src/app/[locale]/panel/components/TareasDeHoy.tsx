@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
   cuantoFalta,
@@ -20,6 +21,8 @@ import {
  * que salga en rojo también se ignorará.
  */
 export function TareasDeHoy({ tareas }: { tareas: TareaPatrocinio[] }) {
+  const t = useTranslations("panel.tareas.hoy");
+  const tComun = useTranslations("panel.comun");
   const hoy = hoyISO();
   const urgentes = tareasParaHoy(tareas, hoy);
 
@@ -35,9 +38,7 @@ export function TareasDeHoy({ tareas }: { tareas: TareaPatrocinio[] }) {
     >
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 className={`text-base font-semibold ${vencidas > 0 ? "text-red-800" : "text-amber-900"}`}>
-          {vencidas > 0
-            ? `Hoy toca esto — y ${vencidas} se te ${vencidas === 1 ? "ha pasado" : "han pasado"} de fecha`
-            : "Hoy toca esto"}
+          {vencidas > 0 ? t("tituloVencidas", { n: vencidas }) : t("titulo")}
         </h2>
         <Link
           href="/panel/tareas"
@@ -45,7 +46,7 @@ export function TareasDeHoy({ tareas }: { tareas: TareaPatrocinio[] }) {
             vencidas > 0 ? "text-red-800" : "text-amber-900"
           }`}
         >
-          Ver todas →
+          {t("verTodas")}
         </Link>
       </div>
 
@@ -65,7 +66,7 @@ export function TareasDeHoy({ tareas }: { tareas: TareaPatrocinio[] }) {
                   vencida ? "text-red-700" : "text-amber-800"
                 }`}
               >
-                {cuantoFalta(tarea.fin, hoy)}
+                {cuantoFalta(tarea.fin, hoy, tComun)}
               </span>
             </li>
           );
@@ -73,7 +74,7 @@ export function TareasDeHoy({ tareas }: { tareas: TareaPatrocinio[] }) {
       </ul>
 
       {urgentes.length > 6 && (
-        <p className="mt-2 text-xs text-zinc-600">Y {urgentes.length - 6} más.</p>
+        <p className="mt-2 text-xs text-zinc-600">{t("yMas", { n: urgentes.length - 6 })}</p>
       )}
     </section>
   );

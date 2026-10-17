@@ -8,7 +8,14 @@
     "irAIniciarSesion": "Ir a iniciar sesión",
     "tuCuentaEstaSuspendida": "Tu cuenta está suspendida",
     "tuCuentaSeHa": "Tu cuenta se ha eliminado",
-    "volverAlInicio": "Volver al inicio"
+    "volverAlInicio": "Volver al inicio",
+    "tienesEmpresasEsperando": "Tienes empresas esperando",
+    "responderProntoDiferenciaEntre": "Responder pronto es la diferencia entre un patrocinio y un correo olvidado.",
+    "verSolicitud": "Ver la solicitud",
+    "verSolicitudes": "Ver las solicitudes",
+    "derechosImagen": "Las fotos las subes tú y respondes de sus derechos de imagen.",
+    "derechosImagenPermiso": "Asegúrate de tener el permiso de quien aparece en ellas y, <fuerte>si hay menores, de sus padres o tutores legales</fuerte>.",
+    "empresasSinRespuesta": "{n, plural, one {Una empresa te ha escrito y sigue sin respuesta} other {# empresas te han escrito y siguen sin respuesta}}"
   },
   "dossier": {
     "activarEnlacePublico": "Activar enlace público",
@@ -25,7 +32,50 @@
     "panelDelClub": "Panel del club",
     "seAbreDirectamenteEn": "Se abre directamente en el navegador, sin necesidad de sesión: ideal para enviarlo por email o WhatsApp.",
     "seccionesAIncluir": "Secciones a incluir",
-    "tuPerfil": "tu perfil"
+    "caducidadOpcional": "Caducidad (opcional)",
+    "seleccionGuardada": "Selección guardada.",
+    "anadirlosAhora": "Añadirlos ahora",
+    "noPodidoGenerarPdf": "No se ha podido generar el PDF. Inténtalo de nuevo.",
+    "noPodidoGenerarWord": "No se ha podido generar el Word. Inténtalo de nuevo.",
+    "copiado": "¡Copiado!",
+    "copiarEnlace": "Copiar enlace",
+    "documentoLePasasEmpresa": "El documento que le pasas a una empresa: tu club en un PDF, con las cifras y las oportunidades que tú elijas. También sale en Word, por si quieres retocarlo.",
+    "secciones": {
+      "identidad": {
+        "etiqueta": "Identidad",
+        "descripcion": "Quiénes somos, ubicación y contacto."
+      },
+      "historia": {
+        "etiqueta": "Historia",
+        "descripcion": "Año de fundación e hitos."
+      },
+      "equipos": {
+        "etiqueta": "Equipos",
+        "descripcion": "Deporte, categoría y nivel de cada equipo."
+      },
+      "cantera": {
+        "etiqueta": "Cantera",
+        "descripcion": "Equipos, jugadores y familias (datos agregados)."
+      },
+      "audiencia": {
+        "etiqueta": "Audiencia",
+        "descripcion": "A cuánta gente llegas, con el origen de cada cifra y sin sumar unas con otras."
+      },
+      "instalaciones": {
+        "etiqueta": "Instalaciones",
+        "descripcion": "Descripción de las instalaciones del club."
+      },
+      "patrocinadores": {
+        "etiqueta": "Patrocinadores actuales",
+        "descripcion": "Marcas que ya confían en el club."
+      }
+    },
+    "sinDatos": "Todavía no has añadido datos.",
+    "sinOportunidades": "Todavía no tienes oportunidades publicadas. Puedes crearlas en <enlace>Oportunidades</enlace>.",
+    "descargarPdf": "Descargar PDF",
+    "descargarWord": "Descargar Word",
+    "pdfYWord": "El <fuerte>PDF</fuerte> es el que se manda a una empresa: se ve igual en cualquier pantalla y no se descoloca. El <fuerte>Word</fuerte> es para ti: ábrelo para cambiar textos, añadir fotos o mover apartados de sitio, y guárdalo después como PDF desde el propio Word.",
+    "completaIdentidad": "Completa primero la identidad del club (nombre y localidad) en <enlace>tu perfil</enlace> para poder generar tu dossier de patrocinio."
   },
   "metricas": {
     "titulo": "Tu mes en ApoyaClub",
@@ -46,12 +96,14 @@
     "vacioDossier": "Preparar mi dossier",
     "contactos": "Contactos vistos",
     "contactosAyuda": "Veces que alguien ha abierto tus datos de contacto. Es el paso justo antes de escribirte.",
-    "empresasTitulo": "Empresas que se han fijado en ti",
-    "empresasTexto": "Empresas registradas que han entrado en tu ficha en los últimos 90 días.",
-    "empresasVioContacto": "Vio tu contacto",
-    "empresasVacio": "Todavía no ha entrado ninguna empresa registrada. Comparte tu página y tu dossier para que empiecen a llegar.",
-    "visitasTotales": "En total, {visitas} personas han visitado tu página desde que estás en ApoyaClub.",
-    "visitasTotalesUna": "En total, 1 persona ha visitado tu página desde que estás en ApoyaClub."
+    "hanVistoFicha": "Han visto tu ficha",
+    "personasHanAbiertoPagina": "Personas que han abierto tu página. Recargar no cuenta dos veces.",
+    "hanAbiertoContacto": "Han abierto tu contacto",
+    "hanPulsadoParaVer": "Han pulsado para ver tu teléfono y tu correo. Es el paso justo antes de escribirte.",
+    "quienEntradoFicha": "Quién ha entrado en tu ficha",
+    "ultimos7Dias": "Últimos 7 días",
+    "ultimos30Dias": "Últimos 30 días",
+    "desdeQueEstas": "Desde que estás en ApoyaClub: {visitas, plural, one {# visita} other {# visitas}} y {contactos, plural, one {# apertura} other {# aperturas}} de tus datos de contacto."
   },
   "oportunidades": {
     "aQuePublicoO": "A qué público o objetivo apela esta oportunidad. Puedes marcar varios.",
@@ -89,9 +141,6 @@
     "ordenarPorValor": "Ordenar por valor",
     "panelDelClub": "Panel del club",
     "periodo": "Periodo",
-    "plantillaCompartida": "Compartida con otros clubes",
-    "plantillasOpcional": " (opcional, para no partir de cero)",
-    "plantillasRapidas": "Plantillas rápidas",
     "plazas": "¿La reparten varias empresas?",
     "plazasAyuda": "Número de patrocinadores que buscas. Déjalo vacío si es para una sola empresa. Ejemplo: 10 empresas de 100 € para el torneo de Navidad.",
     "plazasCubiertas": "Plazas ya cubiertas",
@@ -103,22 +152,79 @@
     "tipo": "Tipo *",
     "todoElClub": "Todo el club",
     "todosLosEstados": "Todos los estados",
-    "tuPerfil": "tu perfil",
     "valorDeMayorA": "Valor: de mayor a menor",
     "valorDeMenorA": "Valor: de menor a mayor",
-    "visualizar": "Visualizar"
+    "visualizar": "Visualizar",
+    "queEsEsto": "¿Qué es esto?",
+    "ofrezcoPatrocinio": "Ofrezco patrocinio",
+    "ofrezcoPatrocinioTexto": "Doy visibilidad a la empresa y ella aporta dinero.",
+    "necesitoServicio": "Necesito un servicio o producto",
+    "necesitoServicioTexto": "Fisio, autobús, fotógrafo, material… y doy visibilidad a cambio.",
+    "queNecesitas": "Qué necesitas",
+    "queNecesitasAyuda": "Sirve para que una empresa de ese ramo te encuentre buscando lo suyo.",
+    "eligeQueNecesitas": "Elige qué necesitas",
+    "fotos": "Fotos",
+    "fotosAyuda": "Opcional, hasta tres. Lo que de verdad convence a una empresa es ver la pared donde irá su lona, el autobús o la equipación.",
+    "valorEuros": "Valor (€) *",
+    "queRecibeEmpresa": "Qué recibe la empresa y quién hace qué",
+    "queRecibeEmpresaResumen": "El detalle del acuerdo, línea a línea. No hace falta para publicar, pero es lo que hace que la empresa entienda qué le estás ofreciendo.",
+    "frecuencia": "Frecuencia",
+    "frecuenciaAyuda": "Cada cuánto: mensual, por partido en casa…",
+    "frecuenciaEjemplo": "Mensual",
+    "desdeHasta": "Desde / hasta",
+    "desdeHastaAyuda": "Opcional. Cuándo empieza y cuándo acaba.",
+    "desde": "Desde",
+    "hasta": "Hasta",
+    "otrosRequisitos": "Otros requisitos",
+    "otrosRequisitosAyuda": "Cualquier cosa que convenga dejar por escrito.",
+    "masDetalles": "Más detalles",
+    "masDetallesResumen": "Nivel, plazas, exclusividad, a quién va dirigida… Nada de esto hace falta para publicar: puedes rellenarlo luego.",
+    "equipoAsociadoAyuda": "Si la oportunidad es de un equipo concreto (el primer equipo, un equipo de cantera). Déjalo en blanco si es del club entero.",
+    "cuantosColaboradores": "Cuántos colaboradores necesitas",
+    "cuantosColaboradoresAyuda": "Si con uno te vale, déjalo vacío. A partir de dos sale una barra con lo que llevas cubierto.",
+    "cuantosTienesYa": "Cuántos tienes ya",
+    "introPagina": "Lo que tu club ofrece a una empresa a cambio de patrocinio, y lo que necesita a cambio de visibilidad. Es lo único de tu ficha donde una empresa puede hacer algo.",
+    "completaIdentidad": "Completa primero la identidad del club (nombre y localidad) en <enlace>tu perfil</enlace> para poder publicar oportunidades de patrocinio.",
+    "anadeAlgoTuyo": "<fuerte>Añade algo tuyo antes de publicarla.</fuerte> Cuánta gente va a vuestros partidos, cuántos equipos sois, cuántos seguidores tenéis. Si todos los clubes publican el mismo texto, la empresa no sabrá por qué elegiros a vosotros.",
+    "crearOportunidad": "Crear oportunidad",
+    "ningunaCreada": "Todavía no has creado ninguna oportunidad. Empieza con el botón de arriba.",
+    "ningunaConFiltros": "No hay oportunidades que coincidan con estos filtros.",
+    "loNecesitamos": "Lo necesitamos",
+    "enExclusiva": "En exclusiva para el sector: {sector}",
+    "guardarCambios": "Guardar cambios",
+    "editor": {
+      "empresaRecibe": "La empresa recibe",
+      "empresaRecibeAyuda": "Una línea por cosa, con la cantidad cuando la haya. Es lo primero que mira quien está decidiendo si le interesa.",
+      "cantidadLinea": "Cantidad de la línea {n}",
+      "recibeEjemplo": "Publicaciones en Instagram",
+      "queRecibeLinea": "Qué recibe, línea {n}",
+      "quitar": "Quitar",
+      "anadirRecibe": "+ Añadir algo que recibe",
+      "quienHaceQue": "Quién hace qué",
+      "quienHaceQueAyuda": "Lo que hay que hacer para que esto funcione, y de quién es cada cosa. Es lo que evita el «yo creía que lo hacíais vosotros».",
+      "hacerEjemplo": "Diseño de las creatividades",
+      "queHacerLinea": "Qué hay que hacer, línea {n}",
+      "quienSeEncargaLinea": "Quién se encarga, línea {n}",
+      "anadirHacer": "+ Añadir algo que hay que hacer"
+    },
+    "galeria": {
+      "fotoN": "Foto {n} de la oportunidad",
+      "principal": "Principal",
+      "quitarEsta": "Quitar esta foto",
+      "quitarN": "Quitar la foto {n}",
+      "anadirUna": "Añadir una foto",
+      "anadirOtra": "Añadir otra foto",
+      "yaTienesTodas": "Ya tienes las {n} fotos. Quita una para poder subir otra."
+    }
   },
   "perfil": {
     "anadeCadaEquipoDel": "Añade cada equipo del club: deporte, categoría, género y si es primer equipo o cantera.",
     "anadirEquipo": "Añadir equipo",
-    "autorizoMostrarElTelefono": "Autorizo mostrar el teléfono y el nombre de contacto en la página pública del club.",
     "cadeteSenior": "Cadete, senior…",
-    "campoPabellonCapacidad": "Campo, pabellón, capacidad…",
     "cantera": "Cantera",
     "categoria": "Categoría",
     "codigoPostal": "Código postal",
     "comoSePresentaTu": "Cómo se presenta tu club a las empresas. El nombre y la localidad son los únicos campos obligatorios.",
-    "compartelaConLasEmpresas": ". Compártela con las empresas que quieras.",
     "competiciones": "Competiciones",
     "competicionesEnLasQue": "Competiciones en las que participa el club",
     "confirmoQueLasFotos": "Confirmo que las fotos que subo no incluyen menores identificables sin consentimiento, o que dispongo de dicho consentimiento.",
@@ -147,7 +253,6 @@
     "logoDelClub": "Logo del club",
     "logros": "Logros",
     "marcaLaCasillaDe": "Marca la casilla de arriba para poder añadir fotos.",
-    "masculinoFemeninoMixto": "Masculino, femenino, mixto…",
     "maximaCategoria": "Máxima categoría",
     "nivelDeportivo": "Nivel deportivo",
     "nombreDeContacto": "Nombre de contacto",
@@ -163,7 +268,86 @@
     "telefonoDeContacto": "Teléfono de contacto",
     "tipoDeEquipo": "Tipo de equipo",
     "titulosAscensosHitosDeportivos": "Títulos, ascensos, hitos deportivos…",
-    "web": "Web"
+    "web": "Web",
+    "paginaPublicaYaEsta": "Tu página pública ya está en <enlace>{ruta}</enlace>. Compártela con las empresas que quieras.",
+    "imagenesTitulo": "Escudo, portada y fotos, en un momento",
+    "imagenesTexto": "Guarda primero el nombre y la localidad de tu club, aquí abajo. En cuanto lo hagas aparecen aquí los botones para subir tu escudo, la foto de portada y las del club.",
+    "cambiarLogo": "Cambiar logo",
+    "subirLogo": "Subir logo",
+    "avisoMenores": "No subas fotos en las que se identifique con claridad a menores de edad (por ejemplo, primeros planos con el rostro visible) sin el consentimiento de sus padres o tutores legales, ni incluyas sus nombres completos en descripciones o títulos. Los datos de cantera se guardan siempre de forma agregada, nunca con fichas de menores concretos.",
+    "fotoDelClub": "Foto del club",
+    "quitarFoto": "Quitar foto",
+    "anadirFoto": "Añadir foto",
+    "soloObligatorios": "Solo el <fuerte>nombre</fuerte> y la <fuerte>localidad</fuerte> son obligatorios: con eso ya tienes tu página. Lo demás lo puedes ir rellenando cuando quieras.",
+    "descripcion": "Descripción",
+    "webVideoRedes": "Web, vídeo y redes sociales",
+    "webVideoRedesVacio": "Las empresas entran a mirarlas antes de escribirte",
+    "videoPresentacion": "Vídeo de presentación",
+    "contactoVacio": "A quién llaman las empresas que entran en tu ficha",
+    "correoContacto": "Correo de contacto",
+    "correoContactoAyuda": "El que quieres que usen las empresas. Si lo dejas vacío se usa el correo con el que te registraste.",
+    "horario": "Horario de atención",
+    "horarioAyuda": "Cuándo se os puede llamar. Ahorra llamadas perdidas por las dos partes.",
+    "horarioEjemplo": "De lunes a viernes, de 17:00 a 21:00",
+    "mostrarContacto": "Mostrar mi nombre de contacto y mi teléfono en mi página pública",
+    "mostrarContactoAyuda": "Recomendado. Las empresas que entran en tu ficha buscan a quién llamar: si lo desmarcas solo verán el formulario de solicitud y tardarás más en cerrar acuerdos. Tu correo se muestra siempre, protegido para que no lo recojan los robots de spam.",
+    "enQueCompite": "En qué compite",
+    "enQueCompiteAyuda": "Ejemplos: Primera Autonómica, Liga comarcal, Nacional Juvenil.",
+    "enQueCompiteAyudaCorta": "Ejemplos: Primera Autonómica, Liga comarcal.",
+    "logrosEquipo": "Logros de este equipo",
+    "logrosEquipoAyuda": "Ascensos, títulos, fases finales. Los del club entero van en Historia.",
+    "equipoAnadido": "Equipo añadido.",
+    "fotoDe": "Foto de {deporte}",
+    "sinFoto": "Sin foto",
+    "sexo": {
+      "Masculino": "Masculino",
+      "Femenino": "Femenino",
+      "Mixto": "Mixto"
+    },
+    "jugadoresN": "{n, plural, one {# jugador} other {# jugadores}}",
+    "cerrar": "Cerrar",
+    "editarDatos": "Editar datos",
+    "cambiarFoto": "Cambiar foto",
+    "subirFoto": "Subir foto",
+    "sinEspecificar": "Sin especificar",
+    "guardado": "Guardado.",
+    "guardarCambiosEquipo": "Guardar cambios del equipo",
+    "dondeJuegaClubPrimero": "Dónde juega el club. Es lo primero que mira una empresa que se plantea poner una lona o un vinilo.",
+    "fotosInstalaciones": "Fotos de las instalaciones",
+    "pabellonCampoPistaGradas": "El pabellón, el campo, la pista, las gradas, el bar. Puedes añadir todas las que quieras: no hay límite.",
+    "fotoInstalaciones": "Foto de las instalaciones",
+    "calleLocalidadPabellonCampo": "Calle y localidad del pabellón, campo o pista donde jugáis.",
+    "pabellonMunicipalCDeporte": "Pabellón Municipal, C/ del Deporte 4, Vigo",
+    "aforoSuperficieSiHay": "Aforo, superficie, si hay marcador, cafetería, aparcamiento…",
+    "pabellon800LocalidadesParque": "Pabellón de 800 localidades, parqué, marcador electrónico y cafetería.",
+    "guardarInstalaciones": "Guardar instalaciones",
+    "direccion": "Dirección",
+    "equipoMasculino": "Equipo masculino",
+    "equipoFemenino": "Equipo femenino",
+    "veFoto": "Qué se ve en la foto",
+    "lineaParaQuienNo": "Una línea, para quien no conozca las categorías. Se ve debajo de la foto.",
+    "primerEquipoTemporada2025": "Primer equipo, temporada 2025/26. Subimos de categoría en mayo.",
+    "masAltaJuegaCada": "La más alta en la que juega cada equipo. Rellena solo la que tengas.",
+    "subirFotoEquipo": "Subir foto del equipo",
+    "imagenPortada": "Imagen de portada",
+    "fotoAnchaArribaTodo": "La foto ancha de arriba del todo de tu página. Apaisada y de buena calidad: es lo primero que ve una empresa.",
+    "portadaClub": "Portada del club",
+    "parteFotoVe": "Qué parte de la foto se ve",
+    "parteArriba": "Parte de arriba",
+    "centro": "Centro",
+    "parteAbajo": "Parte de abajo",
+    "sinPortada": "Sin portada",
+    "guardando": "Guardando…",
+    "guardarEncuadre": "Guardar encuadre",
+    "cambiarPortada": "Cambiar portada",
+    "subirPortada": "Subir portada",
+    "perfilClub": "Perfil del club",
+    "todoEmpresaVeTi": "Todo lo que una empresa ve de ti. Cuanto más completo, más arriba sales en el buscador.",
+    "antesTenias": "Antes tenías puesto <fuerte>{categoria}</fuerte>. Cópialo en la casilla que corresponda y guarda.",
+    "fotoDelEquipo": "Foto: {equipo}",
+    "tuClub": "Tu club",
+    "quitar": "Quitar",
+    "correoContactoEjemplo": "patrocinios@tuclub.es"
   },
   "perfil2": {
     "accionesSocialesEducativasO": "Acciones sociales, educativas o benéficas del club: lo que lo hace más que un resultado deportivo.",
@@ -186,7 +370,6 @@
     "historia": "Historia",
     "hitos": "Hitos",
     "instagram": "Instagram",
-    "lasEmpresasQueYa": "Las empresas que ya patrocinan al club, para dar confianza a las nuevas.",
     "nombre": "Nombre *",
     "patrocinadoresActuales": "Patrocinadores actuales",
     "perfilCompletado": "Perfil completado",
@@ -201,7 +384,78 @@
     "verSuscripcion": "Ver suscripción",
     "web": "Web",
     "xTwitter": "X / Twitter",
-    "youtube": "YouTube"
+    "youtube": "YouTube",
+    "nivel": {
+      "principal": "Patrocinador principal",
+      "oficial": "Patrocinador oficial",
+      "colaborador": "Colaborador",
+      "otro": "Otra categoría (la escribes tú)"
+    },
+    "patrocinadoresDescripcion": "Las empresas que ya colaboran contigo. Enseñarlas es lo que convence a las que todavía no: añade todas las que tengas, clasifícalas y cuenta en dos líneas qué aportan.",
+    "avisadaEl": "Avisada el {fecha}. Solo se escribe una vez a cada empresa.",
+    "anadeCorreoParaAvisar": "Añade el correo de la empresa aquí arriba y podrás mandarle un agradecimiento con el enlace a tu página.",
+    "avisarA": "Avisar a {nombre}",
+    "leLlegaraCorreo": "Le llegará un correo <fuerte>a nombre de tu club</fuerte> dándole las gracias por apoyaros, con el enlace a tu página para que vea cómo aparece. Se manda una sola vez.",
+    "confirmoRelacion": "Confirmo que esta empresa colabora con mi club y que tengo relación con esa dirección de correo.",
+    "avisoEnviado": "Aviso enviado.",
+    "enviarAgradecimiento": "Enviar agradecimiento",
+    "subirEnLista": "Subir en la lista",
+    "bajarEnLista": "Bajar en la lista",
+    "correoEmpresa": "Correo de la empresa (opcional)",
+    "correoEmpresaAyuda": "Solo lo ves tú: nunca se publica. Sirve para mandarles el agradecimiento con el enlace a tu página.",
+    "correoEmpresaEjemplo": "contacto@empresa.es",
+    "alGuardarSeEnviara": "Al guardar, si has puesto un correo, se le enviará <fuerte>a nombre de tu club</fuerte> un agradecimiento por apoyaros con el enlace a tu página. Se manda una sola vez.",
+    "noEnviarCorreo": "No enviar el correo a esta empresa",
+    "noEnviarCorreoAyuda": "Márcalo si prefieres avisarles tú, o si todavía no has hablado con ellos. Podrás mandárselo más tarde desde su ficha.",
+    "categoria": "Categoría",
+    "categoriaAyuda": "Cómo aparece agrupado en tu página pública.",
+    "nombreCategoria": "Nombre de la categoría",
+    "nombreCategoriaAyuda": "Por ejemplo: Patrocinador técnico, Proveedor oficial.",
+    "patrocinaDesde": "Patrocina desde (año)",
+    "opcional": "Opcional.",
+    "queAporta": "Qué aporta",
+    "queAportaAyuda": "Dos líneas: qué patrocina, desde cuándo o por qué colabora. Máximo 400 caracteres.",
+    "logo": "Logo",
+    "logoPatrocinador": "Logo del patrocinador",
+    "cambiarLogo": "Cambiar logo",
+    "subirLogo": "Subir logo",
+    "patrocinadorAnadido": "Patrocinador añadido.",
+    "cambiosGuardados": "Cambios guardados.",
+    "guardarCambios": "Guardar cambios",
+    "buenRitmoCadaApartado": "Buen ritmo. Cada apartado que rellenes te sube en el buscador.",
+    "fichaAunTienePoca": "Tu ficha aún tiene poca información, y eso te hace salir más abajo en el buscador.",
+    "descripcionOpcional": "Descripción (opcional)",
+    "descripcionAccion": "Descripción de la acción",
+    "sinFoto": "Sin foto",
+    "hecho": "Hecho",
+    "editar": "Editar",
+    "cambiarFoto": "Cambiar foto",
+    "subirFoto": "Subir foto",
+    "subirFotoOpcional": "Subir foto (opcional)",
+    "guardado": "Guardado.",
+    "videoHito": "Vídeo del hito",
+    "videoOpcional": "Vídeo (opcional)",
+    "enlaceYoutubeVimeoDonde": "Enlace de YouTube, Vimeo o donde lo tengas.",
+    "fotoOpcional": "Foto (opcional)",
+    "fotoHito": "Foto del hito",
+    "avisoSuscripcion": {
+      "sinActivar": "Todavía no has activado tu suscripción. Mientras tanto, tu página pública y tus oportunidades no son visibles para las empresas.",
+      "terminada": "Tu suscripción ha terminado. Tu página pública y tus oportunidades ya no son visibles.",
+      "problemaCobro": "Hay un problema con el cobro de tu suscripción. Actualiza tu método de pago para no perder visibilidad.",
+      "pagoIncompleto": "No se ha podido completar el pago de tu suscripción.",
+      "cancelada": "Has cancelado tu suscripción: conservarás el acceso hasta el {fecha}.",
+      "ultimoDia": "Hoy es el último día de tu prueba. Mañana necesitarás una suscripción para seguir usando el panel.",
+      "quedanDias": "{dias, plural, one {Te queda # día de prueba.} other {Te quedan # días de prueba.}} Cuando termine necesitarás una suscripción para seguir usando el panel."
+    },
+    "barra": {
+      "faltaPorRellenar": "Te falta por rellenar",
+      "apartados": "{n, plural, one {# apartado} other {# apartados}}",
+      "verRestantes": "Ver los {n} restantes",
+      "verPrincipales": "Ver solo los principales"
+    },
+    "quitarFoto": "Quitar foto",
+    "desdeAnio": "desde {anio}",
+    "cerrar": "Cerrar"
   },
   "primerosPasos": {
     "titulo": "Empieza por aquí",
@@ -233,27 +487,898 @@
     "motivoAyuda": "Nos ayuda a mejorar. No es obligatorio y no cambia nada de la baja.",
     "motivoPlaceholder": "Lo dejamos por temas de presupuesto, ninguna empresa nos escribió…",
     "panelDelClub": "Panel del club",
-    "politicaDePrivacidad": "Política de Privacidad",
     "privacidadYDatos": "Privacidad y datos",
     "seBorranTuPerfil": "Se borran tu perfil, equipos, patrocinadores, oportunidades, logo y fotos.",
     "seBorranTusSolicitudes": "Se borran tus solicitudes de contacto y tu dossier comercial.",
     "seCancelaDeInmediato": "Se cancela de inmediato cualquier suscripción activa en Stripe.",
-    "tuPaginaPublicaDeja": "Tu página pública deja de existir. Esta acción no se puede deshacer."
+    "tuPaginaPublicaDeja": "Tu página pública deja de existir. Esta acción no se puede deshacer.",
+    "datosGuardamosClubComo": "Qué datos guardamos de tu club, cómo descargarlos y cómo borrar la cuenta. Nada de esto depende de que estés al día con el pago.",
+    "eliminando": "Eliminando…",
+    "eliminarTodo": "Eliminar mi cuenta y todos mis datos",
+    "descargarDatos": "Descargar mis datos (JSON)",
+    "masInformacion": "Más información sobre cómo tratamos tus datos en nuestra <enlace>Política de Privacidad</enlace>."
   },
   "solicitudes": {
     "panelDelClub": "Panel del club",
     "solicitudesDeContacto": "Solicitudes de contacto",
-    "todaviaNoHasRecibido": "Todavía no has recibido ninguna solicitud de contacto. Cuando una empresa te escriba desde tu página pública, aparecerá aquí y también recibirás un email."
+    "todaviaNoHasRecibido": "Todavía no has recibido ninguna solicitud de contacto. Cuando una empresa te escriba desde tu página pública, aparecerá aquí y también recibirás un email.",
+    "empresasHanEscritoDesde": "Empresas que han escrito desde tu página pública. Contestar el mismo día es lo que más cierra acuerdos.",
+    "solicitudAnterior": "Solicitud anterior (sin datos de contacto)",
+    "estados": {
+      "new": "Nueva",
+      "seen": "Vista",
+      "in_conversation": "En conversación",
+      "closed": "Cerrada",
+      "discarded": "Descartada"
+    },
+    "sobre": "Sobre: {titulo}",
+    "sobreElClub": "Sobre el club en general",
+    "persona": "Persona: {nombre}",
+    "correo": "Correo:",
+    "telefono": "Teléfono:"
   },
   "suscripcion": {
     "estado": "Estado",
     "finDeLaPrueba": "Fin de la prueba gratuita",
     "gestionarSuscripcion": "Gestionar suscripción",
     "panelDelClub": "Panel del club",
-    "planUnico": "Plan único",
     "proximaRenovacion": "Próxima renovación",
     "suscripcion": "Suscripción",
-    "t2990mesiva": "29,90 €/mes, IVA incluido. 30 días de prueba gratuita la primera vez, sin cobro inicial.",
-    "visibilidadPublica": "Visibilidad pública"
+    "visibilidadPublica": "Visibilidad pública",
+    "estados": {
+      "trialing": "En periodo de prueba",
+      "active": "Activa",
+      "past_due": "Pago pendiente",
+      "unpaid": "Impagada",
+      "canceled": "Cancelada",
+      "incomplete": "Pendiente de completar el pago",
+      "incomplete_expired": "Pendiente de completar el pago",
+      "paused": "Pausada",
+      "ninguno": "Sin suscripción"
+    },
+    "errores": {
+      "sesion": "Tu sesión ha caducado. Vuelve a iniciar sesión e inténtalo de nuevo.",
+      "checkout": "No se ha podido abrir la pasarela de pago. Inténtalo de nuevo en unos minutos.",
+      "portal": "No se ha podido abrir el portal de gestión de la suscripción. Inténtalo de nuevo en unos minutos.",
+      "sin-suscripcion": "Todavía no tienes ninguna suscripción que gestionar.",
+      "sin-plazas": "Se han agotado las plazas de club fundador mientras elegías. Puedes contratar el plan de temporada, que es el siguiente más barato.",
+      "inesperado": "Ha ocurrido un error inesperado."
+    },
+    "intro": "Tu plan, tus facturas y tus datos de facturación. Desde aquí se cambia el método de pago y se cancela, sin llamar a nadie.",
+    "confirmada": "Suscripción confirmada. Ya está todo en marcha.",
+    "confirmando": "¡Gracias! Estamos confirmando tu suscripción con Stripe. Suele tardar unos segundos: vuelve a cargar la página en un momento.",
+    "pruebaTerminada": "Tu mes de prueba ha terminado.",
+    "pruebaTerminadaTexto": "Para volver a usar tu panel y que tu página vuelva a verse, elige uno de los planes de abajo. No pierdes nada de lo que tienes guardado: sigue todo ahí esperándote.",
+    "pagoCancelado": "Has salido de la pasarela sin terminar el pago. No se ha cobrado nada y puedes volver a intentarlo cuando quieras.",
+    "planNombre": "Plan {nombre}",
+    "tuPlan": "Tu plan",
+    "precioConIva": "{precio} {periodo}, IVA incluido.",
+    "eresFundador": "Eres el club fundador nº {numero}: este precio no te sube nunca.",
+    "eligeComoPagar": "Elige cómo quieres pagar cuando termine tu mes gratis.",
+    "invitadoHasta": "Acceso de invitado hasta",
+    "eseDiaSeCobra": "ese día se cobra el primer recibo de tu plan.",
+    "hastaEntoncesNada": "hasta entonces no se te cobra nada. Te avisaremos por correo antes de esa fecha.",
+    "siNoEligesPlan": "si para entonces no has elegido plan, tu página deja de verse. No se cobra nada sin que tú lo actives.",
+    "accesoHastaCancelada": "Acceso hasta (cancelada)",
+    "visible": "Tu página pública y tus oportunidades son visibles.",
+    "noVisible": "Tu página pública y tus oportunidades NO son visibles ahora mismo.",
+    "tusFacturas": "Tus facturas",
+    "tusFacturasTexto": "Están todas en ese mismo botón, en el apartado <fuerte>Historial de facturación</fuerte>: se descargan en PDF, con el CIF y la dirección que diste al contratar. Ahí mismo puedes corregir esos datos si cambian, y la siguiente factura sale ya con los nuevos.",
+    "accesoGratuitoHasta": "Ya tienes acceso gratuito hasta el {fecha}.",
+    "accesoGratuitoTexto": "No necesitas elegir plan ni dar ninguna tarjeta hasta entonces. Te avisaremos por correo antes de esa fecha para que decidas con tiempo.",
+    "volverASuscribirse": "Volver a suscribirse",
+    "elegirPlan": "Elegir este plan",
+    "conservasDatos": "Conservas todos tus datos aunque la suscripción no esté activa: solo se oculta tu página pública y tus oportunidades hasta que vuelvas a suscribirte. Desde «Gestionar suscripción» puedes cambiar de tarjeta, descargar tus facturas, actualizar los datos fiscales del club o cancelar.",
+    "selector": {
+      "recomendado": "Recomendado",
+      "quedan": "Quedan {n}",
+      "ivaIncluido": "{periodo}, IVA incluido",
+      "empiezas": "Empiezas con <fuerte>30 días gratis</fuerte> y no se cobra nada hasta que terminen. Si un solo patrocinador te deja 300 €, ya has cubierto el año entero."
+    }
+  },
+  "comun": {
+    "rellenados": "{puestos} de {total} rellenados",
+    "guardado": "Guardado.",
+    "guardar": "Guardar",
+    "guardando": "Guardando…",
+    "cancelar": "Cancelar",
+    "eliminar": "Eliminar",
+    "editar": "Editar",
+    "quitar": "Quitar",
+    "cerrar": "Cerrar",
+    "venceEn": "{dias, plural, =0 {vence hoy} =1 {vence mañana} other {vence en # días}}",
+    "venciaHace": "{dias, plural, =1 {vencía ayer} other {vencía hace # días}}"
+  },
+  "publico": {
+    "equipoBorrado": "Equipo borrado",
+    "sinEquipoAsignado": "Sin equipo asignado",
+    "temporada": "Temporada {temporada}",
+    "partidosApuntados": "{n, plural, one {# partido apuntado} other {# partidos apuntados}}",
+    "personasEnTotal": "Personas en total",
+    "sumandoTodos": "Sumando todos los partidos apuntados",
+    "mediaEnCasa": "Media en casa",
+    "sobrePartidosEnCasa": "{n, plural, one {Sobre # partido en casa} other {Sobre # partidos en casa}}",
+    "aunNoHayEnCasa": "Aún no hay partidos en casa apuntados",
+    "mejorEnCasa": "Mejor partido en casa",
+    "equipoPorEquipo": "Equipo por equipo",
+    "equipoPorEquipoTexto": "No todos los equipos llevan la misma gente, y una empresa que patrocina al femenino sénior quiere el número de ese equipo, no la media del club.",
+    "partidos": "{n, plural, one {# partido} other {# partidos}}",
+    "enCasaCuantos": "{n} en casa",
+    "personasEnTotalCuantas": "{personas} personas en total",
+    "deMediaEnCasa": "de media en casa",
+    "deMedia": "de media",
+    "sinEquipoNota": "Los partidos sin equipo asignado son de antes de que se pudiera elegir. Cuentan para el total de la temporada, pero no para ningún equipo.",
+    "mesAMes": "Mes a mes",
+    "mesAMesTexto": "Para ver si la grada crece según avanza la temporada.",
+    "mes": "Mes",
+    "partidosColumna": "Partidos",
+    "total": "Total",
+    "media": "Media",
+    "fichaYaEnsena": "Tu ficha enseña <fuerte>{media}</fuerte> personas de asistencia media, que es justo lo que sale de estos partidos.",
+    "fichaPone": "En tu ficha pone <fuerte>{enFicha} personas</fuerte>. Con estos partidos salen <fuerte>{media}</fuerte>.",
+    "fichaSinMedia": "En tu ficha todavía no has puesto la asistencia media. Con estos partidos salen <fuerte>{media}</fuerte>.",
+    "usarMedia": "Usar esta media en mi ficha",
+    "mediaCopiada": "Media copiada a tu ficha.",
+    "apuntarPartido": "Apuntar un partido",
+    "cerrar": "Cerrar",
+    "anadirPartido": "+ Añadir partido",
+    "fechaPartido": "Fecha del partido",
+    "rival": "Rival",
+    "rivalEjemplo": "C.D. Ejemplo",
+    "dondeSeJugo": "¿Dónde se jugó?",
+    "enCasa": "En casa",
+    "fuera": "Fuera",
+    "cuantaGente": "Cuánta gente hubo",
+    "equipo": "Equipo",
+    "sinEspecificar": "Sin especificar",
+    "otroEscribirlo": "Otro (escribirlo)",
+    "equipoEjemplo": "Alevín mixto, filial…",
+    "sinEquipos": "Todavía no tienes equipos en tu ficha. <enlace>Añádelos aquí</enlace> y aparecerán en esta lista.",
+    "competicion": "Competición (opcional)",
+    "competicionEjemplo": "Liga, copa, amistoso…",
+    "notas": "Notas (opcional)",
+    "notasEjemplo": "Derbi, día del club, lluvia…",
+    "estimacion": "No hace falta una cifra exacta: una estimación honesta del aforo vale, y es lo que hace que la media de tu ficha sea defendible.",
+    "partidoApuntado": "Partido apuntado.",
+    "guardarPartido": "Guardar partido",
+    "ningunPartido": "Todavía no has apuntado ningún partido. Empieza por el último que jugasteis en casa.",
+    "personasEnPartidos": "{n, plural, one {{personas} personas en # partido} other {{personas} personas en # partidos}}",
+    "mediaDe": "media de {media}",
+    "contra": "vs {rival}",
+    "enCampoDe": "en {rival}",
+    "personas": "personas",
+    "borrar": "Borrar",
+    "panelClub": "Panel del club",
+    "publicoPartidos": "Público en los partidos",
+    "apuntaCuantaGenteHubo": "Apunta cuánta gente hubo en cada partido. Con eso, la asistencia media de tu ficha deja de ser un número puesto a ojo y pasa a ser un dato que puedes defender delante de una empresa."
+  },
+  "acciones": {
+    "tuSesionCaducadoVuelveIniciar": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
+    "estaAccionSoloEstaDisponible": "Esta acción solo está disponible para clubes.",
+    "ponFechaPartido": "Pon la fecha del partido.",
+    "escribeContraQuienJugo": "Escribe contra quién se jugó.",
+    "escribeCuantaGenteHubo": "Escribe cuánta gente hubo.",
+    "publicoTieneSerNumeroEntre": "El público tiene que ser un número entre 0 y 200.000.",
+    "eseEquipoTuClub": "Ese equipo no es de tu club.",
+    "sabePartidoBorrar": "No se sabe qué partido borrar.",
+    "todaviaHayPartidosApuntadosPara": "Todavía no hay partidos apuntados para calcular la media.",
+    "podidoGuardarPartido": "No se ha podido guardar el partido.",
+    "podidoBorrarPartido": "No se ha podido borrar el partido.",
+    "podidoGuardarMediaTuFicha": "No se ha podido guardar la media en tu ficha.",
+    "tuSesionTienePermisoPara": "Tu sesión no tiene permiso para guardar. Cierra sesión, vuelve a entrar e inténtalo otra vez. Si sigue pasando, escríbenos.",
+    "indicaNombreClub": "Indica el nombre del club.",
+    "indicaLocalidadClub": "Indica la localidad del club.",
+    "correoContactoPareceValido": "El correo de contacto no parece válido.",
+    "posicionValida": "Posición no válida.",
+    "indicaDeporteEquipo": "Indica el deporte del equipo.",
+    "sabeEquipoCambiar": "No se sabe qué equipo cambiar.",
+    "podidoIdentificarBorrar": "No se ha podido identificar qué borrar.",
+    "hitosTienenFormatoValido": "Los hitos no tienen un formato válido.",
+    "accionesTienenFormatoValido": "Las acciones no tienen un formato válido.",
+    "indicaNombrePatrocinador": "Indica el nombre del patrocinador.",
+    "textoPatrocinadorPuedePasar400": "El texto del patrocinador no puede pasar de 400 caracteres.",
+    "podidoIdentificarPatrocinador": "No se ha podido identificar el patrocinador.",
+    "correoEmpresaPareceValido": "El correo de la empresa no parece válido.",
+    "encontradoEsePatrocinador": "No se ha encontrado ese patrocinador.",
+    "anadePrimeroCorreoEmpresa": "Añade primero el correo de la empresa.",
+    "estaEmpresaYaLeAviso": "A esta empresa ya se le avisó. Solo se le escribe una vez.",
+    "completaAntesIdentidadTuClub": "Completa antes la identidad de tu club: el correo lleva el enlace a tu página.",
+    "marcaConfirmacionHaceFaltaDeclares": "Marca la confirmación: hace falta que declares que esta empresa colabora contigo y que tienes relación con esa dirección.",
+    "nombreCategoriaPuedePasar40": "El nombre de la categoría no puede pasar de 40 caracteres.",
+    "podidoGuardarIntentaloNuevo": "No se ha podido guardar. Inténtalo de nuevo.",
+    "podidoGuardarLogo": "No se ha podido guardar el logo.",
+    "podidoGuardarPortada": "No se ha podido guardar la portada.",
+    "podidoGuardarEncuadre": "No se ha podido guardar el encuadre.",
+    "podidoQuitarPortada": "No se ha podido quitar la portada.",
+    "podidoGuardarFoto": "No se ha podido guardar la foto.",
+    "podidoQuitarFoto": "No se ha podido quitar la foto.",
+    "podidoAnadirEquipo": "No se ha podido añadir el equipo.",
+    "hanPodidoGuardarCambiosEquipo": "No se han podido guardar los cambios del equipo.",
+    "podidoBorrarIntentaloNuevo": "No se ha podido borrar. Inténtalo de nuevo.",
+    "podidoAnadirPatrocinador": "No se ha podido añadir el patrocinador.",
+    "hanPodidoGuardarCambios": "No se han podido guardar los cambios.",
+    "fechaCaducidadValida": "La fecha de caducidad no es válida.",
+    "podidoGuardarConfiguracionDossier": "No se ha podido guardar la configuración del dossier.",
+    "escribeMenosNombreEmpresa": "Escribe al menos el nombre de la empresa.",
+    "fechaVolverLlamarValida": "La fecha de volver a llamar no es válida.",
+    "podidoGuardarIntentaloOtraVez": "No se ha podido guardar. Inténtalo otra vez.",
+    "baseDatosTodaviaReconoceAlguno": "La base de datos todavía no reconoce alguno de los campos nuevos. Escríbenos a info@apoyaclub.com y lo dejamos listo en un momento.",
+    "indicaNombreOportunidad": "Indica el nombre de la oportunidad.",
+    "eligeTipoOportunidad": "Elige un tipo de oportunidad.",
+    "indicaValorValido0O": "Indica un valor válido (0 o más).",
+    "eligeServicioOProductoNecesitas": "Elige qué servicio o producto necesitas.",
+    "oportunidadEncontrada": "Oportunidad no encontrada.",
+    "podidoCrearOportunidad": "No se ha podido crear la oportunidad.",
+    "podidoGuardarOportunidad": "No se ha podido guardar la oportunidad.",
+    "sabemosPatrocinadorTrata": "No sabemos de qué patrocinador se trata.",
+    "eligeSiContratoFacturaU": "Elige si es un contrato, una factura u otro documento.",
+    "esePatrocinadorTuClub": "Ese patrocinador no es de tu club.",
+    "eligeArchivoAntesGuardar": "Elige un archivo antes de guardar.",
+    "podidoCancelarTuSuscripcionStripe": "No se ha podido cancelar tu suscripción de Stripe. Cancélala desde \"Gestionar suscripción\" y vuelve a intentarlo.",
+    "podidoEliminarCuentaIntentaloNuevo": "No se ha podido eliminar la cuenta. Inténtalo de nuevo o contacta con soporte.",
+    "fechaParaEscribirTieneSer": "La fecha para escribir tiene que ser anterior al final del acuerdo.",
+    "escribeParaEmpresa": "Escribe para qué empresa es.",
+    "encontradoTarea": "No se ha encontrado la tarea.",
+    "escribeHayHacer": "Escribe qué hay que hacer.",
+    "ponFechaLimite": "Pon la fecha límite.",
+    "fechaInicioPuedeSerPosterior": "La fecha de inicio no puede ser posterior a la fecha límite.",
+    "estadoValido": "Estado no válido.",
+    "podidoRepetirIntentaloNuevo": "No se ha podido repetir. Inténtalo de nuevo.",
+    "guardadoSinAviso": "Patrocinador guardado, pero el aviso no ha salido: {error}",
+    "guardadoConAviso": "Guardado. Se le ha mandado el agradecimiento a {nombre}.",
+    "cambiosSinAviso": "Cambios guardados, pero el aviso no ha salido: {error}",
+    "cambiosConAviso": "Cambios guardados. Se le ha mandado el agradecimiento a {nombre}.",
+    "cupoAvisos": "Has avisado a {n} empresas hoy. Continúa mañana.",
+    "correosSinConfigurar": "El envío de correos todavía no está configurado en la plataforma.",
+    "avisoNoEnviado": "No se ha podido enviar el aviso. Inténtalo más tarde.",
+    "escribeNombreCategoria": "Escribe cómo quieres llamar a esta categoría (por ejemplo, «Patrocinador técnico»).",
+    "faltaMigracion": "Esta función necesita una actualización de la base de datos que todavía no está aplicada.",
+    "noSubidoArchivo": "No hemos podido subir el archivo. Inténtalo otra vez.",
+    "noGuardadoDocumento": "No hemos podido guardar el documento. Inténtalo otra vez.",
+    "noGuardadosCambios": "No hemos podido guardar los cambios. Inténtalo otra vez.",
+    "escribePalabra": "Escribe «{palabra}» (en mayúsculas) para confirmar.",
+    "copia": "{titulo} (copia)",
+    "lineas": {
+      "faltaAccion": "Te falta escribir qué hay que hacer en una de las líneas.",
+      "faltaFin": "Pon la fecha límite de «{accion}».",
+      "inicioNoVale": "La fecha de inicio de «{accion}» no vale.",
+      "inicioDespues": "En «{accion}», la fecha de inicio es posterior a la fecha límite.",
+      "ninguna": "Escribe al menos una cosa que haya que hacer."
+    },
+    "documentos": {
+      "sin-archivo": "Elige un archivo antes de guardar.",
+      "tipo-no-permitido": "Solo se pueden subir PDF o fotos (JPG, PNG o WEBP).",
+      "demasiado-grande": "El archivo pesa más de {mb} MB. Comprímelo o haz la foto con menos calidad.",
+      "vacio": "El archivo está vacío.",
+      "limite-alcanzado": "Cada patrocinador admite {maximo} documentos. Borra alguno para subir otro."
+    }
+  },
+  "tareas": {
+    "filtros": {
+      "pendientes": "Pendientes",
+      "caducadas": "Caducadas",
+      "hechas": "Hechas",
+      "todas": "Todas"
+    },
+    "atajos": {
+      "publicacionInstagram": "Publicación en Instagram",
+      "storyInstagram": "Story en Instagram",
+      "video": "Vídeo",
+      "visitaJugadores": "Visita de los jugadores",
+      "logoCamiseta": "Logo en la camiseta",
+      "vallaPabellon": "Valla en el pabellón",
+      "mencionPrograma": "Mención en el programa del partido",
+      "publicacionFacebook": "Publicación en Facebook"
+    },
+    "apuntarAlgoNuevo": "Apuntar algo nuevo",
+    "todoLoPrometido": "Todo lo que has prometido",
+    "todoLoPrometidoTexto": "Agrupado por empresa. Delante, las que tienen algo vencido.",
+    "nadaApuntado": "Todavía no has apuntado nada. Empieza por lo que le has prometido a tu patrocinador principal: si está escrito, se cumple.",
+    "nadaEnFiltro": "No hay nada en este filtro.",
+    "vencidas": "{n, plural, one {# vencida} other {# vencidas}}",
+    "pendientes": "{n, plural, one {# pendiente} other {# pendientes}}",
+    "loHabitual": "Lo habitual, de un clic",
+    "queHayQueHacer": "Qué hay que hacer",
+    "cosa": "Cosa {n}",
+    "quitar": "Quitar",
+    "accionEjemplo": "2 publicaciones en Instagram",
+    "queHayQueHacerCosa": "Qué hay que hacer, cosa {n}",
+    "desde": "Desde (opcional)",
+    "desdeAyuda": "Si es algo que dura, como una valla.",
+    "fechaLimite": "Fecha límite",
+    "fechaLimiteAyuda": "El día en que tiene que estar hecho.",
+    "notas": "Notas (opcional)",
+    "notasEjemplo": "Etiquetar a @ferreteriaramirez. Fotos del partido del sábado.",
+    "anadirOtraCosa": "+ Añadir otra cosa",
+    "apuntado": "Apuntado.",
+    "anadirALaLista": "{n, plural, one {Añadir a la lista} other {Añadir las # a la lista}}",
+    "apuntarPrometido": "Apuntar lo que le has prometido a una empresa",
+    "apuntarPrometidoTexto": "Puedes añadir todas las cosas de una vez: las dos publicaciones, el vídeo y la visita van juntas en el mismo patrocinio.",
+    "empresa": "Empresa",
+    "empresaAyuda": "Tus patrocinadores y las empresas que ya has apuntado aquí.",
+    "eligeEmpresa": "Elige una empresa…",
+    "otraEmpresa": "Otra empresa (escribirla)",
+    "nombreEmpresa": "Nombre de la empresa",
+    "noHaceFaltaRegistrada": "No hace falta que esté registrada en ApoyaClub.",
+    "empresaEjemplo": "Ferretería Ramírez",
+    "informe": {
+      "terminadas": "{n, plural, one {Has terminado con un patrocinador: mándale el informe} other {Has terminado con # patrocinadores: mándales el informe}}",
+      "terminadasPorQue": "Cuanto antes, mejor: recién terminado todavía lo tiene fresco, y ese es el momento de enseñarle lo que salió. Después ya es un recordatorio de algo viejo.",
+      "ventana": {
+        "mitad": {
+          "titulo": "Estás a mitad de temporada: buen momento para mandar el informe de progreso",
+          "porQue": "Ahora todavía da tiempo a corregir lo que falte. Si esperas a junio, lo que no esté hecho ya no se arregla — solo se cuenta."
+        },
+        "final": {
+          "titulo": "Se acaba la temporada: manda el informe antes de hablar de renovar",
+          "porQue": "Es cuando la empresa decide si sigue. Conviene que lo decida mirando lo que recibió, no lo que recuerda."
+        }
+      },
+      "terminadoEl": "terminado el {fecha}",
+      "ultimoFue": "el último fue en {mes}",
+      "ningunInforme": "todavía no le has descargado ninguno",
+      "loMandasTu": "El informe lo mandas tú, desde tu correo o por WhatsApp. Descárgalo y adjúntalo con dos líneas tuyas: llega mucho mejor que un correo automático.",
+      "pdfCompacto": "Informe PDF",
+      "pdf": "Generar informe de progreso (PDF)",
+      "pdfTitulo": "Descargar en PDF lo que has hecho por {empresa}",
+      "word": "Word",
+      "wordTitulo": "Descargar en Word lo que has hecho por {empresa}, por si quieres retocarlo"
+    },
+    "delAl": "Del {inicio} al {fin}",
+    "paraEl": "Para el {fin}",
+    "hechoMinuscula": "hecho",
+    "verPrueba": "Ver la prueba →",
+    "estado": {
+      "hecha": "Hecho",
+      "cancelada": "Cancelada",
+      "caducada": "Caducado",
+      "hoy": "Para hoy",
+      "pronto": "Esta semana",
+      "programada": "Pendiente"
+    },
+    "marcarHecho": "Marcar hecho",
+    "cancelar": "Cancelar",
+    "volverPendiente": "Volver a pendiente",
+    "cerrar": "Cerrar",
+    "editar": "Editar",
+    "repetirTitulo": "Crea una copia con la fecha un mes más adelante",
+    "repetir": "Repetir el mes que viene",
+    "borrar": "Borrar",
+    "notasCorto": "Notas",
+    "guardarCambios": "Guardar cambios",
+    "enlacePrueba": "Enlace de la prueba (opcional)",
+    "enlacePruebaAyuda": "El enlace a la publicación, al vídeo o a la foto. Es lo que le enseñarás a la empresa cuando toque renovar.",
+    "guardarComoHecho": "Guardar como hecho",
+    "cabecera": {
+      "panel": "Panel del club",
+      "titulo": "Tareas con tus patrocinadores",
+      "texto": "Lo que le has prometido a cada empresa y para cuándo. Es lo que hace que en junio puedas enseñar qué recibieron a cambio — y que renueven."
+    },
+    "hoy": {
+      "titulo": "Hoy toca esto",
+      "tituloVencidas": "{n, plural, one {Hoy toca esto — y # se te ha pasado de fecha} other {Hoy toca esto — y # se te han pasado de fecha}}",
+      "verTodas": "Ver todas →",
+      "yMas": "Y {n} más."
+    }
+  },
+  "plantillas": {
+    "tipos": {
+      "conocida": {
+        "etiqueta": "Una empresa que ya os conoce",
+        "cuando": "El padre de un jugador, el bar de enfrente, un antiguo socio."
+      },
+      "fria": {
+        "etiqueta": "Una empresa que no os conoce",
+        "cuando": "Un comercio del barrio con el que no tenéis trato todavía."
+      },
+      "servicio": {
+        "etiqueta": "Pedir un servicio, no dinero",
+        "cuando": "El fisio, la furgoneta, la imprenta, las comidas."
+      },
+      "insistir": {
+        "etiqueta": "Volver a intentarlo",
+        "cuando": "Escribisteis y no han contestado. A los siete o diez días."
+      },
+      "responder": {
+        "etiqueta": "Contestar a quien ha preguntado",
+        "cuando": "Os han escrito. Es el correo que más se juega y el que peor sale."
+      },
+      "renovar": {
+        "etiqueta": "Renovar con quien ya os apoya",
+        "cuando": "Antes de que acabe la temporada, no después."
+      },
+      "cierre": {
+        "etiqueta": "Cuando os dicen que no",
+        "cuando": "Dejar la puerta abierta para el año que viene."
+      }
+    },
+    "cifras": {
+      "jugadores": "{n} jugadores",
+      "familias": "{n} familias",
+      "socios": "{n} socios",
+      "publico": "una media de {n} personas en cada partido en casa"
+    },
+    "huecos": {
+      "cifras": "Cuánta gente sois: jugadores, familias, socios o público en los partidos",
+      "dossier": "El enlace a tu dossier, para que la empresa vea de un vistazo qué ofreces",
+      "firma": "Quién firma el correo"
+    },
+    "comun": {
+      "fraseCifras": "Este año somos {cifras}. Todo eso es gente de aquí que ve nuestras camisetas y nuestras redes cada fin de semana.",
+      "saludoNombre": "Hola {nombre},",
+      "saludo": "Hola,",
+      "presentacionCompleta": "Te escribo del {club}, club de {deporte} de {localidad}.",
+      "presentacionDeporte": "Te escribo del {club}, club de {deporte}.",
+      "presentacionLocalidad": "Te escribo del {club}, club de {localidad}.",
+      "presentacionSola": "Te escribo del {club}, club.",
+      "enlaceDossier": "Aquí tienes quiénes somos y qué ofrecemos, en dos minutos: {url}",
+      "enlaceFicha": "Aquí tienes nuestra página, por si quieres echarle un ojo: {url}",
+      "tuNombre": "[tu nombre]"
+    },
+    "conocida": {
+      "asunto1": "Una idea para {empresa} y el {club}",
+      "asunto2": "¿Te cuento algo del {club}?",
+      "asunto3": "{club}: te queríamos proponer una cosa",
+      "propuesta": "Estamos buscando empresas de aquí que quieran salir con nosotros esta temporada. No tiene que ser mucho: hay desde cosas pequeñas hasta el patrocinio principal, y también nos sirve en especie.",
+      "llamada": "¿Te va bien que te llame esta semana y lo vemos en cinco minutos?",
+      "despedida": "Un saludo,"
+    },
+    "fria": {
+      "asunto1": "{club}: ¿os interesa salir en nuestras camisetas?",
+      "asunto2": "Un club de {localidad} quiere trabajar con vosotros",
+      "asunto2SinLocalidad": "Un club de aquí quiere trabajar con vosotros",
+      "asunto3": "Patrocinio local, sin compromiso",
+      "porQue": "Os escribo porque sois de {localidad} y creemos que os puede encajar. La publicidad en un club de barrio no es como la de internet: la ve la gente que luego entra por vuestra puerta, y os asocia a algo que quieren.",
+      "porQueSinLocalidad": "Os escribo porque sois de la zona y creemos que os puede encajar. La publicidad en un club de barrio no es como la de internet: la ve la gente que luego entra por vuestra puerta, y os asocia a algo que quieren.",
+      "respuesta": "Si os interesa, contestadme a este correo y os cuento las opciones. Y si no es el momento, decídmelo también y no os molesto más.",
+      "despedida": "Gracias,"
+    },
+    "servicio": {
+      "asunto1": "¿Nos podríais echar una mano en el {club}?",
+      "asunto2": "Una colaboración sin dinero de por medio",
+      "asunto3": "{club}: os proponemos un intercambio",
+      "necesidad": "Lo que necesitamos es esto: {detalle}",
+      "necesidadHueco": "Lo que necesitamos no es dinero, es [di aquí exactamente qué: fisioterapia para los partidos de casa, una furgoneta para los desplazamientos, las lonas del pabellón…].",
+      "aCambio": "A cambio os damos la misma visibilidad que a cualquier patrocinador: vuestro logo, vuestro nombre en nuestras redes y en el pabellón, y a nuestra gente contándolo.",
+      "llamada": "¿Lo hablamos? Con una llamada corta nos aclaramos.",
+      "despedida": "Un saludo,"
+    },
+    "insistir": {
+      "asunto1": "Te escribí hace unos días — {club}",
+      "asunto2": "¿Le has podido echar un ojo?",
+      "asunto3": "Vuelvo a la carga (y no insisto más)",
+      "recordatorio": "Te escribí hace unos días desde el {club} y no sé si te habrá llegado, que los correos se pierden.",
+      "sinLata": "No te quiero dar la lata: con que me digas que no es el momento, me vale y no vuelvo a escribirte.",
+      "siEsQueSi": "Y si es que sí, dime cuándo te viene bien que te llame y lo vemos en cinco minutos.",
+      "despedida": "Gracias de todas formas,"
+    },
+    "responder": {
+      "asunto1": "Re: tu mensaje — {club}",
+      "asunto2": "Gracias por escribirnos",
+      "asunto3": "Te cuento, {contacto}",
+      "gracias": "Muchas gracias por escribirnos. Te cuento lo que podemos hacer.",
+      "respuesta": "Sobre lo que preguntabas: {detalle}",
+      "respuestaHueco": "[Responde aquí a lo que te haya preguntado, con nombres y números concretos. Es la parte que más se juega.]",
+      "llamada": "Si te encaja, dime un día y una hora y te llamo. Y si prefieres verlo en persona, nos pasamos por ahí sin problema.",
+      "despedida": "Un saludo,"
+    },
+    "renovar": {
+      "asunto1": "¿Seguimos juntos la temporada que viene?",
+      "asunto2": "{club}: gracias por este año",
+      "asunto3": "Renovación {club} — {empresa}",
+      "gracias": "Se nos acaba la temporada y quería escribirte antes de que se me pasara: gracias por haber estado con el {club} este año.",
+      "hecho": "Esto es lo que hemos hecho con vosotros: {detalle}",
+      "hechoHueco": "[Cuéntale aquí qué recibió: las publicaciones, la lona, las menciones. Si lo tienes apuntado en Tareas, sácalo de ahí.]",
+      "seguir": "Para el año que viene nos gustaría seguir, y si quieres podemos darle una vuelta a lo que hacemos para que os luzca más.",
+      "hablamos": "¿Lo hablamos un día de estos?",
+      "despedida": "Un abrazo,"
+    },
+    "cierre": {
+      "asunto1": "Sin problema — {club}",
+      "asunto2": "Gracias de todas formas",
+      "asunto3": "Nos vemos el año que viene",
+      "gracias": "Gracias por contestar, de verdad. Un no a tiempo vale mucho más que un silencio.",
+      "puerta": "Si en algún momento cambian las cosas, aquí estamos. Y si conoces a alguien a quien le pueda encajar, te agradecería que le pasaras nuestra página.",
+      "despedida": "Mucha suerte con todo,"
+    }
+  },
+  "objetivos": {
+    "correo": {
+      "escribirA": "Escribir a {empresa}",
+      "loEnviasTu": "Lo escribimos nosotros; lo envías tú desde tu correo, para que te contesten a ti.",
+      "cerrar": "Cerrar",
+      "queSituacion": "Qué situación es",
+      "asunto": "Asunto",
+      "elCorreo": "El correo",
+      "cambialo": "Cámbialo a tu manera antes de enviarlo. Lo que está entre corchetes hay que rellenarlo.",
+      "quedariaMejor": "Este correo quedaría mejor si rellenas:",
+      "copiado": "Copiado",
+      "copiar": "Copiar el correo",
+      "abrir": "Abrir en mi correo",
+      "sinDireccion": "No hemos encontrado ninguna dirección en sus datos, así que se abrirá en blanco."
+    },
+    "estados": {
+      "pendiente": "Por contactar",
+      "contactado": "Contactado",
+      "interesado": "Interesado",
+      "acuerdo": "Acuerdo cerrado",
+      "descartado": "Dijo que no"
+    },
+    "origenes": {
+      "familia": {
+        "etiqueta": "Familia del club",
+        "pista": "Padres, madres, ex jugadores, gente de la junta. Los que ya os cogen el teléfono."
+      },
+      "rival": {
+        "etiqueta": "Patrocina a un rival",
+        "pista": "Ya ha decidido que el patrocinio deportivo le sirve. No hay que convencerle de la idea."
+      },
+      "barrio": {
+        "etiqueta": "Comercio de la zona",
+        "pista": "Los que ven pasar a vuestras familias cada sábado camino del pabellón."
+      },
+      "conocido": {
+        "etiqueta": "Contacto personal",
+        "pista": "Alguien a quien conocéis por otra vía."
+      },
+      "otro": {
+        "etiqueta": "Otro",
+        "pista": ""
+      }
+    },
+    "borrar": "Borrar",
+    "volverALlamar": "Volver a llamar el",
+    "guardar": "Guardar",
+    "tocaHoy": "Toca hoy — era el {fecha}",
+    "cerrar": "Cerrar",
+    "escribirle": "Escribirle",
+    "resumen": {
+      "tocanHoy": "Toca llamar hoy",
+      "porContactar": "Por contactar",
+      "enConversacion": "En conversación",
+      "acuerdos": "Acuerdos cerrados"
+    },
+    "apuntarEmpresa": "Apuntar una empresa",
+    "anadirEmpresa": "+ Añadir empresa",
+    "empresa": "Empresa",
+    "empresaEjemplo": "Ferretería Martínez",
+    "sector": "A qué se dedica (opcional)",
+    "sectorEjemplo": "Ferretería",
+    "deDondeSale": "¿De dónde sale?",
+    "volverALlamarOpcional": "Volver a llamar el (opcional)",
+    "conQuienHablar": "Con quién hablar (opcional)",
+    "conQuienHablarEjemplo": "Marta, la madre de Iker",
+    "telefonoOCorreo": "Teléfono o correo (opcional)",
+    "notas": "Notas (opcional)",
+    "notasEjemplo": "Su hijo juega en alevín. Ya nos dio material el año pasado.",
+    "apuntada": "Apuntada.",
+    "apuntar": "Apuntar",
+    "porDondeEmpezar": "Por dónde empezar",
+    "porDondeEmpezarTexto": "No hace falta una lista de cien empresas. Hacen falta quince a las que alguien de tu club pueda llamar por su nombre. Míralo en este orden:",
+    "cabecera": {
+      "panel": "Panel del club",
+      "titulo": "A quién escribir",
+      "texto": "Tu lista de empresas: a quién queréis llamar, quién de vuestra gente las conoce y cuándo toca volver a intentarlo. Lo que se pierde casi siempre no es un «no», es un «llámame en septiembre» que nadie apuntó."
+    },
+    "tuClub": "tu club"
+  },
+  "renovaciones": {
+    "estados": {
+      "pasada": "Se pasó",
+      "urgente": "Corre prisa",
+      "proxima": "Se acerca",
+      "al-dia": "Al día",
+      "sin-fecha": "Sin fecha"
+    },
+    "plazo": {
+      "hoy": "Hoy",
+      "manana": "Mañana",
+      "ayer": "Se pasó ayer",
+      "hace": "Se pasó hace {dias} días",
+      "faltan": "Faltan {dias} días",
+      "meses": "{meses, plural, one {Falta un mes} other {Faltan unos # meses}}"
+    },
+    "mensaje": {
+      "hola": "Hola:",
+      "desde": "Lleváis con nosotros desde {anio}, {anios, plural, one {una temporada} other {# temporadas}}.",
+      "estaTemporada": "Gracias por haber estado con nosotros esta temporada.",
+      "loAcordado": "Lo que acordamos: {notas}",
+      "osEscribo": "Os escribo del {club}. {desde} Vuestro apoyo se ha visto en el club y queríamos daros las gracias antes de nada.",
+      "cerrando": "Estamos cerrando ya la temporada {temporada} y me gustaría saber si queréis seguir con nosotros. Si os parece, os preparo lo que hicimos este año y lo que podemos ofreceros el que viene, y lo vemos sin compromiso.",
+      "llamada": "¿Os va bien que os llame esta semana?",
+      "despedida": "Un saludo,"
+    },
+    "conElClubDesde": "Con el club desde {anio}",
+    "sinFechaInicio": "Sin fecha de inicio",
+    "cuandoEscribir": "Cuándo escribir",
+    "cuandoEscribirAyuda": "Ponla antes de que acabe el acuerdo, con margen para hablarlo.",
+    "cuandoAcaba": "Cuándo acaba el acuerdo",
+    "queAcordasteis": "Qué acordasteis",
+    "queAcordasteisAyuda": "Lo que hoy está en la cabeza de quien lo firmó. Cuando cambie la junta, esto es lo único que queda.",
+    "queAcordasteisEjemplo": "600 € por temporada, logo en la camiseta y dos publicaciones al mes.",
+    "guardado": "Guardado.",
+    "guardando": "Guardando…",
+    "guardar": "Guardar",
+    "ocultarMensaje": "Ocultar el mensaje",
+    "queEscribirle": "Qué escribirle",
+    "puntoDePartida": "Un punto de partida, no un correo para mandar tal cual: cámbialo a vuestra manera de hablar antes de enviarlo.",
+    "copiado": "Copiado",
+    "copiar": "Copiar",
+    "cabecera": {
+      "panel": "Panel del club",
+      "titulo": "Renovaciones",
+      "texto": "Hasta cuándo dura cada patrocinio y cuándo toca hablarlo. Casi ningún patrocinador se pierde porque diga que no: se pierde porque nadie volvió a preguntar a tiempo."
+    },
+    "avisan": "{n, plural, one {Tienes <fuerte>#</fuerte> renovación que necesita que escribas ya.} other {Tienes <fuerte>#</fuerte> renovaciones que necesitan que escribas ya.}}",
+    "completaIdentidad": "Completa primero la identidad de tu club en <enlace>tu perfil</enlace>.",
+    "sinPatrocinadores": "Todavía no has añadido ningún patrocinador. Añádelos en <enlace>Patrocinadores</enlace> y aquí podrás llevar el control de sus renovaciones."
+  },
+  "alcance": {
+    "panelClub": "Panel del club",
+    "alcanceClub": "Alcance del club",
+    "cuantaGenteLlegasDicho": "A cuánta gente llegas, dicho de forma que aguante una pregunta. Aquí no se suman las cifras entre sí: la misma persona puede ser socio, padre de un jugador y seguidor en redes, y sumarla tres veces se nota enseguida.",
+    "siTuvierasDecirSola": "Si tuvieras que decir una sola cifra, esta",
+    "comparadoTemporadaPasada": "Comparado con la temporada pasada",
+    "estoHacePatrocinadorRenueve": "Esto es lo que hace que un patrocinador renueve: no que el club le caiga bien, sino enseñarle que este año hay más gente que el pasado.",
+    "teFaltaParaSirve": "Lo que te falta, y para qué sirve",
+    "dondeEmpezar": "Por dónde empezar",
+    "nadaEstoObligatorioCada": "Nada de esto es obligatorio. Cada cosa que rellenes es una pregunta menos que te va a hacer la empresa.",
+    "fichaTodaviaNoTiene": "Tu ficha todavía no tiene con qué calcular nada. Esto es lo que más cambia el informe, por orden.",
+    "comparacion": "De {antes} personas de media en la {temporadaAntes} a {ahora} en la {temporadaAhora}: <fuerte>{signo}{diferencia} personas ({signo}{porcentaje} %)</fuerte>.",
+    "mismasCifras": "Estas mismas cifras son las que salen en la sección de audiencia de tu <enlace>dossier</enlace>. Se calculan en un solo sitio, así que los dos documentos no pueden decir cosas distintas.",
+    "informe": {
+      "avisoDeOrigen": "Cifras facilitadas por el club. ApoyaClub no las verifica.",
+      "bloques": {
+        "contado": {
+          "titulo": "Lo que se ha contado",
+          "explicacion": "Público apuntado partido a partido. Es la única parte que no depende de que nadie se fíe de una cifra escrita a mano."
+        },
+        "declarado": {
+          "titulo": "Lo que el club declara",
+          "explicacion": "Cifras de la ficha del club. Van una a una y sin sumar: la misma persona puede ser socio, padre de un jugador y seguidor en redes."
+        },
+        "deducido": {
+          "titulo": "Lo que se deduce",
+          "explicacion": "Cuentas hechas con las cifras de arriba. La cuenta va escrita entera para que cualquiera pueda comprobarla."
+        }
+      },
+      "cifras": {
+        "publicoMedioEnCasa": "Público de media en casa",
+        "publicoMedio": "Público de media por partido",
+        "mejorPartido": "Su mejor partido",
+        "partidosApuntados": "Partidos apuntados",
+        "jugadores": "Jugadores",
+        "socios": "Socios",
+        "familias": "Familias vinculadas",
+        "equipos": "Equipos",
+        "seguidores": "Seguidores en {red}",
+        "alcanceEscrito": "Alcance estimado",
+        "publicoDeUnPartido": "Público de un partido",
+        "personasDistintas": "Personas distintas, como mínimo",
+        "asistencias": "Asistencias al campo en la temporada"
+      },
+      "procedencia": {
+        "unEquipo": "jugadores del único equipo con recuento en la ficha",
+        "variosEquipos": "sumando los jugadores de {n} equipos de la ficha",
+        "declarado": "declarado por el club",
+        "mediaDe": "media de {n, plural, one {# partido apuntado} other {# partidos apuntados}} de la temporada {temporada}",
+        "contra": "contra {rival}, el {fecha}",
+        "temporada": "temporada {temporada}",
+        "temporadaEnCasa": "temporada {temporada}, {n} de ellos en casa",
+        "equipos": "equipos dados de alta en la ficha",
+        "estimacion": "estimación escrita por el club en su ficha",
+        "mayorGrupo": "el mayor de los grupos del club, no su suma"
+      },
+      "cuentas": {
+        "personasDistintas": "la cifra más alta que tiene el club ({grupo}: {valor}). No se suman los grupos porque la misma persona puede estar en varios.",
+        "asistencias": "{media} personas × {n, plural, one {# partido} other {# partidos}} en casa. Son veces que alguien fue al campo, no personas distintas: quien no falta a ninguno cuenta {n, plural, one {# vez} other {# veces}}."
+      },
+      "faltan": {
+        "publico": {
+          "que": "El público de tus partidos",
+          "porQue": "Es la única cifra que no depende de que te crean: la apuntas partido a partido y se enseña con el recuento detrás. Es la que más peso tiene delante de una empresa.",
+          "enlace": "Apuntar un partido"
+        },
+        "masPartidos": {
+          "que": "Más partidos apuntados",
+          "porQue": "Con {n, plural, one {# partido} other {# partidos}} la media aún se mueve mucho. A partir de {minimo} la cifra ya se sostiene, y con una temporada entera se puede comparar con la siguiente.",
+          "enlace": "Apuntar un partido"
+        },
+        "jugadores": {
+          "que": "Cuántos jugadores tiene cada equipo",
+          "porQue": "Es lo primero que pregunta una empresa que se plantea poner su nombre en una camiseta: cuánta gente la va a llevar puesta.",
+          "enlace": "Ir a los equipos"
+        },
+        "socios": {
+          "que": "Cuántos socios tiene el club",
+          "porQue": "Es la cifra que mejor dice a cuánta gente del pueblo llega el club, porque incluye al vecino que paga su cuota sin tener a nadie jugando.",
+          "enlace": "Ir a la ficha"
+        },
+        "familias": {
+          "que": "Cuántas familias hay detrás de la cantera",
+          "porQue": "Detrás de cada niño hay padres, abuelos y hermanos que van al campo y compran en el barrio. Para un comercio local es la cifra que decide.",
+          "enlace": "Ir a la cantera"
+        },
+        "redes": {
+          "que": "Los seguidores de tus redes",
+          "porQue": "Una publicación agradeciendo al patrocinador es lo más barato que puede dar un club, y sin esta cifra no se puede poner precio a nada.",
+          "enlace": "Ir a audiencia"
+        }
+      },
+      "llano": {
+        "publicoEnCasa": "Cada partido en casa lo ven unas {cifra} personas.",
+        "publico": "Cada partido lo ven unas {cifra} personas.",
+        "jugadores": "{cifra} jugadores visten la equipación del club cada semana.",
+        "familias": "Detrás de la cantera hay {cifra} familias: padres, abuelos y hermanos que van al campo.",
+        "socios": "El club tiene {cifra} socios en el pueblo.",
+        "redes": "Cuando el club publica en {red}, lo pueden ver {cifra} personas."
+      },
+      "unidades": {
+        "personas": "{n, plural, one {persona} other {personas}}",
+        "asistencias": "{n, plural, one {asistencia} other {asistencias}}",
+        "partidos": "{n, plural, one {partido} other {partidos}}",
+        "equipos": "{n, plural, one {equipo} other {equipos}}"
+      },
+      "origen": {
+        "contado": "Contado",
+        "declarado": "Declarado",
+        "deducido": "Deducido"
+      }
+    }
+  },
+  "tema": {
+    "modoOscuro": "Modo oscuro",
+    "modoClaro": "Modo claro"
+  },
+  "menu": {
+    "ocultarSeccionesFicha": "Ocultar las secciones de la ficha",
+    "verSeccionesFicha": "Ver las secciones de la ficha",
+    "cargandoPanel": "Cargando tu panel…",
+    "grupos": {
+      "miClub": "Mi club",
+      "buscar": "Buscar patrocinadores",
+      "seguimiento": "Seguimiento",
+      "cuenta": "Cuenta"
+    },
+    "enlaces": {
+      "inicio": "Inicio",
+      "perfil": "Perfil del club",
+      "publico": "Público",
+      "alcance": "Alcance",
+      "oportunidades": "Oportunidades",
+      "objetivos": "A quién escribir",
+      "solicitudes": "Solicitudes",
+      "dossier": "Dossier",
+      "patrocinadores": "Patrocinadores",
+      "renovaciones": "Renovaciones",
+      "tareas": "Tareas",
+      "suscripcion": "Suscripción",
+      "privacidad": "Privacidad"
+    },
+    "secciones": {
+      "identidad": "Identidad",
+      "nivel": "Nivel deportivo",
+      "equipos": "Equipos",
+      "instalaciones": "Instalaciones",
+      "cantera": "Cantera",
+      "historia": "Historia",
+      "audiencia": "Audiencia",
+      "comunidad": "Acción social"
+    },
+    "verPaginaPublica": "Ver tu página pública",
+    "cerrarSesion": "Cerrar sesión",
+    "cambiosSinGuardar": "Tienes cambios sin guardar en esta pestaña. Si sales ahora se pierden.",
+    "completaParaDesbloquear": "Completa la identidad del club (nombre y localidad) para desbloquear el resto de secciones.",
+    "cerrar": "Cerrar"
+  },
+  "recomendaciones": {
+    "herramientasTePuedenAyudar": "Herramientas que te pueden ayudar",
+    "sonOtrasEmpresasNo": "Son de otras empresas, no de ApoyaClub. Te las damos porque a un club de base le resuelven algo que nosotros no hacemos: encontrar a quién enseñarle tu dossier.",
+    "incluidaCuota": "Incluida en tu cuota",
+    "siContratasDesdeEste": "Si contratas desde este enlace, ApoyaClub recibe una comisión. No compartimos ningún dato tuyo con ellos.",
+    "entrar": "Entrar en",
+    "ver": "Ver",
+    "herramientas": {
+      "prospectpro": {
+        "queEs": "Una herramienta para sacar listas de empresas por zona y por sector, con su web y su teléfono.",
+        "paraQue": "Tu página y tu dossier ya están listos, pero hay que mandárselos a alguien. Esto te da a quién: las empresas de tu provincia que encajan con lo que ofreces.",
+        "precio": "Menos de 5 € al mes",
+        "comoSeActiva": "Escríbenos y te damos de alta. Va dentro de tu cuota, no pagas nada más."
+      }
+    }
+  },
+  "patrocinadores": {
+    "contratoFacturas": "Contrato y facturas",
+    "texto": "Qué es",
+    "archivo": "Archivo",
+    "cerrar": "Cerrar",
+    "anadirDocumento": "+ Añadir documento",
+    "subiendo": "Subiendo…",
+    "guardarDocumento": "Guardar documento",
+    "guardado": "Guardado.",
+    "panelClub": "Panel del club",
+    "patrocinadores": "Patrocinadores",
+    "empresasYaColaboranContigo": "Las empresas que ya colaboran contigo. Salen en tu página pública y en tu dossier, y son la mejor carta de presentación ante la siguiente: que otros ya estén dentro es lo que más convence a quien todavía no lo está.",
+    "perfil": "tu perfil",
+    "completaIdentidad": "Completa primero la identidad de tu club (nombre y localidad) en <enlace>tu perfil</enlace> y podrás añadir tus patrocinadores.",
+    "ningunPapel": "Todavía no has guardado ningún papel de este patrocinio.",
+    "cuantosDocumentos": "{n} de {maximo} documentos.",
+    "tipos": {
+      "contrato": "Contrato",
+      "factura": "Factura",
+      "otro": "Otro documento"
+    },
+    "borrarArchivo": "Borrar {archivo}",
+    "borrar": "Borrar",
+    "tope": "Has llegado al tope de {maximo}. Borra alguno para subir otro.",
+    "formatos": "PDF o foto, hasta {mb} MB. Si lo firmasteis en papel, vale una foto del documento.",
+    "soloLoVesTu": "Solo lo ves tú. Estos archivos no salen en la página pública de {nombre} ni en tu dossier."
+  },
+  "imagenes": {
+    "noEsImagen": "El archivo no es una imagen.",
+    "pesaDemasiado": "La imagen pesa demasiado (máximo 15 MB).",
+    "navegador": "Tu navegador no permite procesar imágenes.",
+    "noProcesada": "No se ha podido procesar la imagen.",
+    "noLeida": "No se ha podido leer la imagen.",
+    "sinPermiso": "Tu sesión no tiene permiso para subir imágenes. Cierra sesión, vuelve a entrar e inténtalo otra vez.",
+    "noSubida": "No se ha podido subir la imagen. Inténtalo de nuevo."
+  },
+  "huecos": {
+    "logo": {
+      "titulo": "Sube el logo del club",
+      "porQue": "Es lo primero que se ve en el buscador. Sin logo, tu ficha parece incompleta."
+    },
+    "descripcion": {
+      "titulo": "Escribe una descripción del club",
+      "porQue": "Cuatro líneas contando quién sois. Es lo que lee la empresa antes de decidir."
+    },
+    "patrocinadores": {
+      "titulo": "Añade tus patrocinadores actuales",
+      "porQue": "Ver que otras empresas ya confían en ti es lo que más convence a una nueva."
+    },
+    "equipos": {
+      "titulo": "Da de alta tus equipos",
+      "porQue": "Sin equipos, una empresa no sabe a cuánta gente llega su patrocinio."
+    },
+    "fotos": {
+      "titulo": "Sube fotos del club",
+      "porQue": "Una foto de un partido lleno vale más que cualquier dato."
+    },
+    "cantera": {
+      "titulo": "Rellena los datos de cantera",
+      "porQue": "Niños y familias es lo que compra el comercio de barrio: son clientes cerca."
+    },
+    "audiencia": {
+      "titulo": "Añade tu audiencia y seguidores",
+      "porQue": "Es el número que la empresa compara con lo que le cuesta un anuncio."
+    },
+    "redes": {
+      "titulo": "Enlaza tus redes sociales",
+      "porQue": "La empresa entra a mirarlas antes de escribirte."
+    },
+    "nivel": {
+      "titulo": "Indica en qué categoría y competiciones juegas",
+      "porQue": "Sitúa al club: no es lo mismo una liga autonómica que una nacional."
+    },
+    "historia": {
+      "titulo": "Cuenta la historia del club",
+      "porQue": "Año de fundación y dos hitos. Los años de vida dan confianza."
+    },
+    "comunidad": {
+      "titulo": "Añade lo que hacéis por la comunidad",
+      "porQue": "Muchas empresas patrocinan por esto, no por la publicidad."
+    },
+    "web": {
+      "titulo": "Pon la web del club",
+      "porQue": "Si no tenéis, sirve la página de Facebook o Instagram."
+    },
+    "video": {
+      "titulo": "Añade un vídeo",
+      "porQue": "Un minuto de partido o de resumen de temporada."
+    },
+    "logros": {
+      "titulo": "Escribe vuestros logros",
+      "porQue": "Ascensos, títulos, participaciones. Da igual lo pequeño."
+    }
   }
 }

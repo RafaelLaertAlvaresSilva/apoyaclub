@@ -215,5 +215,12 @@
     "ultimaActualizacion": "Última atualização: {fecha}",
     "soloEnEspanolTitulo": "Este texto só está disponível em espanhol",
     "soloEnEspanol": "Os textos legais do ApoyaClub só estão disponíveis em espanhol, que é a versão válida."
+  },
+  "confirmacion": {
+    "eliminar": "Eliminar",
+    "pregunta": "Apagar",
+    "confirmar": "Sim, apagar",
+    "enCurso": "A apagar…",
+    "no": "Não"
   }
 }

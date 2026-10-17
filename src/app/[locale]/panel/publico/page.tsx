@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { getLocale } from "next-intl/server";
 import { redirect } from "@/i18n/navigation";
 import { etiquetaEquipo } from "@/lib/opportunities";
@@ -17,6 +18,7 @@ type FilaEquipo = { id: string; sport: string; category: string | null; gender: 
  * media, el total de la temporada y el mejor partido.
  */
 export default async function PublicoPage() {
+  const t = await getTranslations("panel.publico");
   const supabase = await createClient();
   const {
     data: { user },
@@ -57,12 +59,10 @@ export default async function PublicoPage() {
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel del club</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Público en los partidos</h1>
+          <p className="text-sm font-medium text-teal-700">{t("panelClub")}</p>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("publicoPartidos")}</h1>
           <p className="mt-1 text-sm text-zinc-600">
-            Apunta cuánta gente hubo en cada partido. Con eso, la asistencia media de tu ficha deja
-            de ser un número puesto a ojo y pasa a ser un dato que puedes defender delante de una
-            empresa.
+            {t("apuntaCuantaGenteHubo")}
           </p>
         </div>
       </div>

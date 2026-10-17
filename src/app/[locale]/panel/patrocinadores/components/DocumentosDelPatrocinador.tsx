@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import {
@@ -31,10 +32,6 @@ import { borrarDocumento, subirDocumento, type EstadoDocumento } from "../action
  * de un minuto después de comprobar de quién es el archivo.
  */
 
-const ETIQUETA: Record<string, string> = Object.fromEntries(
-  TIPOS_DE_DOCUMENTO.map((tipo) => [tipo.id, tipo.etiqueta]),
-);
-
 const COLOR: Record<string, string> = {
   contrato: "bg-teal-100 text-teal-700",
   factura: "bg-amber-100 text-amber-800",
@@ -50,6 +47,7 @@ export function DocumentosDelPatrocinador({
   nombre: string;
   documentos: DocumentoDePatrocinio[];
 }) {
+  const t = useTranslations("panel.patrocinadores");
   const [estado, accion, enviando] = useActionState<EstadoDocumento, FormData>(
     subirDocumento,
     null,
@@ -73,11 +71,11 @@ export function DocumentosDelPatrocinador({
     <div className="rounded-lg border border-zinc-200 bg-white p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <p className="text-sm font-medium text-zinc-900">Contrato y facturas</p>
+          <p className="text-sm font-medium text-zinc-900">{t("contratoFacturas")}</p>
           <p className="mt-0.5 text-xs text-zinc-500">
             {documentos.length === 0
-              ? "Todavía no has guardado ningún papel de este patrocinio."
-              : `${documentos.length} de ${MAXIMO_POR_PATROCINADOR} documentos.`}
+              ? t("ningunPapel")
+              : t("cuantosDocumentos", { n: documentos.length, maximo: MAXIMO_POR_PATROCINADOR })}
           </p>
         </div>
 
@@ -88,7 +86,7 @@ export function DocumentosDelPatrocinador({
           disabled={lleno && !abierto}
           className="rounded-lg px-3 py-1.5 text-sm font-medium text-teal-700 transition-colors hover:bg-teal-50 disabled:cursor-not-allowed disabled:text-zinc-400 disabled:hover:bg-transparent"
         >
-          {abierto ? "Cerrar" : "+ Añadir documento"}
+          {abierto ? t("cerrar") : t("anadirDocumento")}
         </button>
       </div>
 
@@ -101,7 +99,7 @@ export function DocumentosDelPatrocinador({
                   COLOR[documento.tipo] ?? COLOR.otro
                 }`}
               >
-                {ETIQUETA[documento.tipo] ?? "Documento"}
+                {t(`tipos.${TIPOS_DE_DOCUMENTO.some((tipo) => tipo.id === documento.tipo) ? documento.tipo : "otro"}`)}
               </span>
 
               {/* Un enlace normal y no un botón con JavaScript: el
@@ -123,9 +121,9 @@ export function DocumentosDelPatrocinador({
                 <button
                   type="submit"
                   className="text-xs text-zinc-400 transition-colors hover:text-red-600"
-                  aria-label={`Borrar ${documento.nombreDelArchivo}`}
+                  aria-label={t("borrarArchivo", { archivo: documento.nombreDelArchivo })}
                 >
-                  Borrar
+                  {t("borrar")}
                 </button>
               </form>
             </li>
@@ -135,7 +133,7 @@ export function DocumentosDelPatrocinador({
 
       {lleno && !abierto && (
         <p className="mt-3 text-xs text-zinc-500">
-          Has llegado al tope de {MAXIMO_POR_PATROCINADOR}. Borra alguno para subir otro.
+          {t("tope", { maximo: MAXIMO_POR_PATROCINADOR })}
         </p>
       )}
 
@@ -144,7 +142,7 @@ export function DocumentosDelPatrocinador({
           <input type="hidden" name="patrocinadorId" value={patrocinadorId} />
 
           <label className="text-sm">
-            <span className="mb-1 block font-medium text-zinc-700">Qué es</span>
+            <span className="mb-1 block font-medium text-zinc-700">{t("texto")}</span>
             <select
               name="tipo"
               defaultValue="contrato"
@@ -152,14 +150,14 @@ export function DocumentosDelPatrocinador({
             >
               {TIPOS_DE_DOCUMENTO.map((tipo) => (
                 <option key={tipo.id} value={tipo.id}>
-                  {tipo.etiqueta}
+                  {t(`tipos.${tipo.id}`)}
                 </option>
               ))}
             </select>
           </label>
 
           <label className="text-sm">
-            <span className="mb-1 block font-medium text-zinc-700">Archivo</span>
+            <span className="mb-1 block font-medium text-zinc-700">{t("archivo")}</span>
             <input
               type="file"
               name="archivo"
@@ -168,13 +166,12 @@ export function DocumentosDelPatrocinador({
               className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm file:mr-3 file:rounded file:border-0 file:bg-teal-50 file:px-3 file:py-1 file:text-sm file:font-medium file:text-teal-700"
             />
             <span className="mt-1 block text-xs text-zinc-500">
-              PDF o foto, hasta {Math.round(TAMANO_MAXIMO_BYTES / (1024 * 1024))} MB. Si lo firmasteis
-              en papel, vale una foto del documento.
+              {t("formatos", { mb: Math.round(TAMANO_MAXIMO_BYTES / (1024 * 1024)) })}
             </span>
           </label>
 
           <AvisoError mensaje={estado?.error ?? null} />
-          <AvisoExito mensaje={estado?.ok ? "Guardado." : null} />
+          <AvisoExito mensaje={estado?.ok ? t("guardado") : null} />
 
           <div>
             <button
@@ -182,12 +179,12 @@ export function DocumentosDelPatrocinador({
               disabled={enviando}
               className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy disabled:pointer-events-none disabled:opacity-50"
             >
-              {enviando ? "Subiendo…" : "Guardar documento"}
+              {enviando ? t("subiendo") : t("guardarDocumento")}
             </button>
           </div>
 
           <p className="text-xs text-zinc-500">
-            Solo lo ves tú. Estos archivos no salen en la página pública de {nombre} ni en tu dossier.
+            {t("soloLoVesTu", { nombre })}
           </p>
         </form>
       )}

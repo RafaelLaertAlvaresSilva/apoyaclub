@@ -1,10 +1,11 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
+import { useIntlLocale } from "@/i18n/use-intl-locale";
 import { AvisoError } from "@/components/AvisoError";
 import {
   CLASES_ESTADO,
-  ETIQUETA_ESTADO,
   cuantoFalta,
   estadoVisible,
   fechaLegible,
@@ -21,6 +22,9 @@ import { borrarTarea, cambiarEstadoTarea, editarTarea, repetirTarea } from "../a
  * a enseñar al patrocinador en junio.
  */
 export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string }) {
+  const t = useTranslations("panel.tareas");
+  const tComun = useTranslations("panel.comun");
+  const intlLocale = useIntlLocale();
   const [estadoCambio, cambiarEstado] = useActionState(cambiarEstadoTarea, null);
   const [estadoBorrado, borrar] = useActionState(borrarTarea, null);
   const [estadoRepetir, repetir] = useActionState(repetirTarea, null);
@@ -64,11 +68,11 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
           </p>
 
           <p className="mt-1 text-xs text-zinc-500">
-            {tarea.inicio && <>Del {fechaLegible(tarea.inicio)} al </>}
-            {!tarea.inicio && <>Para el </>}
-            {fechaLegible(tarea.fin)}
-            {tarea.estado === "pendiente" && <> · {cuantoFalta(tarea.fin, hoy)}</>}
-            {tarea.hechaEn && <> · hecho</>}
+            {tarea.inicio
+              ? t("delAl", { inicio: fechaLegible(tarea.inicio, intlLocale), fin: fechaLegible(tarea.fin, intlLocale) })
+              : t("paraEl", { fin: fechaLegible(tarea.fin, intlLocale) })}
+            {tarea.estado === "pendiente" && <> · {cuantoFalta(tarea.fin, hoy, tComun)}</>}
+            {tarea.hechaEn && <> · {t("hechoMinuscula")}</>}
           </p>
 
           {tarea.notas && <p className="mt-2 text-sm text-zinc-600">{tarea.notas}</p>}
@@ -80,7 +84,7 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
               rel="noopener noreferrer"
               className="mt-2 inline-block break-all text-xs font-medium text-teal-700 hover:underline"
             >
-              Ver la prueba →
+              {t("verPrueba")}
             </a>
           )}
         </div>
@@ -88,7 +92,7 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
         <span
           className={`shrink-0 rounded-full border px-2.5 py-1 text-xs font-semibold ${CLASES_ESTADO[estado]}`}
         >
-          {ETIQUETA_ESTADO[estado]}
+          {t(`estado.${estado}`)}
         </span>
       </div>
 
@@ -100,15 +104,15 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
               onClick={() => setPidiendoPrueba(true)}
               className="rounded-lg bg-accion px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte"
             >
-              Marcar hecho
+              {t("marcarHecho")}
             </button>
             <Boton accion={cambiarEstado} id={tarea.id} estado="cancelado">
-              Cancelar
+              {t("cancelar")}
             </Boton>
           </>
         ) : (
           <Boton accion={cambiarEstado} id={tarea.id} estado="pendiente">
-            Volver a pendiente
+            {t("volverPendiente")}
           </Boton>
         )}
 
@@ -117,7 +121,7 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
           onClick={() => setEditando((valor) => !valor)}
           className="rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
         >
-          {editando ? "Cerrar" : "Editar"}
+          {editando ? t("cerrar") : t("editar")}
         </button>
 
         <form action={repetir}>
@@ -125,9 +129,9 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
           <button
             type="submit"
             className="rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
-            title="Crea una copia con la fecha un mes más adelante"
+            title={t("repetirTitulo")}
           >
-            Repetir el mes que viene
+            {t("repetir")}
           </button>
         </form>
 
@@ -137,7 +141,7 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
             type="submit"
             className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-700"
           >
-            Borrar
+            {t("borrar")}
           </button>
         </form>
       </div>
@@ -147,7 +151,7 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
           <input type="hidden" name="id" value={tarea.id} />
 
           <label className="block text-xs">
-            <span className="mb-1 block font-medium text-zinc-700">Empresa</span>
+            <span className="mb-1 block font-medium text-zinc-700">{t("empresa")}</span>
             <input
               name="empresa"
               required
@@ -158,7 +162,7 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
           </label>
 
           <label className="block text-xs">
-            <span className="mb-1 block font-medium text-zinc-700">Qué hay que hacer</span>
+            <span className="mb-1 block font-medium text-zinc-700">{t("queHayQueHacer")}</span>
             <input
               name="accion"
               required
@@ -170,7 +174,7 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
 
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block text-xs">
-              <span className="mb-1 block font-medium text-zinc-700">Desde (opcional)</span>
+              <span className="mb-1 block font-medium text-zinc-700">{t("desde")}</span>
               <input
                 name="inicio"
                 type="date"
@@ -180,7 +184,7 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
             </label>
 
             <label className="block text-xs">
-              <span className="mb-1 block font-medium text-zinc-700">Fecha límite</span>
+              <span className="mb-1 block font-medium text-zinc-700">{t("fechaLimite")}</span>
               <input
                 name="fin"
                 type="date"
@@ -192,7 +196,7 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
           </div>
 
           <label className="block text-xs">
-            <span className="mb-1 block font-medium text-zinc-700">Notas</span>
+            <span className="mb-1 block font-medium text-zinc-700">{t("notasCorto")}</span>
             <textarea
               name="notas"
               maxLength={1000}
@@ -207,14 +211,14 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
               type="submit"
               className="rounded-lg bg-accion px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte"
             >
-              Guardar cambios
+              {t("guardarCambios")}
             </button>
             <button
               type="button"
               onClick={() => setEditando(false)}
               className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100"
             >
-              Cancelar
+              {t("cancelar")}
             </button>
           </div>
         </form>
@@ -229,7 +233,7 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
           <input type="hidden" name="id" value={tarea.id} />
           <input type="hidden" name="estado" value="hecho" />
           <label className="block text-xs font-medium text-zinc-700">
-            Enlace de la prueba (opcional)
+            {t("enlacePrueba")}
             <input
               name="pruebaUrl"
               type="url"
@@ -238,22 +242,21 @@ export function TareaFila({ tarea, hoy }: { tarea: TareaPatrocinio; hoy: string 
             />
           </label>
           <p className="mt-1 text-xs text-zinc-500">
-            El enlace a la publicación, al vídeo o a la foto. Es lo que le enseñarás a la empresa
-            cuando toque renovar.
+            {t("enlacePruebaAyuda")}
           </p>
           <div className="mt-2 flex gap-2">
             <button
               type="submit"
               className="rounded-lg bg-accion px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte"
             >
-              Guardar como hecho
+              {t("guardarComoHecho")}
             </button>
             <button
               type="button"
               onClick={() => setPidiendoPrueba(false)}
               className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-500 hover:bg-zinc-100"
             >
-              Cancelar
+              {t("cancelar")}
             </button>
           </div>
         </form>

@@ -7,7 +7,8 @@ import { useActionState, useRef, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { SECCIONES_DOSSIER } from "@/lib/dossier";
-import { formatoValorOportunidad } from "@/lib/opportunities";
+import { formatoDeValor } from "@/lib/format";
+import type { AppLocale } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
 import type {
   ClubProfile,
@@ -91,8 +92,7 @@ export function DossierManager({
     } catch {
       setErrorDescarga(
         formato === "pdf"
-          ? "No se ha podido generar el PDF. Inténtalo de nuevo."
-          : "No se ha podido generar el Word. Inténtalo de nuevo.",
+          ? t("noPodidoGenerarPdf") : t("noPodidoGenerarWord"),
       );
     } finally {
       setDescargando(null);
@@ -139,12 +139,12 @@ export function DossierManager({
                   </span>
                   <span>
                     <span className="block font-medium text-zinc-500 group-hover:text-zinc-900">
-                      {seccion.etiqueta}
+                      {t(`secciones.${seccion.id}.etiqueta`)}
                     </span>
                     <span className="block text-xs text-zinc-500">
-                      Todavía no has añadido datos.{" "}
+                      {t("sinDatos")}{" "}
                       <span className="font-medium text-accion-tinta underline">
-                        Añadirlos ahora
+                        {t("anadirlosAhora")}
                       </span>
                     </span>
                   </span>
@@ -165,8 +165,8 @@ export function DossierManager({
                   className="mt-0.5 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
                 />
                 <span>
-                  <span className="block font-medium text-zinc-900">{seccion.etiqueta}</span>
-                  <span className="block text-xs text-zinc-500">{seccion.descripcion}</span>
+                  <span className="block font-medium text-zinc-900">{t(`secciones.${seccion.id}.etiqueta`)}</span>
+                  <span className="block text-xs text-zinc-500">{t(`secciones.${seccion.id}.descripcion`)}</span>
                 </span>
               </label>
             );
@@ -180,9 +180,13 @@ export function DossierManager({
       >
         {oportunidades.length === 0 ? (
           <p className="text-sm text-zinc-500">
-            Todavía no tienes oportunidades publicadas. Puedes crearlas en{" "}
-            <Link href="/panel/oportunidades" className="font-medium text-teal-700 hover:underline">{t("oportunidades")}</Link>
-            .
+            {t.rich("sinOportunidades", {
+              enlace: (trozo) => (
+                <Link href="/panel/oportunidades" className="font-medium text-teal-700 hover:underline">
+                  {trozo}
+                </Link>
+              ),
+            })}
           </p>
         ) : (
           <div className="space-y-2">
@@ -202,7 +206,7 @@ export function DossierManager({
                   <span className="font-medium text-zinc-900">{oportunidad.title}</span>
                 </span>
                 <span className="whitespace-nowrap font-semibold text-teal-700">
-                  {formatoValorOportunidad.format(oportunidad.value)}
+                  {formatoDeValor(locale as AppLocale).format(oportunidad.value)}
                 </span>
               </label>
             ))}
@@ -221,25 +225,23 @@ export function DossierManager({
               bloqueado={descargando !== null}
               destacado
             >
-              Descargar PDF
+              {t("descargarPdf")}
             </BotonDescarga>
             <BotonDescarga
               onClick={() => descargar("word")}
               ocupado={descargando === "word"}
               bloqueado={descargando !== null}
             >
-              Descargar Word
+              {t("descargarWord")}
             </BotonDescarga>
           </div>
 
           {/* Los dos llevan el mismo contenido: la diferencia es para qué
               sirve cada uno, y conviene decirlo aquí y no en un manual. */}
           <p className="text-xs leading-relaxed text-zinc-500">
-            El <strong className="font-medium text-zinc-700">PDF</strong> es el que se manda a una
-            empresa: se ve igual en cualquier pantalla y no se descoloca. El{" "}
-            <strong className="font-medium text-zinc-700">Word</strong> es para ti: ábrelo para
-            cambiar textos, añadir fotos o mover apartados de sitio, y guárdalo después como PDF
-            desde el propio Word.
+            {t.rich("pdfYWord", {
+              fuerte: (trozo) => <strong className="font-medium text-zinc-700">{trozo}</strong>,
+            })}
           </p>
         </div>
       </SeccionCard>
@@ -257,7 +259,7 @@ export function DossierManager({
               className="rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
             />{t("activarEnlacePublico")}</label>
 
-          <Campo etiqueta="Caducidad (opcional)" ayuda={t("dejaloEnBlancoPara")}>
+          <Campo etiqueta={t("caducidadOpcional")} ayuda={t("dejaloEnBlancoPara")}>
             <input
               type="date"
               name="shareExpiresAt"
@@ -267,7 +269,7 @@ export function DossierManager({
           </Campo>
 
           <AvisoError mensaje={estado?.error} />
-          {estado?.ok && <AvisoExito mensaje="Selección guardada." />}
+          {estado?.ok && <AvisoExito mensaje={t("seleccionGuardada")} />}
 
           {enlaceActual && (
             <div className="flex flex-wrap items-center gap-3 rounded-lg border border-teal-200 bg-teal-50 p-3 text-sm">
@@ -277,7 +279,7 @@ export function DossierManager({
                 onClick={copiarEnlace}
                 className="ml-auto shrink-0 rounded-lg border border-teal-300 bg-white px-3 py-1.5 text-xs font-medium text-teal-700 transition-colors hover:bg-teal-100"
               >
-                {enlaceCopiado ? "¡Copiado!" : "Copiar enlace"}
+                {enlaceCopiado ? t("copiado") : t("copiarEnlace")}
               </button>
             </div>
           )}
@@ -310,8 +312,7 @@ function BotonDescarga({
       disabled={bloqueado}
       className={`flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
         destacado
-          ? "bg-accion text-sobre-color hover:bg-accion-fuerte"
-          : "border border-teal-600 text-teal-700 hover:bg-teal-50"
+          ? "bg-accion text-sobre-color hover:bg-accion-fuerte" : "border border-teal-600 text-teal-700 hover:bg-teal-50"
       }`}
     >
       {ocupado && (

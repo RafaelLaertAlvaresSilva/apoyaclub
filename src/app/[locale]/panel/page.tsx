@@ -90,7 +90,7 @@ export default async function PanelPage() {
   // daba sensación de página a medio hacer, justo en el momento en que
   // hay que generar confianza. El correo sigue estando, debajo y en
   // pequeño, que es donde sirve.
-  const nombreProvisional = (user.user_metadata?.name as string | undefined) ?? "Tu club";
+  const nombreProvisional = (user.user_metadata?.name as string | undefined) ?? t("tuClub");
   // El porcentaje lo calcula la base de datos (migración 0020) y es el
   // mismo que usa el buscador para ordenar; aquí solo se lee.
   const porcentaje = perfil?.profileScore ?? 0;

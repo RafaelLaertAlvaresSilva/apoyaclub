@@ -13,10 +13,8 @@ import { AvisoDerechosDeImagen } from "./AvisoDerechosDeImagen";
 import { ImageUploader } from "./ImageUploader";
 import { Campo, SeccionCard, clasesInput, clasesTextarea } from "./SeccionCard";
 
-const ETIQUETA_NIVEL: Record<ClubTeam["teamLevel"], string> = {
-  primer_equipo: "Primer equipo",
-  cantera: "Cantera",
-};
+/** Los valores que se guardan tal cual (en español) en `club_teams.gender`. */
+const SEXOS = ["Masculino", "Femenino", "Mixto"];
 
 export function EquiposForm({ equipos, userId }: { equipos: ClubTeam[]; userId: string }) {
   const t = useTranslations("panel.perfil");
@@ -67,16 +65,16 @@ export function EquiposForm({ equipos, userId }: { equipos: ClubTeam[]; userId: 
         {/* Lo que de verdad le dice algo a una empresa. "Cadete" no
             significa nada fuera del mundillo; "Primera Autonómica,
             campeón provincial 2025" sí. */}
-        <Campo etiqueta="En qué compite" ayuda="Ejemplos: Primera Autonómica, Liga comarcal, Nacional Juvenil.">
+        <Campo etiqueta={t("enQueCompite")} ayuda={t("enQueCompiteAyuda")}>
           <input name="competitionLevel" maxLength={200} className={clasesInput} />
         </Campo>
 
-        <Campo etiqueta="Logros de este equipo" ayuda="Ascensos, títulos, fases finales. Los del club entero van en Historia.">
+        <Campo etiqueta={t("logrosEquipo")} ayuda={t("logrosEquipoAyuda")}>
           <textarea name="achievements" maxLength={1000} className={clasesTextarea} />
         </Campo>
 
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
-        <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Equipo añadido." : null} />
+        <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? t("equipoAnadido") : null} />
 
         <BotonEnviar>{t("anadirEquipo")}</BotonEnviar>
       </form>
@@ -101,6 +99,7 @@ function FilaEquipo({
   userId: string;
   etiquetaEliminar: string;
 }) {
+  const t = useTranslations("panel.perfil");
   const [errorFoto, setErrorFoto] = useState<string | null>(null);
   const [editando, setEditando] = useState(false);
   const [, iniciarTransicion] = useTransition();
@@ -117,7 +116,7 @@ function FilaEquipo({
       {equipo.photoUrl ? (
         <Image
           src={equipo.photoUrl}
-          alt={`Foto de ${equipo.sport}`}
+          alt={t("fotoDe", { deporte: equipo.sport })}
           width={96}
           height={64}
           className="h-16 w-24 shrink-0 rounded-lg border border-zinc-200 object-cover"
@@ -125,7 +124,7 @@ function FilaEquipo({
         />
       ) : (
         <div className="flex h-16 w-24 shrink-0 items-center justify-center rounded-lg border border-dashed border-zinc-300 bg-zinc-50 text-xs text-zinc-400">
-          Sin foto
+          {t("sinFoto")}
         </div>
       )}
 
@@ -135,9 +134,9 @@ function FilaEquipo({
           {equipo.category ? ` · ${equipo.category}` : ""}
         </p>
         <p className="text-zinc-500">
-          {ETIQUETA_NIVEL[equipo.teamLevel]}
-          {equipo.gender ? ` · ${equipo.gender}` : ""}
-          {equipo.playerCount != null ? ` · ${equipo.playerCount} jugadores` : ""}
+          {equipo.teamLevel === "cantera" ? t("cantera") : t("primerEquipo")}
+          {equipo.gender ? ` · ${SEXOS.includes(equipo.gender) ? t(`sexo.${equipo.gender}`) : equipo.gender}` : ""}
+          {equipo.playerCount != null ? ` · ${t("jugadoresN", { n: equipo.playerCount })}` : ""}
         </p>
         {equipo.competitionLevel && (
           <p className="mt-0.5 text-zinc-600">{equipo.competitionLevel}</p>
@@ -152,12 +151,12 @@ function FilaEquipo({
             onClick={() => setEditando((abierto) => !abierto)}
             className="rounded-lg px-2 py-1 text-xs font-medium text-teal-700 transition-colors hover:bg-teal-50"
           >
-            {editando ? "Cerrar" : "Editar datos"}
+            {editando ? t("cerrar") : t("editarDatos")}
           </button>
           <ImageUploader
             userId={userId}
             carpeta="equipos"
-            label={equipo.photoUrl ? "Cambiar foto" : "Subir foto"}
+            label={equipo.photoUrl ? t("cambiarFoto") : t("subirFoto")}
             onSubido={async (url) => guardar(url)}
           />
           {equipo.photoUrl && (
@@ -166,7 +165,7 @@ function FilaEquipo({
               onClick={() => guardar(null)}
               className="rounded-lg px-2 py-1 text-xs font-medium text-zinc-500 transition-colors hover:bg-red-50 hover:text-red-700"
             >
-              Quitar foto
+              {t("quitarFoto")}
             </button>
           )}
         </div>
@@ -198,16 +197,17 @@ function FilaEquipo({
  * como una opción más.
  */
 function SelectorDeSexo({ nombre, valor }: { nombre: string; valor?: string | null }) {
-  const normales = ["Masculino", "Femenino", "Mixto"];
+  const t = useTranslations("panel.perfil");
+  const normales = SEXOS;
   const guardado = valor ?? "";
   const conocido = guardado === "" || normales.includes(guardado);
 
   return (
     <select name={nombre} defaultValue={guardado} className={clasesInput}>
-      <option value="">Sin especificar</option>
+      <option value="">{t("sinEspecificar")}</option>
       {normales.map((opcion) => (
         <option key={opcion} value={opcion}>
-          {opcion}
+          {t(`sexo.${opcion}`)}
         </option>
       ))}
       {!conocido && <option value={guardado}>{guardado}</option>}
@@ -219,6 +219,7 @@ function SelectorDeSexo({ nombre, valor }: { nombre: string; valor?: string | nu
  * borrarlo y volver a crearlo (que se llevaba por delante la foto y las
  * oportunidades asociadas). */
 function EditorDeEquipo({ equipo }: { equipo: ClubTeam }) {
+  const t = useTranslations("panel.perfil");
   const [estado, formAction] = useActionState(actualizarEquipo, null);
 
   return (
@@ -226,16 +227,16 @@ function EditorDeEquipo({ equipo }: { equipo: ClubTeam }) {
       <input type="hidden" name="id" value={equipo.id} />
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <Campo etiqueta="Deporte">
+        <Campo etiqueta={t("deporte")}>
           <input name="sport" required defaultValue={equipo.sport} className={clasesInput} />
         </Campo>
-        <Campo etiqueta="Categoría">
+        <Campo etiqueta={t("categoria")}>
           <input name="category" defaultValue={equipo.category ?? ""} className={clasesInput} />
         </Campo>
-        <Campo etiqueta="Sexo">
+        <Campo etiqueta={t("genero")}>
           <SelectorDeSexo nombre="gender" valor={equipo.gender} />
         </Campo>
-        <Campo etiqueta="Nº de jugadores">
+        <Campo etiqueta={t("numeroDeJugadores")}>
           <input
             name="playerCount"
             type="number"
@@ -246,14 +247,14 @@ function EditorDeEquipo({ equipo }: { equipo: ClubTeam }) {
         </Campo>
       </div>
 
-      <Campo etiqueta="Tipo de equipo">
+      <Campo etiqueta={t("tipoDeEquipo")}>
         <select name="teamLevel" defaultValue={equipo.teamLevel} className={clasesInput}>
-          <option value="primer_equipo">Primer equipo</option>
-          <option value="cantera">Cantera</option>
+          <option value="primer_equipo">{t("primerEquipo")}</option>
+          <option value="cantera">{t("cantera")}</option>
         </select>
       </Campo>
 
-      <Campo etiqueta="En qué compite" ayuda="Ejemplos: Primera Autonómica, Liga comarcal.">
+      <Campo etiqueta={t("enQueCompite")} ayuda={t("enQueCompiteAyudaCorta")}>
         <input
           name="competitionLevel"
           maxLength={200}
@@ -262,7 +263,7 @@ function EditorDeEquipo({ equipo }: { equipo: ClubTeam }) {
         />
       </Campo>
 
-      <Campo etiqueta="Logros de este equipo">
+      <Campo etiqueta={t("logrosEquipo")}>
         <textarea
           name="achievements"
           maxLength={1000}
@@ -272,9 +273,9 @@ function EditorDeEquipo({ equipo }: { equipo: ClubTeam }) {
       </Campo>
 
       <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
-      <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />
+      <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? t("guardado") : null} />
 
-      <BotonEnviar>Guardar cambios del equipo</BotonEnviar>
+      <BotonEnviar>{t("guardarCambiosEquipo")}</BotonEnviar>
     </form>
   );
 }

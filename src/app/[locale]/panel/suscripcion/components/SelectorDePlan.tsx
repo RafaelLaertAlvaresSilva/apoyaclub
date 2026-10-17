@@ -1,5 +1,7 @@
+import { useTranslations } from "next-intl";
 import { BotonEnviar } from "@/components/BotonEnviar";
-import { PLANES_EN_ORDEN, periodicidad, precioFormateado } from "@/lib/planes";
+import { useIntlLocale } from "@/i18n/use-intl-locale";
+import { PLANES_EN_ORDEN, precioFormateado } from "@/lib/planes";
 import { iniciarSuscripcion } from "../actions";
 
 /**
@@ -18,6 +20,9 @@ export function SelectorDePlan({
   plazasFundadorLibres: number;
   textoBoton: string;
 }) {
+  const t = useTranslations("panel.suscripcion.selector");
+  const tPlanes = useTranslations("home.planes");
+  const intlLocale = useIntlLocale();
   const planes = PLANES_EN_ORDEN.filter(
     (plan) => !plan.limitado || plazasFundadorLibres > 0,
   );
@@ -36,26 +41,28 @@ export function SelectorDePlan({
             <input type="hidden" name="plan" value={plan.id} />
 
             <div className="flex items-baseline justify-between gap-2">
-              <h3 className="text-sm font-semibold text-zinc-900">{plan.nombre}</h3>
+              <h3 className="text-sm font-semibold text-zinc-900">{tPlanes(`${plan.id}.nombre`)}</h3>
               {plan.destacado && (
                 <span className="rounded-full bg-teal-50 px-2 py-0.5 text-xs font-medium text-teal-700">
-                  Recomendado
+                  {t("recomendado")}
                 </span>
               )}
               {plan.limitado && (
                 <span className="rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">
-                  Quedan {plazasFundadorLibres}
+                  {t("quedan", { n: plazasFundadorLibres })}
                 </span>
               )}
             </div>
 
             <p className="mt-3 text-3xl font-semibold tabular-nums text-zinc-900">
-              {precioFormateado(plan)}
+              {precioFormateado(plan, intlLocale)}
             </p>
-            <p className="text-sm text-zinc-500">{periodicidad(plan)}, IVA incluido</p>
+            <p className="text-sm text-zinc-500">
+              {t("ivaIncluido", { periodo: tPlanes(plan.intervalo === "mes" ? "alMes" : "alAnio") })}
+            </p>
 
-            <p className="mt-3 text-sm font-medium text-zinc-700">{plan.reclamo}</p>
-            <p className="mt-1 flex-1 text-sm text-zinc-500">{plan.detalle}</p>
+            <p className="mt-3 text-sm font-medium text-zinc-700">{tPlanes(`${plan.id}.reclamo`)}</p>
+            <p className="mt-1 flex-1 text-sm text-zinc-500">{tPlanes(`${plan.id}.detalle`)}</p>
 
             <div className="mt-5">
               <BotonEnviar>{textoBoton}</BotonEnviar>
@@ -65,9 +72,9 @@ export function SelectorDePlan({
       </div>
 
       <p className="mt-4 text-sm text-zinc-500">
-        Empiezas con <strong className="font-medium text-zinc-700">30 días gratis</strong> y no se
-        cobra nada hasta que terminen. Si un solo patrocinador te deja 300 €, ya has cubierto el año
-        entero.
+        {t.rich("empiezas", {
+          fuerte: (trozo) => <strong className="font-medium text-zinc-700">{trozo}</strong>,
+        })}
       </p>
     </div>
   );

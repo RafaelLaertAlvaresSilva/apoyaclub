@@ -176,15 +176,14 @@ export function ordenarParaTrabajar(prospectos: Prospecto[], hoy: string): Prosp
   });
 }
 
-/** "3 de octubre de 2026" desde "2026-10-03", sin pasar por Date. */
-const MESES = [
-  "enero", "febrero", "marzo", "abril", "mayo", "junio",
-  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
-] as const;
-
-export function fechaDelPaso(fechaISO: string): string {
+/** "3 de octubre de 2026" desde "2026-10-03", en UTC para que el día no se mueva. */
+export function fechaDelPaso(fechaISO: string, intlLocale = "es-ES"): string {
   const [anio, mes, dia] = fechaISO.split("-").map(Number);
-  const nombre = MESES[mes - 1];
-  if (!nombre) return fechaISO;
-  return `${dia} de ${nombre} de ${anio}`;
+  if (!anio || !mes || !dia || mes > 12) return fechaISO;
+  return new Intl.DateTimeFormat(intlLocale, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(Date.UTC(anio, mes - 1, dia));
 }

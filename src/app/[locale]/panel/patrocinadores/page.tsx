@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
@@ -17,6 +18,7 @@ import { PatrocinadoresForm } from "../components/PatrocinadoresForm";
  * otra cosa.
  */
 export default async function PatrocinadoresPage() {
+  const t = await getTranslations("panel.patrocinadores");
   const supabase = await createClient();
   const {
     data: { user },
@@ -50,12 +52,10 @@ export default async function PatrocinadoresPage() {
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel del club</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Patrocinadores</h1>
+          <p className="text-sm font-medium text-teal-700">{t("panelClub")}</p>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("patrocinadores")}</h1>
           <p className="mt-1 max-w-2xl text-sm text-zinc-600">
-            Las empresas que ya colaboran contigo. Salen en tu página pública y en tu dossier, y son
-            la mejor carta de presentación ante la siguiente: que otros ya estén dentro es lo que
-            más convence a quien todavía no lo está.
+            {t("empresasYaColaboranContigo")}
           </p>
         </div>
       </div>
@@ -65,11 +65,13 @@ export default async function PatrocinadoresPage() {
           necesita un `club_id` que todavía no existe. */}
       {!filaClub ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
-          Completa primero la identidad de tu club (nombre y localidad) en{" "}
-          <Link href="/panel" className="font-medium text-teal-700 hover:underline">
-            tu perfil
-          </Link>{" "}
-          y podrás añadir tus patrocinadores.
+          {t.rich("completaIdentidad", {
+            enlace: (trozo) => (
+              <Link href="/panel" className="font-medium text-teal-700 hover:underline">
+                {trozo}
+              </Link>
+            ),
+          })}
         </div>
       ) : (
         <PatrocinadoresForm

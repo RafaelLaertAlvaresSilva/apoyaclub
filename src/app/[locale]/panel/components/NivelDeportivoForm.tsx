@@ -46,12 +46,12 @@ export function NivelDeportivoForm({
             {t("maximaCategoria")}
           </legend>
           <p className="mb-3 text-xs text-zinc-500">
-            La más alta en la que juega cada equipo. Rellena solo la que tengas.
+            {t("masAltaJuegaCada")}
           </p>
 
           <div className="grid gap-5 sm:grid-cols-2">
             <EquipoDeMaximaCategoria
-              etiqueta="Equipo masculino"
+              etiqueta={t("equipoMasculino")}
               nombreCampo="topCategoryMale"
               nombreFoto="topCategoryMalePhoto"
               nombrePie="topCategoryMalePhotoNote"
@@ -64,7 +64,7 @@ export function NivelDeportivoForm({
               placeholder={t("ejPrimeraNacional")}
             />
             <EquipoDeMaximaCategoria
-              etiqueta="Equipo femenino"
+              etiqueta={t("equipoFemenino")}
               nombreCampo="topCategoryFemale"
               nombreFoto="topCategoryFemalePhoto"
               nombrePie="topCategoryFemalePhotoNote"
@@ -88,8 +88,10 @@ export function NivelDeportivoForm({
               vería su dato desaparecer sin explicación. */}
           {perfil?.topCategory && !perfil.topCategoryMale && !perfil.topCategoryFemale && (
             <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-900">
-              Antes tenías puesto <strong>{perfil.topCategory}</strong>. Cópialo en la casilla que
-              corresponda y guarda.
+              {t.rich("antesTenias", {
+                categoria: perfil.topCategory,
+                fuerte: (trozo) => <strong>{trozo}</strong>,
+              })}
             </p>
           )}
         </fieldset>
@@ -111,7 +113,7 @@ export function NivelDeportivoForm({
         </Campo>
 
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
-        <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />
+        <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? t("guardado") : null} />
 
         <BotonEnviar>{t("guardarNivelDeportivo")}</BotonEnviar>
       </form>
@@ -152,6 +154,7 @@ function EquipoDeMaximaCategoria({
   userId: string;
   placeholder: string;
 }) {
+  const t = useTranslations("panel.perfil");
   return (
     <div className="rounded-lg border border-zinc-200 bg-white p-3">
       <Campo etiqueta={etiqueta}>
@@ -171,7 +174,7 @@ function EquipoDeMaximaCategoria({
           <div className="mb-2 overflow-hidden rounded-lg border border-zinc-200">
             <Image
               src={foto}
-              alt={`Foto del ${etiqueta.toLowerCase()}`}
+              alt={t("fotoDelEquipo", { equipo: etiqueta })}
               width={320}
               height={180}
               className="h-28 w-full object-cover"
@@ -179,7 +182,7 @@ function EquipoDeMaximaCategoria({
           </div>
         ) : (
           <div className="mb-2 flex h-28 items-center justify-center rounded-lg border border-dashed border-zinc-300 bg-zinc-50 text-xs text-zinc-400">
-            Sin foto
+            {t("sinFoto")}
           </div>
         )}
 
@@ -187,7 +190,7 @@ function EquipoDeMaximaCategoria({
           <ImageUploader
             userId={userId}
             carpeta="equipos"
-            label={foto ? "Cambiar foto" : "Subir foto del equipo"}
+            label={foto ? t("cambiarFoto") : t("subirFotoEquipo")}
             onSubido={async (url) => onFoto(url)}
           />
           {foto && (
@@ -196,7 +199,7 @@ function EquipoDeMaximaCategoria({
               onClick={() => onFoto("")}
               className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-500 transition-colors hover:bg-red-50 hover:text-red-700"
             >
-              Quitar
+              {t("quitar")}
             </button>
           )}
         </div>
@@ -215,15 +218,15 @@ function EquipoDeMaximaCategoria({
       {foto ? (
         <div className="mt-3">
           <Campo
-            etiqueta="Qué se ve en la foto"
-            ayuda="Una línea, para quien no conozca las categorías. Se ve debajo de la foto."
+            etiqueta={t("veFoto")}
+            ayuda={t("lineaParaQuienNo")}
           >
             <input
               name={nombrePie}
               maxLength={200}
               value={pie}
               onChange={(evento) => onPie(evento.target.value)}
-              placeholder="Primer equipo, temporada 2025/26. Subimos de categoría en mayo."
+              placeholder={t("primerEquipoTemporada2025")}
               className={clasesInput}
             />
           </Campo>

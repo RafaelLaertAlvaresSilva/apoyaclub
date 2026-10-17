@@ -1,12 +1,12 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { useIntlLocale } from "@/i18n/use-intl-locale";
 import type { DatosDelClub } from "@/lib/plantillas-correo-club";
 import {
   CLASES_ESTADO,
   ESTADOS,
-  ETIQUETA_ESTADO,
-  ETIQUETA_ORIGEN,
   estaAbierto,
   fechaDelPaso,
   type Prospecto,
@@ -25,6 +25,8 @@ export function FilaObjetivo({
   /** Los datos con los que se escribe el correo. */
   club: DatosDelClub;
 }) {
+  const t = useTranslations("panel.objetivos");
+  const intlLocale = useIntlLocale();
   const [escribiendo, setEscribiendo] = useState(false);
 
   const toca =
@@ -43,12 +45,12 @@ export function FilaObjetivo({
             <span
               className={`rounded-full px-2 py-0.5 text-xs font-medium ${CLASES_ESTADO[prospecto.estado]}`}
             >
-              {ETIQUETA_ESTADO[prospecto.estado]}
+              {t(`estados.${prospecto.estado}`)}
             </span>
           </div>
 
           <p className="mt-0.5 text-xs text-zinc-500">
-            {ETIQUETA_ORIGEN[prospecto.origen]}
+            {t(`origenes.${prospecto.origen}.etiqueta`)}
             {prospecto.sector ? ` · ${prospecto.sector}` : ""}
           </p>
 
@@ -71,7 +73,7 @@ export function FilaObjetivo({
             type="submit"
             className="text-xs text-zinc-400 transition-colors hover:text-red-600"
           >
-            Borrar
+            {t("borrar")}
           </button>
         </form>
       </div>
@@ -81,7 +83,7 @@ export function FilaObjetivo({
       <form action={cambiarProximoPaso} className="mt-3 flex flex-wrap items-center gap-2">
         <input type="hidden" name="id" value={prospecto.id} />
         <label htmlFor={`paso-${prospecto.id}`} className="text-xs text-zinc-500">
-          Volver a llamar el
+          {t("volverALlamar")}
         </label>
         <input
           id={`paso-${prospecto.id}`}
@@ -94,11 +96,11 @@ export function FilaObjetivo({
           type="submit"
           className="rounded-lg border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
         >
-          Guardar
+          {t("guardar")}
         </button>
         {toca && prospecto.proximoPaso && (
           <span className="text-xs font-medium text-amber-700">
-            Toca hoy — era el {fechaDelPaso(prospecto.proximoPaso)}
+            {t("tocaHoy", { fecha: fechaDelPaso(prospecto.proximoPaso, intlLocale) })}
           </span>
         )}
       </form>
@@ -111,7 +113,7 @@ export function FilaObjetivo({
           onClick={() => setEscribiendo((valor) => !valor)}
           className="mr-1 rounded-lg bg-brand-teal-dark px-3 py-1 text-xs font-medium text-sobre-color transition-colors hover:bg-brand-navy"
         >
-          {escribiendo ? "Cerrar" : "Escribirle"}
+          {escribiendo ? t("cerrar") : t("escribirle")}
         </button>
 
         {ESTADOS.filter((estado) => estado.id !== prospecto.estado).map((estado) => (
@@ -122,7 +124,7 @@ export function FilaObjetivo({
               type="submit"
               className="rounded-lg border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-600 transition-colors hover:border-teal-500 hover:text-teal-700"
             >
-              {estado.etiqueta}
+              {t(`estados.${estado.id}`)}
             </button>
           </form>
         ))}

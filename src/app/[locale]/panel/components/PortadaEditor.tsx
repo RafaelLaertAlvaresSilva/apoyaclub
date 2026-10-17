@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useState, useTransition } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
@@ -33,6 +34,7 @@ export function PortadaEditor({
   coverUrl: string | null;
   coverPosition: number;
 }) {
+  const t = useTranslations("panel.perfil");
   const [posicion, setPosicion] = useState(coverPosition);
   const [mensaje, setMensaje] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -42,13 +44,13 @@ export function PortadaEditor({
 
   function manejar(resultado: EstadoGuardado) {
     setError(resultado && "error" in resultado ? (resultado.error ?? null) : null);
-    setMensaje(resultado && "ok" in resultado && resultado.ok ? "Guardado." : null);
+    setMensaje(resultado && "ok" in resultado && resultado.ok ? t("guardado") : null);
   }
 
   return (
     <Campo
-      etiqueta="Imagen de portada"
-      ayuda="La foto ancha de arriba del todo de tu página. Apaisada y de buena calidad: es lo primero que ve una empresa."
+      etiqueta={t("imagenPortada")}
+      ayuda={t("fotoAnchaArribaTodo")}
       grupo
     >
       <div className="space-y-3">
@@ -59,7 +61,7 @@ export function PortadaEditor({
             <div className="relative h-28 w-full overflow-hidden rounded-lg border border-zinc-200 sm:h-36">
               <Image
                 src={coverUrl}
-                alt="Portada del club"
+                alt={t("portadaClub")}
                 fill
                 sizes="(min-width: 640px) 640px, 100vw"
                 className="object-cover"
@@ -71,7 +73,7 @@ export function PortadaEditor({
                 onClick={() => iniciarTransicion(async () => manejar(await quitarPortada()))}
                 className="absolute right-2 top-2 rounded-lg bg-white/90 px-2 py-1 text-xs font-medium text-red-600 shadow-sm"
               >
-                Quitar
+                {t("quitar")}
               </button>
             </div>
 
@@ -80,7 +82,7 @@ export function PortadaEditor({
                 htmlFor="posicion-portada"
                 className="mb-1 block text-[15px] font-bold text-titular"
               >
-                Qué parte de la foto se ve
+                {t("parteFotoVe")}
               </label>
               <input
                 id="posicion-portada"
@@ -93,9 +95,9 @@ export function PortadaEditor({
                 className="w-full accent-teal-700"
               />
               <div className="flex justify-between text-xs text-zinc-500">
-                <span>Parte de arriba</span>
-                <span>Centro</span>
-                <span>Parte de abajo</span>
+                <span>{t("parteArriba")}</span>
+                <span>{t("centro")}</span>
+                <span>{t("parteAbajo")}</span>
               </div>
 
               {sinGuardar && (
@@ -107,21 +109,21 @@ export function PortadaEditor({
                   }
                   className="mt-2 rounded-lg bg-accion px-3 py-1.5 text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte disabled:opacity-60"
                 >
-                  {guardando ? "Guardando…" : "Guardar encuadre"}
+                  {guardando ? t("guardando") : t("guardarEncuadre")}
                 </button>
               )}
             </div>
           </>
         ) : (
           <div className="flex h-28 w-full items-center justify-center rounded-lg border border-dashed border-zinc-300 text-xs text-zinc-500 sm:h-36">
-            Sin portada
+            {t("sinPortada")}
           </div>
         )}
 
         <ImageUploader
           userId={userId}
           carpeta="fotos"
-          label={coverUrl ? "Cambiar portada" : "Subir portada"}
+          label={coverUrl ? t("cambiarPortada") : t("subirPortada")}
           onSubido={async (url) => manejar(await guardarPortada(url))}
         />
 

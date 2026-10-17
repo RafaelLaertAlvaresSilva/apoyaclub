@@ -29,6 +29,7 @@ export function BarraProgreso({
   huecos: HuecoPerfil[];
 }) {
   const t = useTranslations("panel.perfil2");
+  const tHuecos = useTranslations("panel.huecos");
   const [verTodos, setVerTodos] = useState(false);
 
   const visibles = verTodos ? huecos : huecos.slice(0, 3);
@@ -36,8 +37,7 @@ export function BarraProgreso({
 
   const mensaje =
     porcentaje >= 60
-      ? "Buen ritmo. Cada apartado que rellenes te sube en el buscador."
-      : "Tu ficha aún tiene poca información, y eso te hace salir más abajo en el buscador.";
+      ? t("buenRitmoCadaApartado") : t("fichaAunTienePoca");
 
   // Nada que pedir, nada que enseñar.
   if (huecos.length === 0) return null;
@@ -58,10 +58,8 @@ export function BarraProgreso({
 
       <div className="mt-3 border-t border-zinc-100 pt-3">
           <h3 className="text-sm font-medium text-zinc-700">
-            Te falta por rellenar{" "}
-            <span className="font-normal text-zinc-500">
-              ({huecos.length} {huecos.length === 1 ? "apartado" : "apartados"})
-            </span>
+            {t("barra.faltaPorRellenar")}{" "}
+            <span className="font-normal text-zinc-500">({t("barra.apartados", { n: huecos.length })})</span>
           </h3>
           <ul className="mt-2 space-y-1.5">
             {visibles.map((hueco) => (
@@ -78,11 +76,11 @@ export function BarraProgreso({
                     tareas que no lleva a ninguna parte. */}
                 {hueco.ruta ? (
                   <Link href={hueco.ruta} className={CLASES_HUECO}>
-                    <ContenidoHueco titulo={hueco.titulo} porQue={hueco.porQue} />
+                    <ContenidoHueco titulo={tHuecos(`${hueco.id}.titulo`)} porQue={tHuecos(`${hueco.id}.porQue`)} />
                   </Link>
                 ) : (
                   <a href={`#${hueco.pestana}`} className={CLASES_HUECO}>
-                    <ContenidoHueco titulo={hueco.titulo} porQue={hueco.porQue} />
+                    <ContenidoHueco titulo={tHuecos(`${hueco.id}.titulo`)} porQue={tHuecos(`${hueco.id}.porQue`)} />
                   </a>
                 )}
               </li>
@@ -95,7 +93,7 @@ export function BarraProgreso({
               onClick={() => setVerTodos(true)}
               className="mt-3 text-sm font-medium text-teal-700 hover:underline"
             >
-              Ver los {ocultos} restantes
+              {t("barra.verRestantes", { n: ocultos })}
             </button>
           )}
         {verTodos && huecos.length > 3 && (
@@ -104,7 +102,7 @@ export function BarraProgreso({
             onClick={() => setVerTodos(false)}
             className="mt-3 text-sm font-medium text-teal-700 hover:underline"
           >
-            Ver solo los principales
+            {t("barra.verPrincipales")}
           </button>
         )}
       </div>

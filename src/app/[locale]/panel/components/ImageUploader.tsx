@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { ErrorImagenInvalida } from "@/lib/image-compression";
@@ -28,7 +29,16 @@ type Props = {
  * comprueba que la carpeta raíz sea el identificador de quien sube, sin
  * mirar de qué tipo de cuenta se trata.
  */
+const MOTIVOS_CONOCIDOS: Record<string, string> = {
+  "El archivo no es una imagen.": "noEsImagen",
+  "La imagen pesa demasiado (máximo 15 MB).": "pesaDemasiado",
+  "Tu navegador no permite procesar imágenes.": "navegador",
+  "No se ha podido procesar la imagen.": "noProcesada",
+  "No se ha podido leer la imagen.": "noLeida",
+};
+
 export function ImageUploader({ userId, carpeta, label, onSubido }: Props) {
+  const t = useTranslations("panel.imagenes");
   const [supabase] = useState(() => createClient());
   const inputRef = useRef<HTMLInputElement>(null);
   const [subiendo, setSubiendo] = useState(false);
@@ -45,13 +55,20 @@ export function ImageUploader({ userId, carpeta, label, onSubido }: Props) {
       const url = await subirImagenClub(supabase, userId, carpeta, archivo);
       await onSubido(url);
     } catch (excepcion) {
-      if (excepcion instanceof ErrorImagenInvalida) {
-        setError(excepcion.message);
-      } else if (excepcion instanceof Error) {
-        // `subirImagenClub` ya trae el motivo dentro del mensaje.
-        setError(excepcion.message);
+      // Los motivos llegan escritos en español desde las librerías;
+      // los conocidos se enseñan en el idioma del panel.
+      const motivo = excepcion instanceof Error ? excepcion.message : "";
+      const conocido = MOTIVOS_CONOCIDOS[motivo];
+      if (conocido) {
+        setError(t(conocido));
+      } else if (motivo.startsWith("Tu sesión no tiene permiso")) {
+        setError(t("sinPermiso"));
+      } else if (excepcion instanceof ErrorImagenInvalida) {
+        setError(motivo);
+      } else if (motivo.startsWith("No se ha podido subir la imagen:")) {
+        setError(`${t("noSubida")} (${motivo.slice("No se ha podido subir la imagen:".length).trim()})`);
       } else {
-        setError("No se ha podido subir la imagen. Inténtalo de nuevo.");
+        setError(t("noSubida"));
       }
     } finally {
       setSubiendo(false);

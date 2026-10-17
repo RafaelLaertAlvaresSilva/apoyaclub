@@ -138,7 +138,7 @@ export function ComunidadForm({
                   />
                 ) : (
                   <div className="flex h-16 w-24 shrink-0 items-center justify-center rounded-lg border border-dashed border-zinc-300 bg-zinc-50 text-xs text-zinc-400">
-                    Sin foto
+                    {t("sinFoto")}
                   </div>
                 )}
 
@@ -149,7 +149,7 @@ export function ComunidadForm({
                         type="text"
                         value={accion.title}
                         onChange={(evento) => cambiarAccion(indice, { title: evento.target.value })}
-                        aria-label="Título de la acción"
+                        aria-label={t("tituloDeLaAccion")}
                         className={clasesInput}
                       />
                       <textarea
@@ -157,8 +157,8 @@ export function ComunidadForm({
                         onChange={(evento) =>
                           cambiarAccion(indice, { description: evento.target.value })
                         }
-                        placeholder="Descripción (opcional)"
-                        aria-label="Descripción de la acción"
+                        placeholder={t("descripcionOpcional")}
+                        aria-label={t("descripcionAccion")}
                         className={clasesTextarea}
                       />
                     </span>
@@ -176,12 +176,12 @@ export function ComunidadForm({
                       onClick={() => setEditando(editando === indice ? null : indice)}
                       className="rounded-lg border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-100"
                     >
-                      {editando === indice ? "Hecho" : "Editar"}
+                      {editando === indice ? t("hecho") : t("editar")}
                     </button>
                     <ImageUploader
                       userId={userId}
                       carpeta="comunidad"
-                      label={accion.photo ? "Cambiar foto" : "Subir foto"}
+                      label={accion.photo ? t("cambiarFoto") : t("subirFoto")}
                       onSubido={async (url) => cambiarFoto(indice, url)}
                     />
                     {accion.photo && (
@@ -190,7 +190,7 @@ export function ComunidadForm({
                         onClick={() => cambiarFoto(indice, null)}
                         className="rounded-lg px-2 py-1 text-xs font-medium text-zinc-500 hover:bg-red-50 hover:text-red-700"
                       >
-                        Quitar foto
+                        {t("quitarFoto")}
                       </button>
                     )}
                   </span>
@@ -214,7 +214,7 @@ export function ComunidadForm({
             className={clasesInput}
           />
           <textarea
-            placeholder="Descripción (opcional)"
+            placeholder={t("descripcionOpcional")}
             value={descripcionNueva}
             onChange={(evento) => setDescripcionNueva(evento.target.value)}
             className={clasesTextarea}
@@ -233,7 +233,7 @@ export function ComunidadForm({
             <ImageUploader
               userId={userId}
               carpeta="comunidad"
-              label={fotoNueva ? "Cambiar foto" : "Subir foto (opcional)"}
+              label={fotoNueva ? t("cambiarFoto") : t("subirFotoOpcional")}
               onSubido={async (url) => setFotoNueva(url)}
             />
           </div>
@@ -250,7 +250,7 @@ export function ComunidadForm({
         <input type="hidden" name="communityActions" value={JSON.stringify(accionesAGuardar)} />
 
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
-        <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />
+        <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? t("guardado") : null} />
 
         <BotonEnviar>{t("guardarComunidad")}</BotonEnviar>
       </form>

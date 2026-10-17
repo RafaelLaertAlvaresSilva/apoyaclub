@@ -33,20 +33,19 @@ export function AvisoSuscripcion({ suscripcion }: { suscripcion: ClubSubscriptio
   let grave = false;
 
   if (status === null) {
-    mensaje =
-      "Todavía no has activado tu suscripción. Mientras tanto, tu página pública y tus oportunidades no son visibles para las empresas.";
+    mensaje = t("avisoSuscripcion.sinActivar");
     grave = true;
   } else if (status === "canceled") {
-    mensaje = "Tu suscripción ha terminado. Tu página pública y tus oportunidades ya no son visibles.";
+    mensaje = t("avisoSuscripcion.terminada");
     grave = true;
   } else if (status === "past_due" || status === "unpaid") {
-    mensaje = "Hay un problema con el cobro de tu suscripción. Actualiza tu método de pago para no perder visibilidad.";
+    mensaje = t("avisoSuscripcion.problemaCobro");
     grave = true;
   } else if (status === "incomplete" || status === "incomplete_expired") {
-    mensaje = "No se ha podido completar el pago de tu suscripción.";
+    mensaje = t("avisoSuscripcion.pagoIncompleto");
     grave = true;
   } else if ((status === "active" || status === "trialing") && cancelAtPeriodEnd && currentPeriodEnd) {
-    mensaje = `Has cancelado tu suscripción: conservarás el acceso hasta el ${formatearFecha(currentPeriodEnd)}.`;
+    mensaje = t("avisoSuscripcion.cancelada", { fecha: formatearFecha(currentPeriodEnd) });
     grave = false;
   } else if (status === "trialing" && suscripcion.trialEndsAt) {
     // Con `trialEndsAt` a null no se sabe cuándo acaba, y
@@ -56,10 +55,10 @@ export function AvisoSuscripcion({ suscripcion }: { suscripcion: ClubSubscriptio
     const dias = diasDePruebaQueQuedan(suscripcion.trialEndsAt);
 
     if (dias === 0) {
-      mensaje = "Hoy es el último día de tu prueba. Mañana necesitarás una suscripción para seguir usando el panel.";
+      mensaje = t("avisoSuscripcion.ultimoDia");
       grave = false;
     } else if (dias <= DIAS_PARA_AVISAR_DEL_FIN) {
-      mensaje = `Te ${dias === 1 ? "queda 1 día" : `quedan ${dias} días`} de prueba. Cuando termine necesitarás una suscripción para seguir usando el panel.`;
+      mensaje = t("avisoSuscripcion.quedanDias", { dias });
       grave = false;
     }
   }

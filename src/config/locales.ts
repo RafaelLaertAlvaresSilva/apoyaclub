@@ -65,3 +65,12 @@ export const LOCALE_OPEN_GRAPH: Record<AppLocale, string> = {
   pt: "pt_PT",
   en: "en_GB",
 };
+
+/**
+ * El `intlLocale` de un idioma cualquiera, con el español como red: un
+ * valor raro (una cookie vieja, un idioma guardado que ya no existe) no
+ * debe romper un formato de número.
+ */
+export function intlLocaleDe(locale: string | null | undefined): string {
+  return (LOCALE_CONFIG as Record<string, LocaleConfig>)[locale ?? ""]?.intlLocale ?? LOCALE_CONFIG.es.intlLocale;
+}

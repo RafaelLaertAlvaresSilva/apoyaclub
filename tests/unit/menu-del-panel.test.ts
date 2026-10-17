@@ -139,7 +139,8 @@ describe("la flecha de las secciones de la ficha", () => {
   );
 
   it("encuentra el botón", () => {
-    expect(boton).toContain("secciones de la ficha");
+    // El texto está en los mensajes (panel.menu.verSeccionesFicha).
+    expect(boton).toContain("SeccionesFicha");
   });
 
   it("es un icono dibujado y no un carácter de texto", () => {

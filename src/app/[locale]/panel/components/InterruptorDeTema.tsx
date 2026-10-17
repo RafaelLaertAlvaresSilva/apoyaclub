@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { aplicarTema, CLAVE_DEL_TEMA, olvidarTema } from "./GuionDelTema";
 
@@ -23,6 +24,7 @@ import { aplicarTema, CLAVE_DEL_TEMA, olvidarTema } from "./GuionDelTema";
  * sincronizar entre el servidor y el navegador.
  */
 export function InterruptorDeTema() {
+  const t = useTranslations("panel.tema");
   /**
    * Si el club NO ha elegido a mano, el panel sigue al sistema en vivo:
    * un móvil que se pone oscuro solo al anochecer cambia el panel sin
@@ -73,11 +75,11 @@ export function InterruptorDeTema() {
     >
       <span className="solo-tema-claro inline-flex items-center gap-2">
         <IconoLuna />
-        <span className="hidden sm:inline">Modo oscuro</span>
+        <span className="hidden sm:inline">{t("modoOscuro")}</span>
       </span>
       <span className="solo-tema-oscuro inline-flex items-center gap-2">
         <IconoSol />
-        <span className="hidden sm:inline">Modo claro</span>
+        <span className="hidden sm:inline">{t("modoClaro")}</span>
       </span>
     </button>
   );

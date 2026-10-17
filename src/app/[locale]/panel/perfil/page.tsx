@@ -64,9 +64,9 @@ export default async function PerfilDelClubPage() {
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div>
         <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
-        <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Perfil del club</h1>
+        <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("perfilClub")}</h1>
         <p className="mt-1 text-sm text-zinc-600">
-          Todo lo que una empresa ve de ti. Cuanto más completo, más arriba sales en el buscador.
+          {t("todoEmpresaVeTi")}
         </p>
       </div>
 

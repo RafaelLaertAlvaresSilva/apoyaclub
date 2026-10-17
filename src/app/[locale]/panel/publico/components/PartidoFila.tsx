@@ -1,13 +1,15 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { AvisoError } from "@/components/AvisoError";
 import { fechaCorta, type Partido } from "@/lib/publico-partidos";
+import { useIntlLocale } from "@/i18n/use-intl-locale";
 import { borrarPartido } from "../actions";
 
-const formatoNumero = new Intl.NumberFormat("es-ES");
-
 export function PartidoFila({ partido }: { partido: Partido }) {
+  const t = useTranslations("panel.publico");
+  const formatoNumero = new Intl.NumberFormat(useIntlLocale());
   const [estadoBorrado, borrar] = useActionState(borrarPartido, null);
 
   return (
@@ -18,11 +20,11 @@ export function PartidoFila({ partido }: { partido: Partido }) {
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium text-zinc-900">
-          {partido.enCasa ? "vs" : "en"} {partido.rival}
+          {t(partido.enCasa ? "contra" : "enCampoDe", { rival: partido.rival })}
         </p>
         <p className="truncate text-xs text-zinc-500">
           {[
-            partido.enCasa ? "En casa" : "Fuera",
+            partido.enCasa ? t("enCasa") : t("fuera"),
             partido.equipo,
             partido.competicion,
           ]
@@ -35,7 +37,7 @@ export function PartidoFila({ partido }: { partido: Partido }) {
         <span className="block text-base font-semibold tabular-nums text-zinc-900">
           {formatoNumero.format(partido.publico)}
         </span>
-        <span className="block text-[11px] text-zinc-500">personas</span>
+        <span className="block text-[11px] text-zinc-500">{t("personas")}</span>
       </span>
 
       <form action={borrar} className="flex-none">
@@ -44,7 +46,7 @@ export function PartidoFila({ partido }: { partido: Partido }) {
           type="submit"
           className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-500 transition-colors hover:bg-red-50 hover:text-red-700"
         >
-          Borrar
+          {t("borrar")}
         </button>
       </form>
 

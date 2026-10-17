@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useMemo, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
@@ -17,12 +18,7 @@ import { TareaFila } from "./TareaFila";
 
 type Filtro = "pendientes" | "caducadas" | "hechas" | "todas";
 
-const FILTROS: { id: Filtro; etiqueta: string }[] = [
-  { id: "pendientes", etiqueta: "Pendientes" },
-  { id: "caducadas", etiqueta: "Caducadas" },
-  { id: "hechas", etiqueta: "Hechas" },
-  { id: "todas", etiqueta: "Todas" },
-];
+const FILTROS: Filtro[] = ["pendientes", "caducadas", "hechas", "todas"];
 
 /**
  * Lo que se promete una y otra vez en un patrocinio de club de barrio.
@@ -31,15 +27,15 @@ const FILTROS: { id: Filtro; etiqueta: string }[] = [
  * club de balonmano no se parece a lo que promete uno de piragüismo.
  */
 const ACCIONES_HABITUALES = [
-  "Publicación en Instagram",
-  "Story en Instagram",
-  "Vídeo",
-  "Visita de los jugadores",
-  "Logo en la camiseta",
-  "Valla en el pabellón",
-  "Mención en el programa del partido",
-  "Publicación en Facebook",
-];
+  "publicacionInstagram",
+  "storyInstagram",
+  "video",
+  "visitaJugadores",
+  "logoCamiseta",
+  "vallaPabellon",
+  "mencionPrograma",
+  "publicacionFacebook",
+] as const;
 
 type LineaFormulario = { id: number; accion: string };
 
@@ -60,6 +56,7 @@ export function TareasManager({
   tareas: TareaPatrocinio[];
   empresasConocidas: EmpresaConocida[];
 }) {
+  const t = useTranslations("panel.tareas");
   const [estado, formAction] = useActionState(crearTareas, null);
   const [filtro, setFiltro] = useState<Filtro>("pendientes");
   const hoy = hoyISO();
@@ -111,7 +108,7 @@ export function TareasManager({
         <details className="group rounded-xl border border-zinc-200 bg-white">
           <summary className="flex cursor-pointer list-none items-center gap-2 px-5 py-4 text-sm font-medium text-accion-tinta [&::-webkit-details-marker]:hidden">
             <span aria-hidden="true" className="text-base leading-none">+</span>
-            Apuntar algo nuevo
+            {t("apuntarAlgoNuevo")}
           </summary>
           <div className="border-t border-zinc-100 px-5 py-5">
             <FormularioNuevasTareas
@@ -126,22 +123,22 @@ export function TareasManager({
       )}
 
       <SeccionCard
-        titulo="Todo lo que has prometido"
-        descripcion="Agrupado por empresa. Delante, las que tienen algo vencido."
+        titulo={t("todoLoPrometido")}
+        descripcion={t("todoLoPrometidoTexto")}
       >
         <div className="mb-4 flex flex-wrap gap-2">
           {FILTROS.map((opcion) => (
             <button
-              key={opcion.id}
+              key={opcion}
               type="button"
-              onClick={() => setFiltro(opcion.id)}
+              onClick={() => setFiltro(opcion)}
               className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                filtro === opcion.id
+                filtro === opcion
                   ? "bg-accion text-sobre-color"
                   : "border border-zinc-300 text-zinc-600 hover:bg-zinc-100"
               }`}
             >
-              {opcion.etiqueta}
+              {t(`filtros.${opcion}`)}
             </button>
           ))}
         </div>
@@ -149,8 +146,8 @@ export function TareasManager({
         {grupos.length === 0 ? (
           <p className="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 p-5 text-sm text-zinc-600">
             {tareas.length === 0
-              ? "Todavía no has apuntado nada. Empieza por lo que le has prometido a tu patrocinador principal: si está escrito, se cumple."
-              : "No hay nada en este filtro."}
+              ? t("nadaApuntado")
+              : t("nadaEnFiltro")}
           </p>
         ) : (
           <div className="flex flex-col gap-6">
@@ -160,11 +157,11 @@ export function TareasManager({
                   <h3 className="font-semibold text-zinc-900">{grupo.empresa}</h3>
                   {grupo.caducadas > 0 && (
                     <span className="rounded-full bg-peligro px-2 py-0.5 text-xs font-bold text-sobre-color">
-                      {grupo.caducadas} vencida{grupo.caducadas === 1 ? "" : "s"}
+                      {t("vencidas", { n: grupo.caducadas })}
                     </span>
                   )}
                   <span className="text-xs text-zinc-500">
-                    {grupo.pendientes} pendiente{grupo.pendientes === 1 ? "" : "s"}
+                    {t("pendientes", { n: grupo.pendientes })}
                   </span>
 
                   <span className="ml-auto">
@@ -206,6 +203,7 @@ function FormularioNuevasTareas({
    * tarjeta. */
   sinTarjeta?: boolean;
 }) {
+  const t = useTranslations("panel.tareas");
   const [lineas, setLineas] = useState<LineaFormulario[]>([nuevaLinea()]);
 
   /**
@@ -228,9 +226,9 @@ function FormularioNuevasTareas({
           <SelectorDeEmpresa empresasConocidas={empresasConocidas} />
 
           <div>
-            <p className="mb-2 text-[15px] font-bold text-titular">Lo habitual, de un clic</p>
+            <p className="mb-2 text-[15px] font-bold text-titular">{t("loHabitual")}</p>
             <div className="flex flex-wrap gap-2">
-              {ACCIONES_HABITUALES.map((accion) => (
+              {ACCIONES_HABITUALES.map((clave) => t(`atajos.${clave}`)).map((accion) => (
                 <button
                   key={accion}
                   type="button"
@@ -244,13 +242,13 @@ function FormularioNuevasTareas({
           </div>
 
           <fieldset className="flex flex-col gap-3">
-            <legend className="mb-1 text-[15px] font-bold text-titular">Qué hay que hacer</legend>
+            <legend className="mb-1 text-[15px] font-bold text-titular">{t("queHayQueHacer")}</legend>
 
             {lineas.map((linea, indice) => (
               <div key={linea.id} className="rounded-xl border border-zinc-300 bg-white p-4">
                 <div className="mb-3 flex items-center justify-between gap-2">
                   <span className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                    Cosa {indice + 1}
+                    {t("cosa", { n: indice + 1 })}
                   </span>
                   {lineas.length > 1 && (
                     <button
@@ -258,7 +256,7 @@ function FormularioNuevasTareas({
                       onClick={() => setLineas((actuales) => actuales.filter((otra) => otra.id !== linea.id))}
                       className="rounded-lg px-2 py-1 text-xs font-medium text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-700"
                     >
-                      Quitar
+                      {t("quitar")}
                     </button>
                   )}
                 </div>
@@ -276,26 +274,26 @@ function FormularioNuevasTareas({
                         ),
                       )
                     }
-                    placeholder="2 publicaciones en Instagram"
-                    aria-label={`Qué hay que hacer, cosa ${indice + 1}`}
+                    placeholder={t("accionEjemplo")}
+                    aria-label={t("queHayQueHacerCosa", { n: indice + 1 })}
                     className={clasesInput}
                   />
 
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <Campo etiqueta="Desde (opcional)" ayuda="Si es algo que dura, como una valla.">
+                    <Campo etiqueta={t("desde")} ayuda={t("desdeAyuda")}>
                       <input name="inicio" type="date" className={clasesInput} />
                     </Campo>
-                    <Campo etiqueta="Fecha límite" ayuda="El día en que tiene que estar hecho.">
+                    <Campo etiqueta={t("fechaLimite")} ayuda={t("fechaLimiteAyuda")}>
                       <input name="fin" type="date" required className={clasesInput} />
                     </Campo>
                   </div>
 
-                  <Campo etiqueta="Notas (opcional)">
+                  <Campo etiqueta={t("notas")}>
                     <textarea
                       name="notas"
                       maxLength={1000}
                       rows={2}
-                      placeholder="Etiquetar a @ferreteriaramirez. Fotos del partido del sábado."
+                      placeholder={t("notasEjemplo")}
                       className={clasesTextarea}
                     />
                   </Campo>
@@ -308,15 +306,15 @@ function FormularioNuevasTareas({
               onClick={() => setLineas((actuales) => [...actuales, nuevaLinea()])}
               className="self-start rounded-lg border border-dashed border-zinc-400 px-4 py-2 text-sm font-medium text-zinc-600 transition-colors hover:border-teal-500 hover:bg-teal-50 hover:text-teal-800"
             >
-              + Añadir otra cosa
+              {t("anadirOtraCosa")}
             </button>
           </fieldset>
 
           <AvisoError mensaje={estado?.error} />
-          <AvisoExito mensaje={estado?.ok ? "Apuntado." : null} />
+          <AvisoExito mensaje={estado?.ok ? t("apuntado") : null} />
 
           <BotonEnviar>
-            {lineas.length === 1 ? "Añadir a la lista" : `Añadir las ${lineas.length} a la lista`}
+            {t("anadirALaLista", { n: lineas.length })}
           </BotonEnviar>
         </form>
   );
@@ -325,8 +323,8 @@ function FormularioNuevasTareas({
 
   return (
     <SeccionCard
-      titulo="Apuntar lo que le has prometido a una empresa"
-      descripcion="Puedes añadir todas las cosas de una vez: las dos publicaciones, el vídeo y la visita van juntas en el mismo patrocinio."
+      titulo={t("apuntarPrometido")}
+      descripcion={t("apuntarPrometidoTexto")}
     >
       {formulario}
     </SeccionCard>
@@ -352,6 +350,7 @@ function FormularioNuevasTareas({
  * ninguna parte.
  */
 function SelectorDeEmpresa({ empresasConocidas }: { empresasConocidas: EmpresaConocida[] }) {
+  const t = useTranslations("panel.tareas");
   const OTRA = "__otra__";
 
   // Sin nada conocido todavía, un desplegable con una sola opción
@@ -366,8 +365,8 @@ function SelectorDeEmpresa({ empresasConocidas }: { empresasConocidas: EmpresaCo
     <div className="flex flex-col gap-3">
       {empresasConocidas.length > 0 && (
         <Campo
-          etiqueta="Empresa"
-          ayuda="Tus patrocinadores y las empresas que ya has apuntado aquí."
+          etiqueta={t("empresa")}
+          ayuda={t("empresaAyuda")}
         >
           <select
             name="empresaElegida"
@@ -376,27 +375,27 @@ function SelectorDeEmpresa({ empresasConocidas }: { empresasConocidas: EmpresaCo
             onChange={(evento) => setEleccion(evento.target.value)}
             className={clasesInput}
           >
-            <option value="">Elige una empresa…</option>
+            <option value="">{t("eligeEmpresa")}</option>
             {empresasConocidas.map((empresa) => (
               <option key={empresa.nombre} value={empresa.nombre}>
                 {empresa.nombre}
               </option>
             ))}
-            <option value={OTRA}>Otra empresa (escribirla)</option>
+            <option value={OTRA}>{t("otraEmpresa")}</option>
           </select>
         </Campo>
       )}
 
       {esOtra && (
         <Campo
-          etiqueta={empresasConocidas.length > 0 ? "Nombre de la empresa" : "Empresa"}
-          ayuda="No hace falta que esté registrada en ApoyaClub."
+          etiqueta={empresasConocidas.length > 0 ? t("nombreEmpresa") : t("empresa")}
+          ayuda={t("noHaceFaltaRegistrada")}
         >
           <input
             name="empresa"
             required
             maxLength={120}
-            placeholder="Ferretería Ramírez"
+            placeholder={t("empresaEjemplo")}
             className={clasesInput}
           />
         </Campo>

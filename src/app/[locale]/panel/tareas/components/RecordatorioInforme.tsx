@@ -1,7 +1,8 @@
+import { useTranslations } from "next-intl";
+import { useIntlLocale } from "@/i18n/use-intl-locale";
 import {
   colaboracionesTerminadas,
-  cuandoFueElUltimo,
-  cuandoTermino,
+  aFecha,
   empresasPendientesDeInforme,
   ventanaDeInforme,
   type EmpresaParaInformar,
@@ -37,6 +38,7 @@ export function RecordatorioInforme({
   ultimosInformes: Map<string, string>;
   hoy: string;
 }) {
+  const t = useTranslations("panel.tareas.informe");
   const terminadas = colaboracionesTerminadas(tareas, ultimosInformes);
   const ventana = ventanaDeInforme(hoy);
   const deTemporada = ventana
@@ -49,18 +51,18 @@ export function RecordatorioInforme({
     <div className="flex flex-col gap-4">
       {terminadas.length > 0 && (
         <Aviso
-          titulo={
-            terminadas.length === 1
-              ? "Has terminado con un patrocinador: mándale el informe"
-              : `Has terminado con ${terminadas.length} patrocinadores: mándales el informe`
-          }
-          porQue="Cuanto antes, mejor: recién terminado todavía lo tiene fresco, y ese es el momento de enseñarle lo que salió. Después ya es un recordatorio de algo viejo."
+          titulo={t("terminadas", { n: terminadas.length })}
+          porQue={t("terminadasPorQue")}
           empresas={terminadas}
         />
       )}
 
       {ventana && deTemporada.length > 0 && (
-        <Aviso titulo={ventana.titulo} porQue={ventana.porQue} empresas={deTemporada} />
+        <Aviso
+          titulo={t(`ventana.${ventana.tipo}.titulo`)}
+          porQue={t(`ventana.${ventana.tipo}.porQue`)}
+          empresas={deTemporada}
+        />
       )}
     </div>
   );
@@ -75,6 +77,10 @@ function Aviso({
   porQue: string;
   empresas: EmpresaParaInformar[];
 }) {
+  const t = useTranslations("panel.tareas.informe");
+  const intlLocale = useIntlLocale();
+  const formatoMes = new Intl.DateTimeFormat(intlLocale, { month: "long", year: "numeric" });
+  const formatoDia = new Intl.DateTimeFormat(intlLocale, { day: "numeric", month: "long" });
   return (
     <section className="rounded-xl border border-teal-200 bg-teal-50 p-5">
       <h2 className="text-base font-semibold text-teal-900">{titulo}</h2>
@@ -90,8 +96,12 @@ function Aviso({
               <p className="font-medium text-zinc-900">{empresa.empresa}</p>
               <p className="text-xs text-zinc-500">
                 {[
-                  empresa.terminadaEl ? cuandoTermino(empresa.terminadaEl) : null,
-                  cuandoFueElUltimo(empresa.ultimoInforme),
+                  empresa.terminadaEl
+                    ? t("terminadoEl", { fecha: formatoDia.format(aFecha(empresa.terminadaEl)) })
+                    : null,
+                  empresa.ultimoInforme
+                    ? t("ultimoFue", { mes: formatoMes.format(aFecha(empresa.ultimoInforme)) })
+                    : t("ningunInforme"),
                 ]
                   .filter(Boolean)
                   .join(" · ")}
@@ -103,8 +113,7 @@ function Aviso({
       </ul>
 
       <p className="mt-3 text-xs text-teal-800">
-        El informe lo mandas tú, desde tu correo o por WhatsApp. Descárgalo y adjúntalo con dos
-        líneas tuyas: llega mucho mejor que un correo automático.
+        {t("loMandasTu")}
       </p>
     </section>
   );

@@ -1,11 +1,11 @@
 "use server";
 
 import { getTranslations } from "next-intl/server";
-import { routing } from "@/i18n/routing";
 import { enviarEmailNuevaSolicitudContacto } from "@/lib/email/resend";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { consumirLimite, ipDelVisitante, pareceBot } from "@/lib/rate-limit";
 import { SITE_URL } from "@/lib/site";
+import { idiomaDe } from "@/lib/idioma-usuario";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export type EstadoSolicitud = { error: string; ok?: false } | { ok: true; error?: undefined } | null;
@@ -160,18 +160,23 @@ async function notificarClubPorEmail({
       opportunityTitle = data?.title ?? null;
     }
 
+    // El correo va en el idioma del club (el de su cuenta), no en el de
+    // quien escribe: una empresa inglesa puede escribir a un club
+    // portugués.
+    const idiomaDelClub = idiomaDe(clubAuth.data.user);
     const resultado = await enviarEmailNuevaSolicitudContacto({
+      idioma: idiomaDelClub,
       clubEmail,
-      clubName: clubRow?.name ?? "tu club",
+      clubName: clubRow?.name ?? (await getTranslations({ locale: idiomaDelClub, namespace: "emails" }))("comun.tuClub"),
       companyName: empresa || nombre,
       personaNombre: nombre,
       personaCorreo: correo,
       personaTelefono: telefono || null,
       opportunityTitle,
       message: mensaje,
-      // El enlace es para el club, no para quien escribe: va a su panel en
-      // español aunque la empresa haya escrito desde la web en inglés.
-      panelUrl: `${SITE_URL}/${routing.defaultLocale}/panel/solicitudes`,
+      // El enlace es para el club, no para quien escribe: va a su panel
+      // en su idioma aunque la empresa haya escrito desde otro.
+      panelUrl: `${SITE_URL}/${idiomaDelClub}/panel/solicitudes`,
       // Para que el club conteste con "Responder" y le llegue a quien
       // escribió, no a ApoyaClub.
       responderA: correo,

@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
 import { avisarDeFallo } from "@/lib/monitoring";
@@ -16,14 +17,15 @@ const RUTA_PUBLICO = "/panel/publico";
 async function obtenerClubActual(): Promise<
   { supabase: Awaited<ReturnType<typeof createClient>>; user: User } | { error: string }
 > {
+  const t = await getTranslations("panel.acciones");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
+  if (!user) return { error: t("tuSesionCaducadoVuelveIniciar") };
   if ((user.app_metadata?.role as Role | undefined) !== "club") {
-    return { error: "Esta acción solo está disponible para clubes." };
+    return { error: t("estaAccionSoloEstaDisponible") };
   }
 
   return { supabase, user };
@@ -44,26 +46,27 @@ export async function guardarPartido(
   _previo: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerClubActual();
   if ("error" in sesion) return { error: sesion.error };
 
   const fecha = leerTexto(formData, "fecha");
   if (!fecha || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
-    return { error: "Pon la fecha del partido." };
+    return { error: t("ponFechaPartido") };
   }
 
   const rival = leerTexto(formData, "rival");
-  if (!rival) return { error: "Escribe contra quién se jugó." };
+  if (!rival) return { error: t("escribeContraQuienJugo") };
 
   // El público se lee a mano en vez de con `Number(...)` a secas: un
   // campo vacío se convierte en 0 con Number, y "0 personas" y "no lo
   // he apuntado" no son lo mismo.
   const publicoTexto = leerTexto(formData, "publico");
-  if (publicoTexto === null) return { error: "Escribe cuánta gente hubo." };
+  if (publicoTexto === null) return { error: t("escribeCuantaGenteHubo") };
 
   const publico = Number(publicoTexto.replace(/\./g, "").replace(/\s/g, ""));
   if (!Number.isInteger(publico) || publico < 0 || publico > 200000) {
-    return { error: "El público tiene que ser un número entre 0 y 200.000." };
+    return { error: t("publicoTieneSerNumeroEntre") };
   }
 
   // El equipo llega como el id de uno de la ficha, o como "otro" y
@@ -83,7 +86,7 @@ export async function guardarPartido(
       .eq("club_id", sesion.user.id)
       .maybeSingle<{ id: string; sport: string; category: string | null; gender: string | null }>();
 
-    if (!equipo) return { error: "Ese equipo no es de tu club." };
+    if (!equipo) return { error: t("eseEquipoTuClub") };
 
     equipoId = equipo.id;
     // Se guarda también el nombre: es el que tenía el equipo el día del
@@ -103,7 +106,7 @@ export async function guardarPartido(
     notes: leerTexto(formData, "notas")?.slice(0, 1000) ?? null,
   });
 
-  if (error) return fallo("guardar el partido", error, "No se ha podido guardar el partido.");
+  if (error) return fallo("guardar el partido", error, t("podidoGuardarPartido"));
 
   revalidatePath(RUTA_PUBLICO);
   return { ok: true };
@@ -113,11 +116,12 @@ export async function borrarPartido(
   _previo: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerClubActual();
   if ("error" in sesion) return { error: sesion.error };
 
   const id = leerTexto(formData, "id");
-  if (!id) return { error: "No se sabe qué partido borrar." };
+  if (!id) return { error: t("sabePartidoBorrar") };
 
   const { error } = await sesion.supabase
     .from("club_matches")
@@ -125,7 +129,7 @@ export async function borrarPartido(
     .eq("id", id)
     .eq("club_id", sesion.user.id);
 
-  if (error) return fallo("borrar el partido", error, "No se ha podido borrar el partido.");
+  if (error) return fallo("borrar el partido", error, t("podidoBorrarPartido"));
 
   revalidatePath(RUTA_PUBLICO);
   return { ok: true };
@@ -142,6 +146,7 @@ export async function borrarPartido(
 // Sin parámetros a propósito: `useActionState` le pasa el estado
 // anterior y el formulario, y aquí no se necesita ninguno de los dos.
 export async function usarMediaEnLaFicha(): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerClubActual();
   if ("error" in sesion) return { error: sesion.error };
 
@@ -149,7 +154,7 @@ export async function usarMediaEnLaFicha(): Promise<EstadoGuardado> {
   const media = mediaParaLaFicha(partidos);
 
   if (media === null) {
-    return { error: "Todavía no hay partidos apuntados para calcular la media." };
+    return { error: t("todaviaHayPartidosApuntadosPara") };
   }
 
   const { error } = await sesion.supabase
@@ -157,7 +162,7 @@ export async function usarMediaEnLaFicha(): Promise<EstadoGuardado> {
     .update({ average_attendance: media })
     .eq("id", sesion.user.id);
 
-  if (error) return fallo("copiar la media a la ficha", error, "No se ha podido guardar la media en tu ficha.");
+  if (error) return fallo("copiar la media a la ficha", error, t("podidoGuardarMediaTuFicha"));
 
   revalidatePath(RUTA_PUBLICO);
   revalidatePath("/panel");

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 
@@ -29,10 +30,10 @@ export function AccionConConfirmacion({
   accion,
   id,
   nombre,
-  etiqueta = "Eliminar",
-  pregunta = "¿Borrar",
-  confirmar = "Sí, borrar",
-  enCurso = "Borrando…",
+  etiqueta,
+  pregunta,
+  confirmar,
+  enCurso,
   clases = "rounded-lg px-2.5 py-1.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50",
 }: {
   /** La Server Action. Recibe el `id` en el FormData. Puede no devolver
@@ -50,6 +51,12 @@ export function AccionConConfirmacion({
   enCurso?: string;
   clases?: string;
 }) {
+  // Sin textos propios, los de siempre en el idioma de la página.
+  const t = useTranslations("common.confirmacion");
+  etiqueta ??= t("eliminar");
+  pregunta ??= t("pregunta");
+  confirmar ??= t("confirmar");
+  enCurso ??= t("enCurso");
   const [preguntando, setPreguntando] = useState(false);
   const [estado, enviar] = useActionState<Resultado, FormData>(
     async (_previo, formData) => (await accion(formData)) ?? null,
@@ -98,7 +105,7 @@ export function AccionConConfirmacion({
           onClick={() => setPreguntando(false)}
           className="rounded px-2 py-1 text-xs font-medium text-zinc-600 hover:bg-white"
         >
-          No
+          {t("no")}
         </button>
       </div>
     </form>

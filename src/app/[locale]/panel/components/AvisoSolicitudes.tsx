@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
 /**
@@ -9,26 +10,25 @@ import { Link } from "@/i18n/navigation";
  * hasta que el club entre a leerla.
  */
 export function AvisoSolicitudes({ sinAbrir }: { sinAbrir: number }) {
+  const t = useTranslations("panel.avisos");
   if (sinAbrir === 0) return null;
 
   return (
     <section className="rounded-xl border-2 border-teal-600 bg-teal-50 p-5">
       <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">
-        Tienes empresas esperando
+        {t("tienesEmpresasEsperando")}
       </p>
       <h2 className="mt-1 text-lg font-semibold text-zinc-900">
-        {sinAbrir === 1
-          ? "Una empresa te ha escrito y sigue sin respuesta"
-          : `${sinAbrir} empresas te han escrito y siguen sin respuesta`}
+        {t("empresasSinRespuesta", { n: sinAbrir })}
       </h2>
       <p className="mt-1 text-sm text-zinc-700">
-        Responder pronto es la diferencia entre un patrocinio y un correo olvidado.
+        {t("responderProntoDiferenciaEntre")}
       </p>
       <Link
         href="/panel/solicitudes"
         className="mt-3 inline-flex items-center rounded-lg bg-accion px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte"
       >
-        {sinAbrir === 1 ? "Ver la solicitud" : "Ver las solicitudes"}
+        {sinAbrir === 1 ? t("verSolicitud") : t("verSolicitudes")}
       </Link>
     </section>
   );

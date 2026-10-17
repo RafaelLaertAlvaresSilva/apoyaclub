@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 /**
  * Los botones para descargar el informe de una empresa.
  *
@@ -27,6 +28,7 @@ export function BotonInforme({
   empresa: string;
   compacto?: boolean;
 }) {
+  const t = useTranslations("panel.tareas.informe");
   return (
     // `flex-wrap` y sin `shrink-0`: en un móvil estrecho los dos botones
     // ya no caben en la misma línea que el nombre de la empresa, y antes
@@ -37,9 +39,9 @@ export function BotonInforme({
         empresa={empresa}
         formato="pdf"
         etiqueta={
-          compacto ? "Informe PDF" : "Generar informe de progreso (PDF)"
+          compacto ? t("pdfCompacto") : t("pdf")
         }
-        titulo={`Descargar en PDF lo que has hecho por ${empresa}`}
+        titulo={t("pdfTitulo", { empresa })}
         compacto={compacto}
         principal
       />
@@ -47,8 +49,8 @@ export function BotonInforme({
       <Descarga
         empresa={empresa}
         formato="word"
-        etiqueta="Word"
-        titulo={`Descargar en Word lo que has hecho por ${empresa}, por si quieres retocarlo`}
+        etiqueta={t("word")}
+        titulo={t("wordTitulo", { empresa })}
         compacto={compacto}
       />
     </span>

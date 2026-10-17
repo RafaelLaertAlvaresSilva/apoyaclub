@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { createClient } from "@/lib/supabase/server";
@@ -31,18 +32,19 @@ export async function guardarRenovacion(
   _estado: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
+  if (!user) return { error: t("tuSesionCaducadoVuelveIniciar") };
   if ((user.app_metadata?.role as Role | undefined) !== "club") {
-    return { error: "Esta acción solo está disponible para clubes." };
+    return { error: t("estaAccionSoloEstaDisponible") };
   }
 
   const patrocinadorId = String(formData.get("patrocinadorId") ?? "");
-  if (!patrocinadorId) return { error: "No sabemos de qué patrocinador se trata." };
+  if (!patrocinadorId) return { error: t("sabemosPatrocinadorTrata") };
 
   const renewalDate = leerFecha(formData, "renewalDate");
   const agreementEndsOn = leerFecha(formData, "agreementEndsOn");
@@ -51,7 +53,7 @@ export async function guardarRenovacion(
   // lee un motivo en vez de un error de restricción.
   if (renewalDate && agreementEndsOn && renewalDate > agreementEndsOn) {
     return {
-      error: "La fecha para escribir tiene que ser anterior al final del acuerdo.",
+      error: t("fechaParaEscribirTieneSer"),
     };
   }
 
@@ -71,8 +73,8 @@ export async function guardarRenovacion(
     // no existe y el mensaje de Postgres no le dice nada a un club.
     return {
       error: error.message.includes("column")
-        ? "Esta función necesita una actualización de la base de datos que todavía no está aplicada."
-        : "No hemos podido guardar los cambios. Inténtalo otra vez.",
+        ? t("faltaMigracion")
+        : t("noGuardadosCambios"),
     };
   }
 

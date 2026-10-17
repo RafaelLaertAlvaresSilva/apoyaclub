@@ -53,9 +53,16 @@ export function BloquePlegable({
   );
 }
 
-/** "Ninguno todavía" / "2 de 5 rellenados", para el resumen de arriba. */
-export function cuantosRellenados(valores: (string | null | undefined)[], vacio: string): string {
+/**
+ * "Ninguno todavía" / "2 de 5 rellenados", para el resumen de arriba.
+ * El "2 de 5" llega ya traducido desde quien lo usa (`rellenados`).
+ */
+export function cuantosRellenados(
+  valores: (string | null | undefined)[],
+  vacio: string,
+  rellenados: (puestos: number, total: number) => string,
+): string {
   const puestos = valores.filter((valor) => !!valor?.trim()).length;
   if (puestos === 0) return vacio;
-  return `${puestos} de ${valores.length} rellenados`;
+  return rellenados(puestos, valores.length);
 }

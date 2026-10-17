@@ -20,13 +20,17 @@ import {
 } from "../actions";
 import { Campo, SeccionCard, clasesInput, clasesTextarea } from "./SeccionCard";
 import { ImageUploader } from "./ImageUploader";
+import { useIntlLocale } from "@/i18n/use-intl-locale";
 
-/** Nombre visible de cada categoría en los desplegables del formulario. */
-const NOMBRE_NIVEL: Record<SponsorTier, string> = {
-  principal: "Patrocinador principal",
-  oficial: "Patrocinador oficial",
-  colaborador: "Colaborador",
-  otro: "Otra categoría (la escribes tú)",
+/**
+ * Las categorías fijas, por el nombre en español con el que llegan
+ * agrupadas (`agruparPatrocinadoresPorNivel`), para enseñarlas en el
+ * idioma del panel. Las que escribe el club van tal cual.
+ */
+const NIVEL_POR_NOMBRE: Record<string, Exclude<SponsorTier, "otro">> = {
+  "Patrocinador principal": "principal",
+  "Patrocinador oficial": "oficial",
+  Colaborador: "colaborador",
 };
 
 /**
@@ -59,14 +63,14 @@ export function PatrocinadoresForm({
   return (
     <SeccionCard
       titulo={t("patrocinadoresActuales")}
-      descripcion="Las empresas que ya colaboran contigo. Enseñarlas es lo que convence a las que todavía no: añade todas las que tengas, clasifícalas y cuenta en dos líneas qué aportan."
+      descripcion={t("patrocinadoresDescripcion")}
     >
       {grupos.length > 0 && (
         <div className="mb-6 space-y-5">
           {grupos.map((grupo) => (
             <div key={grupo.etiqueta}>
               <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                {grupo.etiqueta}
+                {NIVEL_POR_NOMBRE[grupo.etiqueta] ? t(`nivel.${NIVEL_POR_NOMBRE[grupo.etiqueta]}`) : grupo.etiqueta}
               </h3>
               <ul className="divide-y divide-zinc-100 rounded-lg border border-zinc-200">
                 {grupo.patrocinadores.map((patrocinador) => (
@@ -151,7 +155,7 @@ function FilaPatrocinador({
               {patrocinador.name}
               {patrocinador.sinceYear && (
                 <span className="ml-2 text-xs font-normal text-zinc-500">
-                  desde {patrocinador.sinceYear}
+                  {t("desdeAnio", { anio: patrocinador.sinceYear })}
                 </span>
               )}
             </p>
@@ -167,7 +171,7 @@ function FilaPatrocinador({
             className="rounded px-2 py-1 text-sm font-medium text-teal-700 hover:bg-teal-50"
             aria-expanded={editando}
           >
-            {editando ? "Cerrar" : "Editar"}
+            {editando ? t("cerrar") : t("editar")}
           </button>
           <AccionConConfirmacion
             accion={eliminarPatrocinador}
@@ -218,18 +222,20 @@ function FilaPatrocinador({
  * sostiene este envío es que el club sí tiene relación con ella.
  */
 function AvisoAlPatrocinador({ patrocinador }: { patrocinador: ClubSponsor }) {
+  const t = useTranslations("panel.perfil2");
+  const intlLocale = useIntlLocale();
   const [estado, formAction] = useActionState(avisarPatrocinador, null);
 
   if (patrocinador.notifiedAt) {
     return (
       <p className="rounded-lg bg-zinc-50 px-3 py-2 text-xs text-zinc-600">
-        Avisada el{" "}
-        {new Date(patrocinador.notifiedAt).toLocaleDateString("es-ES", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
+        {t("avisadaEl", {
+          fecha: new Date(patrocinador.notifiedAt).toLocaleDateString(intlLocale, {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }),
         })}
-        . Solo se escribe una vez a cada empresa.
       </p>
     );
   }
@@ -237,8 +243,7 @@ function AvisoAlPatrocinador({ patrocinador }: { patrocinador: ClubSponsor }) {
   if (!patrocinador.contactEmail) {
     return (
       <p className="rounded-lg bg-zinc-50 px-3 py-2 text-xs text-zinc-600">
-        Añade el correo de la empresa aquí arriba y podrás mandarle un agradecimiento con el
-        enlace a tu página.
+        {t("anadeCorreoParaAvisar")}
       </p>
     );
   }
@@ -247,10 +252,9 @@ function AvisoAlPatrocinador({ patrocinador }: { patrocinador: ClubSponsor }) {
     <form action={formAction} className="rounded-lg border border-teal-200 bg-teal-50 p-4">
       <input type="hidden" name="id" value={patrocinador.id} />
 
-      <p className="text-sm font-medium text-zinc-900">Avisar a {patrocinador.name}</p>
+      <p className="text-sm font-medium text-zinc-900">{t("avisarA", { nombre: patrocinador.name })}</p>
       <p className="mt-1 text-xs text-zinc-600">
-        Le llegará un correo <strong>a nombre de tu club</strong> dándole las gracias por
-        apoyaros, con el enlace a tu página para que vea cómo aparece. Se manda una sola vez.
+        {t.rich("leLlegaraCorreo", { fuerte: (trozo) => <strong>{trozo}</strong> })}
       </p>
 
       <label className="mt-3 flex items-start gap-2 text-xs text-zinc-700">
@@ -259,20 +263,17 @@ function AvisoAlPatrocinador({ patrocinador }: { patrocinador: ClubSponsor }) {
           name="confirmaRelacion"
           className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
         />
-        <span>
-          Confirmo que esta empresa colabora con mi club y que tengo relación con esa dirección
-          de correo.
-        </span>
+        <span>{t("confirmoRelacion")}</span>
       </label>
 
       <div className="mt-3">
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
         <AvisoExito
-          mensaje={estado && "ok" in estado && estado.ok ? "Aviso enviado." : null}
+          mensaje={estado && "ok" in estado && estado.ok ? t("avisoEnviado") : null}
         />
       </div>
 
-      <BotonEnviar>Enviar agradecimiento</BotonEnviar>
+      <BotonEnviar>{t("enviarAgradecimiento")}</BotonEnviar>
     </form>
   );
 }
@@ -286,6 +287,7 @@ function BotonMover({
   direccion: "arriba" | "abajo";
   desactivado: boolean;
 }) {
+  const t = useTranslations("panel.perfil2");
   return (
     <form action={moverPatrocinador}>
       <input type="hidden" name="id" value={id} />
@@ -293,7 +295,7 @@ function BotonMover({
       <button
         type="submit"
         disabled={desactivado}
-        aria-label={direccion === "arriba" ? "Subir en la lista" : "Bajar en la lista"}
+        aria-label={direccion === "arriba" ? t("subirEnLista") : t("bajarEnLista")}
         className="rounded px-2 py-1 text-zinc-500 hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-30"
       >
         {direccion === "arriba" ? "↑" : "↓"}
@@ -336,13 +338,13 @@ function CamposPatrocinador({
       </div>
 
       <Campo
-        etiqueta="Correo de la empresa (opcional)"
-        ayuda="Solo lo ves tú: nunca se publica. Sirve para mandarles el agradecimiento con el enlace a tu página."
+        etiqueta={t("correoEmpresa")}
+        ayuda={t("correoEmpresaAyuda")}
       >
         <input
           name="contactEmail"
           type="email"
-          placeholder="contacto@empresa.es"
+          placeholder={t("correoEmpresaEjemplo")}
           defaultValue={patrocinador?.contactEmail ?? ""}
           className={clasesInput}
         />
@@ -360,9 +362,9 @@ function CamposPatrocinador({
       {!patrocinador?.notifiedAt && (
         <div className="rounded-lg border border-teal-200 bg-teal-50 p-4">
           <p className="text-sm text-zinc-800">
-            Al guardar, si has puesto un correo, se le enviará{" "}
-            <strong className="font-semibold">a nombre de tu club</strong> un agradecimiento por
-            apoyaros con el enlace a tu página. Se manda una sola vez.
+            {t.rich("alGuardarSeEnviara", {
+              fuerte: (trozo) => <strong className="font-semibold">{trozo}</strong>,
+            })}
           </p>
 
           <label className="mt-3 flex items-start gap-2 text-sm text-zinc-700">
@@ -372,11 +374,8 @@ function CamposPatrocinador({
               className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
             />
             <span>
-              No enviar el correo a esta empresa
-              <span className="mt-0.5 block text-xs text-zinc-600">
-                Márcalo si prefieres avisarles tú, o si todavía no has hablado con ellos. Podrás
-                mandárselo más tarde desde su ficha.
-              </span>
+              {t("noEnviarCorreo")}
+              <span className="mt-0.5 block text-xs text-zinc-600">{t("noEnviarCorreoAyuda")}</span>
             </span>
           </label>
         </div>
@@ -384,8 +383,8 @@ function CamposPatrocinador({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Campo
-          etiqueta="Categoría"
-          ayuda="Cómo aparece agrupado en tu página pública."
+          etiqueta={t("categoria")}
+          ayuda={t("categoriaAyuda")}
         >
           <select
             name="tier"
@@ -395,7 +394,7 @@ function CamposPatrocinador({
           >
             {NIVELES_PATROCINADOR.map((nivel) => (
               <option key={nivel} value={nivel}>
-                {NOMBRE_NIVEL[nivel]}
+                {t(`nivel.${nivel}`)}
               </option>
             ))}
           </select>
@@ -403,8 +402,8 @@ function CamposPatrocinador({
 
         {tier === "otro" ? (
           <Campo
-            etiqueta="Nombre de la categoría"
-            ayuda="Por ejemplo: Patrocinador técnico, Proveedor oficial."
+            etiqueta={t("nombreCategoria")}
+            ayuda={t("nombreCategoriaAyuda")}
           >
             <input
               name="tierLabel"
@@ -415,7 +414,7 @@ function CamposPatrocinador({
             />
           </Campo>
         ) : (
-          <Campo etiqueta="Patrocina desde (año)" ayuda="Opcional.">
+          <Campo etiqueta={t("patrocinaDesde")} ayuda={t("opcional")}>
             <input
               name="sinceYear"
               type="number"
@@ -429,7 +428,7 @@ function CamposPatrocinador({
       </div>
 
       {tier === "otro" && (
-        <Campo etiqueta="Patrocina desde (año)" ayuda="Opcional.">
+        <Campo etiqueta={t("patrocinaDesde")} ayuda={t("opcional")}>
           <input
             name="sinceYear"
             type="number"
@@ -442,8 +441,8 @@ function CamposPatrocinador({
       )}
 
       <Campo
-        etiqueta="Qué aporta"
-        ayuda="Dos líneas: qué patrocina, desde cuándo o por qué colabora. Máximo 400 caracteres."
+        etiqueta={t("queAporta")}
+        ayuda={t("queAportaAyuda")}
       >
         <textarea
           name="description"
@@ -453,12 +452,12 @@ function CamposPatrocinador({
         />
       </Campo>
 
-      <Campo etiqueta="Logo">
+      <Campo etiqueta={t("logo")}>
         <div className="flex items-center gap-3">
           {logoActual && (
             <Image
               src={logoActual}
-              alt="Logo del patrocinador"
+              alt={t("logoPatrocinador")}
               width={40}
               height={40}
               className="h-10 w-10 rounded border border-placa-borde bg-placa object-contain p-1"
@@ -468,7 +467,7 @@ function CamposPatrocinador({
           <ImageUploader
             userId={userId}
             carpeta="patrocinadores"
-            label={logoActual ? "Cambiar logo" : "Subir logo"}
+            label={logoActual ? t("cambiarLogo") : t("subirLogo")}
             onSubido={(url) => setLogoUrl(url)}
           />
         </div>
@@ -497,7 +496,7 @@ function FormularioNuevoPatrocinador({
       <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
       <AvisoExito
         mensaje={
-          estado && "ok" in estado && estado.ok ? (estado.nota ?? "Patrocinador añadido.") : null
+          estado && "ok" in estado && estado.ok ? (estado.nota ?? t("patrocinadorAnadido")) : null
         }
       />
 
@@ -513,6 +512,7 @@ function FormularioEditarPatrocinador({
   userId: string;
   patrocinador: ClubSponsor;
 }) {
+  const t = useTranslations("panel.perfil2");
   const [estado, formAction] = useActionState(editarPatrocinador, null);
   const [logoUrl, setLogoUrl] = useState("");
 
@@ -529,11 +529,11 @@ function FormularioEditarPatrocinador({
       <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
       <AvisoExito
         mensaje={
-          estado && "ok" in estado && estado.ok ? (estado.nota ?? "Cambios guardados.") : null
+          estado && "ok" in estado && estado.ok ? (estado.nota ?? t("cambiosGuardados")) : null
         }
       />
 
-      <BotonEnviar>Guardar cambios</BotonEnviar>
+      <BotonEnviar>{t("guardarCambios")}</BotonEnviar>
     </form>
   );
 }

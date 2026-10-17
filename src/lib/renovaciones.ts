@@ -104,10 +104,24 @@ export function ordenarPorRenovacion(patrocinadores: ClubSponsor[], hoy: Date): 
   });
 }
 
+/**
+ * Para decir los plazos en el idioma del panel. Recibe la clave
+ * (`hoy`, `manana`, `ayer`, `hace`, `faltan`, `meses`) y el número.
+ */
+export type TraducirPlazoRenovacion = (clave: string, valores?: { dias?: number; meses?: number }) => string;
+
 /** "Faltan 12 días", "Era hace 3 días", "Hoy". */
-export function cuantoFalta(fechaISO: string, hoy: Date): string {
+export function cuantoFalta(fechaISO: string, hoy: Date, traducir?: TraducirPlazoRenovacion): string {
   const dias = diasHasta(fechaISO, hoy);
   if (Number.isNaN(dias)) return "";
+  if (traducir) {
+    if (dias === 0) return traducir("hoy");
+    if (dias === 1) return traducir("manana");
+    if (dias === -1) return traducir("ayer");
+    if (dias < 0) return traducir("hace", { dias: Math.abs(dias) });
+    if (dias < 45) return traducir("faltan", { dias });
+    return traducir("meses", { meses: Math.round(dias / 30) });
+  }
   if (dias === 0) return "Hoy";
   if (dias === 1) return "Mañana";
   if (dias === -1) return "Se pasó ayer";
@@ -135,15 +149,40 @@ export function mensajeDeRenovacion({
   patrocinador,
   nombreDelClub,
   temporada,
+  traducir,
 }: {
   patrocinador: ClubSponsor;
   nombreDelClub: string;
   temporada: string;
+  /** `panel.renovaciones.mensaje`, para sacarlo en el idioma del panel. */
+  traducir?: (clave: string, valores?: Record<string, string | number>) => string;
 }): string {
   const anios =
     patrocinador.sinceYear && patrocinador.sinceYear > 0
       ? new Date().getFullYear() - patrocinador.sinceYear
       : 0;
+
+  if (traducir) {
+    const desdeTexto =
+      anios >= 1
+        ? traducir("desde", { anio: patrocinador.sinceYear ?? 0, anios })
+        : traducir("estaTemporada");
+    const acordado = patrocinador.renewalNotes
+      ? `\n\n${traducir("loAcordado", { notas: patrocinador.renewalNotes })}`
+      : "";
+    return [
+      traducir("hola"),
+      ``,
+      `${traducir("osEscribo", { club: nombreDelClub, desde: desdeTexto })}${acordado}`,
+      ``,
+      traducir("cerrando", { temporada }),
+      ``,
+      traducir("llamada"),
+      ``,
+      traducir("despedida"),
+      nombreDelClub,
+    ].join("\n");
+  }
 
   const desde =
     anios >= 1

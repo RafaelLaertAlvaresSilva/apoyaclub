@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 /**
@@ -43,6 +44,7 @@ export function CampoContrasena({
   /** Lo que va debajo del campo: el enlace de contraseña olvidada. */
   children?: React.ReactNode;
 }) {
+  const t = useTranslations("auth.comun");
   const [visible, setVisible] = useState(false);
 
   return (
@@ -67,7 +69,7 @@ export function CampoContrasena({
           aria-pressed={visible}
           className="absolute inset-y-0 right-0 rounded-r-lg px-3 text-sm font-medium text-teal-700 hover:bg-teal-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accion-tinta"
         >
-          {visible ? "Ocultar" : "Mostrar"}
+          {visible ? t("ocultar") : t("mostrar")}
         </button>
       </div>
 

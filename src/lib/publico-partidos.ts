@@ -157,17 +157,20 @@ export function mediaParaLaFicha(partidos: Partido[]): number | null {
   return temporadas[0].resumenEnCasa.media;
 }
 
-/** "12 de mayo de 2026" a partir de "2026-05-12", sin pasar por Date. */
-const MESES = [
-  "enero", "febrero", "marzo", "abril", "mayo", "junio",
-  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
-] as const;
-
-export function fechaLarga(fechaISO: string): string {
+/**
+ * "12 de mayo de 2026" a partir de "2026-05-12" (o "12 May 2026" en
+ * inglés). La fecha se arma en UTC y se formatea en UTC: es un día del
+ * calendario, no un instante, y no puede moverse por la zona horaria.
+ */
+export function fechaLarga(fechaISO: string, intlLocale = "es-ES"): string {
   const [anio, mes, dia] = fechaISO.split("-").map(Number);
-  const nombre = MESES[mes - 1];
-  if (!nombre) return fechaISO;
-  return `${dia} de ${nombre} de ${anio}`;
+  if (!anio || !mes || !dia || mes > 12) return fechaISO;
+  return new Intl.DateTimeFormat(intlLocale, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(Date.UTC(anio, mes - 1, dia));
 }
 
 /** "12/05/2026", para las tablas donde no cabe la fecha larga. */
@@ -221,6 +224,10 @@ export type PublicoDeUnEquipo = {
 export function agruparPorEquipo(
   partidos: Partido[],
   etiquetasActuales: Map<string, string> = new Map(),
+  textos: { equipoBorrado: string; sinEquipo: string } = {
+    equipoBorrado: "Equipo borrado",
+    sinEquipo: "Sin equipo asignado",
+  },
 ): PublicoDeUnEquipo[] {
   const grupos = new Map<string, { etiqueta: string; partidos: Partido[] }>();
 
@@ -228,8 +235,8 @@ export function agruparPorEquipo(
     const nombreEscrito = partido.equipo?.trim() || "";
     const clave = partido.equipoId ?? (nombreEscrito || SIN_EQUIPO);
     const etiqueta = partido.equipoId
-      ? (etiquetasActuales.get(partido.equipoId) ?? (nombreEscrito || "Equipo borrado"))
-      : nombreEscrito || "Sin equipo asignado";
+      ? (etiquetasActuales.get(partido.equipoId) ?? (nombreEscrito || textos.equipoBorrado))
+      : nombreEscrito || textos.sinEquipo;
 
     const grupo = grupos.get(clave);
     if (grupo) grupo.partidos.push(partido);
@@ -262,16 +269,17 @@ export type PublicoDeUnMes = {
   resumenEnCasa: ResumenDePublico;
 };
 
-/** "septiembre de 2026" a partir de "2026-09", sin pasar por Date. */
-export function mesLargo(mes: string): string {
+/** "septiembre de 2026" a partir de "2026-09" ("September 2026" en inglés). */
+export function mesLargo(mes: string, intlLocale = "es-ES"): string {
   const [anio, numero] = mes.split("-").map(Number);
-  const nombre = MESES[numero - 1];
-  if (!nombre) return mes;
-  return `${nombre} de ${anio}`;
+  if (!anio || !numero || numero > 12) return mes;
+  return new Intl.DateTimeFormat(intlLocale, { month: "long", year: "numeric", timeZone: "UTC" }).format(
+    Date.UTC(anio, numero - 1, 1),
+  );
 }
 
 /** Mes a mes, del más reciente al más antiguo. */
-export function agruparPorMes(partidos: Partido[]): PublicoDeUnMes[] {
+export function agruparPorMes(partidos: Partido[], intlLocale = "es-ES"): PublicoDeUnMes[] {
   const porMes = new Map<string, Partido[]>();
 
   for (const partido of partidos) {
@@ -285,7 +293,7 @@ export function agruparPorMes(partidos: Partido[]): PublicoDeUnMes[] {
     .sort(([a], [b]) => b.localeCompare(a))
     .map(([mes, deEseMes]) => ({
       mes,
-      etiqueta: mesLargo(mes),
+      etiqueta: mesLargo(mes, intlLocale),
       resumen: resumirPublico(deEseMes),
       resumenEnCasa: resumirPublico(soloEnCasa(deEseMes)),
     }));

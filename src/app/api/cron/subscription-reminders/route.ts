@@ -10,7 +10,8 @@ import {
   recordarSolicitudesSinAbrir,
   soltarPlazasDeFundadorSinPagar,
 } from "@/lib/emails-ciclo";
-import { routing } from "@/i18n/routing";
+import { LOCALE_CONFIG } from "@/config/locales";
+import { idiomaDe } from "@/lib/idioma-usuario";
 import { SITE_URL } from "@/lib/site";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -108,16 +109,19 @@ export async function GET(request: Request) {
     const email = usuario.user?.email;
     if (!email) continue;
 
+    const idioma = idiomaDe(usuario.user);
     const resultado = await enviarEmailAvisoCaducidadSuscripcion({
       clubEmail: email,
       clubName: club.name,
       diasRestantes: umbral,
-      fechaFin: new Date(club.current_period_end).toLocaleDateString("es-ES", {
+      fechaFin: new Date(club.current_period_end).toLocaleDateString(LOCALE_CONFIG[idioma].intlLocale, {
         day: "numeric",
         month: "long",
         year: "numeric",
+        timeZone: LOCALE_CONFIG[idioma].timeZone,
       }),
-      panelUrl: `${SITE_URL}/${routing.defaultLocale}/panel/suscripcion`,
+      panelUrl: `${SITE_URL}/${idioma}/panel/suscripcion`,
+      idioma,
     });
 
     // Se marca como enviado tanto si Resend confirma el envío como si

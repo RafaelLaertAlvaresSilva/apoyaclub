@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
@@ -31,6 +32,7 @@ import { ListaDeRenovaciones } from "./components/ListaDeRenovaciones";
  * enseñarla vacía y pedir las fechas.
  */
 export default async function RenovacionesPage() {
+  const t = await getTranslations("panel.renovaciones");
   const supabase = await createClient();
   const {
     data: { user },
@@ -72,12 +74,9 @@ export default async function RenovacionesPage() {
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div>
-        <p className="text-sm font-medium text-teal-700">Panel del club</p>
-        <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Renovaciones</h1>
-        <p className="mt-1 max-w-2xl text-sm text-zinc-600">
-          Hasta cuándo dura cada patrocinio y cuándo toca hablarlo. Casi ningún patrocinador se
-          pierde porque diga que no: se pierde porque nadie volvió a preguntar a tiempo.
-        </p>
+        <p className="text-sm font-medium text-teal-700">{t("cabecera.panel")}</p>
+        <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("cabecera.titulo")}</h1>
+        <p className="mt-1 max-w-2xl text-sm text-zinc-600">{t("cabecera.texto")}</p>
       </div>
 
       {avisan > 0 && (
@@ -87,27 +86,29 @@ export default async function RenovacionesPage() {
            texto al 800. El que había aquí era más alto y más oscuro
            que cualquier otro aviso del panel. */
         <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-          Tienes <strong>{avisan}</strong>{" "}
-          {avisan === 1 ? "renovación que necesita" : "renovaciones que necesitan"} que escribas
-          ya.
+          {t.rich("avisan", { n: avisan, fuerte: (trozo) => <strong>{trozo}</strong> })}
         </p>
       )}
 
       {!filaClub ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
-          Completa primero la identidad de tu club en{" "}
-          <Link href="/panel/perfil" className="font-medium text-teal-700 hover:underline">
-            tu perfil
-          </Link>
-          .
+          {t.rich("completaIdentidad", {
+            enlace: (trozo) => (
+              <Link href="/panel/perfil" className="font-medium text-teal-700 hover:underline">
+                {trozo}
+              </Link>
+            ),
+          })}
         </div>
       ) : patrocinadores.length === 0 ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
-          Todavía no has añadido ningún patrocinador. Añádelos en{" "}
-          <Link href="/panel/patrocinadores" className="font-medium text-teal-700 hover:underline">
-            Patrocinadores
-          </Link>{" "}
-          y aquí podrás llevar el control de sus renovaciones.
+          {t.rich("sinPatrocinadores", {
+            enlace: (trozo) => (
+              <Link href="/panel/patrocinadores" className="font-medium text-teal-700 hover:underline">
+                {trozo}
+              </Link>
+            ),
+          })}
         </div>
       ) : (
         <ListaDeRenovaciones

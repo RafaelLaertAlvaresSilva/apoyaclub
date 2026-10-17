@@ -32,56 +32,32 @@ export type PlantillaId =
   | "renovar"
   | "cierre";
 
-export const PLANTILLAS: {
-  id: PlantillaId;
-  etiqueta: string;
-  cuando: string;
-}[] = [
-  {
-    id: "conocida",
-    etiqueta: "Una empresa que ya os conoce",
-    cuando: "El padre de un jugador, el bar de enfrente, un antiguo socio.",
-  },
-  {
-    id: "fria",
-    etiqueta: "Una empresa que no os conoce",
-    cuando: "Un comercio del barrio con el que no tenéis trato todavía.",
-  },
-  {
-    id: "servicio",
-    etiqueta: "Pedir un servicio, no dinero",
-    cuando: "El fisio, la furgoneta, la imprenta, las comidas.",
-  },
-  {
-    id: "insistir",
-    etiqueta: "Volver a intentarlo",
-    cuando: "Escribisteis y no han contestado. A los siete o diez días.",
-  },
-  {
-    id: "responder",
-    etiqueta: "Contestar a quien ha preguntado",
-    cuando: "Os han escrito. Es el correo que más se juega y el que peor sale.",
-  },
-  {
-    id: "renovar",
-    etiqueta: "Renovar con quien ya os apoya",
-    cuando: "Antes de que acabe la temporada, no después.",
-  },
-  {
-    id: "cierre",
-    etiqueta: "Cuando os dicen que no",
-    cuando: "Dejar la puerta abierta para el año que viene.",
-  },
+/**
+ * Las plantillas, en el orden del desplegable. Su nombre y cuándo se
+ * usa cada una están en `panel.plantillas.tipos.<id>`: los textos de
+ * los correos viven todos en los mensajes, para que el club los saque
+ * en el idioma en el que tiene abierto el panel.
+ */
+export const PLANTILLAS: { id: PlantillaId }[] = [
+  { id: "conocida" },
+  { id: "fria" },
+  { id: "servicio" },
+  { id: "insistir" },
+  { id: "responder" },
+  { id: "renovar" },
+  { id: "cierre" },
 ];
-
-export const ETIQUETA_PLANTILLA: Record<PlantillaId, string> = PLANTILLAS.reduce(
-  (acumulado, plantilla) => ({ ...acumulado, [plantilla.id]: plantilla.etiqueta }),
-  {} as Record<PlantillaId, string>,
-);
 
 export function esPlantillaValida(valor: string): valor is PlantillaId {
   return PLANTILLAS.some((plantilla) => plantilla.id === valor);
 }
+
+/**
+ * La función de traducir de `panel.plantillas`, ya hecha. La da
+ * `useTranslations("panel.plantillas")` en el panel y, en las pruebas,
+ * un traductor armado con los mismos mensajes.
+ */
+export type Traducir = (clave: string, valores?: Record<string, string | number>) => string;
 
 export type DatosDelClub = {
   nombre: string;
@@ -117,77 +93,46 @@ export type CorreoGenerado = {
   faltan: Hueco[];
 };
 
-const formatoNumero = new Intl.NumberFormat("es-ES");
-
 /**
  * Las cifras del club en una frase, con lo que tenga.
  *
  * Devuelve null si no tiene ninguna: entonces la frase entera se cae,
- * en vez de quedarse coja.
+ * en vez de quedarse coja. La "y" del final la pone `Intl.ListFormat`,
+ * que sabe que en portugués es "e" y en inglés "and".
  */
-export function cifrasEnTexto(club: DatosDelClub): string | null {
+export function cifrasEnTexto(club: DatosDelClub, t: Traducir, intlLocale = "es-ES"): string | null {
+  const formatoNumero = new Intl.NumberFormat(intlLocale);
   const partes: string[] = [];
 
-  if (club.jugadores) partes.push(`${formatoNumero.format(club.jugadores)} jugadores`);
-  if (club.familias) partes.push(`${formatoNumero.format(club.familias)} familias`);
-  if (club.socios) partes.push(`${formatoNumero.format(club.socios)} socios`);
+  if (club.jugadores) partes.push(t("cifras.jugadores", { n: formatoNumero.format(club.jugadores) }));
+  if (club.familias) partes.push(t("cifras.familias", { n: formatoNumero.format(club.familias) }));
+  if (club.socios) partes.push(t("cifras.socios", { n: formatoNumero.format(club.socios) }));
   if (club.publicoMedio) {
-    partes.push(`una media de ${formatoNumero.format(club.publicoMedio)} personas en cada partido en casa`);
+    partes.push(t("cifras.publico", { n: formatoNumero.format(club.publicoMedio) }));
   }
 
   if (partes.length === 0) return null;
-  if (partes.length === 1) return partes[0];
 
-  return `${partes.slice(0, -1).join(", ")} y ${partes[partes.length - 1]}`;
+  return new Intl.ListFormat(intlLocale, { style: "long", type: "conjunction" }).format(partes);
 }
 
 /** Qué le falta al club para que estos correos convenzan. */
-export function huecosDelClub(club: DatosDelClub): Hueco[] {
+export function huecosDelClub(club: DatosDelClub, t: Traducir, intlLocale = "es-ES"): Hueco[] {
   const huecos: Hueco[] = [];
 
-  if (!cifrasEnTexto(club)) {
-    huecos.push({
-      que: "Cuánta gente sois: jugadores, familias, socios o público en los partidos",
-      donde: "/panel/perfil#audiencia",
-    });
+  if (!cifrasEnTexto(club, t, intlLocale)) {
+    huecos.push({ que: t("huecos.cifras"), donde: "/panel/perfil#audiencia" });
   }
 
   if (!club.urlDossier) {
-    huecos.push({
-      que: "El enlace a tu dossier, para que la empresa vea de un vistazo qué ofreces",
-      donde: "/panel/dossier",
-    });
+    huecos.push({ que: t("huecos.dossier"), donde: "/panel/dossier" });
   }
 
   if (!club.firmante) {
-    huecos.push({ que: "Quién firma el correo", donde: "/panel/perfil#identidad" });
+    huecos.push({ que: t("huecos.firma"), donde: "/panel/perfil#identidad" });
   }
 
   return huecos;
-}
-
-/** El saludo, con el nombre de la persona si se sabe. */
-function saludo(empresa: DatosDeLaEmpresa): string {
-  return empresa.contactoNombre ? `Hola ${empresa.contactoNombre},` : "Hola,";
-}
-
-/** Quién somos, en una línea. */
-function presentacion(club: DatosDelClub): string {
-  const deporte = club.deporte ? `club de ${club.deporte}` : "club";
-  const donde = club.localidad ? ` de ${club.localidad}` : "";
-  return `Te escribo del ${club.nombre}, ${deporte}${donde}.`;
-}
-
-/** El enlace que se le pasa a la empresa: el dossier si lo hay, y si no
- * la ficha pública, que siempre existe. */
-function enlace(club: DatosDelClub): string {
-  return club.urlDossier
-    ? `Aquí tienes quiénes somos y qué ofrecemos, en dos minutos: ${club.urlDossier}`
-    : `Aquí tienes nuestra página, por si quieres echarle un ojo: ${club.urlFicha}`;
-}
-
-function firma(club: DatosDelClub): string {
-  return `${club.firmante ?? "[tu nombre]"}\n${club.nombre}`;
 }
 
 /** Junta los trozos que no están vacíos, separados por una línea. */
@@ -199,149 +144,151 @@ export function construirCorreo(
   plantilla: PlantillaId,
   club: DatosDelClub,
   empresa: DatosDeLaEmpresa,
+  t: Traducir,
+  intlLocale = "es-ES",
 ): CorreoGenerado {
-  const cifras = cifrasEnTexto(club);
-  const laFraseDeLasCifras = cifras
-    ? `Este año somos ${cifras}. Todo eso es gente de aquí que ve nuestras camisetas y nuestras redes cada fin de semana.`
-    : null;
-
+  const cifras = cifrasEnTexto(club, t, intlLocale);
+  const laFraseDeLasCifras = cifras ? t("comun.fraseCifras", { cifras }) : null;
   const detalle = empresa.detalle?.trim() || null;
+
+  // Los datos que puede usar cualquier frase de cualquier plantilla.
+  const datos = {
+    club: club.nombre,
+    empresa: empresa.nombre,
+    contacto: empresa.contactoNombre ?? empresa.nombre,
+    localidad: club.localidad ?? "",
+    deporte: club.deporte ?? "",
+    detalle: detalle ?? "",
+  };
+  const frase = (clave: string) => t(`${plantilla}.${clave}`, datos);
+
+  const saludo = empresa.contactoNombre
+    ? t("comun.saludoNombre", { nombre: empresa.contactoNombre })
+    : t("comun.saludo");
+
+  // Quién somos, en una línea: con deporte y localidad si los hay.
+  const presentacion = t(
+    club.deporte && club.localidad
+      ? "comun.presentacionCompleta"
+      : club.deporte
+        ? "comun.presentacionDeporte"
+        : club.localidad
+          ? "comun.presentacionLocalidad"
+          : "comun.presentacionSola",
+    datos,
+  );
+
+  // El enlace que se le pasa a la empresa: el dossier si lo hay, y si
+  // no la ficha pública, que siempre existe.
+  const enlace = club.urlDossier
+    ? t("comun.enlaceDossier", { url: club.urlDossier })
+    : t("comun.enlaceFicha", { url: club.urlFicha });
+
+  const firma = `${club.firmante ?? t("comun.tuNombre")}\n${club.nombre}`;
+  const despedida = (clave: string) => `${frase(clave)}\n${firma}`;
+  const asuntos = [frase("asunto1"), frase("asunto2"), frase("asunto3")];
 
   switch (plantilla) {
     case "conocida":
       return {
-        asuntos: [
-          `Una idea para ${empresa.nombre} y el ${club.nombre}`,
-          `¿Te cuento algo del ${club.nombre}?`,
-          `${club.nombre}: te queríamos proponer una cosa`,
-        ],
+        asuntos,
         cuerpo: parrafos(
-          saludo(empresa),
-          presentacion(club),
-          detalle ? `${detalle}` : null,
+          saludo,
+          presentacion,
+          detalle,
           laFraseDeLasCifras,
-          "Estamos buscando empresas de aquí que quieran salir con nosotros esta temporada. No tiene que ser mucho: hay desde cosas pequeñas hasta el patrocinio principal, y también nos sirve en especie.",
-          enlace(club),
-          "¿Te va bien que te llame esta semana y lo vemos en cinco minutos?",
-          `Un saludo,\n${firma(club)}`,
+          frase("propuesta"),
+          enlace,
+          frase("llamada"),
+          despedida("despedida"),
         ),
-        faltan: huecosDelClub(club),
+        faltan: huecosDelClub(club, t, intlLocale),
       };
 
     case "fria":
       return {
         asuntos: [
-          `${club.nombre}: ¿os interesa salir en nuestras camisetas?`,
-          `Un club de ${club.localidad ?? "aquí"} quiere trabajar con vosotros`,
-          `Patrocinio local, sin compromiso`,
+          frase("asunto1"),
+          club.localidad ? frase("asunto2") : frase("asunto2SinLocalidad"),
+          frase("asunto3"),
         ],
         cuerpo: parrafos(
-          saludo(empresa),
-          presentacion(club),
+          saludo,
+          presentacion,
           laFraseDeLasCifras,
           detalle,
-          `Os escribo porque sois de ${club.localidad ?? "la zona"} y creemos que os puede encajar. La publicidad en un club de barrio no es como la de internet: la ve la gente que luego entra por vuestra puerta, y os asocia a algo que quieren.`,
-          enlace(club),
-          "Si os interesa, contestadme a este correo y os cuento las opciones. Y si no es el momento, decídmelo también y no os molesto más.",
-          `Gracias,\n${firma(club)}`,
+          club.localidad ? frase("porQue") : frase("porQueSinLocalidad"),
+          enlace,
+          frase("respuesta"),
+          despedida("despedida"),
         ),
-        faltan: huecosDelClub(club),
+        faltan: huecosDelClub(club, t, intlLocale),
       };
 
     case "servicio":
       return {
-        asuntos: [
-          `¿Nos podríais echar una mano en el ${club.nombre}?`,
-          `Una colaboración sin dinero de por medio`,
-          `${club.nombre}: os proponemos un intercambio`,
-        ],
+        asuntos,
         cuerpo: parrafos(
-          saludo(empresa),
-          presentacion(club),
-          detalle
-            ? `Lo que necesitamos es esto: ${detalle}`
-            : "Lo que necesitamos no es dinero, es [di aquí exactamente qué: fisioterapia para los partidos de casa, una furgoneta para los desplazamientos, las lonas del pabellón…].",
+          saludo,
+          presentacion,
+          detalle ? frase("necesidad") : frase("necesidadHueco"),
           laFraseDeLasCifras,
-          "A cambio os damos la misma visibilidad que a cualquier patrocinador: vuestro logo, vuestro nombre en nuestras redes y en el pabellón, y a nuestra gente contándolo.",
-          enlace(club),
-          "¿Lo hablamos? Con una llamada corta nos aclaramos.",
-          `Un saludo,\n${firma(club)}`,
+          frase("aCambio"),
+          enlace,
+          frase("llamada"),
+          despedida("despedida"),
         ),
-        faltan: huecosDelClub(club),
+        faltan: huecosDelClub(club, t, intlLocale),
       };
 
     case "insistir":
       return {
-        asuntos: [
-          `Te escribí hace unos días — ${club.nombre}`,
-          `¿Le has podido echar un ojo?`,
-          `Vuelvo a la carga (y no insisto más)`,
-        ],
+        asuntos,
         cuerpo: parrafos(
-          saludo(empresa),
-          `Te escribí hace unos días desde el ${club.nombre} y no sé si te habrá llegado, que los correos se pierden.`,
-          "No te quiero dar la lata: con que me digas que no es el momento, me vale y no vuelvo a escribirte.",
-          "Y si es que sí, dime cuándo te viene bien que te llame y lo vemos en cinco minutos.",
-          enlace(club),
-          `Gracias de todas formas,\n${firma(club)}`,
+          saludo,
+          frase("recordatorio"),
+          frase("sinLata"),
+          frase("siEsQueSi"),
+          enlace,
+          despedida("despedida"),
         ),
         faltan: [],
       };
 
     case "responder":
       return {
-        asuntos: [
-          `Re: tu mensaje — ${club.nombre}`,
-          `Gracias por escribirnos`,
-          `Te cuento, ${empresa.contactoNombre ?? empresa.nombre}`,
-        ],
+        asuntos,
         cuerpo: parrafos(
-          saludo(empresa),
-          `Muchas gracias por escribirnos. Te cuento lo que podemos hacer.`,
+          saludo,
+          frase("gracias"),
           laFraseDeLasCifras,
-          detalle
-            ? `Sobre lo que preguntabas: ${detalle}`
-            : "[Responde aquí a lo que te haya preguntado, con nombres y números concretos. Es la parte que más se juega.]",
-          enlace(club),
-          "Si te encaja, dime un día y una hora y te llamo. Y si prefieres verlo en persona, nos pasamos por ahí sin problema.",
-          `Un saludo,\n${firma(club)}`,
+          detalle ? frase("respuesta") : frase("respuestaHueco"),
+          enlace,
+          frase("llamada"),
+          despedida("despedida"),
         ),
-        faltan: huecosDelClub(club),
+        faltan: huecosDelClub(club, t, intlLocale),
       };
 
     case "renovar":
       return {
-        asuntos: [
-          `¿Seguimos juntos la temporada que viene?`,
-          `${club.nombre}: gracias por este año`,
-          `Renovación ${club.nombre} — ${empresa.nombre}`,
-        ],
+        asuntos,
         cuerpo: parrafos(
-          saludo(empresa),
-          `Se nos acaba la temporada y quería escribirte antes de que se me pasara: gracias por haber estado con el ${club.nombre} este año.`,
-          detalle ? `Esto es lo que hemos hecho con vosotros: ${detalle}` : "[Cuéntale aquí qué recibió: las publicaciones, la lona, las menciones. Si lo tienes apuntado en Tareas, sácalo de ahí.]",
+          saludo,
+          frase("gracias"),
+          detalle ? frase("hecho") : frase("hechoHueco"),
           laFraseDeLasCifras,
-          "Para el año que viene nos gustaría seguir, y si quieres podemos darle una vuelta a lo que hacemos para que os luzca más.",
-          "¿Lo hablamos un día de estos?",
-          `Un abrazo,\n${firma(club)}`,
+          frase("seguir"),
+          frase("hablamos"),
+          despedida("despedida"),
         ),
-        faltan: huecosDelClub(club),
+        faltan: huecosDelClub(club, t, intlLocale),
       };
 
     case "cierre":
       return {
-        asuntos: [
-          `Sin problema — ${club.nombre}`,
-          `Gracias de todas formas`,
-          `Nos vemos el año que viene`,
-        ],
-        cuerpo: parrafos(
-          saludo(empresa),
-          "Gracias por contestar, de verdad. Un no a tiempo vale mucho más que un silencio.",
-          "Si en algún momento cambian las cosas, aquí estamos. Y si conoces a alguien a quien le pueda encajar, te agradecería que le pasaras nuestra página.",
-          enlace(club),
-          `Mucha suerte con todo,\n${firma(club)}`,
-        ),
+        asuntos,
+        cuerpo: parrafos(saludo, frase("gracias"), frase("puerta"), enlace, despedida("despedida")),
         faltan: [],
       };
   }

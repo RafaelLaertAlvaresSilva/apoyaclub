@@ -1,5 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { routing } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
+import type { AppLocale } from "@/i18n/routing";
+import { LOCALE_CONFIG } from "@/config/locales";
+import { idiomaDe } from "@/lib/idioma-usuario";
 import {
   enviarEmailBienvenidaClub,
   enviarEmailBienvenidaEmpresa,
@@ -38,10 +41,11 @@ import type { Role } from "@/lib/types";
 
 type ClienteAdmin = SupabaseClient;
 
-const URL_PANEL = `${SITE_URL}/${routing.defaultLocale}/panel`;
-const URL_SOLICITUDES = `${SITE_URL}/${routing.defaultLocale}/panel/solicitudes`;
-const URL_SUSCRIPCION = `${SITE_URL}/${routing.defaultLocale}/panel/suscripcion`;
-const URL_BUSCAR = `${SITE_URL}/${routing.defaultLocale}/buscar`;
+/**
+ * Los enlaces de los correos, en el idioma de quien los recibe: un club
+ * portugués que pulsa "Ir a mi panel" tiene que caer en `/pt/panel`.
+ */
+const urlEn = (idioma: AppLocale, ruta: string) => `${SITE_URL}/${idioma}${ruta}`;
 
 /** Días desde el alta en los que todavía tiene sentido dar la bienvenida. */
 const DIAS_MAXIMOS_BIENVENIDA = 7;
@@ -115,6 +119,7 @@ export async function enviarBienvenidas(admin: ClienteAdmin, ahora = new Date())
     if (enviados.has(`${usuario.id}:${kind}`)) continue;
 
     let resultado: ResultadoEnvioEmail;
+    const idioma = idiomaDe(usuario);
 
     if (rol === "club") {
       const { data: club } = await admin
@@ -123,15 +128,19 @@ export async function enviarBienvenidas(admin: ClienteAdmin, ahora = new Date())
         .eq("id", usuario.id)
         .maybeSingle<{ name: string }>();
 
+      const tEmails = await getTranslations({ locale: idioma, namespace: "emails" });
       resultado = await enviarEmailBienvenidaClub({
         clubEmail: usuario.email!,
-        clubName: club?.name ?? (usuario.user_metadata?.name as string | undefined) ?? "tu club",
-        panelUrl: URL_PANEL,
+        clubName:
+          club?.name ?? (usuario.user_metadata?.name as string | undefined) ?? tEmails("comun.tuClub"),
+        panelUrl: urlEn(idioma, "/panel"),
+        idioma,
       });
     } else {
       resultado = await enviarEmailBienvenidaEmpresa({
         companyEmail: usuario.email!,
-        buscarUrl: URL_BUSCAR,
+        buscarUrl: urlEn(idioma, "/buscar"),
+        idioma,
       });
     }
 
@@ -182,16 +191,19 @@ export async function avisarFinDePrueba(admin: ClienteAdmin, ahora = new Date())
     const email = usuario.user?.email;
     if (!email) continue;
 
+    const idioma = idiomaDe(usuario.user);
     const resultado = await enviarEmailFinDePrueba({
       clubEmail: email,
       clubName: club.name,
       diasRestantes: umbral,
-      fechaFin: new Date(club.trial_ends_at!).toLocaleDateString("es-ES", {
+      fechaFin: new Date(club.trial_ends_at!).toLocaleDateString(LOCALE_CONFIG[idioma].intlLocale, {
         day: "numeric",
         month: "long",
         year: "numeric",
+        timeZone: LOCALE_CONFIG[idioma].timeZone,
       }),
-      panelUrl: URL_SUSCRIPCION,
+      panelUrl: urlEn(idioma, "/panel/suscripcion"),
+      idioma,
     });
 
     if (seDaPorEnviado(resultado)) await apuntarEnviado(admin, club.id, `trial_${umbral}d`);
@@ -242,11 +254,13 @@ export async function recordarSolicitudesSinAbrir(
       new Date(actual.created_at) < new Date(antigua.created_at) ? actual : antigua,
     );
 
+    const idioma = idiomaDe(usuario.user);
     const resultado = await enviarEmailSolicitudSinAbrir({
       clubEmail: email,
       total: solicitudes.length,
       diasDeLaMasAntigua: Math.max(diasDesde(masAntigua.created_at, ahora) ?? 2, 2),
-      panelUrl: URL_SOLICITUDES,
+      panelUrl: urlEn(idioma, "/panel/solicitudes"),
+      idioma,
     });
 
     if (seDaPorEnviado(resultado)) {
@@ -384,12 +398,15 @@ export async function recordarFichaIncompleta(
 
     if (huecos.length === 0) continue;
 
+    const idioma = idiomaDe(usuario.user);
+    const tHuecos = await getTranslations({ locale: idioma, namespace: "panel.huecos" });
     const resultado = await enviarEmailFichaIncompleta({
       clubEmail: email,
       clubName: fila.name,
       porcentaje: fila.profile_score ?? 0,
-      huecos: huecos.slice(0, HUECOS_EN_EL_EMAIL).map((hueco) => hueco.titulo),
-      panelUrl: URL_PANEL,
+      huecos: huecos.slice(0, HUECOS_EN_EL_EMAIL).map((hueco) => tHuecos(`${hueco.id}.titulo`)),
+      panelUrl: urlEn(idioma, "/panel"),
+      idioma,
     });
 
     if (seDaPorEnviado(resultado)) {

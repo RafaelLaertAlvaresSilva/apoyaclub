@@ -176,14 +176,14 @@ export function HistoriaForm({ userId, perfil }: { userId: string; perfil: ClubP
                               cambiarHito(indice, { videoUrl: evento.target.value || null })
                             }
                             placeholder="https://youtube.com/..."
-                            aria-label="Vídeo del hito"
+                            aria-label={t("videoHito")}
                             className={clasesInput}
                           />
                           <div className="flex flex-wrap items-center gap-2">
                             <ImageUploader
                               userId={userId}
                               carpeta="fotos"
-                              label={hito.photoUrl ? "Cambiar foto" : "Subir foto"}
+                              label={hito.photoUrl ? t("cambiarFoto") : t("subirFoto")}
                               onSubido={async (url) => cambiarHito(indice, { photoUrl: url })}
                             />
                             {hito.photoUrl && (
@@ -192,7 +192,7 @@ export function HistoriaForm({ userId, perfil }: { userId: string; perfil: ClubP
                                 onClick={() => cambiarHito(indice, { photoUrl: null })}
                                 className="rounded-lg px-2 py-1 text-xs font-medium text-zinc-500 hover:bg-red-50 hover:text-red-700"
                               >
-                                Quitar foto
+                                {t("quitarFoto")}
                               </button>
                             )}
                           </div>
@@ -215,7 +215,7 @@ export function HistoriaForm({ userId, perfil }: { userId: string; perfil: ClubP
                         onClick={() => setEditando(editando === indice ? null : indice)}
                         className="rounded-lg border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-100"
                       >
-                        {editando === indice ? "Hecho" : "Editar"}
+                        {editando === indice ? t("hecho") : t("editar")}
                       </button>
                       <button
                         type="button"
@@ -255,7 +255,7 @@ export function HistoriaForm({ userId, perfil }: { userId: string; perfil: ClubP
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2">
-              <Campo etiqueta="Vídeo (opcional)" ayuda="Enlace de YouTube, Vimeo o donde lo tengas.">
+              <Campo etiqueta={t("videoOpcional")} ayuda={t("enlaceYoutubeVimeoDonde")}>
                 <input
                   type="url"
                   placeholder="https://youtube.com/..."
@@ -265,12 +265,12 @@ export function HistoriaForm({ userId, perfil }: { userId: string; perfil: ClubP
                 />
               </Campo>
 
-              <Campo etiqueta="Foto (opcional)">
+              <Campo etiqueta={t("fotoOpcional")}>
                 <div className="flex items-center gap-3">
                   {fotoNueva && (
                     <Image
                       src={fotoNueva}
-                      alt="Foto del hito"
+                      alt={t("fotoHito")}
                       width={40}
                       height={40}
                       className="h-10 w-10 rounded object-cover"
@@ -281,7 +281,7 @@ export function HistoriaForm({ userId, perfil }: { userId: string; perfil: ClubP
                     key={hitos.length}
                     userId={userId}
                     carpeta="fotos"
-                    label={fotoNueva ? "Cambiar foto" : "Subir foto"}
+                    label={fotoNueva ? t("cambiarFoto") : t("subirFoto")}
                     onSubido={(url) => setFotoNueva(url)}
                   />
                 </div>
@@ -301,7 +301,7 @@ export function HistoriaForm({ userId, perfil }: { userId: string; perfil: ClubP
         <input type="hidden" name="milestones" value={JSON.stringify(hitosAGuardar)} />
 
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
-        <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />
+        <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? t("guardado") : null} />
 
         <BotonEnviar>{t("guardarHistoria")}</BotonEnviar>
       </form>

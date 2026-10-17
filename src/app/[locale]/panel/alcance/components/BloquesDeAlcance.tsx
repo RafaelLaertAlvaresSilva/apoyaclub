@@ -1,6 +1,6 @@
 import type { AppLocale } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import {
-  AVISO_DE_ORIGEN,
   unidadEnTexto,
   type BloqueDeAlcance,
   type CifraDeAlcance,
@@ -39,11 +39,6 @@ const ESTILO_BLOQUE: Record<OrigenDeCifra, { borde: string; fondo: string; etiqu
   },
 };
 
-const NOMBRE_ORIGEN: Record<OrigenDeCifra, string> = {
-  contado: "Contado",
-  declarado: "Declarado",
-  deducido: "Deducido",
-};
 
 export function Cifra({
   cifra,
@@ -54,6 +49,7 @@ export function Cifra({
   locale: AppLocale;
   grande?: boolean;
 }) {
+  const tInforme = useTranslations("panel.alcance.informe");
   const estilo = ESTILO_BLOQUE[cifra.origen];
 
   return (
@@ -61,7 +57,7 @@ export function Cifra({
       <p className={`${grande ? "text-4xl" : "text-2xl"} font-semibold ${estilo.texto}`}>
         {formatearNumero(cifra.valor, locale)}{" "}
         <span className="text-sm font-normal text-zinc-500">
-          {unidadEnTexto(cifra.unidad, cifra.valor)}
+          {unidadEnTexto(cifra.unidad, cifra.valor, tInforme)}
         </span>
       </p>
       <p className="mt-1 text-sm font-medium text-zinc-800">{cifra.etiqueta}</p>
@@ -74,13 +70,14 @@ export function Cifra({
 }
 
 export function Bloque({ bloque, locale }: { bloque: BloqueDeAlcance; locale: AppLocale }) {
+  const tInforme = useTranslations("panel.alcance.informe");
   const estilo = ESTILO_BLOQUE[bloque.id];
 
   return (
     <section className={`rounded-2xl border ${estilo.borde} ${estilo.fondo} p-5`}>
       <div className="flex flex-wrap items-center gap-2">
         <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${estilo.etiqueta}`}>
-          {NOMBRE_ORIGEN[bloque.id]}
+          {tInforme(`origen.${bloque.id}`)}
         </span>
         <h2 className="text-lg font-semibold text-zinc-900">{bloque.titulo}</h2>
       </div>
@@ -96,5 +93,6 @@ export function Bloque({ bloque, locale }: { bloque: BloqueDeAlcance; locale: Ap
 }
 
 export function AvisoDeOrigen() {
-  return <p className="text-xs text-zinc-500">{AVISO_DE_ORIGEN}</p>;
+  const tInforme = useTranslations("panel.alcance.informe");
+  return <p className="text-xs text-zinc-500">{tInforme("avisoDeOrigen")}</p>;
 }

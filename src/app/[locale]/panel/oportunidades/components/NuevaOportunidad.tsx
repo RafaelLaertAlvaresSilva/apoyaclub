@@ -86,10 +86,7 @@ export function NuevaOportunidad({
         {idea && (
           <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-3">
             <p className="text-sm text-amber-900">
-              <strong>Añade algo tuyo antes de publicarla.</strong> Cuánta gente
-              va a vuestros partidos, cuántos equipos sois, cuántos seguidores
-              tenéis. Si todos los clubes publican el mismo texto, la empresa no
-              sabrá por qué elegiros a vosotros.
+              {t.rich("anadeAlgoTuyo", { fuerte: (trozo) => <strong>{trozo}</strong> })}
             </p>
           </div>
         )}
@@ -100,7 +97,7 @@ export function NuevaOportunidad({
           accion={formAction}
           estado={estado}
           equipos={equipos}
-          textoBoton="Crear oportunidad"
+          textoBoton={t("crearOportunidad")}
           valoresIniciales={
             idea
               ? {

@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { BarraLogo } from "@/components/BarraLogo";
 import { CargandoRegion, Skeleton } from "@/components/ui/Skeleton";
 
@@ -10,8 +11,9 @@ import { CargandoRegion, Skeleton } from "@/components/ui/Skeleton";
  * cargar, que es exactamente lo que el esqueleto viene a evitar.
  */
 export default function CargandoPanel() {
+  const t = useTranslations("panel.menu");
   return (
-    <CargandoRegion etiqueta="Cargando tu panel…">
+    <CargandoRegion etiqueta={t("cargandoPanel")}>
       <BarraLogo />
       <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
         <Skeleton className="h-8 w-56" />

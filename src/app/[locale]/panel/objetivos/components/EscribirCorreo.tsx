@@ -1,6 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { useIntlLocale } from "@/i18n/use-intl-locale";
 import { Link } from "@/i18n/navigation";
 import {
   PLANTILLAS,
@@ -42,15 +44,20 @@ export function EscribirCorreo({
   notas: string | null;
   alCerrar: () => void;
 }) {
+  const t = useTranslations("panel.objetivos.correo");
+  const tPlantillas = useTranslations("panel.plantillas");
+  const intlLocale = useIntlLocale();
   const [plantilla, setPlantilla] = useState<PlantillaId>("conocida");
   const [indiceAsunto, setIndiceAsunto] = useState(0);
   const [copiado, setCopiado] = useState(false);
 
-  const generado = construirCorreo(plantilla, club, {
-    nombre: empresaNombre,
-    contactoNombre,
-    detalle: notas,
-  });
+  const generado = construirCorreo(
+    plantilla,
+    club,
+    { nombre: empresaNombre, contactoNombre, detalle: notas },
+    tPlantillas,
+    intlLocale,
+  );
 
   // El texto se puede tocar antes de enviarlo, y se reinicia al cambiar
   // de plantilla: la `key` del textarea se encarga, sin efectos.
@@ -82,23 +89,21 @@ export function EscribirCorreo({
     <div className="mt-3 rounded-xl border border-teal-200 bg-teal-50/60 p-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="font-medium text-zinc-900">Escribir a {empresaNombre}</p>
-          <p className="mt-0.5 text-xs text-zinc-600">
-            Lo escribimos nosotros; lo envías tú desde tu correo, para que te contesten a ti.
-          </p>
+          <p className="font-medium text-zinc-900">{t("escribirA", { empresa: empresaNombre })}</p>
+          <p className="mt-0.5 text-xs text-zinc-600">{t("loEnviasTu")}</p>
         </div>
         <button
           type="button"
           onClick={alCerrar}
           className="shrink-0 rounded-lg px-2 py-1 text-sm font-medium text-zinc-500 hover:bg-zinc-100"
         >
-          Cerrar
+          {t("cerrar")}
         </button>
       </div>
 
       <div className="mt-4 flex flex-col gap-3">
         <label className="block">
-          <span className="mb-1 block text-[15px] font-bold text-titular">Qué situación es</span>
+          <span className="mb-1 block text-[15px] font-bold text-titular">{t("queSituacion")}</span>
           <select
             value={plantilla}
             onChange={(evento) => cambiarPlantilla(evento.target.value as PlantillaId)}
@@ -106,18 +111,18 @@ export function EscribirCorreo({
           >
             {PLANTILLAS.map((opcion) => (
               <option key={opcion.id} value={opcion.id}>
-                {opcion.etiqueta}
+                {tPlantillas(`tipos.${opcion.id}.etiqueta`)}
               </option>
             ))}
           </select>
           <span className="mt-1 block text-xs text-zinc-500">
-            {PLANTILLAS.find((opcion) => opcion.id === plantilla)?.cuando}
+            {tPlantillas(`tipos.${plantilla}.cuando`)}
           </span>
         </label>
 
         {/* El asunto decide si se abre. Por eso hay varios y no uno. */}
         <fieldset>
-          <legend className="mb-1 text-[15px] font-bold text-titular">Asunto</legend>
+          <legend className="mb-1 text-[15px] font-bold text-titular">{t("asunto")}</legend>
           <div className="flex flex-col gap-1.5">
             {generado.asuntos.map((opcion, indice) => (
               <label key={opcion} className="flex items-start gap-2 text-sm text-zinc-700">
@@ -135,7 +140,7 @@ export function EscribirCorreo({
         </fieldset>
 
         <label className="block">
-          <span className="mb-1 block text-[15px] font-bold text-titular">El correo</span>
+          <span className="mb-1 block text-[15px] font-bold text-titular">{t("elCorreo")}</span>
           <textarea
             key={plantilla}
             defaultValue={generado.cuerpo}
@@ -144,7 +149,7 @@ export function EscribirCorreo({
             className={`${clasesTextarea} bg-white font-mono text-xs leading-relaxed`}
           />
           <span className="mt-1 block text-xs text-zinc-500">
-            Cámbialo a tu manera antes de enviarlo. Lo que está entre corchetes hay que rellenarlo.
+            {t("cambialo")}
           </span>
         </label>
 
@@ -153,7 +158,7 @@ export function EscribirCorreo({
         {generado.faltan.length > 0 && (
           <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5">
             <p className="text-sm font-medium text-amber-900">
-              Este correo quedaría mejor si rellenas:
+              {t("quedariaMejor")}
             </p>
             <ul className="mt-1 space-y-1">
               {generado.faltan.map((hueco) => (
@@ -173,19 +178,19 @@ export function EscribirCorreo({
             onClick={() => void copiar()}
             className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
           >
-            {copiado ? "Copiado" : "Copiar el correo"}
+            {copiado ? t("copiado") : t("copiar")}
           </button>
 
           <a
             href={enlaceDeCorreo({ para, asunto, cuerpo })}
             className="rounded-lg border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
           >
-            Abrir en mi correo
+            {t("abrir")}
           </a>
 
           {!para && contactoDatos && (
             <span className="text-xs text-zinc-500">
-              No hemos encontrado ninguna dirección en sus datos, así que se abrirá en blanco.
+              {t("sinDireccion")}
             </span>
           )}
         </div>

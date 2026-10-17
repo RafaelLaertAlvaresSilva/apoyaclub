@@ -1,7 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { etiquetador } from "@/lib/etiquetas-traducidas";
+import { formatoDeValor } from "@/lib/format";
+import type { AppLocale } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
 import { useActionState, useState } from "react";
 import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
@@ -9,11 +12,7 @@ import type { ClubTeam, Opportunity, OpportunityStatus } from "@/lib/types";
 import {
   CLASES_NIVEL_PATROCINIO,
   ESTADOS_OPORTUNIDAD,
-  ETIQUETA_NIVEL_PATROCINIO,
-  ETIQUETA_CATEGORIA_NECESIDAD,
-  ETIQUETA_TIPO_OPORTUNIDAD,
   esPorPlazas,
-  formatoValorOportunidad,
 } from "@/lib/opportunities";
 import {
   actualizarOportunidad,
@@ -48,6 +47,8 @@ export function TarjetaOportunidad({
   userId: string;
 }) {
   const t = useTranslations("panel.oportunidades");
+  const E = etiquetador(useTranslations("common.etiquetas"));
+  const precio = formatoDeValor(useLocale() as AppLocale);
   const [enEdicion, setEnEdicion] = useState(false);
 
   if (enEdicion) {
@@ -94,14 +95,14 @@ export function TarjetaOportunidad({
                     CLASES_NIVEL_PATROCINIO[oportunidad.sponsorLevel]
                   }`}
                 >
-                  {ETIQUETA_NIVEL_PATROCINIO[oportunidad.sponsorLevel]}
+                  {E.nivelPatrocinio(oportunidad.sponsorLevel)}
                 </span>
               )}
               {oportunidad.esNecesidad && (
                 <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
-                  Lo necesitamos
+                  {t("loNecesitamos")}
                   {oportunidad.categoriaNecesidad
-                    ? ` · ${ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]}`
+                    ? ` · ${E.categoriaNecesidad(oportunidad.categoriaNecesidad)}`
                     : ""}
                 </span>
               )}
@@ -112,7 +113,7 @@ export function TarjetaOportunidad({
               )}
             </div>
             <p className="mt-0.5 text-sm text-zinc-500">
-              {ETIQUETA_TIPO_OPORTUNIDAD[oportunidad.opportunityType]}
+              {E.tipoOportunidad(oportunidad.opportunityType)}
               {oportunidad.duration ? ` · ${oportunidad.duration}` : ""}
               {equipoAsociado
                 ? ` · ${equipoAsociado.sport} ${equipoAsociado.category ?? ""}`.trimEnd()
@@ -120,7 +121,7 @@ export function TarjetaOportunidad({
             </p>
             {oportunidad.exclusivity && (
               <p className="mt-1 text-xs font-medium text-accion-tinta">
-                En exclusiva para el sector: {oportunidad.exclusivity}
+                {t("enExclusiva", { sector: oportunidad.exclusivity })}
               </p>
             )}
             {oportunidad.description && (
@@ -146,7 +147,7 @@ export function TarjetaOportunidad({
         </div>
 
         <p className="whitespace-nowrap text-lg font-bold text-teal-700">
-          {formatoValorOportunidad.format(oportunidad.value)}
+          {precio.format(oportunidad.value)}
         </p>
       </div>
 
@@ -166,7 +167,7 @@ export function TarjetaOportunidad({
                       : "bg-white text-zinc-500 hover:bg-zinc-50"
                   }`}
                 >
-                  {estadoOpcion.etiqueta}
+                  {E.estadoOportunidad(estadoOpcion.id)}
                 </button>
               </form>
             ))}
@@ -276,6 +277,7 @@ function EditorOportunidad({
   equipos: ClubTeam[];
   userId: string;
 }) {
+  const t = useTranslations("panel.oportunidades");
   const [estado, formAction] = useActionState(actualizarOportunidad, null);
 
   return (
@@ -287,7 +289,7 @@ function EditorOportunidad({
         estado={estado}
         mostrarEstado
         equipos={equipos}
-        textoBoton="Guardar cambios"
+        textoBoton={t("guardarCambios")}
         onCancelar={onCerrar}
         valoresIniciales={{
           title: oportunidad.title,

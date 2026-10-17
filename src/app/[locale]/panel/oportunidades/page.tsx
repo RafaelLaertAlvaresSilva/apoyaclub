@@ -72,24 +72,19 @@ export default async function OportunidadesPage() {
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">
             {t("oportunidadesDePatrocinio")}
           </h1>
-          <p className="mt-1 max-w-2xl text-sm text-zinc-600">
-            Lo que tu club ofrece a una empresa a cambio de patrocinio, y lo que
-            necesita a cambio de visibilidad. Es lo único de tu ficha donde una
-            empresa puede hacer algo.
-          </p>
+          <p className="mt-1 max-w-2xl text-sm text-zinc-600">{t("introPagina")}</p>
         </div>
       </div>
 
       {!perfil ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
-          Completa primero la identidad del club (nombre y localidad) en{" "}
-          <Link
-            href="/panel"
-            className="font-medium text-teal-700 hover:underline"
-          >
-            {t("tuPerfil")}
-          </Link>{" "}
-          para poder publicar oportunidades de patrocinio.
+          {t.rich("completaIdentidad", {
+            enlace: (trozo) => (
+              <Link href="/panel" className="font-medium text-teal-700 hover:underline">
+                {trozo}
+              </Link>
+            ),
+          })}
         </div>
       ) : (
         <OportunidadesManager

@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { diasDePruebaQueQuedan } from "@/lib/acceso-club";
 import { redirect } from "next/navigation";
 import { getLocale } from "next-intl/server";
@@ -22,18 +23,19 @@ const RUTA_SUSCRIPCION = "/panel/suscripcion";
 async function obtenerClubActual(): Promise<
   { supabase: Awaited<ReturnType<typeof createClient>>; user: User } | { error: string }
 > {
+  const t = await getTranslations("panel.acciones");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
+    return { error: t("tuSesionCaducadoVuelveIniciar") };
   }
 
   const rol = user.app_metadata?.role as Role | undefined;
   if (rol !== "club") {
-    return { error: "Esta acción solo está disponible para clubes." };
+    return { error: t("estaAccionSoloEstaDisponible") };
   }
 
   return { supabase, user };

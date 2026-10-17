@@ -76,7 +76,7 @@ export default async function DossierPage() {
           <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("dossierComercialEnPdf")}</h1>
           <p className="mt-1 max-w-2xl text-sm text-zinc-600">
-            El documento que le pasas a una empresa: tu club en un PDF, con las cifras y las oportunidades que tú elijas. También sale en Word, por si quieres retocarlo.
+            {t("documentoLePasasEmpresa")}
           </p>
         </div>
       </div>
@@ -84,9 +84,13 @@ export default async function DossierPage() {
 
       {!perfil ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
-          Completa primero la identidad del club (nombre y localidad) en{" "}
-          <Link href="/panel" className="font-medium text-teal-700 hover:underline">{t("tuPerfil")}</Link>{" "}
-          para poder generar tu dossier de patrocinio.
+          {t.rich("completaIdentidad", {
+            enlace: (trozo) => (
+              <Link href="/panel" className="font-medium text-teal-700 hover:underline">
+                {trozo}
+              </Link>
+            ),
+          })}
         </div>
       ) : (
         <DossierManager

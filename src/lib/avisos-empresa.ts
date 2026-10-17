@@ -2,7 +2,8 @@ import { avisarDeFallo } from "@/lib/monitoring";
 import { ETIQUETA_CATEGORIA_NECESIDAD } from "@/lib/opportunities";
 import { enviarEmailNecesidadesQueEncajan } from "@/lib/email/resend";
 import { SITE_URL } from "@/lib/site";
-import { routing } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
+import { idiomaDe } from "@/lib/idioma-usuario";
 import type { createAdminClient } from "@/lib/supabase/admin";
 import type { CategoriaNecesidad } from "@/lib/types";
 
@@ -177,14 +178,20 @@ export async function avisarDeNecesidadesQueEncajan(
     if (!email) continue;
 
     const aEnsenar = nuevas.slice(0, MAXIMO_POR_CORREO);
-    const locale = routing.defaultLocale;
+    // En el idioma de la empresa: el suyo de la cuenta, o español.
+    const locale = idiomaDe(usuario.user);
+    const tEtiquetas = await getTranslations({ locale, namespace: "common.etiquetas" });
+    const tEmails = await getTranslations({ locale, namespace: "emails" });
 
     const resultado = await enviarEmailNecesidadesQueEncajan({
       empresaEmail: email,
-      empresaNombre: empresa.name ?? "tu empresa",
+      empresaNombre: empresa.name ?? tEmails("comun.tuEmpresa"),
+      idioma: locale,
       necesidades: aEnsenar.map((necesidad) => ({
         titulo: necesidad.titulo,
-        categoria: etiquetaDeCategoria(necesidad.categoria),
+        categoria: tEtiquetas.has(`categoriaNecesidad.${necesidad.categoria}`)
+          ? tEtiquetas(`categoriaNecesidad.${necesidad.categoria}`)
+          : etiquetaDeCategoria(necesidad.categoria),
         clubNombre: necesidad.clubNombre,
         clubUrl: `${SITE_URL}/${locale}/club/${necesidad.clubSlug}`,
       })),

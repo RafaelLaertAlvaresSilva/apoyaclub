@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import type { User } from "@supabase/supabase-js";
@@ -23,18 +24,19 @@ const CARPETAS_MEDIA = ["logo", "fotos", "patrocinadores"] as const;
 async function obtenerClubActual(): Promise<
   { supabase: Awaited<ReturnType<typeof createClient>>; user: User } | { error: string }
 > {
+  const t = await getTranslations("panel.acciones");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
+    return { error: t("tuSesionCaducadoVuelveIniciar") };
   }
 
   const rol = user.app_metadata?.role as Role | undefined;
   if (rol !== "club") {
-    return { error: "Esta acción solo está disponible para clubes." };
+    return { error: t("estaAccionSoloEstaDisponible") };
   }
 
   return { supabase, user };
@@ -54,13 +56,17 @@ export async function eliminarCuentaClub(
   _estadoPrevio: EstadoEliminacion,
   formData: FormData,
 ): Promise<EstadoEliminacion> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
   const confirmacion = String(formData.get("confirmacion") ?? "").trim();
-  if (confirmacion !== TEXTO_CONFIRMACION) {
-    return { error: `Escribe "${TEXTO_CONFIRMACION}" (en mayúsculas) para confirmar.` };
+  // La palabra se pide en el idioma de la pantalla ("ELIMINAR",
+  // "ELIMINAR", "DELETE"); la española vale siempre.
+  const palabra = (await getTranslations("panel.privacidad"))("eliminar");
+  if (confirmacion !== palabra && confirmacion !== TEXTO_CONFIRMACION) {
+    return { error: t("escribePalabra", { palabra }) };
   }
 
   const { data: filaClub } = await supabase
@@ -76,7 +82,7 @@ export async function eliminarCuentaClub(
       console.error("[eliminar cuenta] No se ha podido cancelar la suscripción de Stripe:", excepcion);
       return {
         error:
-          "No se ha podido cancelar tu suscripción de Stripe. Cancélala desde \"Gestionar suscripción\" y vuelve a intentarlo.",
+          t("podidoCancelarTuSuscripcionStripe"),
       };
     }
   }
@@ -115,7 +121,7 @@ export async function eliminarCuentaClub(
   const { error } = await admin.auth.admin.deleteUser(user.id);
   if (error) {
     console.error("[eliminar cuenta] No se ha podido eliminar el usuario:", error);
-    return { error: "No se ha podido eliminar la cuenta. Inténtalo de nuevo o contacta con soporte." };
+    return { error: t("podidoEliminarCuentaIntentaloNuevo") };
   }
 
   await supabase.auth.signOut();

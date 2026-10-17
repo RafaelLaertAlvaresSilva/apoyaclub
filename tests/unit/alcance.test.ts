@@ -10,6 +10,15 @@ import {
 } from "@/lib/alcance";
 import type { Partido } from "@/lib/publico-partidos";
 import { equipoDePrueba, perfilDePrueba } from "../fixtures/club";
+import { traductorDePrueba } from "./traductor-de-prueba";
+
+// Las funciones reciben los textos ya traducidos; aquí, los españoles.
+const t = traductorDePrueba("es", "panel", "alcance.informe");
+const conTextos = {
+  calcularAlcance: (datos: Parameters<typeof calcularAlcance>[0]) => calcularAlcance(datos, t),
+  resumenLlano: (informe: Parameters<typeof resumenLlano>[0]) => resumenLlano(informe, t),
+  unidadEnTexto: (unidad: Parameters<typeof unidadEnTexto>[0], valor: number) => unidadEnTexto(unidad, valor, t),
+};
 
 function partido(parcial: Partial<Partido> & { fecha: string; publico: number }): Partido {
   return {
@@ -29,7 +38,7 @@ const buscar = (cifras: CifraDeAlcance[], id: string) => cifras.find((c) => c.id
 
 describe("calcularAlcance", () => {
   it("no devuelve nada cuando el club está vacío", () => {
-    const informe = calcularAlcance({ perfil: perfilDePrueba(), equipos: [], partidos: [] });
+    const informe = conTextos.calcularAlcance({ perfil: perfilDePrueba(), equipos: [], partidos: [] });
 
     expect(informe.hayCifras).toBe(false);
     expect(informe.bloques).toHaveLength(0);
@@ -37,7 +46,7 @@ describe("calcularAlcance", () => {
   });
 
   it("cuenta la media de los partidos en casa y dice de cuántos sale", () => {
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba(),
       equipos: [],
       partidos: [
@@ -57,7 +66,7 @@ describe("calcularAlcance", () => {
   });
 
   it("nunca suma grupos de personas: el mínimo es el mayor, no el total", () => {
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba({
         membersCount: 320,
         youthFamiliesCount: 150,
@@ -80,7 +89,7 @@ describe("calcularAlcance", () => {
     // alrededor: tiene cuentas, muchas de fuera del pueblo. Meterlas
     // aquí convertía la única cifra que se presenta como "gente de
     // verdad del club" en la más inflada del dossier.
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba({
         membersCount: 320,
         followersByNetwork: { instagram: 12437 },
@@ -97,7 +106,7 @@ describe("calcularAlcance", () => {
   });
 
   it("sin socios ni familias, el mínimo es el público contado y no los seguidores", () => {
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba({ followersByNetwork: { instagram: 9000 } }),
       equipos: [equipoDePrueba({ playerCount: 60 })],
       partidos: [partido({ fecha: "2025-09-14", publico: 240 })],
@@ -107,7 +116,7 @@ describe("calcularAlcance", () => {
   });
 
   it("lista los seguidores red por red y no los suma", () => {
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba({ followersByNetwork: { instagram: 800, facebook: 500 } }),
       equipos: [],
       partidos: [],
@@ -123,7 +132,7 @@ describe("calcularAlcance", () => {
     const partidos = Array.from({ length: 4 }, (_, i) =>
       partido({ fecha: `2025-1${i}-01`, publico: 200 }),
     );
-    const informe = calcularAlcance({ perfil: perfilDePrueba(), equipos: [], partidos });
+    const informe = conTextos.calcularAlcance({ perfil: perfilDePrueba(), equipos: [], partidos });
 
     const asistencias = buscar(cifrasDelInforme(informe), "asistencias");
     expect(asistencias?.valor).toBe(800);
@@ -133,7 +142,7 @@ describe("calcularAlcance", () => {
   });
 
   it("titula con lo contado antes que con lo declarado, aunque sea menor", () => {
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba({ membersCount: 5000 }),
       equipos: [],
       partidos: [partido({ fecha: "2025-09-14", publico: 90 })],
@@ -144,7 +153,7 @@ describe("calcularAlcance", () => {
   });
 
   it("la estimación escrita a mano nunca es el titular ni entra en el mínimo", () => {
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba({ estimatedReach: 99999, membersCount: 300 }),
       equipos: [],
       partidos: [],
@@ -157,7 +166,7 @@ describe("calcularAlcance", () => {
   });
 
   it("cada cifra dice de dónde viene", () => {
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba({ membersCount: 300, youthFamiliesCount: 150 }),
       equipos: [equipoDePrueba({ playerCount: 20 })],
       partidos: [partido({ fecha: "2025-09-14", publico: 200 })],
@@ -171,7 +180,7 @@ describe("calcularAlcance", () => {
   });
 
   it("compara con la temporada anterior solo cuando hay partidos suficientes", () => {
-    const pocos = calcularAlcance({
+    const pocos = conTextos.calcularAlcance({
       perfil: perfilDePrueba(),
       equipos: [],
       partidos: [
@@ -181,7 +190,7 @@ describe("calcularAlcance", () => {
     });
     expect(pocos.comparacion).toBeNull();
 
-    const bastantes = calcularAlcance({
+    const bastantes = conTextos.calcularAlcance({
       perfil: perfilDePrueba(),
       equipos: [],
       partidos: [
@@ -199,7 +208,7 @@ describe("calcularAlcance", () => {
   });
 
   it("dice lo que falta, y lo primero es apuntar partidos", () => {
-    const informe = calcularAlcance({ perfil: perfilDePrueba(), equipos: [], partidos: [] });
+    const informe = conTextos.calcularAlcance({ perfil: perfilDePrueba(), equipos: [], partidos: [] });
 
     expect(informe.faltan[0]?.id).toBe("publico");
     expect(informe.faltan.map((f) => f.id)).toContain("socios");
@@ -209,7 +218,7 @@ describe("calcularAlcance", () => {
 
 describe("cifrasDePortada", () => {
   it("coge la red con más seguidores, nunca la suma de todas", () => {
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba({ followersByNetwork: { instagram: 800, facebook: 500 } }),
       equipos: [],
       partidos: [],
@@ -221,7 +230,7 @@ describe("cifrasDePortada", () => {
   });
 
   it("nunca devuelve más de cuatro cifras y pone el público contado primero", () => {
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba({
         membersCount: 320,
         youthFamiliesCount: 150,
@@ -239,9 +248,9 @@ describe("cifrasDePortada", () => {
 
 describe("unidadEnTexto", () => {
   it("distingue personas de asistencias", () => {
-    expect(unidadEnTexto("personas", 240)).toBe("personas");
-    expect(unidadEnTexto("personas", 1)).toBe("persona");
-    expect(unidadEnTexto("asistencias", 4320)).toBe("asistencias");
+    expect(conTextos.unidadEnTexto("personas", 240)).toBe("personas");
+    expect(conTextos.unidadEnTexto("personas", 1)).toBe("persona");
+    expect(conTextos.unidadEnTexto("asistencias", 4320)).toBe("asistencias");
   });
 });
 
@@ -266,12 +275,12 @@ describe("cifraLlana", () => {
 
 describe("resumenLlano", () => {
   it("no dice nada de un club sin cifras", () => {
-    const informe = calcularAlcance({ perfil: perfilDePrueba(), equipos: [], partidos: [] });
-    expect(resumenLlano(informe)).toEqual([]);
+    const informe = conTextos.calcularAlcance({ perfil: perfilDePrueba(), equipos: [], partidos: [] });
+    expect(conTextos.resumenLlano(informe)).toEqual([]);
   });
 
   it("habla de lo que gana la empresa, no de lo que tiene el club", () => {
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba({
         youthFamiliesCount: 150,
         followersByNetwork: { instagram: 800 },
@@ -283,7 +292,7 @@ describe("resumenLlano", () => {
       ],
     });
 
-    const frases = resumenLlano(informe);
+    const frases = conTextos.resumenLlano(informe);
 
     expect(frases[0]).toBe("Cada partido en casa lo ven unas 240 personas.");
     expect(frases).toContain("120 jugadores visten la equipación del club cada semana.");
@@ -294,7 +303,7 @@ describe("resumenLlano", () => {
   });
 
   it("nunca pasa de cuatro frases: la quinta ya no se lee", () => {
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba({
         membersCount: 320,
         youthFamiliesCount: 150,
@@ -305,17 +314,17 @@ describe("resumenLlano", () => {
       partidos: [partido({ fecha: "2025-09-14", publico: 240 })],
     });
 
-    expect(resumenLlano(informe).length).toBeLessThanOrEqual(4);
+    expect(conTextos.resumenLlano(informe).length).toBeLessThanOrEqual(4);
   });
 
   it("nombra solo la red mayor, nunca la suma de todas", () => {
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba({ followersByNetwork: { instagram: 800, facebook: 500 } }),
       equipos: [],
       partidos: [],
     });
 
-    const frases = resumenLlano(informe);
+    const frases = conTextos.resumenLlano(informe);
     const deRedes = frases.filter((frase) => frase.includes("publica en"));
 
     expect(deRedes).toHaveLength(1);
@@ -325,22 +334,22 @@ describe("resumenLlano", () => {
   });
 
   it("cae a los socios cuando el club no ha dicho cuántas familias tiene", () => {
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba({ membersCount: 320 }),
       equipos: [],
       partidos: [],
     });
 
-    expect(resumenLlano(informe)).toContain("El club tiene 320 socios en el pueblo.");
+    expect(conTextos.resumenLlano(informe)).toContain("El club tiene 320 socios en el pueblo.");
   });
 
   it("dice \"por partido\" y no \"en casa\" cuando no hay partidos en casa", () => {
-    const informe = calcularAlcance({
+    const informe = conTextos.calcularAlcance({
       perfil: perfilDePrueba(),
       equipos: [],
       partidos: [partido({ fecha: "2025-09-14", publico: 90, enCasa: false })],
     });
 
-    expect(resumenLlano(informe)[0]).toBe("Cada partido lo ven unas 90 personas.");
+    expect(conTextos.resumenLlano(informe)[0]).toBe("Cada partido lo ven unas 90 personas.");
   });
 });

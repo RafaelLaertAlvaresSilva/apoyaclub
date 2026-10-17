@@ -4,32 +4,31 @@ import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import {
   esVisiblePublicamente,
-  etiquetaEstadoSuscripcion,
   subscriptionRowToInfo,
+  type SubscriptionStatus,
   type SubscriptionRow,
 } from "@/lib/subscription-mappers";
 import { esAccesoRegalado } from "@/lib/acceso-gratuito";
 import { createClient } from "@/lib/supabase/server";
-import { PLANES, esPlanValido, periodicidad, precioFormateado } from "@/lib/planes";
+import { intlLocaleDe } from "@/config/locales";
+import { PLANES, esPlanValido, precioFormateado } from "@/lib/planes";
 import { abrirPortalCliente } from "./actions";
 import { SelectorDePlan } from "./components/SelectorDePlan";
 
-function formatearFecha(fechaIso: string): string {
-  return new Date(fechaIso).toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
+/** Los `?error=` que pueden llegar de las acciones, con su texto en `errores`. */
+const ERRORES_CONOCIDOS = new Set(["sesion", "checkout", "portal", "sin-suscripcion", "sin-plazas"]);
 
-const MENSAJES_ERROR: Record<string, string> = {
-  sesion: "Tu sesión ha caducado. Vuelve a iniciar sesión e inténtalo de nuevo.",
-  checkout: "No se ha podido abrir la pasarela de pago. Inténtalo de nuevo en unos minutos.",
-  portal: "No se ha podido abrir el portal de gestión de la suscripción. Inténtalo de nuevo en unos minutos.",
-  "sin-suscripcion": "Todavía no tienes ninguna suscripción que gestionar.",
-  "sin-plazas":
-    "Se han agotado las plazas de club fundador mientras elegías. Puedes contratar el plan de temporada, que es el siguiente más barato.",
-};
+/** Los estados de Stripe que tienen texto propio; el resto es "sin suscripción". */
+const ESTADOS_CONOCIDOS = new Set([
+  "trialing",
+  "active",
+  "past_due",
+  "unpaid",
+  "canceled",
+  "incomplete",
+  "incomplete_expired",
+  "paused",
+]);
 
 export default async function SuscripcionPage({
   searchParams,
@@ -37,6 +36,12 @@ export default async function SuscripcionPage({
   searchParams: Promise<{ error?: string; checkout?: string; motivo?: string }>;
 }) {
   const t = await getTranslations("panel.suscripcion");
+  const tPlanes = await getTranslations("home.planes");
+  const intlLocale = intlLocaleDe(await getLocale());
+  const formatearFecha = (fechaIso: string) =>
+    new Date(fechaIso).toLocaleDateString(intlLocale, { day: "numeric", month: "long", year: "numeric" });
+  const estadoTexto = (estado: SubscriptionStatus) =>
+    t(`estados.${ESTADOS_CONOCIDOS.has(estado ?? "") ? estado : "ninguno"}`);
   const { error, checkout, motivo } = await searchParams;
 
   const supabase = await createClient();
@@ -99,9 +104,7 @@ export default async function SuscripcionPage({
         <div>
           <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("suscripcion")}</h1>
-          <p className="mt-1 max-w-2xl text-sm text-zinc-600">
-            Tu plan, tus facturas y tus datos de facturación. Desde aquí se cambia el método de pago y se cancela, sin llamar a nadie.
-          </p>
+          <p className="mt-1 max-w-2xl text-sm text-zinc-600">{t("intro")}</p>
         </div>
       </div>
 
@@ -119,8 +122,8 @@ export default async function SuscripcionPage({
             <AvisoExito
               mensaje={
                 confirmada
-                  ? "Suscripción confirmada. Ya está todo en marcha."
-                  : "¡Gracias! Estamos confirmando tu suscripción con Stripe. Suele tardar unos segundos: vuelve a cargar la página en un momento."
+                  ? t("confirmada")
+                  : t("confirmando")
               }
             />
           </div>
@@ -131,52 +134,50 @@ export default async function SuscripcionPage({
             explicación, no aparecer aquí sin saber por qué. */}
         {motivo === "prueba-terminada" && (
           <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4">
-            <p className="text-sm font-medium text-amber-900">
-              Tu mes de prueba ha terminado.
-            </p>
-            <p className="mt-1 text-sm text-amber-800">
-              Para volver a usar tu panel y que tu página vuelva a verse, elige uno de los planes de
-              abajo. No pierdes nada de lo que tienes guardado: sigue todo ahí esperándote.
-            </p>
+            <p className="text-sm font-medium text-amber-900">{t("pruebaTerminada")}</p>
+            <p className="mt-1 text-sm text-amber-800">{t("pruebaTerminadaTexto")}</p>
           </div>
         )}
 
         {checkout === "cancel" && (
           <div className="mb-4">
-            <AvisoError mensaje="Has salido de la pasarela sin terminar el pago. No se ha cobrado nada y puedes volver a intentarlo cuando quieras." />
+            <AvisoError mensaje={t("pagoCancelado")} />
           </div>
         )}
         {error && (
           <div className="mb-4">
-            <AvisoError mensaje={MENSAJES_ERROR[error] ?? "Ha ocurrido un error inesperado."} />
+            <AvisoError mensaje={ERRORES_CONOCIDOS.has(error) ? t(`errores.${error}`) : t("errores.inesperado")} />
           </div>
         )}
 
         <h2 className="text-base font-semibold text-zinc-900">
-          {planActual ? `Plan ${planActual.nombre}` : "Tu plan"}
+          {planActual ? t("planNombre", { nombre: tPlanes(`${planActual.id}.nombre`) }) : t("tuPlan")}
         </h2>
         <p className="mt-1 text-sm text-zinc-500">
           {planActual
-            ? `${precioFormateado(planActual)} ${periodicidad(planActual)}, IVA incluido.${
+            ? `${t("precioConIva", {
+                precio: precioFormateado(planActual, intlLocale),
+                periodo: tPlanes(planActual.intervalo === "mes" ? "alMes" : "alAnio"),
+              })}${
                 planActual.id === "fundador" && filaSuscripcion?.founder_number
-                  ? ` Eres el club fundador nº ${filaSuscripcion.founder_number}: este precio no te sube nunca.`
+                  ? ` ${t("eresFundador", { numero: filaSuscripcion.founder_number })}`
                   : ""
               }`
-            : "Elige cómo quieres pagar cuando termine tu mes gratis."}
+            : t("eligeComoPagar")}
         </p>
 
         <dl className="mt-6 grid gap-4 sm:grid-cols-2">
           <div>
             <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{t("estado")}</dt>
             <dd className="mt-1 text-sm font-medium text-zinc-900">
-              {etiquetaEstadoSuscripcion(suscripcion.status)}
+              {estadoTexto(suscripcion.status)}
             </dd>
           </div>
 
           {suscripcion.status === "trialing" && suscripcion.currentPeriodEnd && (
             <div>
               <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                {invitado ? "Acceso de invitado hasta" : t("finDeLaPrueba")}
+                {invitado ? t("invitadoHasta") : t("finDeLaPrueba")}
               </dt>
               <dd className="mt-1 text-sm text-zinc-700">
                 {formatearFecha(suscripcion.currentPeriodEnd)}
@@ -187,10 +188,10 @@ export default async function SuscripcionPage({
                     existe y ocultarle el que sí ocurre: que su página deja
                     de verse. */}
                 {suscripcion.stripeSubscriptionId
-                  ? " — ese día se cobra el primer recibo de tu plan."
+                  ? ` — ${t("eseDiaSeCobra")}`
                   : invitado
-                    ? " — hasta entonces no se te cobra nada. Te avisaremos por correo antes de esa fecha."
-                    : " — si para entonces no has elegido plan, tu página deja de verse. No se cobra nada sin que tú lo actives."}
+                    ? ` — ${t("hastaEntoncesNada")}`
+                    : ` — ${t("siNoEligesPlan")}`}
               </dd>
             </div>
           )}
@@ -205,7 +206,7 @@ export default async function SuscripcionPage({
           {suscripcion.cancelAtPeriodEnd && suscripcion.currentPeriodEnd && (
             <div>
               <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                Acceso hasta (cancelada)
+                {t("accesoHastaCancelada")}
               </dt>
               <dd className="mt-1 text-sm text-red-700">{formatearFecha(suscripcion.currentPeriodEnd)}</dd>
             </div>
@@ -215,8 +216,8 @@ export default async function SuscripcionPage({
             <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{t("visibilidadPublica")}</dt>
             <dd className="mt-1 text-sm text-zinc-700">
               {esVisiblePublicamente(suscripcion.status)
-                ? "Tu página pública y tus oportunidades son visibles."
-                : "Tu página pública y tus oportunidades NO son visibles ahora mismo."}
+                ? t("visible")
+                : t("noVisible")}
             </dd>
           </div>
         </dl>
@@ -234,12 +235,9 @@ export default async function SuscripcionPage({
                 acaba pidiéndolas por correo una a una. Decirle aquí
                 exactamente dónde pinchar ahorra ese correo. */}
             <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4">
-              <p className="text-sm font-medium text-zinc-900">Tus facturas</p>
+              <p className="text-sm font-medium text-zinc-900">{t("tusFacturas")}</p>
               <p className="mt-1 text-sm text-zinc-600">
-                Están todas en ese mismo botón, en el apartado{" "}
-                <strong>Historial de facturación</strong>: se descargan en PDF, con el CIF y la
-                dirección que diste al contratar. Ahí mismo puedes corregir esos datos si cambian, y
-                la siguiente factura sale ya con los nuevos.
+                {t.rich("tusFacturasTexto", { fuerte: (trozo) => <strong>{trozo}</strong> })}
               </p>
             </div>
           </div>
@@ -252,27 +250,21 @@ export default async function SuscripcionPage({
             {invitado && suscripcion.currentPeriodEnd && (
               <div className="mb-4 rounded-lg border border-violet-200 bg-violet-50 p-4">
                 <p className="text-sm font-medium text-violet-900">
-                  Ya tienes acceso gratuito hasta el {formatearFecha(suscripcion.currentPeriodEnd)}.
+                  {t("accesoGratuitoHasta", { fecha: formatearFecha(suscripcion.currentPeriodEnd) })}
                 </p>
-                <p className="mt-1 text-sm text-violet-800">
-                  No necesitas elegir plan ni dar ninguna tarjeta hasta entonces. Te avisaremos por
-                  correo antes de esa fecha para que decidas con tiempo.
-                </p>
+                <p className="mt-1 text-sm text-violet-800">{t("accesoGratuitoTexto")}</p>
               </div>
             )}
 
             <SelectorDePlan
               plazasFundadorLibres={plazasFundadorLibres}
-              textoBoton={suscripcion.status === "canceled" ? "Volver a suscribirse" : "Elegir este plan"}
+              textoBoton={suscripcion.status === "canceled" ? t("volverASuscribirse") : t("elegirPlan")}
             />
           </div>
         )}
 
         <p className="mt-4 text-xs text-zinc-500">
-          Conservas todos tus datos aunque la suscripción no esté activa: solo se oculta tu página
-          pública y tus oportunidades hasta que vuelvas a suscribirte. Desde &quot;Gestionar
-          suscripción&quot; puedes cambiar de tarjeta, descargar tus facturas, actualizar los datos
-          fiscales del club o cancelar.
+          {t("conservasDatos")}
         </p>
       </section>
     </div>

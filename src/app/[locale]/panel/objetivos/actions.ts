@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
 import { avisarDeFallo } from "@/lib/monitoring";
@@ -14,14 +15,15 @@ const RUTA = "/panel/objetivos";
 async function obtenerClubActual(): Promise<
   { supabase: Awaited<ReturnType<typeof createClient>>; user: User } | { error: string }
 > {
+  const t = await getTranslations("panel.acciones");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
+  if (!user) return { error: t("tuSesionCaducadoVuelveIniciar") };
   if ((user.app_metadata?.role as Role | undefined) !== "club") {
-    return { error: "Esta acción solo está disponible para clubes." };
+    return { error: t("estaAccionSoloEstaDisponible") };
   }
 
   return { supabase, user };
@@ -37,11 +39,12 @@ export async function guardarObjetivo(
   _previo: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerClubActual();
   if ("error" in sesion) return { error: sesion.error };
 
   const nombre = leerTexto(formData, "nombre", 160);
-  if (!nombre) return { error: "Escribe al menos el nombre de la empresa." };
+  if (!nombre) return { error: t("escribeMenosNombreEmpresa") };
 
   const origen = String(formData.get("origen") ?? "otro");
   const proximo = leerTexto(formData, "proximoPaso", 10);
@@ -49,7 +52,7 @@ export async function guardarObjetivo(
   // La fecha llega de un campo de tipo date, pero el formulario lo manda
   // el navegador y puede venir cualquier cosa.
   if (proximo !== null && !/^\d{4}-\d{2}-\d{2}$/.test(proximo)) {
-    return { error: "La fecha de volver a llamar no es válida." };
+    return { error: t("fechaVolverLlamarValida") };
   }
 
   const { error } = await sesion.supabase.from("club_prospects").insert({
@@ -65,7 +68,7 @@ export async function guardarObjetivo(
 
   if (error) {
     avisarDeFallo("prospectos", "No se ha podido guardar la empresa", error);
-    return { error: "No se ha podido guardar. Inténtalo otra vez." };
+    return { error: t("podidoGuardarIntentaloOtraVez") };
   }
 
   revalidatePath(RUTA);

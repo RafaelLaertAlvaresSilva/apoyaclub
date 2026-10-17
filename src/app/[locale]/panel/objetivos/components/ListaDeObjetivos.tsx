@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
@@ -26,6 +27,7 @@ export function ListaDeObjetivos({
   hoy: string;
   club: DatosDelClub;
 }) {
+  const t = useTranslations("panel.objetivos");
   const [estado, alta] = useActionState(guardarObjetivo, null);
   const [abierto, setAbierto] = useState(prospectos.length === 0);
 
@@ -36,23 +38,23 @@ export function ListaDeObjetivos({
     <div className="flex flex-col gap-6">
       {prospectos.length > 0 && (
         <section className="grid gap-3 sm:grid-cols-4">
-          <Dato numero={resumen.tocanHoy} etiqueta="Toca llamar hoy" destacado={resumen.tocanHoy > 0} />
-          <Dato numero={resumen.porContactar} etiqueta="Por contactar" />
-          <Dato numero={resumen.enConversacion} etiqueta="En conversación" />
-          <Dato numero={resumen.acuerdos} etiqueta="Acuerdos cerrados" />
+          <Dato numero={resumen.tocanHoy} etiqueta={t("resumen.tocanHoy")} destacado={resumen.tocanHoy > 0} />
+          <Dato numero={resumen.porContactar} etiqueta={t("resumen.porContactar")} />
+          <Dato numero={resumen.enConversacion} etiqueta={t("resumen.enConversacion")} />
+          <Dato numero={resumen.acuerdos} etiqueta={t("resumen.acuerdos")} />
         </section>
       )}
 
       <section className="rounded-xl border border-zinc-200 bg-white p-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-base font-semibold text-zinc-900">Apuntar una empresa</h2>
+          <h2 className="text-base font-semibold text-zinc-900">{t("apuntarEmpresa")}</h2>
           {prospectos.length > 0 && (
             <button
               type="button"
               onClick={() => setAbierto((valor) => !valor)}
               className="rounded-lg px-3 py-1.5 text-sm font-medium text-teal-700 transition-colors hover:bg-teal-50"
             >
-              {abierto ? "Cerrar" : "+ Añadir empresa"}
+              {abierto ? t("cerrar") : t("anadirEmpresa")}
             </button>
           )}
         </div>
@@ -60,67 +62,64 @@ export function ListaDeObjetivos({
         {abierto && (
           <form action={alta} className="mt-4 flex flex-col gap-4">
             <div className="grid gap-4 sm:grid-cols-2">
-              <Campo etiqueta="Empresa">
-                <input name="nombre" required maxLength={160} placeholder="Ferretería Martínez" className={clasesInput} />
+              <Campo etiqueta={t("empresa")}>
+                <input name="nombre" required maxLength={160} placeholder={t("empresaEjemplo")} className={clasesInput} />
               </Campo>
-              <Campo etiqueta="A qué se dedica (opcional)">
-                <input name="sector" maxLength={120} placeholder="Ferretería" className={clasesInput} />
+              <Campo etiqueta={t("sector")}>
+                <input name="sector" maxLength={120} placeholder={t("sectorEjemplo")} className={clasesInput} />
               </Campo>
-              <Campo etiqueta="¿De dónde sale?">
+              <Campo etiqueta={t("deDondeSale")}>
                 <select name="origen" defaultValue="familia" className={clasesInput}>
                   {ORIGENES.map((origen) => (
                     <option key={origen.id} value={origen.id}>
-                      {origen.etiqueta}
+                      {t(`origenes.${origen.id}.etiqueta`)}
                     </option>
                   ))}
                 </select>
               </Campo>
-              <Campo etiqueta="Volver a llamar el (opcional)">
+              <Campo etiqueta={t("volverALlamarOpcional")}>
                 <input type="date" name="proximoPaso" className={clasesInput} />
               </Campo>
-              <Campo etiqueta="Con quién hablar (opcional)">
+              <Campo etiqueta={t("conQuienHablar")}>
                 <input
                   name="contactoNombre"
                   maxLength={120}
-                  placeholder="Marta, la madre de Iker"
+                  placeholder={t("conQuienHablarEjemplo")}
                   className={clasesInput}
                 />
               </Campo>
-              <Campo etiqueta="Teléfono o correo (opcional)">
+              <Campo etiqueta={t("telefonoOCorreo")}>
                 <input name="contactoDatos" maxLength={200} className={clasesInput} />
               </Campo>
             </div>
 
-            <Campo etiqueta="Notas (opcional)">
+            <Campo etiqueta={t("notas")}>
               <textarea
                 name="notas"
                 rows={2}
                 maxLength={1000}
-                placeholder="Su hijo juega en alevín. Ya nos dio material el año pasado."
+                placeholder={t("notasEjemplo")}
                 className={clasesInput}
               />
             </Campo>
 
             <AvisoError mensaje={estado?.error ?? null} />
-            <AvisoExito mensaje={estado?.ok ? "Apuntada." : null} />
+            <AvisoExito mensaje={estado?.ok ? t("apuntada") : null} />
 
-            <BotonEnviar>Apuntar</BotonEnviar>
+            <BotonEnviar>{t("apuntar")}</BotonEnviar>
           </form>
         )}
       </section>
 
       {prospectos.length === 0 ? (
         <section className="rounded-xl border border-dashed border-zinc-300 bg-white p-6">
-          <h2 className="text-base font-semibold text-zinc-900">Por dónde empezar</h2>
-          <p className="mt-1 text-sm text-zinc-600">
-            No hace falta una lista de cien empresas. Hacen falta quince a las que alguien de tu
-            club pueda llamar por su nombre. Míralo en este orden:
-          </p>
+          <h2 className="text-base font-semibold text-zinc-900">{t("porDondeEmpezar")}</h2>
+          <p className="mt-1 text-sm text-zinc-600">{t("porDondeEmpezarTexto")}</p>
           <ul className="mt-4 flex flex-col gap-3">
             {ORIGENES.filter((origen) => origen.pista).map((origen) => (
               <li key={origen.id} className="rounded-lg border border-zinc-200 p-3">
-                <p className="text-sm font-medium text-zinc-900">{origen.etiqueta}</p>
-                <p className="mt-0.5 text-sm text-zinc-600">{origen.pista}</p>
+                <p className="text-sm font-medium text-zinc-900">{t(`origenes.${origen.id}.etiqueta`)}</p>
+                <p className="mt-0.5 text-sm text-zinc-600">{t(`origenes.${origen.id}.pista`)}</p>
               </li>
             ))}
           </ul>

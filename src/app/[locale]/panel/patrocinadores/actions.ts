@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { avisarDeFallo } from "@/lib/monitoring";
 import type { User } from "@supabase/supabase-js";
@@ -9,8 +10,9 @@ import {
   contarDocumentosDelPatrocinador,
 } from "@/lib/documentos-datos";
 import {
+  MAXIMO_POR_PATROCINADOR,
+  TAMANO_MAXIMO_BYTES,
   esTipoValido,
-  mensajeDelProblema,
   nombreLimpio,
   problemaAlSubir,
   rutaDelDocumento,
@@ -35,14 +37,15 @@ type Sesion =
   | { error?: undefined; supabase: SupabaseServidor; user: User };
 
 async function clubDeLaSesion(): Promise<Sesion> {
+  const t = await getTranslations("panel.acciones");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
+  if (!user) return { error: t("tuSesionCaducadoVuelveIniciar") };
   if ((user.app_metadata?.role as Role | undefined) !== "club") {
-    return { error: "Esta acción solo está disponible para clubes." };
+    return { error: t("estaAccionSoloEstaDisponible") };
   }
   return { supabase, user };
 }
@@ -70,15 +73,16 @@ export async function subirDocumento(
   _estado: EstadoDocumento,
   formData: FormData,
 ): Promise<EstadoDocumento> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await clubDeLaSesion();
   if (sesion.error !== undefined) return { error: sesion.error };
   const { supabase, user } = sesion;
 
   const patrocinadorId = String(formData.get("patrocinadorId") ?? "");
-  if (!patrocinadorId) return { error: "No sabemos de qué patrocinador se trata." };
+  if (!patrocinadorId) return { error: t("sabemosPatrocinadorTrata") };
 
   const tipo = String(formData.get("tipo") ?? "");
-  if (!esTipoValido(tipo)) return { error: "Elige si es un contrato, una factura u otro documento." };
+  if (!esTipoValido(tipo)) return { error: t("eligeSiContratoFacturaU") };
 
   // Que el patrocinador sea de este club. Sin esto, el id del
   // formulario bastaría para colgarle un archivo a la ficha de otro.
@@ -89,7 +93,7 @@ export async function subirDocumento(
     .eq("club_id", user.id)
     .maybeSingle<{ id: string }>();
 
-  if (!patrocinador) return { error: "Ese patrocinador no es de tu club." };
+  if (!patrocinador) return { error: t("esePatrocinadorTuClub") };
 
   const archivo = formData.get("archivo");
   const esArchivo = archivo instanceof File && archivo.size > 0;
@@ -100,8 +104,15 @@ export async function subirDocumento(
     tamano: esArchivo ? archivo.size : undefined,
     yaGuardados,
   });
-  if (problema) return { error: mensajeDelProblema(problema) };
-  if (!esArchivo) return { error: "Elige un archivo antes de guardar." };
+  if (problema) {
+    return {
+      error: t(`documentos.${problema}`, {
+        mb: Math.round(TAMANO_MAXIMO_BYTES / (1024 * 1024)),
+        maximo: MAXIMO_POR_PATROCINADOR,
+      }),
+    };
+  }
+  if (!esArchivo) return { error: t("eligeArchivoAntesGuardar") };
 
   const ruta = rutaDelDocumento(user.id, patrocinadorId, archivo.type, crypto.randomUUID());
 
@@ -116,8 +127,8 @@ export async function subirDocumento(
     });
     return {
       error: faltaLaMigracion(errorAlSubir.message ?? "")
-        ? "Esta función necesita una actualización de la base de datos que todavía no está aplicada."
-        : "No hemos podido subir el archivo. Inténtalo otra vez.",
+        ? t("faltaMigracion")
+        : t("noSubidoArchivo"),
     };
   }
 
@@ -143,8 +154,8 @@ export async function subirDocumento(
     });
     return {
       error: faltaLaMigracion(errorAlGuardar.message ?? "")
-        ? "Esta función necesita una actualización de la base de datos que todavía no está aplicada."
-        : "No hemos podido guardar el documento. Inténtalo otra vez.",
+        ? t("faltaMigracion")
+        : t("noGuardadoDocumento"),
     };
   }
 

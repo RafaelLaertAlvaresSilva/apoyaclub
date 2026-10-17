@@ -7,6 +7,7 @@ import { AvisoError } from "@/components/AvisoError";
 import { eliminarCuentaClub } from "../actions";
 
 function BotonEliminar() {
+  const t = useTranslations("panel.privacidad");
   const { pending } = useFormStatus();
 
   return (
@@ -21,7 +22,7 @@ function BotonEliminar() {
           aria-hidden="true"
         />
       )}
-      {pending ? "Eliminando…" : "Eliminar mi cuenta y todos mis datos"}
+      {pending ? t("eliminando") : t("eliminarTodo")}
     </button>
   );
 }

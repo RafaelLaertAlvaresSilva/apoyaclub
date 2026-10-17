@@ -34,8 +34,16 @@ import type { ClubProfile, ClubTeam, SocialLinks } from "@/lib/types";
  * que dicen cifras distintas hacen más daño que no tener ninguna.
  */
 
-export const AVISO_DE_ORIGEN =
-  "Cifras facilitadas por el club. ApoyaClub no las verifica.";
+/**
+ * Los textos del informe (títulos, procedencias, cuentas) salen de
+ * `panel.alcance.informe` en el idioma de quien lo mira. Esta es la
+ * función de traducir ya hecha: la de `getTranslations` en el panel, o
+ * `createTranslator` donde no hay petición (el dossier).
+ *
+ * El aviso de origen ("Cifras facilitadas por el club…") es
+ * `t("avisoDeOrigen")`.
+ */
+export type TraducirAlcance = (clave: string, valores?: Record<string, string | number>) => string;
 
 export type OrigenDeCifra = "contado" | "declarado" | "deducido";
 
@@ -127,6 +135,7 @@ function cifra(
 function jugadoresDelClub(
   perfil: ClubProfile | null,
   equipos: ClubTeam[],
+  t: TraducirAlcance,
 ): { valor: number; procedencia: string } | null {
   const conRecuento = equipos.filter((equipo) => (equipo.playerCount ?? 0) > 0);
   const sumados = conRecuento.reduce((suma, equipo) => suma + (equipo.playerCount ?? 0), 0);
@@ -136,19 +145,23 @@ function jugadoresDelClub(
       valor: sumados,
       procedencia:
         conRecuento.length === 1
-          ? "jugadores del único equipo con recuento en la ficha"
-          : `sumando los jugadores de ${conRecuento.length} equipos de la ficha`,
+          ? t("procedencia.unEquipo")
+          : t("procedencia.variosEquipos", { n: conRecuento.length }),
     };
   }
 
   if (perfil?.youthPlayersCount != null && perfil.youthPlayersCount > 0) {
-    return { valor: perfil.youthPlayersCount, procedencia: "declarado por el club" };
+    return { valor: perfil.youthPlayersCount, procedencia: t("procedencia.declarado") };
   }
 
   return null;
 }
 
-function bloqueContado(partidos: Partido[]): {
+function bloqueContado(
+  partidos: Partido[],
+  t: TraducirAlcance,
+  intlLocale: string,
+): {
   bloque: BloqueDeAlcance;
   temporada: string | null;
   mediaEnCasa: number | null;
@@ -159,9 +172,8 @@ function bloqueContado(partidos: Partido[]): {
 
   const bloque: BloqueDeAlcance = {
     id: "contado",
-    titulo: "Lo que se ha contado",
-    explicacion:
-      "Público apuntado partido a partido. Es la única parte que no depende de que nadie se fíe de una cifra escrita a mano.",
+    titulo: t("bloques.contado.titulo"),
+    explicacion: t("bloques.contado.explicacion"),
     cifras: [],
   };
 
@@ -179,11 +191,11 @@ function bloqueContado(partidos: Partido[]): {
     bloque.cifras.push(
       cifra(
         "publicoMedio",
-        usaCasa ? "Público de media en casa" : "Público de media por partido",
+        usaCasa ? t("cifras.publicoMedioEnCasa") : t("cifras.publicoMedio"),
         media,
         "personas",
         "contado",
-        `media de ${cuantos} ${cuantos === 1 ? "partido apuntado" : "partidos apuntados"} de la temporada ${ultima.temporada}`,
+        t("procedencia.mediaDe", { n: cuantos, temporada: ultima.temporada }),
       ),
     );
   }
@@ -193,11 +205,11 @@ function bloqueContado(partidos: Partido[]): {
     bloque.cifras.push(
       cifra(
         "mejorPartido",
-        "Su mejor partido",
+        t("cifras.mejorPartido"),
         mejor.publico,
         "personas",
         "contado",
-        `contra ${mejor.rival}, el ${fechaLarga(mejor.fecha)}`,
+        t("procedencia.contra", { rival: mejor.rival, fecha: fechaLarga(mejor.fecha, intlLocale) }),
       ),
     );
   }
@@ -206,11 +218,13 @@ function bloqueContado(partidos: Partido[]): {
     bloque.cifras.push(
       cifra(
         "partidosApuntados",
-        "Partidos apuntados",
+        t("cifras.partidosApuntados"),
         todos.partidos,
         "partidos",
         "contado",
-        `temporada ${ultima.temporada}${usaCasa ? `, ${enCasa.partidos} de ellos en casa` : ""}`,
+        usaCasa
+          ? t("procedencia.temporadaEnCasa", { temporada: ultima.temporada, n: enCasa.partidos })
+          : t("procedencia.temporada", { temporada: ultima.temporada }),
       ),
     );
   }
@@ -223,19 +237,24 @@ function bloqueContado(partidos: Partido[]): {
   };
 }
 
-function bloqueDeclarado(perfil: ClubProfile | null, equipos: ClubTeam[]): BloqueDeAlcance {
+function bloqueDeclarado(
+  perfil: ClubProfile | null,
+  equipos: ClubTeam[],
+  t: TraducirAlcance,
+): BloqueDeAlcance {
   const cifras: CifraDeAlcance[] = [];
+  const declaradoPorElClub = t("procedencia.declarado");
 
-  const jugadores = jugadoresDelClub(perfil, equipos);
+  const jugadores = jugadoresDelClub(perfil, equipos, t);
   if (jugadores) {
     cifras.push(
-      cifra("jugadores", "Jugadores", jugadores.valor, "personas", "declarado", jugadores.procedencia),
+      cifra("jugadores", t("cifras.jugadores"), jugadores.valor, "personas", "declarado", jugadores.procedencia),
     );
   }
 
   if (perfil?.membersCount != null && perfil.membersCount > 0) {
     cifras.push(
-      cifra("socios", "Socios", perfil.membersCount, "personas", "declarado", "declarado por el club"),
+      cifra("socios", t("cifras.socios"), perfil.membersCount, "personas", "declarado", declaradoPorElClub),
     );
   }
 
@@ -243,18 +262,18 @@ function bloqueDeclarado(perfil: ClubProfile | null, equipos: ClubTeam[]): Bloqu
     cifras.push(
       cifra(
         "familias",
-        "Familias vinculadas",
+        t("cifras.familias"),
         perfil.youthFamiliesCount,
         "personas",
         "declarado",
-        "declarado por el club",
+        declaradoPorElClub,
       ),
     );
   }
 
   if (equipos.length > 0) {
     cifras.push(
-      cifra("equipos", "Equipos", equipos.length, "equipos", "declarado", "equipos dados de alta en la ficha"),
+      cifra("equipos", t("cifras.equipos"), equipos.length, "equipos", "declarado", t("procedencia.equipos")),
     );
   }
 
@@ -268,11 +287,11 @@ function bloqueDeclarado(perfil: ClubProfile | null, equipos: ClubTeam[]): Bloqu
     cifras.push(
       cifra(
         `seguidores-${red}`,
-        `Seguidores en ${ETIQUETA_RED_SOCIAL[red] ?? red}`,
+        t("cifras.seguidores", { red: ETIQUETA_RED_SOCIAL[red] ?? red }),
         seguidores,
         "personas",
         "declarado",
-        "declarado por el club",
+        declaradoPorElClub,
       ),
     );
   }
@@ -281,20 +300,19 @@ function bloqueDeclarado(perfil: ClubProfile | null, equipos: ClubTeam[]): Bloqu
     cifras.push(
       cifra(
         "alcanceEscrito",
-        "Alcance estimado",
+        t("cifras.alcanceEscrito"),
         perfil.estimatedReach,
         "personas",
         "declarado",
-        "estimación escrita por el club en su ficha",
+        t("procedencia.estimacion"),
       ),
     );
   }
 
   return {
     id: "declarado",
-    titulo: "Lo que el club declara",
-    explicacion:
-      "Cifras de la ficha del club. Van una a una y sin sumar: la misma persona puede ser socio, padre de un jugador y seguidor en redes.",
+    titulo: t("bloques.declarado.titulo"),
+    explicacion: t("bloques.declarado.explicacion"),
     cifras,
   };
 }
@@ -315,12 +333,16 @@ function bloqueDeclarado(perfil: ClubProfile | null, equipos: ClubTeam[]): Bloqu
  * todo el dossier, y es justo la que una empresa va a mirar con lupa.
  * Los seguidores siguen en su tarjeta, con su nombre y sin disfraz.
  */
-function personasDistintas(declarado: BloqueDeAlcance, mediaEnCasa: number | null): CifraDeAlcance | null {
+function personasDistintas(
+  declarado: BloqueDeAlcance,
+  mediaEnCasa: number | null,
+  t: TraducirAlcance,
+): CifraDeAlcance | null {
   const candidatas = declarado.cifras.filter(
     (c) => c.unidad === "personas" && c.id !== "alcanceEscrito" && !c.id.startsWith("seguidores-"),
   );
   const conPublico = mediaEnCasa != null
-    ? [...candidatas, cifra("publico", "público de un partido", mediaEnCasa, "personas", "contado", "")]
+    ? [...candidatas, cifra("publico", t("cifras.publicoDeUnPartido"), mediaEnCasa, "personas", "contado", "")]
     : candidatas;
 
   if (conPublico.length === 0) return null;
@@ -329,12 +351,12 @@ function personasDistintas(declarado: BloqueDeAlcance, mediaEnCasa: number | nul
 
   return cifra(
     "personasDistintas",
-    "Personas distintas, como mínimo",
+    t("cifras.personasDistintas"),
     mayor.valor,
     "personas",
     "deducido",
-    "el mayor de los grupos del club, no su suma",
-    `la cifra más alta que tiene el club (${mayor.etiqueta.toLowerCase()}: ${mayor.valor}). No se suman los grupos porque la misma persona puede estar en varios.`,
+    t("procedencia.mayorGrupo"),
+    t("cuentas.personasDistintas", { grupo: mayor.etiqueta.toLocaleLowerCase(), valor: mayor.valor }),
   );
 }
 
@@ -343,31 +365,31 @@ function bloqueDeducido(
   mediaEnCasa: number | null,
   partidosEnCasa: number,
   temporada: string | null,
+  t: TraducirAlcance,
 ): BloqueDeAlcance {
   const cifras: CifraDeAlcance[] = [];
 
-  const minimo = personasDistintas(declarado, mediaEnCasa);
+  const minimo = personasDistintas(declarado, mediaEnCasa, t);
   if (minimo) cifras.push(minimo);
 
   if (mediaEnCasa != null && partidosEnCasa > 0) {
     cifras.push(
       cifra(
         "asistencias",
-        "Asistencias al campo en la temporada",
+        t("cifras.asistencias"),
         mediaEnCasa * partidosEnCasa,
         "asistencias",
         "deducido",
-        `temporada ${temporada ?? ""}`.trim(),
-        `${mediaEnCasa} personas × ${partidosEnCasa} ${partidosEnCasa === 1 ? "partido" : "partidos"} en casa. Son veces que alguien fue al campo, no personas distintas: quien no falta a ninguno cuenta ${partidosEnCasa} ${partidosEnCasa === 1 ? "vez" : "veces"}.`,
+        temporada ? t("procedencia.temporada", { temporada }) : "",
+        t("cuentas.asistencias", { media: mediaEnCasa, n: partidosEnCasa }),
       ),
     );
   }
 
   return {
     id: "deducido",
-    titulo: "Lo que se deduce",
-    explicacion:
-      "Cuentas hechas con las cifras de arriba. La cuenta va escrita entera para que cualquiera pueda comprobarla.",
+    titulo: t("bloques.deducido.titulo"),
+    explicacion: t("bloques.deducido.explicacion"),
     cifras,
   };
 }
@@ -376,73 +398,41 @@ function faltasDelClub(
   perfil: ClubProfile | null,
   equipos: ClubTeam[],
   partidos: Partido[],
+  t: TraducirAlcance,
 ): FaltaDeAlcance[] {
   const faltan: FaltaDeAlcance[] = [];
+  // Lo que se le dice al club en cada caso, con el texto del enlace.
+  const falta = (id: string, ruta: string, valores?: Record<string, string | number>): FaltaDeAlcance => ({
+    id,
+    que: t(`faltan.${id}.que`, valores),
+    porQue: t(`faltan.${id}.porQue`, valores),
+    ruta,
+    rutaEtiqueta: t(`faltan.${id}.enlace`, valores),
+  });
 
   if (partidos.length === 0) {
-    faltan.push({
-      id: "publico",
-      que: "El público de tus partidos",
-      porQue:
-        "Es la única cifra que no depende de que te crean: la apuntas partido a partido y se enseña con el recuento detrás. Es la que más peso tiene delante de una empresa.",
-      ruta: "/panel/publico",
-      rutaEtiqueta: "Apuntar un partido",
-    });
+    faltan.push(falta("publico", "/panel/publico"));
   } else if (partidos.length < PARTIDOS_PARA_COMPARAR) {
-    faltan.push({
-      id: "masPartidos",
-      que: "Más partidos apuntados",
-      porQue: `Con ${partidos.length} ${partidos.length === 1 ? "partido" : "partidos"} la media aún se mueve mucho. A partir de ${PARTIDOS_PARA_COMPARAR} la cifra ya se sostiene, y con una temporada entera se puede comparar con la siguiente.`,
-      ruta: "/panel/publico",
-      rutaEtiqueta: "Apuntar un partido",
-    });
+    faltan.push(falta("masPartidos", "/panel/publico", { n: partidos.length, minimo: PARTIDOS_PARA_COMPARAR }));
   }
 
-  if (jugadoresDelClub(perfil, equipos) == null) {
-    faltan.push({
-      id: "jugadores",
-      que: "Cuántos jugadores tiene cada equipo",
-      porQue:
-        "Es lo primero que pregunta una empresa que se plantea poner su nombre en una camiseta: cuánta gente la va a llevar puesta.",
-      ruta: "/panel",
-      rutaEtiqueta: "Ir a los equipos",
-    });
+  if (jugadoresDelClub(perfil, equipos, t) == null) {
+    faltan.push(falta("jugadores", "/panel"));
   }
 
   if (perfil?.membersCount == null) {
-    faltan.push({
-      id: "socios",
-      que: "Cuántos socios tiene el club",
-      porQue:
-        "Es la cifra que mejor dice a cuánta gente del pueblo llega el club, porque incluye al vecino que paga su cuota sin tener a nadie jugando.",
-      ruta: "/panel",
-      rutaEtiqueta: "Ir a la ficha",
-    });
+    faltan.push(falta("socios", "/panel"));
   }
 
   if (perfil?.youthFamiliesCount == null) {
-    faltan.push({
-      id: "familias",
-      que: "Cuántas familias hay detrás de la cantera",
-      porQue:
-        "Detrás de cada niño hay padres, abuelos y hermanos que van al campo y compran en el barrio. Para un comercio local es la cifra que decide.",
-      ruta: "/panel",
-      rutaEtiqueta: "Ir a la cantera",
-    });
+    faltan.push(falta("familias", "/panel"));
   }
 
   const seguidores = Object.values(perfil?.followersByNetwork ?? {}).filter(
     (valor) => valor != null && valor > 0,
   );
   if (seguidores.length === 0) {
-    faltan.push({
-      id: "redes",
-      que: "Los seguidores de tus redes",
-      porQue:
-        "Una publicación agradeciendo al patrocinador es lo más barato que puede dar un club, y sin esta cifra no se puede poner precio a nada.",
-      ruta: "/panel",
-      rutaEtiqueta: "Ir a audiencia",
-    });
+    faltan.push(falta("redes", "/panel"));
   }
 
   return faltan;
@@ -483,14 +473,19 @@ function compararTemporadas(partidos: Partido[]): ComparacionDeTemporadas | null
   };
 }
 
-export function calcularAlcance({ perfil, equipos, partidos }: DatosDeAlcance): InformeDeAlcance {
-  const contado = bloqueContado(partidos);
-  const declarado = bloqueDeclarado(perfil, equipos);
+export function calcularAlcance(
+  { perfil, equipos, partidos }: DatosDeAlcance,
+  t: TraducirAlcance,
+  intlLocale = "es-ES",
+): InformeDeAlcance {
+  const contado = bloqueContado(partidos, t, intlLocale);
+  const declarado = bloqueDeclarado(perfil, equipos, t);
   const deducido = bloqueDeducido(
     declarado,
     contado.mediaEnCasa,
     contado.partidosEnCasa,
     contado.temporada,
+    t,
   );
 
   const bloques = [contado.bloque, declarado, deducido].filter((bloque) => bloque.cifras.length > 0);
@@ -507,7 +502,7 @@ export function calcularAlcance({ perfil, equipos, partidos }: DatosDeAlcance): 
   return {
     temporada: contado.temporada,
     bloques,
-    faltan: faltasDelClub(perfil, equipos, partidos),
+    faltan: faltasDelClub(perfil, equipos, partidos, t),
     titular,
     comparacion: compararTemporadas(partidos),
     hayCifras: bloques.length > 0,
@@ -557,13 +552,13 @@ export function cifrasDePortada(informe: InformeDeAlcance, cuantas = 4): CifraDe
  * nadie —12.437 se lee como "doce mil y pico"— así que se redondea al
  * millar y se dice así.
  */
-export function cifraLlana(valor: number): string {
-  if (valor < 10000) return valor.toLocaleString("es-ES");
+export function cifraLlana(valor: number, intlLocale = "es-ES"): string {
+  if (valor < 10000) return valor.toLocaleString(intlLocale);
 
   // Se redondea el número y se formatea después, en vez de pegarle
   // ".000" al millar: con "48" pegar el sufijo daba "48.000", que está
   // bien, pero con "1234" daba "1234.000" en vez de "1.234.000".
-  return (Math.round(valor / 1000) * 1000).toLocaleString("es-ES");
+  return (Math.round(valor / 1000) * 1000).toLocaleString(intlLocale);
 }
 
 /**
@@ -586,35 +581,36 @@ export function cifraLlana(valor: number): string {
  * tiene: "cada partido en casa lo ven 240 personas" dice más que
  * "público medio: 240".
  */
-export function resumenLlano(informe: InformeDeAlcance): string[] {
+export function resumenLlano(
+  informe: InformeDeAlcance,
+  t: TraducirAlcance,
+  intlLocale = "es-ES",
+): string[] {
   const todas = cifrasDelInforme(informe);
   const porId = (id: string) => todas.find((c) => c.id === id) ?? null;
+  const llana = (valor: number) => cifraLlana(valor, intlLocale);
   const frases: string[] = [];
 
   const publico = porId("publicoMedio");
   if (publico) {
     // "unas" y no la cifra a secas: es una media, y decirla como si
     // fuera un recuento exacto de este domingo sería pasarse.
-    const donde = publico.etiqueta.includes("en casa") ? " en casa" : "";
-    frases.push(`Cada partido${donde} lo ven unas ${cifraLlana(publico.valor)} personas.`);
+    const enCasa = publico.etiqueta === t("cifras.publicoMedioEnCasa");
+    frases.push(t(enCasa ? "llano.publicoEnCasa" : "llano.publico", { cifra: llana(publico.valor) }));
   }
 
   const jugadores = porId("jugadores");
   if (jugadores) {
-    frases.push(
-      `${cifraLlana(jugadores.valor)} jugadores visten la equipación del club cada semana.`,
-    );
+    frases.push(t("llano.jugadores", { cifra: llana(jugadores.valor) }));
   }
 
   const familias = porId("familias");
   if (familias) {
-    frases.push(
-      `Detrás de la cantera hay ${cifraLlana(familias.valor)} familias: padres, abuelos y hermanos que van al campo.`,
-    );
+    frases.push(t("llano.familias", { cifra: llana(familias.valor) }));
   } else {
     const socios = porId("socios");
     if (socios) {
-      frases.push(`El club tiene ${cifraLlana(socios.valor)} socios en el pueblo.`);
+      frases.push(t("llano.socios", { cifra: llana(socios.valor) }));
     }
   }
 
@@ -627,9 +623,9 @@ export function resumenLlano(informe: InformeDeAlcance): string[] {
       null,
     );
   if (mayorRed) {
-    const red = mayorRed.etiqueta.replace("Seguidores en ", "");
+    const id = mayorRed.id.replace("seguidores-", "") as keyof SocialLinks;
     frases.push(
-      `Cuando el club publica en ${red}, lo pueden ver ${cifraLlana(mayorRed.valor)} personas.`,
+      t("llano.redes", { red: ETIQUETA_RED_SOCIAL[id] ?? id, cifra: llana(mayorRed.valor) }),
     );
   }
 
@@ -641,16 +637,6 @@ export function resumenLlano(informe: InformeDeAlcance): string[] {
 /** "personas" / "asistencias" / "partidos" / "equipos", en singular
  * cuando toca. Se enseña pegado a la cifra para que nadie confunda
  * personas con veces. */
-export function unidadEnTexto(unidad: UnidadDeCifra, valor: number): string {
-  const singular = Math.abs(valor) === 1;
-  switch (unidad) {
-    case "personas":
-      return singular ? "persona" : "personas";
-    case "asistencias":
-      return singular ? "asistencia" : "asistencias";
-    case "partidos":
-      return singular ? "partido" : "partidos";
-    case "equipos":
-      return singular ? "equipo" : "equipos";
-  }
+export function unidadEnTexto(unidad: UnidadDeCifra, valor: number, t: TraducirAlcance): string {
+  return t(`unidades.${unidad}`, { n: Math.abs(valor) });
 }

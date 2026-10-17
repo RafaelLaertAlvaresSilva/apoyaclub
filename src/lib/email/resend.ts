@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
+import { esIdioma } from "@/lib/idioma-usuario";
 import { direccionDe, limpiarCabecera } from "@/lib/email/cabeceras";
 /**
  * Envío de email transaccional con Resend (Fase 8), usando `fetch`
@@ -91,11 +92,11 @@ export async function enviarEmail({
  * Se pide con el idioma explícito en vez de heredarlo de la petición:
  * el cron de avisos (`api/cron/subscription-reminders`) no viene de
  * ninguna URL con prefijo de idioma, así que ahí no hay ninguno del que
- * heredar. Cuando existan destinatarios en otro idioma, este es el sitio
- * donde se decidirá cuál usar (por ejemplo, el idioma guardado del club).
+ * heredar. Cada función recibe `idioma`: el del destinatario, que se
+ * guarda en su cuenta (ver `lib/idioma-usuario.ts`). Sin él, español.
  */
-async function traductorEmails() {
-  return getTranslations({ locale: routing.defaultLocale, namespace: "emails" });
+async function traductorEmails(idioma?: string) {
+  return getTranslations({ locale: esIdioma(idioma) ? idioma : routing.defaultLocale, namespace: "emails" });
 }
 
 /**
@@ -113,6 +114,7 @@ export async function enviarEmailNuevaSolicitudContacto({
   message,
   panelUrl,
   responderA,
+  idioma,
 }: {
   clubEmail: string;
   clubName: string;
@@ -132,8 +134,10 @@ export async function enviarEmailNuevaSolicitudContacto({
    * la solicitud sirva de algo.
    */
   responderA?: string;
+  /** El idioma del destinatario ("es", "pt", "en"). Sin él, español. */
+  idioma?: string;
 }): Promise<ResultadoEnvioEmail> {
-  const t = await traductorEmails();
+  const t = await traductorEmails(idioma);
 
   const detalles = [
     [t("solicitudContacto.persona"), personaNombre],
@@ -186,6 +190,7 @@ export async function enviarEmailAvisoCaducidadSuscripcion({
   diasRestantes,
   fechaFin,
   panelUrl,
+  idioma,
 }: {
   clubEmail: string;
   clubName: string;
@@ -193,8 +198,10 @@ export async function enviarEmailAvisoCaducidadSuscripcion({
   /** Fecha ya formateada para mostrar (p. ej. "15 de marzo de 2026"). */
   fechaFin: string;
   panelUrl: string;
+  /** El idioma del destinatario ("es", "pt", "en"). Sin él, español. */
+  idioma?: string;
 }): Promise<ResultadoEnvioEmail> {
-  const t = await traductorEmails();
+  const t = await traductorEmails(idioma);
 
   const html = `
     <div style="font-family:sans-serif;color:#18181b;max-width:560px;margin:0 auto;">
@@ -227,13 +234,16 @@ export async function enviarEmailContactoLanding({
   nombre,
   email,
   mensaje,
+  idioma,
 }: {
   destinatario: string;
   nombre: string;
   email: string;
   mensaje: string;
+  /** El idioma del destinatario ("es", "pt", "en"). Sin él, español. */
+  idioma?: string;
 }): Promise<ResultadoEnvioEmail> {
-  const t = await traductorEmails();
+  const t = await traductorEmails(idioma);
 
   const html = `
     <div style="font-family:sans-serif;color:#18181b;max-width:560px;margin:0 auto;">
@@ -296,12 +306,15 @@ export async function enviarEmailBienvenidaClub({
   clubEmail,
   clubName,
   panelUrl,
+  idioma,
 }: {
   clubEmail: string;
   clubName: string;
   panelUrl: string;
+  /** El idioma del destinatario ("es", "pt", "en"). Sin él, español. */
+  idioma?: string;
 }): Promise<ResultadoEnvioEmail> {
-  const t = await traductorEmails();
+  const t = await traductorEmails(idioma);
 
   const cuerpo = `
     <p style="margin:0 0 16px;">${t("bienvenidaClub.texto")}</p>
@@ -331,11 +344,14 @@ export async function enviarEmailBienvenidaClub({
 export async function enviarEmailBienvenidaEmpresa({
   companyEmail,
   buscarUrl,
+  idioma,
 }: {
   companyEmail: string;
   buscarUrl: string;
+  /** El idioma del destinatario ("es", "pt", "en"). Sin él, español. */
+  idioma?: string;
 }): Promise<ResultadoEnvioEmail> {
-  const t = await traductorEmails();
+  const t = await traductorEmails(idioma);
 
   return enviarEmail({
     to: companyEmail,
@@ -365,6 +381,7 @@ export async function enviarEmailRespuestaDelClub({
   buscarUrl,
   opportunityTitle,
   aceptada,
+  idioma,
 }: {
   companyEmail: string;
   clubName: string;
@@ -373,8 +390,10 @@ export async function enviarEmailRespuestaDelClub({
   opportunityTitle: string | null;
   /** true = el club ha abierto la conversación; false = la ha descartado. */
   aceptada: boolean;
+  /** El idioma del destinatario ("es", "pt", "en"). Sin él, español. */
+  idioma?: string;
 }): Promise<ResultadoEnvioEmail> {
-  const t = await traductorEmails();
+  const t = await traductorEmails(idioma);
 
   const cuerpo = `
     ${
@@ -411,13 +430,16 @@ export async function enviarEmailSolicitudSinAbrir({
   total,
   diasDeLaMasAntigua,
   panelUrl,
+  idioma,
 }: {
   clubEmail: string;
   total: number;
   diasDeLaMasAntigua: number;
   panelUrl: string;
+  /** El idioma del destinatario ("es", "pt", "en"). Sin él, español. */
+  idioma?: string;
 }): Promise<ResultadoEnvioEmail> {
-  const t = await traductorEmails();
+  const t = await traductorEmails(idioma);
 
   return enviarEmail({
     to: clubEmail,
@@ -447,14 +469,17 @@ export async function enviarEmailAvisoPatrocinador({
   clubNombre,
   urlFicha,
   responderA,
+  idioma,
 }: {
   empresaEmail: string;
   clubNombre: string;
   urlFicha: string;
   /** Correo del club, para que la empresa le conteste a él. */
   responderA?: string;
+  /** El idioma del destinatario ("es", "pt", "en"). Sin él, español. */
+  idioma?: string;
 }): Promise<ResultadoEnvioEmail> {
-  const t = await traductorEmails();
+  const t = await traductorEmails(idioma);
 
   return enviarEmail({
     to: empresaEmail,
@@ -490,6 +515,7 @@ export async function enviarEmailFichaIncompleta({
   porcentaje,
   huecos,
   panelUrl,
+  idioma,
 }: {
   clubEmail: string;
   clubName: string;
@@ -497,8 +523,10 @@ export async function enviarEmailFichaIncompleta({
   /** Títulos de lo que le falta, ya priorizados. */
   huecos: string[];
   panelUrl: string;
+  /** El idioma del destinatario ("es", "pt", "en"). Sin él, español. */
+  idioma?: string;
 }): Promise<ResultadoEnvioEmail> {
-  const t = await traductorEmails();
+  const t = await traductorEmails(idioma);
 
   const lista = huecos
     .map(
@@ -536,14 +564,17 @@ export async function enviarEmailFinDePrueba({
   diasRestantes,
   fechaFin,
   panelUrl,
+  idioma,
 }: {
   clubEmail: string;
   clubName: string;
   diasRestantes: number;
   fechaFin: string;
   panelUrl: string;
+  /** El idioma del destinatario ("es", "pt", "en"). Sin él, español. */
+  idioma?: string;
 }): Promise<ResultadoEnvioEmail> {
-  const t = await traductorEmails();
+  const t = await traductorEmails(idioma);
 
   return enviarEmail({
     to: clubEmail,
@@ -578,6 +609,7 @@ export async function enviarEmailNecesidadesQueEncajan({
   cuantasMas,
   buscarUrl,
   bajaUrl,
+  idioma,
 }: {
   empresaEmail: string;
   empresaNombre: string;
@@ -586,8 +618,10 @@ export async function enviarEmailNecesidadesQueEncajan({
   cuantasMas: number;
   buscarUrl: string;
   bajaUrl: string;
+  /** El idioma del destinatario ("es", "pt", "en"). Sin él, español. */
+  idioma?: string;
 }): Promise<ResultadoEnvioEmail> {
-  const t = await traductorEmails();
+  const t = await traductorEmails(idioma);
 
   const lista = necesidades
     .map(

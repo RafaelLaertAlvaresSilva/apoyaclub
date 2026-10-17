@@ -8,6 +8,7 @@ import type { Accion, Beneficio } from "@/lib/ficha-oportunidad";
 import { EditorDeLaFicha } from "./EditorDeLaFicha";
 import { FotosDeLaOportunidad } from "./FotosDeLaOportunidad";
 import { BotonEnviar } from "@/components/BotonEnviar";
+import { etiquetador } from "@/lib/etiquetas-traducidas";
 import {
   Campo,
   SeccionCard,
@@ -104,6 +105,8 @@ export function OportunidadForm({
   equipos?: ClubTeam[];
 }) {
   const t = useTranslations("panel.oportunidades");
+  const tComun = useTranslations("panel.comun");
+  const E = etiquetador(useTranslations("common.etiquetas"));
 
   // Qué clase de oportunidad es. Cambia lo que se enseña debajo, así
   // que vive en el componente y no solo en el formulario.
@@ -123,7 +126,7 @@ export function OportunidadForm({
           la mejor oportunidad que hay en la plataforma. */}
       <fieldset className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
         <legend className="float-left mb-3 w-full text-[15px] font-bold text-titular">
-          ¿Qué es esto?
+          {t("queEsEsto")}
         </legend>
         <div className="clear-both grid gap-2 sm:grid-cols-2">
           <label
@@ -142,12 +145,8 @@ export function OportunidadForm({
               className="mt-0.5"
             />
             <span>
-              <span className="block text-sm font-medium text-zinc-900">
-                Ofrezco patrocinio
-              </span>
-              <span className="block text-xs text-zinc-500">
-                Doy visibilidad a la empresa y ella aporta dinero.
-              </span>
+              <span className="block text-sm font-medium text-zinc-900">{t("ofrezcoPatrocinio")}</span>
+              <span className="block text-xs text-zinc-500">{t("ofrezcoPatrocinioTexto")}</span>
             </span>
           </label>
 
@@ -167,12 +166,8 @@ export function OportunidadForm({
               className="mt-0.5"
             />
             <span>
-              <span className="block text-sm font-medium text-zinc-900">
-                Necesito un servicio o producto
-              </span>
-              <span className="block text-xs text-zinc-500">
-                Fisio, autobús, fotógrafo, material… y doy visibilidad a cambio.
-              </span>
+              <span className="block text-sm font-medium text-zinc-900">{t("necesitoServicio")}</span>
+              <span className="block text-xs text-zinc-500">{t("necesitoServicioTexto")}</span>
             </span>
           </label>
         </div>
@@ -180,8 +175,8 @@ export function OportunidadForm({
         {esNecesidad && (
           <div className="mt-4">
             <Campo
-              etiqueta="Qué necesitas"
-              ayuda="Sirve para que una empresa de ese ramo te encuentre buscando lo suyo."
+              etiqueta={t("queNecesitas")}
+              ayuda={t("queNecesitasAyuda")}
             >
               <select
                 name="categoriaNecesidad"
@@ -190,11 +185,11 @@ export function OportunidadForm({
                 className={clasesInput}
               >
                 <option value="" disabled>
-                  Elige qué necesitas
+                  {t("eligeQueNecesitas")}
                 </option>
                 {CATEGORIAS_NECESIDAD.map((categoria) => (
                   <option key={categoria.id} value={categoria.id}>
-                    {categoria.etiqueta}
+                    {E.categoriaNecesidad(categoria.id)}
                   </option>
                 ))}
               </select>
@@ -227,7 +222,7 @@ export function OportunidadForm({
           </option>
           {TIPOS_OPORTUNIDAD.map((tipo) => (
             <option key={tipo.id} value={tipo.id}>
-              {tipo.etiqueta}
+              {E.tipoOportunidad(tipo.id)}
             </option>
           ))}
         </select>
@@ -242,8 +237,8 @@ export function OportunidadForm({
       </Campo>
 
       <Campo
-        etiqueta="Fotos"
-        ayuda="Opcional, hasta tres. Lo que de verdad convence a una empresa es ver la pared donde irá su lona, el autobús o la equipación."
+        etiqueta={t("fotos")}
+        ayuda={t("fotosAyuda")}
       >
         <FotosDeLaOportunidad
           userId={userId}
@@ -269,7 +264,7 @@ export function OportunidadForm({
          * rellenar, y lo que acababa escribiendo era un cero que
          * luego salía publicado. */}
         {!esNecesidad && (
-          <Campo etiqueta="Valor (€) *" ayuda={t("loFijasTuLa")}>
+          <Campo etiqueta={t("valorEuros")} ayuda={t("loFijasTuLa")}>
             <input
               name="value"
               type="number"
@@ -296,8 +291,8 @@ export function OportunidadForm({
           patrocinador o el periodo, y abierta cuando ya tiene algo
           escrito para que se vea que está. */}
       <BloquePlegable
-        titulo="Qué recibe la empresa y quién hace qué"
-        resumen="El detalle del acuerdo, línea a línea. No hace falta para publicar, pero es lo que hace que la empresa entienda qué le estás ofreciendo."
+        titulo={t("queRecibeEmpresa")}
+        resumen={t("queRecibeEmpresaResumen")}
         /* Abierto siempre.
          *
          * Lo tuve plegado cuando estaba vacío, para no alargar un
@@ -315,36 +310,36 @@ export function OportunidadForm({
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <Campo
-            etiqueta="Frecuencia"
-            ayuda="Cada cuánto: mensual, por partido en casa…"
+            etiqueta={t("frecuencia")}
+            ayuda={t("frecuenciaAyuda")}
           >
             <input
               name="frecuencia"
               maxLength={120}
               defaultValue={valoresIniciales?.frecuencia ?? ""}
-              placeholder="Mensual"
+              placeholder={t("frecuenciaEjemplo")}
               className={clasesInput}
             />
           </Campo>
 
           <Campo
-            etiqueta="Desde / hasta"
+            etiqueta={t("desdeHasta")}
             grupo
-            ayuda="Opcional. Cuándo empieza y cuándo acaba."
+            ayuda={t("desdeHastaAyuda")}
           >
             <div className="flex gap-2">
               <input
                 name="desde"
                 type="date"
                 defaultValue={valoresIniciales?.desde ?? ""}
-                aria-label="Desde"
+                aria-label={t("desde")}
                 className={clasesInput}
               />
               <input
                 name="hasta"
                 type="date"
                 defaultValue={valoresIniciales?.hasta ?? ""}
-                aria-label="Hasta"
+                aria-label={t("hasta")}
                 className={clasesInput}
               />
             </div>
@@ -353,8 +348,8 @@ export function OportunidadForm({
 
         <div className="mt-4">
           <Campo
-            etiqueta="Otros requisitos"
-            ayuda="Cualquier cosa que convenga dejar por escrito."
+            etiqueta={t("otrosRequisitos")}
+            ayuda={t("otrosRequisitosAyuda")}
           >
             <textarea
               name="requisitos"
@@ -367,8 +362,8 @@ export function OportunidadForm({
       </BloquePlegable>
 
       <BloquePlegable
-        titulo="Más detalles"
-        resumen="Nivel, plazas, exclusividad, a quién va dirigida… Nada de esto hace falta para publicar: puedes rellenarlo luego."
+        titulo={t("masDetalles")}
+        resumen={t("masDetallesResumen")}
         abierto={!!idOportunidad}
       >
         <div className="grid gap-4 sm:grid-cols-2">
@@ -381,7 +376,7 @@ export function OportunidadForm({
               <option value="">{t("sinEspecificar")}</option>
               {PERIODOS_OPORTUNIDAD.map((periodo) => (
                 <option key={periodo.id} value={periodo.id}>
-                  {periodo.etiqueta}
+                  {E.periodo(periodo.id)}
                 </option>
               ))}
             </select>
@@ -399,7 +394,7 @@ export function OportunidadForm({
               <option value="">{t("sinEspecificar")}</option>
               {FORMAS_COLABORACION.map((forma) => (
                 <option key={forma.id} value={forma.id}>
-                  {forma.etiqueta}
+                  {E.formaColaboracion(forma.id)}
                 </option>
               ))}
             </select>
@@ -418,7 +413,7 @@ export function OportunidadForm({
             >
               {NIVELES_PATROCINIO.map((nivel) => (
                 <option key={nivel.id} value={nivel.id}>
-                  {nivel.etiqueta}
+                  {E.nivelPatrocinio(nivel.id)}
                 </option>
               ))}
             </select>
@@ -439,7 +434,7 @@ export function OportunidadForm({
         {equipos.length > 0 && (
           <Campo
             etiqueta={t("equipoAsociado")}
-            ayuda="Si la oportunidad es de un equipo concreto (el primer equipo, un equipo de cantera). Déjalo en blanco si es del club entero."
+            ayuda={t("equipoAsociadoAyuda")}
           >
             <select
               name="teamId"
@@ -459,11 +454,11 @@ export function OportunidadForm({
         <div className="grid gap-4 sm:grid-cols-2">
           <Campo
             etiqueta={
-              esNecesidad ? "Cuántos colaboradores necesitas" : t("plazas")
+              esNecesidad ? t("cuantosColaboradores") : t("plazas")
             }
             ayuda={
               esNecesidad
-                ? "Si con uno te vale, déjalo vacío. A partir de dos sale una barra con lo que llevas cubierto."
+                ? t("cuantosColaboradoresAyuda")
                 : t("plazasAyuda")
             }
           >
@@ -478,7 +473,7 @@ export function OportunidadForm({
           </Campo>
 
           <Campo
-            etiqueta={esNecesidad ? "Cuántos tienes ya" : t("plazasCubiertas")}
+            etiqueta={esNecesidad ? t("cuantosTienesYa") : t("plazasCubiertas")}
             ayuda={t("plazasCubiertasAyuda")}
           >
             <input
@@ -508,7 +503,7 @@ export function OportunidadForm({
                   }
                   className="rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
                 />
-                {objetivo.etiqueta}
+                {E.objetivo(objetivo.id)}
               </label>
             ))}
           </div>
@@ -524,7 +519,7 @@ export function OportunidadForm({
           >
             {ESTADOS_OPORTUNIDAD.map((estadoOpcion) => (
               <option key={estadoOpcion.id} value={estadoOpcion.id}>
-                {estadoOpcion.etiqueta}
+                {E.estadoOportunidad(estadoOpcion.id)}
               </option>
             ))}
           </select>
@@ -533,7 +528,7 @@ export function OportunidadForm({
 
       <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
       <AvisoExito
-        mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null}
+        mensaje={estado && "ok" in estado && estado.ok ? tComun("guardado") : null}
       />
 
       <div className="flex gap-2">

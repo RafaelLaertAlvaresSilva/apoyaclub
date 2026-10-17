@@ -47,7 +47,7 @@ export async function registrarClub(
     email,
     password,
     options: {
-      data: { name: nombre, role: "club" },
+      data: { name: nombre, role: "club", idioma: locale },
       emailRedirectTo: `${origin}/${locale}/auth/callback`,
     },
   });

@@ -18,12 +18,12 @@ import {
 import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
 import { deportesDelClub, seccionesConContenido } from "@/lib/dossier";
 import {
-  AVISO_DE_ORIGEN,
   calcularAlcance,
   cifrasDePortada,
   resumenLlano,
   unidadEnTexto,
 } from "@/lib/alcance";
+import { traductorDelAlcanceEnEspanol } from "@/lib/traductor-espanol";
 import type { DatosDossier } from "@/lib/dossier-datos";
 import { descargarImagen, encajarEn, type ImagenDescargada } from "@/lib/imagenes-remotas";
 import { formatoValorOportunidad } from "@/lib/opportunities";
@@ -181,7 +181,8 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
    * sola cuenta no es elegancia: es que el día que una empresa compare
    * el Word con el PDF del mismo club, las cifras tienen que coincidir.
    */
-  const alcance = calcularAlcance({ perfil, equipos, partidos });
+  const tAlcance = traductorDelAlcanceEnEspanol();
+  const alcance = calcularAlcance({ perfil, equipos, partidos }, tAlcance);
 
   const cifrasPortada = cifrasDePortada(alcance).map((cifra) => ({
     etiqueta: cifra.etiqueta,
@@ -370,7 +371,7 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
     // con su metodología. Va aquí también porque el día que una empresa
     // compare el Word con el PDF del mismo club, los dos tienen que
     // decir lo mismo.
-    for (const frase of resumenLlano(alcance)) {
+    for (const frase of resumenLlano(alcance, tAlcance)) {
       cuerpo.push(parrafo(frase, { tamano: 22, espacioDespues: 40 }));
     }
 
@@ -386,7 +387,7 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
             children: [
               new TextRun({ text: `${cifra.etiqueta}: `, size: 22, color: GRIS }),
               new TextRun({
-                text: `${formatoNumero.format(cifra.valor)} ${unidadEnTexto(cifra.unidad, cifra.valor)}`,
+                text: `${formatoNumero.format(cifra.valor)} ${unidadEnTexto(cifra.unidad, cifra.valor, tAlcance)}`,
                 size: 22,
                 bold: true,
                 color: NAVY,
@@ -402,7 +403,7 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
       }
     }
 
-    cuerpo.push(parrafo(AVISO_DE_ORIGEN, { color: GRIS_TENUE, tamano: 16 }));
+    cuerpo.push(parrafo(tAlcance("avisoDeOrigen"), { color: GRIS_TENUE, tamano: 16 }));
   }
 
   if (incluir("patrocinadores")) {

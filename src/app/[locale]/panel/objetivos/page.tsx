@@ -1,6 +1,8 @@
+import { getTranslations } from "next-intl/server";
 import { getLocale } from "next-intl/server";
 import { redirect } from "@/i18n/navigation";
 import { calcularAlcance, cifrasDelInforme } from "@/lib/alcance";
+import { intlLocaleDe } from "@/config/locales";
 import { reunirDatosDeAlcance } from "@/lib/alcance-datos";
 import { deportesDelClub } from "@/lib/dossier";
 import type { DatosDelClub } from "@/lib/plantillas-correo-club";
@@ -23,6 +25,7 @@ import { ListaDeObjetivos } from "./components/ListaDeObjetivos";
  * probabilidades tiene de decirle que sí.
  */
 export default async function ObjetivosPage() {
+  const t = await getTranslations("panel.objetivos");
   const supabase = await createClient();
   const {
     data: { user },
@@ -48,13 +51,15 @@ export default async function ObjetivosPage() {
   // servidor, y viaja ya masticado: el generador no toca la base de
   // datos, así que se puede probar entero sin levantar nada.
   const { perfil, equipos } = datosDeAlcance;
-  const cifras = cifrasDelInforme(calcularAlcance(datosDeAlcance));
+  const cifras = cifrasDelInforme(
+    calcularAlcance(datosDeAlcance, await getTranslations("panel.alcance.informe"), intlLocaleDe(locale)),
+  );
   const cifra = (id: string) => cifras.find((una) => una.id === id)?.valor ?? null;
 
   const deportes = deportesDelClub(equipos);
 
   const club: DatosDelClub = {
-    nombre: perfil?.name ?? "tu club",
+    nombre: perfil?.name ?? t("tuClub"),
     localidad: perfil?.city ?? null,
     deporte: deportes[0]?.toLocaleLowerCase("es") ?? null,
     jugadores: cifra("jugadores"),
@@ -73,13 +78,9 @@ export default async function ObjetivosPage() {
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel del club</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">A quién escribir</h1>
-          <p className="mt-1 max-w-2xl text-sm text-zinc-600">
-            Tu lista de empresas: a quién queréis llamar, quién de vuestra gente las conoce y cuándo
-            toca volver a intentarlo. Lo que se pierde casi siempre no es un &quot;no&quot;, es un
-            &quot;llámame en septiembre&quot; que nadie apuntó.
-          </p>
+          <p className="text-sm font-medium text-teal-700">{t("cabecera.panel")}</p>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("cabecera.titulo")}</h1>
+          <p className="mt-1 max-w-2xl text-sm text-zinc-600">{t("cabecera.texto")}</p>
         </div>
       </div>
 

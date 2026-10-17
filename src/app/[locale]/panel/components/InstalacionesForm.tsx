@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useActionState, useState, useTransition } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
@@ -29,6 +30,7 @@ export function InstalacionesForm({
   userId: string;
   perfil: ClubProfile | null;
 }) {
+  const t = useTranslations("panel.perfil");
   const [estado, formAction] = useActionState(guardarInstalaciones, null);
   const [errorFoto, setErrorFoto] = useState<string | null>(null);
   const [, iniciarTransicion] = useTransition();
@@ -41,20 +43,20 @@ export function InstalacionesForm({
 
   return (
     <SeccionCard
-      titulo="Instalaciones"
-      descripcion="Dónde juega el club. Es lo primero que mira una empresa que se plantea poner una lona o un vinilo."
+      titulo={t("instalaciones")}
+      descripcion={t("dondeJuegaClubPrimero")}
     >
       <div className="mb-6">
         <Campo
-          etiqueta="Fotos de las instalaciones"
-          ayuda="El pabellón, el campo, la pista, las gradas, el bar. Puedes añadir todas las que quieras: no hay límite."
+          etiqueta={t("fotosInstalaciones")}
+          ayuda={t("pabellonCampoPistaGradas")}
         >
           <div className="flex flex-wrap gap-3">
             {fotos.map((foto) => (
               <div key={foto} className="group relative h-20 w-20">
                 <Image
                   src={foto}
-                  alt="Foto de las instalaciones"
+                  alt={t("fotoInstalaciones")}
                   width={80}
                   height={80}
                   className="h-20 w-20 rounded-lg border border-zinc-200 object-cover"
@@ -68,7 +70,7 @@ export function InstalacionesForm({
                     })
                   }
                   className="absolute -right-2 -top-2 hidden h-6 w-6 items-center justify-center rounded-full bg-peligro text-xs text-sobre-color group-hover:flex"
-                  aria-label="Quitar foto"
+                  aria-label={t("quitarFoto")}
                 >
                   ×
                 </button>
@@ -77,7 +79,7 @@ export function InstalacionesForm({
             <ImageUploader
               userId={userId}
               carpeta="fotos"
-              label="Añadir foto"
+              label={t("anadirFoto")}
               onSubido={async (url) => {
                 manejarResultado(await agregarFotoInstalacion(url));
               }}
@@ -94,34 +96,34 @@ export function InstalacionesForm({
 
       <form action={formAction} className="space-y-4">
         <Campo
-          etiqueta="Dirección"
-          ayuda="Calle y localidad del pabellón, campo o pista donde jugáis."
+          etiqueta={t("direccion")}
+          ayuda={t("calleLocalidadPabellonCampo")}
         >
           <input
             name="facilitiesAddress"
             defaultValue={perfil?.facilitiesAddress ?? ""}
-            placeholder="Pabellón Municipal, C/ del Deporte 4, Vigo"
+            placeholder={t("pabellonMunicipalCDeporte")}
             maxLength={300}
             className={clasesInput}
           />
         </Campo>
 
         <Campo
-          etiqueta="Descripción"
-          ayuda="Aforo, superficie, si hay marcador, cafetería, aparcamiento…"
+          etiqueta={t("descripcion")}
+          ayuda={t("aforoSuperficieSiHay")}
         >
           <textarea
             name="facilities"
             defaultValue={perfil?.facilities ?? ""}
-            placeholder="Pabellón de 800 localidades, parqué, marcador electrónico y cafetería."
+            placeholder={t("pabellon800LocalidadesParque")}
             className={clasesTextarea}
           />
         </Campo>
 
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
-        <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />
+        <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? t("guardado") : null} />
 
-        <BotonEnviar>Guardar instalaciones</BotonEnviar>
+        <BotonEnviar>{t("guardarInstalaciones")}</BotonEnviar>
       </form>
     </SeccionCard>
   );

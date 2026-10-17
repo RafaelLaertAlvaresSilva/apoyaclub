@@ -78,9 +78,12 @@ const formatoEuros = new Intl.NumberFormat("es-ES", {
   minimumFractionDigits: 2,
 });
 
-/** "29,90 €" */
-export function precioFormateado(plan: Plan): string {
-  return formatoEuros.format(plan.precioCentimos / 100);
+/** "29,90 €" ("€29.90" en inglés, si se pasa `intlLocale`). */
+export function precioFormateado(plan: Plan, intlLocale?: string): string {
+  const formato = intlLocale
+    ? new Intl.NumberFormat(intlLocale, { style: "currency", currency: "EUR", minimumFractionDigits: 2 })
+    : formatoEuros;
+  return formato.format(plan.precioCentimos / 100);
 }
 
 /** "al mes" / "al año" */

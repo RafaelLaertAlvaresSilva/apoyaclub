@@ -175,16 +175,22 @@ export function agruparPorEmpresa(
   });
 }
 
-const formatoFecha = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric" });
-
 /** "4 sept 2026" a partir de "2026-09-04", sin pasar por UTC. */
-export function fechaLegible(fechaISO: string): string {
+export function fechaLegible(fechaISO: string, intlLocale = "es-ES"): string {
   const [anio, mes, dia] = fechaISO.split("-").map(Number);
-  return formatoFecha.format(new Date(anio, mes - 1, dia));
+  return new Intl.DateTimeFormat(intlLocale, { day: "numeric", month: "short", year: "numeric" }).format(
+    new Date(anio, mes - 1, dia),
+  );
 }
 
+/**
+ * Para decir "vence en 3 días" en el idioma del panel: recibe los días
+ * que faltan (0 o más, `venceEn`) o los que han pasado (`venciaHace`).
+ */
+export type TraducirPlazo = (clave: "venceEn" | "venciaHace", valores: { dias: number }) => string;
+
 /** "vence hoy", "vence en 3 días", "vencía hace 5 días". */
-export function cuantoFalta(fechaISO: string, hoy: string = hoyISO()): string {
+export function cuantoFalta(fechaISO: string, hoy: string = hoyISO(), traducir?: TraducirPlazo): string {
   const aDias = (iso: string) => {
     const [anio, mes, dia] = iso.split("-").map(Number);
     return Math.round(new Date(anio, mes - 1, dia).getTime() / 86400000);
@@ -192,12 +198,35 @@ export function cuantoFalta(fechaISO: string, hoy: string = hoyISO()): string {
 
   const diferencia = aDias(fechaISO) - aDias(hoy);
 
+  if (traducir) {
+    return diferencia >= 0
+      ? traducir("venceEn", { dias: diferencia })
+      : traducir("venciaHace", { dias: -diferencia });
+  }
+
   if (diferencia === 0) return "vence hoy";
   if (diferencia === 1) return "vence mañana";
   if (diferencia === -1) return "vencía ayer";
   if (diferencia > 0) return `vence en ${diferencia} días`;
   return `vencía hace ${Math.abs(diferencia)} días`;
 }
+
+/** Los errores de `prepararLineas`, en el idioma de quien guarda. */
+export type TextosDeLineas = {
+  faltaAccion: string;
+  faltaFin: (accion: string) => string;
+  inicioNoVale: (accion: string) => string;
+  inicioDespues: (accion: string) => string;
+  ninguna: string;
+};
+
+const TEXTOS_DE_LINEAS: TextosDeLineas = {
+  faltaAccion: "Te falta escribir qué hay que hacer en una de las líneas.",
+  faltaFin: (accion) => `Pon la fecha límite de "${accion}".`,
+  inicioNoVale: (accion) => `La fecha de inicio de "${accion}" no vale.`,
+  inicioDespues: (accion) => `En "${accion}", la fecha de inicio es posterior a la fecha límite.`,
+  ninguna: "Escribe al menos una cosa que haya que hacer.",
+};
 
 export type LineaNueva = {
   accion: string;
@@ -221,12 +250,15 @@ const ES_FECHA = /^\d{4}-\d{2}-\d{2}$/;
  * club añadió y luego no llegó a rellenar. Una a medias, en cambio, sí
  * da error: ahí sí quería apuntar algo y hay que decírselo.
  */
-export function prepararLineas(campos: {
-  acciones: string[];
-  inicios: string[];
-  fines: string[];
-  notas: string[];
-}): { lineas: LineaNueva[] } | { error: string } {
+export function prepararLineas(
+  campos: {
+    acciones: string[];
+    inicios: string[];
+    fines: string[];
+    notas: string[];
+  },
+  textos: TextosDeLineas = TEXTOS_DE_LINEAS,
+): { lineas: LineaNueva[] } | { error: string } {
   const lineas: LineaNueva[] = [];
 
   for (let indice = 0; indice < campos.acciones.length; indice += 1) {
@@ -237,11 +269,11 @@ export function prepararLineas(campos: {
 
     if (!accion && !inicio && !fin && !notas) continue;
 
-    if (!accion) return { error: "Te falta escribir qué hay que hacer en una de las líneas." };
-    if (!ES_FECHA.test(fin)) return { error: `Pon la fecha límite de "${accion}".` };
-    if (inicio && !ES_FECHA.test(inicio)) return { error: `La fecha de inicio de "${accion}" no vale.` };
+    if (!accion) return { error: textos.faltaAccion };
+    if (!ES_FECHA.test(fin)) return { error: textos.faltaFin(accion) };
+    if (inicio && !ES_FECHA.test(inicio)) return { error: textos.inicioNoVale(accion) };
     if (inicio && inicio > fin) {
-      return { error: `En "${accion}", la fecha de inicio es posterior a la fecha límite.` };
+      return { error: textos.inicioDespues(accion) };
     }
 
     lineas.push({
@@ -252,7 +284,7 @@ export function prepararLineas(campos: {
     });
   }
 
-  if (lineas.length === 0) return { error: "Escribe al menos una cosa que haya que hacer." };
+  if (lineas.length === 0) return { error: textos.ninguna };
 
   return { lineas };
 }

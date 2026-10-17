@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { Button } from "@/components/ui/Button";
@@ -47,31 +48,27 @@ import { guardarRenovacion, type EstadoGuardado } from "../actions";
  * tiene ninguna otra pastilla del panel.
  */
 
-const ASPECTO: Record<EstadoRenovacion, { caja: string; pastilla: string; texto: string }> = {
+/** El texto de cada estado está en `panel.renovaciones.estados.<estado>`. */
+const ASPECTO: Record<EstadoRenovacion, { caja: string; pastilla: string }> = {
   pasada: {
     caja: "border-red-300 ring-1 ring-red-100",
     pastilla: "bg-red-100 text-red-700",
-    texto: "Se pasó",
   },
   urgente: {
     caja: "border-amber-300 ring-1 ring-amber-100",
     pastilla: "bg-amber-100 text-amber-800",
-    texto: "Corre prisa",
   },
   proxima: {
     caja: "border-zinc-200",
     pastilla: "bg-teal-100 text-teal-700",
-    texto: "Se acerca",
   },
   "al-dia": {
     caja: "border-zinc-200",
     pastilla: "bg-zinc-100 text-zinc-700",
-    texto: "Al día",
   },
   "sin-fecha": {
     caja: "border-zinc-200",
     pastilla: "bg-zinc-100 text-zinc-500",
-    texto: "Sin fecha",
   },
 };
 
@@ -116,6 +113,9 @@ function FichaDeRenovacion({
   temporada: string;
   hoy: Date;
 }) {
+  const t = useTranslations("panel.renovaciones");
+  const tPlazo = useTranslations("panel.renovaciones.plazo");
+  const tMensaje = useTranslations("panel.renovaciones.mensaje");
   const [estado, accion, enviando] = useActionState<EstadoGuardado, FormData>(
     guardarRenovacion,
     null,
@@ -125,7 +125,7 @@ function FichaDeRenovacion({
 
   const situacion = estadoDeRenovacion(patrocinador, hoy);
   const aspecto = ASPECTO[situacion];
-  const mensaje = mensajeDeRenovacion({ patrocinador, nombreDelClub, temporada });
+  const mensaje = mensajeDeRenovacion({ patrocinador, nombreDelClub, temporada, traducir: tMensaje });
 
   async function copiar() {
     try {
@@ -146,8 +146,8 @@ function FichaDeRenovacion({
           <p className="font-medium text-zinc-900">{patrocinador.name}</p>
           <p className="mt-0.5 text-xs text-zinc-500">
             {patrocinador.sinceYear
-              ? `Con el club desde ${patrocinador.sinceYear}`
-              : "Sin fecha de inicio"}
+              ? t("conElClubDesde", { anio: patrocinador.sinceYear })
+              : t("sinFechaInicio")}
           </p>
         </div>
 
@@ -157,10 +157,10 @@ function FichaDeRenovacion({
           {/* "Se pasó · Se pasó hace 16 días" lo decía dos veces: en lo
               vencido, la frase de los días ya dice el estado ella sola. */}
           {situacion === "pasada" && patrocinador.renewalDate
-            ? cuantoFalta(patrocinador.renewalDate, hoy)
-            : `${aspecto.texto}${
+            ? cuantoFalta(patrocinador.renewalDate, hoy, tPlazo)
+            : `${t(`estados.${situacion}`)}${
                 patrocinador.renewalDate
-                  ? ` · ${cuantoFalta(patrocinador.renewalDate, hoy)}`
+                  ? ` · ${cuantoFalta(patrocinador.renewalDate, hoy, tPlazo)}`
                   : ""
               }`}
         </span>
@@ -171,8 +171,8 @@ function FichaDeRenovacion({
 
         <div className="grid gap-4 sm:grid-cols-2">
           <Campo
-            etiqueta="Cuándo escribir"
-            ayuda="Ponla antes de que acabe el acuerdo, con margen para hablarlo."
+            etiqueta={t("cuandoEscribir")}
+            ayuda={t("cuandoEscribirAyuda")}
           >
             <input
               type="date"
@@ -182,7 +182,7 @@ function FichaDeRenovacion({
             />
           </Campo>
 
-          <Campo etiqueta="Cuándo acaba el acuerdo">
+          <Campo etiqueta={t("cuandoAcaba")}>
             <input
               type="date"
               name="agreementEndsOn"
@@ -193,24 +193,24 @@ function FichaDeRenovacion({
         </div>
 
         <Campo
-          etiqueta="Qué acordasteis"
-          ayuda="Lo que hoy está en la cabeza de quien lo firmó. Cuando cambie la junta, esto es lo único que queda."
+          etiqueta={t("queAcordasteis")}
+          ayuda={t("queAcordasteisAyuda")}
         >
           <textarea
             name="renewalNotes"
             rows={2}
             defaultValue={patrocinador.renewalNotes ?? ""}
-            placeholder="600 € por temporada, logo en la camiseta y dos publicaciones al mes."
+            placeholder={t("queAcordasteisEjemplo")}
             className={clasesInput}
           />
         </Campo>
 
         <AvisoError mensaje={estado?.error ?? null} />
-        <AvisoExito mensaje={estado?.ok ? "Guardado." : null} />
+        <AvisoExito mensaje={estado?.ok ? t("guardado") : null} />
 
         <div className="flex flex-wrap items-center gap-2">
           <Button type="submit" disabled={enviando}>
-            {enviando ? "Guardando…" : "Guardar"}
+            {enviando ? t("guardando") : t("guardar")}
           </Button>
 
           <button
@@ -219,7 +219,7 @@ function FichaDeRenovacion({
             aria-expanded={verMensaje}
             className="rounded-lg px-3 py-1.5 text-sm font-medium text-teal-700 transition-colors hover:bg-teal-50"
           >
-            {verMensaje ? "Ocultar el mensaje" : "Qué escribirle"}
+            {verMensaje ? t("ocultarMensaje") : t("queEscribirle")}
           </button>
         </div>
       </form>
@@ -227,8 +227,7 @@ function FichaDeRenovacion({
       {verMensaje && (
         <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4">
           <p className="text-xs text-zinc-500">
-            Un punto de partida, no un correo para mandar tal cual: cámbialo a vuestra manera de
-            hablar antes de enviarlo.
+            {t("puntoDePartida")}
           </p>
           <pre className="mt-3 whitespace-pre-wrap font-sans text-sm leading-relaxed text-zinc-700">
             {mensaje}
@@ -238,7 +237,7 @@ function FichaDeRenovacion({
             onClick={copiar}
             className="mt-3 rounded-lg border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
           >
-            {copiado ? "Copiado" : "Copiar"}
+            {copiado ? t("copiado") : t("copiar")}
           </button>
         </div>
       )}

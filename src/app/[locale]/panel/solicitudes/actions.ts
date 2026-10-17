@@ -1,10 +1,11 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
 import { enviarEmailRespuestaDelClub } from "@/lib/email/resend";
-import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
+import { idiomaDe } from "@/lib/idioma-usuario";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import type { ContactRequestStatus, Role } from "@/lib/types";
@@ -27,18 +28,19 @@ const ESTADOS_VALIDOS: ContactRequestStatus[] = [
 async function obtenerClubActual(): Promise<
   { supabase: Awaited<ReturnType<typeof createClient>>; user: User } | { error: string }
 > {
+  const t = await getTranslations("panel.acciones");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
+    return { error: t("tuSesionCaducadoVuelveIniciar") };
   }
 
   const rol = user.app_metadata?.role as Role | undefined;
   if (rol !== "club") {
-    return { error: "Esta acción solo está disponible para clubes." };
+    return { error: t("estaAccionSoloEstaDisponible") };
   }
 
   return { supabase, user };
@@ -127,11 +129,13 @@ async function avisarEmpresaPorEmail({
       opportunityTitle = data?.title ?? null;
     }
 
+    const idioma = idiomaDe(empresa.data.user);
     await enviarEmailRespuestaDelClub({
+      idioma,
       companyEmail,
       clubName: club.name,
-      clubUrl: `${SITE_URL}/${routing.defaultLocale}/club/${club.slug}`,
-      buscarUrl: `${SITE_URL}/${routing.defaultLocale}/buscar`,
+      clubUrl: `${SITE_URL}/${idioma}/club/${club.slug}`,
+      buscarUrl: `${SITE_URL}/${idioma}/buscar`,
       opportunityTitle,
       aceptada,
     });

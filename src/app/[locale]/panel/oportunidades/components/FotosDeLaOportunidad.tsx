@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useState } from "react";
 import { ImageUploader } from "@/app/[locale]/panel/components/ImageUploader";
@@ -33,6 +34,7 @@ export function FotosDeLaOportunidad({
   userId: string;
   iniciales: string[];
 }) {
+  const t = useTranslations("panel.oportunidades.galeria");
   const [fotos, setFotos] = useState<string[]>(iniciales);
 
   return (
@@ -47,7 +49,7 @@ export function FotosDeLaOportunidad({
             <li key={foto} className="relative">
               <Image
                 src={foto}
-                alt={`Foto ${posicion + 1} de la oportunidad`}
+                alt={t("fotoN", { n: posicion + 1 })}
                 width={160}
                 height={120}
                 unoptimized
@@ -59,17 +61,17 @@ export function FotosDeLaOportunidad({
                   primero y es la que ve media España. */}
               {posicion === 0 && (
                 <span className="absolute left-1 top-1 rounded bg-black/65 px-1.5 py-0.5 text-[11px] font-semibold text-sobre-color">
-                  Principal
+                  {t("principal")}
                 </span>
               )}
 
               <button
                 type="button"
                 onClick={() => setFotos((previas) => sinLaFoto(previas, foto))}
-                title="Quitar esta foto"
+                title={t("quitarEsta")}
                 className="absolute -right-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full border border-zinc-300 bg-white text-zinc-600 shadow-sm transition-colors hover:border-peligro hover:text-peligro"
               >
-                <span className="sr-only">Quitar la foto {posicion + 1}</span>
+                <span className="sr-only">{t("quitarN", { n: posicion + 1 })}</span>
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 24 24"
@@ -91,7 +93,7 @@ export function FotosDeLaOportunidad({
         <ImageUploader
           userId={userId}
           carpeta="oportunidades"
-          label={fotos.length === 0 ? "Añadir una foto" : "Añadir otra foto"}
+          label={fotos.length === 0 ? t("anadirUna") : t("anadirOtra")}
           onSubido={(url) =>
             // Con el tope comprobado otra vez aquí: entre que se pulsa
             // el botón y vuelve la subida pasan segundos, y en ese rato
@@ -105,7 +107,7 @@ export function FotosDeLaOportunidad({
         />
       ) : (
         <p className="text-sm text-zinc-500">
-          Ya tienes las {MAXIMO_FOTOS} fotos. Quita una para poder subir otra.
+          {t("yaTienesTodas", { n: MAXIMO_FOTOS })}
         </p>
       )}
     </div>

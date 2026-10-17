@@ -26,6 +26,8 @@ export function IdentidadForm({
   perfil: ClubProfile | null;
 }) {
   const t = useTranslations("panel.perfil");
+  const tComun = useTranslations("panel.comun");
+  const rellenados = (puestos: number, total: number) => tComun("rellenados", { puestos, total });
   const [estado, formAction] = useActionState(guardarIdentidad, null);
   const [errorImagen, setErrorImagen] = useState<string | null>(null);
   const [confirmaSinMenores, setConfirmaSinMenores] = useState(false);
@@ -68,10 +70,15 @@ export function IdentidadForm({
     >
       {perfil?.slug && (
         <p className="mb-6 rounded-lg border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-800">
-          Tu página pública ya está en{" "}
-          <a href={`/club/${perfil.slug}`} target="_blank" rel="noreferrer" className="font-medium underline">
-            /club/{perfil.slug}
-          </a>{t("compartelaConLasEmpresas")}</p>
+          {t.rich("paginaPublicaYaEsta", {
+            ruta: `/club/${perfil.slug}`,
+            enlace: (trozo) => (
+              <a href={`/club/${perfil.slug}`} target="_blank" rel="noreferrer" className="font-medium underline">
+                {trozo}
+              </a>
+            ),
+          })}
+        </p>
       )}
 
       {/* Las imágenes solo cuando el club ya tiene ficha.
@@ -84,11 +91,8 @@ export function IdentidadForm({
           * primer gesto de todo club nuevo fallaba en silencio. */}
       {!perfil ? (
         <div className="mb-6 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-600">
-          <p className="font-medium text-zinc-800">Escudo, portada y fotos, en un momento</p>
-          <p className="mt-1">
-            Guarda primero el nombre y la localidad de tu club, aquí abajo. En cuanto lo hagas
-            aparecen aquí los botones para subir tu escudo, la foto de portada y las del club.
-          </p>
+          <p className="font-medium text-zinc-800">{t("imagenesTitulo")}</p>
+          <p className="mt-1">{t("imagenesTexto")}</p>
         </div>
       ) : (
       <div className="mb-6 space-y-4">
@@ -103,7 +107,7 @@ export function IdentidadForm({
             {perfil?.logoUrl ? (
               <Image
                 src={perfil.logoUrl}
-                alt="Logo del club"
+                alt={t("logoDelClub")}
                 width={64}
                 height={64}
                 className="h-16 w-16 rounded-lg border border-placa-borde bg-placa object-contain p-1.5"
@@ -115,7 +119,7 @@ export function IdentidadForm({
             <ImageUploader
               userId={userId}
               carpeta="logo"
-              label={perfil?.logoUrl ? "Cambiar logo" : "Subir logo"}
+              label={perfil?.logoUrl ? t("cambiarLogo") : t("subirLogo")}
               onSubido={async (url) => {
                 const resultado = await guardarLogo(url);
                 manejarErrorAccion(resultado);
@@ -126,11 +130,7 @@ export function IdentidadForm({
 
         <Campo etiqueta={t("fotosDelClub")} ayuda={t("instalacionesAficionEquiposLo")}>
           <div className="mb-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
-            No subas fotos en las que se identifique con claridad a menores de edad (por
-            ejemplo, primeros planos con el rostro visible) sin el consentimiento de sus
-            padres o tutores legales, ni incluyas sus nombres completos en descripciones o
-            títulos. Los datos de cantera se guardan siempre de forma agregada, nunca con
-            fichas de menores concretos.
+            {t("avisoMenores")}
           </div>
 
           <label className="mb-3 flex items-start gap-2 text-xs text-zinc-600">
@@ -154,7 +154,7 @@ export function IdentidadForm({
               <div key={foto} className="group relative h-20 w-20">
                 <Image
                   src={foto}
-                  alt="Foto del club"
+                  alt={t("fotoDelClub")}
                   width={80}
                   height={80}
                   className="h-20 w-20 rounded-lg border border-zinc-200 object-cover"
@@ -169,7 +169,7 @@ export function IdentidadForm({
                     })
                   }
                   className="absolute -right-2 -top-2 hidden h-6 w-6 items-center justify-center rounded-full bg-peligro text-xs text-sobre-color group-hover:flex"
-                  aria-label="Quitar foto"
+                  aria-label={t("quitarFoto")}
                 >
                   ×
                 </button>
@@ -179,7 +179,7 @@ export function IdentidadForm({
               <ImageUploader
                 userId={userId}
                 carpeta="fotos"
-                label="Añadir foto"
+                label={t("anadirFoto")}
                 onSubido={async (url) => {
                   const resultado = await agregarFoto(url);
                   manejarErrorAccion(resultado);
@@ -201,9 +201,9 @@ export function IdentidadForm({
             nada de ello impide publicar. Sin esta línea, la pantalla
             parecía un impreso que hay que completar entero. */}
         <p className="rounded-lg bg-zinc-50 px-4 py-3 text-sm text-zinc-600">
-          Solo el <strong className="font-medium text-zinc-800">nombre</strong> y la{" "}
-          <strong className="font-medium text-zinc-800">localidad</strong> son obligatorios: con
-          eso ya tienes tu página. Lo demás lo puedes ir rellenando cuando quieras.
+          {t.rich("soloObligatorios", {
+            fuerte: (trozo) => <strong className="font-medium text-zinc-800">{trozo}</strong>,
+          })}
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2">
@@ -235,7 +235,7 @@ export function IdentidadForm({
           </Campo>
         </div>
 
-        <Campo etiqueta="Descripción">
+        <Campo etiqueta={t("descripcion")}>
           <textarea
             name="description"
             defaultValue={perfil?.description ?? ""}
@@ -244,11 +244,12 @@ export function IdentidadForm({
         </Campo>
 
         <BloquePlegable
-          titulo="Web, vídeo y redes sociales"
+          titulo={t("webVideoRedes")}
           abierto={hayAlgo(enlaces)}
           resumen={cuantosRellenados(
             enlaces,
-            "Las empresas entran a mirarlas antes de escribirte",
+            t("webVideoRedesVacio"),
+            rellenados,
           )}
         >
           <div className="grid gap-4 sm:grid-cols-2">
@@ -261,7 +262,7 @@ export function IdentidadForm({
                 className={clasesInput}
               />
             </Campo>
-            <Campo etiqueta="Vídeo de presentación" ayuda={t("enlaceAYoutubeVimeo")}>
+            <Campo etiqueta={t("videoPresentacion")} ayuda={t("enlaceAYoutubeVimeo")}>
               <input
                 name="videoUrl"
                 type="url"
@@ -325,7 +326,8 @@ export function IdentidadForm({
           abierto={hayAlgo(contacto)}
           resumen={cuantosRellenados(
             contacto,
-            "A quién llaman las empresas que entran en tu ficha",
+            t("contactoVacio"),
+            rellenados,
           )}
         >
           <p className="text-xs text-zinc-500">{t("elCorreoDeTu")}</p>
@@ -351,26 +353,26 @@ export function IdentidadForm({
           </div>
 
           <Campo
-            etiqueta="Correo de contacto"
-            ayuda="El que quieres que usen las empresas. Si lo dejas vacío se usa el correo con el que te registraste."
+            etiqueta={t("correoContacto")}
+            ayuda={t("correoContactoAyuda")}
           >
             <input
               name="contactEmail"
               type="email"
               defaultValue={perfil?.contactEmail ?? ""}
-              placeholder="patrocinios@tuclub.es"
+              placeholder={t("correoContactoEjemplo")}
               className={clasesInput}
             />
           </Campo>
 
           <Campo
-            etiqueta="Horario de atención"
-            ayuda="Cuándo se os puede llamar. Ahorra llamadas perdidas por las dos partes."
+            etiqueta={t("horario")}
+            ayuda={t("horarioAyuda")}
           >
             <input
               name="contactHours"
               defaultValue={perfil?.contactHours ?? ""}
-              placeholder="De lunes a viernes, de 17:00 a 21:00"
+              placeholder={t("horarioEjemplo")}
               maxLength={200}
               className={clasesInput}
             />
@@ -388,20 +390,14 @@ export function IdentidadForm({
               className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
             />
             <span>
-              <span className="font-medium text-zinc-900">
-                Mostrar mi nombre de contacto y mi teléfono en mi página pública
-              </span>
-              <span className="mt-0.5 block text-xs text-zinc-600">
-                Recomendado. Las empresas que entran en tu ficha buscan a quién llamar: si lo
-                desmarcas solo verán el formulario de solicitud y tardarás más en cerrar acuerdos.
-                Tu correo se muestra siempre, protegido para que no lo recojan los robots de spam.
-              </span>
+              <span className="font-medium text-zinc-900">{t("mostrarContacto")}</span>
+              <span className="mt-0.5 block text-xs text-zinc-600">{t("mostrarContactoAyuda")}</span>
             </span>
           </label>
         </BloquePlegable>
 
         <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
-        <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? "Guardado." : null} />
+        <AvisoExito mensaje={estado && "ok" in estado && estado.ok ? tComun("guardado") : null} />
 
         <BotonEnviar>{t("guardarIdentidad")}</BotonEnviar>
       </form>

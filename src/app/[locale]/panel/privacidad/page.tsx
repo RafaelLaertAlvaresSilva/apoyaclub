@@ -23,7 +23,7 @@ export default async function PrivacidadClubPage() {
           <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("privacidadYDatos")}</h1>
           <p className="mt-1 max-w-2xl text-sm text-zinc-600">
-            Qué datos guardamos de tu club, cómo descargarlos y cómo borrar la cuenta. Nada de esto depende de que estés al día con el pago.
+            {t("datosGuardamosClubComo")}
           </p>
         </div>
       </div>
@@ -40,7 +40,7 @@ export default async function PrivacidadClubPage() {
           href="/panel/exportar"
           className="mt-4 inline-block rounded-lg border border-zinc-300 px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
         >
-          Descargar mis datos (JSON)
+          {t("descargarDatos")}
         </a>
       </section>
 
@@ -53,9 +53,13 @@ export default async function PrivacidadClubPage() {
       </section>
 
       <p className="text-xs text-zinc-500">
-        Más información sobre cómo tratamos tus datos en nuestra{" "}
-        <Link href="/privacidad" className="font-medium text-teal-700 hover:underline">{t("politicaDePrivacidad")}</Link>
-        .
+        {t.rich("masInformacion", {
+          enlace: (trozo) => (
+            <Link href="/privacidad" className="font-medium text-teal-700 hover:underline">
+              {trozo}
+            </Link>
+          ),
+        })}
       </p>
     </div>
   );

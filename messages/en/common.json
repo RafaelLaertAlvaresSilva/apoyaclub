@@ -215,5 +215,12 @@
     "ultimaActualizacion": "Last updated: {fecha}",
     "soloEnEspanolTitulo": "This text is only available in Spanish",
     "soloEnEspanol": "ApoyaClub's legal texts are only available in Spanish, which is the valid version."
+  },
+  "confirmacion": {
+    "eliminar": "Delete",
+    "pregunta": "Delete",
+    "confirmar": "Yes, delete",
+    "enCurso": "Deleting…",
+    "no": "No"
   }
 }

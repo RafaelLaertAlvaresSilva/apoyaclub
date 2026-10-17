@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { randomBytes } from "crypto";
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
@@ -25,18 +26,19 @@ const RUTA_DOSSIER = "/panel/dossier";
 async function obtenerClubActual(): Promise<
   { supabase: Awaited<ReturnType<typeof createClient>>; user: User } | { error: string }
 > {
+  const t = await getTranslations("panel.acciones");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
+    return { error: t("tuSesionCaducadoVuelveIniciar") };
   }
 
   const rol = user.app_metadata?.role as Role | undefined;
   if (rol !== "club") {
-    return { error: "Esta acción solo está disponible para clubes." };
+    return { error: t("estaAccionSoloEstaDisponible") };
   }
 
   return { supabase, user };
@@ -57,6 +59,7 @@ export async function guardarConfiguracionDossier(
   _estadoPrevio: EstadoDossier,
   formData: FormData,
 ): Promise<EstadoDossier> {
+  const t = await getTranslations("panel.acciones");
   const contexto = await obtenerClubActual();
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
@@ -83,7 +86,7 @@ export async function guardarConfiguracionDossier(
   if (fechaCaducidad) {
     const fecha = new Date(`${fechaCaducidad}T23:59:59`);
     if (Number.isNaN(fecha.getTime())) {
-      return { error: "La fecha de caducidad no es válida." };
+      return { error: t("fechaCaducidadValida") };
     }
     shareExpiresAt = fecha.toISOString();
   }
@@ -110,7 +113,7 @@ export async function guardarConfiguracionDossier(
     share_expires_at: shareExpiresAt,
   });
 
-  if (error) return { error: "No se ha podido guardar la configuración del dossier." };
+  if (error) return { error: t("podidoGuardarConfiguracionDossier") };
 
   revalidatePath(RUTA_DOSSIER);
 
