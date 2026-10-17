@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
+import { textosDeDocumento } from "@/lib/textos-documento";
 import { reunirDatosDelDossier } from "@/lib/dossier-datos";
 import { generarDossierPdf } from "@/lib/dossier-pdf";
 import { createClient } from "@/lib/supabase/server";
 import type { Role } from "@/lib/types";
+
+type ParametrosRuta = { params: Promise<{ locale: string }> };
 
 /**
  * Descarga autenticada del dossier en PDF (Fase 9): el propio club,
@@ -13,14 +16,16 @@ import type { Role } from "@/lib/types";
  *
  * La versión editable en Word está al lado, en `../word`.
  */
-export async function POST(request: Request) {
+export async function POST(request: Request, { params }: ParametrosRuta) {
+  const { locale } = await params;
+  const { t } = await textosDeDocumento(locale, "dossier");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user || (user.app_metadata?.role as Role | undefined) !== "club") {
-    return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+    return NextResponse.json({ error: t("noAutorizado") }, { status: 401 });
   }
 
   const datos = await reunirDatosDelDossier(
@@ -31,10 +36,10 @@ export async function POST(request: Request) {
   );
 
   if (!datos) {
-    return NextResponse.json({ error: "Completa primero la identidad del club." }, { status: 400 });
+    return NextResponse.json({ error: t("completaIdentidad") }, { status: 400 });
   }
 
-  const pdf = await generarDossierPdf(datos);
+  const pdf = await generarDossierPdf(datos, locale);
 
   return new NextResponse(new Uint8Array(pdf), {
     headers: {

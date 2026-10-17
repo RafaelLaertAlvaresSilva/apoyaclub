@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { AvisoError } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
@@ -15,6 +16,7 @@ import { darseDeBajaDeAvisos, type EstadoBaja } from "./actions";
  * medio mundo sin que nadie hubiera pulsado nada.
  */
 export function BajaForm({ token }: { token: string }) {
+  const t = useTranslations("empresa.baja");
   const [estado, formAction] = useActionState<EstadoBaja, FormData>(
     async (_previo, formData) => darseDeBajaDeAvisos(formData),
     null,
@@ -23,16 +25,15 @@ export function BajaForm({ token }: { token: string }) {
   if (estado && "ok" in estado) {
     return (
       <div className="rounded-xl border border-zinc-200 bg-white p-6">
-        <p className="font-medium text-zinc-900">Hecho. No te mandaremos más avisos.</p>
+        <p className="font-medium text-zinc-900">{t("hecho")}</p>
         <p className="mt-2 text-sm text-zinc-600">
-          Tus ofertas siguen publicadas y los clubes pueden seguir escribiéndote. Si algún día
-          quieres volver a recibirlos, la casilla está en tu panel.
+          {t("hechoTexto")}
         </p>
         <Link
           href="/empresa"
           className="mt-4 inline-block rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
         >
-          Ir a mi panel
+          {t("irAlPanel")}
         </Link>
       </div>
     );
@@ -43,12 +44,10 @@ export function BajaForm({ token }: { token: string }) {
       <input type="hidden" name="token" value={token} />
 
       <p className="text-zinc-700">
-        Dejarás de recibir los correos que te avisan cuando un club busca algo que tu empresa
-        ofrece.
+        {t("explicacion")}
       </p>
       <p className="mt-2 text-sm text-zinc-500">
-        Tus ofertas siguen publicadas y los clubes pueden seguir escribiéndote. Esto solo apaga los
-        correos.
+        {t("soloCorreos")}
       </p>
 
       <div className="mt-4">
@@ -56,7 +55,7 @@ export function BajaForm({ token }: { token: string }) {
       </div>
 
       <div className="mt-4">
-        <BotonEnviar>Sí, dejar de recibir avisos</BotonEnviar>
+        <BotonEnviar>{t("confirmar")}</BotonEnviar>
       </div>
     </form>
   );

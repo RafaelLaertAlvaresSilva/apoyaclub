@@ -1,10 +1,11 @@
 import { useTranslations } from "next-intl";
+import { useIntlLocale } from "@/i18n/use-intl-locale";
 import { Link } from "@/i18n/navigation";
 import { diasDePruebaQueQuedan } from "@/lib/acceso-club";
 import type { ClubSubscription } from "@/lib/subscription-mappers";
 
-function formatearFecha(fechaIso: string): string {
-  return new Date(fechaIso).toLocaleDateString("es-ES", {
+function formatearFecha(fechaIso: string, intlLocale: string): string {
+  return new Date(fechaIso).toLocaleDateString(intlLocale, {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -26,6 +27,7 @@ function formatearFecha(fechaIso: string): string {
  */
 export const DIAS_PARA_AVISAR_DEL_FIN = 7;
 export function AvisoSuscripcion({ suscripcion }: { suscripcion: ClubSubscription }) {
+  const intlLocale = useIntlLocale();
   const t = useTranslations("panel.perfil2");
   const { status, cancelAtPeriodEnd, currentPeriodEnd } = suscripcion;
 
@@ -45,7 +47,7 @@ export function AvisoSuscripcion({ suscripcion }: { suscripcion: ClubSubscriptio
     mensaje = t("avisoSuscripcion.pagoIncompleto");
     grave = true;
   } else if ((status === "active" || status === "trialing") && cancelAtPeriodEnd && currentPeriodEnd) {
-    mensaje = t("avisoSuscripcion.cancelada", { fecha: formatearFecha(currentPeriodEnd) });
+    mensaje = t("avisoSuscripcion.cancelada", { fecha: formatearFecha(currentPeriodEnd, intlLocale) });
     grave = false;
   } else if (status === "trialing" && suscripcion.trialEndsAt) {
     // Con `trialEndsAt` a null no se sabe cuándo acaba, y

@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
@@ -6,7 +7,10 @@ import { createClient } from "@/lib/supabase/server";
 import { EmpresaNav } from "../components/EmpresaNav";
 import { FichaForm } from "./FichaForm";
 
-export const metadata: Metadata = { title: "Mi ficha" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("empresa.panel");
+  return { title: t("miFicha") };
+}
 
 type FilaEmpresa = {
   name: string | null;
@@ -25,6 +29,7 @@ type FilaEmpresa = {
 };
 
 export default async function FichaEmpresaPage() {
+  const t = await getTranslations("empresa.panel");
   const supabase = await createClient();
   const {
     data: { user },
@@ -47,8 +52,8 @@ export default async function FichaEmpresaPage() {
     <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel de empresa</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">Mi ficha</h1>
+          <p className="text-sm font-medium text-teal-700">{t("panelDeEmpresa")}</p>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("miFicha")}</h1>
         </div>
         <CerrarSesionBoton />
       </div>

@@ -1,0 +1,780 @@
+{
+  "ideas": {
+    "equipo-patrocinador-principal": {
+      "titulo": "Patrocinador principal de uma equipa",
+      "queEs": "Uma empresa associa-se a uma equipa concreta durante toda a época e aparece em tudo o que essa equipa faz.",
+      "queRecibe": "A sua marca na camisola de jogo, menção em cada convocatória e onze inicial, e presença nas fotografias da equipa.",
+      "duracion": "Toda a época"
+    },
+    "equipo-empresa-del-mes": {
+      "titulo": "Empresa do mês",
+      "queEs": "Todos os meses uma empresa diferente é a protagonista do clube: apresenta-se, conta-se a que se dedica e porque apoia a equipa.",
+      "queRecibe": "Um mês inteiro de presença: publicação de apresentação, menções nos jogos desse mês e o seu logótipo no resumo mensal.",
+      "duracion": "Um mês"
+    },
+    "equipo-patrocinador-de-partido": {
+      "titulo": "Patrocinador de um jogo",
+      "queEs": "Um jogo concreto leva o nome de uma empresa. Serve para o dérbi, para o dia do clube ou para qualquer jornada especial.",
+      "queRecibe": "A sua marca no cartaz do jogo, no sistema de som durante o encontro e na publicação do resultado.",
+      "duracion": "Um jogo"
+    },
+    "equipo-desplazamientos": {
+      "titulo": "Patrocinador das deslocações",
+      "queEs": "Uma empresa cobre as viagens da equipa aos jogos fora, em dinheiro ou disponibilizando o transporte.",
+      "queRecibe": "A sua marca associada a cada deslocação, com publicação de partida e chegada, e no autocarro se for ela a pô-lo.",
+      "duracion": "Toda a época"
+    },
+    "equipo-material": {
+      "titulo": "Patrocinador do material da equipa",
+      "queEs": "Bolas, pinos, coletes, estojo de primeiros socorros: o material de trabalho de uma equipa durante uma época.",
+      "queRecibe": "A sua marca no material e nas publicações dos treinos, que são as mais frequentes do clube.",
+      "duracion": "Toda a época"
+    },
+    "equipo-empresa-oficial": {
+      "titulo": "Empresa oficial do clube no seu setor",
+      "queEs": "Uma empresa é a única do seu setor associada ao clube: a contabilidade oficial, a clínica oficial, a padaria oficial.",
+      "queRecibe": "Exclusividade no seu setor durante a época e o direito de se apresentar como empresa oficial do clube na sua própria publicidade.",
+      "duracion": "Toda a época"
+    },
+    "equipo-contenido-con-jugadores": {
+      "titulo": "Conteúdo com jogadores da equipa",
+      "queEs": "Os jogadores aparecem numa peça de conteúdo com o produto ou o serviço da empresa.",
+      "queRecibe": "Uma peça gravada no clube, com gente do clube, que a empresa também pode usar nas suas próprias redes.",
+      "duracion": "Uma peça"
+    },
+    "equipo-entrenamiento-abierto": {
+      "titulo": "Treino aberto patrocinado",
+      "queEs": "Um treino aberto ao público, com a empresa como anfitriã: convidam-se famílias, sócios e os clientes da empresa.",
+      "queRecibe": "Uma tarde com a sua marca à frente das famílias do clube, com a possibilidade de levar amostras ou montar um ponto próprio.",
+      "duracion": "Um dia"
+    },
+    "equipacion-pecho": {
+      "titulo": "Peito da camisola de jogo",
+      "queEs": "O espaço mais visível de todos, o que sai em cada fotografia e em cada transmissão.",
+      "queRecibe": "O seu logótipo na frente da camisola de jogo durante toda a época.",
+      "duracion": "Toda a época"
+    },
+    "equipacion-espalda": {
+      "titulo": "Costas da camisola",
+      "queEs": "O segundo espaço mais caro, e o que melhor se lê da bancada.",
+      "queRecibe": "O seu logótipo nas costas da camisola de jogo durante toda a época.",
+      "duracion": "Toda a época"
+    },
+    "equipacion-manga": {
+      "titulo": "Manga da camisola",
+      "queEs": "Um espaço pequeno e mais acessível, perfeito para um comércio do bairro que não pode ir ao peito.",
+      "queRecibe": "O seu logótipo na manga da camisola de jogo durante toda a época.",
+      "duracion": "Toda a época"
+    },
+    "equipacion-pantalon": {
+      "titulo": "Calções de jogo",
+      "queEs": "Outro espaço que quase nenhum clube vende, normalmente porque não lhe ocorre que se possa vender.",
+      "queRecibe": "O seu logótipo nos calções de jogo durante toda a época.",
+      "duracion": "Toda a época"
+    },
+    "equipacion-entrenamiento": {
+      "titulo": "Camisola de treino",
+      "queEs": "Vê-se menos nos jogos, mas usa-se quatro dias por semana em vez de um.",
+      "queRecibe": "O seu logótipo na roupa de treino, a que mais aparece nas publicações do dia a dia.",
+      "duracion": "Toda a época"
+    },
+    "equipacion-chandal": {
+      "titulo": "Fato de treino de passeio",
+      "queEs": "A roupa com que os jogadores chegam ao pavilhão, viajam e passeiam pela terra.",
+      "queRecibe": "O seu logótipo na roupa que sai do recinto desportivo e se vê na rua.",
+      "duracion": "Toda a época"
+    },
+    "equipacion-mochilas": {
+      "titulo": "Mochilas e sacos do clube",
+      "queEs": "Cada jogador leva a sua para a escola, para o liceu e para o trabalho durante anos.",
+      "queRecibe": "A sua marca num objeto que se usa todos os dias e fora do contexto desportivo.",
+      "duracion": "Toda a época"
+    },
+    "equipacion-presentacion": {
+      "titulo": "Apresentação do equipamento",
+      "queEs": "O dia em que se mostra a camisola nova é o conteúdo com mais alcance de toda a época. Pode vender-se inteiro.",
+      "queRecibe": "Ser a marca que apresenta o equipamento: sessão fotográfica, vídeo e publicação de estreia.",
+      "duracion": "Um dia"
+    },
+    "instalaciones-lona": {
+      "titulo": "Lona ou painel publicitário",
+      "queEs": "Publicidade fixa no campo ou no pavilhão, visível em todos os jogos em casa.",
+      "queRecibe": "A sua marca à frente de todos os que passam pelo recinto durante a época, também nos treinos.",
+      "duracion": "Toda a época"
+    },
+    "instalaciones-naming": {
+      "titulo": "Nome do pavilhão ou do campo",
+      "queEs": "O recinto passa a chamar-se com o nome da empresa em tudo o que o clube publica.",
+      "queRecibe": "O seu nome em cada convocatória, cada crónica e cada indicação de onde se joga.",
+      "duracion": "Toda a época"
+    },
+    "instalaciones-vinilo-pista": {
+      "titulo": "Vinil no campo ou no recinto de jogo",
+      "queEs": "Um autocolante no próprio piso de jogo, que sai em todas as fotografias da ação.",
+      "queRecibe": "Presença dentro do campo, que é para onde apontam as câmaras e os telemóveis.",
+      "duracion": "Toda a época"
+    },
+    "instalaciones-marcador": {
+      "titulo": "Marcador ou ecrã",
+      "queEs": "A empresa aparece no marcador: o sítio para onde toda a gente olha várias vezes por jogo.",
+      "queRecibe": "A sua marca no elemento mais olhado do recinto, em cada jogo em casa.",
+      "duracion": "Toda a época"
+    },
+    "instalaciones-vestuario": {
+      "titulo": "Patrocinador do balneário",
+      "queEs": "O balneário é decorado com a marca. Um espaço que ninguém vende e que os jogadores veem todos os dias.",
+      "queRecibe": "Presença no sítio onde a equipa passa mais tempo, e nas fotografias de antes e depois do jogo.",
+      "duracion": "Toda a época"
+    },
+    "instalaciones-entrada": {
+      "titulo": "Entrada e receção do recinto",
+      "queEs": "A primeira coisa que vê quem entra para ver um jogo.",
+      "queRecibe": "A sua marca no acesso, à frente de todos os espectadores, da casa e visitantes.",
+      "duracion": "Toda a época"
+    },
+    "instalaciones-stand": {
+      "titulo": "Banca da empresa num dia de jogo",
+      "queEs": "A empresa monta uma mesa ou uma pequena banca num jogo em casa.",
+      "queRecibe": "Falar pessoalmente com as famílias do clube, distribuir amostras ou captar clientes ali mesmo.",
+      "duracion": "Um jogo"
+    },
+    "instalaciones-megafonia": {
+      "titulo": "Menções no sistema de som",
+      "queEs": "O speaker refere a empresa em momentos concretos do jogo: apresentação das equipas, intervalo, final.",
+      "queRecibe": "Várias menções faladas por jogo, à frente de todo o público presente.",
+      "duracion": "Toda a época"
+    },
+    "intervalo-patrocinador-del-descanso": {
+      "titulo": "Patrocinador do intervalo",
+      "queEs": "O intervalo inteiro leva o nome de uma empresa durante toda a época, nos jogos em casa de uma equipa. O clube escolhe qual: a primeira equipa masculina e a feminina vendem-se em separado, a duas empresas diferentes se quiser.",
+      "queRecibe": "Que o speaker abra e feche cada intervalo com o seu nome, a sua marca no que se montar durante esses minutos e a menção na publicação do jogo.",
+      "duracion": "Toda a época"
+    },
+    "intervalo-sorteo": {
+      "titulo": "Sorteio no intervalo",
+      "queEs": "No intervalo sorteia-se algo entre o público presente. O prémio é dado pela empresa: um vale, um jantar, um produto seu.",
+      "queRecibe": "O seu produto nas mãos de um vizinho à frente de toda a bancada, e o nome repetido no sistema de som antes, durante e depois do sorteio.",
+      "duracion": "Um jogo"
+    },
+    "intervalo-reto-de-tiro": {
+      "titulo": "O desafio do intervalo",
+      "queEs": "Um espectador entra no campo no intervalo e tenta um lançamento. Se acertar, a empresa dá-lhe o prémio; se não, leva na mesma uma lembrança.",
+      "queRecibe": "O momento mais comentado do jogo com o seu nome, e um vídeo curto que a empresa pode publicar nas suas próprias redes.",
+      "duracion": "Um jogo"
+    },
+    "intervalo-minipartido-cantera": {
+      "titulo": "Minijogo da formação no intervalo",
+      "queEs": "As equipas mais pequenas do clube jogam uns minutos no campo grande durante o intervalo, com as famílias na bancada.",
+      "queRecibe": "A sua marca no minijogo e as fotografias das crianças a jogar no campo da primeira equipa, que são as mais partilhadas de todo o clube.",
+      "duracion": "Um jogo"
+    },
+    "intervalo-degustacion": {
+      "titulo": "Degustação no intervalo",
+      "queEs": "Uma padaria, uma gelataria, um café ou qualquer empresa de comida distribui amostras ao público durante o intervalo.",
+      "queRecibe": "Que o bairro inteiro prove o seu produto no mesmo dia, sem montar uma feira nem alugar uma banca.",
+      "duracion": "Um jogo"
+    },
+    "intervalo-entrega-mvp": {
+      "titulo": "Entrega do prémio ao jogador do jogo",
+      "queEs": "Alguém da empresa desce ao campo e entrega o prémio ao melhor jogador ou jogadora do jogo à frente do público.",
+      "queRecibe": "Aparecer em pessoa na fotografia do prémio, que é a que publica o clube, o jogador e muitas vezes o jornal local.",
+      "duracion": "Toda a época"
+    },
+    "intervalo-photocall": {
+      "titulo": "Photocall no intervalo",
+      "queEs": "Um painel com o emblema do clube e a marca da empresa, montado junto ao campo para que as pessoas tirem fotografias no intervalo.",
+      "queRecibe": "O seu logótipo em todas as fotografias que o público publica nessa tarde, partilhadas por eles mesmos e não pelo clube.",
+      "duracion": "Toda a época"
+    },
+    "intervalo-anuncio-en-pista": {
+      "titulo": "Anúncio no campo durante o intervalo",
+      "queEs": "Durante os minutos do intervalo passa o anúncio da empresa no sistema de som, ou projeta-se o seu vídeo se o pavilhão tiver ecrã.",
+      "queRecibe": "Um anúncio completo, não uma menção solta, com a bancada cheia e sem jogo para ver.",
+      "duracion": "Toda a época"
+    },
+    "redes-publicaciones-semanales": {
+      "titulo": "Publicações semanais com a tua marca",
+      "queEs": "Um número fixo de publicações por mês em que a empresa aparece.",
+      "queRecibe": "Presença repetida junto da comunidade do clube, que é gente do bairro e não seguidores comprados.",
+      "duracion": "Um mês, renovável"
+    },
+    "redes-stories-partido": {
+      "titulo": "Stories durante os jogos",
+      "queEs": "A empresa acompanha o direto dos jogos: antevisão, intervalo, resultado.",
+      "queRecibe": "Aparecer no momento de maior atenção da semana, quando as pessoas estão atentas ao resultado.",
+      "duracion": "Toda a época"
+    },
+    "redes-reel-patrocinado": {
+      "titulo": "Reel patrocinado",
+      "queEs": "Um vídeo curto feito pelo clube em que a empresa é a protagonista.",
+      "queRecibe": "Uma peça pensada para a sua marca, com a gente do clube, que ela também pode publicar.",
+      "duracion": "Uma peça"
+    },
+    "redes-sorteo": {
+      "titulo": "Passatempo conjunto",
+      "queEs": "O clube sorteia um produto ou serviço da empresa entre os seus seguidores.",
+      "queRecibe": "Novos seguidores e pessoas que ficam a conhecer o seu negócio, a troco de um produto em vez de dinheiro.",
+      "duracion": "Uma semana"
+    },
+    "redes-codigo-descuento": {
+      "titulo": "Código de desconto para a comunidade do clube",
+      "queEs": "A empresa dá um desconto a sócios, famílias e seguidores, e o clube divulga-o.",
+      "queRecibe": "Novos clientes que chegam identificados, e uma forma de medir se o patrocínio funciona.",
+      "duracion": "Toda a época"
+    },
+    "redes-empresa-de-la-semana": {
+      "titulo": "Empresa da semana",
+      "queEs": "Todas as semanas apresenta-se um negócio do bairro que apoia o clube.",
+      "queRecibe": "Uma publicação dedicada, a contar quem é e a que se dedica, não apenas um logótipo solto.",
+      "duracion": "Uma semana"
+    },
+    "redes-entrevista": {
+      "titulo": "Entrevista ao dono ou à equipa da empresa",
+      "queEs": "O clube entrevista quem está por trás do negócio e publica-a como mais uma peça.",
+      "queRecibe": "Contar a sua história a uma comunidade local, que é o que realmente faz as pessoas entrarem pela porta.",
+      "duracion": "Uma peça"
+    },
+    "redes-encuesta": {
+      "titulo": "Sondagem ou jogo patrocinado",
+      "queEs": "Prognósticos do resultado, melhor jogador do jogo, perguntas aos adeptos: com uma marca por trás.",
+      "queRecibe": "Aparecer no conteúdo com mais participação, que é o que pede opinião.",
+      "duracion": "Um mês"
+    },
+    "cantera-patrocinador": {
+      "titulo": "Patrocinador da formação",
+      "queEs": "Uma empresa apoia toda a formação do clube: todas as equipas de formação ao mesmo tempo.",
+      "queRecibe": "A sua marca nos equipamentos da formação e em tudo o que se publica das equipas de formação, que é muito.",
+      "duracion": "Toda a época"
+    },
+    "cantera-una-categoria": {
+      "titulo": "Patrocinador de um escalão concreto",
+      "queEs": "Infantis, iniciados, juvenis: uma empresa fica com uma equipa de formação.",
+      "queRecibe": "Uma opção acessível para um comércio pequeno, com as famílias dessa equipa como público direto.",
+      "duracion": "Toda a época"
+    },
+    "cantera-empresa-amiga": {
+      "titulo": "Empresa amiga da formação",
+      "queEs": "Uma figura pensada para negócios que não podem pôr muito dinheiro mas querem aparecer: várias empresas, com uma contribuição pequena cada uma.",
+      "queRecibe": "Estar no cartaz das empresas amigas, no site e no pavilhão, junto a outros negócios do bairro.",
+      "duracion": "Toda a época"
+    },
+    "cantera-material": {
+      "titulo": "Material desportivo para a formação",
+      "queEs": "Bolas, coletes e pinos para as equipas de formação, que é onde mais se gasta e há menos orçamento.",
+      "queRecibe": "A sua marca no material com que as crianças treinam todas as semanas.",
+      "duracion": "Toda a época"
+    },
+    "cantera-jugador-del-mes": {
+      "titulo": "Jogador ou jogadora do mês da formação",
+      "queEs": "Um reconhecimento mensal a um miúdo da formação, entregue pela empresa.",
+      "queRecibe": "Aparecer no conteúdo que as famílias mais partilham, que é aquele em que aparece o filho.",
+      "duracion": "Um mês, renovável"
+    },
+    "cantera-jornada-especial": {
+      "titulo": "Dia especial da formação",
+      "queEs": "Um dia em que jogam todas as equipas de formação, com atividades à volta.",
+      "queRecibe": "Um dia inteiro com todas as famílias do clube no mesmo sítio e a sua marca como anfitriã.",
+      "duracion": "Um dia"
+    },
+    "cantera-charla-familias": {
+      "titulo": "Palestra para as famílias",
+      "queEs": "Um profissional dá uma palestra útil aos pais: alimentação, lesões, descanso, uso do telemóvel.",
+      "queRecibe": "Apresentar-se como quem percebe do assunto à frente das famílias, o que é melhor do que qualquer anúncio.",
+      "duracion": "Uma sessão"
+    },
+    "cantera-escuela": {
+      "titulo": "Patrocinador da escola ou do campo de férias",
+      "queEs": "A escola de verão, o campo de férias do Natal ou as atividades de captação nas escolas.",
+      "queRecibe": "A sua marca numa atividade que chega a crianças que ainda não são do clube, e às suas famílias.",
+      "duracion": "A duração do campo de férias"
+    },
+    "jugadores-del-mes": {
+      "titulo": "Jogador ou jogadora do mês",
+      "queEs": "Todos os meses escolhe-se o melhor da equipa e o prémio é oferecido e entregue por uma empresa.",
+      "queRecibe": "A sua marca associada ao reconhecimento, com fotografia da entrega e publicação dedicada todos os meses.",
+      "duracion": "Um mês, renovável"
+    },
+    "jugadores-patrocinado": {
+      "titulo": "Jogador patrocinado",
+      "queEs": "Uma empresa apadrinha um jogador ou jogadora concretos durante a época.",
+      "queRecibe": "Aparecer em tudo o que se publicar sobre essa pessoa, que num clube de bairro é alguém conhecido na terra.",
+      "duracion": "Toda a época"
+    },
+    "jugadores-visita-a-empresa": {
+      "titulo": "Visita da equipa à empresa",
+      "queEs": "Os jogadores vão às instalações da empresa: fotografias com a equipa, cumprimentos aos trabalhadores, conteúdo.",
+      "queRecibe": "Uma manhã diferente para a sua gente e material próprio para as suas redes, com a equipa a sério.",
+      "duracion": "Uma visita"
+    },
+    "jugadores-visita-al-club": {
+      "titulo": "A empresa visita o clube",
+      "queEs": "Os trabalhadores da empresa vêm a um jogo ou a um treino, como convidados do clube.",
+      "queRecibe": "Uma atividade para a sua equipa que não lhe dá trabalho a organizar, com acesso ao balneário e fotografia com a equipa.",
+      "duracion": "Um dia"
+    },
+    "jugadores-prueba-de-producto": {
+      "titulo": "Teste de produto com a equipa",
+      "queEs": "A equipa experimenta algo da empresa e conta o que achou: bebida, calçado, recuperação, alimentação.",
+      "queRecibe": "Opiniões reais de desportistas, gravadas no clube, para usar na sua publicidade.",
+      "duracion": "Uma ação"
+    },
+    "jugadores-clinic": {
+      "titulo": "Clinic ou sessão técnica patrocinada",
+      "queEs": "Uma sessão técnica aberta, dada por jogadores ou treinadores do clube, com uma empresa por trás.",
+      "queRecibe": "A sua marca numa atividade que atrai miúdos de outros clubes da zona.",
+      "duracion": "Uma sessão"
+    },
+    "jugadores-embajador": {
+      "titulo": "Embaixador ou embaixadora da marca",
+      "queEs": "Um jogador do clube representa a empresa durante a época, para além de uma ação solta.",
+      "queRecibe": "Uma cara conhecida do desporto local associada ao seu negócio o ano inteiro.",
+      "duracion": "Toda a época"
+    },
+    "jugadores-meet-and-greet": {
+      "titulo": "Encontro com os adeptos no espaço da empresa",
+      "queEs": "Autógrafos em camisolas, fotografias e um bocado com os adeptos, mas no café, na loja ou no espaço do patrocinador.",
+      "queRecibe": "Levar pessoas ao seu próprio espaço, que é o que um negócio de bairro realmente quer.",
+      "duracion": "Uma tarde"
+    },
+    "eventos-patrocinador": {
+      "titulo": "Patrocinador do evento",
+      "queEs": "Apresentação das equipas, gala de fim de época, jantar do clube: qualquer evento tem patrocinador.",
+      "queRecibe": "A sua marca no cartaz, no evento e em tudo o que se publicar desse dia.",
+      "duracion": "Um evento"
+    },
+    "eventos-naming": {
+      "titulo": "O evento leva o nome da empresa",
+      "queEs": "O evento é chamado com o nome do patrocinador em todo o lado.",
+      "queRecibe": "Que o seu nome seja dito sempre que alguém fala do evento, antes, durante e depois.",
+      "duracion": "Um evento"
+    },
+    "eventos-photocall": {
+      "titulo": "Photocall do evento",
+      "queEs": "O fundo onde toda a gente tira a fotografia, com os logótipos de quem paga.",
+      "queRecibe": "Aparecer em todas as fotografias que as pessoas publicam por conta própria, que são muitas mais do que as do clube.",
+      "duracion": "Um evento"
+    },
+    "eventos-catering": {
+      "titulo": "Comida e bebida do evento",
+      "queEs": "Um café, um restaurante ou um catering oferece a comida a troco de visibilidade.",
+      "queRecibe": "Que todos os presentes provem o que faz, que é a melhor publicidade para um negócio de restauração.",
+      "duracion": "Um evento"
+    },
+    "eventos-sorteo": {
+      "titulo": "Sorteio ou rifa do evento",
+      "queEs": "A empresa oferece o prémio do sorteio feito durante o evento.",
+      "queRecibe": "O seu produto nas mãos de alguém da comunidade e o seu nome repetido no palco.",
+      "duracion": "Um evento"
+    },
+    "eventos-muestras": {
+      "titulo": "Distribuição de amostras",
+      "queEs": "A empresa distribui produto aos presentes: bebida, comida, material, vales.",
+      "queRecibe": "Que o seu produto chegue a centenas de pessoas do seu próprio bairro numa tarde.",
+      "duracion": "Um evento"
+    },
+    "eventos-dia-del-club": {
+      "titulo": "Dia do clube",
+      "queEs": "O dia em que jogam todas as equipas e vem toda a gente. O maior evento do ano.",
+      "queRecibe": "O dia com mais gente de toda a época, com a sua marca como anfitriã.",
+      "duracion": "Um dia"
+    },
+    "eventos-transporte": {
+      "titulo": "Transporte do evento",
+      "queEs": "Uma empresa de transportes põe o autocarro para levar a equipa ou os adeptos.",
+      "queRecibe": "A sua marca na deslocação, com o autocarro cheio de gente do clube e fotografias garantidas.",
+      "duracion": "Um evento"
+    },
+    "torneos-patrocinador": {
+      "titulo": "Patrocinador principal do torneio",
+      "queEs": "Um torneio próprio é o mais fácil de vender que um clube tem: data concreta, gente concreta, resultado visível.",
+      "queRecibe": "O seu nome no torneio inteiro, do cartaz ao troféu, perante clubes e famílias de toda a região.",
+      "duracion": "O torneio"
+    },
+    "torneos-trofeos": {
+      "titulo": "Troféus e medalhas",
+      "queEs": "Uma empresa paga os troféus e aparece neles.",
+      "queRecibe": "A sua marca num objeto que fica na prateleira de uma casa durante anos.",
+      "duracion": "O torneio"
+    },
+    "torneos-mvp": {
+      "titulo": "Prémio de melhor jogador do torneio",
+      "queEs": "O MVP é entregue pela empresa, com o seu nome no prémio.",
+      "queRecibe": "O momento mais fotografado do torneio, com o seu representante na fotografia.",
+      "duracion": "O torneio"
+    },
+    "torneos-camisetas": {
+      "titulo": "T-shirts do torneio",
+      "queEs": "Todos os participantes levam uma t-shirt com a marca do patrocinador.",
+      "queRecibe": "Centenas de t-shirts com o seu logótipo espalhadas pela região, que continuam a ser usadas meses depois.",
+      "duracion": "O torneio"
+    },
+    "torneos-avituallamiento": {
+      "titulo": "Água e abastecimento",
+      "queEs": "Bebida e fruta para os participantes durante o dia.",
+      "queRecibe": "Uma forma barata de estar presente o dia todo e nas mãos de toda a gente.",
+      "duracion": "O torneio"
+    },
+    "torneos-jornada": {
+      "titulo": "Patrocinador de um dia ou escalão",
+      "queEs": "Não é preciso vender o torneio inteiro: pode vender-se um escalão ou um dia avulso.",
+      "queRecibe": "Entrar num torneio grande com uma contribuição pequena.",
+      "duracion": "Um dia"
+    },
+    "torneos-zona-empresa": {
+      "titulo": "Zona de empresas no torneio",
+      "queEs": "Um espaço com bancas de vários negócios locais durante o torneio.",
+      "queRecibe": "Vender ou dar-se a conhecer durante todo o dia, com público garantido entre jogo e jogo.",
+      "duracion": "O torneio"
+    },
+    "torneos-final": {
+      "titulo": "Patrocinador da final",
+      "queEs": "O jogo com mais gente e mais atenção de todo o torneio, vendido à parte.",
+      "queRecibe": "O momento alto, com a entrega de prémios incluída.",
+      "duracion": "Um jogo"
+    },
+    "contenido-resumen-partido": {
+      "titulo": "Resumo do jogo patrocinado",
+      "queEs": "O vídeo ou o texto com o que aconteceu no jogo, que o clube já faz todas as semanas, com uma marca por trás.",
+      "queRecibe": "Estar no conteúdo mais procurado de cada fim de semana, sem esforço extra para ninguém.",
+      "duracion": "Toda a época"
+    },
+    "contenido-fotografia": {
+      "titulo": "Fotografias dos jogos",
+      "queEs": "As fotografias de cada jornada levam uma marca de água ou uma legenda com o patrocinador.",
+      "queRecibe": "Aparecer nas fotografias que as famílias descarregam, imprimem e partilham.",
+      "duracion": "Toda a época"
+    },
+    "contenido-entrevistas": {
+      "titulo": "Rubrica de entrevistas",
+      "queEs": "Uma série de entrevistas a jogadores, treinadores ou gente do clube, com patrocinador fixo.",
+      "queRecibe": "Uma rubrica reconhecível que leva o seu nome durante toda a época.",
+      "duracion": "Toda a época"
+    },
+    "contenido-podcast": {
+      "titulo": "Podcast ou programa do clube",
+      "queEs": "Um programa de áudio ou vídeo sobre o clube e a sua competição.",
+      "queRecibe": "Menções faladas, que duram mais e se recordam melhor do que um logótipo.",
+      "duracion": "Por época ou por programa"
+    },
+    "contenido-reportaje": {
+      "titulo": "Reportagem sobre a empresa",
+      "queEs": "Uma peça longa a contar quem está por trás do negócio e porque apoia o clube.",
+      "queRecibe": "Uma história contada a sério, que é o que faz um vizinho escolher a sua loja e não outra.",
+      "duracion": "Uma peça"
+    },
+    "contenido-detras-de-camaras": {
+      "titulo": "Por trás das câmaras",
+      "queEs": "Balneário, viagem, aquecimento: o que não se vê, que costuma ser o que mais prende.",
+      "queRecibe": "Estar no conteúdo mais próximo do clube, aquele que as pessoas veem até ao fim.",
+      "duracion": "Toda a época"
+    },
+    "contenido-cantera": {
+      "titulo": "Conteúdo da formação",
+      "queEs": "Uma rubrica dedicada às equipas de formação, que é o que as famílias mais partilham.",
+      "queRecibe": "O conteúdo com mais difusão real, porque cada pai o reencaminha à família inteira.",
+      "duracion": "Toda a época"
+    },
+    "contenido-educativo": {
+      "titulo": "Conteúdo educativo com a empresa",
+      "queEs": "A empresa contribui com o que sabe —um fisioterapeuta explica um alongamento, um nutricionista um pequeno-almoço— e o clube publica-o.",
+      "queRecibe": "Mostrar que percebe do assunto, o que vende muito mais do que repetir um logótipo.",
+      "duracion": "Por peça ou por época"
+    },
+    "digital-banner-web": {
+      "titulo": "Publicidade no site do clube",
+      "queEs": "Um espaço fixo na página do clube, visível para quem entra para consultar resultados ou horários.",
+      "queRecibe": "Presença permanente e uma ligação direta para o seu próprio site.",
+      "duracion": "Toda a época"
+    },
+    "digital-empresa-recomendada": {
+      "titulo": "Empresa recomendada pelo clube",
+      "queEs": "O clube recomenda publicamente a empresa aos seus sócios e famílias.",
+      "queRecibe": "Uma recomendação com nome e apelido, que é o mais valioso que um clube de bairro pode dar.",
+      "duracion": "Toda a época"
+    },
+    "digital-newsletter": {
+      "titulo": "Patrocinador da newsletter do clube",
+      "queEs": "O email que o clube envia a sócios e famílias tem um patrocinador fixo.",
+      "queRecibe": "Chegar à caixa de correio de gente que abre esse email porque lhe interessa, não a uma lista comprada.",
+      "duracion": "Por envio ou por época"
+    },
+    "digital-qr": {
+      "titulo": "Código QR com promoção",
+      "queEs": "Um cartaz no pavilhão com um QR que leva a uma oferta da empresa para a gente do clube.",
+      "queRecibe": "Poder medir exatamente quantas pessoas do clube chegam ao seu negócio.",
+      "duracion": "Toda a época"
+    },
+    "digital-pagina-patrocinada": {
+      "titulo": "Secção do site patrocinada",
+      "queEs": "Uma parte concreta do site —resultados, formação, calendário— leva o nome de uma empresa.",
+      "queRecibe": "Associar-se ao que as pessoas realmente consultam, que costuma ser o calendário e os resultados.",
+      "duracion": "Toda a época"
+    },
+    "digital-cartel-fichajes": {
+      "titulo": "Anúncios de contratações e renovações",
+      "queEs": "As publicações de entradas, saídas e renovações levam o logótipo do patrocinador.",
+      "queRecibe": "Aparecer nas publicações mais partilhadas fora do clube, sobretudo no verão.",
+      "duracion": "Toda a época"
+    },
+    "retransmision-patrocinador": {
+      "titulo": "Patrocinador do direto",
+      "queEs": "Se o clube transmite jogos, mesmo que seja pelo YouTube, isso vende-se.",
+      "queRecibe": "A sua marca durante todo o direto, à frente de quem não pode ir ao pavilhão mas segue o jogo.",
+      "duracion": "Por jogo ou por época"
+    },
+    "retransmision-logo": {
+      "titulo": "Logótipo fixo durante a transmissão",
+      "queEs": "Um canto da imagem com a marca, presente durante todo o jogo.",
+      "queRecibe": "Mais de uma hora de presença contínua, não um relâmpago de três segundos.",
+      "duracion": "Por jogo ou por época"
+    },
+    "retransmision-descanso": {
+      "titulo": "Publicidade no intervalo",
+      "queEs": "O espaço do intervalo é preenchido com um anúncio da empresa.",
+      "queRecibe": "Vários minutos só para ela, com a audiência já agarrada à espera da segunda parte.",
+      "duracion": "Por jogo"
+    },
+    "retransmision-mvp": {
+      "titulo": "Melhor jogador do jogo patrocinado",
+      "queEs": "No fim do direto escolhe-se o melhor, com o nome da empresa no prémio.",
+      "queRecibe": "Um fecho com a sua marca e mais uma publicação no dia seguinte.",
+      "duracion": "Por jogo ou por época"
+    },
+    "retransmision-entrevista": {
+      "titulo": "Entrevista pós-jogo patrocinada",
+      "queEs": "A entrevista depois do jogo tem patrocinador, como na televisão.",
+      "queRecibe": "Aparecer no momento em que as pessoas ficam a ouvir o que aconteceu.",
+      "duracion": "Por jogo ou por época"
+    },
+    "retransmision-clips": {
+      "titulo": "Clips e melhores jogadas",
+      "queEs": "Os excertos do jogo publicados depois, com a marca do patrocinador.",
+      "queRecibe": "Estar no conteúdo mais reencaminhado, porque dura vinte segundos e partilha-se pelo WhatsApp.",
+      "duracion": "Toda a época"
+    },
+    "familias-descuento": {
+      "titulo": "Desconto para sócios e famílias",
+      "queEs": "A empresa faz um preço especial à gente do clube, e o clube comunica-o.",
+      "queRecibe": "Novos clientes do seu próprio bairro, sem pôr dinheiro: põe margem.",
+      "duracion": "Toda a época"
+    },
+    "familias-carnet": {
+      "titulo": "Vantagens do cartão de sócio",
+      "queEs": "Um grupo de comércios dá vantagens a quem mostrar o cartão do clube.",
+      "queRecibe": "Entrar num circuito de comércios do bairro com o clube como garantia.",
+      "duracion": "Toda a época"
+    },
+    "familias-actividad": {
+      "titulo": "Atividade para as famílias",
+      "queEs": "Uma oficina, um lanche, um dia de portas abertas para pais, mães e irmãos.",
+      "queRecibe": "Um bom bocado com as famílias, sem pressa e sem competir com um jogo.",
+      "duracion": "Um dia"
+    },
+    "familias-regalo-navidad": {
+      "titulo": "Lembrança de Natal ou de fim de época",
+      "queEs": "Uma prenda pequena para todos os miúdos do clube, oferecida por uma empresa.",
+      "queRecibe": "A sua marca numa lembrança que fica na memória, entregue no momento mais emotivo do ano.",
+      "duracion": "Uma entrega"
+    },
+    "familias-sorteo-socios": {
+      "titulo": "Sorteio só para sócios",
+      "queEs": "Um sorteio fechado à gente do clube, que é também uma razão para se fazer sócio.",
+      "queRecibe": "Aparecer como quem dá alguma coisa, e ajudar o clube a angariar sócios pelo caminho.",
+      "duracion": "Uma ação"
+    },
+    "familias-campana-comercios": {
+      "titulo": "Campanha com os comércios do bairro",
+      "queEs": "Vários negócios pequenos entram juntos com uma contribuição acessível cada um.",
+      "queRecibe": "Estar no cartaz dos comércios amigos do clube, ao alcance de um negócio que não pode patrocinar sozinho.",
+      "duracion": "Toda a época"
+    },
+    "tienda-patrocinador-de-la-tienda": {
+      "titulo": "Patrocinador da loja do clube",
+      "queEs": "Uma empresa paga a primeira tiragem de produtos do clube —bonés, sweatshirts, porta-chaves— e o clube vende-os e fica com o dinheiro.",
+      "queRecibe": "A sua marca junto ao emblema em tudo o que o clube vender nessa época, e na banca onde se vende nos dias de jogo.",
+      "duracion": "Toda a época"
+    },
+    "tienda-personalizado-con-dorsal": {
+      "titulo": "Produtos personalizados com o nome e o número",
+      "queEs": "Porta-chaves, ímanes, canecas ou abre-garrafas com o emblema do clube e, atrás, o nome e o número da camisola de cada jogador ou jogadora.",
+      "queRecibe": "Uma gráfica ou uma oficina de reclamos local fica com a encomenda, põe a sua marca em cada peça e entra na casa de todas as famílias do clube.",
+      "duracion": "Toda a época"
+    },
+    "tienda-mercadillo-de-equipaciones": {
+      "titulo": "Feira de equipamentos de anos anteriores",
+      "queEs": "O clube põe à venda os equipamentos, fatos de treino e mochilas de épocas anteriores que estão a ocupar espaço no armazém, a preço de segunda mão.",
+      "queRecibe": "Dar nome ao dia da feira, com a sua marca no cartaz e na banca, à frente de todas as famílias que passam para experimentar tamanhos.",
+      "duracion": "Um dia"
+    },
+    "tienda-venta-a-comision": {
+      "titulo": "Uma empresa vende nos teus jogos a troco de comissão",
+      "queEs": "Uma loja monta a sua banca nos jogos em casa e vende lá os seus produtos. O clube fica com uma percentagem do que vender.",
+      "queRecibe": "Um ponto de venda com público garantido em cada jornada, sem renda e sem abrir uma loja nova.",
+      "duracion": "Toda a época"
+    },
+    "tienda-prenda-oficial": {
+      "titulo": "A peça oficial da época",
+      "queEs": "Um boné, um cachecol ou uma camisola de adepto que o clube lança todas as épocas para ser usada pela gente da bancada, não pelos jogadores.",
+      "queRecibe": "O seu logótipo junto ao emblema numa peça que as pessoas vestem por gosto e usam pelo bairro o ano inteiro.",
+      "duracion": "Toda a época"
+    },
+    "tienda-ropa-de-paseo": {
+      "titulo": "Roupa de passeio do clube",
+      "queEs": "Fato de treino, sweatshirt e mochila com o emblema, para as famílias comprarem e as crianças levarem para a escola, não só para o treino.",
+      "queRecibe": "A sua marca em roupa usada todos os dias fora do pavilhão, que é onde mais se vê e onde nenhum patrocínio chega.",
+      "duracion": "Toda a época"
+    },
+    "tienda-lote-de-bienvenida": {
+      "titulo": "Kit de boas-vindas para quem chega",
+      "queEs": "Cada criança que se inscreve no clube recebe um kit no primeiro dia: mochila, garrafa, porta-chaves e o emblema. Quem paga é uma empresa.",
+      "queRecibe": "Ser a primeira coisa que uma família nova leva do clube para casa, com a sua marca no kit e na fotografia do primeiro dia.",
+      "duracion": "Toda a época"
+    },
+    "tienda-producto-con-el-escudo": {
+      "titulo": "Um produto da empresa com o emblema do clube",
+      "queEs": "A padaria lança o bolo do clube, a adega um rótulo com o emblema, a gelataria um sabor com o nome da equipa. De cada unidade vendida, uma parte vai para o clube.",
+      "queRecibe": "Um produto que se vende sozinho no seu bairro porque tem o emblema da sua equipa, e uma razão para o clube o divulgar em todas as suas redes.",
+      "duracion": "Uma época ou uma campanha"
+    },
+    "local-evento-conjunto": {
+      "titulo": "Evento conjunto no bairro",
+      "queEs": "Clube e empresa organizam algo juntos fora do pavilhão: numa rua, numa praça, num centro comercial.",
+      "queRecibe": "Sair do seu espaço e fazer com que as pessoas o associem ao clube à frente de toda a terra.",
+      "duracion": "Um dia"
+    },
+    "local-presentacion-producto": {
+      "titulo": "Apresentação de um produto com o clube",
+      "queEs": "A empresa lança algo novo e fá-lo com a equipa presente.",
+      "queRecibe": "Um evento com caras conhecidas do desporto local e cobertura do clube.",
+      "duracion": "Um evento"
+    },
+    "local-escaparate": {
+      "titulo": "O clube na montra da empresa",
+      "queEs": "Camisola autografada, troféus, cartaz do próximo jogo: o clube decora o espaço do patrocinador.",
+      "queRecibe": "Uma montra de que as pessoas do bairro falam, e uma razão para entrar a perguntar.",
+      "duracion": "Toda a época"
+    },
+    "local-cupones": {
+      "titulo": "Cupões distribuídos nos jogos",
+      "queEs": "Vales da empresa entregues aos espectadores de um jogo.",
+      "queRecibe": "Gente a entrar pela sua porta com o vale na mão, e uma contagem exata de quantos.",
+      "duracion": "Por jogo ou por época"
+    },
+    "local-accion-solidaria": {
+      "titulo": "Ação solidária conjunta",
+      "queEs": "Recolha de alimentos, de brinquedos ou de material, organizada entre o clube e a empresa.",
+      "queRecibe": "Aparecer a fazer algo que importa, que é das poucas coisas de que um vizinho realmente se lembra.",
+      "duracion": "Uma campanha"
+    },
+    "local-colegios": {
+      "titulo": "Atividade nas escolas da zona",
+      "queEs": "O clube vai às escolas dar uma sessão, com uma empresa por trás.",
+      "queRecibe": "Chegar às famílias da escola inteira, não só às do clube.",
+      "duracion": "Uma campanha"
+    },
+    "necesita-fisioterapia": {
+      "titulo": "Fisioterapeuta para a equipa",
+      "queEs": "Alguém que trate as lesões do plantel durante a época.",
+      "queRecibe": "Visibilidade contínua junto de desportistas e famílias, que é precisamente o seu público, e pacientes que chegam sozinhos.",
+      "duracion": "Toda a época"
+    },
+    "necesita-medico": {
+      "titulo": "Serviço médico ou exames",
+      "queEs": "Exames médicos de época ou assistência nos jogos em casa.",
+      "queRecibe": "A sua marca como serviço médico oficial do clube e acesso direto a todas as famílias.",
+      "duracion": "Toda a época"
+    },
+    "necesita-fotografo": {
+      "titulo": "Fotógrafo para os jogos",
+      "queEs": "Alguém que cubra os jogos em casa e deixe ao clube fotografias decentes todas as semanas.",
+      "queRecibe": "A sua assinatura em cada fotografia que o clube publica, que é a publicidade mais constante que existe.",
+      "duracion": "Toda a época"
+    },
+    "necesita-video": {
+      "titulo": "Vídeo e edição",
+      "queEs": "Resumos dos jogos, apresentação da época, peças para as redes.",
+      "queRecibe": "A sua marca em tudo o que mexe no clube, e uma montra do seu trabalho na terra.",
+      "duracion": "Toda a época"
+    },
+    "necesita-marketing": {
+      "titulo": "Ajuda com as redes do clube",
+      "queEs": "Alguém que dê uma mão com as publicações e a comunicação.",
+      "queRecibe": "Um caso real para mostrar a outros clientes, com resultados mensuráveis.",
+      "duracion": "Toda a época"
+    },
+    "necesita-imprenta": {
+      "titulo": "Gráfica e reclamos",
+      "queEs": "Cartazes, lonas, vinis, números das camisolas: o que é preciso imprimir ao longo do ano.",
+      "queRecibe": "A sua marca em tudo o que o clube imprime, visto por todos os que passam pelo pavilhão.",
+      "duracion": "Toda a época"
+    },
+    "necesita-transporte": {
+      "titulo": "Autocarro para as deslocações",
+      "queEs": "Levar a equipa aos jogos fora.",
+      "queRecibe": "A sua marca em cada viagem, com publicação de partida e chegada em cada deslocação.",
+      "duracion": "Por viagem ou por época"
+    },
+    "necesita-material": {
+      "titulo": "Material desportivo",
+      "queEs": "Bolas, pinos, coletes, redes: o que se gasta todas as épocas.",
+      "queRecibe": "A sua marca no material com que se treina todos os dias.",
+      "duracion": "Toda a época"
+    },
+    "necesita-equipacion": {
+      "titulo": "Equipamentos",
+      "queEs": "Camisolas, calções e roupa de treino para uma ou várias equipas.",
+      "queRecibe": "Ser a marca desportiva do clube, com o seu logótipo em toda a roupa durante a época.",
+      "duracion": "Toda a época"
+    },
+    "necesita-restauracion": {
+      "titulo": "Comida para eventos e deslocações",
+      "queEs": "Sandes, catering da gala, comida do torneio.",
+      "queRecibe": "Que centenas de pessoas provem o que faz, que é como se enche um restaurante.",
+      "duracion": "Toda a época"
+    },
+    "necesita-alojamiento": {
+      "titulo": "Alojamento para torneios e viagens",
+      "queEs": "Dormir fora quando há torneio ou deslocação longa.",
+      "queRecibe": "A sua marca associada às viagens do clube e ocupação em datas fracas.",
+      "duracion": "Toda a época"
+    },
+    "necesita-gimnasio": {
+      "titulo": "Ginásio ou preparação física",
+      "queEs": "Um sítio onde o plantel possa trabalhar a força, ou alguém que o oriente.",
+      "queRecibe": "Desportistas nas suas instalações todas as semanas e as famílias atrás deles.",
+      "duracion": "Toda a época"
+    },
+    "necesita-nutricion": {
+      "titulo": "Nutrição",
+      "queEs": "Orientação alimentar para o plantel ou palestras para as famílias.",
+      "queRecibe": "Apresentar-se como quem sabe, à frente de um público que já lhe interessa.",
+      "duracion": "Toda a época"
+    },
+    "necesita-asesoria": {
+      "titulo": "Contabilidade ou consultoria",
+      "queEs": "Tratar das contas, dos salários ou da papelada do clube.",
+      "queRecibe": "Ser o gabinete de contabilidade oficial do clube, com a recomendação pública que isso traz.",
+      "duracion": "Toda a época"
+    },
+    "necesita-informatica": {
+      "titulo": "Site e informática",
+      "queEs": "Manter o site do clube, o email ou os computadores do escritório.",
+      "queRecibe": "A sua marca no rodapé do site e um cliente visível na terra.",
+      "duracion": "Toda a época"
+    },
+    "necesita-limpieza": {
+      "titulo": "Limpeza das instalações",
+      "queEs": "Manter limpos os balneários e as zonas comuns.",
+      "queRecibe": "Um contrato visível na comunidade e a sua marca nas instalações.",
+      "duracion": "Toda a época"
+    }
+  },
+  "falta": {
+    "equipos": "adiciona as tuas equipas à ficha",
+    "cantera": "adiciona os dados da tua formação",
+    "instalaciones": "indica onde jogam",
+    "redes": "adiciona as tuas redes sociais",
+    "publico": "regista o público de algum jogo"
+  },
+  "queRecibeEtiqueta": "O que a empresa recebe:"
+}

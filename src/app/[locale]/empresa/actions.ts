@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
 import { avisarDeFallo } from "@/lib/monitoring";
@@ -20,14 +21,15 @@ const RUTA_EMPRESA = "/empresa";
 async function obtenerEmpresaActual(): Promise<
   { supabase: Awaited<ReturnType<typeof createClient>>; user: User } | { error: string }
 > {
+  const t = await getTranslations("panel.acciones");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
+  if (!user) return { error: t("tuSesionCaducadoVuelveIniciar") };
   if ((user.app_metadata?.role as Role | undefined) !== "empresa") {
-    return { error: "Esta acción solo está disponible para empresas." };
+    return { error: t("soloParaEmpresas") };
   }
 
   return { supabase, user };
@@ -66,13 +68,14 @@ type DatosDeOferta = {
 
 /** Lee y comprueba el formulario. Mismo camino para el alta y la
  * edición, para que no puedan separarse con el tiempo. */
-function leerFormulario(formData: FormData): DatosDeOferta | { error: string } {
+async function leerFormulario(formData: FormData): Promise<DatosDeOferta | { error: string }> {
+  const t = await getTranslations("panel.acciones");
   const title = String(formData.get("titulo") ?? "").trim();
-  if (title.length < 3) return { error: "Escribe qué ofreces, con algo más de detalle." };
-  if (title.length > 150) return { error: "El título es demasiado largo." };
+  if (title.length < 3) return { error: t("escribeOfrecesAlgoMasDetalle") };
+  if (title.length > 150) return { error: t("tituloDemasiadoLargo") };
 
   const tipo = leerTipoDeOferta(String(formData.get("tipo") ?? ""));
-  if (!tipo) return { error: "Elige si ofreces un servicio, un producto o dinero." };
+  if (!tipo) return { error: t("eligeSiOfrecesServicioProducto") };
 
   const categoriaBruta = String(formData.get("categoria") ?? "");
   const category = categoriaBruta ? leerCategoriaNecesidad(categoriaBruta) : null;
@@ -104,7 +107,8 @@ type DatosDeContacto = {
  * falta: publicar sin forma de contacto deja al club con la oferta
  * leída y ningún sitio al que ir.
  */
-function leerContacto(formData: FormData): DatosDeContacto | { error: string } {
+async function leerContacto(formData: FormData): Promise<DatosDeContacto | { error: string }> {
+  const t = await getTranslations("panel.acciones");
   const contacto = {
     contact_name: leerTexto(formData, "contactoNombre")?.slice(0, 120) ?? null,
     contact_email: leerTexto(formData, "contactoEmail")?.slice(0, 200) ?? null,
@@ -113,11 +117,11 @@ function leerContacto(formData: FormData): DatosDeContacto | { error: string } {
   };
 
   if (!sePuedeContactar({ email: contacto.contact_email, telefono: contacto.contact_phone })) {
-    return { error: "Pon un correo o un teléfono: sin eso, el club no puede escribirte." };
+    return { error: t("ponCorreoOTelefonoSin") };
   }
 
   if (contacto.contact_email && !contacto.contact_email.includes("@")) {
-    return { error: "Ese correo no parece un correo." };
+    return { error: t("eseCorreoPareceCorreo") };
   }
 
   return contacto;
@@ -127,13 +131,14 @@ export async function crearOferta(
   _previo: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerEmpresaActual();
   if ("error" in sesion) return { error: sesion.error };
 
-  const datos = leerFormulario(formData);
+  const datos = await leerFormulario(formData);
   if ("error" in datos) return { error: datos.error };
 
-  const contacto = leerContacto(formData);
+  const contacto = await leerContacto(formData);
   if ("error" in contacto) return { error: contacto.error };
 
   // El contacto primero: si esto falla, no queremos una oferta
@@ -144,14 +149,14 @@ export async function crearOferta(
     .eq("id", sesion.user.id);
 
   if (errorContacto) {
-    return fallo("guardar el contacto", errorContacto, "No se ha podido guardar. Inténtalo de nuevo.");
+    return fallo("guardar el contacto", errorContacto, t("podidoGuardarIntentaloNuevo"));
   }
 
   const { error } = await sesion.supabase
     .from("company_offers")
     .insert({ ...datos, company_id: sesion.user.id });
 
-  if (error) return fallo("crear la oferta", error, "No se ha podido publicar. Inténtalo de nuevo.");
+  if (error) return fallo("crear la oferta", error, t("podidoPublicarIntentaloNuevo"));
 
   revalidatePath(RUTA_EMPRESA);
   return { ok: true };
@@ -161,16 +166,17 @@ export async function editarOferta(
   _previo: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerEmpresaActual();
   if ("error" in sesion) return { error: sesion.error };
 
   const id = leerTexto(formData, "id");
-  if (!id) return { error: "No se ha encontrado la oferta." };
+  if (!id) return { error: t("encontradoOferta") };
 
-  const datos = leerFormulario(formData);
+  const datos = await leerFormulario(formData);
   if ("error" in datos) return { error: datos.error };
 
-  const contacto = leerContacto(formData);
+  const contacto = await leerContacto(formData);
   if ("error" in contacto) return { error: contacto.error };
 
   const { error: errorContacto } = await sesion.supabase
@@ -179,7 +185,7 @@ export async function editarOferta(
     .eq("id", sesion.user.id);
 
   if (errorContacto) {
-    return fallo("guardar el contacto", errorContacto, "No se ha podido guardar. Inténtalo de nuevo.");
+    return fallo("guardar el contacto", errorContacto, t("podidoGuardarIntentaloNuevo"));
   }
 
   // El `company_id` va en el update además de en la regla de fila: si
@@ -191,7 +197,7 @@ export async function editarOferta(
     .eq("id", id)
     .eq("company_id", sesion.user.id);
 
-  if (error) return fallo("editar la oferta", error, "No se ha podido guardar. Inténtalo de nuevo.");
+  if (error) return fallo("editar la oferta", error, t("podidoGuardarIntentaloNuevo"));
 
   revalidatePath(RUTA_EMPRESA);
   return { ok: true };
@@ -199,12 +205,13 @@ export async function editarOferta(
 
 /** Disponible, apalabrada o cerrada. No borra nada. */
 export async function cambiarEstadoOferta(formData: FormData): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerEmpresaActual();
   if ("error" in sesion) return { error: sesion.error };
 
   const id = leerTexto(formData, "id");
   const estado = leerEstadoOferta(String(formData.get("estado") ?? ""));
-  if (!id || !estado) return { error: "No se ha podido cambiar el estado." };
+  if (!id || !estado) return { error: t("podidoCambiarEstado") };
 
   const { error } = await sesion.supabase
     .from("company_offers")
@@ -212,7 +219,7 @@ export async function cambiarEstadoOferta(formData: FormData): Promise<EstadoGua
     .eq("id", id)
     .eq("company_id", sesion.user.id);
 
-  if (error) return fallo("cambiar el estado", error, "No se ha podido cambiar. Inténtalo de nuevo.");
+  if (error) return fallo("cambiar el estado", error, t("podidoCambiarIntentaloNuevo"));
 
   revalidatePath(RUTA_EMPRESA);
   return { ok: true };
@@ -225,11 +232,12 @@ export async function cambiarEstadoOferta(formData: FormData): Promise<EstadoGua
  * que no lo haga.
  */
 export async function archivarOferta(formData: FormData): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerEmpresaActual();
   if ("error" in sesion) return { error: sesion.error };
 
   const id = leerTexto(formData, "id");
-  if (!id) return { error: "No se ha encontrado la oferta." };
+  if (!id) return { error: t("encontradoOferta") };
 
   const desarchivar = String(formData.get("desarchivar") ?? "") === "si";
 
@@ -239,18 +247,19 @@ export async function archivarOferta(formData: FormData): Promise<EstadoGuardado
     .eq("id", id)
     .eq("company_id", sesion.user.id);
 
-  if (error) return fallo("archivar la oferta", error, "No se ha podido archivar. Inténtalo de nuevo.");
+  if (error) return fallo("archivar la oferta", error, t("podidoArchivarIntentaloNuevo"));
 
   revalidatePath(RUTA_EMPRESA);
   return { ok: true };
 }
 
 export async function borrarOferta(formData: FormData): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerEmpresaActual();
   if ("error" in sesion) return { error: sesion.error };
 
   const id = leerTexto(formData, "id");
-  if (!id) return { error: "No se ha encontrado la oferta." };
+  if (!id) return { error: t("encontradoOferta") };
 
   const { error } = await sesion.supabase
     .from("company_offers")
@@ -258,7 +267,7 @@ export async function borrarOferta(formData: FormData): Promise<EstadoGuardado> 
     .eq("id", id)
     .eq("company_id", sesion.user.id);
 
-  if (error) return fallo("borrar la oferta", error, "No se ha podido borrar. Inténtalo de nuevo.");
+  if (error) return fallo("borrar la oferta", error, t("podidoBorrarIntentaloNuevo"));
 
   revalidatePath(RUTA_EMPRESA);
   return { ok: true };
@@ -275,13 +284,14 @@ export async function guardarFichaEmpresa(
   _previo: EstadoGuardado,
   formData: FormData,
 ): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
   const sesion = await obtenerEmpresaActual();
   if ("error" in sesion) return { error: sesion.error };
 
   const name = leerTexto(formData, "nombre");
-  if (!name) return { error: "El nombre de la empresa no puede quedarse vacío." };
+  if (!name) return { error: t("nombreEmpresaPuedeQuedarseVacio") };
 
-  const contacto = leerContacto(formData);
+  const contacto = await leerContacto(formData);
   if ("error" in contacto) return { error: contacto.error };
 
   const { error } = await sesion.supabase
@@ -301,7 +311,7 @@ export async function guardarFichaEmpresa(
     })
     .eq("id", sesion.user.id);
 
-  if (error) return fallo("guardar la ficha", error, "No se ha podido guardar. Inténtalo de nuevo.");
+  if (error) return fallo("guardar la ficha", error, t("podidoGuardarIntentaloNuevo"));
 
   revalidatePath(RUTA_EMPRESA);
   revalidatePath("/empresas");

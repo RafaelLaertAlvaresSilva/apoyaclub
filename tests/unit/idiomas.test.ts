@@ -19,7 +19,7 @@ const RAIZ = process.cwd();
  * El panel de empresa y el administrador todavía no: sus archivos no
  * se comprueban.
  */
-const TRADUCIDOS = ["common", "home", "auth", "club", "buscar", "servicios", "panel", "emails"] as const;
+const TRADUCIDOS = ["common", "home", "auth", "club", "buscar", "servicios", "panel", "emails", "ideas", "empresa"] as const;
 const OTROS = ["pt", "en"] as const;
 
 /** Campos que, dentro de una lista, son identificadores y no se

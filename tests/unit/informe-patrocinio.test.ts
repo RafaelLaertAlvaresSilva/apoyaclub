@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { fraseDeResumen, prepararInforme } from "@/lib/informe-patrocinio";
+import { traductorDePrueba } from "./traductor-de-prueba";
 import type { TareaPatrocinio } from "@/lib/tareas-patrocinio";
 
 const HOY = "2027-01-10";
@@ -78,6 +79,7 @@ describe("prepararInforme", () => {
 });
 
 describe("fraseDeResumen", () => {
+  const tInforme = traductorDePrueba("es", "panel", "documentos.informe");
   const informe = (cumplidas: number, total: number) =>
     prepararInforme(
       "X",
@@ -93,15 +95,23 @@ describe("fraseDeResumen", () => {
     );
 
   it("dice la verdad cuando está todo hecho", () => {
-    expect(fraseDeResumen(informe(3, 3))).toBe("Se han cumplido las 3 acciones acordadas.");
-    expect(fraseDeResumen(informe(1, 1))).toBe("Se ha cumplido la acción acordada.");
+    expect(fraseDeResumen(informe(3, 3), tInforme)).toBe("Se han cumplido las 3 acciones acordadas.");
+    expect(fraseDeResumen(informe(1, 1), tInforme)).toBe("Se ha cumplido la acción acordada.");
   });
 
   it("y también cuando falta algo", () => {
-    expect(fraseDeResumen(informe(2, 5))).toBe("2 de 5 acciones acordadas ya están cumplidas.");
+    expect(fraseDeResumen(informe(2, 5), tInforme)).toBe("2 de 5 acciones acordadas ya están cumplidas.");
   });
 
   it("avisa si no hay nada apuntado", () => {
-    expect(fraseDeResumen(informe(0, 0))).toBe("Todavía no hay acciones registradas.");
+    expect(fraseDeResumen(informe(0, 0), tInforme)).toBe("Todavía no hay acciones registradas.");
+  });
+
+  it("y en los otros idiomas, con su plural", () => {
+    const tIngles = traductorDePrueba("en", "panel", "documentos.informe");
+    expect(fraseDeResumen(informe(1, 1), tIngles)).toBe("The agreed activity has been delivered.");
+    expect(fraseDeResumen(informe(2, 5), tIngles)).toBe("2 of 5 agreed activities have already been delivered.");
+    const tPortugues = traductorDePrueba("pt", "panel", "documentos.informe");
+    expect(fraseDeResumen(informe(3, 3), tPortugues)).toBe("As 3 ações acordadas foram cumpridas.");
   });
 });

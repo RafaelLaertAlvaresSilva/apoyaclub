@@ -11,8 +11,7 @@ import {
 } from "docx";
 import { fraseDeResumen, type ResumenInforme } from "@/lib/informe-patrocinio";
 import { descargarImagen, encajarEn } from "@/lib/imagenes-remotas";
-import { routing } from "@/i18n/routing";
-import { SITE_URL } from "@/lib/site";
+import { textosDeDocumento, type TextosDocumento } from "@/lib/textos-documento";
 import { fechaLegible, type TareaPatrocinio } from "@/lib/tareas-patrocinio";
 import type { ClubProfile } from "@/lib/types";
 
@@ -56,11 +55,17 @@ function parrafo(
 }
 
 /** Una acción de la lista: qué, cuándo y, si la hay, la prueba. */
-function lineaDeTarea(tarea: TareaPatrocinio, marca: string, color: string): Paragraph[] {
+function lineaDeTarea(
+  tarea: TareaPatrocinio,
+  marca: string,
+  color: string,
+  textos: TextosDocumento,
+): Paragraph[] {
+  const { t, intlLocale } = textos;
   const detalle = [
     tarea.inicio
-      ? `Del ${fechaLegible(tarea.inicio)} al ${fechaLegible(tarea.fin)}`
-      : fechaLegible(tarea.fin),
+      ? t("periodo", { desde: fechaLegible(tarea.inicio, intlLocale), hasta: fechaLegible(tarea.fin, intlLocale) })
+      : fechaLegible(tarea.fin, intlLocale),
     tarea.notas ?? null,
   ]
     .filter(Boolean)
@@ -96,17 +101,19 @@ function lineaDeTarea(tarea: TareaPatrocinio, marca: string, color: string): Par
   return parrafos;
 }
 
-export async function generarInformeWord(datos: DatosInformeWord): Promise<Buffer> {
+export async function generarInformeWord(datos: DatosInformeWord, idioma?: string): Promise<Buffer> {
   const { perfil, informe, emailContacto } = datos;
+  const textos = await textosDeDocumento(idioma, "informe");
+  const { t, intlLocale } = textos;
 
   const logo = await descargarImagen(perfil.logoUrl);
-  const urlLimpia = `${SITE_URL}/${routing.defaultLocale}/club/${perfil.slug}`.replace(/^https?:\/\//, "");
+  const urlLimpia = textos.urlDelClub(perfil.slug).replace(/^https?:\/\//, "");
 
   const periodo =
     informe.desde && informe.hasta
       ? informe.desde === informe.hasta
-        ? fechaLegible(informe.desde)
-        : `Del ${fechaLegible(informe.desde)} al ${fechaLegible(informe.hasta)}`
+        ? fechaLegible(informe.desde, intlLocale)
+        : t("periodo", { desde: fechaLegible(informe.desde, intlLocale), hasta: fechaLegible(informe.hasta, intlLocale) })
       : null;
 
   const cuerpo: Paragraph[] = [];
@@ -125,13 +132,13 @@ export async function generarInformeWord(datos: DatosInformeWord): Promise<Buffe
     new Paragraph({
       spacing: { after: 40 },
       children: [
-        new TextRun({ text: "INFORME DE PATROCINIO", size: 16, bold: true, color: TEAL, characterSpacing: 20 }),
+        new TextRun({ text: t("portada").toUpperCase(), size: 16, bold: true, color: TEAL, characterSpacing: 20 }),
       ],
     }),
   );
   cuerpo.push(parrafo(perfil.name, { negrita: true, tamano: 24, color: NAVY, espacioDespues: 240 }));
 
-  cuerpo.push(parrafo("Lo que hemos hecho por", { color: GRIS, tamano: 18, espacioDespues: 40 }));
+  cuerpo.push(parrafo(t("loHecho"), { color: GRIS, tamano: 18, espacioDespues: 40 }));
   cuerpo.push(
     new Paragraph({
       spacing: { after: 60 },
@@ -140,34 +147,34 @@ export async function generarInformeWord(datos: DatosInformeWord): Promise<Buffe
   );
   if (periodo) cuerpo.push(parrafo(periodo, { color: GRIS, tamano: 20 }));
 
-  cuerpo.push(parrafo(fraseDeResumen(informe), { tamano: 24, espacioDespues: 200 }));
+  cuerpo.push(parrafo(fraseDeResumen(informe, t), { tamano: 24, espacioDespues: 200 }));
 
   cuerpo.push(
     parrafo(
-      `${informe.total} acciones acordadas · ${informe.cumplidas.length} ya cumplidas · ${informe.conPrueba} con enlace o prueba`,
+      t("resumenLinea", { total: informe.total, cumplidas: informe.cumplidas.length, prueba: informe.conPrueba }),
       { color: GRIS, tamano: 20, espacioDespues: 200 },
     ),
   );
 
   if (informe.cumplidas.length > 0) {
-    cuerpo.push(new Paragraph({ heading: HeadingLevel.HEADING_1, text: "Hecho" }));
-    for (const tarea of informe.cumplidas) cuerpo.push(...lineaDeTarea(tarea, "✓", TEAL));
+    cuerpo.push(new Paragraph({ heading: HeadingLevel.HEADING_1, text: t("hecho") }));
+    for (const tarea of informe.cumplidas) cuerpo.push(...lineaDeTarea(tarea, "✓", TEAL, textos));
   }
 
   if (informe.enMarcha.length > 0) {
-    cuerpo.push(new Paragraph({ heading: HeadingLevel.HEADING_1, text: "En marcha" }));
-    for (const tarea of informe.enMarcha) cuerpo.push(...lineaDeTarea(tarea, "•", GRIS_TENUE));
+    cuerpo.push(new Paragraph({ heading: HeadingLevel.HEADING_1, text: t("enMarcha") }));
+    for (const tarea of informe.enMarcha) cuerpo.push(...lineaDeTarea(tarea, "•", GRIS_TENUE, textos));
   }
 
   if (informe.vencidas.length > 0) {
-    cuerpo.push(new Paragraph({ heading: HeadingLevel.HEADING_1, text: "Pendiente, fuera de plazo" }));
-    for (const tarea of informe.vencidas) cuerpo.push(...lineaDeTarea(tarea, "!", ROJO));
+    cuerpo.push(new Paragraph({ heading: HeadingLevel.HEADING_1, text: t("vencidas") }));
+    for (const tarea of informe.vencidas) cuerpo.push(...lineaDeTarea(tarea, "!", ROJO, textos));
   }
 
-  cuerpo.push(new Paragraph({ heading: HeadingLevel.HEADING_1, text: "Gracias por apoyar el deporte de tu barrio" }));
+  cuerpo.push(new Paragraph({ heading: HeadingLevel.HEADING_1, text: t("gracias") }));
   cuerpo.push(
     parrafo(
-      "Tu apoyo se ve cada semana en la pista y en cada familia que forma parte del club. Si quieres seguir la temporada que viene, o cambiar algo de lo acordado, hablamos cuando te venga bien.",
+      t("graciasTexto"),
       { color: GRIS },
     ),
   );
@@ -181,8 +188,8 @@ export async function generarInformeWord(datos: DatosInformeWord): Promise<Buffe
 
   const documento = new Document({
     creator: perfil.name,
-    title: `Informe de patrocinio — ${informe.empresa}`,
-    description: `Acciones realizadas para ${informe.empresa}`,
+    title: t("tituloDocumento", { empresa: informe.empresa }),
+    description: t("asunto", { empresa: informe.empresa }),
     styles: {
       default: {
         document: { run: { font: "Calibri", size: 22, color: "18181B" } },
@@ -201,9 +208,9 @@ export async function generarInformeWord(datos: DatosInformeWord): Promise<Buffe
               new Paragraph({
                 alignment: AlignmentType.CENTER,
                 children: [
-                  new TextRun({ text: `${urlLimpia}  ·  ApoyaClub  ·  página `, size: 16, color: GRIS_TENUE }),
+                  new TextRun({ text: `${urlLimpia}  ·  ApoyaClub  ·  ${t("paginaPalabra")} `, size: 16, color: GRIS_TENUE }),
                   new TextRun({ children: [PageNumber.CURRENT], size: 16, color: GRIS_TENUE }),
-                  new TextRun({ text: " de ", size: 16, color: GRIS_TENUE }),
+                  new TextRun({ text: ` ${t("de")} `, size: 16, color: GRIS_TENUE }),
                   new TextRun({ children: [PageNumber.TOTAL_PAGES], size: 16, color: GRIS_TENUE }),
                 ],
               }),

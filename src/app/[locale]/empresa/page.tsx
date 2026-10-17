@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
@@ -9,7 +10,10 @@ import { EmpresaNav } from "./components/EmpresaNav";
 import { OfertasManager } from "./components/OfertasManager";
 import { TraerGuardados } from "./components/TraerGuardados";
 
-export const metadata: Metadata = { title: "Lo que ofrezco" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("empresa.panel");
+  return { title: t("loQueOfrezco") };
+}
 
 type FilaEmpresa = {
   name: string | null;
@@ -29,6 +33,7 @@ type FilaEmpresa = {
  * ya vale, aunque no rellene nada más.
  */
 export default async function EmpresaPage() {
+  const t = await getTranslations("empresa.panel");
   const supabase = await createClient();
   const {
     data: { user },
@@ -63,13 +68,12 @@ export default async function EmpresaPage() {
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel de empresa</p>
+          <p className="text-sm font-medium text-teal-700">{t("panelDeEmpresa")}</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">
-            {empresa?.name ?? "Tu empresa"}
+            {empresa?.name ?? t("tuEmpresa")}
           </h1>
           <p className="mt-1 max-w-2xl text-sm text-zinc-600">
-            Lo que puedes poner y qué pides a cambio. Los clubes lo ven en el directorio y te
-            escriben ellos.
+            {t("puedesPonerPidesCambio")}
           </p>
         </div>
         <CerrarSesionBoton />
@@ -83,11 +87,13 @@ export default async function EmpresaPage() {
           le sirve de nada a nadie. */}
       {publicadas > 0 && empresa?.slug && (
         <p className="rounded-lg border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-900">
-          Tu ficha ya es pública.{" "}
-          <Link href={`/empresas/${empresa.slug}`} className="font-medium underline">
-            Mira cómo la ven los clubes
-          </Link>
-          .
+          {t.rich("fichaPublica", {
+            enlace: (trozo) => (
+              <Link href={`/empresas/${empresa.slug}`} className="font-medium underline">
+                {trozo}
+              </Link>
+            ),
+          })}
         </p>
       )}
 

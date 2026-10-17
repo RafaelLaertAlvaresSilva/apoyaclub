@@ -163,4 +163,24 @@ describe("generarDossierWord", () => {
 
     expect(buffer.toString("ascii", 0, 2)).toBe("PK");
   });
+
+  it("sale en el idioma que se le pide, con el enlace a la ficha en ese idioma", async () => {
+    const ingles = await textoDelDocumento(await generarDossierWord(datosDePrueba(), "en"));
+    expect(ingles).toContain("Who we are");
+    expect(ingles).toContain("Our history");
+    expect(ingles).toContain("Founded in 1954.");
+    expect(ingles).toContain("/en/club/");
+    expect(ingles).not.toContain("Quiénes somos");
+
+    const portugues = await textoDelDocumento(await generarDossierWord(datosDePrueba(), "pt"));
+    expect(portugues).toContain("Quem somos");
+    expect(portugues).toContain("/pt/club/");
+    expect(portugues).not.toContain("Quiénes somos");
+  });
+
+  it("un idioma que no existe sale en español", async () => {
+    const xml = await textoDelDocumento(await generarDossierWord(datosDePrueba(), "fr"));
+    expect(xml).toContain("Quiénes somos");
+    expect(xml).toContain("/es/club/");
+  });
 });

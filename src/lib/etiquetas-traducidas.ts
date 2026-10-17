@@ -8,7 +8,7 @@ import type {
   SponsorLevel,
   TeamLevel,
 } from "@/lib/types";
-import type { TipoDeOferta } from "@/lib/empresas";
+import type { EstadoOferta, TipoDeOferta } from "@/lib/empresas";
 import type { Responsable } from "@/lib/ficha-oportunidad";
 import type { OrdenBusqueda } from "@/lib/search-types";
 
@@ -41,6 +41,8 @@ export function etiquetador(t: Traductor) {
     objetivo: (id: ObjectiveTag) => t(`objetivo.${id}`),
     categoriaNecesidad: (id: CategoriaNecesidad) => t(`categoriaNecesidad.${id}`),
     tipoOferta: (id: TipoDeOferta) => t(`tipoOferta.${id}`),
+    tipoOfertaAyuda: (id: TipoDeOferta) => t(`tipoOfertaAyuda.${id}`),
+    estadoOferta: (id: EstadoOferta) => t(`estadoOferta.${id}`),
     responsable: (id: Responsable) => t(`responsable.${id}`),
     redSocial: (id: string) => t(`redSocial.${id}`),
     orden: (id: OrdenBusqueda) => t(`orden.${id}`),

@@ -8,8 +8,14 @@ import {
   ideasParaElClub,
   requisitosDelClub,
   textoDeLoQueFalta,
+  textosDeLaIdea,
   type RequisitoIdea,
 } from "@/lib/catalogo-ideas";
+import { traductorDePrueba } from "./traductor-de-prueba";
+
+// Los textos de las ideas están en los mensajes; aquí, los españoles.
+const t = traductorDePrueba("es", "ideas");
+const textos = (idea: { id: string }) => textosDeLaIdea(idea, t);
 import { CATEGORIAS_NECESIDAD, TIPOS_OPORTUNIDAD } from "@/lib/opportunities";
 
 describe("el catálogo, por dentro", () => {
@@ -33,7 +39,8 @@ describe("el catálogo, por dentro", () => {
 
   it("ninguna idea sugiere un precio: eso lo decide el club", () => {
     for (const idea of IDEAS) {
-      const texto = `${idea.titulo} ${idea.queEs} ${idea.queRecibeLaEmpresa} ${idea.duracion}`;
+      const { titulo, queEs, queRecibe, duracion } = textos(idea);
+      const texto = `${titulo} ${queEs} ${queRecibe} ${duracion}`;
       expect(texto, `${idea.id} menciona un importe`).not.toMatch(/\d+\s*(€|eur|euros)/i);
     }
   });
@@ -109,8 +116,8 @@ describe("el catálogo, por dentro", () => {
 
   it("ninguna descripción se queda a medias", () => {
     for (const idea of IDEAS) {
-      expect(idea.queEs.length, `${idea.id}`).toBeGreaterThan(30);
-      expect(idea.queRecibeLaEmpresa.length, `${idea.id}`).toBeGreaterThan(30);
+      expect(textos(idea).queEs.length, `${idea.id}`).toBeGreaterThan(30);
+      expect(textos(idea).queRecibe.length, `${idea.id}`).toBeGreaterThan(30);
     }
   });
 });
@@ -200,18 +207,18 @@ describe("ideasParaElClub", () => {
 describe("descripcionDeLaIdea", () => {
   it("junta qué es y qué se lleva la empresa, sin huecos que rellenar", () => {
     const idea = buscarIdea("equipacion-pecho")!;
-    const texto = descripcionDeLaIdea(idea);
+    const texto = descripcionDeLaIdea(idea, t);
 
-    expect(texto).toContain(idea.queEs);
-    expect(texto).toContain(idea.queRecibeLaEmpresa);
+    expect(texto).toContain(textos(idea).queEs);
+    expect(texto).toContain(textos(idea).queRecibe);
     expect(texto).not.toContain("[");
   });
 });
 
 describe("textoDeLoQueFalta", () => {
   it("lo dice en castellano y no con nombres de campos", () => {
-    expect(textoDeLoQueFalta(["instalaciones"])).toBe("cuenta dónde jugáis");
-    expect(textoDeLoQueFalta(["cantera", "redes"])).toBe(
+    expect(textoDeLoQueFalta(["instalaciones"], t)).toBe("cuenta dónde jugáis");
+    expect(textoDeLoQueFalta(["cantera", "redes"], t)).toBe(
       "añade los datos de tu cantera y añade tus redes sociales",
     );
   });
@@ -220,5 +227,24 @@ describe("textoDeLoQueFalta", () => {
 describe("buscarIdea", () => {
   it("devuelve null en vez de reventar si el id no existe", () => {
     expect(buscarIdea("no-existe")).toBeNull();
+  });
+});
+
+describe("el catálogo en los tres idiomas", () => {
+  it("cada idea tiene sus cuatro textos en español, portugués e inglés", () => {
+    for (const idioma of ["es", "pt", "en"]) {
+      const tIdioma = traductorDePrueba(idioma, "ideas");
+      for (const idea of IDEAS) {
+        const { titulo, queEs, queRecibe, duracion } = textosDeLaIdea(idea, tIdioma);
+        expect(titulo.length, `${idioma} ${idea.id}`).toBeGreaterThan(3);
+        expect(queEs.length, `${idioma} ${idea.id}`).toBeGreaterThan(20);
+        expect(queRecibe.length, `${idioma} ${idea.id}`).toBeGreaterThan(30);
+        expect(duracion.length, `${idioma} ${idea.id}`).toBeGreaterThan(2);
+      }
+    }
+  });
+
+  it("en inglés lo que falta se une con «and»", () => {
+    expect(textoDeLoQueFalta(["cantera", "redes"], traductorDePrueba("en", "ideas"), "en-GB")).toContain(" and ");
   });
 });

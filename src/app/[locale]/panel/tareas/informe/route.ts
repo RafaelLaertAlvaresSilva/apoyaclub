@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { textosDeDocumento } from "@/lib/textos-documento";
 import { clubRowToProfile, type ClubRow } from "@/lib/club-mappers";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { generarInformeWord } from "@/lib/informe-docx";
@@ -8,6 +9,8 @@ import { createClient } from "@/lib/supabase/server";
 import { obtenerTareasDelClub } from "@/lib/tareas-datos";
 import type { Role } from "@/lib/types";
 
+type ParametrosRuta = { params: Promise<{ locale: string }> };
+
 /**
  * Descarga del informe de patrocinio de una empresa, en PDF o en Word.
  *
@@ -16,14 +19,16 @@ import type { Role } from "@/lib/types";
  * hacerlo a mano con fetch y un blob solo añade un sitio más donde
  * fallar.
  */
-export async function POST(request: Request) {
+export async function POST(request: Request, { params }: ParametrosRuta) {
+  const { locale } = await params;
+  const { t } = await textosDeDocumento(locale, "informe");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user || (user.app_metadata?.role as Role | undefined) !== "club") {
-    return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+    return NextResponse.json({ error: t("noAutorizado") }, { status: 401 });
   }
 
   const formData = await request.formData();
@@ -31,7 +36,7 @@ export async function POST(request: Request) {
   const formato = String(formData.get("formato") ?? "pdf");
 
   if (!empresa || empresa.length > 120) {
-    return NextResponse.json({ error: "Falta la empresa." }, { status: 400 });
+    return NextResponse.json({ error: t("faltaEmpresa") }, { status: 400 });
   }
 
   const [{ data: filaClub }, tareas] = await Promise.all([
@@ -40,14 +45,14 @@ export async function POST(request: Request) {
   ]);
 
   if (!filaClub) {
-    return NextResponse.json({ error: "Completa primero la identidad del club." }, { status: 400 });
+    return NextResponse.json({ error: t("completaIdentidad") }, { status: 400 });
   }
 
   const informe = prepararInforme(empresa, tareas);
 
   if (informe.total === 0) {
     return NextResponse.json(
-      { error: "Todavía no hay acciones apuntadas para esa empresa." },
+      { error: t("sinAccionesEmpresa") },
       { status: 400 },
     );
   }
@@ -84,7 +89,7 @@ export async function POST(request: Request) {
     .slice(0, 60) || "empresa";
 
   if (formato === "word") {
-    const word = await generarInformeWord(datos);
+    const word = await generarInformeWord(datos, locale);
     return new NextResponse(new Uint8Array(word), {
       headers: {
         "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -94,7 +99,7 @@ export async function POST(request: Request) {
     });
   }
 
-  const pdf = await generarInformePdf(datos);
+  const pdf = await generarInformePdf(datos, locale);
   return new NextResponse(new Uint8Array(pdf), {
     headers: {
       "Content-Type": "application/pdf",

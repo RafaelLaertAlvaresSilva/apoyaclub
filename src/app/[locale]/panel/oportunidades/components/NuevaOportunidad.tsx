@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useActionState, useEffect, useRef, useState } from "react";
 import {
   descripcionDeLaIdea,
+  textosDeLaIdea,
   type Idea,
   type RequisitoIdea,
 } from "@/lib/catalogo-ideas";
@@ -24,6 +25,7 @@ export function NuevaOportunidad({
   userId: string;
 }) {
   const t = useTranslations("panel.oportunidades");
+  const tIdeas = useTranslations("ideas");
   const [abierto, setAbierto] = useState(false);
   const [idea, setIdea] = useState<Idea | null>(null);
   const [estado, formAction] = useActionState(crearOportunidad, null);
@@ -101,10 +103,10 @@ export function NuevaOportunidad({
           valoresIniciales={
             idea
               ? {
-                  title: idea.titulo,
-                  description: descripcionDeLaIdea(idea),
+                  title: textosDeLaIdea(idea, tIdeas).titulo,
+                  description: descripcionDeLaIdea(idea, tIdeas),
                   opportunityType: idea.tipo,
-                  duration: idea.duracion,
+                  duration: textosDeLaIdea(idea, tIdeas).duracion,
                   period: idea.periodo,
                   collaborationType: idea.colaboracion,
                   esNecesidad: idea.esNecesidad ?? false,

@@ -3,6 +3,7 @@ import { clubRowToProfile, clubSponsorRowToSponsor, clubTeamRowToTeam } from "@/
 import type { ClubRow, ClubSponsorRow, ClubTeamRow } from "@/lib/club-mappers";
 import { dossierRowToConfig, type DossierRow } from "@/lib/dossier-mappers";
 import { generarDossierPdf } from "@/lib/dossier-pdf";
+import { textosDeDocumento, type TextosDocumento } from "@/lib/textos-documento";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
 import { partidoRowToPartido, type PartidoRow } from "@/lib/publico-partidos";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -16,23 +17,25 @@ import { createAdminClient } from "@/lib/supabase/admin";
  * token, la activación y la caducidad antes de generar nada.
  */
 
-function paginaNoDisponible(mensaje: string) {
+function paginaNoDisponible({ t, locale }: TextosDocumento, clave: string) {
+  const mensaje = t(clave);
   const html = `<!doctype html>
-<html lang="es">
-<head><meta charset="utf-8" /><title>Enlace no disponible — ApoyaClub</title></head>
+<html lang="${locale}">
+<head><meta charset="utf-8" /><title>${t("noDisponibleTitulo")} — ApoyaClub</title></head>
 <body style="font-family: sans-serif; max-width: 480px; margin: 15vh auto; text-align: center; color: #18181b;">
-  <h1 style="font-size: 1.25rem;">Este enlace no está disponible</h1>
+  <h1 style="font-size: 1.25rem;">${t("noDisponible")}</h1>
   <p style="color: #52525b;">${mensaje}</p>
 </body>
 </html>`;
   return new NextResponse(html, { status: 404, headers: { "Content-Type": "text/html; charset=utf-8" } });
 }
 
-type ParametrosRuta = { params: Promise<{ token: string }> };
+type ParametrosRuta = { params: Promise<{ locale: string; token: string }> };
 
 export async function GET(_request: Request, { params }: ParametrosRuta) {
-  const { token } = await params;
-  if (!token) return paginaNoDisponible("El enlace no es válido.");
+  const { locale, token } = await params;
+  const textos = await textosDeDocumento(locale, "dossier");
+  if (!token) return paginaNoDisponible(textos, "noValido");
 
   const admin = createAdminClient();
 
@@ -42,14 +45,14 @@ export async function GET(_request: Request, { params }: ParametrosRuta) {
     .eq("share_token", token)
     .maybeSingle<DossierRow>();
 
-  if (!filaDossier) return paginaNoDisponible("El enlace no es válido.");
+  if (!filaDossier) return paginaNoDisponible(textos, "noValido");
 
   const configuracion = dossierRowToConfig(filaDossier);
   if (!configuracion.shareEnabled) {
-    return paginaNoDisponible("El club ha desactivado este enlace.");
+    return paginaNoDisponible(textos, "desactivado");
   }
   if (configuracion.shareExpiresAt && new Date(configuracion.shareExpiresAt).getTime() < Date.now()) {
-    return paginaNoDisponible("Este enlace ha caducado.");
+    return paginaNoDisponible(textos, "caducado");
   }
 
   const { data: filaClub } = await admin
@@ -58,7 +61,7 @@ export async function GET(_request: Request, { params }: ParametrosRuta) {
     .eq("id", configuracion.clubId)
     .maybeSingle<ClubRow>();
 
-  if (!filaClub) return paginaNoDisponible("El club ya no está disponible.");
+  if (!filaClub) return paginaNoDisponible(textos, "clubNoDisponible");
 
   // Métrica del panel (migración 0014): cuántas veces se ha abierto el
   // dossier que el club comparte. Si falla, el dossier se sirve igual.
@@ -119,7 +122,7 @@ export async function GET(_request: Request, { params }: ParametrosRuta) {
     partidos: (filasPartidos ?? []).map(partidoRowToPartido),
     secciones: configuracion.sections,
     emailContacto: usuario.user?.email ?? null,
-  });
+  }, locale);
 
   return new NextResponse(new Uint8Array(pdf), {
     headers: {

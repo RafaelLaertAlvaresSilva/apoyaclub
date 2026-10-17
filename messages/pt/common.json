@@ -199,6 +199,16 @@
       "todo": "Tudo",
       "patrocinios": "Patrocínios",
       "necesidades": "O que precisam"
+    },
+    "estadoOferta": {
+      "available": "Disponível",
+      "reserved": "Combinada",
+      "closed": "Fechada"
+    },
+    "tipoOfertaAyuda": {
+      "service": "Fisioterapia, transporte, design, consultoria… o que a tua empresa faz.",
+      "in_kind": "Material, equipamentos, comida, impressões… algo que entregas.",
+      "money": "Um patrocínio em dinheiro a troco de visibilidade."
     }
   },
   "plazas": {

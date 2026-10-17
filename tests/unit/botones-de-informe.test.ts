@@ -41,7 +41,7 @@ describe("los botones del informe", () => {
   it("siguen siendo formularios que mandan al sitio de siempre", () => {
     // Si alguien los pasa a fetch, dejan de funcionar sin JavaScript y
     // hay que montar a mano la descarga. Son POST a propósito.
-    expect(CODIGO).toContain('method="post" action="/panel/tareas/informe"');
+    expect(CODIGO).toContain('method="post" action={`/${locale}/panel/tareas/informe`}');
     expect(CODIGO).toContain('formato="pdf"');
     expect(CODIGO).toContain('formato="word"');
     expect(CODIGO).toContain('name="formato"');

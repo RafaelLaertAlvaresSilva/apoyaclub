@@ -1,14 +1,16 @@
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
 const ENLACES = [
-  { id: "ofertas", href: "/empresa", etiqueta: "Lo que ofrezco" },
-  { id: "ficha", href: "/empresa/ficha", etiqueta: "Mi ficha" },
+  { id: "ofertas", href: "/empresa", clave: "loQueOfrezco" },
+  { id: "ficha", href: "/empresa/ficha", clave: "miFicha" },
 ] as const;
 
 export type SeccionEmpresa = (typeof ENLACES)[number]["id"];
 
 /** Navegación entre las secciones del panel de empresa. */
 export function EmpresaNav({ activo }: { activo: SeccionEmpresa }) {
+  const t = useTranslations("empresa.panel");
   return (
     <nav className="flex gap-2 border-b border-zinc-200 pb-3">
       {ENLACES.map((enlace) => (
@@ -19,7 +21,7 @@ export function EmpresaNav({ activo }: { activo: SeccionEmpresa }) {
             activo === enlace.id ? "bg-accion text-sobre-color" : "text-zinc-600 hover:bg-zinc-100"
           }`}
         >
-          {enlace.etiqueta}
+          {t(enlace.clave)}
         </Link>
       ))}
 
@@ -27,7 +29,7 @@ export function EmpresaNav({ activo }: { activo: SeccionEmpresa }) {
         href="/buscar"
         className="ml-auto rounded-lg px-3 py-1.5 text-sm font-medium text-accion-tinta hover:bg-zinc-100"
       >
-        Buscar clubes
+        {t("buscarClubes")}
       </Link>
     </nav>
   );

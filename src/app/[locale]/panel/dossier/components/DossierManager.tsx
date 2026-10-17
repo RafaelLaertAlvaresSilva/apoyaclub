@@ -77,7 +77,7 @@ export function DossierManager({
       for (const valor of datosFormulario.getAll("opportunityIds"))
         cuerpo.append("opportunityIds", String(valor));
 
-      const respuesta = await fetch(`/panel/dossier/${formato}`, { method: "POST", body: cuerpo });
+      const respuesta = await fetch(`/${locale}/panel/dossier/${formato}`, { method: "POST", body: cuerpo });
       if (!respuesta.ok) throw new Error("Fallo al generar el dossier");
 
       const blob = await respuesta.blob();

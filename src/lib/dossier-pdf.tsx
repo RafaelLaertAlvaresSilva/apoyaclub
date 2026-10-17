@@ -7,14 +7,11 @@ import {
   type BloqueDeAlcance,
   type CifraDeAlcance,
 } from "@/lib/alcance";
-import { traductorDelAlcanceEnEspanol } from "@/lib/traductor-espanol";
 import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
 import type { DatosDossier } from "@/lib/dossier-datos";
 import { deportesDelClub, seccionesConContenido } from "@/lib/dossier";
-import { formatoValorOportunidad } from "@/lib/opportunities";
-import { routing } from "@/i18n/routing";
-import { SITE_URL } from "@/lib/site";
-import type { ClubTeam, DossierSectionKey, SocialLinks } from "@/lib/types";
+import { textosDeDocumento, type TextosDocumento } from "@/lib/textos-documento";
+import type { DossierSectionKey, SocialLinks } from "@/lib/types";
 
 /**
  * Generador del dossier comercial en PDF (Fase 9). Se genera siempre en
@@ -47,14 +44,6 @@ const COLOR_TEXTO = "#18181b"; // zinc-900
 const COLOR_TEXTO_SUAVE = "#52525b"; // zinc-600
 const COLOR_TEXTO_TENUE = "#a1a1aa"; // zinc-400
 const COLOR_BORDE = "#e4e4e7"; // zinc-200
-
-const ETIQUETA_NIVEL_EQUIPO: Record<ClubTeam["teamLevel"], string> = {
-  primer_equipo: "Primer equipo",
-  cantera: "Cantera",
-};
-
-const formatoNumero = new Intl.NumberFormat("es-ES");
-const formatoFecha = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "long", year: "numeric" });
 
 const estilos = StyleSheet.create({
   // -----------------------------------------------------------------
@@ -284,12 +273,12 @@ const estilos = StyleSheet.create({
 /** El tipo vive en `dossier-datos.ts`: lo comparten el PDF y el Word. */
 export type DatosDossierPdf = DatosDossier;
 
-function Pie({ url }: { url: string }) {
+function Pie({ url, textos }: { url: string; textos: TextosDocumento }) {
   return (
     <View style={estilos.pie} fixed>
       <Text>{url.replace(/^https?:\/\//, "")}</Text>
       <Text
-        render={({ pageNumber, totalPages }) => `ApoyaClub · página ${pageNumber} de ${totalPages}`}
+        render={({ pageNumber, totalPages }) => `ApoyaClub · ${textos.t("pagina", { n: pageNumber, total: totalPages })}`}
       />
     </View>
   );
@@ -310,8 +299,8 @@ function Tarjeta({ etiqueta, valor }: { etiqueta: string; valor: string }) {
  * "240 personas de media, apuntadas partido a partido" de un número
  * puesto a ojo, y es lo único que hace que la empresa se lo crea.
  */
-function TarjetaDeAlcance({ cifra }: { cifra: CifraDeAlcance }) {
-  const tAlcance = traductorDelAlcanceEnEspanol();
+function TarjetaDeAlcance({ cifra, textos }: { cifra: CifraDeAlcance; textos: TextosDocumento }) {
+  const { tAlcance, numero: formatoNumero } = textos;
   return (
     <View style={estilos.tarjeta}>
       <Text style={estilos.tarjetaValor}>
@@ -324,14 +313,14 @@ function TarjetaDeAlcance({ cifra }: { cifra: CifraDeAlcance }) {
   );
 }
 
-function BloqueDeAlcanceEnPdf({ bloque }: { bloque: BloqueDeAlcance }) {
+function BloqueDeAlcanceEnPdf({ bloque, textos }: { bloque: BloqueDeAlcance; textos: TextosDocumento }) {
   return (
     <View style={{ marginBottom: 10 }}>
       <Text style={estilos.bloqueTitulo}>{bloque.titulo}</Text>
       <Text style={estilos.bloqueExplicacion}>{bloque.explicacion}</Text>
       <View style={estilos.filaTarjetas}>
         {bloque.cifras.map((cifra) => (
-          <TarjetaDeAlcance key={cifra.id} cifra={cifra} />
+          <TarjetaDeAlcance key={cifra.id} cifra={cifra} textos={textos} />
         ))}
       </View>
       {bloque.cifras
@@ -377,8 +366,9 @@ function Seccion({
 }
 
 /** Construye el documento y lo renderiza a un Buffer con el PDF final. */
-export async function generarDossierPdf(datos: DatosDossierPdf): Promise<Buffer> {
-  return renderToBuffer(<DossierDocumento {...datos} />);
+export async function generarDossierPdf(datos: DatosDossierPdf, idioma?: string): Promise<Buffer> {
+  const textos = await textosDeDocumento(idioma, "dossier");
+  return renderToBuffer(<DossierDocumento {...datos} textos={textos} />);
 }
 
 function DossierDocumento({
@@ -389,13 +379,15 @@ function DossierDocumento({
   partidos,
   secciones,
   emailContacto,
-}: DatosDossierPdf) {
+  textos,
+}: DatosDossierPdf & { textos: TextosDocumento }) {
+  const { t, E, numero: formatoNumero, precio: formatoValorOportunidad } = textos;
   const disponibles = seccionesConContenido(perfil, equipos, patrocinadores, partidos);
   const incluir = (clave: DossierSectionKey) => secciones.includes(clave) && disponibles.has(clave);
 
   const deportes = deportesDelClub(equipos);
   const ubicacion = [perfil.city, perfil.province].filter(Boolean).join(", ");
-  const urlPublica = `${SITE_URL}/${routing.defaultLocale}/club/${perfil.slug}`;
+  const urlPublica = textos.urlDelClub(perfil.slug);
 
   const redesSociales = (Object.entries(perfil.socialLinks) as [keyof SocialLinks, string | undefined][])
     .filter((entrada): entrada is [keyof SocialLinks, string] => !!entrada[1]);
@@ -410,10 +402,10 @@ function DossierDocumento({
    * dejaba de creerse también lo que sí era cierto. Ahora se enseña la
    * red mayor y nada más.
    */
-  const tAlcance = traductorDelAlcanceEnEspanol();
-  const alcance = calcularAlcance({ perfil, equipos, partidos }, tAlcance);
+  const { tAlcance } = textos;
+  const alcance = calcularAlcance({ perfil, equipos, partidos }, tAlcance, textos.intlLocale);
   const cifrasPortada = cifrasDePortada(alcance);
-  const frasesLlanas = resumenLlano(alcance, tAlcance);
+  const frasesLlanas = resumenLlano(alcance, tAlcance, textos.intlLocale);
 
   const masBarata = oportunidades.reduce<number | null>(
     (minimo, oportunidad) => (minimo == null || oportunidad.value < minimo ? oportunidad.value : minimo),
@@ -422,9 +414,9 @@ function DossierDocumento({
 
   return (
     <Document
-      title={`Dossier de patrocinio — ${perfil.name}`}
+      title={t("tituloDocumento", { club: perfil.name })}
       author={perfil.name}
-      subject="Dossier comercial de patrocinio deportivo"
+      subject={t("asunto")}
     >
       {/* Portada: quién es el club y por qué le interesa a una empresa,
           sin pasar de página. */}
@@ -449,7 +441,7 @@ function DossierDocumento({
               </View>
             )}
 
-            <Text style={estilos.portadaEtiqueta}>DOSSIER DE PATROCINIO</Text>
+            <Text style={estilos.portadaEtiqueta}>{t("portada").toUpperCase()}</Text>
             <Text style={estilos.portadaNombre}>{perfil.name}</Text>
             {(deportes.length > 0 || ubicacion) && (
               <Text style={estilos.portadaDetalle}>
@@ -476,12 +468,10 @@ function DossierDocumento({
             {masBarata != null && (
               <View style={estilos.reclamo}>
                 <Text style={estilos.reclamoTexto}>
-                  Puedes colaborar con nosotros desde {formatoValorOportunidad.format(masBarata)}
+                  {t("desde", { precio: formatoValorOportunidad.format(masBarata) })}
                 </Text>
                 <Text style={estilos.reclamoDetalle}>
-                  {oportunidades.length === 1
-                    ? "Tienes el detalle en la página siguiente."
-                    : `${oportunidades.length} formas distintas de colaborar, en la página siguiente.`}
+                  {t("detalleSiguiente", { n: oportunidades.length })}
                 </Text>
               </View>
             )}
@@ -494,7 +484,7 @@ function DossierDocumento({
                 pie. */}
             {patrocinadores.length > 0 && (
               <View style={estilos.confianza}>
-                <Text style={estilos.confianzaEtiqueta}>YA CONFÍAN EN NOSOTROS</Text>
+                <Text style={estilos.confianzaEtiqueta}>{t("yaConfian").toUpperCase()}</Text>
                 <Text style={estilos.confianzaNombres}>
                   {patrocinadores
                     .slice(0, 8)
@@ -507,7 +497,7 @@ function DossierDocumento({
             <View style={estilos.portadaPie}>
               <Text style={estilos.marcaApoyaClub}>ApoyaClub</Text>
               <Text style={estilos.marcaApoyaClubSub}>
-                Dossier generado el {formatoFecha.format(new Date())} ·{" "}
+                {t("generado", { fecha: textos.fechaLarga(new Date()) })} ·{" "}
                 {urlPublica.replace(/^https?:\/\//, "")}
               </Text>
             </View>
@@ -518,7 +508,7 @@ function DossierDocumento({
       {/* Contenido: fluye automáticamente en tantas páginas como haga falta. */}
       <Page size="A4" style={estilos.paginaContenido}>
         {incluir("identidad") && perfil.description && (
-          <Seccion etiqueta="El club" titulo="Quiénes somos">
+          <Seccion etiqueta={t("elClub")} titulo={t("quienesSomos")}>
             <Text style={estilos.parrafo}>{perfil.description}</Text>
             {(perfil.website || redesSociales.length > 0) && (
               <Text style={[estilos.parrafo, { marginBottom: 0 }]}>
@@ -535,9 +525,9 @@ function DossierDocumento({
             esto está decidiendo si colabora, no estudiando su pasado. */}
         {oportunidades.length > 0 && (
           <Seccion
-            etiqueta="La propuesta"
-            titulo="Cómo puedes colaborar"
-            descripcion="Formas concretas de patrocinar al club, con su valor."
+            etiqueta={t("propuesta")}
+            titulo={t("comoColaborar")}
+            descripcion={t("comoColaborarTexto")}
           >
             {oportunidades.map((oportunidad) => (
               <View key={oportunidad.id} style={estilos.oportunidad} wrap={false}>
@@ -554,7 +544,7 @@ function DossierDocumento({
                 )}
                 {oportunidad.exclusivity && (
                   <Text style={estilos.oportunidadExclusiva}>
-                    Exclusiva para el sector {oportunidad.exclusivity}
+                    {t("exclusiva", { sector: oportunidad.exclusivity })}
                   </Text>
                 )}
                 {oportunidad.duration && (
@@ -566,7 +556,7 @@ function DossierDocumento({
         )}
 
         {incluir("equipos") && (
-          <Seccion etiqueta="A quién llegas" titulo="Equipos">
+          <Seccion etiqueta={t("aQuienLlegas")} titulo={t("equipos")}>
             <View style={estilos.filaTarjetas}>
               {equipos.map((equipo) => (
                 <View key={equipo.id} style={estilos.tarjeta}>
@@ -575,10 +565,10 @@ function DossierDocumento({
                     {equipo.category ? ` · ${equipo.category}` : ""}
                   </Text>
                   <Text style={estilos.tarjetaEtiqueta}>
-                    {ETIQUETA_NIVEL_EQUIPO[equipo.teamLevel]}
-                    {equipo.gender ? ` · ${equipo.gender}` : ""}
+                    {E.nivelEquipo(equipo.teamLevel)}
+                    {equipo.gender ? ` · ${textos.sexo(equipo.gender)}` : ""}
                     {equipo.playerCount != null
-                      ? ` · ${formatoNumero.format(equipo.playerCount)} jugadores`
+                      ? ` · ${t("jugadores", { n: equipo.playerCount })}`
                       : ""}
                   </Text>
                 </View>
@@ -589,19 +579,19 @@ function DossierDocumento({
 
         {incluir("cantera") && (
           <Seccion
-            etiqueta="A quién llegas"
-            titulo="Cantera"
-            descripcion="Datos agregados de las categorías inferiores del club."
+            etiqueta={t("aQuienLlegas")}
+            titulo={t("cantera")}
+            descripcion={t("canteraTexto")}
           >
             <View style={estilos.filaTarjetas}>
               {perfil.youthTeamsCount != null && (
-                <Tarjeta etiqueta="Equipos" valor={formatoNumero.format(perfil.youthTeamsCount)} />
+                <Tarjeta etiqueta={t("tarjetaEquipos")} valor={formatoNumero.format(perfil.youthTeamsCount)} />
               )}
               {perfil.youthPlayersCount != null && (
-                <Tarjeta etiqueta="Jugadores" valor={formatoNumero.format(perfil.youthPlayersCount)} />
+                <Tarjeta etiqueta={t("tarjetaJugadores")} valor={formatoNumero.format(perfil.youthPlayersCount)} />
               )}
               {perfil.youthFamiliesCount != null && (
-                <Tarjeta etiqueta="Familias" valor={formatoNumero.format(perfil.youthFamiliesCount)} />
+                <Tarjeta etiqueta={t("tarjetaFamilias")} valor={formatoNumero.format(perfil.youthFamiliesCount)} />
               )}
             </View>
           </Seccion>
@@ -609,9 +599,9 @@ function DossierDocumento({
 
         {incluir("audiencia") && alcance.hayCifras && (
           <Seccion
-            etiqueta="A quién llegas"
-            titulo="Audiencia en cifras"
-            descripcion="Las cifras van separadas según de dónde salen, y no se suman entre sí: la misma persona puede ser socio, padre de un jugador y seguidor en redes."
+            etiqueta={t("aQuienLlegas")}
+            titulo={t("audiencia")}
+            descripcion={t("audienciaTexto")}
           >
             {/* Primero en cristiano, y debajo las cifras con su
                 procedencia. Quien abre esto suele ser el dueño de un
@@ -626,13 +616,13 @@ function DossierDocumento({
                   </Text>
                 ))}
                 <Text style={estilos.resumenLlanoPie}>
-                  Las cifras exactas, y de dónde sale cada una, aquí debajo.
+                  {t("cifrasExactas")}
                 </Text>
               </View>
             )}
 
             {alcance.bloques.map((bloque) => (
-              <BloqueDeAlcanceEnPdf key={bloque.id} bloque={bloque} />
+              <BloqueDeAlcanceEnPdf key={bloque.id} bloque={bloque} textos={textos} />
             ))}
             <Text style={estilos.avisoDeOrigen}>{tAlcance("avisoDeOrigen")}</Text>
           </Seccion>
@@ -640,13 +630,13 @@ function DossierDocumento({
 
         {incluir("patrocinadores") && (
           <Seccion
-            etiqueta="Confían en nosotros"
-            titulo="Patrocinadores actuales"
-            descripcion="Empresas que ya colaboran con el club."
+            etiqueta={t("confian")}
+            titulo={t("patrocinadores")}
+            descripcion={t("patrocinadoresTexto")}
           >
             {agruparPatrocinadoresPorNivel(patrocinadores).map((grupo) => (
               <View key={grupo.etiqueta} style={{ marginBottom: 8 }}>
-                <Text style={estilos.grupoSponsorEtiqueta}>{grupo.etiqueta.toUpperCase()}</Text>
+                <Text style={estilos.grupoSponsorEtiqueta}>{textos.nivelPatrocinador(grupo.etiqueta).toUpperCase()}</Text>
                 <View style={estilos.filaSponsors}>
                   {grupo.patrocinadores.map((patrocinador) => (
                     <View key={patrocinador.id} style={estilos.filaSponsor}>
@@ -654,7 +644,7 @@ function DossierDocumento({
                       {patrocinador.logoUrl && <Image src={patrocinador.logoUrl} style={estilos.logoPequeno} />}
                       <Text style={{ fontSize: 9, fontFamily: "Helvetica-Bold" }}>
                         {patrocinador.name}
-                        {patrocinador.sinceYear ? ` (desde ${patrocinador.sinceYear})` : ""}
+                        {patrocinador.sinceYear ? ` ${t("desdeAnio", { anio: String(patrocinador.sinceYear) })}` : ""}
                       </Text>
                     </View>
                   ))}
@@ -665,9 +655,9 @@ function DossierDocumento({
         )}
 
         {incluir("historia") && (
-          <Seccion etiqueta="El club" titulo="Nuestra historia">
+          <Seccion etiqueta={t("elClub")} titulo={t("historia")}>
             {perfil.foundingYear != null && (
-              <Text style={estilos.parrafo}>Fundado en {perfil.foundingYear}.</Text>
+              <Text style={estilos.parrafo}>{t("fundado", { anio: String(perfil.foundingYear) })}</Text>
             )}
             {perfil.milestones
               .slice()
@@ -682,7 +672,7 @@ function DossierDocumento({
         )}
 
         {incluir("instalaciones") && (perfil.facilities || perfil.facilitiesAddress) && (
-          <Seccion etiqueta="El club" titulo="Instalaciones">
+          <Seccion etiqueta={t("elClub")} titulo={t("instalaciones")}>
             {perfil.facilitiesAddress && (
               <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", marginBottom: 4 }}>
                 {perfil.facilitiesAddress}
@@ -697,8 +687,8 @@ function DossierDocumento({
             y las dos en gris pequeño, como una nota al pie. */}
         {(emailContacto || (perfil.contactPublicConsent && perfil.contactPhone)) && (
           <View style={estilos.contacto} wrap={false}>
-            <Text style={estilos.contactoEtiqueta}>HABLEMOS</Text>
-            <Text style={estilos.contactoTitulo}>¿Te interesa colaborar con nosotros?</Text>
+            <Text style={estilos.contactoEtiqueta}>{t("hablemos").toUpperCase()}</Text>
+            <Text style={estilos.contactoTitulo}>{t("teInteresa")}</Text>
             {perfil.contactPublicConsent && perfil.contactName && (
               <Text style={estilos.contactoLinea}>{perfil.contactName}</Text>
             )}
@@ -711,7 +701,7 @@ function DossierDocumento({
           </View>
         )}
 
-        <Pie url={urlPublica} />
+        <Pie url={urlPublica} textos={textos} />
       </Page>
     </Document>
   );

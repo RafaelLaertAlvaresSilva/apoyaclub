@@ -215,6 +215,14 @@
       "anadirUna": "Añadir una foto",
       "anadirOtra": "Añadir otra foto",
       "yaTienesTodas": "Ya tienes las {n} fotos. Quita una para poder subir otra."
+    },
+    "catalogo": {
+      "titulo": "¿No sabes qué ofrecer? Mira por aquí",
+      "texto": "Un patrocinio no es solo el hueco de la camiseta. Elige por dónde quieres empezar.",
+      "seLleva": "La empresa se lleva:",
+      "usar": "Usar esta idea",
+      "paraEsto": "Para esto, antes {falta}",
+      "alElegir": "Al elegir una idea se rellena el formulario de abajo y lo puedes cambiar entero. El precio lo pones tú: nadie sabe mejor que el club lo que vale lo suyo."
     }
   },
   "perfil": {
@@ -751,7 +759,19 @@
       "demasiado-grande": "El archivo pesa más de {mb} MB. Comprímelo o haz la foto con menos calidad.",
       "vacio": "El archivo está vacío.",
       "limite-alcanzado": "Cada patrocinador admite {maximo} documentos. Borra alguno para subir otro."
-    }
+    },
+    "soloParaEmpresas": "Esta acción solo está disponible para empresas.",
+    "escribeOfrecesAlgoMasDetalle": "Escribe qué ofreces, con algo más de detalle.",
+    "tituloDemasiadoLargo": "El título es demasiado largo.",
+    "eligeSiOfrecesServicioProducto": "Elige si ofreces un servicio, un producto o dinero.",
+    "ponCorreoOTelefonoSin": "Pon un correo o un teléfono: sin eso, el club no puede escribirte.",
+    "eseCorreoPareceCorreo": "Ese correo no parece un correo.",
+    "encontradoOferta": "No se ha encontrado la oferta.",
+    "podidoCambiarEstado": "No se ha podido cambiar el estado.",
+    "nombreEmpresaPuedeQuedarseVacio": "El nombre de la empresa no puede quedarse vacío.",
+    "podidoPublicarIntentaloNuevo": "No se ha podido publicar. Inténtalo de nuevo.",
+    "podidoCambiarIntentaloNuevo": "No se ha podido cambiar. Inténtalo de nuevo.",
+    "podidoArchivarIntentaloNuevo": "No se ha podido archivar. Inténtalo de nuevo."
   },
   "tareas": {
     "filtros": {
@@ -1379,6 +1399,82 @@
     "logros": {
       "titulo": "Escribe vuestros logros",
       "porQue": "Ascensos, títulos, participaciones. Da igual lo pequeño."
+    }
+  },
+  "documentos": {
+    "dossier": {
+      "tituloDocumento": "Dossier de patrocinio — {club}",
+      "asunto": "Dossier comercial de patrocinio deportivo",
+      "portada": "Dossier de patrocinio",
+      "desde": "Puedes colaborar con nosotros desde {precio}",
+      "detalleSiguiente": "{n, plural, one {Tienes el detalle en la página siguiente.} other {# formas distintas de colaborar, en la página siguiente.}}",
+      "yaConfian": "Ya confían en nosotros",
+      "generado": "Dossier generado el {fecha}",
+      "elClub": "El club",
+      "quienesSomos": "Quiénes somos",
+      "propuesta": "La propuesta",
+      "comoColaborar": "Cómo puedes colaborar",
+      "comoColaborarTexto": "Formas concretas de patrocinar al club, con su valor.",
+      "exclusiva": "Exclusiva para el sector {sector}",
+      "aQuienLlegas": "A quién llegas",
+      "equipos": "Equipos",
+      "jugadores": "{n, plural, one {# jugador} other {# jugadores}}",
+      "cantera": "Cantera",
+      "canteraTexto": "Datos agregados de las categorías inferiores del club.",
+      "tarjetaEquipos": "Equipos",
+      "tarjetaJugadores": "Jugadores",
+      "tarjetaFamilias": "Familias",
+      "audiencia": "Audiencia en cifras",
+      "audienciaTexto": "Las cifras van separadas según de dónde salen, y no se suman entre sí: la misma persona puede ser socio, padre de un jugador y seguidor en redes.",
+      "cifrasExactas": "Las cifras exactas, y de dónde sale cada una, aquí debajo.",
+      "confian": "Confían en nosotros",
+      "patrocinadores": "Patrocinadores actuales",
+      "patrocinadoresTexto": "Empresas que ya colaboran con el club.",
+      "desdeAnio": "(desde {anio})",
+      "historia": "Nuestra historia",
+      "fundado": "Fundado en {anio}.",
+      "instalaciones": "Instalaciones",
+      "hablemos": "Hablemos",
+      "teInteresa": "¿Te interesa colaborar con nosotros?",
+      "pagina": "página {n} de {total}",
+      "paginaPalabra": "página",
+      "de": "de",
+      "noAutorizado": "No autorizado.",
+      "completaIdentidad": "Completa primero la identidad del club.",
+      "noDisponibleTitulo": "Enlace no disponible",
+      "noDisponible": "Este enlace no está disponible",
+      "noValido": "El enlace no es válido.",
+      "desactivado": "El club ha desactivado este enlace.",
+      "caducado": "Este enlace ha caducado.",
+      "clubNoDisponible": "El club ya no está disponible."
+    },
+    "informe": {
+      "portada": "Informe de patrocinio",
+      "tituloDocumento": "Informe de patrocinio — {empresa}",
+      "asunto": "Acciones realizadas para {empresa}",
+      "loHecho": "Lo que hemos hecho por",
+      "periodo": "Del {desde} al {hasta}",
+      "fecha": "Fecha: {fecha}",
+      "acordadas": "Acciones acordadas",
+      "cumplidas": "Ya cumplidas",
+      "conPrueba": "Con enlace o prueba",
+      "resumenLinea": "{total, plural, one {# acción acordada} other {# acciones acordadas}} · {cumplidas} ya cumplidas · {prueba} con enlace o prueba",
+      "hecho": "Hecho",
+      "enMarcha": "En marcha",
+      "vencidas": "Pendiente, fuera de plazo",
+      "conCuenta": "{titulo} ({n})",
+      "gracias": "Gracias por apoyar el deporte de tu barrio",
+      "graciasTexto": "Tu apoyo se ve cada semana en la pista y en cada familia que forma parte del club. Si quieres seguir la temporada que viene, o cambiar algo de lo acordado, hablamos cuando te venga bien.",
+      "sinAcciones": "Todavía no hay acciones registradas.",
+      "todasCumplidas": "{n, plural, one {Se ha cumplido la acción acordada.} other {Se han cumplido las # acciones acordadas.}}",
+      "parcial": "{cumplidas} de {total} acciones acordadas ya están cumplidas.",
+      "pagina": "página {n} de {total}",
+      "paginaPalabra": "página",
+      "de": "de",
+      "noAutorizado": "No autorizado.",
+      "faltaEmpresa": "Falta la empresa.",
+      "completaIdentidad": "Completa primero la identidad del club.",
+      "sinAccionesEmpresa": "Todavía no hay acciones apuntadas para esa empresa."
     }
   }
 }

@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -18,8 +19,9 @@ export type EstadoBaja = { error: string } | { ok: true } | null;
  * vez: eso se hace desde el panel, con la sesión iniciada.
  */
 export async function darseDeBajaDeAvisos(formData: FormData): Promise<EstadoBaja> {
+  const t = await getTranslations("empresa.baja");
   const token = String(formData.get("token") ?? "").trim();
-  if (!token) return { error: "Este enlace no es válido." };
+  if (!token) return { error: t("noValido") };
 
   const { error, count } = await createAdminClient()
     .from("companies")
@@ -28,13 +30,13 @@ export async function darseDeBajaDeAvisos(formData: FormData): Promise<EstadoBaj
 
   if (error) {
     avisarDeFallo("empresa", "No se ha podido dar de baja de los avisos", error);
-    return { error: "No se ha podido completar. Inténtalo dentro de un rato." };
+    return { error: t("fallo") };
   }
 
   // Un enlace viejo o manipulado no encuentra a nadie. Se dice, en vez
   // de fingir que ha funcionado: si alguien sigue recibiendo correos
   // después de darse de baja, lo siguiente es el botón de spam.
-  if (!count) return { error: "Este enlace ya no sirve. Escríbenos a info@apoyaclub.com." };
+  if (!count) return { error: t("yaNoSirve") };
 
   return { ok: true };
 }

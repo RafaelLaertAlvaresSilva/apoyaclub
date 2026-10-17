@@ -93,6 +93,10 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   const tc = await getTranslations("club.paginaClub");
   const E = etiquetador(await getTranslations("common.etiquetas"));
   const tDestacados = await getTranslations("club.destacados");
+  const tSexo = await getTranslations("panel.perfil.sexo");
+  // Se guardan en español (`club_teams.gender`); lo escrito a mano, tal cual.
+  const sexoDelEquipo = (valor: string) =>
+    valor === "Masculino" || valor === "Femenino" || valor === "Mixto" ? tSexo(valor) : valor;
   const formatoNumero = new Intl.NumberFormat(LOCALE_CONFIG[locale].intlLocale);
   const precio = formatoDeValor(locale);
 
@@ -543,7 +547,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                 </p>
                 <p className="mt-1 text-sm text-zinc-500">
                   {E.nivelEquipo(equipo.teamLevel)}
-                  {equipo.gender ? ` · ${equipo.gender}` : ""}
+                  {equipo.gender ? ` · ${sexoDelEquipo(equipo.gender)}` : ""}
                   {equipo.playerCount != null
                     ? ` · ${tc("jugadores", { n: formatoNumero.format(equipo.playerCount) })}`
                     : ""}

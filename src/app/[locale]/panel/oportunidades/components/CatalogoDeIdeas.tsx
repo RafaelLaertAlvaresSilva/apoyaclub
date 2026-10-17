@@ -1,11 +1,14 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { useIntlLocale } from "@/i18n/use-intl-locale";
 import { IconoDeCategoria } from "@/components/IconoDeCategoria";
 import {
   CATEGORIAS_IDEA,
   ideasParaElClub,
   textoDeLoQueFalta,
+  textosDeLaIdea,
   type CategoriaIdea,
   type Idea,
   type RequisitoIdea,
@@ -32,19 +35,24 @@ export function CatalogoDeIdeas({
   requisitos: RequisitoIdea[];
   onElegir: (idea: Idea) => void;
 }) {
+  const t = useTranslations("panel.oportunidades.catalogo");
+  const tIdeas = useTranslations("ideas");
+  // Los nombres y pistas de las categorías son los de la portada.
+  const tCategorias = useTranslations("home.categoriasIdea");
+  const intlLocale = useIntlLocale();
   const [categoria, setCategoria] = useState<CategoriaIdea | null>(null);
 
   const tiene = new Set(requisitos);
   const ideas = categoria ? ideasParaElClub(categoria, tiene) : [];
-  const pista = CATEGORIAS_IDEA.find((entrada) => entrada.id === categoria)?.pista;
+  const pista = categoria ? tCategorias(`${categoria}.pista`) : null;
 
   return (
     <div className="mb-6 rounded-xl border border-teal-200 bg-teal-50/50 p-4">
       <p className="text-sm font-semibold text-zinc-900">
-        ¿No sabes qué ofrecer? Mira por aquí
+        {t("titulo")}
       </p>
       <p className="mt-0.5 text-sm text-zinc-600">
-        Un patrocinio no es solo el hueco de la camiseta. Elige por dónde quieres empezar.
+        {t("texto")}
       </p>
 
       <div className="mt-3 flex flex-wrap gap-2">
@@ -68,7 +76,7 @@ export function CatalogoDeIdeas({
                 separarse. Hereda el color de la pastilla, que cambia a
                 blanco al seleccionarla. */}
             <IconoDeCategoria categoria={entrada.id} className="h-3.5 w-3.5 flex-none" />
-            {entrada.etiqueta}
+            {tCategorias(`${entrada.id}.etiqueta`)}
           </button>
         ))}
       </div>
@@ -85,15 +93,15 @@ export function CatalogoDeIdeas({
                     idea.disponible ? "border-zinc-200" : "border-dashed border-zinc-300"
                   }`}
                 >
-                  <p className="text-sm font-medium text-zinc-900">{idea.titulo}</p>
-                  <p className="mt-1 text-xs leading-relaxed text-zinc-600">{idea.queEs}</p>
+                  <p className="text-sm font-medium text-zinc-900">{textosDeLaIdea(idea, tIdeas).titulo}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-zinc-600">{textosDeLaIdea(idea, tIdeas).queEs}</p>
                   <p className="mt-1.5 text-xs leading-relaxed text-zinc-500">
-                    <span className="font-medium text-zinc-600">La empresa se lleva:</span>{" "}
-                    {idea.queRecibeLaEmpresa}
+                    <span className="font-medium text-zinc-600">{t("seLleva")}</span>{" "}
+                    {textosDeLaIdea(idea, tIdeas).queRecibe}
                   </p>
 
                   <div className="mt-3 flex items-center justify-between gap-2">
-                    <span className="text-xs text-zinc-400">{idea.duracion}</span>
+                    <span className="text-xs text-zinc-400">{textosDeLaIdea(idea, tIdeas).duracion}</span>
 
                     {idea.disponible ? (
                       <button
@@ -101,14 +109,14 @@ export function CatalogoDeIdeas({
                         onClick={() => onElegir(idea)}
                         className="rounded-lg bg-accion px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte"
                       >
-                        Usar esta idea
+                        {t("usar")}
                       </button>
                     ) : (
                       /* Apagada, pero a la vista: enterarse de que esto
                          también se vende es justo lo que el club ha
                          venido a buscar. Solo le falta un dato suyo. */
                       <span className="text-right text-xs text-amber-700">
-                        Para esto, antes {textoDeLoQueFalta(idea.leFalta)}
+                        {t("paraEsto", { falta: textoDeLoQueFalta(idea.leFalta, tIdeas, intlLocale) })}
                       </span>
                     )}
                   </div>
@@ -118,8 +126,7 @@ export function CatalogoDeIdeas({
           </ul>
 
           <p className="mt-3 text-xs text-zinc-500">
-            Al elegir una idea se rellena el formulario de abajo y lo puedes cambiar entero. El
-            precio lo pones tú: nadie sabe mejor que el club lo que vale lo suyo.
+            {t("alElegir")}
           </p>
         </div>
       )}

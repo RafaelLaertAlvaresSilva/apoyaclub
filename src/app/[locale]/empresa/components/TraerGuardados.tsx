@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { leerFavoritos, vaciarFavoritos } from "@/lib/favoritos";
 import { subirFavoritosDelNavegador } from "../../favoritos/actions";
@@ -16,6 +17,7 @@ import { subirFavoritosDelNavegador } from "../../favoritos/actions";
  * No pinta nada mientras no hay nada que traer, que es lo normal.
  */
 export function TraerGuardados() {
+  const t = useTranslations("empresa.panel");
   const [subidos, setSubidos] = useState<number | null>(null);
 
   useEffect(() => {
@@ -42,8 +44,7 @@ export function TraerGuardados() {
 
   return (
     <p className="rounded-lg border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-900">
-      Hemos traído a tu cuenta {subidos === 1 ? "lo que tenías guardado" : `las ${subidos} cosas que tenías guardadas`}{" "}
-      en este navegador. Ahora las verás desde cualquier dispositivo.
+      {t("traidos", { n: subidos })}
     </p>
   );
 }

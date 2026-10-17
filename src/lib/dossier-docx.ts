@@ -23,13 +23,10 @@ import {
   resumenLlano,
   unidadEnTexto,
 } from "@/lib/alcance";
-import { traductorDelAlcanceEnEspanol } from "@/lib/traductor-espanol";
 import type { DatosDossier } from "@/lib/dossier-datos";
 import { descargarImagen, encajarEn, type ImagenDescargada } from "@/lib/imagenes-remotas";
-import { formatoValorOportunidad } from "@/lib/opportunities";
-import { routing } from "@/i18n/routing";
-import { SITE_URL } from "@/lib/site";
-import type { ClubTeam, DossierSectionKey, SocialLinks } from "@/lib/types";
+import { textosDeDocumento } from "@/lib/textos-documento";
+import type { DossierSectionKey, SocialLinks } from "@/lib/types";
 
 /**
  * El mismo dossier que el PDF, pero en Word (.docx).
@@ -59,18 +56,6 @@ const GRIS = "52525B";
 const GRIS_TENUE = "A1A1AA";
 
 const ANCHO_UTIL = 690; // ancho util de una A4 con los margenes de este documento (0,5")
-
-const ETIQUETA_NIVEL_EQUIPO: Record<ClubTeam["teamLevel"], string> = {
-  primer_equipo: "Primer equipo",
-  cantera: "Cantera",
-};
-
-const formatoNumero = new Intl.NumberFormat("es-ES");
-const formatoFecha = new Intl.DateTimeFormat("es-ES", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
 
 function recortar(texto: string, limite: number): string {
   if (texto.length <= limite) return texto;
@@ -152,16 +137,18 @@ function tablaDeCifras(cifras: { etiqueta: string; valor: string }[]) {
 }
 
 /** Construye el .docx y lo devuelve como Buffer. */
-export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
+export async function generarDossierWord(datos: DatosDossier, idioma?: string): Promise<Buffer> {
   const { perfil, equipos, patrocinadores, oportunidades, partidos, secciones, emailContacto } =
     datos;
+  const textos = await textosDeDocumento(idioma, "dossier");
+  const { t, E, tAlcance, numero: formatoNumero, precio: formatoValorOportunidad } = textos;
 
   const disponibles = seccionesConContenido(perfil, equipos, patrocinadores, partidos);
   const incluir = (clave: DossierSectionKey) => secciones.includes(clave) && disponibles.has(clave);
 
   const deportes = deportesDelClub(equipos);
   const ubicacion = [perfil.city, perfil.province].filter(Boolean).join(", ");
-  const urlPublica = `${SITE_URL}/${routing.defaultLocale}/club/${perfil.slug}`;
+  const urlPublica = textos.urlDelClub(perfil.slug);
   const urlLimpia = urlPublica.replace(/^https?:\/\//, "");
 
   // Las imágenes se traen todas a la vez: son peticiones a Storage y en
@@ -181,8 +168,7 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
    * sola cuenta no es elegancia: es que el día que una empresa compare
    * el Word con el PDF del mismo club, las cifras tienen que coincidir.
    */
-  const tAlcance = traductorDelAlcanceEnEspanol();
-  const alcance = calcularAlcance({ perfil, equipos, partidos }, tAlcance);
+  const alcance = calcularAlcance({ perfil, equipos, partidos }, tAlcance, textos.intlLocale);
 
   const cifrasPortada = cifrasDePortada(alcance).map((cifra) => ({
     etiqueta: cifra.etiqueta,
@@ -209,7 +195,7 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
     cuerpo.push(imagen(logo, ancho, alto));
   }
 
-  cuerpo.push(antetitulo("Dossier de patrocinio"));
+  cuerpo.push(antetitulo(t("portada")));
   cuerpo.push(
     new Paragraph({
       spacing: { after: 60 },
@@ -236,7 +222,7 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
         spacing: { after: 60 },
         children: [
           new TextRun({
-            text: `Puedes colaborar con nosotros desde ${formatoValorOportunidad.format(masBarata)}`,
+            text: t("desde", { precio: formatoValorOportunidad.format(masBarata) }),
             size: 24,
             bold: true,
             color: TEAL,
@@ -246,16 +232,14 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
     );
     cuerpo.push(
       parrafo(
-        oportunidades.length === 1
-          ? "Tienes el detalle en la página siguiente."
-          : `${oportunidades.length} formas distintas de colaborar, en la página siguiente.`,
+        t("detalleSiguiente", { n: oportunidades.length }),
         { color: GRIS, tamano: 18 },
       ),
     );
   }
 
   if (patrocinadores.length > 0) {
-    cuerpo.push(antetitulo("Ya confían en nosotros"));
+    cuerpo.push(antetitulo(t("yaConfian")));
     cuerpo.push(
       parrafo(
         patrocinadores
@@ -268,7 +252,7 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
   }
 
   cuerpo.push(
-    parrafo(`ApoyaClub · Dossier generado el ${formatoFecha.format(new Date())} · ${urlLimpia}`, {
+    parrafo(`ApoyaClub · ${t("generado", { fecha: textos.fechaLarga(new Date()) })} · ${urlLimpia}`, {
       color: GRIS_TENUE,
       tamano: 16,
     }),
@@ -278,7 +262,7 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
 
   // ---------- Contenido ----------
   if (incluir("identidad") && perfil.description) {
-    cuerpo.push(titulo("Quiénes somos"));
+    cuerpo.push(titulo(t("quienesSomos")));
     cuerpo.push(parrafo(perfil.description));
     if (perfil.website || redesSociales.length > 0) {
       cuerpo.push(
@@ -294,8 +278,8 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
   }
 
   if (oportunidades.length > 0) {
-    cuerpo.push(titulo("Cómo puedes colaborar"));
-    cuerpo.push(parrafo("Formas concretas de patrocinar al club, con su valor.", { color: GRIS, tamano: 20 }));
+    cuerpo.push(titulo(t("comoColaborar")));
+    cuerpo.push(parrafo(t("comoColaborarTexto"), { color: GRIS, tamano: 20 }));
 
     for (const oportunidad of oportunidades) {
       cuerpo.push(
@@ -307,19 +291,19 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
       );
       if (oportunidad.description) cuerpo.push(parrafo(oportunidad.description, { espacioDespues: 60 }));
       if (oportunidad.exclusivity) {
-        cuerpo.push(parrafo(`Exclusiva para el sector ${oportunidad.exclusivity}`, { color: TEAL, tamano: 18, negrita: true, espacioDespues: 40 }));
+        cuerpo.push(parrafo(t("exclusiva", { sector: oportunidad.exclusivity }), { color: TEAL, tamano: 18, negrita: true, espacioDespues: 40 }));
       }
       if (oportunidad.duration) cuerpo.push(parrafo(oportunidad.duration, { color: GRIS, tamano: 18 }));
     }
   }
 
   if (incluir("equipos")) {
-    cuerpo.push(titulo("Equipos"));
+    cuerpo.push(titulo(t("equipos")));
     for (const equipo of equipos) {
       const detalle = [
-        ETIQUETA_NIVEL_EQUIPO[equipo.teamLevel],
-        equipo.gender ?? null,
-        equipo.playerCount != null ? `${formatoNumero.format(equipo.playerCount)} jugadores` : null,
+        E.nivelEquipo(equipo.teamLevel),
+        equipo.gender ? textos.sexo(equipo.gender) : null,
+        equipo.playerCount != null ? t("jugadores", { n: equipo.playerCount }) : null,
       ]
         .filter(Boolean)
         .join(" · ");
@@ -340,38 +324,33 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
   if (incluir("cantera")) {
     const cifras = [
       perfil.youthTeamsCount != null
-        ? { etiqueta: "Equipos", valor: formatoNumero.format(perfil.youthTeamsCount) }
+        ? { etiqueta: t("tarjetaEquipos"), valor: formatoNumero.format(perfil.youthTeamsCount) }
         : null,
       perfil.youthPlayersCount != null
-        ? { etiqueta: "Jugadores", valor: formatoNumero.format(perfil.youthPlayersCount) }
+        ? { etiqueta: t("tarjetaJugadores"), valor: formatoNumero.format(perfil.youthPlayersCount) }
         : null,
       perfil.youthFamiliesCount != null
-        ? { etiqueta: "Familias", valor: formatoNumero.format(perfil.youthFamiliesCount) }
+        ? { etiqueta: t("tarjetaFamilias"), valor: formatoNumero.format(perfil.youthFamiliesCount) }
         : null,
     ].filter((cifra): cifra is { etiqueta: string; valor: string } => cifra !== null);
 
     if (cifras.length > 0) {
-      cuerpo.push(titulo("Cantera"));
-      cuerpo.push(parrafo("Datos agregados de las categorías inferiores del club.", { color: GRIS, tamano: 20 }));
+      cuerpo.push(titulo(t("cantera")));
+      cuerpo.push(parrafo(t("canteraTexto"), { color: GRIS, tamano: 20 }));
       cuerpo.push(tablaDeCifras(cifras));
     }
   }
 
   if (incluir("audiencia") && alcance.hayCifras) {
-    cuerpo.push(titulo("Audiencia en cifras"));
-    cuerpo.push(
-      parrafo(
-        "Las cifras van separadas segun de donde salen, y no se suman entre si: la misma persona puede ser socio, padre de un jugador y seguidor en redes.",
-        { color: GRIS, tamano: 20 },
-      ),
-    );
+    cuerpo.push(titulo(t("audiencia")));
+    cuerpo.push(parrafo(t("audienciaTexto"), { color: GRIS, tamano: 20 }));
 
     // El mismo resumen en cristiano que el PDF, y por el mismo motivo:
     // quien abre esto decide en dos minutos y no se lee ocho tarjetas
     // con su metodología. Va aquí también porque el día que una empresa
     // compare el Word con el PDF del mismo club, los dos tienen que
     // decir lo mismo.
-    for (const frase of resumenLlano(alcance, tAlcance)) {
+    for (const frase of resumenLlano(alcance, tAlcance, textos.intlLocale)) {
       cuerpo.push(parrafo(frase, { tamano: 22, espacioDespues: 40 }));
     }
 
@@ -407,15 +386,15 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
   }
 
   if (incluir("patrocinadores")) {
-    cuerpo.push(titulo("Patrocinadores actuales"));
-    cuerpo.push(parrafo("Empresas que ya colaboran con el club.", { color: GRIS, tamano: 20 }));
+    cuerpo.push(titulo(t("patrocinadores")));
+    cuerpo.push(parrafo(t("patrocinadoresTexto"), { color: GRIS, tamano: 20 }));
 
     const logoPorId = new Map(
       patrocinadores.map((patrocinador, indice) => [patrocinador.id, logosPatrocinadores[indice]]),
     );
 
     for (const grupo of agruparPatrocinadoresPorNivel(patrocinadores)) {
-      cuerpo.push(antetitulo(grupo.etiqueta));
+      cuerpo.push(antetitulo(textos.nivelPatrocinador(grupo.etiqueta)));
       for (const patrocinador of grupo.patrocinadores) {
         const logoPatrocinador = logoPorId.get(patrocinador.id);
         if (logoPatrocinador) {
@@ -423,7 +402,7 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
           cuerpo.push(imagen(logoPatrocinador, ancho, alto));
         }
         cuerpo.push(
-          parrafo(`${patrocinador.name}${patrocinador.sinceYear ? ` (desde ${patrocinador.sinceYear})` : ""}`, {
+          parrafo(`${patrocinador.name}${patrocinador.sinceYear ? ` ${t("desdeAnio", { anio: String(patrocinador.sinceYear) })}` : ""}`, {
             negrita: true,
             espacioDespues: patrocinador.description ? 40 : 120,
           }),
@@ -434,8 +413,8 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
   }
 
   if (incluir("historia")) {
-    cuerpo.push(titulo("Nuestra historia"));
-    if (perfil.foundingYear != null) cuerpo.push(parrafo(`Fundado en ${perfil.foundingYear}.`));
+    cuerpo.push(titulo(t("historia")));
+    if (perfil.foundingYear != null) cuerpo.push(parrafo(t("fundado", { anio: String(perfil.foundingYear) })));
     for (const hito of perfil.milestones.slice().sort((a, b) => a.year - b.year)) {
       cuerpo.push(
         new Paragraph({
@@ -450,13 +429,13 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
   }
 
   if (incluir("instalaciones") && (perfil.facilities || perfil.facilitiesAddress)) {
-    cuerpo.push(titulo("Instalaciones"));
+    cuerpo.push(titulo(t("instalaciones")));
     if (perfil.facilitiesAddress) cuerpo.push(parrafo(perfil.facilitiesAddress, { negrita: true, espacioDespues: 60 }));
     if (perfil.facilities) cuerpo.push(parrafo(perfil.facilities));
   }
 
   if (emailContacto || (perfil.contactPublicConsent && perfil.contactPhone)) {
-    cuerpo.push(titulo("¿Te interesa colaborar con nosotros?"));
+    cuerpo.push(titulo(t("teInteresa")));
     if (perfil.contactPublicConsent && perfil.contactName) cuerpo.push(parrafo(perfil.contactName, { negrita: true, espacioDespues: 40 }));
     if (emailContacto) cuerpo.push(parrafo(emailContacto, { espacioDespues: 40 }));
     if (perfil.contactPublicConsent && perfil.contactPhone) cuerpo.push(parrafo(perfil.contactPhone, { espacioDespues: 40 }));
@@ -466,8 +445,8 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
 
   const documento = new Document({
     creator: perfil.name,
-    title: `Dossier de patrocinio — ${perfil.name}`,
-    description: "Dossier comercial de patrocinio deportivo",
+    title: t("tituloDocumento", { club: perfil.name }),
+    description: t("asunto"),
     styles: {
       default: {
         document: { run: { font: "Calibri", size: 22, color: "18181B" } },
@@ -490,9 +469,9 @@ export async function generarDossierWord(datos: DatosDossier): Promise<Buffer> {
               new Paragraph({
                 alignment: AlignmentType.CENTER,
                 children: [
-                  new TextRun({ text: `${urlLimpia}  ·  ApoyaClub  ·  página `, size: 16, color: GRIS_TENUE }),
+                  new TextRun({ text: `${urlLimpia}  ·  ApoyaClub  ·  ${t("paginaPalabra")} `, size: 16, color: GRIS_TENUE }),
                   new TextRun({ children: [PageNumber.CURRENT], size: 16, color: GRIS_TENUE }),
-                  new TextRun({ text: " de ", size: 16, color: GRIS_TENUE }),
+                  new TextRun({ text: ` ${t("de")} `, size: 16, color: GRIS_TENUE }),
                   new TextRun({ children: [PageNumber.TOTAL_PAGES], size: 16, color: GRIS_TENUE }),
                 ],
               }),

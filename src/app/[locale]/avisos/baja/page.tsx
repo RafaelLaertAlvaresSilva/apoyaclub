@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Header } from "@/components/Header";
 import { BajaForm } from "./BajaForm";
 
-export const metadata: Metadata = {
-  title: "Dejar de recibir avisos",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("empresa.baja");
+  return { title: t("titulo"), robots: { index: false, follow: false } };
+}
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,7 @@ export default async function PaginaBajaDeAvisos({
 }: {
   searchParams: Promise<{ t?: string | string[] }>;
 }) {
+  const t = await getTranslations("empresa.baja");
   const params = await searchParams;
   const token = (Array.isArray(params.t) ? params.t[0] : params.t)?.trim() ?? "";
 
@@ -29,7 +31,7 @@ export default async function PaginaBajaDeAvisos({
       <Header />
 
       <div className="mx-auto w-full max-w-xl flex-1 px-4 sm:px-6 py-12">
-        <h1 className="text-2xl font-bold text-zinc-900">Dejar de recibir avisos</h1>
+        <h1 className="text-2xl font-bold text-zinc-900">{t("titulo")}</h1>
 
         {token ? (
           <div className="mt-6">
@@ -37,8 +39,7 @@ export default async function PaginaBajaDeAvisos({
           </div>
         ) : (
           <p className="mt-4 rounded-xl border border-zinc-200 bg-white p-6 text-zinc-700">
-            Este enlace no está completo. Ábrelo otra vez desde el correo que recibiste, o
-            escríbenos a info@apoyaclub.com y lo hacemos nosotros.
+            {t("incompleto")}
           </p>
         )}
       </div>

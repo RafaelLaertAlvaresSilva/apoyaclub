@@ -199,6 +199,16 @@
       "todo": "Todo",
       "patrocinios": "Patrocinios",
       "necesidades": "Lo que necesitan"
+    },
+    "estadoOferta": {
+      "available": "Disponible",
+      "reserved": "Apalabrada",
+      "closed": "Cerrada"
+    },
+    "tipoOfertaAyuda": {
+      "service": "Fisioterapia, transporte, diseño, asesoría… lo que tu empresa hace.",
+      "in_kind": "Material, equipaciones, comida, impresiones… algo que entregas.",
+      "money": "Un patrocinio en metálico a cambio de visibilidad."
     }
   },
   "plazas": {

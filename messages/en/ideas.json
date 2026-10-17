@@ -1,0 +1,780 @@
+{
+  "ideas": {
+    "equipo-patrocinador-principal": {
+      "titulo": "Main sponsor of a team",
+      "queEs": "A company partners with one specific team for the whole season and appears in everything that team does.",
+      "queRecibe": "Its brand on the match shirt, a mention in every squad list and line-up, and a place in the team photos.",
+      "duracion": "All season"
+    },
+    "equipo-empresa-del-mes": {
+      "titulo": "Company of the month",
+      "queEs": "Each month a different company takes centre stage at the club: it is introduced, with what it does and why it backs the team.",
+      "queRecibe": "A full month of visibility: an introduction post, mentions at that month's matches and its logo in the monthly round-up.",
+      "duracion": "One month"
+    },
+    "equipo-patrocinador-de-partido": {
+      "titulo": "Match sponsor",
+      "queEs": "A single match carries a company's name. It works for the derby, the club day or any big fixture.",
+      "queRecibe": "Its brand on the match poster, on the PA during the game and in the result post.",
+      "duracion": "One match"
+    },
+    "equipo-desplazamientos": {
+      "titulo": "Away travel sponsor",
+      "queEs": "A company covers the team's trips to away matches, with money or by providing the transport.",
+      "queRecibe": "Its brand linked to every trip, with departure and arrival posts, and on the coach if it provides it.",
+      "duracion": "All season"
+    },
+    "equipo-material": {
+      "titulo": "Team equipment sponsor",
+      "queEs": "Balls, cones, bibs, first-aid kit: a team's working equipment for a season.",
+      "queRecibe": "Its brand on the equipment and in training posts, which are the club's most frequent.",
+      "duracion": "All season"
+    },
+    "equipo-empresa-oficial": {
+      "titulo": "The club's official company in its sector",
+      "queEs": "One company is the only one in its sector linked to the club: the official accountant, the official clinic, the official bakery.",
+      "queRecibe": "Exclusivity in its sector for the season and the right to call itself the club's official company in its own advertising.",
+      "duracion": "All season"
+    },
+    "equipo-contenido-con-jugadores": {
+      "titulo": "Content with the team's players",
+      "queEs": "The players appear in a piece of content featuring the company's product or service.",
+      "queRecibe": "A piece filmed at the club, with club people, that the company can also use on its own social media.",
+      "duracion": "One piece"
+    },
+    "equipo-entrenamiento-abierto": {
+      "titulo": "Sponsored open training session",
+      "queEs": "A training session open to the public, hosted by the company: families, members and the company's customers are invited.",
+      "queRecibe": "An afternoon with its brand in front of the club's families, with the chance to bring samples or set up its own stand.",
+      "duracion": "One day"
+    },
+    "equipacion-pecho": {
+      "titulo": "Front of the match shirt",
+      "queEs": "The most visible spot of all, the one in every photo and every broadcast.",
+      "queRecibe": "Its logo on the front of the match shirt for the whole season.",
+      "duracion": "All season"
+    },
+    "equipacion-espalda": {
+      "titulo": "Back of the shirt",
+      "queEs": "The second most expensive spot, and the easiest to read from the stands.",
+      "queRecibe": "Its logo on the back of the match shirt for the whole season.",
+      "duracion": "All season"
+    },
+    "equipacion-manga": {
+      "titulo": "Shirt sleeve",
+      "queEs": "A small, more affordable spot, perfect for a local shop that can't go for the front.",
+      "queRecibe": "Its logo on the sleeve of the match shirt for the whole season.",
+      "duracion": "All season"
+    },
+    "equipacion-pantalon": {
+      "titulo": "Match shorts",
+      "queEs": "Another spot almost no club sells, usually because it never occurs to them that it can be sold.",
+      "queRecibe": "Its logo on the match shorts for the whole season.",
+      "duracion": "All season"
+    },
+    "equipacion-entrenamiento": {
+      "titulo": "Training shirt",
+      "queEs": "It's seen less at matches, but it's worn four days a week instead of one.",
+      "queRecibe": "Its logo on the training kit, the one that shows up most in everyday posts.",
+      "duracion": "All season"
+    },
+    "equipacion-chandal": {
+      "titulo": "Travel tracksuit",
+      "queEs": "What the players wear to arrive at the ground, to travel and to walk around town.",
+      "queRecibe": "Its logo on the clothes that leave the sports ground and are seen on the street.",
+      "duracion": "All season"
+    },
+    "equipacion-mochilas": {
+      "titulo": "Club backpacks and bags",
+      "queEs": "Every player takes theirs to school, college and work for years.",
+      "queRecibe": "Its brand on an object used every day and outside the sports setting.",
+      "duracion": "All season"
+    },
+    "equipacion-presentacion": {
+      "titulo": "Kit launch",
+      "queEs": "The day the new shirt is unveiled is the content with the widest reach of the whole season. It can be sold as a whole.",
+      "queRecibe": "Being the brand that presents the kit: photo shoot, video and launch post.",
+      "duracion": "One day"
+    },
+    "instalaciones-lona": {
+      "titulo": "Banner or advertising board",
+      "queEs": "Fixed advertising on the pitch, court or sports hall, visible at every home match.",
+      "queRecibe": "Its brand in front of everyone who passes through the ground during the season, at training sessions too.",
+      "duracion": "All season"
+    },
+    "instalaciones-naming": {
+      "titulo": "Naming rights to the hall or ground",
+      "queEs": "The venue takes the company's name in everything the club publishes.",
+      "queRecibe": "Its name in every squad list, every match report and every mention of where the game is played.",
+      "duracion": "All season"
+    },
+    "instalaciones-vinilo-pista": {
+      "titulo": "Floor or pitch vinyl",
+      "queEs": "A decal on the playing surface itself, which shows up in every action photo.",
+      "queRecibe": "Presence inside the playing area, which is where the cameras and phones point.",
+      "duracion": "All season"
+    },
+    "instalaciones-marcador": {
+      "titulo": "Scoreboard or screen",
+      "queEs": "The company appears on the scoreboard: the spot everyone looks at several times a match.",
+      "queRecibe": "Its brand on the most-watched element of the venue, at every home match.",
+      "duracion": "All season"
+    },
+    "instalaciones-vestuario": {
+      "titulo": "Dressing room sponsor",
+      "queEs": "The dressing room is branded with the company. A space nobody sells and the players see every day.",
+      "queRecibe": "Presence where the team spends most of its time, and in the before- and after-match photos.",
+      "duracion": "All season"
+    },
+    "instalaciones-entrada": {
+      "titulo": "Venue entrance and reception",
+      "queEs": "The first thing anyone coming to watch a match sees.",
+      "queRecibe": "Its brand at the entrance, in front of every spectator, home and away.",
+      "duracion": "All season"
+    },
+    "instalaciones-stand": {
+      "titulo": "Company stand on a match day",
+      "queEs": "The company sets up a table or a small stand at a home match.",
+      "queRecibe": "Talking face to face with the club's families, handing out samples or signing up customers on the spot.",
+      "duracion": "One match"
+    },
+    "instalaciones-megafonia": {
+      "titulo": "PA announcements",
+      "queEs": "The announcer names the company at set moments of the match: line-ups, half-time, full time.",
+      "queRecibe": "Several spoken mentions per match, in front of the whole crowd.",
+      "duracion": "All season"
+    },
+    "intervalo-patrocinador-del-descanso": {
+      "titulo": "Half-time sponsor",
+      "queEs": "The whole half-time break carries a company's name for the full season, at one team's home matches. The club chooses which: the men's and women's first teams are sold separately, to two different companies if it likes.",
+      "queRecibe": "The announcer opening and closing every half-time with its name, its brand on whatever is set up during those minutes and a mention in the match post.",
+      "duracion": "All season"
+    },
+    "intervalo-sorteo": {
+      "titulo": "Half-time prize draw",
+      "queEs": "At half-time something is raffled among the crowd. The company provides the prize: a voucher, a dinner, one of its products.",
+      "queRecibe": "Its product in a neighbour's hands in front of the whole stand, and its name repeated on the PA before, during and after the draw.",
+      "duracion": "One match"
+    },
+    "intervalo-reto-de-tiro": {
+      "titulo": "The half-time challenge",
+      "queEs": "A spectator comes onto the court at half-time and tries a shot. If it goes in, the company gives them the prize; if not, they still get a small gift.",
+      "queRecibe": "The most talked-about moment of the match with its name on it, and a short video the company can post on its own social media.",
+      "duracion": "One match"
+    },
+    "intervalo-minipartido-cantera": {
+      "titulo": "Youth mini-match at half-time",
+      "queEs": "The club's youngest teams play for a few minutes on the main court during half-time, with their families in the stands.",
+      "queRecibe": "Its brand on the mini-match and the photos of the kids playing on the first team's court, which are the most shared of the whole club.",
+      "duracion": "One match"
+    },
+    "intervalo-degustacion": {
+      "titulo": "Half-time tasting",
+      "queEs": "A bakery, an ice-cream shop, a bar or any food business hands out samples to the crowd during half-time.",
+      "queRecibe": "The whole neighbourhood trying its product on the same day, without putting on a fair or renting a stall.",
+      "duracion": "One match"
+    },
+    "intervalo-entrega-mvp": {
+      "titulo": "Player of the match award",
+      "queEs": "Someone from the company comes down to the court and presents the award to the best player of the match in front of the crowd.",
+      "queRecibe": "Appearing in person in the award photo, which the club, the player and often the local paper all publish.",
+      "duracion": "All season"
+    },
+    "intervalo-photocall": {
+      "titulo": "Half-time photocall",
+      "queEs": "A backdrop with the club crest and the company's brand, set up courtside so people can take photos at half-time.",
+      "queRecibe": "Its logo in every photo the crowd posts that afternoon, shared by the fans themselves rather than the club.",
+      "duracion": "All season"
+    },
+    "intervalo-anuncio-en-pista": {
+      "titulo": "Half-time advert",
+      "queEs": "During the half-time minutes the company's advert plays on the PA, or its video is shown if the hall has a screen.",
+      "queRecibe": "A full advert, not a passing mention, with the stands full and no match to watch.",
+      "duracion": "All season"
+    },
+    "redes-publicaciones-semanales": {
+      "titulo": "Weekly posts featuring your brand",
+      "queEs": "A fixed number of posts a month in which the company appears.",
+      "queRecibe": "Repeated visibility in front of the club's community, who are local people, not bought followers.",
+      "duracion": "One month, renewable"
+    },
+    "redes-stories-partido": {
+      "titulo": "Stories during matches",
+      "queEs": "The company rides along with the live match coverage: preview, half-time, result.",
+      "queRecibe": "Showing up at the moment of the week with most attention, when people are waiting for the result.",
+      "duracion": "All season"
+    },
+    "redes-reel-patrocinado": {
+      "titulo": "Sponsored reel",
+      "queEs": "A short video made by the club with the company at its centre.",
+      "queRecibe": "A piece designed around its brand, with club people, which it can also post itself.",
+      "duracion": "One piece"
+    },
+    "redes-sorteo": {
+      "titulo": "Joint giveaway",
+      "queEs": "The club gives away one of the company's products or services among its followers.",
+      "queRecibe": "New followers and people who get to know its business, in exchange for a product rather than money.",
+      "duracion": "One week"
+    },
+    "redes-codigo-descuento": {
+      "titulo": "Discount code for the club community",
+      "queEs": "The company offers a discount to members, families and followers, and the club spreads the word.",
+      "queRecibe": "New customers who arrive already identified, and a way to measure whether the sponsorship works.",
+      "duracion": "All season"
+    },
+    "redes-empresa-de-la-semana": {
+      "titulo": "Company of the week",
+      "queEs": "Each week a local business that supports the club is introduced.",
+      "queRecibe": "A dedicated post saying who they are and what they do, not just a stray logo.",
+      "duracion": "One week"
+    },
+    "redes-entrevista": {
+      "titulo": "Interview with the owner or the company team",
+      "queEs": "The club interviews the people behind the business and publishes it as one more piece.",
+      "queRecibe": "Telling its story to a local community, which is what really brings people through the door.",
+      "duracion": "One piece"
+    },
+    "redes-encuesta": {
+      "titulo": "Sponsored poll or game",
+      "queEs": "Score predictions, player of the match, questions to the fans: with a brand behind them.",
+      "queRecibe": "Appearing in the content with the most engagement, the kind that asks for opinions.",
+      "duracion": "One month"
+    },
+    "cantera-patrocinador": {
+      "titulo": "Youth academy sponsor",
+      "queEs": "A company backs the club's whole youth section: all the development teams at once.",
+      "queRecibe": "Its brand on the youth kits and in everything posted about the development teams, which is a lot.",
+      "duracion": "All season"
+    },
+    "cantera-una-categoria": {
+      "titulo": "Sponsor of one age group",
+      "queEs": "Under-10s, under-12s, under-14s: a company takes on one youth team.",
+      "queRecibe": "An affordable option for a small shop, with that team's families as a direct audience.",
+      "duracion": "All season"
+    },
+    "cantera-empresa-amiga": {
+      "titulo": "Friend of the academy",
+      "queEs": "A scheme for businesses that can't put in much money but want to be seen: several companies, each with a small contribution.",
+      "queRecibe": "A place on the friends-of-the-club board, on the website and at the sports hall, alongside other local businesses.",
+      "duracion": "All season"
+    },
+    "cantera-material": {
+      "titulo": "Sports equipment for the youth teams",
+      "queEs": "Balls, bibs and cones for the development teams, where spending is highest and budgets are lowest.",
+      "queRecibe": "Its brand on the equipment the kids train with every week.",
+      "duracion": "All season"
+    },
+    "cantera-jugador-del-mes": {
+      "titulo": "Youth player of the month",
+      "queEs": "A monthly award for a young player from the academy, presented by the company.",
+      "queRecibe": "Appearing in the content families share most, the kind that features their child.",
+      "duracion": "One month, renewable"
+    },
+    "cantera-jornada-especial": {
+      "titulo": "Youth academy special day",
+      "queEs": "A day when all the youth teams play, with activities around them.",
+      "queRecibe": "A whole day with all the club's families in one place and its brand as host.",
+      "duracion": "One day"
+    },
+    "cantera-charla-familias": {
+      "titulo": "Talk for families",
+      "queEs": "A professional gives parents a useful talk: nutrition, injuries, rest, phone use.",
+      "queRecibe": "Presenting itself as an expert in its field in front of the families, which beats any advert.",
+      "duracion": "One session"
+    },
+    "cantera-escuela": {
+      "titulo": "Sponsor of the school or camp",
+      "queEs": "The summer school, the Christmas camp or recruitment activities at schools.",
+      "queRecibe": "Its brand on an activity that reaches children who aren't at the club yet, and their families.",
+      "duracion": "Length of the camp"
+    },
+    "jugadores-del-mes": {
+      "titulo": "Player of the month",
+      "queEs": "Each month the team's best player is chosen, and a company provides and presents the award.",
+      "queRecibe": "Its brand linked to the award, with a presentation photo and a dedicated post every month.",
+      "duracion": "One month, renewable"
+    },
+    "jugadores-patrocinado": {
+      "titulo": "Sponsored player",
+      "queEs": "A company sponsors one specific player for the season.",
+      "queRecibe": "Appearing in everything posted about that person, who at a community club is well known locally.",
+      "duracion": "All season"
+    },
+    "jugadores-visita-a-empresa": {
+      "titulo": "Team visit to the company",
+      "queEs": "The players visit the company's premises: photos with the staff, greeting the workers, content.",
+      "queRecibe": "A different morning for its people and its own material for social media, with the real team.",
+      "duracion": "One visit"
+    },
+    "jugadores-visita-al-club": {
+      "titulo": "The company visits the club",
+      "queEs": "The company's staff come to a match or a training session as the club's guests.",
+      "queRecibe": "An activity for its staff that takes no effort to organise, with dressing-room access and a photo with the team.",
+      "duracion": "One day"
+    },
+    "jugadores-prueba-de-producto": {
+      "titulo": "Product test with the team",
+      "queEs": "The team tries something from the company and says how it went: drinks, footwear, recovery, nutrition.",
+      "queRecibe": "Real opinions from athletes, filmed at the club, to use in its advertising.",
+      "duracion": "One activation"
+    },
+    "jugadores-clinic": {
+      "titulo": "Sponsored clinic or skills session",
+      "queEs": "An open skills session led by the club's players or coaches, with a company behind it.",
+      "queRecibe": "Its brand on an activity that draws young players from other clubs in the area.",
+      "duracion": "One session"
+    },
+    "jugadores-embajador": {
+      "titulo": "Brand ambassador",
+      "queEs": "A club player represents the company for the season, beyond a one-off activation.",
+      "queRecibe": "A well-known face of local sport linked to its business all year round.",
+      "duracion": "All season"
+    },
+    "jugadores-meet-and-greet": {
+      "titulo": "Fan meet-and-greet at the company's premises",
+      "queEs": "Signing shirts, photos and time with the fans, but at the sponsor's bar, shop or premises.",
+      "queRecibe": "Bringing people into its own premises, which is what a local business really wants.",
+      "duracion": "One afternoon"
+    },
+    "eventos-patrocinador": {
+      "titulo": "Event sponsor",
+      "queEs": "Team presentation, end-of-season gala, club dinner: any event can have a sponsor.",
+      "queRecibe": "Its brand on the poster, at the event and in everything posted about that day.",
+      "duracion": "One event"
+    },
+    "eventos-naming": {
+      "titulo": "The event takes the company's name",
+      "queEs": "The event is called by the sponsor's name everywhere.",
+      "queRecibe": "Its name being said every time anyone mentions the event, before, during and after.",
+      "duracion": "One event"
+    },
+    "eventos-photocall": {
+      "titulo": "Event photocall",
+      "queEs": "The backdrop where everyone takes their photo, with the logos of whoever pays for it.",
+      "queRecibe": "Appearing in every photo people post on their own, which far outnumber the club's.",
+      "duracion": "One event"
+    },
+    "eventos-catering": {
+      "titulo": "Event food and drink",
+      "queEs": "A bar, a restaurant or a caterer provides the food in exchange for visibility.",
+      "queRecibe": "Everyone attending tasting what it makes, which is the best advertising for a hospitality business.",
+      "duracion": "One event"
+    },
+    "eventos-sorteo": {
+      "titulo": "Event raffle",
+      "queEs": "The company provides the prize for the raffle held during the event.",
+      "queRecibe": "Its product in the hands of someone from the community and its name repeated on stage.",
+      "duracion": "One event"
+    },
+    "eventos-muestras": {
+      "titulo": "Sampling",
+      "queEs": "The company hands out product to those attending: drinks, food, merchandise, vouchers.",
+      "queRecibe": "Its product reaching hundreds of people from its own neighbourhood in one afternoon.",
+      "duracion": "One event"
+    },
+    "eventos-dia-del-club": {
+      "titulo": "Club day",
+      "queEs": "The day all the teams play and everyone comes. The biggest event of the year.",
+      "queRecibe": "The busiest day of the whole season, with its brand as host.",
+      "duracion": "One day"
+    },
+    "eventos-transporte": {
+      "titulo": "Event transport",
+      "queEs": "A transport company provides the coach to take the team or the fans.",
+      "queRecibe": "Its brand on the trip, with a coach full of club people and guaranteed photos.",
+      "duracion": "One event"
+    },
+    "torneos-patrocinador": {
+      "titulo": "Tournament title sponsor",
+      "queEs": "A club's own tournament is the easiest thing it has to sell: a set date, set people, a visible result.",
+      "queRecibe": "Its name on the whole tournament, from poster to trophy, in front of clubs and families from across the area.",
+      "duracion": "The tournament"
+    },
+    "torneos-trofeos": {
+      "titulo": "Trophies and medals",
+      "queEs": "A company pays for the trophies and appears on them.",
+      "queRecibe": "Its brand on an object that sits on a shelf at home for years.",
+      "duracion": "The tournament"
+    },
+    "torneos-mvp": {
+      "titulo": "Tournament MVP award",
+      "queEs": "The company presents the MVP award, with its name on it.",
+      "queRecibe": "The most photographed moment of the tournament, with its representative in the photo.",
+      "duracion": "The tournament"
+    },
+    "torneos-camisetas": {
+      "titulo": "Tournament T-shirts",
+      "queEs": "Every participant takes home a T-shirt with the sponsor's brand.",
+      "queRecibe": "Hundreds of T-shirts with its logo spread around the area, still being worn months later.",
+      "duracion": "The tournament"
+    },
+    "torneos-avituallamiento": {
+      "titulo": "Water and refreshments",
+      "queEs": "Drinks and fruit for the participants throughout the day.",
+      "queRecibe": "A cheap way to be present all day and in everyone's hands.",
+      "duracion": "The tournament"
+    },
+    "torneos-jornada": {
+      "titulo": "Sponsor of one day or age group",
+      "queEs": "There's no need to sell the whole tournament: one age group or a single day can be sold.",
+      "queRecibe": "Getting into a big tournament with a small contribution.",
+      "duracion": "One day"
+    },
+    "torneos-zona-empresa": {
+      "titulo": "Business area at the tournament",
+      "queEs": "A space with stalls from several local businesses during the tournament.",
+      "queRecibe": "Selling or getting known all day long, with a captive audience between matches.",
+      "duracion": "The tournament"
+    },
+    "torneos-final": {
+      "titulo": "Final sponsor",
+      "queEs": "The match with the biggest crowd and most attention of the whole tournament, sold separately.",
+      "queRecibe": "The high point, prize-giving included.",
+      "duracion": "One match"
+    },
+    "contenido-resumen-partido": {
+      "titulo": "Sponsored match report",
+      "queEs": "The video or write-up of what happened in the match, which the club already does every week, with a brand behind it.",
+      "queRecibe": "Being in the most looked-for content every weekend, with no extra effort for anyone.",
+      "duracion": "All season"
+    },
+    "contenido-fotografia": {
+      "titulo": "Match photos",
+      "queEs": "Each matchday's photos carry a watermark or a caption with the sponsor.",
+      "queRecibe": "Appearing in the photos families download, print and share.",
+      "duracion": "All season"
+    },
+    "contenido-entrevistas": {
+      "titulo": "Interview series",
+      "queEs": "A series of interviews with players, coaches or club people, with a fixed sponsor.",
+      "queRecibe": "A recognisable feature carrying its name all season.",
+      "duracion": "All season"
+    },
+    "contenido-podcast": {
+      "titulo": "Club podcast or show",
+      "queEs": "An audio or video show about the club and its league.",
+      "queRecibe": "Spoken mentions, which last longer and are remembered better than a logo.",
+      "duracion": "Per season or per episode"
+    },
+    "contenido-reportaje": {
+      "titulo": "Feature on the company",
+      "queEs": "A long piece telling who is behind the business and why it backs the club.",
+      "queRecibe": "A story told properly, which is what makes a neighbour choose its shop over another.",
+      "duracion": "One piece"
+    },
+    "contenido-detras-de-camaras": {
+      "titulo": "Behind the scenes",
+      "queEs": "Dressing room, travel, warm-up: what isn't seen, which is usually what hooks people most.",
+      "queRecibe": "Being in the club's most personal content, the kind people watch to the end.",
+      "duracion": "All season"
+    },
+    "contenido-cantera": {
+      "titulo": "Youth academy content",
+      "queEs": "A feature dedicated to the youth teams, which is what families share most.",
+      "queRecibe": "The content with the widest real reach, because every parent forwards it to the whole family.",
+      "duracion": "All season"
+    },
+    "contenido-educativo": {
+      "titulo": "Educational content with the company",
+      "queEs": "The company shares what it knows —a physio explains a stretch, a nutritionist a breakfast— and the club publishes it.",
+      "queRecibe": "Showing it knows its stuff, which sells far better than repeating a logo.",
+      "duracion": "Per piece or per season"
+    },
+    "digital-banner-web": {
+      "titulo": "Advertising on the club website",
+      "queEs": "A fixed space on the club's site, seen by anyone checking results or kick-off times.",
+      "queRecibe": "Permanent visibility and a direct link to its own website.",
+      "duracion": "All season"
+    },
+    "digital-empresa-recomendada": {
+      "titulo": "Club-recommended company",
+      "queEs": "The club publicly recommends the company to its members and families.",
+      "queRecibe": "A recommendation with a name attached, which is the most valuable thing a community club can give.",
+      "duracion": "All season"
+    },
+    "digital-newsletter": {
+      "titulo": "Club newsletter sponsor",
+      "queEs": "The email the club sends to members and families has a fixed sponsor.",
+      "queRecibe": "Landing in the inbox of people who open that email because they care, not a bought list.",
+      "duracion": "Per send or per season"
+    },
+    "digital-qr": {
+      "titulo": "QR code with a promotion",
+      "queEs": "A poster at the sports hall with a QR code leading to the company's offer for club people.",
+      "queRecibe": "Being able to measure exactly how many club people reach its business.",
+      "duracion": "All season"
+    },
+    "digital-pagina-patrocinada": {
+      "titulo": "Sponsored website section",
+      "queEs": "One specific part of the website —results, youth teams, fixtures— carries a company's name.",
+      "queRecibe": "Being linked to what people actually check, which is usually the fixtures and results.",
+      "duracion": "All season"
+    },
+    "digital-cartel-fichajes": {
+      "titulo": "Signing and renewal announcements",
+      "queEs": "Posts about new signings, departures and renewals carry the sponsor's logo.",
+      "queRecibe": "Appearing in the posts most shared outside the club, especially in summer.",
+      "duracion": "All season"
+    },
+    "retransmision-patrocinador": {
+      "titulo": "Live stream sponsor",
+      "queEs": "If the club streams matches, even on YouTube, that can be sold.",
+      "queRecibe": "Its brand throughout the stream, in front of people who can't make it to the hall but follow the match.",
+      "duracion": "Per match or per season"
+    },
+    "retransmision-logo": {
+      "titulo": "Fixed logo during the stream",
+      "queEs": "A corner of the picture with the brand, there for the whole match.",
+      "queRecibe": "Well over an hour of continuous presence, not a three-second flash.",
+      "duracion": "Per match or per season"
+    },
+    "retransmision-descanso": {
+      "titulo": "Half-time advertising",
+      "queEs": "The half-time slot is filled with an advert from the company.",
+      "queRecibe": "Several minutes all to itself, with the audience already hooked and waiting for the second half.",
+      "duracion": "Per match"
+    },
+    "retransmision-mvp": {
+      "titulo": "Sponsored player of the match",
+      "queEs": "When the stream ends the best player is chosen, with the company's name on the award.",
+      "queRecibe": "A closing moment with its brand and one more post the next day.",
+      "duracion": "Per match or per season"
+    },
+    "retransmision-entrevista": {
+      "titulo": "Sponsored post-match interview",
+      "queEs": "The after-match interview has a sponsor, just like on TV.",
+      "queRecibe": "Appearing at the moment people stay on to hear what happened.",
+      "duracion": "Per match or per season"
+    },
+    "retransmision-clips": {
+      "titulo": "Clips and highlights",
+      "queEs": "The match clips posted afterwards, carrying the sponsor's brand.",
+      "queRecibe": "Being in the most forwarded content, because it lasts twenty seconds and gets shared on WhatsApp.",
+      "duracion": "All season"
+    },
+    "familias-descuento": {
+      "titulo": "Discount for members and families",
+      "queEs": "The company offers club people a special price, and the club spreads the word.",
+      "queRecibe": "New customers from its own neighbourhood, without putting in money: it puts in margin.",
+      "duracion": "All season"
+    },
+    "familias-carnet": {
+      "titulo": "Membership card perks",
+      "queEs": "A group of shops gives perks to anyone showing their club card.",
+      "queRecibe": "Joining a network of local shops with the club as its backer.",
+      "duracion": "All season"
+    },
+    "familias-actividad": {
+      "titulo": "Family activity",
+      "queEs": "A workshop, an afternoon snack, an open day for parents and siblings.",
+      "queRecibe": "Quality time with the families, unhurried and not competing with a match.",
+      "duracion": "One day"
+    },
+    "familias-regalo-navidad": {
+      "titulo": "Christmas or end-of-season gift",
+      "queEs": "A small gift for every kid at the club, provided by a company.",
+      "queRecibe": "Its brand on a memorable gift, handed out at the most emotional moment of the year.",
+      "duracion": "One handout"
+    },
+    "familias-sorteo-socios": {
+      "titulo": "Members-only prize draw",
+      "queEs": "A draw open only to club people, which is also a reason to become a member.",
+      "queRecibe": "Being seen as the one giving something, and helping the club sign up members along the way.",
+      "duracion": "One activation"
+    },
+    "familias-campana-comercios": {
+      "titulo": "Campaign with local shops",
+      "queEs": "Several small businesses come in together, each with an affordable contribution.",
+      "queRecibe": "A place on the board of the club's friendly shops, within reach of a business that can't sponsor on its own.",
+      "duracion": "All season"
+    },
+    "tienda-patrocinador-de-la-tienda": {
+      "titulo": "Club shop sponsor",
+      "queEs": "A company pays for the club's first run of merchandise —caps, hoodies, keyrings— and the club sells it and keeps the money.",
+      "queRecibe": "Its brand next to the crest on everything the club sells that season, and on the stall where it's sold on match days.",
+      "duracion": "All season"
+    },
+    "tienda-personalizado-con-dorsal": {
+      "titulo": "Personalised items with name and number",
+      "queEs": "Keyrings, magnets, mugs or bottle openers with the club crest and, on the back, each player's name and shirt number.",
+      "queRecibe": "A local printer or sign maker gets the order, puts its brand on every piece and ends up in every club family's home.",
+      "duracion": "All season"
+    },
+    "tienda-mercadillo-de-equipaciones": {
+      "titulo": "Sale of previous seasons' kit",
+      "queEs": "The club sells off the kits, tracksuits and backpacks from past seasons that are taking up space in the storeroom, at second-hand prices.",
+      "queRecibe": "Giving its name to the sale day, with its brand on the poster and the stall, in front of every family dropping by to try on sizes.",
+      "duracion": "One day"
+    },
+    "tienda-venta-a-comision": {
+      "titulo": "A company sells at your matches for a commission",
+      "queEs": "A shop sets up its stall at home matches and sells its products there. The club takes a percentage of what it sells.",
+      "queRecibe": "A sales point with a guaranteed audience every matchday, with no rent and no new shop to open.",
+      "duracion": "All season"
+    },
+    "tienda-prenda-oficial": {
+      "titulo": "The official item of the season",
+      "queEs": "A cap, a scarf or a fan shirt the club brings out every season for the people in the stands to wear, not the players.",
+      "queRecibe": "Its logo next to the crest on an item people wear because they want to, all year round in the neighbourhood.",
+      "duracion": "All season"
+    },
+    "tienda-ropa-de-paseo": {
+      "titulo": "Club leisurewear",
+      "queEs": "Tracksuit, hoodie and backpack with the crest, for families to buy and kids to wear to school, not just to training.",
+      "queRecibe": "Its brand on clothes worn every day away from the sports hall, which is where they're seen most and where no sponsorship reaches.",
+      "duracion": "All season"
+    },
+    "tienda-lote-de-bienvenida": {
+      "titulo": "Welcome pack for newcomers",
+      "queEs": "Every child who joins the club gets a pack on their first day: backpack, water bottle, keyring and the crest. A company pays for it.",
+      "queRecibe": "Being the first thing a new family takes home from the club, with its brand on the pack and in the first-day photo.",
+      "duracion": "All season"
+    },
+    "tienda-producto-con-el-escudo": {
+      "titulo": "A company product with the club crest",
+      "queEs": "The bakery makes the club pastry, the winery a label with the crest, the ice-cream shop a flavour named after the team. A share of every unit sold goes to the club.",
+      "queRecibe": "A product that sells itself locally because it carries the team's crest, and a reason for the club to talk about it across its social media.",
+      "duracion": "One season or one campaign"
+    },
+    "local-evento-conjunto": {
+      "titulo": "Joint neighbourhood event",
+      "queEs": "Club and company organise something together away from the sports hall: in a street, a square, a shopping centre.",
+      "queRecibe": "Getting out of its premises and having people link it to the club in front of the whole town.",
+      "duracion": "One day"
+    },
+    "local-presentacion-producto": {
+      "titulo": "Product launch with the club",
+      "queEs": "The company launches something new and does it with the team there.",
+      "queRecibe": "An event with well-known faces from local sport and coverage from the club.",
+      "duracion": "One event"
+    },
+    "local-escaparate": {
+      "titulo": "The club in the company's shop window",
+      "queEs": "Signed shirt, trophies, poster for the next match: the club decorates the sponsor's premises.",
+      "queRecibe": "A shop window the neighbourhood talks about, and a reason to come in and ask.",
+      "duracion": "All season"
+    },
+    "local-cupones": {
+      "titulo": "Vouchers handed out at matches",
+      "queEs": "Company vouchers given to the people attending a match.",
+      "queRecibe": "People walking through its door voucher in hand, and an exact count of how many.",
+      "duracion": "Per match or per season"
+    },
+    "local-accion-solidaria": {
+      "titulo": "Joint charity drive",
+      "queEs": "A food, toy or equipment collection organised by the club and the company together.",
+      "queRecibe": "Being seen doing something that matters, which is one of the few things a neighbour really remembers.",
+      "duracion": "One campaign"
+    },
+    "local-colegios": {
+      "titulo": "Activity at local schools",
+      "queEs": "The club visits schools to run a session, with a company behind it.",
+      "queRecibe": "Reaching the families of the whole school, not just the club's.",
+      "duracion": "One campaign"
+    },
+    "necesita-fisioterapia": {
+      "titulo": "Physio for the team",
+      "queEs": "Someone to treat the squad's injuries during the season.",
+      "queRecibe": "Ongoing visibility with athletes and families, which is exactly its audience, and patients who come by themselves.",
+      "duracion": "All season"
+    },
+    "necesita-medico": {
+      "titulo": "Medical service or check-ups",
+      "queEs": "Pre-season medicals or cover at home matches.",
+      "queRecibe": "Its brand as the club's official medical service and direct access to every family.",
+      "duracion": "All season"
+    },
+    "necesita-fotografo": {
+      "titulo": "Match photographer",
+      "queEs": "Someone to cover home matches and give the club decent photos every week.",
+      "queRecibe": "Its credit on every photo the club posts, which is the most constant advertising there is.",
+      "duracion": "All season"
+    },
+    "necesita-video": {
+      "titulo": "Video and editing",
+      "queEs": "Match highlights, the season launch, pieces for social media.",
+      "queRecibe": "Its brand on everything that moves at the club, and a showcase for its work in town.",
+      "duracion": "All season"
+    },
+    "necesita-marketing": {
+      "titulo": "Help with the club's social media",
+      "queEs": "Someone to lend a hand with posts and communications.",
+      "queRecibe": "A real case to show other clients, with measurable results.",
+      "duracion": "All season"
+    },
+    "necesita-imprenta": {
+      "titulo": "Printing and signage",
+      "queEs": "Posters, banners, vinyls, shirt numbers: everything that needs printing through the year.",
+      "queRecibe": "Its brand on everything the club prints, seen by everyone who passes through the sports hall.",
+      "duracion": "All season"
+    },
+    "necesita-transporte": {
+      "titulo": "Coach for away trips",
+      "queEs": "Taking the team to away matches.",
+      "queRecibe": "Its brand on every trip, with a departure and arrival post for each one.",
+      "duracion": "Per trip or per season"
+    },
+    "necesita-material": {
+      "titulo": "Sports equipment",
+      "queEs": "Balls, cones, bibs, nets: what gets used up every season.",
+      "queRecibe": "Its brand on the equipment used in training every day.",
+      "duracion": "All season"
+    },
+    "necesita-equipacion": {
+      "titulo": "Kits",
+      "queEs": "Shirts, shorts and training wear for one or more teams.",
+      "queRecibe": "Being the club's sportswear brand, with its logo on all the kit throughout the season.",
+      "duracion": "All season"
+    },
+    "necesita-restauracion": {
+      "titulo": "Food for events and trips",
+      "queEs": "Sandwiches, catering for the gala, food at the tournament.",
+      "queRecibe": "Hundreds of people tasting what it makes, which is how a restaurant fills up.",
+      "duracion": "All season"
+    },
+    "necesita-alojamiento": {
+      "titulo": "Accommodation for tournaments and trips",
+      "queEs": "Overnight stays for tournaments or long away trips.",
+      "queRecibe": "Its brand linked to the club's trips, and bookings in quiet periods.",
+      "duracion": "All season"
+    },
+    "necesita-gimnasio": {
+      "titulo": "Gym or strength and conditioning",
+      "queEs": "A place where the squad can do strength work, or someone to lead it.",
+      "queRecibe": "Athletes on its premises every week, with their families behind them.",
+      "duracion": "All season"
+    },
+    "necesita-nutricion": {
+      "titulo": "Nutrition",
+      "queEs": "Dietary guidance for the squad or talks for families.",
+      "queRecibe": "Presenting itself as the expert, in front of an audience already interested.",
+      "duracion": "All season"
+    },
+    "necesita-asesoria": {
+      "titulo": "Accounting or admin services",
+      "queEs": "Handling the club's accounts, payroll or paperwork.",
+      "queRecibe": "Being the club's official accountant, with the public recommendation that comes with it.",
+      "duracion": "All season"
+    },
+    "necesita-informatica": {
+      "titulo": "Website and IT",
+      "queEs": "Maintaining the club's website, email or office computers.",
+      "queRecibe": "Its brand in the website footer and a visible client in town.",
+      "duracion": "All season"
+    },
+    "necesita-limpieza": {
+      "titulo": "Cleaning of the facilities",
+      "queEs": "Keeping the dressing rooms and common areas clean.",
+      "queRecibe": "A contract visible in the community and its brand at the facilities.",
+      "duracion": "All season"
+    }
+  },
+  "falta": {
+    "equipos": "add your teams to your profile",
+    "cantera": "add your youth academy details",
+    "instalaciones": "say where you play",
+    "redes": "add your social media",
+    "publico": "log the attendance at a match"
+  },
+  "queRecibeEtiqueta": "What the company gets:"
+}

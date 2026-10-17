@@ -81,17 +81,17 @@ export function prepararInforme(
 /**
  * La frase de cabecera del informe. Es lo primero que lee el
  * patrocinador y tiene que decir la verdad en una línea, buena o mala.
+ * Los textos, de `panel.documentos.informe`.
  */
-export function fraseDeResumen(informe: ResumenInforme): string {
-  if (informe.total === 0) return "Todavía no hay acciones registradas.";
+export function fraseDeResumen(
+  informe: ResumenInforme,
+  t: (clave: string, valores?: Record<string, string | number>) => string,
+): string {
+  if (informe.total === 0) return t("sinAcciones");
 
   const cumplidas = informe.cumplidas.length;
 
-  if (cumplidas === informe.total) {
-    return informe.total === 1
-      ? "Se ha cumplido la acción acordada."
-      : `Se han cumplido las ${informe.total} acciones acordadas.`;
-  }
+  if (cumplidas === informe.total) return t("todasCumplidas", { n: informe.total });
 
-  return `${cumplidas} de ${informe.total} acciones acordadas ya están cumplidas.`;
+  return t("parcial", { cumplidas, total: informe.total });
 }

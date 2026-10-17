@@ -199,6 +199,16 @@
       "todo": "Everything",
       "patrocinios": "Sponsorships",
       "necesidades": "What they need"
+    },
+    "estadoOferta": {
+      "available": "Available",
+      "reserved": "Agreed",
+      "closed": "Closed"
+    },
+    "tipoOfertaAyuda": {
+      "service": "Physio, transport, design, consulting… whatever your company does.",
+      "in_kind": "Equipment, kit, food, printing… something you hand over.",
+      "money": "A cash sponsorship in exchange for visibility."
     }
   },
   "plazas": {

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { ContactoEmpresa } from "@/lib/empresas";
 import { Campo, clasesInput } from "../../panel/components/SeccionCard";
 
@@ -15,17 +16,17 @@ import { Campo, clasesInput } from "../../panel/components/SeccionCard";
  * — que es exactamente lo que pasaba antes de esto.
  */
 export function CamposDeContacto({ contacto }: { contacto: ContactoEmpresa }) {
+  const t = useTranslations("empresa.panel");
   return (
     <div className="rounded-lg border border-zinc-200 bg-zinc-50/60 p-4">
-      <p className="text-sm font-medium text-zinc-900">Cómo te contactan</p>
+      <p className="text-sm font-medium text-zinc-900">{t("comoTeContactan")}</p>
       <p className="mt-1 text-xs text-zinc-500">
-        Con el correo o el teléfono basta, pero cuantos más pongas, más fácil se lo pones. Son los
-        mismos para todas tus ofertas.
+        {t("correoTelefonoBastaPero")}
       </p>
 
       <div className="mt-3 flex flex-col gap-3">
         <div className="grid gap-3 sm:grid-cols-2">
-          <Campo etiqueta="Correo">
+          <Campo etiqueta={t("correo")}>
             <input
               name="contactoEmail"
               type="email"
@@ -36,7 +37,7 @@ export function CamposDeContacto({ contacto }: { contacto: ContactoEmpresa }) {
             />
           </Campo>
 
-          <Campo etiqueta="Teléfono">
+          <Campo etiqueta={t("telefono")}>
             <input
               name="contactoTelefono"
               type="tel"
@@ -48,12 +49,12 @@ export function CamposDeContacto({ contacto }: { contacto: ContactoEmpresa }) {
           </Campo>
         </div>
 
-        <Campo etiqueta="Persona de contacto" ayuda="Con quién habla el club cuando llame.">
+        <Campo etiqueta={t("personaContacto")} ayuda={t("quienHablaClubCuando")}>
           <input
             name="contactoNombre"
             maxLength={120}
             defaultValue={contacto.nombre ?? ""}
-            placeholder="Marta Ruiz"
+            placeholder={t("martaRuiz")}
             className={clasesInput}
           />
         </Campo>
@@ -70,12 +71,10 @@ export function CamposDeContacto({ contacto }: { contacto: ContactoEmpresa }) {
           />
           <span>
             <span className="block font-medium text-zinc-900">
-              Los clubes pueden ver estos datos
+              {t("clubesPuedenVerEstos")}
             </span>
             <span className="mt-1 block text-zinc-500">
-              No salen escritos en la página: el club tiene que pulsar un botón para verlos, y así
-              no acabas en las listas de correo basura. Si lo desmarcas, nadie podrá escribirte
-              desde aquí.
+              {t("noSalenEscritosPagina")}
             </span>
           </span>
         </label>

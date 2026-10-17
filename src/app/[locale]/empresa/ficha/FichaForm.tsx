@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useActionState, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
@@ -32,6 +33,7 @@ export type DatosFicha = {
  * cierre la pestaña.
  */
 export function FichaForm({ datos, userId }: { datos: DatosFicha; userId: string }) {
+  const t = useTranslations("empresa.panel");
   const [estado, formAction] = useActionState(guardarFichaEmpresa, null);
 
   // El logo viaja en un campo oculto, igual que en el panel del club:
@@ -41,17 +43,17 @@ export function FichaForm({ datos, userId }: { datos: DatosFicha; userId: string
 
   return (
     <form action={formAction} className="flex flex-col gap-6">
-      <SeccionCard titulo="Tu empresa" descripcion="Lo que ve un club antes de escribirte.">
+      <SeccionCard titulo={t("empresa")} descripcion={t("veClubAntesEscribirte")}>
         <div className="flex flex-col gap-4">
           {/* Lo primero que ve un club en el directorio. Una ficha sin
               logo se lee como una empresa a medio hacer. */}
-          <Campo etiqueta="Logo" grupo ayuda="Cuadrado se ve mejor. Puedes cambiarlo cuando quieras.">
+          <Campo etiqueta={t("logo")} grupo ayuda={t("cuadradoVeMejorPuedes")}>
             <input type="hidden" name="logoUrl" value={logoUrl} />
             <div className="flex flex-wrap items-center gap-3">
               {logoUrl ? (
                 <Image
                   src={logoUrl}
-                  alt="Logo de tu empresa"
+                  alt={t("logoEmpresa")}
                   width={64}
                   height={64}
                   className="h-16 w-16 rounded-lg border border-zinc-200 bg-white object-contain p-1"
@@ -59,14 +61,14 @@ export function FichaForm({ datos, userId }: { datos: DatosFicha; userId: string
                 />
               ) : (
                 <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-dashed border-zinc-300 bg-zinc-50 text-xs text-zinc-400">
-                  Sin logo
+                  {t("sinLogo")}
                 </div>
               )}
 
               <ImageUploader
                 userId={userId}
                 carpeta="logo-empresa"
-                label={logoUrl ? "Cambiar logo" : "Subir logo"}
+                label={logoUrl ? t("cambiarLogo") : t("subirLogo")}
                 onSubido={(url) => setLogoUrl(url)}
               />
 
@@ -76,13 +78,13 @@ export function FichaForm({ datos, userId }: { datos: DatosFicha; userId: string
                   onClick={() => setLogoUrl("")}
                   className="rounded-lg px-3 py-1.5 text-sm font-medium text-zinc-500 transition-colors hover:bg-red-50 hover:text-red-700"
                 >
-                  Quitar
+                  {t("quitar")}
                 </button>
               )}
             </div>
           </Campo>
 
-          <Campo etiqueta="Nombre *">
+          <Campo etiqueta={t("nombre")}>
             <input
               name="nombre"
               required
@@ -93,17 +95,17 @@ export function FichaForm({ datos, userId }: { datos: DatosFicha; userId: string
           </Campo>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Campo etiqueta="Sector" ayuda="A qué os dedicáis, en dos palabras.">
+            <Campo etiqueta={t("sector")} ayuda={t("osDedicaisDosPalabras")}>
               <input
                 name="sector"
                 maxLength={100}
                 defaultValue={datos.sector}
-                placeholder="Clínica de fisioterapia"
+                placeholder={t("clinicaFisioterapia")}
                 className={clasesInput}
               />
             </Campo>
 
-            <Campo etiqueta="Web">
+            <Campo etiqueta={t("web")}>
               <input
                 name="web"
                 type="url"
@@ -114,30 +116,30 @@ export function FichaForm({ datos, userId }: { datos: DatosFicha; userId: string
               />
             </Campo>
 
-            <Campo etiqueta="Localidad">
+            <Campo etiqueta={t("localidad")}>
               <input
                 name="localidad"
                 maxLength={100}
                 defaultValue={datos.localidad}
-                placeholder="Benidorm"
+                placeholder={t("benidorm")}
                 className={clasesInput}
               />
             </Campo>
 
-            <Campo etiqueta="Provincia">
+            <Campo etiqueta={t("provincia")}>
               <input
                 name="provincia"
                 maxLength={80}
                 defaultValue={datos.provincia}
-                placeholder="Alicante"
+                placeholder={t("alicante")}
                 className={clasesInput}
               />
             </Campo>
           </div>
 
           <Campo
-            etiqueta="Presentación"
-            ayuda="Máximo 600 caracteres. Quién sois y por qué os interesa el deporte de base."
+            etiqueta={t("presentacion")}
+            ayuda={t("maximo600CaracteresQuien")}
           >
             <textarea
               name="descripcion"
@@ -150,15 +152,15 @@ export function FichaForm({ datos, userId }: { datos: DatosFicha; userId: string
       </SeccionCard>
 
       <SeccionCard
-        titulo="Contacto"
-        descripcion="Cómo te escriben los clubes. Es lo mismo que pide el formulario de publicar."
+        titulo={t("contacto")}
+        descripcion={t("comoTeEscribenClubes")}
       >
         <CamposDeContacto contacto={datos.contacto} />
       </SeccionCard>
 
       <SeccionCard
-        titulo="Salir en el directorio"
-        descripcion="El listado público de empresas que los clubes miran para saber a quién escribir."
+        titulo={t("salirDirectorio")}
+        descripcion={t("listadoPublicoEmpresasClubes")}
       >
         <label className="flex items-start gap-3 text-sm">
           <input
@@ -169,19 +171,18 @@ export function FichaForm({ datos, userId }: { datos: DatosFicha; userId: string
           />
           <span>
             <span className="block font-medium text-zinc-900">
-              Quiero aparecer y que los clubes me escriban
+              {t("quieroAparecerClubesMe")}
             </span>
             <span className="mt-1 block text-zinc-500">
-              Si publicas una oferta esto se enciende solo: una oferta que no se ve no sirve de
-              nada. Apagándolo dejas de salir, y tus ofertas dejan de verse con él.
+              {t("siPublicasOfertaEsto")}
             </span>
           </span>
         </label>
       </SeccionCard>
 
       <SeccionCard
-        titulo="Avisos por correo"
-        descripcion="Lo que hace que no tengas que estar entrando a mirar."
+        titulo={t("avisosCorreo")}
+        descripcion={t("haceNoTengasEstar")}
       >
         <label className="flex items-start gap-3 text-sm">
           <input
@@ -192,20 +193,19 @@ export function FichaForm({ datos, userId }: { datos: DatosFicha; userId: string
           />
           <span>
             <span className="block font-medium text-zinc-900">
-              Avísame cuando un club busque algo que ofrezco
+              {t("avisameCuandoClubBusque")}
             </span>
             <span className="mt-1 block text-zinc-500">
-              Un correo, como mucho al día, solo con lo que encaja con tus categorías. Si has
-              puesto provincia, solo de clubes de tu provincia.
+              {t("correoComoMuchoDia")}
             </span>
           </span>
         </label>
       </SeccionCard>
 
       <AvisoError mensaje={estado?.error} />
-      <AvisoExito mensaje={estado?.ok ? "Guardado." : null} />
+      <AvisoExito mensaje={estado?.ok ? t("guardado") : null} />
 
-      <BotonEnviar>Guardar ficha</BotonEnviar>
+      <BotonEnviar>{t("guardarFicha")}</BotonEnviar>
     </form>
   );
 }

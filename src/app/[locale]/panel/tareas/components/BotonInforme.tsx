@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 /**
  * Los botones para descargar el informe de una empresa.
  *
@@ -80,6 +80,8 @@ function Descarga({
   compacto: boolean;
   principal?: boolean;
 }) {
+  // Con el idioma delante: sin él, el informe salía siempre en el idioma por defecto.
+  const locale = useLocale();
   // El tamaño sube lo justo: medido, de 26 px de alto a 34 en la lista
   // de tareas y de 26/36 a 42 en el aviso de arriba. El de antes era
   // más bajo que la yema de un dedo, y en el móvil se fallaba al darle.
@@ -98,7 +100,7 @@ function Descarga({
     : "border-accion-tinta bg-white text-accion-tinta hover:bg-teal-50";
 
   return (
-    <form method="post" action="/panel/tareas/informe">
+    <form method="post" action={`/${locale}/panel/tareas/informe`}>
       <input type="hidden" name="empresa" value={empresa} />
       <input type="hidden" name="formato" value={formato} />
       <button

@@ -1,7 +1,6 @@
 import { Document, Image, Page, StyleSheet, Text, View, renderToBuffer } from "@react-pdf/renderer";
 import { fraseDeResumen, type ResumenInforme } from "@/lib/informe-patrocinio";
-import { routing } from "@/i18n/routing";
-import { SITE_URL } from "@/lib/site";
+import { textosDeDocumento, type TextosDocumento } from "@/lib/textos-documento";
 import { fechaLegible, type TareaPatrocinio } from "@/lib/tareas-patrocinio";
 import type { ClubProfile } from "@/lib/types";
 
@@ -75,8 +74,9 @@ export type DatosInforme = {
   emailContacto: string | null;
 };
 
-export async function generarInformePdf(datos: DatosInforme): Promise<Buffer> {
-  return renderToBuffer(<InformeDocumento {...datos} />);
+export async function generarInformePdf(datos: DatosInforme, idioma?: string): Promise<Buffer> {
+  const textos = await textosDeDocumento(idioma, "informe");
+  return renderToBuffer(<InformeDocumento {...datos} textos={textos} />);
 }
 
 function Cifra({ valor, etiqueta }: { valor: number; etiqueta: string }) {
@@ -88,7 +88,8 @@ function Cifra({ valor, etiqueta }: { valor: number; etiqueta: string }) {
   );
 }
 
-function Linea({ tarea, color }: { tarea: TareaPatrocinio; color: string }) {
+function Linea({ tarea, color, textos }: { tarea: TareaPatrocinio; color: string; textos: TextosDocumento }) {
+  const { t, intlLocale } = textos;
   return (
     <View style={estilos.linea} wrap={false}>
       <View style={estilos.columnaMarca}>
@@ -97,9 +98,9 @@ function Linea({ tarea, color }: { tarea: TareaPatrocinio; color: string }) {
       <View style={estilos.lineaCuerpo}>
         <Text style={estilos.lineaTitulo}>{tarea.accion}</Text>
         <Text style={estilos.lineaDetalle}>
-          {tarea.inicio && `Del ${fechaLegible(tarea.inicio)} al `}
-          {!tarea.inicio && "Fecha: "}
-          {fechaLegible(tarea.fin)}
+          {tarea.inicio
+            ? t("periodo", { desde: fechaLegible(tarea.inicio, intlLocale), hasta: fechaLegible(tarea.fin, intlLocale) })
+            : t("fecha", { fecha: fechaLegible(tarea.fin, intlLocale) })}
           {tarea.notas ? ` · ${tarea.notas}` : ""}
         </Text>
         {tarea.pruebaUrl && (
@@ -120,22 +121,28 @@ function Seccion({ titulo, children }: { titulo: string; children: React.ReactNo
   );
 }
 
-function InformeDocumento({ perfil, informe, emailContacto }: DatosInforme) {
-  const urlPublica = `${SITE_URL}/${routing.defaultLocale}/club/${perfil.slug}`;
+function InformeDocumento({
+  perfil,
+  informe,
+  emailContacto,
+  textos,
+}: DatosInforme & { textos: TextosDocumento }) {
+  const { t, intlLocale } = textos;
+  const urlPublica = textos.urlDelClub(perfil.slug);
   const urlLimpia = urlPublica.replace(/^https?:\/\//, "");
 
   const periodo =
     informe.desde && informe.hasta
       ? informe.desde === informe.hasta
-        ? fechaLegible(informe.desde)
-        : `Del ${fechaLegible(informe.desde)} al ${fechaLegible(informe.hasta)}`
+        ? fechaLegible(informe.desde, intlLocale)
+        : t("periodo", { desde: fechaLegible(informe.desde, intlLocale), hasta: fechaLegible(informe.hasta, intlLocale) })
       : null;
 
   return (
     <Document
-      title={`Informe de patrocinio — ${informe.empresa}`}
+      title={t("tituloDocumento", { empresa: informe.empresa })}
       author={perfil.name}
-      subject={`Acciones realizadas para ${informe.empresa}`}
+      subject={t("asunto", { empresa: informe.empresa })}
     >
       <Page size="A4" style={estilos.pagina}>
         <View style={estilos.banda}>
@@ -143,37 +150,37 @@ function InformeDocumento({ perfil, informe, emailContacto }: DatosInforme) {
             {/* eslint-disable-next-line jsx-a11y/alt-text -- Image de @react-pdf/renderer, no la de HTML. */}
             {perfil.logoUrl && <Image src={perfil.logoUrl} style={estilos.logo} />}
             <View>
-              <Text style={estilos.bandaEtiqueta}>INFORME DE PATROCINIO</Text>
+              <Text style={estilos.bandaEtiqueta}>{t("portada").toUpperCase()}</Text>
               <Text style={estilos.bandaClub}>{perfil.name}</Text>
             </View>
           </View>
         </View>
 
         <View style={estilos.cuerpo}>
-          <Text style={estilos.empresaEtiqueta}>LO QUE HEMOS HECHO POR</Text>
+          <Text style={estilos.empresaEtiqueta}>{t("loHecho").toUpperCase()}</Text>
           <Text style={estilos.empresa}>{informe.empresa}</Text>
           {periodo && <Text style={estilos.periodo}>{periodo}</Text>}
 
-          <Text style={estilos.resumen}>{fraseDeResumen(informe)}</Text>
+          <Text style={estilos.resumen}>{fraseDeResumen(informe, t)}</Text>
 
           <View style={estilos.filaCifras}>
-            <Cifra valor={informe.total} etiqueta="Acciones acordadas" />
-            <Cifra valor={informe.cumplidas.length} etiqueta="Ya cumplidas" />
-            <Cifra valor={informe.conPrueba} etiqueta="Con enlace o prueba" />
+            <Cifra valor={informe.total} etiqueta={t("acordadas")} />
+            <Cifra valor={informe.cumplidas.length} etiqueta={t("cumplidas")} />
+            <Cifra valor={informe.conPrueba} etiqueta={t("conPrueba")} />
           </View>
 
           {informe.cumplidas.length > 0 && (
-            <Seccion titulo={`Hecho (${informe.cumplidas.length})`}>
+            <Seccion titulo={t("conCuenta", { titulo: t("hecho"), n: informe.cumplidas.length })}>
               {informe.cumplidas.map((tarea) => (
-                <Linea key={tarea.id} tarea={tarea} color={COLOR_ACENTO} />
+                <Linea key={tarea.id} tarea={tarea} color={COLOR_ACENTO} textos={textos} />
               ))}
             </Seccion>
           )}
 
           {informe.enMarcha.length > 0 && (
-            <Seccion titulo={`En marcha (${informe.enMarcha.length})`}>
+            <Seccion titulo={t("conCuenta", { titulo: t("enMarcha"), n: informe.enMarcha.length })}>
               {informe.enMarcha.map((tarea) => (
-                <Linea key={tarea.id} tarea={tarea} color={COLOR_TEXTO_TENUE} />
+                <Linea key={tarea.id} tarea={tarea} color={COLOR_TEXTO_TENUE} textos={textos} />
               ))}
             </Seccion>
           )}
@@ -182,19 +189,17 @@ function InformeDocumento({ perfil, informe, emailContacto }: DatosInforme) {
               lo pendiente se cae en cuanto el empresario se acuerda de
               la publicación que nunca vio. */}
           {informe.vencidas.length > 0 && (
-            <Seccion titulo={`Pendiente, fuera de plazo (${informe.vencidas.length})`}>
+            <Seccion titulo={t("conCuenta", { titulo: t("vencidas"), n: informe.vencidas.length })}>
               {informe.vencidas.map((tarea) => (
-                <Linea key={tarea.id} tarea={tarea} color="#b91c1c" />
+                <Linea key={tarea.id} tarea={tarea} color="#b91c1c" textos={textos} />
               ))}
             </Seccion>
           )}
 
           <View style={estilos.cierre} wrap={false}>
-            <Text style={estilos.cierreTitulo}>Gracias por apoyar el deporte de tu barrio</Text>
+            <Text style={estilos.cierreTitulo}>{t("gracias")}</Text>
             <Text style={estilos.cierreTexto}>
-              Tu apoyo se ve cada semana en la pista y en cada familia que forma parte del club. Si
-              quieres seguir la temporada que viene, o cambiar algo de lo acordado, hablamos cuando
-              te venga bien.
+              {t("graciasTexto")}
             </Text>
             {perfil.contactPublicConsent && perfil.contactName && (
               <Text style={estilos.cierreLinea}>{perfil.contactName}</Text>
@@ -209,7 +214,7 @@ function InformeDocumento({ perfil, informe, emailContacto }: DatosInforme) {
         <View style={estilos.pie} fixed>
           <Text>{urlLimpia}</Text>
           <Text
-            render={({ pageNumber, totalPages }) => `ApoyaClub · página ${pageNumber} de ${totalPages}`}
+            render={({ pageNumber, totalPages }) => `ApoyaClub · ${t("pagina", { n: pageNumber, total: totalPages })}`}
           />
         </View>
       </Page>

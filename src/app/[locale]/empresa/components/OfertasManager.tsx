@@ -1,12 +1,12 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import { useIntlLocale } from "@/i18n/use-intl-locale";
+import { etiquetador } from "@/lib/etiquetas-traducidas";
 import { useActionState, useState } from "react";
 import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
 import { AvisoError } from "@/components/AvisoError";
-import { ETIQUETA_CATEGORIA_NECESIDAD } from "@/lib/opportunities";
 import {
-  ETIQUETA_ESTADO_OFERTA,
-  ETIQUETA_TIPO_OFERTA,
   type ContactoEmpresa,
   type EstadoOferta,
   type OfertaDeEmpresa,
@@ -14,12 +14,6 @@ import {
 import { SeccionCard } from "../../panel/components/SeccionCard";
 import { archivarOferta, borrarOferta, cambiarEstadoOferta } from "../actions";
 import { OfertaForm } from "./OfertaForm";
-
-const formatoEuros = new Intl.NumberFormat("es-ES", {
-  style: "currency",
-  currency: "EUR",
-  maximumFractionDigits: 0,
-});
 
 const COLOR_ESTADO: Record<EstadoOferta, string> = {
   available: "bg-teal-100 text-teal-800",
@@ -42,6 +36,7 @@ export function OfertasManager({
   ofertas: OfertaDeEmpresa[];
   contacto: ContactoEmpresa;
 }) {
+  const t = useTranslations("empresa.panel");
   const [creando, setCreando] = useState(ofertas.length === 0);
   const [editando, setEditando] = useState<string | null>(null);
 
@@ -52,8 +47,8 @@ export function OfertasManager({
     <div className="flex flex-col gap-6">
       {creando ? (
         <SeccionCard
-          titulo="Publica lo que ofreces"
-          descripcion="Sale en el directorio de empresas y lo ven los clubes que buscan justo eso."
+          titulo={t("publicaOfreces")}
+          descripcion={t("saleDirectorioEmpresasVen")}
         >
           <OfertaForm contacto={contacto} alTerminar={() => setCreando(false)} />
         </SeccionCard>
@@ -63,7 +58,7 @@ export function OfertasManager({
           onClick={() => setCreando(true)}
           className="self-start rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
         >
-          + Publicar otra cosa
+          {t("publicarOtraCosa")}
         </button>
       )}
 
@@ -85,7 +80,7 @@ export function OfertasManager({
       {archivadas.length > 0 && (
         <details className="rounded-xl border border-zinc-200 bg-white">
           <summary className="cursor-pointer list-none px-5 py-4 text-sm font-medium text-zinc-600 [&::-webkit-details-marker]:hidden">
-            Archivadas ({archivadas.length})
+            {t("archivadas", { n: archivadas.length })}
           </summary>
           <div className="flex flex-col gap-3 border-t border-zinc-100 px-5 py-5">
             {archivadas.map((oferta) => (
@@ -118,6 +113,14 @@ function TarjetaOferta({
   alEditar: () => void;
   alCerrar: () => void;
 }) {
+  const t = useTranslations("empresa.panel");
+  const E = etiquetador(useTranslations("common.etiquetas"));
+  const intlLocale = useIntlLocale();
+  const formatoEuros = new Intl.NumberFormat(intlLocale, {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0,
+  });
   // Pasan por `useActionState` y no por un `<form action={...}>` pelado
   // porque estas acciones devuelven el motivo cuando fallan, y un
   // formulario normal se lo tragaría. Un botón que no hace nada y no
@@ -150,9 +153,9 @@ function TarjetaOferta({
         <div className="min-w-0">
           <p className="font-semibold text-zinc-900">{oferta.titulo}</p>
           <p className="mt-1 text-xs text-zinc-500">
-            {ETIQUETA_TIPO_OFERTA[oferta.tipo]}
-            {oferta.categoria && ` · ${ETIQUETA_CATEGORIA_NECESIDAD[oferta.categoria]}`}
-            {oferta.provincia ? ` · ${oferta.provincia}` : " · Toda España"}
+            {E.tipoOferta(oferta.tipo)}
+            {oferta.categoria && ` · ${E.categoriaNecesidad(oferta.categoria)}`}
+            {` · ${oferta.provincia ?? t("todaEspana")}`}
           </p>
         </div>
 
@@ -161,7 +164,7 @@ function TarjetaOferta({
             <span className="text-sm font-semibold text-zinc-900">{formatoEuros.format(oferta.valor)}</span>
           )}
           <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${COLOR_ESTADO[oferta.estado]}`}>
-            {ETIQUETA_ESTADO_OFERTA[oferta.estado]}
+            {E.estadoOferta(oferta.estado)}
           </span>
         </div>
       </div>
@@ -170,7 +173,7 @@ function TarjetaOferta({
 
       {oferta.pideACambio && (
         <p className="mt-2 text-sm text-zinc-700">
-          <span className="font-medium">A cambio: </span>
+          <span className="font-medium">{t("cambio")} </span>
           {oferta.pideACambio}
         </p>
       )}
@@ -181,7 +184,7 @@ function TarjetaOferta({
           onClick={alEditar}
           className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
         >
-          Editar
+          {t("editar")}
         </button>
 
         {/* El estado se cambia con un formulario normal y no con un
@@ -193,18 +196,18 @@ function TarjetaOferta({
             <select
               name="estado"
               defaultValue={oferta.estado}
-              aria-label="Estado de la oferta"
+              aria-label={t("estadoOferta")}
               className="rounded-lg border border-zinc-300 px-2 py-1.5 text-sm"
             >
-              <option value="available">Disponible</option>
-              <option value="reserved">Apalabrada</option>
-              <option value="closed">Cerrada</option>
+              <option value="available">{E.estadoOferta("available")}</option>
+              <option value="reserved">{E.estadoOferta("reserved")}</option>
+              <option value="closed">{E.estadoOferta("closed")}</option>
             </select>
             <button
               type="submit"
               className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
             >
-              Cambiar
+              {t("cambiar")}
             </button>
           </form>
         )}
@@ -216,7 +219,7 @@ function TarjetaOferta({
             type="submit"
             className="rounded-lg px-3 py-1.5 text-sm font-medium text-zinc-500 transition-colors hover:bg-zinc-100"
           >
-            {archivada ? "Volver a publicar" : "Archivar"}
+            {archivada ? t("volverPublicar") : t("archivar")}
           </button>
         </form>
 
@@ -225,7 +228,7 @@ function TarjetaOferta({
             accion={borrarOferta}
             id={oferta.id}
             nombre={oferta.titulo}
-            etiqueta="Borrar"
+            etiqueta={t("borrar")}
           />
         </span>
       </div>
