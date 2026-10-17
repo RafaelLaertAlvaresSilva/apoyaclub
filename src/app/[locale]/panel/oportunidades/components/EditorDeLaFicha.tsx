@@ -29,7 +29,7 @@ export function EditorDeLaFicha({
   return (
     <div className="flex flex-col gap-6">
       <section>
-        <p className="text-sm font-medium text-zinc-900">La empresa recibe</p>
+        <p className="text-[15px] font-bold text-titular">La empresa recibe</p>
         <p className="mt-0.5 text-xs text-zinc-500">
           Una línea por cosa, con la cantidad cuando la haya. Es lo primero que mira quien está
           decidiendo si le interesa.
@@ -96,7 +96,7 @@ export function EditorDeLaFicha({
       </section>
 
       <section>
-        <p className="text-sm font-medium text-zinc-900">Quién hace qué</p>
+        <p className="text-[15px] font-bold text-titular">Quién hace qué</p>
         <p className="mt-0.5 text-xs text-zinc-500">
           Lo que hay que hacer para que esto funcione, y de quién es cada cosa. Es lo que evita el
           &quot;yo creía que lo hacíais vosotros&quot;.

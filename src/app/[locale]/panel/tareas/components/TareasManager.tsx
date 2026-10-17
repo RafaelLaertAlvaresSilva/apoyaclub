@@ -228,7 +228,7 @@ function FormularioNuevasTareas({
           <SelectorDeEmpresa empresasConocidas={empresasConocidas} />
 
           <div>
-            <p className="mb-2 text-sm font-medium text-zinc-700">Lo habitual, de un clic</p>
+            <p className="mb-2 text-[15px] font-bold text-titular">Lo habitual, de un clic</p>
             <div className="flex flex-wrap gap-2">
               {ACCIONES_HABITUALES.map((accion) => (
                 <button
@@ -244,10 +244,10 @@ function FormularioNuevasTareas({
           </div>
 
           <fieldset className="flex flex-col gap-3">
-            <legend className="mb-1 text-sm font-medium text-zinc-700">Qué hay que hacer</legend>
+            <legend className="mb-1 text-[15px] font-bold text-titular">Qué hay que hacer</legend>
 
             {lineas.map((linea, indice) => (
-              <div key={linea.id} className="rounded-lg border border-zinc-200 bg-zinc-50/60 p-4">
+              <div key={linea.id} className="rounded-xl border border-zinc-300 bg-white p-4">
                 <div className="mb-3 flex items-center justify-between gap-2">
                   <span className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
                     Cosa {indice + 1}

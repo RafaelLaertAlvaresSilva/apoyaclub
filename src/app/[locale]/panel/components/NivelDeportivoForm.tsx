@@ -42,7 +42,7 @@ export function NivelDeportivoForm({
             venden. Se rellena la que se tenga; el que solo tiene uno
             deja la otra vacía y no sale en ningún sitio. */}
         <fieldset className="rounded-lg border border-zinc-200 p-4">
-          <legend className="px-1 text-sm font-medium text-zinc-700">
+          <legend className="px-1 text-[15px] font-bold text-titular">
             {t("maximaCategoria")}
           </legend>
           <p className="mb-3 text-xs text-zinc-500">

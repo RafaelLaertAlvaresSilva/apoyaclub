@@ -43,21 +43,27 @@ export function Campo({
   grupo?: boolean;
   children: React.ReactNode;
 }) {
-  const textoEtiqueta = <span className="mb-1 block text-sm font-medium text-zinc-700">{etiqueta}</span>;
-  const textoAyuda = ayuda ? <span className="mt-1 block text-xs text-zinc-500">{ayuda}</span> : null;
+  const textoEtiqueta = (
+    <span className="mb-2 block text-[15px] font-bold text-titular">{etiqueta}</span>
+  );
+  const textoAyuda = ayuda ? (
+    <span className="mt-2 block text-xs leading-relaxed text-zinc-500">{ayuda}</span>
+  ) : null;
 
   if (grupo) {
     return (
-      <fieldset className="min-w-0">
-        <legend className="mb-1 text-sm font-medium text-zinc-700">{etiqueta}</legend>
-        {children}
-        {textoAyuda}
-      </fieldset>
+      <div className={CLASES_CAJA_CAMPO}>
+        <fieldset className="min-w-0">
+          <legend className="mb-2 text-[15px] font-bold text-titular">{etiqueta}</legend>
+          {children}
+          {textoAyuda}
+        </fieldset>
+      </div>
     );
   }
 
   return (
-    <label className="block">
+    <label className={`block ${CLASES_CAJA_CAMPO}`}>
       {textoEtiqueta}
       {children}
       {textoAyuda}
@@ -65,7 +71,25 @@ export function Campo({
   );
 }
 
+/**
+ * CADA CAMPO EN SU CAJA.
+ *
+ * Antes la etiqueta, el control y la ayuda de un campo iban sueltos,
+ * con 16 px hasta el siguiente: en un formulario largo (crear una
+ * oportunidad tiene veinte campos) la ayuda gris de uno se leía como la
+ * etiqueta del de abajo y no se sabía dónde acababa cada cosa. Ahora
+ * cada campo es un bloque con fondo y borde, y el título del campo va
+ * más grande, en negrita y en el azul de los titulares, para que se
+ * distinga de un vistazo de la ayuda gris de debajo.
+ *
+ * El fondo es el gris de lienzo (`zinc-50`) y el control encima es
+ * blanco (`clasesInput`), así que el hueco donde se escribe resalta
+ * dentro de la caja. Los dos colores son variables del tema: en el modo
+ * oscuro del panel se invierten solos.
+ */
+const CLASES_CAJA_CAMPO = "rounded-xl border border-zinc-200 bg-zinc-50 p-4";
+
 export const clasesInput =
-  "w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-accion-tinta focus:outline-none focus:ring-1 focus:ring-accion-tinta";
+  "w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-accion-tinta focus:outline-none focus:ring-1 focus:ring-accion-tinta";
 
 export const clasesTextarea = `${clasesInput} min-h-24 resize-y`;

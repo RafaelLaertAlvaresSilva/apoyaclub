@@ -98,7 +98,7 @@ export function EscribirCorreo({
 
       <div className="mt-4 flex flex-col gap-3">
         <label className="block">
-          <span className="mb-1 block text-sm font-medium text-zinc-700">Qué situación es</span>
+          <span className="mb-1 block text-[15px] font-bold text-titular">Qué situación es</span>
           <select
             value={plantilla}
             onChange={(evento) => cambiarPlantilla(evento.target.value as PlantillaId)}
@@ -117,7 +117,7 @@ export function EscribirCorreo({
 
         {/* El asunto decide si se abre. Por eso hay varios y no uno. */}
         <fieldset>
-          <legend className="mb-1 text-sm font-medium text-zinc-700">Asunto</legend>
+          <legend className="mb-1 text-[15px] font-bold text-titular">Asunto</legend>
           <div className="flex flex-col gap-1.5">
             {generado.asuntos.map((opcion, indice) => (
               <label key={opcion} className="flex items-start gap-2 text-sm text-zinc-700">
@@ -135,7 +135,7 @@ export function EscribirCorreo({
         </fieldset>
 
         <label className="block">
-          <span className="mb-1 block text-sm font-medium text-zinc-700">El correo</span>
+          <span className="mb-1 block text-[15px] font-bold text-titular">El correo</span>
           <textarea
             key={plantilla}
             defaultValue={generado.cuerpo}

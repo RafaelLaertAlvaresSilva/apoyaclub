@@ -423,7 +423,7 @@ function Dato({
 function Campo({ etiqueta, children }: { etiqueta: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-sm font-medium text-zinc-700">{etiqueta}</span>
+      <span className="mb-1 block text-[15px] font-bold text-titular">{etiqueta}</span>
       {children}
     </label>
   );

@@ -28,10 +28,10 @@ export function BloquePlegable({
   children: React.ReactNode;
 }) {
   return (
-    <details open={abierto} className="group rounded-lg border border-zinc-200">
+    <details open={abierto} className="group rounded-xl border border-zinc-200">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 [&::-webkit-details-marker]:hidden">
         <span>
-          <span className="block text-sm font-medium text-zinc-800">{titulo}</span>
+          <span className="block text-[15px] font-bold text-titular">{titulo}</span>
           {resumen && <span className="mt-0.5 block text-xs text-zinc-500">{resumen}</span>}
         </span>
         <svg

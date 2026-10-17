@@ -44,7 +44,7 @@ export function EliminarCuentaForm() {
           todavía está dispuesto a contarlo. Preguntarlo después de
           escribir ELIMINAR ya no lo lee nadie. */}
       <div>
-        <label htmlFor="motivo" className="mb-1 block text-sm font-medium text-zinc-700">
+        <label htmlFor="motivo" className="mb-1 block text-[15px] font-bold text-titular">
           {t("motivo")}
         </label>
         <p className="mb-1 text-xs text-zinc-500">{t("motivoAyuda")}</p>
@@ -59,7 +59,7 @@ export function EliminarCuentaForm() {
       </div>
 
       <div>
-        <label htmlFor="confirmacion" className="mb-1 block text-sm font-medium text-zinc-700">{t("escribeEliminarParaConfirmar")}</label>
+        <label htmlFor="confirmacion" className="mb-1 block text-[15px] font-bold text-titular">{t("escribeEliminarParaConfirmar")}</label>
         <input
           id="confirmacion"
           name="confirmacion"

@@ -78,7 +78,7 @@ export function PortadaEditor({
             <div>
               <label
                 htmlFor="posicion-portada"
-                className="mb-1 block text-sm font-medium text-zinc-700"
+                className="mb-1 block text-[15px] font-bold text-titular"
               >
                 Qué parte de la foto se ve
               </label>

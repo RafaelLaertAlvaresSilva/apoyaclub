@@ -115,7 +115,7 @@ export function HistoriaForm({ userId, perfil }: { userId: string; perfil: ClubP
         </Campo>
 
         <div>
-          <p className="mb-2 text-sm font-medium text-zinc-700">{t("hitos")}</p>
+          <p className="mb-2 text-[15px] font-bold text-titular">{t("hitos")}</p>
 
           {hitos.length > 0 && (
             <ul className="mb-3 space-y-2">

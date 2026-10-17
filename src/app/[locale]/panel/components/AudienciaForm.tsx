@@ -20,7 +20,7 @@ export function AudienciaForm({ perfil }: { perfil: ClubProfile | null }) {
     >
       <form action={formAction} className="space-y-4">
         <div>
-          <p className="mb-2 text-sm font-medium text-zinc-700">{t("seguidoresPorRed")}</p>
+          <p className="mb-2 text-[15px] font-bold text-titular">{t("seguidoresPorRed")}</p>
           <div className="grid gap-4 sm:grid-cols-3">
             <Campo etiqueta={t("instagram")}>
               <input

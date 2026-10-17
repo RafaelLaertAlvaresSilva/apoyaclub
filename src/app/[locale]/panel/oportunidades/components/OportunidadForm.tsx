@@ -121,15 +121,15 @@ export function OportunidadForm({
           visibilidad a cambio". Es la misma ficha con la flecha al
           revés, y para un fisioterapeuta del barrio es probablemente
           la mejor oportunidad que hay en la plataforma. */}
-      <fieldset className="rounded-lg border border-zinc-200 p-4">
-        <legend className="px-1 text-sm font-medium text-zinc-700">
+      <fieldset className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+        <legend className="float-left mb-3 w-full text-[15px] font-bold text-titular">
           ¿Qué es esto?
         </legend>
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div className="clear-both grid gap-2 sm:grid-cols-2">
           <label
             className={`flex cursor-pointer gap-2.5 rounded-lg border p-3 transition-colors ${
               esNecesidad
-                ? "border-zinc-200 hover:bg-zinc-50"
+                ? "border-zinc-200 bg-white hover:bg-zinc-50"
                 : "border-teal-500 bg-teal-50"
             }`}
           >
@@ -155,7 +155,7 @@ export function OportunidadForm({
             className={`flex cursor-pointer gap-2.5 rounded-lg border p-3 transition-colors ${
               esNecesidad
                 ? "border-amber-500 bg-amber-50"
-                : "border-zinc-200 hover:bg-zinc-50"
+                : "border-zinc-200 bg-white hover:bg-zinc-50"
             }`}
           >
             <input
