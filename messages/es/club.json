@@ -59,5 +59,148 @@
     "titulo": "Lo que necesitamos",
     "descripcion": "Servicios y productos que le hacen falta al club. A cambio, la misma visibilidad que cualquier patrocinador."
   },
-  "verMas": "Ver {cuantos} más"
+  "verMas": "Ver {cuantos} más",
+  "escribir": {
+    "titulo": "Escribir a {club}",
+    "enviadoTitulo": "Mensaje enviado",
+    "enviadoTexto": "{club} lo recibe ahora mismo y te contestará al correo que has puesto.",
+    "cerrar": "Cerrar",
+    "sobre": "Sobre \"{titulo}\".",
+    "cuentales": "Cuéntales quién eres y qué te interesa.",
+    "sinRegistro": "No hace falta registrarse.",
+    "tuNombre": "Tu nombre",
+    "empresa": "Empresa",
+    "opcional": "(opcional)",
+    "tuCorreo": "Tu correo",
+    "telefono": "Teléfono",
+    "mensaje": "Mensaje",
+    "ejemplo": "Hola, tenemos una tienda en el barrio y nos interesa lo del patrocinio de las camisetas. ¿Podemos hablar?",
+    "privacidad": "Tu nombre y tu correo se los mandamos al club para que pueda contestarte. Nada más.",
+    "cancelar": "Cancelar",
+    "enviando": "Enviando…",
+    "enviar": "Enviar mensaje",
+    "errores": {
+      "clubNoEncontrado": "Club no encontrado.",
+      "nombre": "Escribe tu nombre.",
+      "correo": "Escribe un correo válido: es a donde te contestará el club.",
+      "mensaje": "Escribe un mensaje para el club.",
+      "largo": "El mensaje es demasiado largo.",
+      "demasiadas": "Has enviado muchas solicitudes seguidas. Espera un rato y vuelve a intentarlo.",
+      "noEnviada": "No se ha podido enviar la solicitud. Inténtalo de nuevo."
+    }
+  },
+  "ficha": {
+    "laEmpresaRecibe": "La empresa recibe",
+    "quienHaceQue": "Quién hace qué",
+    "condiciones": "Condiciones",
+    "responsable": {
+      "club": "El club se encarga de",
+      "empresa": "La empresa aporta",
+      "ambos": "Entre los dos"
+    },
+    "cond": {
+      "duracion": "Duración",
+      "frecuencia": "Frecuencia",
+      "fechas": "Fechas",
+      "delAl": "Del {desde} al {hasta}",
+      "desde": "Desde",
+      "hasta": "Hasta",
+      "exclusividad": "Exclusividad",
+      "enExclusiva": "En exclusiva para el sector: {sector}",
+      "requisitos": "Otros requisitos"
+    },
+    "imprimir": "Imprimir ficha",
+    "compartir": "Compartir enlace",
+    "enlaceCopiado": "¡Enlace copiado!",
+    "pieImpreso": {
+      "teInteresa": "¿Te interesa? Escanea el código para ver la oportunidad y escribir a {club}.",
+      "publicado": "Publicado en ApoyaClub"
+    },
+    "fotoPrincipal": "{titulo} — foto principal",
+    "fotoN": "{titulo} — foto {numero}"
+  },
+  "destacados": {
+    "deporte": "Deporte",
+    "deportes": "Deportes",
+    "maximaCategoria": "Máxima categoría",
+    "jugadores": "Jugadores",
+    "equiposCantera": "Equipos de cantera",
+    "dondeEsta": "Dónde está",
+    "masculino": "M",
+    "femenino": "F"
+  },
+  "contactoPublico": {
+    "errorCarga": "No se han podido cargar los datos de contacto. Revisa tu conexión.",
+    "cargando": "Cargando…",
+    "unSoloClic": "Un solo clic, sin registrarte. Así el club no acaba en listas de spam.",
+    "sinDatos": "Este club todavía no ha publicado sus datos de contacto. Puedes escribirle con el botón de abajo.",
+    "persona": "Persona de contacto",
+    "telefono": "Teléfono",
+    "correo": "Correo",
+    "horario": "Horario de atención"
+  },
+  "listado": {
+    "sinNecesidades": "Este club no ha publicado nada que necesite.",
+    "sinOportunidades": "Este club todavía no ha publicado oportunidades.",
+    "volverASuFicha": "Volver a su ficha",
+    "loNecesitamos": "Lo necesitamos",
+    "verFicha": "Ver ficha →"
+  },
+  "pagina": {
+    "seccionesDeLaFicha": "Secciones de la ficha",
+    "verTodoElClub": "Ver todo el club",
+    "cargando": "Cargando la página del club…",
+    "noEncontradoTitulo": "No encontramos este club",
+    "noEncontradoTexto": "El enlace puede haber caducado o el club puede haber cambiado de dirección. Comprueba la URL o vuelve al inicio.",
+    "volverAlInicio": "Volver al inicio"
+  },
+  "listas": {
+    "clubNoEncontrado": "Club no encontrado",
+    "oportunidades": {
+      "titulo": "Oportunidades de patrocinio",
+      "intro": "Todo lo que este club puede ofrecer a una empresa, con el detalle de cada acuerdo."
+    },
+    "necesidades": {
+      "titulo": "Lo que necesitamos",
+      "intro": "Servicios y productos que le hacen falta al club. A cambio, la misma visibilidad que cualquier patrocinador."
+    }
+  },
+  "oportunidadPagina": {
+    "noEncontrada": "Oportunidad no encontrada",
+    "resumenPorDefecto": "Oportunidad de patrocinio con {club}.",
+    "loQueNecesitamos": "Lo que necesitamos",
+    "oportunidades": "Oportunidades",
+    "loNecesitamos": "Lo necesitamos",
+    "verFichaCompleta": "Ver la ficha completa de {club}",
+    "imagen": {
+      "oportunidadDePatrocinio": "Oportunidad de patrocinio",
+      "antetituloNecesidad": "LO NECESITAMOS",
+      "antetituloOportunidad": "OPORTUNIDAD DE PATROCINIO",
+      "plazasLibres": "{n, plural, one {# plaza libre} other {# plazas libres}}"
+    }
+  },
+  "paginaClub": {
+    "verLasOportunidades": "{n, plural, one {Ver la oportunidad} other {Ver las # oportunidades}}",
+    "verLasNecesidades": "{n, plural, one {Ver lo que necesitamos} other {Ver las # cosas que necesitamos}}",
+    "loNecesitamos": "Lo necesitamos",
+    "verFicha": "Ver ficha",
+    "fotoDe": "Foto de {club}",
+    "jugadores": "{n} jugadores",
+    "redesSociales": "Redes sociales",
+    "redesDescripcion": "Dónde y a cuánta gente llega el club.",
+    "seguidores": "{n} seguidores",
+    "verPerfil": "Ver perfil ↗",
+    "instalacionesDe": "Instalaciones de {club}",
+    "masculino": "Masculino",
+    "femenino": "Femenino",
+    "logoDe": "Logo de {club}",
+    "sitioWeb": "Sitio web",
+    "videoPresentacion": "Vídeo de presentación",
+    "gruposEquipos": {
+      "Equipos femeninos": "Equipos femeninos",
+      "Equipos masculinos": "Equipos masculinos",
+      "Equipos mixtos": "Equipos mixtos",
+      "Otros equipos": "Otros equipos"
+    }
+  }
 }

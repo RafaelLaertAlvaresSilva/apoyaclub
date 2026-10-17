@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { IconoDeCategoria } from "@/components/IconoDeCategoria";
 import { CATEGORIAS_IDEA } from "@/lib/catalogo-ideas";
 
@@ -44,6 +45,10 @@ import { CATEGORIAS_IDEA } from "@/lib/catalogo-ideas";
 export function QuePuedesOfrecer() {
   // Cuál está abierta a dedo. Solo una a la vez: en un teléfono, con
   // varias abiertas no se ve ninguna entera.
+  // El nombre y la pista de cada categoría vienen de
+  // `home.categoriasIdea.<id>`, en cada idioma; la lista y el orden,
+  // de `CATEGORIAS_IDEA`, que es la que manda.
+  const t = useTranslations("home.categoriasIdea");
   const [abierta, setAbierta] = useState<string | null>(null);
 
   return (
@@ -64,7 +69,7 @@ export function QuePuedesOfrecer() {
               </span>
 
               <span className="mt-2.5 text-sm font-bold leading-snug text-titular">
-                {categoria.etiqueta}
+                {t(`${categoria.id}.etiqueta`)}
               </span>
 
               {/* La pista, encima de todo lo anterior. `pointer-events-none`
@@ -77,7 +82,7 @@ export function QuePuedesOfrecer() {
                   estaAbierta ? "opacity-100" : "opacity-0"
                 }`}
               >
-                {categoria.pista}
+                {t(`${categoria.id}.pista`)}
               </span>
             </button>
           </li>

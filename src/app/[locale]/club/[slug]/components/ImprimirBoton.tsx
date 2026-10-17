@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 /**
  * "Imprimir ficha": abre el cuadro de imprimir del navegador, que es
  * también donde se elige "Guardar como PDF".
@@ -11,6 +13,7 @@
  * pueden contar cosas distintas.
  */
 export function ImprimirBoton() {
+  const t = useTranslations("club.ficha");
   return (
     <button
       type="button"
@@ -18,7 +21,7 @@ export function ImprimirBoton() {
       className="inline-flex items-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
     >
       <span aria-hidden="true">🖨️</span>
-      Imprimir ficha
+      {t("imprimir")}
     </button>
   );
 }

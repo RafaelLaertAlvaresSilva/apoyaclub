@@ -51,23 +51,49 @@ const ICONO: Record<string, React.ReactNode> = {
 };
 
 /** La máxima categoría, venga de donde venga. */
-function maximaCategoria(perfil: ClubProfile): string | null {
+function maximaCategoria(perfil: ClubProfile, textos: TextosDestacados): string | null {
   // Desde la migración 0035 se reparte entre masculino y femenino. Si el
   // club todavía no lo ha repartido, sigue valiendo la de antes.
   const repartida = [
-    perfil.topCategoryMale && `${perfil.topCategoryMale} (M)`,
-    perfil.topCategoryFemale && `${perfil.topCategoryFemale} (F)`,
+    perfil.topCategoryMale && `${perfil.topCategoryMale} (${textos.masculino})`,
+    perfil.topCategoryFemale && `${perfil.topCategoryFemale} (${textos.femenino})`,
   ].filter(Boolean);
 
   if (repartida.length > 0) return repartida.join(" · ");
   return perfil.topCategory ?? null;
 }
 
+/** Los rótulos de las tarjetas. Por defecto en español; la ficha
+ * pública le pasa los del idioma de quien mira. */
+export type TextosDestacados = {
+  deporte: string;
+  deportes: string;
+  maximaCategoria: string;
+  jugadores: string;
+  equiposCantera: string;
+  dondeEsta: string;
+  masculino: string;
+  femenino: string;
+};
+
+const EN_ESPANOL: TextosDestacados = {
+  deporte: "Deporte",
+  deportes: "Deportes",
+  maximaCategoria: "Máxima categoría",
+  jugadores: "Jugadores",
+  equiposCantera: "Equipos de cantera",
+  dondeEsta: "Dónde está",
+  masculino: "M",
+  femenino: "F",
+};
+
 export function datosDestacados(
   perfil: ClubProfile,
   equipos: ClubTeam[],
   deportes: string[],
   ubicacion: string,
+  textos: TextosDestacados = EN_ESPANOL,
+  intlLocale = "es-ES",
 ): Dato[] {
   // Los jugadores salen de sumar los equipos que han dicho cuántos son.
   // Si ninguno lo ha dicho, la suma es 0 y el dato no se enseña: un "0
@@ -79,26 +105,26 @@ export function datosDestacados(
   const equiposCantera =
     perfil.youthTeamsCount ?? equipos.filter((equipo) => equipo.teamLevel === "cantera").length;
 
-  const categoria = maximaCategoria(perfil);
+  const categoria = maximaCategoria(perfil, textos);
 
   return [
     deportes.length > 0 && {
       clave: "deporte",
-      etiqueta: deportes.length > 1 ? "Deportes" : "Deporte",
+      etiqueta: deportes.length > 1 ? textos.deportes : textos.deporte,
       valor: deportes.join(" · "),
     },
-    categoria && { clave: "categoria", etiqueta: "Máxima categoría", valor: categoria },
+    categoria && { clave: "categoria", etiqueta: textos.maximaCategoria, valor: categoria },
     jugadores > 0 && {
       clave: "jugadores",
-      etiqueta: "Jugadores",
-      valor: new Intl.NumberFormat("es-ES").format(jugadores),
+      etiqueta: textos.jugadores,
+      valor: new Intl.NumberFormat(intlLocale).format(jugadores),
     },
     equiposCantera > 0 && {
       clave: "cantera",
-      etiqueta: "Equipos de cantera",
+      etiqueta: textos.equiposCantera,
       valor: String(equiposCantera),
     },
-    ubicacion && { clave: "ubicacion", etiqueta: "Dónde está", valor: ubicacion },
+    ubicacion && { clave: "ubicacion", etiqueta: textos.dondeEsta, valor: ubicacion },
   ].filter((dato): dato is Dato => Boolean(dato));
 }
 

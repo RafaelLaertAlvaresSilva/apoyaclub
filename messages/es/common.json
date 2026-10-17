@@ -48,6 +48,172 @@
     "rechazar": "Rechazar",
     "reintentar": "Reintentar",
     "volverAApoyaclub": "← Volver a ApoyaClub",
-    "volverAlInicio": "Volver al inicio"
+    "volverAlInicio": "Volver al inicio",
+    "falloNuestro": "Ha sido un fallo nuestro, no tuyo. Puedes reintentarlo ahora mismo; si vuelve a pasar, escríbenos y lo miramos.",
+    "referenciaDelError": "Referencia del error: {codigo}",
+    "seccionesDeLaPagina": "Secciones de la página",
+    "graciasMensaje": "Gracias, hemos recibido tu mensaje. Te responderemos por email en breve."
+  },
+  "cabecera": {
+    "paraClubes": "Para clubes",
+    "paraEmpresas": "Para empresas",
+    "buscarClubes": "Buscar clubes",
+    "empresas": "Empresas",
+    "irAMiPanel": "Ir a mi panel",
+    "creaTuPagina": "Crea tu página",
+    "abrirMenu": "Abrir el menú",
+    "cerrarMenu": "Cerrar el menú",
+    "menu": "Menú",
+    "secciones": "Secciones",
+    "miraQueClubes": "Mira qué clubes hay cerca de ti",
+    "guardados": "Guardados",
+    "iniciarSesion": "Iniciar sesión",
+    "irALaPortada": "Ir a la portada de ApoyaClub",
+    "volverALaPortada": "Volver a la portada"
+  },
+  "idioma": {
+    "elegir": "Idioma"
+  },
+  "cookies": {
+    "aviso": "Aviso de cookies",
+    "corto": "Usamos cookies técnicas.",
+    "largo": "Usamos cookies técnicas necesarias para que ApoyaClub funcione. Puedes aceptar o rechazar las cookies no técnicas; más información en nuestra",
+    "masInformacion": "Más información"
+  },
+  "favoritos": {
+    "guardar": "Guardar {nombre}",
+    "quitar": "Quitar {nombre} de guardados",
+    "guardarParaLuego": "Guardar para luego",
+    "quitarDeGuardados": "Quitar de guardados"
+  },
+  "meta": {
+    "tituloPorDefecto": "ApoyaClub — Conecta tu club deportivo con empresas patrocinadoras",
+    "descripcion": "Conecta tu club deportivo con empresas patrocinadoras.",
+    "ogDescripcion": "Tu club publica lo que puede ofrecer y las empresas de tu zona lo encuentran. Para las empresas es gratis y sin cuenta.",
+    "saltarAlContenido": "Saltar al contenido",
+    "paginaNoEncontrada": "Página no encontrada"
+  },
+  "imagenCompartir": {
+    "eslogan": "CONECTA · IMPULSA · CRECE",
+    "titular": "Conecta tu club deportivo con empresas que quieren patrocinarlo.",
+    "gratis": "Para las empresas es gratis y sin cuenta."
+  },
+  "etiquetas": {
+    "tipoOportunidad": {
+      "equipment": "Equipación",
+      "venue_matches": "Pabellón y partidos",
+      "social_content": "Redes y contenido",
+      "events_tournaments": "Eventos y torneos",
+      "youth": "Cantera",
+      "in_kind": "Servicios en especie"
+    },
+    "estadoOportunidad": {
+      "available": "Disponible",
+      "reserved": "Reservada",
+      "closed": "Cerrada"
+    },
+    "nivelPatrocinio": {
+      "principal": "Patrocinador principal",
+      "oficial": "Patrocinador oficial",
+      "colaborador": "Colaborador",
+      "libre": "Sin categoría"
+    },
+    "formaColaboracion": {
+      "money": "Dinero",
+      "product": "Producto",
+      "service": "Servicio",
+      "mixed": "Mixta"
+    },
+    "periodo": {
+      "match": "Por partido",
+      "month": "Por mes",
+      "season": "Por temporada",
+      "event": "Por evento"
+    },
+    "objetivo": {
+      "familias": "Familias",
+      "jovenes": "Jóvenes",
+      "comunidad_local": "Comunidad local",
+      "deporte_femenino": "Deporte femenino",
+      "deporte_masculino": "Deporte masculino",
+      "deporte_base": "Deporte base",
+      "visibilidad": "Visibilidad de marca",
+      "contenido": "Contenido",
+      "clientes": "Captación de clientes",
+      "empleados": "Empleados",
+      "rsc": "RSC"
+    },
+    "categoriaNecesidad": {
+      "fisioterapia": "Fisioterapia",
+      "medico": "Servicio médico",
+      "fotografia": "Fotografía",
+      "video": "Vídeo",
+      "marketing": "Marketing y redes",
+      "imprenta": "Imprenta y rotulación",
+      "transporte": "Transporte y autobús",
+      "material": "Material deportivo",
+      "equipacion": "Equipaciones",
+      "limpieza": "Limpieza",
+      "restauracion": "Restauración y catering",
+      "alojamiento": "Alojamiento",
+      "gimnasio": "Gimnasio y preparación física",
+      "nutricion": "Nutrición",
+      "asesoria": "Asesoría y gestoría",
+      "informatica": "Informática y web",
+      "otro": "Otro"
+    },
+    "tipoOferta": {
+      "service": "Un servicio",
+      "in_kind": "Un producto",
+      "money": "Dinero"
+    },
+    "responsable": {
+      "club": "El club",
+      "empresa": "La empresa",
+      "ambos": "Los dos"
+    },
+    "redSocial": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "twitter": "X",
+      "tiktok": "TikTok",
+      "youtube": "YouTube"
+    },
+    "orden": {
+      "recomendado": "Recomendadas",
+      "novedad": "Más recientes",
+      "valor": "Mayor valor",
+      "cercania": "Más cerca"
+    },
+    "nivelPatrocinioAyuda": {
+      "principal": "El patrocinio de mayor visibilidad del club.",
+      "oficial": "Patrocinador destacado, normalmente en exclusiva dentro de su sector.",
+      "colaborador": "Colaboración de menor tamaño, sin exclusividad.",
+      "libre": "No encaja en ninguno de los niveles anteriores."
+    },
+    "nivelEquipo": {
+      "primer_equipo": "Primer equipo",
+      "cantera": "Cantera"
+    },
+    "busca": {
+      "todo": "Todo",
+      "patrocinios": "Patrocinios",
+      "necesidades": "Lo que necesitan"
+    }
+  },
+  "plazas": {
+    "progreso": "{cubiertas} de {total} {unidad}",
+    "completa": "Completa",
+    "unidades": {
+      "plazas": "plazas",
+      "colaboradores": "colaboradores",
+      "patrocinadores": "patrocinadores",
+      "empresas": "empresas"
+    }
+  },
+  "legal": {
+    "ultimaActualizacion": "Última actualización: {fecha}",
+    "soloEnEspanolTitulo": "Este texto solo está en español",
+    "soloEnEspanol": "Los textos legales de ApoyaClub solo están disponibles en español, que es la versión válida."
   }
 }

@@ -1,3 +1,6 @@
+import { useLocale, useTranslations } from "next-intl";
+import { LOCALE_CONFIG } from "@/config/locales";
+import type { AppLocale } from "@/i18n/routing";
 import {
   accionesPorResponsable,
   condicionesEnTexto,
@@ -26,8 +29,24 @@ export function FichaDeOportunidad({
   acciones: Accion[];
   condiciones: CondicionesDeLaFicha;
 }) {
+  const t = useTranslations("club.ficha");
+  const locale = useLocale() as AppLocale;
   const grupos = accionesPorResponsable(acciones);
-  const lineasDeCondiciones = condicionesEnTexto(condiciones);
+  const lineasDeCondiciones = condicionesEnTexto(
+    condiciones,
+    {
+      duracion: t("cond.duracion"),
+      frecuencia: t("cond.frecuencia"),
+      fechas: t("cond.fechas"),
+      delAl: (desde, hasta) => t("cond.delAl", { desde, hasta }),
+      desde: t("cond.desde"),
+      hasta: t("cond.hasta"),
+      exclusividad: t("cond.exclusividad"),
+      enExclusiva: (sector) => t("cond.enExclusiva", { sector }),
+      requisitos: t("cond.requisitos"),
+    },
+    LOCALE_CONFIG[locale].intlLocale,
+  );
 
   if (beneficios.length === 0 && grupos.length === 0 && lineasDeCondiciones.length === 0) {
     return null;
@@ -38,7 +57,7 @@ export function FichaDeOportunidad({
       {beneficios.length > 0 && (
         <section>
           <h3 className="text-sm font-bold uppercase tracking-wide text-accion-tinta">
-            La empresa recibe
+            {t("laEmpresaRecibe")}
           </h3>
           <ul className="mt-3 flex flex-col gap-2">
             {beneficios.map((beneficio, indice) => (
@@ -58,14 +77,14 @@ export function FichaDeOportunidad({
 
       {grupos.length > 0 && (
         <section>
-          <h3 className="text-sm font-bold uppercase tracking-wide text-zinc-500">Quién hace qué</h3>
+          <h3 className="text-sm font-bold uppercase tracking-wide text-zinc-500">{t("quienHaceQue")}</h3>
           <div className="mt-3 grid gap-4 sm:grid-cols-2">
             {grupos.map((grupo) => (
               <div
                 key={grupo.responsable}
                 className="rounded-xl border border-zinc-200 bg-white p-4"
               >
-                <p className="text-sm font-semibold text-zinc-900">{grupo.titulo}</p>
+                <p className="text-sm font-semibold text-zinc-900">{t(`responsable.${grupo.responsable}`)}</p>
                 <ul className="mt-2 flex flex-col gap-1.5">
                   {grupo.lineas.map((accion, indice) => (
                     <li key={`${accion.texto}-${indice}`} className="flex items-start gap-2 text-sm text-zinc-700">
@@ -82,7 +101,7 @@ export function FichaDeOportunidad({
 
       {lineasDeCondiciones.length > 0 && (
         <section>
-          <h3 className="text-sm font-bold uppercase tracking-wide text-zinc-500">Condiciones</h3>
+          <h3 className="text-sm font-bold uppercase tracking-wide text-zinc-500">{t("condiciones")}</h3>
           <dl className="mt-3 divide-y divide-zinc-100 rounded-xl border border-zinc-200 bg-white">
             {lineasDeCondiciones.map((linea) => (
               <div key={linea.que} className="flex flex-wrap gap-x-3 gap-y-1 px-4 py-3">

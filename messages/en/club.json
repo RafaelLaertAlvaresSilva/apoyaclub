@@ -1,0 +1,206 @@
+{
+  "meta": {
+    "noEncontrado": "Club not found — ApoyaClub",
+    "titulo": "{club} — ApoyaClub",
+    "descripcionPorDefecto": "{resumen}. Find out how to sponsor this club on ApoyaClub."
+  },
+  "portada": {
+    "verificado": "Verified",
+    "verificadoAyuda": "Club verified by the ApoyaClub team",
+    "solicitarContacto": "Write to the club",
+    "contactar": "Contact",
+    "compartirTitulo": "{club} — ApoyaClub",
+    "verFotoCompleta": "See full photo",
+    "cerrarFoto": "Close the photo",
+    "verFoto": "See {club}'s full photo"
+  },
+  "oportunidades": {
+    "titulo": "Available opportunities",
+    "vacio": "This club hasn't published any sponsorship opportunities yet. Come back soon, or contact the club directly to suggest a partnership.",
+    "exclusiva": "Exclusive to the sector: {sector}",
+    "solicitar": "Write to the club",
+    "plazas": "{libres, plural, =0 {All places taken} one {# place left out of {total}} other {# places left out of {total}}}",
+    "porEmpresa": "per business"
+  },
+  "secciones": {
+    "alcanceEstimado": "Estimated reach",
+    "asistenciaMedia": "Average attendance",
+    "audiencia": "Audience in figures",
+    "cantera": "Youth teams",
+    "canteraDescripcion": "Combined figures for the club's youth categories.",
+    "canteraEquipos": "Teams",
+    "canteraFamilias": "Families",
+    "canteraJugadores": "Players",
+    "competiciones": "Competitions",
+    "comunidad": "Community",
+    "comunidadDescripcion": "The club's social, educational and charity work.",
+    "contacto": "Contact",
+    "contactoHorario": "Opening hours",
+    "contactoPersona": "Contact person",
+    "contactoTelefono": "Phone",
+    "equipos": "Teams",
+    "escribirEmail": "Send email",
+    "fundadoEn": "Founded in",
+    "historia": "Our story",
+    "instalaciones": "Facilities",
+    "llamar": "Call",
+    "logros": "Achievements",
+    "maximaCategoria": "Top category",
+    "palmares": "Honours",
+    "patrocinadores": "Current sponsors",
+    "quienesSomos": "About us",
+    "seguidoresEn": "Followers on {red}",
+    "socios": "Members",
+    "verContacto": "See contact details",
+    "verVideo": "Watch video"
+  },
+  "pie": "{club}'s page on ApoyaClub — the platform that connects sports clubs with sponsoring businesses.",
+  "servicios": {
+    "titulo": "What we need",
+    "descripcion": "Services and products the club needs. In return, the same visibility as any sponsor."
+  },
+  "verMas": "See {cuantos} more",
+  "escribir": {
+    "titulo": "Write to {club}",
+    "enviadoTitulo": "Message sent",
+    "enviadoTexto": "{club} receives it right now and will reply to the email address you gave.",
+    "cerrar": "Close",
+    "sobre": "About \"{titulo}\".",
+    "cuentales": "Tell them who you are and what you're interested in.",
+    "sinRegistro": "No need to sign up.",
+    "tuNombre": "Your name",
+    "empresa": "Business",
+    "opcional": "(optional)",
+    "tuCorreo": "Your email",
+    "telefono": "Phone",
+    "mensaje": "Message",
+    "ejemplo": "Hi, we have a shop in the area and we're interested in sponsoring the shirts. Can we talk?",
+    "privacidad": "We send your name and email to the club so it can reply to you. Nothing else.",
+    "cancelar": "Cancel",
+    "enviando": "Sending…",
+    "enviar": "Send message",
+    "errores": {
+      "clubNoEncontrado": "Club not found.",
+      "nombre": "Enter your name.",
+      "correo": "Enter a valid email: it's where the club will reply to you.",
+      "mensaje": "Write a message for the club.",
+      "largo": "The message is too long.",
+      "demasiadas": "You've sent a lot of requests in a row. Wait a while and try again.",
+      "noEnviada": "The request couldn't be sent. Please try again."
+    }
+  },
+  "ficha": {
+    "laEmpresaRecibe": "The business receives",
+    "quienHaceQue": "Who does what",
+    "condiciones": "Terms",
+    "responsable": {
+      "club": "The club takes care of",
+      "empresa": "The business provides",
+      "ambos": "Between the two"
+    },
+    "cond": {
+      "duracion": "Duration",
+      "frecuencia": "Frequency",
+      "fechas": "Dates",
+      "delAl": "From {desde} to {hasta}",
+      "desde": "From",
+      "hasta": "Until",
+      "exclusividad": "Exclusivity",
+      "enExclusiva": "Exclusive to the sector: {sector}",
+      "requisitos": "Other requirements"
+    },
+    "imprimir": "Print sheet",
+    "compartir": "Share link",
+    "enlaceCopiado": "Link copied!",
+    "pieImpreso": {
+      "teInteresa": "Interested? Scan the code to see the opportunity and write to {club}.",
+      "publicado": "Published on ApoyaClub"
+    },
+    "fotoPrincipal": "{titulo} — main photo",
+    "fotoN": "{titulo} — photo {numero}"
+  },
+  "destacados": {
+    "deporte": "Sport",
+    "deportes": "Sports",
+    "maximaCategoria": "Top category",
+    "jugadores": "Players",
+    "equiposCantera": "Youth teams",
+    "dondeEsta": "Location",
+    "masculino": "M",
+    "femenino": "W"
+  },
+  "contactoPublico": {
+    "errorCarga": "The contact details couldn't be loaded. Check your connection.",
+    "cargando": "Loading…",
+    "unSoloClic": "Just one click, no sign-up. That way the club doesn't end up on spam lists.",
+    "sinDatos": "This club hasn't published its contact details yet. You can write to it with the button below.",
+    "persona": "Contact person",
+    "telefono": "Phone",
+    "correo": "Email",
+    "horario": "Opening hours"
+  },
+  "listado": {
+    "sinNecesidades": "This club hasn't published anything it needs.",
+    "sinOportunidades": "This club hasn't published any opportunities yet.",
+    "volverASuFicha": "Back to its page",
+    "loNecesitamos": "We need this",
+    "verFicha": "See details →"
+  },
+  "pagina": {
+    "seccionesDeLaFicha": "Page sections",
+    "verTodoElClub": "See the whole club",
+    "cargando": "Loading the club's page…",
+    "noEncontradoTitulo": "We couldn't find this club",
+    "noEncontradoTexto": "The link may have expired or the club may have changed its address. Check the URL or go back to the home page.",
+    "volverAlInicio": "Back to home"
+  },
+  "listas": {
+    "clubNoEncontrado": "Club not found",
+    "oportunidades": {
+      "titulo": "Sponsorship opportunities",
+      "intro": "Everything this club can offer a business, with the details of each deal."
+    },
+    "necesidades": {
+      "titulo": "What we need",
+      "intro": "Services and products the club needs. In return, the same visibility as any sponsor."
+    }
+  },
+  "oportunidadPagina": {
+    "noEncontrada": "Opportunity not found",
+    "resumenPorDefecto": "Sponsorship opportunity with {club}.",
+    "loQueNecesitamos": "What we need",
+    "oportunidades": "Opportunities",
+    "loNecesitamos": "We need this",
+    "verFichaCompleta": "See {club}'s full page",
+    "imagen": {
+      "oportunidadDePatrocinio": "Sponsorship opportunity",
+      "antetituloNecesidad": "WE NEED THIS",
+      "antetituloOportunidad": "SPONSORSHIP OPPORTUNITY",
+      "plazasLibres": "{n, plural, one {# place left} other {# places left}}"
+    }
+  },
+  "paginaClub": {
+    "verLasOportunidades": "{n, plural, one {See the opportunity} other {See all # opportunities}}",
+    "verLasNecesidades": "{n, plural, one {See what we need} other {See all # things we need}}",
+    "loNecesitamos": "We need this",
+    "verFicha": "See details",
+    "fotoDe": "Photo of {club}",
+    "jugadores": "{n} players",
+    "redesSociales": "Social media",
+    "redesDescripcion": "Where the club is and how many people it reaches.",
+    "seguidores": "{n} followers",
+    "verPerfil": "See profile ↗",
+    "instalacionesDe": "{club}'s facilities",
+    "masculino": "Men's",
+    "femenino": "Women's",
+    "logoDe": "{club} logo",
+    "sitioWeb": "Website",
+    "videoPresentacion": "Introduction video",
+    "gruposEquipos": {
+      "Equipos femeninos": "Women's teams",
+      "Equipos masculinos": "Men's teams",
+      "Equipos mixtos": "Mixed teams",
+      "Otros equipos": "Other teams"
+    }
+  }
+}

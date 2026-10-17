@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 type Contacto = {
   nombre: string | null;
@@ -20,6 +21,7 @@ type Contacto = {
  * barrio no puede salir de esto con el buzón lleno de basura.
  */
 export function ContactoDeLaEmpresa({ slug }: { slug: string }) {
+  const t = useTranslations("buscar.fichaEmpresa.contacto");
   const [contacto, setContacto] = useState<Contacto | null>(null);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,14 +38,13 @@ export function ContactoDeLaEmpresa({ slug }: { slug: string }) {
       });
 
       if (!respuesta.ok) {
-        const cuerpo = (await respuesta.json().catch(() => null)) as { error?: string } | null;
-        setError(cuerpo?.error ?? "No se han podido cargar los datos de contacto.");
+        setError(t("errorCarga"));
         return;
       }
 
       setContacto((await respuesta.json()) as Contacto);
     } catch {
-      setError("No se han podido cargar los datos de contacto. Inténtalo de nuevo.");
+      setError(t("errorCarga"));
     } finally {
       setCargando(false);
     }
@@ -58,7 +59,7 @@ export function ContactoDeLaEmpresa({ slug }: { slug: string }) {
           disabled={cargando}
           className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy disabled:opacity-60"
         >
-          {cargando ? "Un momento…" : "Ver datos de contacto"}
+          {cargando ? t("unMomento") : t("verDatos")}
         </button>
         {error && <p className="mt-2 text-sm text-red-700">{error}</p>}
       </div>
@@ -72,20 +73,22 @@ export function ContactoDeLaEmpresa({ slug }: { slug: string }) {
   if (!hayContacto) {
     return contacto.web ? (
       <p className="text-sm text-zinc-700">
-        Esta empresa no ha publicado sus datos de contacto.{" "}
-        <a
-          href={contacto.web}
-          target="_blank"
-          rel="noopener noreferrer nofollow"
-          className="font-medium text-accion-tinta hover:underline"
-        >
-          Escríbele por su web
-        </a>
-        .
+        {t.rich("sinDatosConWeb", {
+          enlace: (texto) => (
+            <a
+              href={contacto.web ?? undefined}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="font-medium text-accion-tinta hover:underline"
+            >
+              {texto}
+            </a>
+          ),
+        })}
       </p>
     ) : (
       <p className="text-sm text-zinc-700">
-        Esta empresa todavía no ha publicado ninguna forma de contacto.
+        {t("sinNada")}
       </p>
     );
   }
@@ -94,7 +97,7 @@ export function ContactoDeLaEmpresa({ slug }: { slug: string }) {
     <div className="flex flex-col gap-2 text-sm">
       {contacto.nombre && (
         <p className="text-zinc-700">
-          <span className="font-medium text-zinc-900">Preguntar por: </span>
+          <span className="font-medium text-zinc-900">{t("preguntarPor")} </span>
           {contacto.nombre}
         </p>
       )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
 /**
  * El vídeo de presentación, al lado del mensaje de la portada.
@@ -36,6 +37,7 @@ export function VideoDeLaPortada({
   poster: string;
   etiqueta: string;
 }) {
+  const t = useTranslations("home.video");
   const video = useRef<HTMLVideoElement>(null);
   const [conSonido, setConSonido] = useState(false);
   const [enMarcha, setEnMarcha] = useState(true);
@@ -185,7 +187,7 @@ export function VideoDeLaPortada({
           step={0.1}
           value={momento}
           onChange={(evento) => irA(Number(evento.target.value))}
-          aria-label="Ir a un momento del vídeo"
+          aria-label={t("irAUnMomento")}
           style={{
             background: `linear-gradient(to right, var(--brand-teal-dark) ${avance}%, #e4e4e7 ${avance}%)`,
           }}
@@ -202,7 +204,7 @@ export function VideoDeLaPortada({
           </span>
 
           <span className="flex items-center gap-1">
-            <Mando al={() => saltar(-10)} nombre="Retroceder 10 segundos">
+            <Mando al={() => saltar(-10)} nombre={t("retroceder")}>
               <IconoSaltar haciaAtras />
             </Mando>
 
@@ -212,12 +214,12 @@ export function VideoDeLaPortada({
               className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-teal-dark text-sobre-color transition-colors hover:bg-accion-fuerte focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accion-tinta"
             >
               <span className="sr-only">
-                {enMarcha ? "Pausar el vídeo" : "Reanudar el vídeo"}
+                {enMarcha ? t("pausar") : t("reanudar")}
               </span>
               <IconoMarcha enMarcha={enMarcha} />
             </button>
 
-            <Mando al={() => saltar(10)} nombre="Avanzar 10 segundos">
+            <Mando al={() => saltar(10)} nombre={t("avanzar")}>
               <IconoSaltar />
             </Mando>
           </span>
@@ -225,7 +227,7 @@ export function VideoDeLaPortada({
           <span className="flex justify-end">
             <Mando
               al={alternarSonido}
-              nombre={conSonido ? "Quitar el sonido" : "Poner el sonido"}
+              nombre={conSonido ? t("quitarSonido") : t("ponerSonido")}
               pulsado={conSonido}
             >
               <IconoSonido conSonido={conSonido} />

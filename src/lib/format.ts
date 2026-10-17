@@ -33,3 +33,17 @@ export function formatearFecha(
     typeof fecha === "string" ? new Date(fecha) : fecha,
   );
 }
+
+/**
+ * El precio de una oportunidad en el idioma de quien la mira: "200,00 €"
+ * en español y portugués, "€200.00" en inglés. Mismas reglas que
+ * `formatoValorOportunidad` (que se queda para el panel, los PDF y el
+ * dossier, que de momento solo están en español).
+ */
+export function formatoDeValor(locale: AppLocale): Intl.NumberFormat {
+  return new Intl.NumberFormat(LOCALE_CONFIG[locale].intlLocale, {
+    style: "currency",
+    currency: LOCALE_CONFIG[locale].currency.code,
+    maximumFractionDigits: 2,
+  });
+}

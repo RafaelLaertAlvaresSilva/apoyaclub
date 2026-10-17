@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Header } from "@/components/Header";
 import { CargandoRegion, Skeleton } from "@/components/ui/Skeleton";
 
@@ -13,8 +14,9 @@ import { CargandoRegion, Skeleton } from "@/components/ui/Skeleton";
  * inestable justo en la pantalla que más tarda.
  */
 export default function CargandoBuscador() {
+  const t = useTranslations("buscar.resultados");
   return (
-    <CargandoRegion etiqueta="Buscando oportunidades…">
+    <CargandoRegion etiqueta={t("buscando")}>
       <Header />
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[18rem_1fr]">
         <div className="hidden flex-col gap-4 lg:flex">

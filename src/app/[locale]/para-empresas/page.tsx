@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { VideoDeLaPortada } from "../components/VideoDeLaPortada";
-import { MenuDeSecciones, type SeccionDelMenu } from "../components/MenuDeSecciones";
+import { MenuDeSecciones } from "../components/MenuDeSecciones";
 import {
   FondoDeHeroe,
   SeccionBeneficiosEmpresa,
@@ -35,16 +35,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: tMeta("titulo"), description: tMeta("descripcion") };
 }
 
-const SECCIONES: SeccionDelMenu[] = [
-  { id: "beneficios", etiqueta: "Por qué te interesa" },
-  { id: "empresas", etiqueta: "Qué puedes patrocinar" },
-  { id: "como", etiqueta: "Cómo funciona" },
-  { id: "colaborar", etiqueta: "Formas de colaborar" },
-  { id: "cuenta", etiqueta: "Cuenta gratuita" },
-  { id: "faq", etiqueta: "Preguntas" },
-];
+/* Los nombres de cada apartado están en `home.paraEmpresas.menu`, por idioma. */
+const SECCIONES_IDS = ["beneficios", "empresas", "como", "colaborar", "cuenta", "faq"] as const;
 
 export default async function ParaEmpresasPage() {
+  const tMenu = await getTranslations("home.paraEmpresas.menu");
   const t = await getTranslations("home.paraEmpresas");
   const tVideo = await getTranslations("home.video");
   const pasos = t.raw("pasos") as { titulo: string; texto: string }[];
@@ -114,7 +109,7 @@ export default async function ParaEmpresasPage() {
           </div>
         </section>
 
-        <MenuDeSecciones secciones={SECCIONES} />
+        <MenuDeSecciones secciones={SECCIONES_IDS.map((id) => ({ id, etiqueta: tMenu(id) }))} />
 
         {/* Lo primero después de la portada: quien acaba de pulsar "soy
             una empresa" todavía no sabe por qué debería seguir

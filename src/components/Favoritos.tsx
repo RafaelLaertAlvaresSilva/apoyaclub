@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useState, useSyncExternalStore } from "react";
+import { useTranslations } from "next-intl";
 import {
   alternarFavorito as alternarEnNavegador,
   estaGuardado,
@@ -137,6 +138,7 @@ export function BotonFavorito({
   nombre: string;
   clases?: string;
 }) {
+  const t = useTranslations("common.favoritos");
   const { favoritos, alternar, cargando } = useFavoritos();
   const guardado = estaGuardado(favoritos, tipo, id);
 
@@ -145,8 +147,8 @@ export function BotonFavorito({
       type="button"
       onClick={() => void alternar(tipo, id)}
       aria-pressed={guardado}
-      aria-label={guardado ? `Quitar ${nombre} de guardados` : `Guardar ${nombre}`}
-      title={guardado ? "Quitar de guardados" : "Guardar para luego"}
+      aria-label={guardado ? t("quitar", { nombre }) : t("guardar", { nombre })}
+      title={guardado ? t("quitarDeGuardados") : t("guardarParaLuego")}
       className={`rounded-lg p-1.5 text-lg leading-none transition-colors ${
         guardado ? "text-red-600 hover:bg-red-50" : "text-zinc-300 hover:bg-zinc-100 hover:text-zinc-500"
       } ${cargando ? "opacity-60" : ""} ${clases}`}

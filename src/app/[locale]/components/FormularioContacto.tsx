@@ -13,7 +13,7 @@ export function FormularioContacto() {
   const [estado, formAction] = useActionState<EstadoContacto, FormData>(enviarConsultaContacto, null);
 
   if (estado && "ok" in estado && estado.ok) {
-    return <AvisoExito mensaje="Gracias, hemos recibido tu mensaje. Te responderemos por email en breve." />;
+    return <AvisoExito mensaje={t("graciasMensaje")} />;
   }
 
   return (

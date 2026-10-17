@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { etiquetador } from "@/lib/etiquetas-traducidas";
+import { formatoDeValor } from "@/lib/format";
+import type { AppLocale } from "@/i18n/routing";
 import { Header } from "@/components/Header";
 import { Link } from "@/i18n/navigation";
 import { BarraDePlazas } from "@/components/BarraDePlazas";
 import { beneficioEnTexto } from "@/lib/ficha-oportunidad";
-import {
-  esPorPlazas,
-  ETIQUETA_CATEGORIA_NECESIDAD,
-  ETIQUETA_NIVEL_PATROCINIO,
-  ETIQUETA_TIPO_OPORTUNIDAD,
-  formatoValorOportunidad,
-} from "@/lib/opportunities";
+import { esPorPlazas } from "@/lib/opportunities";
 import { SITE_URL } from "@/lib/site";
 import { CompartirBoton } from "../../components/CompartirBoton";
 import { FichaDeOportunidad } from "../../components/FichaDeOportunidad";
@@ -44,7 +41,8 @@ export async function generateMetadata({
   const { slug, id } = await params;
   const encontrado = await buscar(slug, id);
 
-  if (!encontrado) return { title: "Oportunidad no encontrada — ApoyaClub" };
+  const tp = await getTranslations("club.oportunidadPagina");
+  if (!encontrado) return { title: `${tp("noEncontrada")} — ApoyaClub` };
 
   const { perfil, oportunidad } = encontrado;
 
@@ -54,7 +52,7 @@ export async function generateMetadata({
     oportunidad.beneficios.length > 0
       ? oportunidad.beneficios.map(beneficioEnTexto).join(" · ")
       : (oportunidad.description ??
-        `Oportunidad de patrocinio con ${perfil.name}.`);
+        tp("resumenPorDefecto", { club: perfil.name }));
 
   return {
     title: `${oportunidad.title} — ${perfil.name}`,
@@ -86,9 +84,13 @@ export default async function PaginaOportunidad({
 
   const { perfil, oportunidad } = encontrado;
   const t = await getTranslations("club");
+  const tp = await getTranslations("club.oportunidadPagina");
+  const E = etiquetador(await getTranslations("common.etiquetas"));
+  const locale = (await getLocale()) as AppLocale;
+  const precio = formatoDeValor(locale);
 
   const esNecesidad = oportunidad.esNecesidad;
-  const urlPublica = `${SITE_URL}/es/club/${perfil.slug}/oportunidad/${oportunidad.id}`;
+  const urlPublica = `${SITE_URL}/${locale}/club/${perfil.slug}/oportunidad/${oportunidad.id}`;
   const volverA = esNecesidad
     ? `/club/${perfil.slug}/necesidades`
     : `/club/${perfil.slug}/oportunidades`;
@@ -109,7 +111,7 @@ export default async function PaginaOportunidad({
           </Link>
           <span aria-hidden="true">›</span>
           <Link href={volverA} className="hover:underline">
-            {esNecesidad ? "Lo que necesitamos" : "Oportunidades"}
+            {esNecesidad ? tp("loQueNecesitamos") : tp("oportunidades")}
           </Link>
         </nav>
 
@@ -128,10 +130,10 @@ export default async function PaginaOportunidad({
               </p>
               <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
                 {esNecesidad
-                  ? `Lo necesitamos${oportunidad.categoriaNecesidad ? ` · ${ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]}` : ""}`
-                  : `${ETIQUETA_TIPO_OPORTUNIDAD[oportunidad.opportunityType]}${
+                  ? `${tp("loNecesitamos")}${oportunidad.categoriaNecesidad ? ` · ${E.categoriaNecesidad(oportunidad.categoriaNecesidad)}` : ""}`
+                  : `${E.tipoOportunidad(oportunidad.opportunityType)}${
                       oportunidad.sponsorLevel !== "libre"
-                        ? ` · ${ETIQUETA_NIVEL_PATROCINIO[oportunidad.sponsorLevel]}`
+                        ? ` · ${E.nivelPatrocinio(oportunidad.sponsorLevel)}`
                         : ""
                     }`}
               </p>
@@ -169,7 +171,7 @@ export default async function PaginaOportunidad({
               se ofrece ES el servicio y ponerle precio confunde. */}
           {!esNecesidad && oportunidad.value > 0 && (
             <p className="mt-4 text-2xl font-bold text-zinc-900">
-              {formatoValorOportunidad.format(oportunidad.value)}
+              {precio.format(oportunidad.value)}
               {esPorPlazas(oportunidad) && (
                 <span className="ml-1 text-sm font-medium text-zinc-500">
                   {t("oportunidades.porEmpresa")}
@@ -230,7 +232,7 @@ export default async function PaginaOportunidad({
             href={`/club/${perfil.slug}`}
             className="font-medium text-accion-tinta hover:underline"
           >
-            Ver la ficha completa de {perfil.name}
+            {tp("verFichaCompleta", { club: perfil.name })}
           </Link>
         </p>
       </div>

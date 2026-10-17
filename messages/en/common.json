@@ -1,0 +1,219 @@
+{
+  "footer": {
+    "derechos": "ApoyaClub",
+    "descripcion": "Connect your sports club with sponsoring businesses.",
+    "contacto": "Contact",
+    "clubes": {
+      "titulo": "For clubs",
+      "comoFunciona": "How it works",
+      "precios": "Pricing",
+      "crearPagina": "Create your club's page",
+      "faq": "FAQ",
+      "empresasQueAyudan": "Businesses that help"
+    },
+    "empresas": {
+      "titulo": "For businesses",
+      "buscarClubes": "Find clubs",
+      "comoFunciona": "How it works",
+      "accesoGratuito": "Free access",
+      "queNecesitan": "What clubs need",
+      "publicarOferta": "Publish what I offer"
+    },
+    "legalTitulo": "Legal",
+    "enlaces": {
+      "avisoLegal": "Legal notice",
+      "privacidad": "Privacy",
+      "cookies": "Cookies",
+      "condicionesDeUso": "Terms of use"
+    },
+    "apoyaclub": "ApoyaClub",
+    "derechosReservados": "All rights reserved."
+  },
+  "componentes": {
+    "aceptar": "Accept",
+    "algoHaFallado": "Something went wrong",
+    "buscarClubes": "Find clubs",
+    "cerrarSesion": "Sign out",
+    "cuentanosSiEscribesComo": "Tell us whether you're writing as a club, as a business, or anything else you'd like to ask…",
+    "email": "Email",
+    "enviarMensaje": "Send message",
+    "estaPaginaNoExiste": "This page doesn't exist",
+    "esteTextoEsUn": "This text is a starting draft and has not yet been reviewed by a lawyer. Don't publish it as final or use it as a real legal basis until it has been reviewed.",
+    "mensaje": "Message",
+    "noHemosPodidoCargar": "We couldn't load this page",
+    "nombre": "Name",
+    "plantillaPendienteDeRevision": "⚠️ Template pending legal review",
+    "politicaDeCookies": "Cookie Policy",
+    "puedeQueElEnlace": "The link may have been copied incorrectly, or the page may have moved.",
+    "rechazar": "Reject",
+    "reintentar": "Try again",
+    "volverAApoyaclub": "← Back to ApoyaClub",
+    "volverAlInicio": "Back to home",
+    "falloNuestro": "This was our fault, not yours. You can try again right now; if it happens again, write to us and we'll look into it.",
+    "referenciaDelError": "Error reference: {codigo}",
+    "seccionesDeLaPagina": "Page sections",
+    "graciasMensaje": "Thanks, we've received your message. We'll reply by email shortly."
+  },
+  "cabecera": {
+    "paraClubes": "For clubs",
+    "paraEmpresas": "For businesses",
+    "buscarClubes": "Find clubs",
+    "empresas": "Businesses",
+    "irAMiPanel": "Go to my dashboard",
+    "creaTuPagina": "Create your page",
+    "abrirMenu": "Open menu",
+    "cerrarMenu": "Close menu",
+    "menu": "Menu",
+    "secciones": "Sections",
+    "miraQueClubes": "See which clubs are near you",
+    "guardados": "Saved",
+    "iniciarSesion": "Sign in",
+    "irALaPortada": "Go to the ApoyaClub home page",
+    "volverALaPortada": "Back to home"
+  },
+  "idioma": {
+    "elegir": "Language"
+  },
+  "cookies": {
+    "aviso": "Cookie notice",
+    "corto": "We use technical cookies.",
+    "largo": "We use the technical cookies ApoyaClub needs to work. You can accept or reject non-technical cookies; find out more in our",
+    "masInformacion": "Find out more"
+  },
+  "favoritos": {
+    "guardar": "Save {nombre}",
+    "quitar": "Remove {nombre} from saved",
+    "guardarParaLuego": "Save for later",
+    "quitarDeGuardados": "Remove from saved"
+  },
+  "meta": {
+    "tituloPorDefecto": "ApoyaClub — Connect your sports club with sponsoring businesses",
+    "descripcion": "Connect your sports club with sponsoring businesses.",
+    "ogDescripcion": "Your club publishes what it can offer and local businesses find it. For businesses it's free, with no account needed.",
+    "saltarAlContenido": "Skip to content",
+    "paginaNoEncontrada": "Page not found"
+  },
+  "imagenCompartir": {
+    "eslogan": "CONNECT · BOOST · GROW",
+    "titular": "Connect your sports club with businesses that want to sponsor it.",
+    "gratis": "For businesses it's free, with no account needed."
+  },
+  "etiquetas": {
+    "tipoOportunidad": {
+      "equipment": "Kit",
+      "venue_matches": "Venue and matches",
+      "social_content": "Social media and content",
+      "events_tournaments": "Events and tournaments",
+      "youth": "Youth teams",
+      "in_kind": "In-kind services"
+    },
+    "estadoOportunidad": {
+      "available": "Available",
+      "reserved": "Reserved",
+      "closed": "Closed"
+    },
+    "nivelPatrocinio": {
+      "principal": "Main sponsor",
+      "oficial": "Official sponsor",
+      "colaborador": "Partner",
+      "libre": "No category"
+    },
+    "formaColaboracion": {
+      "money": "Money",
+      "product": "Product",
+      "service": "Service",
+      "mixed": "Mixed"
+    },
+    "periodo": {
+      "match": "Per match",
+      "month": "Per month",
+      "season": "Per season",
+      "event": "Per event"
+    },
+    "objetivo": {
+      "familias": "Families",
+      "jovenes": "Young people",
+      "comunidad_local": "Local community",
+      "deporte_femenino": "Women's sport",
+      "deporte_masculino": "Men's sport",
+      "deporte_base": "Grassroots sport",
+      "visibilidad": "Brand visibility",
+      "contenido": "Content",
+      "clientes": "Customer acquisition",
+      "empleados": "Employees",
+      "rsc": "CSR"
+    },
+    "categoriaNecesidad": {
+      "fisioterapia": "Physiotherapy",
+      "medico": "Medical services",
+      "fotografia": "Photography",
+      "video": "Video",
+      "marketing": "Marketing and social media",
+      "imprenta": "Printing and signage",
+      "transporte": "Transport and coach hire",
+      "material": "Sports equipment",
+      "equipacion": "Kits",
+      "limpieza": "Cleaning",
+      "restauracion": "Food and catering",
+      "alojamiento": "Accommodation",
+      "gimnasio": "Gym and fitness training",
+      "nutricion": "Nutrition",
+      "asesoria": "Accounting and admin",
+      "informatica": "IT and web",
+      "otro": "Other"
+    },
+    "tipoOferta": {
+      "service": "A service",
+      "in_kind": "A product",
+      "money": "Money"
+    },
+    "responsable": {
+      "club": "The club",
+      "empresa": "The business",
+      "ambos": "Both"
+    },
+    "redSocial": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "twitter": "X",
+      "tiktok": "TikTok",
+      "youtube": "YouTube"
+    },
+    "orden": {
+      "recomendado": "Recommended",
+      "novedad": "Newest",
+      "valor": "Highest value",
+      "cercania": "Nearest"
+    },
+    "nivelPatrocinioAyuda": {
+      "principal": "The club's most visible sponsorship.",
+      "oficial": "A prominent sponsor, usually the only one in its sector.",
+      "colaborador": "A smaller partnership, with no exclusivity.",
+      "libre": "Doesn't fit any of the levels above."
+    },
+    "nivelEquipo": {
+      "primer_equipo": "First team",
+      "cantera": "Youth team"
+    },
+    "busca": {
+      "todo": "Everything",
+      "patrocinios": "Sponsorships",
+      "necesidades": "What they need"
+    }
+  },
+  "plazas": {
+    "progreso": "{cubiertas} of {total} {unidad}",
+    "completa": "Full",
+    "unidades": {
+      "plazas": "places",
+      "colaboradores": "partners",
+      "patrocinadores": "sponsors",
+      "empresas": "businesses"
+    }
+  },
+  "legal": {
+    "ultimaActualizacion": "Last updated: {fecha}",
+    "soloEnEspanolTitulo": "This text is only available in Spanish",
+    "soloEnEspanol": "ApoyaClub's legal texts are only available in Spanish, which is the valid version."
+  }
+}

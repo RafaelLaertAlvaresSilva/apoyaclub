@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
 /**
@@ -24,12 +25,13 @@ import { Link } from "@/i18n/navigation";
  * acceso) no tienen modo oscuro y no le pasan nada.
  */
 export function BarraLogo({ extra }: { extra?: ReactNode }) {
+  const t = useTranslations("common.cabecera");
   return (
     <div className="border-b border-zinc-200 bg-white">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-2.5 sm:px-6">
         <Link
           href="/"
-          aria-label="Ir a la portada de ApoyaClub"
+          aria-label={t("irALaPortada")}
           className="shrink-0"
         >
           {/*
@@ -79,7 +81,7 @@ export function BarraLogo({ extra }: { extra?: ReactNode }) {
             href="/"
             className="shrink-0 text-sm font-medium text-zinc-600 transition hover:text-titular"
           >
-            Volver a la portada
+            {t("volverALaPortada")}
           </Link>
         </div>
       </div>

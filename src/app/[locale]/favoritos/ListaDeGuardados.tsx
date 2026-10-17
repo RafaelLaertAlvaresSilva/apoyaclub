@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { BotonFavorito, useFavoritos } from "@/components/Favoritos";
 import { Link } from "@/i18n/navigation";
@@ -28,6 +29,7 @@ type OportunidadGuardada = {
  * servidor no sabe nada de esa lista y no puede pintarla.
  */
 export function ListaDeGuardados() {
+  const t = useTranslations("buscar.guardados");
   const { favoritos, conCuenta, cargando } = useFavoritos();
 
   /**
@@ -80,22 +82,21 @@ export function ListaDeGuardados() {
   }, [clave, cargando]);
 
   if (cargando) {
-    return <p className="text-sm text-zinc-500">Un momento…</p>;
+    return <p className="text-sm text-zinc-500">{t("unMomento")}</p>;
   }
 
   if (favoritos.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-zinc-300 bg-white p-8 text-center">
-        <p className="font-medium text-zinc-900">Todavía no has guardado nada.</p>
+        <p className="font-medium text-zinc-900">{t("vacioTitulo")}</p>
         <p className="mx-auto mt-1 max-w-md text-sm text-zinc-500">
-          Pulsa el corazón en cualquier club u oportunidad y aparecerá aquí, para volver cuando
-          tengas tiempo de mirarlo con calma.
+          {t("vacioTexto")}
         </p>
         <Link
           href="/buscar"
           className="mt-4 inline-block rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
         >
-          Buscar clubes
+          {t("buscarClubes")}
         </Link>
       </div>
     );
@@ -117,14 +118,13 @@ export function ListaDeGuardados() {
           la página en blanco sin explicación. */}
       {nadaQueEnsenar && (
         <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-          Lo que tenías guardado ya no está disponible. Puede que esos clubes hayan dejado
-          ApoyaClub.
+          {t("yaNoDisponible")}
         </p>
       )}
 
       {clubesVisibles.length > 0 && (
         <section>
-          <h2 className="mb-3 text-lg font-semibold text-zinc-900">Clubes</h2>
+          <h2 className="mb-3 text-lg font-semibold text-zinc-900">{t("clubes")}</h2>
           <ul className="grid gap-3 sm:grid-cols-2">
             {clubesVisibles.map((club) => (
               <li
@@ -162,7 +162,7 @@ export function ListaDeGuardados() {
 
       {oportunidadesVisibles.length > 0 && (
         <section>
-          <h2 className="mb-3 text-lg font-semibold text-zinc-900">Oportunidades</h2>
+          <h2 className="mb-3 text-lg font-semibold text-zinc-900">{t("oportunidades")}</h2>
           <ul className="grid gap-3 sm:grid-cols-2">
             {oportunidadesVisibles.map((oportunidad) => (
               <li
@@ -172,7 +172,7 @@ export function ListaDeGuardados() {
                 <div className="min-w-0 flex-1">
                   {oportunidad.esNecesidad && (
                     <p className="text-xs font-semibold uppercase tracking-wide text-accion-tinta">
-                      Lo necesitan
+                      {t("loNecesitan")}
                     </p>
                   )}
                   <p className="font-medium text-zinc-900">{oportunidad.titulo}</p>
@@ -200,12 +200,13 @@ export function ListaDeGuardados() {
           el disgusto el día que mire desde el móvil. */}
       {!conCuenta && (
         <p className="rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-600">
-          Esto se guarda solo en este navegador: desde otro dispositivo no lo verás, y si borras
-          los datos de navegación se pierde.{" "}
-          <Link href="/registro-empresa" className="font-medium text-accion-tinta underline">
-            Crea una cuenta gratis
-          </Link>{" "}
-          y se te guarda en todos. Lo que ya tienes marcado se viene contigo.
+          {t.rich("soloEnEsteNavegador", {
+            enlace: (texto) => (
+              <Link href="/registro-empresa" className="font-medium text-accion-tinta underline">
+                {texto}
+              </Link>
+            ),
+          })}
         </p>
       )}
     </div>

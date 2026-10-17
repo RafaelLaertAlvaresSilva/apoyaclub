@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
 /**
  * Índice de una página larga: una barra con sus secciones, pegada bajo
@@ -28,6 +29,7 @@ export type SeccionDelMenu = { id: string; etiqueta: string };
  * bloques se acaba antes de que te pierdas, y un índice encima de una
  * página corta es una barra más que tapar. */
 export function MenuDeSecciones({ secciones }: { secciones: SeccionDelMenu[] }) {
+  const t = useTranslations("common.componentes");
   const [alturaCabecera, setAlturaCabecera] = useState(0);
   const [activa, setActiva] = useState<string | null>(null);
   const barra = useRef<HTMLDivElement>(null);
@@ -89,7 +91,7 @@ export function MenuDeSecciones({ secciones }: { secciones: SeccionDelMenu[] }) 
 
   return (
     <nav
-      aria-label="Secciones de la página"
+      aria-label={t("seccionesDeLaPagina")}
       style={{ top: alturaCabecera }}
       className="sticky z-30 border-b border-zinc-200 bg-white"
     >

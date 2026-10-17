@@ -1,20 +1,18 @@
 import type { Metadata } from "next";
+import { getLocale, getTranslations } from "next-intl/server";
+import { etiquetador } from "@/lib/etiquetas-traducidas";
+import { LOCALE_CONFIG } from "@/config/locales";
+import type { AppLocale } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Header } from "@/components/Header";
 import { Link } from "@/i18n/navigation";
-import { ETIQUETA_TIPO_OFERTA, obtenerOfertasPublicas } from "@/lib/empresas";
-import { ETIQUETA_CATEGORIA_NECESIDAD } from "@/lib/opportunities";
+import { obtenerOfertasPublicas } from "@/lib/empresas";
 import { createPublicClient } from "@/lib/supabase/public";
 import { ContactoDeLaEmpresa } from "../components/ContactoDeLaEmpresa";
 
 export const revalidate = 60;
 
-const formatoEuros = new Intl.NumberFormat("es-ES", {
-  style: "currency",
-  currency: "EUR",
-  maximumFractionDigits: 0,
-});
 
 type FilaEmpresaPublica = {
   id: string;
@@ -45,14 +43,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const empresa = await obtenerEmpresa(slug);
+  const tMetadatos = await getTranslations("buscar.fichaEmpresa");
 
-  if (!empresa) return { title: "Empresa no encontrada — ApoyaClub" };
+  if (!empresa) return { title: `${tMetadatos("noEncontrada")} — ApoyaClub` };
 
   return {
     title: `${empresa.name} — ApoyaClub`,
-    description:
-      empresa.description ??
-      `${empresa.name} apoya al deporte de base. Mira qué ofrece a los clubes en ApoyaClub.`,
+    description: empresa.description ?? tMetadatos("descripcionPorDefecto", { nombre: empresa.name }),
   };
 }
 
@@ -71,6 +68,14 @@ export default async function PaginaEmpresa({ params }: { params: Promise<{ slug
   if (!empresa) notFound();
 
   const ofertas = await obtenerOfertasPublicas(createPublicClient(), slug);
+  const t = await getTranslations("buscar.fichaEmpresa");
+  const E = etiquetador(await getTranslations("common.etiquetas"));
+  const locale = (await getLocale()) as AppLocale;
+  const formatoEuros = new Intl.NumberFormat(LOCALE_CONFIG[locale].intlLocale, {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0,
+  });
   const donde = [empresa.city, empresa.province].filter(Boolean).join(", ");
 
   return (
@@ -92,7 +97,7 @@ export default async function PaginaEmpresa({ params }: { params: Promise<{ slug
           <div className="min-w-0">
             <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl">{empresa.name}</h1>
             <p className="mt-1 text-sm text-zinc-600">
-              {[empresa.sector, donde].filter(Boolean).join(" · ") || "Empresa"}
+              {[empresa.sector, donde].filter(Boolean).join(" · ") || t("empresa")}
             </p>
             {empresa.website && (
               <a
@@ -101,7 +106,7 @@ export default async function PaginaEmpresa({ params }: { params: Promise<{ slug
                 rel="noopener noreferrer nofollow"
                 className="mt-1 inline-block text-sm font-medium text-accion-tinta hover:underline"
               >
-                Ver su web
+                {t("verSuWeb")}
               </a>
             )}
           </div>
@@ -111,26 +116,25 @@ export default async function PaginaEmpresa({ params }: { params: Promise<{ slug
       <div className="mx-auto w-full max-w-4xl flex-1 px-4 sm:px-6 py-8">
         {empresa.description && (
           <section className="rounded-2xl border border-zinc-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-zinc-900">Quiénes son</h2>
+            <h2 className="text-lg font-semibold text-zinc-900">{t("quienesSon")}</h2>
             <p className="mt-2 whitespace-pre-line text-zinc-700">{empresa.description}</p>
           </section>
         )}
 
         <section className="mt-6">
-          <h2 className="text-lg font-semibold text-zinc-900">Lo que ofrece</h2>
+          <h2 className="text-lg font-semibold text-zinc-900">{t("loQueOfrece")}</h2>
 
           {ofertas.length === 0 ? (
             <p className="mt-2 rounded-xl border border-dashed border-zinc-300 bg-white p-6 text-sm text-zinc-500">
-              Esta empresa todavía no ha publicado nada concreto, pero ha dicho que está abierta a
-              colaborar con clubes. Si te encaja, escríbele por su web.
+              {t("sinOfertas")}
             </p>
           ) : (
             <ul className="mt-3 grid gap-3 sm:grid-cols-2">
               {ofertas.map((oferta) => (
                 <li key={oferta.id} className="rounded-xl border border-teal-200 bg-teal-50 p-4">
                   <p className="text-xs font-semibold uppercase tracking-wide text-accion-tinta">
-                    {ETIQUETA_TIPO_OFERTA[oferta.tipo]}
-                    {oferta.categoria && ` · ${ETIQUETA_CATEGORIA_NECESIDAD[oferta.categoria]}`}
+                    {E.tipoOferta(oferta.tipo)}
+                    {oferta.categoria && ` · ${E.categoriaNecesidad(oferta.categoria)}`}
                   </p>
                   <p className="mt-1 font-semibold text-zinc-900">{oferta.titulo}</p>
                   {oferta.descripcion && (
@@ -138,7 +142,7 @@ export default async function PaginaEmpresa({ params }: { params: Promise<{ slug
                   )}
                   {oferta.pideACambio && (
                     <p className="mt-2 text-sm text-zinc-700">
-                      <span className="font-medium">A cambio: </span>
+                      <span className="font-medium">{t("aCambio")} </span>
                       {oferta.pideACambio}
                     </p>
                   )}
@@ -156,16 +160,16 @@ export default async function PaginaEmpresa({ params }: { params: Promise<{ slug
         {/* Lo que faltaba: sin esto el club leía la oferta, le
             encajaba, y no tenía a dónde ir. */}
         <section className="mt-6 rounded-2xl border border-zinc-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-zinc-900">Hablar con esta empresa</h2>
+          <h2 className="text-lg font-semibold text-zinc-900">{t("hablarConEstaEmpresa")}</h2>
           <p className="mb-4 mt-1 text-sm text-zinc-600">
-            Dile quién eres y qué club llevas. No hace falta que tengas nada preparado.
+            {t("hablarTexto")}
           </p>
           <ContactoDeLaEmpresa slug={empresa.slug} />
         </section>
 
         <p className="mt-8 text-center text-sm text-zinc-500">
           <Link href="/empresas" className="font-medium text-accion-tinta hover:underline">
-            Ver todas las empresas
+            {t("verTodas")}
           </Link>
         </p>
       </div>

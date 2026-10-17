@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 type Contacto = {
   email: string | null;
@@ -36,6 +37,7 @@ export function DatosDeContacto({
   textoEmail: string;
   textoLlamar: string;
 }) {
+  const t = useTranslations("club.contactoPublico");
   const [contacto, setContacto] = useState<Contacto | null>(null);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -52,14 +54,13 @@ export function DatosDeContacto({
       });
 
       if (!respuesta.ok) {
-        const cuerpo = (await respuesta.json().catch(() => null)) as { error?: string } | null;
-        setError(cuerpo?.error ?? "No se han podido cargar los datos de contacto.");
+        setError(t("errorCarga"));
         return;
       }
 
       setContacto((await respuesta.json()) as Contacto);
     } catch {
-      setError("No se han podido cargar los datos de contacto. Revisa tu conexión.");
+      setError(t("errorCarga"));
     } finally {
       setCargando(false);
     }
@@ -74,10 +75,10 @@ export function DatosDeContacto({
           disabled={cargando}
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-accion px-5 py-3 text-sm font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte disabled:opacity-60"
         >
-          {cargando ? "Cargando…" : textoBoton}
+          {cargando ? t("cargando") : textoBoton}
         </button>
         <p className="mt-2 text-xs text-zinc-500">
-          Un solo clic, sin registrarte. Así el club no acaba en listas de spam.
+          {t("unSoloClic")}
         </p>
         {error && <p className="mt-2 text-sm text-red-700">{error}</p>}
       </div>
@@ -89,8 +90,7 @@ export function DatosDeContacto({
   if (vacio) {
     return (
       <p className="text-sm text-zinc-600">
-        Este club todavía no ha publicado sus datos de contacto. Puedes escribirle con el botón de
-        abajo.
+        {t("sinDatos")}
       </p>
     );
   }
@@ -98,10 +98,10 @@ export function DatosDeContacto({
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
       <dl className="space-y-2 text-sm">
-        {contacto.nombre && <Dato etiqueta="Persona de contacto" valor={contacto.nombre} />}
-        {contacto.telefono && <Dato etiqueta="Teléfono" valor={contacto.telefono} />}
-        {contacto.email && <Dato etiqueta="Correo" valor={contacto.email} />}
-        {contacto.horario && <Dato etiqueta="Horario de atención" valor={contacto.horario} />}
+        {contacto.nombre && <Dato etiqueta={t("persona")} valor={contacto.nombre} />}
+        {contacto.telefono && <Dato etiqueta={t("telefono")} valor={contacto.telefono} />}
+        {contacto.email && <Dato etiqueta={t("correo")} valor={contacto.email} />}
+        {contacto.horario && <Dato etiqueta={t("horario")} valor={contacto.horario} />}
       </dl>
 
       <div className="flex shrink-0 flex-wrap gap-2">

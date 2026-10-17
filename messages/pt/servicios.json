@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "titulo": "Do que precisam os clubes — ApoyaClub",
+    "descripcion": "Clubes desportivos que procuram fisioterapia, transporte, gráfica, refeições de equipa e outros serviços em troca de visibilidade. Acesso gratuito para empresas."
+  },
+  "eyebrow": "Para empresas",
+  "titulo": "Do que precisam os clubes",
+  "texto": "Nem tudo é dar dinheiro. Muitos clubes procuram serviços —fisioterapia, transporte, gráfica, refeições de equipa— em troca de visibilidade. Se a tua empresa pode cobrir algum, é a forma mais fácil de começar uma colaboração.",
+  "filtroCategoria": "Tipo de serviço",
+  "todasLasCategorias": "Todos",
+  "filtroProvincia": "Província",
+  "todaEspana": "Toda a Espanha",
+  "filtrar": "Filtrar",
+  "verPatrocinios": "Ver oportunidades de patrocínio →",
+  "verClub": "Ver clube",
+  "vacioTitulo": "Ainda não há serviços publicados com estes filtros.",
+  "vacioTexto": "Experimenta outra província ou outro tipo de serviço, ou vê as oportunidades de patrocínio.",
+  "publicaCta": "A tua empresa pode cobrir alguma destas coisas? <enlace>Publica o que ofereces</enlace> e deixa que os clubes te encontrem. É grátis.",
+  "verFicha": "Ver ficha"
+}

@@ -4,10 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { CtaFijoMovil } from "../components/CtaFijoMovil";
 import { VideoDeLaPortada } from "../components/VideoDeLaPortada";
-import {
-  MenuDeSecciones,
-  type SeccionDelMenu,
-} from "../components/MenuDeSecciones";
+import { MenuDeSecciones } from "../components/MenuDeSecciones";
 import {
   FondoDeHeroe,
   FuncionesDestacadas,
@@ -38,17 +35,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: tMeta("titulo"), description: tMeta("descripcion") };
 }
 
-const SECCIONES: SeccionDelMenu[] = [
-  { id: "como-funciona", etiqueta: "Cómo funciona" },
-  { id: "clubes", etiqueta: "Qué puedes ofrecer" },
-  { id: "oportunidades", etiqueta: "Oportunidades" },
-  { id: "tu-pagina", etiqueta: "Tu página" },
-  { id: "herramientas", etiqueta: "Herramientas" },
-  { id: "precio", etiqueta: "Precio" },
-  { id: "faq", etiqueta: "Preguntas" },
-];
+/* Los nombres de cada apartado están en `home.paraClubes.menu`, por idioma. */
+const SECCIONES_IDS = ["como-funciona", "clubes", "oportunidades", "tu-pagina", "herramientas", "precio", "faq"] as const;
 
 export default async function ParaClubesPage() {
+  const tMenu = await getTranslations("home.paraClubes.menu");
   const t = await getTranslations("home");
 
   return (
@@ -119,7 +110,7 @@ export default async function ParaClubesPage() {
           </div>
         </section>
 
-        <MenuDeSecciones secciones={SECCIONES} />
+        <MenuDeSecciones secciones={SECCIONES_IDS.map((id) => ({ id, etiqueta: tMenu(id) }))} />
 
         <SeccionComoFunciona />
         <SeccionQueOfrece />

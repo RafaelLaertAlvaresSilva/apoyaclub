@@ -62,6 +62,7 @@ function leerSnapshotServidor(): boolean {
  */
 export function CookieBanner() {
   const t = useTranslations("common.componentes");
+  const tc = useTranslations("common.cookies");
   const yaElegido = useSyncExternalStore(suscribirse, leerSnapshotCliente, leerSnapshotServidor);
   const [descartado, setDescartado] = useState(false);
   const caja = useRef<HTMLDivElement>(null);
@@ -104,7 +105,7 @@ export function CookieBanner() {
     <div
       ref={caja}
       role="dialog"
-      aria-label="Aviso de cookies"
+      aria-label={tc("aviso")}
       className="fixed inset-x-0 bottom-0 z-50 print:hidden border-t border-zinc-200 bg-white px-3 py-2.5 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] sm:px-4 sm:py-4"
     >
       {/* EN EL MÓVIL, UNA FRANJA BAJA Y NO UNA CAJA.
@@ -117,13 +118,12 @@ export function CookieBanner() {
           RGPD no deja que "Rechazar" sea más difícil que "Aceptar". */}
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3">
         <p className="text-xs leading-snug text-zinc-600 sm:text-sm">
-          <span className="sm:hidden">Usamos cookies técnicas. </span>
+          <span className="sm:hidden">{tc("corto")} </span>
           <span className="hidden sm:inline">
-            Usamos cookies técnicas necesarias para que ApoyaClub funcione. Puedes aceptar o
-            rechazar las cookies no técnicas; más información en nuestra{" "}
+            {tc("largo")}{" "}
           </span>
           <Link href="/cookies" className="font-medium text-teal-700 underline sm:no-underline sm:hover:underline">
-            <span className="sm:hidden">Más información</span>
+            <span className="sm:hidden">{tc("masInformacion")}</span>
             <span className="hidden sm:inline">{t("politicaDeCookies")}</span>
           </Link>
           .

@@ -32,7 +32,9 @@
     "todaEspana": "Toda España",
     "ubicacion": "Ubicación",
     "ubicacionPlaceholder": "Ciudad o código postal",
-    "verResultados": "Ver resultados"
+    "verResultados": "Ver resultados",
+    "queBuscas": "Qué buscas",
+    "cualquierServicio": "Cualquier servicio o producto"
   },
   "resultados": {
     "ampliarRadio": "Ampliar radio a {km} km",
@@ -55,6 +57,63 @@
     "verClub": "Ver club",
     "vacioSinFiltrosTitulo": "Todavía no hay clubes publicados por aquí.",
     "vacioSinFiltrosTexto": "ApoyaClub acaba de empezar y los clubes se van dando de alta poco a poco. Mientras tanto, mira qué cosas necesitan.",
-    "verQueNecesitan": "Ver qué necesitan los clubes"
+    "verQueNecesitan": "Ver qué necesitan los clubes",
+    "verFicha": "Ver ficha",
+    "verPaginaDelClub": "Ver página del club",
+    "buscando": "Buscando oportunidades…"
+  },
+  "directorioEmpresas": {
+    "metaTitulo": "Empresas que apoyan al deporte de base",
+    "metaDescripcion": "Empresas que ofrecen servicios, productos o patrocinio a clubes deportivos. Mira qué ofrecen y escríbeles.",
+    "eyebrow": "Empresas",
+    "titulo": "Empresas que apoyan al deporte de base",
+    "intro": "Lo que cada una puede poner y qué pide a cambio. Si eres un club y algo te encaja, escríbele: no hace falta que tengas nada preparado.",
+    "queBuscas": "Qué buscas",
+    "todo": "Todo",
+    "deQueTipo": "De qué tipo",
+    "cualquiera": "Cualquiera",
+    "provincia": "Provincia",
+    "todaEspana": "Toda España",
+    "filtrar": "Filtrar",
+    "vacioTitulo": "Todavía no hay ninguna empresa aquí.",
+    "vacioTexto": "Esto se llena con lo que las empresas publican. Si tienes una y puedes aportar algo a un club de tu barrio, empieza tú.",
+    "publicarLoQueOfrezco": "Publicar lo que ofrezco",
+    "aCambio": "A cambio:",
+    "verEmpresa": "Ver empresa"
+  },
+  "fichaEmpresa": {
+    "noEncontrada": "Empresa no encontrada",
+    "descripcionPorDefecto": "{nombre} apoya al deporte de base. Mira qué ofrece a los clubes en ApoyaClub.",
+    "empresa": "Empresa",
+    "verSuWeb": "Ver su web",
+    "quienesSon": "Quiénes son",
+    "loQueOfrece": "Lo que ofrece",
+    "sinOfertas": "Esta empresa todavía no ha publicado nada concreto, pero ha dicho que está abierta a colaborar con clubes. Si te encaja, escríbele por su web.",
+    "aCambio": "A cambio:",
+    "hablarConEstaEmpresa": "Hablar con esta empresa",
+    "hablarTexto": "Dile quién eres y qué club llevas. No hace falta que tengas nada preparado.",
+    "verTodas": "Ver todas las empresas",
+    "contacto": {
+      "errorCarga": "No se han podido cargar los datos de contacto. Inténtalo de nuevo.",
+      "unMomento": "Un momento…",
+      "verDatos": "Ver datos de contacto",
+      "sinDatosConWeb": "Esta empresa no ha publicado sus datos de contacto. <enlace>Escríbele por su web</enlace>.",
+      "sinNada": "Esta empresa todavía no ha publicado ninguna forma de contacto.",
+      "preguntarPor": "Preguntar por:"
+    }
+  },
+  "guardados": {
+    "titulo": "Guardados",
+    "metaDescripcion": "Los clubes y las oportunidades que has guardado para mirar con calma.",
+    "intro": "Lo que has marcado para mirar con calma.",
+    "unMomento": "Un momento…",
+    "vacioTitulo": "Todavía no has guardado nada.",
+    "vacioTexto": "Pulsa el corazón en cualquier club u oportunidad y aparecerá aquí, para volver cuando tengas tiempo de mirarlo con calma.",
+    "buscarClubes": "Buscar clubes",
+    "yaNoDisponible": "Lo que tenías guardado ya no está disponible. Puede que esos clubes hayan dejado ApoyaClub.",
+    "clubes": "Clubes",
+    "oportunidades": "Oportunidades",
+    "loNecesitan": "Lo necesitan",
+    "soloEnEsteNavegador": "Esto se guarda solo en este navegador: desde otro dispositivo no lo verás, y si borras los datos de navegación se pierde. <enlace>Crea una cuenta gratis</enlace> y se te guarda en todos. Lo que ya tienes marcado se viene contigo."
   }
 }

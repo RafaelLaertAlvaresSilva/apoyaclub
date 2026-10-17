@@ -36,4 +36,32 @@ export const LOCALE_CONFIG: Record<AppLocale, LocaleConfig> = {
     currency: { code: "EUR", symbol: "€" },
     timeZone: "Europe/Madrid",
   },
+  // Portugués de Portugal, no de Brasil: es el mercado al que se abre.
+  pt: {
+    intlLocale: "pt-PT",
+    currency: { code: "EUR", symbol: "€" },
+    timeZone: "Europe/Lisbon",
+  },
+  // Inglés de Reino Unido: euros, día antes que mes y hora de Madrid,
+  // porque quien lo lee en inglés sigue mirando clubes de España.
+  en: {
+    intlLocale: "en-GB",
+    currency: { code: "EUR", symbol: "€" },
+    timeZone: "Europe/Madrid",
+  },
+};
+
+/** El nombre de cada idioma escrito en ese mismo idioma, que es como lo
+ * busca quien no entiende el que está viendo. */
+export const NOMBRE_DEL_IDIOMA: Record<AppLocale, string> = {
+  es: "Español",
+  pt: "Português",
+  en: "English",
+};
+
+/** Lo que usa Open Graph (`og:locale`), con guion bajo. */
+export const LOCALE_OPEN_GRAPH: Record<AppLocale, string> = {
+  es: "es_ES",
+  pt: "pt_PT",
+  en: "en_GB",
 };

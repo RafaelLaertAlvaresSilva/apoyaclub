@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "titulo": "What clubs need — ApoyaClub",
+    "descripcion": "Sports clubs looking for physiotherapy, transport, printing, team meals and other services in exchange for visibility. Free access for businesses."
+  },
+  "eyebrow": "For businesses",
+  "titulo": "What clubs need",
+  "texto": "It's not all about money. Many clubs are looking for services —physiotherapy, transport, printing, team meals— in exchange for visibility. If your business can cover any of them, it's the easiest way to start a partnership.",
+  "filtroCategoria": "Type of service",
+  "todasLasCategorias": "All",
+  "filtroProvincia": "Province",
+  "todaEspana": "All of Spain",
+  "filtrar": "Filter",
+  "verPatrocinios": "See sponsorship opportunities →",
+  "verClub": "See club",
+  "vacioTitulo": "There are no services published with these filters yet.",
+  "vacioTexto": "Try another province or another type of service, or look at the sponsorship opportunities.",
+  "publicaCta": "Can your business cover any of this? <enlace>Publish what you offer</enlace> and let clubs find you. It's free.",
+  "verFicha": "See details"
+}

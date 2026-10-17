@@ -38,8 +38,7 @@ export default function ErrorEnLaPagina({
       <p className="text-sm font-medium text-accion-tinta">{t("algoHaFallado")}</p>
       <h1 className="mt-2 text-2xl font-semibold text-zinc-900 sm:text-3xl">{t("noHemosPodidoCargar")}</h1>
       <p className="mt-3 max-w-md text-zinc-600">
-        Ha sido un fallo nuestro, no tuyo. Puedes reintentarlo ahora mismo; si vuelve a pasar,
-        escríbenos y lo miramos.
+        {t("falloNuestro")}
       </p>
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
         <button
@@ -53,7 +52,7 @@ export default function ErrorEnLaPagina({
         >{t("volverAlInicio")}</Link>
       </div>
       {error.digest ? (
-        <p className="mt-8 font-mono text-xs text-zinc-500">Referencia del error: {error.digest}</p>
+        <p className="mt-8 font-mono text-xs text-zinc-500">{t("referenciaDelError", { codigo: error.digest })}</p>
       ) : null}
     </main>
   );

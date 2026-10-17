@@ -1,6 +1,6 @@
 "use server";
 
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { createClient } from "@/lib/supabase/server";
@@ -30,7 +30,7 @@ export async function reenviarConfirmacion(
   const email = String(formData.get("email") ?? "").trim();
 
   if (!email || !email.includes("@")) {
-    return { error: "Escribe la dirección de correo con la que te registraste." };
+    return { error: (await getTranslations("auth.reenviar"))("escribeLaDireccion") };
   }
 
   const origin = (await headers()).get("origin");

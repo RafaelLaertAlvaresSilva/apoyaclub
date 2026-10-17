@@ -5,18 +5,13 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { LOCALE_CONFIG } from "@/config/locales";
-import type { AppLocale } from "@/i18n/routing";
-import {
-  CLASES_NIVEL_PATROCINIO,
-  ETIQUETA_CATEGORIA_NECESIDAD,
-  ETIQUETA_NIVEL_PATROCINIO,
-  esPorPlazas,
-  formatoValorOportunidad,
-  plazasLibres,
-} from "@/lib/opportunities";
+import { routing, type AppLocale } from "@/i18n/routing";
+import { CLASES_NIVEL_PATROCINIO, esPorPlazas, plazasLibres } from "@/lib/opportunities";
+import { etiquetador } from "@/lib/etiquetas-traducidas";
+import { formatoDeValor } from "@/lib/format";
 import { agruparEquiposPorSexo, agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
 import { SITE_URL } from "@/lib/site";
-import type { ClubTeam, SocialLinks } from "@/lib/types";
+import type { SocialLinks } from "@/lib/types";
 import { BarraDePlazas } from "@/components/BarraDePlazas";
 import { BotonFavorito } from "@/components/Favoritos";
 import { Link } from "@/i18n/navigation";
@@ -32,20 +27,9 @@ import { deportesDelClub, obtenerClubPublico } from "./data";
 
 export const revalidate = 60;
 
-const ETIQUETA_NIVEL_EQUIPO: Record<ClubTeam["teamLevel"], string> = {
-  primer_equipo: "Primer equipo",
-  cantera: "Cantera",
-};
-
-const ETIQUETA_RED: Record<keyof SocialLinks, string> = {
-  instagram: "Instagram",
-  facebook: "Facebook",
-  twitter: "X / Twitter",
-  tiktok: "TikTok",
-  youtube: "YouTube",
-};
-
-const formatoNumero = new Intl.NumberFormat("es-ES");
+/** El orden en que salen las redes. El nombre de cada una no se
+ * traduce, pero va en `common.etiquetas.redSocial` con los demás. */
+const REDES: (keyof SocialLinks)[] = ["instagram", "facebook", "twitter", "tiktok", "youtube"];
 
 function recortar(texto: string, maximo: number): string {
   if (texto.length <= maximo) return texto;
@@ -78,7 +62,14 @@ export async function generateMetadata({ params }: ParametrosRuta): Promise<Meta
   return {
     title: titulo,
     description: descripcion,
-    alternates: { canonical: ruta },
+    // La misma ficha en los otros idiomas, para que Google enseñe a cada
+    // uno la suya en vez de tratarlas como páginas repetidas.
+    alternates: {
+      canonical: ruta,
+      languages: Object.fromEntries(
+        routing.locales.map((otro) => [otro, `/${otro}/club/${perfil.slug}`]),
+      ),
+    },
     openGraph: {
       title: titulo,
       description: descripcion,
@@ -99,6 +90,21 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   const { locale, slug } = await params;
   const datos = await obtenerClubPublico(slug);
   const t = await getTranslations("club");
+  const tc = await getTranslations("club.paginaClub");
+  const E = etiquetador(await getTranslations("common.etiquetas"));
+  const tDestacados = await getTranslations("club.destacados");
+  const formatoNumero = new Intl.NumberFormat(LOCALE_CONFIG[locale].intlLocale);
+  const precio = formatoDeValor(locale);
+
+  // Los niveles fijos de patrocinador vienen en español de `lib/`; el
+  // nombre que el club haya escrito a mano para su nivel se deja tal cual.
+  const NIVELES_FIJOS: Record<string, "principal" | "oficial" | "colaborador"> = {
+    "Patrocinador principal": "principal",
+    "Patrocinador oficial": "oficial",
+    Colaborador: "colaborador",
+  };
+  const traducirNivelDePatrocinador = (etiqueta: string) =>
+    NIVELES_FIJOS[etiqueta] ? E.nivelPatrocinio(NIVELES_FIJOS[etiqueta]) : etiqueta;
 
   if (!datos) notFound();
 
@@ -111,7 +117,23 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   const ubicacion = [perfil.city, perfil.province].filter(Boolean).join(", ");
   // La ficha en una línea, debajo del logo. Solo con lo que el club
   // haya rellenado: ver `DatosDestacados`.
-  const destacados = datosDestacados(perfil, equipos, deportes, ubicacion);
+  const destacados = datosDestacados(
+    perfil,
+    equipos,
+    deportes,
+    ubicacion,
+    {
+      deporte: tDestacados("deporte"),
+      deportes: tDestacados("deportes"),
+      maximaCategoria: tDestacados("maximaCategoria"),
+      jugadores: tDestacados("jugadores"),
+      equiposCantera: tDestacados("equiposCantera"),
+      dondeEsta: tDestacados("dondeEsta"),
+      masculino: tDestacados("masculino"),
+      femenino: tDestacados("femenino"),
+    },
+    LOCALE_CONFIG[locale].intlLocale,
+  );
   const urlPublica = `${SITE_URL}/${locale}/club/${perfil.slug}`;
 
   // La portada es ahora un campo propio (migración 0025). Si el club
@@ -128,7 +150,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   // ambos. Antes los enlaces vivían en la cabecera y los seguidores en
   // "Audiencia", así que la empresa tenía que cruzar dos sitios para
   // saber si el Instagram de 4.000 seguidores era el del club.
-  const redes = (Object.keys(ETIQUETA_RED) as (keyof SocialLinks)[])
+  const redes = REDES
     .map((red) => ({
       red,
       url: perfil.socialLinks[red] ?? null,
@@ -244,7 +266,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             <ListaConVerMas
               clasesLista={REJILLA_TARJETAS}
               visiblesEnOrdenador={VISIBLES_EN_ORDENADOR}
-              textoVerMas={`Ver las ${loQueOfrece.length} oportunidades`}
+              textoVerMas={tc("verLasOportunidades", { n: loQueOfrece.length })}
               tono="verde"
               href={`/club/${perfil.slug}/oportunidades`}
               cuantasEnTotal={loQueOfrece.length}
@@ -263,9 +285,9 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                           un golpe de lo que el club ofrece. */}
                       {oportunidad.esNecesidad && (
                         <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
-                          Lo necesitamos
+                          {tc("loNecesitamos")}
                           {oportunidad.categoriaNecesidad
-                            ? ` · ${ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]}`
+                            ? ` · ${E.categoriaNecesidad(oportunidad.categoriaNecesidad)}`
                             : ""}
                         </span>
                       )}
@@ -275,12 +297,12 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                             CLASES_NIVEL_PATROCINIO[oportunidad.sponsorLevel]
                           }`}
                         >
-                          {ETIQUETA_NIVEL_PATROCINIO[oportunidad.sponsorLevel]}
+                          {E.nivelPatrocinio(oportunidad.sponsorLevel)}
                         </span>
                       )}
                     </div>
                     <p className="whitespace-nowrap text-lg font-bold text-teal-700">
-                      {formatoValorOportunidad.format(oportunidad.value)}
+                      {precio.format(oportunidad.value)}
                       {esPorPlazas(oportunidad) && (
                         <span className="ml-1 text-xs font-medium text-zinc-500">
                           {t("oportunidades.porEmpresa")}
@@ -331,7 +353,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                       href={`/club/${perfil.slug}/oportunidad/${oportunidad.id}`}
                       className="inline-flex items-center rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:border-accion-tinta hover:text-accion-tinta"
                     >
-                      Ver ficha
+                      {tc("verFicha")}
                     </Link>
                   </div>
                 </div>
@@ -380,7 +402,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             <ListaConVerMas
               clasesLista={REJILLA_TARJETAS}
               visiblesEnOrdenador={VISIBLES_EN_ORDENADOR}
-              textoVerMas={`Ver las ${loQueNecesita.length} cosas que necesitamos`}
+              textoVerMas={tc("verLasNecesidades", { n: loQueNecesita.length })}
               tono="verde"
               href={`/club/${perfil.slug}/necesidades`}
               cuantasEnTotal={loQueNecesita.length}
@@ -394,7 +416,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     <p className="font-semibold text-zinc-900">{oportunidad.title}</p>
                     {oportunidad.categoriaNecesidad && (
                       <span className="rounded-full bg-teal-100 px-2 py-0.5 text-xs font-medium text-teal-800">
-                        {ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]}
+                        {E.categoriaNecesidad(oportunidad.categoriaNecesidad)}
                       </span>
                     )}
                   </div>
@@ -432,7 +454,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                       href={`/club/${perfil.slug}/oportunidad/${oportunidad.id}`}
                       className="inline-flex items-center rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:border-accion-tinta hover:text-accion-tinta"
                     >
-                      Ver ficha
+                      {tc("verFicha")}
                     </Link>
                   </div>
                 </div>
@@ -460,7 +482,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                 <div key={foto} className="relative aspect-square overflow-hidden rounded-lg bg-zinc-100">
                   <Image
                     src={foto}
-                    alt={`Foto de ${perfil.name}`}
+                    alt={tc("fotoDe", { club: perfil.name })}
                     fill
                     sizes="(min-width: 640px) 33vw, 50vw"
                     className="object-cover"
@@ -499,7 +521,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             <div key={titulo ?? "sin-grupo"} className={titulo ? "mb-6 last:mb-0" : ""}>
               {titulo && (
                 <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500">
-                  {titulo}
+                  {tc.has(`gruposEquipos.${titulo}`) ? tc(`gruposEquipos.${titulo}`) : titulo}
                 </h3>
               )}
               <ul className="grid gap-3 sm:grid-cols-2">
@@ -520,10 +542,10 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                   {equipo.category ? ` · ${equipo.category}` : ""}
                 </p>
                 <p className="mt-1 text-sm text-zinc-500">
-                  {ETIQUETA_NIVEL_EQUIPO[equipo.teamLevel]}
+                  {E.nivelEquipo(equipo.teamLevel)}
                   {equipo.gender ? ` · ${equipo.gender}` : ""}
                   {equipo.playerCount != null
-                    ? ` · ${formatoNumero.format(equipo.playerCount)} jugadores`
+                    ? ` · ${tc("jugadores", { n: formatoNumero.format(equipo.playerCount) })}`
                     : ""}
                 </p>
                 {equipo.competitionLevel && (
@@ -550,12 +572,12 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   if (redes.length > 0) {
     secciones.push({
       id: "redes-sociales",
-      etiqueta: "Redes sociales",
+      etiqueta: tc("redesSociales"),
       nodo: (
         <Seccion
           id="redes-sociales"
-          titulo="Redes sociales"
-          descripcion="Dónde y a cuánta gente llega el club."
+          titulo={tc("redesSociales")}
+          descripcion={tc("redesDescripcion")}
         >
           <ul className="grid gap-3 sm:grid-cols-2">
             {redes.map(({ red, url, seguidores }) => (
@@ -564,10 +586,10 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                 className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200 p-4"
               >
                 <div className="min-w-0">
-                  <p className="font-medium text-zinc-900">{ETIQUETA_RED[red]}</p>
+                  <p className="font-medium text-zinc-900">{red === "twitter" ? "X / Twitter" : E.redSocial(red)}</p>
                   {seguidores != null && (
                     <p className="text-sm text-zinc-600">
-                      {formatoNumero.format(seguidores)} seguidores
+                      {tc("seguidores", { n: formatoNumero.format(seguidores) })}
                     </p>
                   )}
                 </div>
@@ -578,7 +600,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                     rel="noreferrer"
                     className="shrink-0 rounded-lg border border-zinc-300 px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
                   >
-                    Ver perfil ↗
+                    {tc("verPerfil")}
                   </a>
                 )}
               </li>
@@ -607,7 +629,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                 <div key={foto} className="relative aspect-video overflow-hidden rounded-lg bg-zinc-100">
                   <Image
                     src={foto}
-                    alt={`Instalaciones de ${perfil.name}`}
+                    alt={tc("instalacionesDe", { club: perfil.name })}
                     fill
                     sizes="(min-width: 640px) 33vw, 50vw"
                     className="object-cover"
@@ -658,7 +680,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
               <div className="grid gap-4 sm:grid-cols-2">
                 {perfil.topCategoryMale && (
                   <EquipoDestacado
-                    etiqueta={`${t("secciones.maximaCategoria")} · Masculino`}
+                    etiqueta={`${t("secciones.maximaCategoria")} · ${tc("masculino")}`}
                     categoria={perfil.topCategoryMale}
                     foto={perfil.topCategoryMalePhoto}
                     pie={perfil.topCategoryMalePhotoNote}
@@ -666,7 +688,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                 )}
                 {perfil.topCategoryFemale && (
                   <EquipoDestacado
-                    etiqueta={`${t("secciones.maximaCategoria")} · Femenino`}
+                    etiqueta={`${t("secciones.maximaCategoria")} · ${tc("femenino")}`}
                     categoria={perfil.topCategoryFemale}
                     foto={perfil.topCategoryFemalePhoto}
                     pie={perfil.topCategoryFemalePhotoNote}
@@ -816,7 +838,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             {agruparPatrocinadoresPorNivel(patrocinadores).map((grupo) => (
               <div key={grupo.etiqueta}>
                 <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                  {grupo.etiqueta}
+                  {traducirNivelDePatrocinador(grupo.etiqueta)}
                 </h3>
                 <ul className="grid gap-3 sm:grid-cols-2">
                   {grupo.patrocinadores.map((patrocinador) => (
@@ -964,7 +986,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
               {perfil.logoUrl ? (
                 <Image
                   src={perfil.logoUrl}
-                  alt={`Logo de ${perfil.name}`}
+                  alt={tc("logoDe", { club: perfil.name })}
                   width={160}
                   height={160}
                   className="h-full w-full object-contain"
@@ -1024,10 +1046,10 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
             {mostrarEnlaces && (perfil.website || perfil.videoUrl) && (
               <div className="flex flex-wrap gap-2 sm:justify-end">
                 {perfil.website && (
-                  <EnlaceSecundario href={perfil.website}>Sitio web</EnlaceSecundario>
+                  <EnlaceSecundario href={perfil.website}>{tc("sitioWeb")}</EnlaceSecundario>
                 )}
                 {perfil.videoUrl && (
-                  <EnlaceSecundario href={perfil.videoUrl}>Vídeo de presentación</EnlaceSecundario>
+                  <EnlaceSecundario href={perfil.videoUrl}>{tc("videoPresentacion")}</EnlaceSecundario>
                 )}
               </div>
             )}

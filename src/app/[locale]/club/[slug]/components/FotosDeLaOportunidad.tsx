@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { esFotoDeLaCasa } from "@/lib/fotos-de-oportunidad";
 
 /**
@@ -25,6 +26,7 @@ export function FotosDeLaOportunidad({
   fotos: string[];
   titulo: string;
 }) {
+  const t = useTranslations("club.ficha");
   const limpias = fotos.filter(esFotoDeLaCasa);
   if (limpias.length === 0) return null;
 
@@ -43,7 +45,7 @@ export function FotosDeLaOportunidad({
           móvil, todo el ancho, que ahí ya es poco. */}
       <Image
         src={principal}
-        alt={`${titulo} — foto principal`}
+        alt={t("fotoPrincipal", { titulo })}
         width={1200}
         height={800}
         unoptimized
@@ -56,7 +58,7 @@ export function FotosDeLaOportunidad({
             <li key={foto}>
               <Image
                 src={foto}
-                alt={`${titulo} — foto ${posicion + 2}`}
+                alt={t("fotoN", { titulo, numero: posicion + 2 })}
                 width={600}
                 height={400}
                 unoptimized

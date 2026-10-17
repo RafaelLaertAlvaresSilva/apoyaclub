@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
+import { useTranslations } from "next-intl";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { CLASES_CAMPO_ACCESO } from "@/components/CampoContrasena";
 import { Button } from "@/components/ui/Button";
@@ -17,6 +18,7 @@ import { reenviarConfirmacion, type EstadoReenvio } from "./actions";
 const ESPERA_SEGUNDOS = 60;
 
 export function ReenviarCorreo() {
+  const t = useTranslations("auth.reenviar");
   const [estado, enviar] = useActionState<EstadoReenvio, FormData>(reenviarConfirmacion, null);
 
   // La cuenta atrás empieza al pulsar, no al llegar la respuesta.
@@ -48,10 +50,10 @@ export function ReenviarCorreo() {
     >
       <div>
         <label htmlFor="email-reenvio" className="block text-sm font-medium text-zinc-800">
-          ¿No te ha llegado?
+          {t("noTeHaLlegado")}
         </label>
         <p className="mt-0.5 text-xs text-zinc-500">
-          Escribe el correo con el que te registraste y te lo mandamos otra vez.
+          {t("escribeElCorreo")}
         </p>
       </div>
 
@@ -61,13 +63,13 @@ export function ReenviarCorreo() {
         type="email"
         required
         autoComplete="email"
-        placeholder="tuclub@correo.es"
+        placeholder={t("ejemploCorreo")}
         className={CLASES_CAMPO_ACCESO}
       />
 
       <AvisoError mensaje={estado && "error" in estado ? estado.error : null} />
       {enviado && (
-        <AvisoExito mensaje="Enviado. Si esa dirección tiene una cuenta sin confirmar, el correo está de camino." />
+        <AvisoExito mensaje={t("enviado")} />
       )}
 
       <BotonReenviar quedan={quedan} />
@@ -76,6 +78,7 @@ export function ReenviarCorreo() {
 }
 
 function BotonReenviar({ quedan }: { quedan: number }) {
+  const t = useTranslations("auth.reenviar");
   const { pending } = useFormStatus();
 
   return (
@@ -86,7 +89,7 @@ function BotonReenviar({ quedan }: { quedan: number }) {
       disabled={pending || quedan > 0}
       className="w-full"
     >
-      {pending ? "Enviando…" : quedan > 0 ? `Puedes reenviarlo en ${quedan} s` : "Reenviar el correo"}
+      {pending ? t("enviando") : quedan > 0 ? t("puedesEn", { segundos: quedan }) : t("reenviar")}
     </Button>
   );
 }

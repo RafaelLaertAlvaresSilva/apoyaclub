@@ -71,7 +71,7 @@ export async function registrarClub(
     } catch {
       return {
         error:
-          "Tu cuenta se ha creado, pero ha habido un problema técnico. Contacta con soporte.",
+          tValidacion("problemaTecnico"),
       };
     }
   }

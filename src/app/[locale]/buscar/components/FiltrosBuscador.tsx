@@ -5,6 +5,7 @@ import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 import { clasesInput } from "@/app/[locale]/panel/components/SeccionCard";
 import { filtrosAQueryString, RADIOS_KM } from "@/lib/buscar-params";
+import { etiquetador } from "@/lib/etiquetas-traducidas";
 import {
   CATEGORIAS_NECESIDAD,
   FORMAS_COLABORACION,
@@ -88,6 +89,7 @@ export function FiltrosBuscador({
   provincias: string[];
 }) {
   const t = useTranslations("buscar.filtros");
+  const E = etiquetador(useTranslations("common.etiquetas"));
   const router = useRouter();
   const [abiertoEnMovil, setAbiertoEnMovil] = useState(false);
 
@@ -120,7 +122,7 @@ export function FiltrosBuscador({
           marketing no quiere ver "necesitamos un fisio" entre las
           lonas, y el fisio no quiere ver las lonas. */}
       <div>
-        <p className={clasesEtiquetaGrupo}>Qué buscas</p>
+        <p className={clasesEtiquetaGrupo}>{t("queBuscas")}</p>
         <div className="grid grid-cols-3 overflow-hidden rounded-lg border border-zinc-300">
           {OPCIONES_BUSCA.map((opcion) => (
             <label
@@ -140,7 +142,7 @@ export function FiltrosBuscador({
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
                 className="sr-only"
               />
-              {opcion.etiqueta}
+              {E.busca(opcion.id)}
             </label>
           ))}
         </div>
@@ -154,10 +156,10 @@ export function FiltrosBuscador({
             defaultValue={filtrosIniciales.necesidad ?? ""}
             className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
           >
-            <option value="">Cualquier servicio o producto</option>
+            <option value="">{t("cualquierServicio")}</option>
             {CATEGORIAS_NECESIDAD.map((categoria) => (
               <option key={categoria.id} value={categoria.id}>
-                {categoria.etiqueta}
+                {E.categoriaNecesidad(categoria.id)}
               </option>
             ))}
           </select>
@@ -237,7 +239,7 @@ export function FiltrosBuscador({
             <option value="">{t("cualquiera")}</option>
             {NIVELES_EQUIPO.map((nivel) => (
               <option key={nivel.id} value={nivel.id}>
-                {nivel.etiqueta}
+                {E.nivelEquipo(nivel.id)}
               </option>
             ))}
           </select>
@@ -273,7 +275,7 @@ export function FiltrosBuscador({
           <option value="">{t("cualquierPeriodo")}</option>
           {PERIODOS_OPORTUNIDAD.map((periodo) => (
             <option key={periodo.id} value={periodo.id}>
-              {periodo.etiqueta}
+              {E.periodo(periodo.id)}
             </option>
           ))}
         </select>
@@ -292,7 +294,7 @@ export function FiltrosBuscador({
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
                 className="rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
               />
-              {forma.etiqueta}
+              {E.formaColaboracion(forma.id)}
             </label>
           ))}
         </div>
@@ -302,7 +304,7 @@ export function FiltrosBuscador({
         <p className={clasesEtiquetaGrupo}>{t("nivelPatrocinador")}</p>
         <div className="grid grid-cols-1 gap-2">
           {NIVELES_PATROCINIO.map((nivel) => (
-            <label key={nivel.id} className={clasesCheckbox} title={nivel.ayuda}>
+            <label key={nivel.id} className={clasesCheckbox} title={E.nivelPatrocinioAyuda(nivel.id)}>
               <input
                 type="checkbox"
                 name="patrocinio"
@@ -311,7 +313,7 @@ export function FiltrosBuscador({
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
                 className="rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
               />
-              {nivel.etiqueta}
+              {E.nivelPatrocinio(nivel.id)}
             </label>
           ))}
         </div>
@@ -330,7 +332,7 @@ export function FiltrosBuscador({
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
                 className="rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
               />
-              {tipo.etiqueta}
+              {E.tipoOportunidad(tipo.id)}
             </label>
           ))}
         </div>
@@ -349,7 +351,7 @@ export function FiltrosBuscador({
                 onChange={(evento) => aplicar(evento.currentTarget.form!)}
                 className="rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
               />
-              {objetivo.etiqueta}
+              {E.objetivo(objetivo.id)}
             </label>
           ))}
         </div>

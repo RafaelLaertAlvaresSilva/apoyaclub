@@ -1,0 +1,920 @@
+{
+  "meta": {
+    "titulo": "ApoyaClub — Liga o teu clube desportivo a empresas patrocinadoras",
+    "descripcion": "Liga o teu clube a empresas interessadas em colaborar. Publica as tuas oportunidades de patrocínio, desde 50 € até ao patrocínio principal, e deixa que te encontrem e contactem diretamente. Sem comissões."
+  },
+  "hero": {
+    "etiqueta": "PLATAFORMA DE GESTÃO DE PATROCÍNIOS DESPORTIVOS",
+    "tituloParte1": "Cada clube tem algo para oferecer.",
+    "tituloParte2": "Ajudamos-te a descobri‑lo e a geri‑lo.",
+    "cta": "Experimenta 1 mês grátis",
+    "condiciones": "1 mês grátis · 29,90 €/mês depois · IVA incluído · Sem fidelização",
+    "ctaSecundario": "Descobre como funciona"
+  },
+  "puertas": {
+    "clubCta": "Sou um clube",
+    "clubPie": "Descobre o que podes oferecer. Um mês grátis, sem fidelização.",
+    "empresaCta": "Sou uma empresa ou colaborador",
+    "empresaPie": "Encontra oportunidades perto de ti. Grátis e sem conta."
+  },
+  "caminos": {
+    "clubEtiqueta": "PARA CLUBES",
+    "clubTitulo": "Tenho um clube",
+    "clubTexto": "A tua página, as tuas oportunidades de patrocínio e as ferramentas para as conseguir.",
+    "clubCta": "Cria a página do teu clube",
+    "clubCondiciones": "1 mês grátis · Sem fidelização",
+    "clubAtajo": "Ou vai diretamente para o registo",
+    "empresaEtiqueta": "PARA EMPRESAS E COLABORADORES",
+    "empresaTitulo": "Sou uma empresa ou colaborador",
+    "empresaTexto": "Vê o que podes patrocinar perto de ti, ou do que precisa um clube da tua zona.",
+    "empresaCta": "Quero descobrir oportunidades",
+    "empresaGratis": "Grátis, sem conta e sem intermediários.",
+    "empresaAtajo": "Ou vai diretamente para a pesquisa"
+  },
+  "comoFunciona": {
+    "eyebrow": "Em quatro passos",
+    "titulo": "Como funciona",
+    "pieDeFoto": "Ecrãs reais do ApoyaClub. Os dados são de exemplo.",
+    "pasos": [
+      {
+        "clave": "CREA",
+        "titulo": "A página do teu clube",
+        "texto": "Equipas, formação, instalações e audiência. Escreve-se uma vez.",
+        "etiqueta": "CRIA"
+      },
+      {
+        "clave": "PUBLICA",
+        "titulo": "As tuas oportunidades",
+        "texto": "O que inclui e o que pedes em troca: dinheiro, material ou um serviço. Tu decides.",
+        "etiqueta": "PUBLICA"
+      },
+      {
+        "clave": "CONTACTA",
+        "titulo": "As empresas escrevem-te",
+        "texto": "A partir da tua página e sem se registarem. Tu fazes o acompanhamento.",
+        "etiqueta": "CONTACTA"
+      },
+      {
+        "clave": "CRECE",
+        "titulo": "E no ano seguinte repetem",
+        "texto": "Cumpres o prometido e envias-lhes o relatório.",
+        "etiqueta": "CRESCE"
+      }
+    ],
+    "capturas": {
+      "CREA": "A ficha do clube no ApoyaClub, com as suas secções: identidade, equipas, instalações, formação.",
+      "PUBLICA": "O ecrã de oportunidades, com o catálogo de ideias por categorias aberto.",
+      "CONTACTA": "A caixa de pedidos, com a mensagem de uma empresa e o seu estado.",
+      "CRECE": "As tarefas com cada patrocinador, com as suas datas e o botão para gerar o relatório."
+    }
+  },
+  "oportunidades": {
+    "eyebrow": "O coração da plataforma",
+    "titulo": "Transforma o que tens em oportunidades",
+    "texto": "Cada clube cria as suas, à sua medida. E nem todas são dinheiro: há quem precise de um autocarro, de um fisioterapeuta ou de material.",
+    "nota": "Exemplos de como fica uma oportunidade publicada. Os dados são de amostra.",
+    "ejemplos": [
+      {
+        "categoria": "Patrocínio",
+        "titulo": "Patrocinador da equipa feminina",
+        "precio": "500 €",
+        "periodo": "/época",
+        "datos": [
+          "Alicante",
+          "250 famílias",
+          "4.800 seguidores"
+        ],
+        "incluye": [
+          "Logótipo no equipamento",
+          "4 publicações",
+          "8 stories",
+          "Presença nos jogos"
+        ],
+        "cta": "Tenho interesse"
+      },
+      {
+        "categoria": "Evento",
+        "titulo": "Patrocinador do torneio de Natal",
+        "precio": "300 €",
+        "periodo": "",
+        "datos": [
+          "120 participantes",
+          "Um fim de semana",
+          "3 vagas"
+        ],
+        "incluye": [
+          "Lona no pavilhão",
+          "Marca no cartaz",
+          "Menção no sistema de som"
+        ],
+        "cta": "Ver oportunidade"
+      },
+      {
+        "categoria": "Colaboração",
+        "titulo": "Fisioterapia para o plantel",
+        "precio": "Serviço",
+        "periodo": "",
+        "datos": [
+          "Equipa sénior",
+          "Formação",
+          "Todo o ano"
+        ],
+        "incluye": [
+          "Marca no site do clube",
+          "Menção nas redes",
+          "Presença no pavilhão"
+        ],
+        "cta": "Ver oportunidade"
+      }
+    ]
+  },
+  "empresas": {
+    "eyebrow": "Para empresas",
+    "titulo": "Descobre o que podes patrocinar",
+    "filtros": {
+      "presupuesto": "ORÇAMENTO",
+      "presupuestoValor": "500 €",
+      "ubicacion": "LOCALIZAÇÃO",
+      "ubicacionValor": "Alicante",
+      "publico": "PÚBLICO",
+      "publicoValor": "Famílias",
+      "deporte": "DESPORTO",
+      "deporteValor": "Todos",
+      "buscar": "Procurar oportunidades",
+      "masFiltros": "Mais filtros",
+      "tipo": "TIPO DE OPORTUNIDADE",
+      "tipoValor": "Equipamentos",
+      "categoria": "CATEGORIA",
+      "categoriaValor": "Formação",
+      "alcance": "ALCANCE",
+      "alcanceValor": "Local",
+      "presupuestoEtiqueta": "QUANTO QUERES INVESTIR?",
+      "ubicacionEtiqueta": "ONDE?",
+      "deporteEtiqueta": "QUE DESPORTO?",
+      "publicoEtiqueta": "A QUEM QUERES CHEGAR?"
+    },
+    "resultados": [
+      {
+        "categoria": "Equipamentos",
+        "titulo": "Clube de futebol · Formação · Alicante",
+        "texto": "Patrocínio dos equipamentos para a época.",
+        "precio": "450 €"
+      },
+      {
+        "categoria": "Redes sociais",
+        "titulo": "Clube de basquetebol · Famílias · Alicante",
+        "texto": "Menções e conteúdo nas redes durante o campeonato.",
+        "precio": "500 €"
+      },
+      {
+        "categoria": "Instalações",
+        "titulo": "Clube de padel · Todos os públicos · Alicante",
+        "texto": "Presença de marca nos campos e nos balneários.",
+        "precio": "480 €"
+      }
+    ],
+    "avisoEjemplos": "Resultados de exemplo — ilustrativos, não são clubes reais.",
+    "texto": "Dizes quanto queres investir, onde e a quem queres chegar. E vês o que há.",
+    "gratis": "Grátis, sem conta e sem intermediários.",
+    "nota": "Maqueta da pesquisa. As oportunidades que aparecem são de amostra."
+  },
+  "paginaClub": {
+    "eyebrow": "A página do teu clube",
+    "titulo": "Um perfil profissional, não uma simples ficha",
+    "texto": "Logótipo, capa, fotos, vídeos, equipas, jogadores, seguidores, alcance, formação, palmarés, instalações, eventos e patrocinadores atuais — tudo o que dá valor ao teu clube, num só lugar.",
+    "texto2": "E sempre à vista, as tuas oportunidades de patrocínio disponíveis.",
+    "maqueta": {
+      "url": "apoyaclub.com/club/o-teu-clube",
+      "alt": "A página pública de um clube no ApoyaClub: foto de capa, emblema, nome e, por baixo, o desporto, o escalão máximo, os jogadores, as equipas de formação e a cidade.",
+      "altTelefono": "A mesma página de clube vista num telemóvel: a capa, o emblema, o nome, os botões de partilhar e contactar, e os dados do clube por baixo."
+    },
+    "ventajas": {
+      "visibilidad": {
+        "titulo": "Visibilidade",
+        "texto": "Mostra a identidade do teu clube e chega a mais pessoas."
+      },
+      "comunidad": {
+        "titulo": "Comunidade",
+        "texto": "Liga-te a desportistas, famílias e adeptos."
+      },
+      "oportunidades": {
+        "titulo": "Oportunidades",
+        "texto": "Atrai patrocinadores e colaboradores."
+      },
+      "gestion": {
+        "titulo": "Gestão simples",
+        "texto": "Atualiza o teu clube em poucos minutos."
+      }
+    }
+  },
+  "herramientas": {
+    "eyebrow": "Tudo incluído",
+    "titulo": "As ferramentas que vêm contigo",
+    "texto": "Não é um site com um formulário. É o que um clube precisa para vender o seu patrocínio, cumpri-lo e demonstrá-lo, sem pagar a ninguém para o fazer.",
+    "lista": [
+      {
+        "clave": "dossier",
+        "titulo": "Dossiê em PDF e em Word",
+        "corto": "Em PDF para o enviar e em Word para o retocar.",
+        "texto": "Gera-se sozinho com os dados da tua ficha. O PDF para enviar tal como está; o Word para retocar, pôr fotos ou mudar a ordem."
+      },
+      {
+        "clave": "oportunidades",
+        "titulo": "Criador de oportunidades",
+        "corto": "O que vendes, a que preço e quantas vagas restam.",
+        "texto": "O que vendes, a que preço e quantas vagas restam. Com modelos feitos para não partires de uma folha em branco."
+      },
+      {
+        "clave": "tareas",
+        "titulo": "Organizador de tarefas",
+        "corto": "O que prometeste a cada empresa, com a data.",
+        "texto": "O que prometeste a cada empresa, com a respetiva data. Ao entrar vês o que há para hoje, e o que já passou de prazo aparece a vermelho."
+      },
+      {
+        "clave": "informe",
+        "titulo": "Relatório de progresso por empresa",
+        "corto": "O que cumpriste, num PDF para a empresa.",
+        "texto": "Um PDF com o que foi cumprido e as respetivas ligações, para enviar a meio da época, no fim ou ao fechar uma colaboração curta."
+      },
+      {
+        "clave": "publico",
+        "titulo": "Registo de público nos jogos",
+        "corto": "Quanta gente veio a cada jogo, e a média.",
+        "texto": "Registas quanta gente esteve em cada jogo e obténs a média, o total da época e o melhor jogo. Com um clique, essa média passa para a tua ficha."
+      },
+      {
+        "clave": "estadisticas",
+        "titulo": "Estatísticas da tua ficha",
+        "corto": "Quem visita a tua ficha e quem te escreve.",
+        "texto": "Quanta gente visitou a tua página, quantos abriram o teu contacto e quantas empresas te escreveram. Por semana e por mês."
+      },
+      {
+        "clave": "solicitudes",
+        "titulo": "Caixa de pedidos",
+        "corto": "As empresas escrevem-te sem se registarem em nada.",
+        "texto": "As empresas escrevem-te a partir da tua página sem se registarem em nada, e tu recebes o aviso por e-mail."
+      },
+      {
+        "clave": "patrocinadores",
+        "titulo": "Os teus patrocinadores, em destaque",
+        "corto": "Quem já confia no teu clube, com o logótipo.",
+        "texto": "Principal, oficial ou colaborador, com o respetivo logótipo. Quem entra vê logo que há empresas que já confiam no clube."
+      },
+      {
+        "clave": "objetivos",
+        "titulo": "A quem escrever",
+        "corto": "A tua lista de empresas, com o estado de cada uma.",
+        "texto": "O caderno de a quem vais propor algo, ordenado pela origem de cada nome: as famílias do clube, quem já patrocina um rival, o comércio da zona. Com o estado de cada uma e o próximo passo anotado."
+      },
+      {
+        "clave": "accion-social",
+        "titulo": "Ação social do clube",
+        "corto": "O que o teu clube faz fora do campo.",
+        "texto": "As fotos do que fazem fora do campo: escolas, câmara municipal, campanhas, donativos. É o que mais pesa para muitas empresas."
+      },
+      {
+        "clave": "servicios",
+        "titulo": "Serviços que procuras",
+        "corto": "Autocarro, fisioterapia, material: o que não se paga com dinheiro.",
+        "texto": "Autocarro, fisioterapia, material, gráfica. Nem tudo se paga com dinheiro, e isto abre a porta à troca."
+      },
+      {
+        "clave": "pagina",
+        "titulo": "A página pública do teu clube",
+        "corto": "Emblema, equipas, palmarés e instalações.",
+        "texto": "Emblema, fotos, equipas, escalões, palmarés e instalações. Um endereço que podes enviar por WhatsApp sem vergonha."
+      }
+    ],
+    "destacadas": [
+      "pagina",
+      "oportunidades",
+      "solicitudes",
+      "tareas",
+      "dossier",
+      "informe"
+    ],
+    "hayMas": "E mais {cuantas} ferramentas: o público de cada jogo, as estatísticas da tua ficha, os teus patrocinadores com o logótipo, o teu caderno de empresas a quem escrever, a ação social do clube e os serviços de que precisas.",
+    "verTodas": "Ver as {total} ferramentas, uma a uma"
+  },
+  "panel": {
+    "titulo": "Assim funciona o ApoyaClub por dentro",
+    "boton": "+ Criar oportunidade",
+    "metricas": [
+      {
+        "numero": "4",
+        "etiqueta": "Oportunidades ativas"
+      },
+      {
+        "numero": "128",
+        "etiqueta": "Visitas à tua ficha"
+      },
+      {
+        "numero": "9",
+        "etiqueta": "Viram o teu contacto"
+      },
+      {
+        "numero": "3",
+        "etiqueta": "Pedidos novos"
+      },
+      {
+        "numero": "2",
+        "etiqueta": "Tarefas para hoje"
+      },
+      {
+        "numero": "5",
+        "etiqueta": "Patrocinadores"
+      }
+    ],
+    "saludo": "Bom dia, Clube Desportivo Exemplo",
+    "eyebrow": "O teu painel",
+    "texto": "Tudo o que se passa com o teu clube, num ecrã: quem te viu, quem te escreveu e o que tens para fazer hoje.",
+    "nota": "Maqueta do painel com dados de amostra."
+  },
+  "sector": {
+    "eyebrow": "O setor, em números",
+    "titulo": "Um mercado grande.",
+    "tituloResalte": "E em crescimento.",
+    "subtitulo": "Não são estimativas nossas. Todos os números dos países são do mesmo relatório e do mesmo ano, para que se possam comparar a sério.",
+    "paises": [
+      {
+        "clave": "es",
+        "nombre": "Patrocínio em Espanha",
+        "anio": "2025",
+        "cifra": "2.180 M€",
+        "insignia": "+14 %",
+        "insigniaPie": "vs. 2024",
+        "texto": "O mercado de patrocínio em Espanha chegou aos 2.180 milhões de euros em 2025. Foi o que mais cresceu dos cinco grandes da Europa."
+      },
+      {
+        "clave": "gb",
+        "nombre": "Patrocínio no Reino Unido",
+        "anio": "2025",
+        "cifra": "6.150 M€",
+        "insignia": "+10,5 %",
+        "insigniaPie": "vs. 2024",
+        "texto": "O segundo mercado da Europa, com 6.150 milhões de euros em 2025 e um crescimento de 10,5 %."
+      },
+      {
+        "clave": "it",
+        "nombre": "Patrocínio em Itália",
+        "anio": "2025",
+        "cifra": "2.010 M€",
+        "insignia": "+5 %",
+        "insigniaPie": "vs. 2024",
+        "texto": "O mercado italiano atingiu os 2.010 milhões de euros em 2025, com um crescimento de 5 %."
+      },
+      {
+        "clave": "fr",
+        "nombre": "Patrocínio em França",
+        "anio": "2025",
+        "cifra": "1.850 M€",
+        "insignia": "+10,3 %",
+        "insigniaPie": "vs. 2024",
+        "texto": "O mercado francês atingiu os 1.850 milhões de euros em 2025, com um crescimento de 10,3 %."
+      }
+    ],
+    "comparativa": {
+      "titulo": "Os cinco grandes mercados da Europa",
+      "subtitulo": "Milhões de euros, 2025",
+      "barras": [
+        {
+          "clave": "de",
+          "nombre": "Alemanha",
+          "cifra": "6.260 M€",
+          "valor": 6260,
+          "destacada": false
+        },
+        {
+          "clave": "gb",
+          "nombre": "Reino Unido",
+          "cifra": "6.150 M€",
+          "valor": 6150,
+          "destacada": false
+        },
+        {
+          "clave": "es",
+          "nombre": "Espanha",
+          "cifra": "2.180 M€",
+          "valor": 2180,
+          "destacada": true
+        },
+        {
+          "clave": "it",
+          "nombre": "Itália",
+          "cifra": "2.010 M€",
+          "valor": 2010,
+          "destacada": false
+        },
+        {
+          "clave": "fr",
+          "nombre": "França",
+          "cifra": "1.850 M€",
+          "valor": 1850,
+          "destacada": false
+        }
+      ]
+    },
+    "europa": {
+      "titulo": "O patrocínio desportivo na Europa",
+      "subtitulo": "Repartição do mercado de patrocínio, 2025",
+      "porcentaje": 72,
+      "centroCifra": "24.790 M€",
+      "centroTexto": "para o desporto",
+      "texto": "O desporto fica com 72 % do patrocínio europeu: 24.790 dos 34.450 milhões de euros movimentados no total.",
+      "leyenda": [
+        {
+          "etiqueta": "Patrocínio desportivo",
+          "cifra": "24.790 M€",
+          "porcentaje": "72 %",
+          "fuerte": true
+        },
+        {
+          "etiqueta": "Restantes setores",
+          "cifra": "9.660 M€",
+          "porcentaje": "28 %",
+          "fuerte": false
+        }
+      ]
+    },
+    "licencias": {
+      "titulo": "Licenças federativas em Espanha",
+      "cifra": "4,31 milhões",
+      "anio": "2024",
+      "texto": "4.315.809 licenças federativas em 2024, o segundo número mais alto alguma vez registado. Esses desportistas estão espalhados por milhares de clubes de vila e de bairro."
+    },
+    "fuentes": [
+      {
+        "quien": "Espanha, Reino Unido, Itália, França e Alemanha",
+        "que": "ESA Sponsorship Market Overview 2026. Nielsen Sports · European Sponsorship Association (dados de 2025)."
+      },
+      {
+        "quien": "Licenças em Espanha",
+        "que": "Anuario de Estadísticas Deportivas 2025. Ministério da Educação, Formação Profissional e Desporto de Espanha (dados de 2024)."
+      }
+    ]
+  },
+  "precio": {
+    "titulo": "Preço transparente",
+    "eyebrow": "Primeiro mês grátis",
+    "importe": "29,90 €",
+    "periodo": "/mês",
+    "condiciones": "IVA incluído · Sem fidelização",
+    "comision": "Comissão: 0 % — tu e a empresa negociam diretamente.",
+    "ventajas": [
+      "Página pública profissional",
+      "Oportunidades ilimitadas",
+      "Dossiê em PDF e em Word",
+      "Pedidos de empresas, com aviso",
+      "Tarefas com os teus patrocinadores",
+      "Relatório de patrocínio para cada empresa",
+      "Estatísticas de visitas e contactos",
+      "A quem escrever: a tua lista de empresas, com acompanhamento"
+    ],
+    "cta": "Experimenta 1 mês grátis",
+    "subtitulo": "O mesmo produto nos três. A única coisa que muda é a forma de pagar.",
+    "todoIncluye": "Os três planos incluem:",
+    "plazasFundador": "Só 50 vagas",
+    "gratisPrimerMes": "Começas com um mês grátis, em qualquer um dos três.",
+    "cancelar": "Cancela quando quiseres.",
+    "resumenCondiciones": "Um mês grátis em qualquer um dos três · IVA incluído · Sem fidelização · Comissão de 0 %",
+    "nota": "Investe no futuro do teu clube.",
+    "franja": [
+      {
+        "clave": "cubre",
+        "titulo": "Uma única colaboração pode cobrir vários meses",
+        "texto": "Se conseguires ou mantiveres um único patrocinador, o custo do ApoyaClub fica mais do que coberto."
+      },
+      {
+        "clave": "renueva",
+        "titulo": "Organiza, cumpre e renova",
+        "texto": "Não se trata só de conseguir patrocinadores. Gere tudo o que prometes, mostra resultados e faz com que voltem a confiar no teu clube."
+      },
+      {
+        "clave": "segura",
+        "titulo": "Sem amarras",
+        "texto": "Primeiro mês grátis · Sem fidelização · Cancela quando quiseres · IVA incluído · Comissão de 0 %"
+      }
+    ]
+  },
+  "faq": {
+    "titulo": "Perguntas frequentes",
+    "preguntas": [
+      {
+        "pregunta": "O que é exatamente o ApoyaClub?",
+        "respuesta": "Uma plataforma que dá a um clube desportivo os meios para conseguir patrocinadores e para os manter: uma página que mostra o seu valor real, um catálogo de oportunidades com preço, um dossiê pronto a enviar e o controlo do que promete a cada empresa. O clube decide a quem se dirige; a empresa que chegue à sua página pode contactá-lo diretamente."
+      },
+      {
+        "pregunta": "O ApoyaClub procura as empresas por mim?",
+        "respuesta": "Não, e convém dizê-lo claramente: és tu que te diriges às empresas, porque és tu quem conhece o teu bairro e as pessoas do teu bairro. O que o ApoyaClub faz é garantir que essa abordagem tem algo por trás —uma página séria, um dossiê num clique, um preço que consegues defender— e que depois não se perde: o que prometeste a cada empresa, se está feito, e um relatório para lhe mostrar quando chegar a altura de renovar."
+      },
+      {
+        "pregunta": "Quanto custa para um clube?",
+        "respuesta": "O primeiro mês é grátis. Depois, 29,90 €/mês com IVA incluído, sem surpresas no preço."
+      },
+      {
+        "pregunta": "É grátis para as empresas?",
+        "respuesta": "Sim, e nem sequer precisam de criar uma conta. Procurar clubes, ver as suas páginas, ver os seus contactos e escrever-lhes não custa nada."
+      },
+      {
+        "pregunta": "O ApoyaClub cobra alguma comissão sobre o patrocínio?",
+        "respuesta": "Não, a comissão é de 0 %. O clube e a empresa negoceiam e acordam as condições diretamente entre si."
+      },
+      {
+        "pregunta": "Como se paga o patrocínio?",
+        "respuesta": "O ApoyaClub não gere o pagamento nem atua como agência: o pagamento e o resto do acordo são tratados diretamente entre o clube e a empresa, pelo meio que ambos decidirem."
+      },
+      {
+        "pregunta": "Posso cancelar quando quiser?",
+        "respuesta": "Sim. No painel do clube podes cancelar a tua subscrição quando quiseres e continuas a ter acesso até ao fim do período já pago."
+      }
+    ],
+    "fiscalidadTitulo": "Sobre a fiscalidade do patrocínio",
+    "fiscalidadTexto": "Um acordo de patrocínio entre um clube e uma empresa pode ter implicações fiscais (IVA, faturação, deduções…) para ambas as partes. O ApoyaClub não gere o pagamento nem atua como agência, e <fuerte>não presta aconselhamento fiscal</fuerte>: recomendamos que consultes um consultor fiscal ou um contabilista antes de fechar qualquer acordo.",
+    "verTodas": "Ver todas as perguntas"
+  },
+  "ctaFinal": {
+    "tituloLinea1": "O teu clube já tem valor.",
+    "tituloLinea2": "Agora é altura de o mostrar.",
+    "cta": "Começa o teu mês grátis",
+    "subtexto": "Cria o teu perfil, publica as tuas oportunidades e começa a gerir novas possibilidades para o teu clube.",
+    "condiciones": "1 mês grátis · Sem fidelização"
+  },
+  "contacto": {
+    "titulo": "Tens dúvidas? Escreve-nos",
+    "texto": "Quer sejas um clube, uma empresa ou tenhas simplesmente uma pergunta, conta-nos e respondemos-te por e-mail."
+  },
+  "seguimiento": {
+    "eyebrow": "O que não se vê noutras plataformas",
+    "titulo": "Conseguir o patrocínio é metade. A outra metade é cumpri-lo",
+    "texto": "A razão pela qual um patrocinador de bairro quase nunca renova não é o preço: é que em junho não sabe dizer o que recebeu pelo seu dinheiro. O ApoyaClub dá-te onde o registar e com que o demonstrar.",
+    "puntos": [
+      {
+        "titulo": "Regista o que prometes",
+        "texto": "Duas publicações, um vídeo, uma visita dos jogadores. Com data, para cada empresa."
+      },
+      {
+        "titulo": "Avisa-te antes de passar o prazo",
+        "texto": "Ao entrar no teu painel vês o que há para hoje e o que já passou de prazo. A vermelho."
+      },
+      {
+        "titulo": "E demonstras-lho",
+        "texto": "Um relatório em PDF com o que foi cumprido e as respetivas ligações. É o que faz com que renove no ano seguinte."
+      }
+    ]
+  },
+  "ofrece": {
+    "eyebrow": "Para clubes",
+    "titulo": "O teu clube tem muito mais para oferecer do que imaginas",
+    "pie": "Passa o rato por cima —ou toca-lhes, se estiveres no telemóvel— para ver o que inclui cada uma.",
+    "cierre1": "Um patrocínio não tem de ser só pôr um logótipo numa camisola.",
+    "cierre2": "O ApoyaClub transforma tudo o que o teu clube pode oferecer em oportunidades que podes mostrar e gerir."
+  },
+  "embudo": {
+    "eyebrow": "Quando uma empresa te escreve",
+    "titulo": "Não perdes nenhuma mensagem",
+    "texto": "Cada empresa que te escreve aparece numa lista no teu painel. Vais movendo-a consoante a conversa avança e vês num relance a quem ainda tens de responder.",
+    "comoSeLee": "Assim avança uma mensagem, passo a passo:",
+    "estados": [
+      {
+        "nombre": "Nova",
+        "texto": "Uma empresa acabou de te escrever. Recebes um aviso no teu e-mail."
+      },
+      {
+        "nombre": "Vista",
+        "texto": "Já leste a mensagem, mas ainda não respondeste."
+      },
+      {
+        "nombre": "Em conversa",
+        "texto": "Estão a conversar. É aqui que se fecha o acordo."
+      },
+      {
+        "nombre": "Fechada",
+        "texto": "Acordo fechado. O que prometeste passa automaticamente para a tua lista de tarefas."
+      }
+    ],
+    "descartada": "Descartada",
+    "descartadaTexto": "Se a empresa não encaixava, pões-na de lado e deixa de incomodar. Não se apaga: no próximo ano pode voltar a interessar-te.",
+    "cierre": "Em resumo: escrevem-te, vês tudo num só sítio e, quando fecham o acordo, o ApoyaClub vai-te lembrando o que tens de fazer para o cumprir."
+  },
+  "ctaFijo": {
+    "texto": "Experimenta 1 mês grátis"
+  },
+  "paraClubes": {
+    "meta": {
+      "titulo": "Para clubes — ApoyaClub",
+      "descripcion": "A tua página, as tuas oportunidades de patrocínio e as ferramentas para as conseguir e cumprir. 1 mês grátis, sem fidelização."
+    },
+    "etiqueta": "PARA CLUBES",
+    "titulo": "Tudo o que o teu clube precisa para conseguir patrocínios",
+    "texto": "Patrocinadores, colaboradores, serviços e oportunidades para fazer crescer o teu clube. Aqui está tudo o que inclui, sem letras pequenas.",
+    "menu": {
+      "como-funciona": "Como funciona",
+      "clubes": "O que podes oferecer",
+      "oportunidades": "Oportunidades",
+      "tu-pagina": "A tua página",
+      "herramientas": "Ferramentas",
+      "precio": "Preço",
+      "faq": "Perguntas"
+    }
+  },
+  "paraEmpresas": {
+    "meta": {
+      "titulo": "Para empresas e colaboradores — ApoyaClub",
+      "descripcion": "Descobre o que podes patrocinar em clubes da tua zona, ou do que precisam. Grátis, sem conta e sem intermediários."
+    },
+    "etiqueta": "PARA EMPRESAS E COLABORADORES",
+    "titulo": "Escolhe quem apoias e o que recebes em troca",
+    "texto": "Cada clube diz exatamente o que oferece e do que precisa. Vês, escolhes e escreves diretamente. Sem comissões e sem ninguém pelo meio.",
+    "cta": "Ver o que posso patrocinar",
+    "ctaNecesidades": "Ver do que precisam os clubes",
+    "gratis": "Grátis, sem conta e sem intermediários.",
+    "comoEyebrow": "Em três passos",
+    "comoTitulo": "Como funciona para ti",
+    "pasos": [
+      {
+        "titulo": "Vês o que há perto",
+        "texto": "Filtras por província, desporto, público e quanto queres investir. Cada oportunidade diz o que recebes, do que se encarrega o clube e o que pões tu."
+      },
+      {
+        "titulo": "Escreves ao clube",
+        "texto": "Diretamente, a partir da sua página. O clube recebe a tua mensagem e responde-te ele próprio. O ApoyaClub não se mete pelo meio nem cobra comissão."
+      },
+      {
+        "titulo": "Chegam a acordo",
+        "texto": "Acordam entre vocês, como sempre se fez. O clube faz o acompanhamento no seu painel e depois mostra-te que cumpriu."
+      }
+    ],
+    "comoCierre": "Não é preciso conta para nada disto. Podes ver, comparar e escrever a um clube sem te registares.",
+    "formas": {
+      "eyebrow": "Não só dinheiro",
+      "titulo": "Colaborar nem sempre é passar um cheque",
+      "texto": "A maior parte do que um clube precisa não se compra com orçamento de marketing. Resolve-se com o que o teu negócio já faz.",
+      "lista": [
+        "Um autocarro para uma deslocação",
+        "Material desportivo",
+        "Equipamentos",
+        "Um fisioterapeuta",
+        "Comida para um torneio",
+        "Gráfica e cartazes",
+        "Horas do teu ofício",
+        "Um espaço para um evento",
+        "Contribuir com 50 € por mês"
+      ],
+      "cierre": "Se o teu é um serviço, um produto ou umas horas, os clubes estão a pedi-lo pelo nome. Procura pelo que precisam e verás quem precisa perto de ti."
+    },
+    "cuenta": {
+      "eyebrow": "Opcional e grátis",
+      "titulo": "E se me registar?",
+      "texto": "Para ver e escrever a um clube não é preciso. A conta é gratuita e serve para que os clubes te encontrem a ti, em vez de seres tu a procurá-los de cada vez.",
+      "ventajas": [
+        {
+          "titulo": "A tua ficha no diretório",
+          "texto": "Com o teu logótipo, o teu setor, a tua zona e uma apresentação. É o que um clube vê quando procura a quem escrever."
+        },
+        {
+          "titulo": "Publica o que ofereces",
+          "texto": "Um serviço, um produto ou um valor. Aparece no diretório com o teu contacto, para que o clube te escreva a ti."
+        },
+        {
+          "titulo": "Avisos por e-mail",
+          "texto": "Quando um clube da tua província pede algo que tu ofereces, recebes um aviso. No máximo um por dia, e desliga-se quando quiseres."
+        },
+        {
+          "titulo": "Guarda os teus favoritos",
+          "texto": "Os clubes e as oportunidades que te interessam, numa lista, para voltares a eles quando tiveres decidido."
+        }
+      ],
+      "cta": "Criar a minha conta de empresa",
+      "condiciones": "Grátis, sem cartão e sem fidelização.",
+      "directorio": "Ver o diretório de empresas"
+    },
+    "faq": {
+      "titulo": "Perguntas frequentes",
+      "preguntas": [
+        {
+          "pregunta": "Cobram-me alguma coisa?",
+          "respuesta": "Não. Nem por ver, nem por escrever a um clube, nem por te registares, nem por publicares o que ofereces. O ApoyaClub é pago pelos clubes com a sua subscrição; para uma empresa ou um colaborador é grátis."
+        },
+        {
+          "pregunta": "Ficam com uma comissão do que eu der ao clube?",
+          "respuesta": "Não. O que acordares com o clube fica entre vocês e o dinheiro nunca passa por aqui."
+        },
+        {
+          "pregunta": "Tenho de me registar para contactar um clube?",
+          "respuesta": "Não. Entras na página do clube, preenches o formulário de contacto e o clube recebe a tua mensagem. A conta só é precisa se quiseres que te encontrem a ti."
+        },
+        {
+          "pregunta": "Não tenho orçamento, mas posso contribuir com um serviço. Serve?",
+          "respuesta": "Serve, e é o que mais falta faz. Muitos clubes publicam diretamente o que precisam —um autocarro, um fisioterapeuta, material— em vez de pedirem dinheiro. Procura em «do que precisam os clubes»."
+        },
+        {
+          "pregunta": "Como sei que o clube existe mesmo?",
+          "respuesta": "Cada clube preenche a sua página com as suas equipas, as suas instalações e os seus dados, e responde ele próprio à tua mensagem. Se algo não te parecer bem, escreve-nos e vemos o que se passa."
+        },
+        {
+          "pregunta": "Posso tirar a minha ficha do diretório?",
+          "respuesta": "Quando quiseres, no teu painel, com uma caixa de seleção. Deixas de aparecer e as tuas ofertas deixam de se ver com ela."
+        }
+      ]
+    },
+    "cierre": {
+      "titulo": "Há um clube a dez minutos do teu negócio",
+      "texto": "Vê o que está a procurar. Pode ser exatamente o que tu podes dar.",
+      "cta": "Ver oportunidades perto de mim"
+    },
+    "beneficios": {
+      "eyebrow": "O que a tua empresa ganha",
+      "titulo": "Faz crescer a tua marca apoiando o desporto local",
+      "subtitulo": "Liga-te a uma comunidade ativa e deixa um impacto que fica na tua zona.",
+      "tarjetas": [
+        {
+          "clave": "visibilidad",
+          "titulo": "Mais visibilidade local",
+          "texto": "A tua marca nos equipamentos, nas instalações, nos eventos e nas redes do clube.",
+          "cifra": "4,31 milhões",
+          "dato": "de licenças federativas em Espanha.",
+          "fuente": "Anuario de Estadísticas Deportivas 2025 (dados de 2024)"
+        },
+        {
+          "clave": "comunidad",
+          "titulo": "Uma comunidade a sério",
+          "texto": "Desportistas, famílias e adeptos da tua zona que já se conhecem entre si.",
+          "cifra": "77.038",
+          "dato": "clubes federados em Espanha. Algum, a cinco minutos do teu negócio.",
+          "fuente": "CSD · Estatística do Desporto Federado (2023)"
+        },
+        {
+          "clave": "reputacion",
+          "titulo": "Melhor reputação de marca",
+          "texto": "Associas a tua empresa a saúde, esforço, espírito de equipa e inclusão. E a um clube com nome.",
+          "cifra": "2.180 M€",
+          "dato": "de patrocínio em Espanha em 2025, mais 14 %.",
+          "fuente": "ESA Sponsorship Market Overview 2026 · Nielsen Sports"
+        },
+        {
+          "clave": "fiscal",
+          "titulo": "Vantagem fiscal (Espanha)",
+          "texto": "Em Espanha é um gasto de publicidade: deduz-se no Imposto sobre Sociedades.",
+          "cifra": "25 %",
+          "dato": "é a taxa geral em Espanha. PME, 20 %; empresas novas, 15 %.",
+          "fuente": "Agencia Tributaria · Lei 27/2014",
+          "aviso": "Não é um donativo: esse tem outro regime. Confirma com o teu contabilista."
+        },
+        {
+          "clave": "medida",
+          "titulo": "Ações à tua medida",
+          "texto": "Equipamentos, um torneio, bolsas, material ou conteúdos. Sem pacotes fechados.",
+          "cifra": "128 ideias",
+          "dato": "em 16 categorias, prontas a escolher.",
+          "fuente": "O catálogo do ApoyaClub"
+        },
+        {
+          "clave": "impacto",
+          "titulo": "Impacto social real",
+          "texto": "O que contribuis fica no teu bairro: formação, instalações e famílias.",
+          "cifra": "0 %",
+          "dato": "de comissão. O que for acordado chega inteiro ao clube.",
+          "fuente": "ApoyaClub"
+        }
+      ],
+      "franjaTitulo": "O desporto de formação é uma montra enorme, e está ao lado do teu negócio",
+      "franja": [
+        {
+          "clave": "gratis",
+          "titulo": "Grátis e sem conta",
+          "texto": "Vê o que oferecem os clubes da tua zona sem te registares."
+        },
+        {
+          "clave": "directo",
+          "titulo": "Sem ninguém pelo meio",
+          "texto": "Falas diretamente com o clube. Sem comissões nem intermediários."
+        },
+        {
+          "clave": "digital",
+          "titulo": "Também em digital",
+          "texto": "Redes sociais, a página do clube, conteúdos e eventos."
+        }
+      ],
+      "franjaCta": "Ver o que posso patrocinar"
+    },
+    "menu": {
+      "beneficios": "Porque te interessa",
+      "empresas": "O que podes patrocinar",
+      "como": "Como funciona",
+      "colaborar": "Formas de colaborar",
+      "cuenta": "Conta gratuita",
+      "faq": "Perguntas"
+    }
+  },
+  "video": {
+    "eyebrow": "Num minuto",
+    "titulo": "Vê o ApoyaClub por dentro",
+    "texto": "Um clube a sério, do princípio ao fim: a página, uma oportunidade publicada e uma empresa a escrever.",
+    "alternativa": "O teu navegador não consegue reproduzir este vídeo.",
+    "etiquetaPortada": "Vídeo de apresentação do ApoyaClub (em espanhol): o que é, como descobres oportunidades de patrocínio e como geres os teus patrocinadores.",
+    "etiquetaParaClubes": "Vídeo de apresentação para clubes (em espanhol): o que é o ApoyaClub, as mais de 100 ideias de patrocínio, as ferramentas para gerir tarefas e acordos, e como demonstras resultados aos teus patrocinadores.",
+    "etiquetaParaEmpresas": "Vídeo de apresentação para empresas e colaboradores (em espanhol): que oportunidades de patrocínio podes ver sem te registares, como filtrá-las por província, desporto e orçamento, e como contactar diretamente o clube.",
+    "irAUnMomento": "Ir para um momento do vídeo",
+    "retroceder": "Recuar 10 segundos",
+    "avanzar": "Avançar 10 segundos",
+    "pausar": "Pausar o vídeo",
+    "reanudar": "Retomar o vídeo",
+    "ponerSonido": "Ligar o som",
+    "quitarSonido": "Desligar o som"
+  },
+  "funciones": {
+    "ideasTitulo": "Mais de {ideas} ideias de patrocínio",
+    "ideasDetalle": "em mais de {categorias} categorias",
+    "empresasTitulo": "Empresas e colaboradores",
+    "empresasDetalle": "mais perto do teu clube",
+    "tareasTitulo": "As tuas tarefas em dia",
+    "tareasDetalle": "com cada patrocinador",
+    "dossierTitulo": "Dossiê e relatórios num clique",
+    "dossierDetalle": "prontos a partilhar"
+  },
+  "categoriasIdea": {
+    "equipos": {
+      "etiqueta": "Equipas",
+      "pista": "Tudo o que envolve uma equipa inteira durante a época."
+    },
+    "equipaciones": {
+      "etiqueta": "Equipamentos",
+      "pista": "Cada espaço do equipamento vende-se em separado."
+    },
+    "instalaciones": {
+      "etiqueta": "Instalações",
+      "pista": "O que se vê no pavilhão ou no campo num dia de jogo."
+    },
+    "intervalo": {
+      "etiqueta": "Intervalo do jogo",
+      "pista": "O intervalo de um jogo em casa: vende-se por equipa, masculino e feminino em separado."
+    },
+    "redes": {
+      "etiqueta": "Redes sociais",
+      "pista": "A tua audiência, que é maior do que pensas."
+    },
+    "cantera": {
+      "etiqueta": "Formação",
+      "pista": "Os miúdos, as suas famílias e tudo o que arrastam."
+    },
+    "jugadores": {
+      "etiqueta": "Jogadores",
+      "pista": "As pessoas do clube, não o emblema."
+    },
+    "eventos": {
+      "etiqueta": "Eventos",
+      "pista": "Apresentações, galas, jornadas, qualquer dia especial."
+    },
+    "torneos": {
+      "etiqueta": "Torneios",
+      "pista": "Um torneio é o produto mais fácil de vender que um clube tem."
+    },
+    "contenido": {
+      "etiqueta": "Conteúdo",
+      "pista": "Vídeos, fotos, entrevistas: o que já fazes, com uma marca ao lado."
+    },
+    "digital": {
+      "etiqueta": "Digital",
+      "pista": "O teu site, a tua newsletter, a tua lista de sócios."
+    },
+    "retransmisiones": {
+      "etiqueta": "Transmissões",
+      "pista": "Se transmites jogos, nem que seja pelo YouTube."
+    },
+    "familias": {
+      "etiqueta": "Famílias e sócios",
+      "pista": "Descontos e vantagens: a empresa ganha clientes, não só um logótipo."
+    },
+    "tienda": {
+      "etiqueta": "Loja do clube",
+      "pista": "O que o clube vende: roupa de outras épocas, produtos próprios e quem vende nos teus jogos."
+    },
+    "visibilidad-local": {
+      "etiqueta": "Visibilidade local",
+      "pista": "O clube a sair do pavilhão e a entrar no bairro."
+    },
+    "servicios": {
+      "etiqueta": "Do que precisas",
+      "pista": "Ao contrário: o que te falta e uma empresa pode cobrir."
+    }
+  },
+  "planes": {
+    "alMes": "por mês",
+    "alAnio": "por ano",
+    "mensual": {
+      "nombre": "Mensal",
+      "reclamo": "Sem fidelização, cancelas quando quiseres.",
+      "detalle": "Num ano são 358,80 €. Se vais ficar mais de oito meses, compensa mais o da época."
+    },
+    "temporada": {
+      "nombre": "Época",
+      "reclamo": "Um pagamento por ano. Poupas 109,80 €.",
+      "detalle": "Pensado para a forma como um clube funciona: a direção aprova a despesa uma vez e a época inteira fica coberta."
+    },
+    "fundador": {
+      "nombre": "Fundador",
+      "reclamo": "Preço congelado para sempre.",
+      "detalle": "Só para os primeiros clubes que entram na plataforma. O preço nunca sobe enquanto continuares inscrito."
+    }
+  }
+}

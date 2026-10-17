@@ -23,11 +23,13 @@ export function RegistroEmpresaForm() {
       {/* Lo primero, para que nadie se registre creyendo que es
           obligatorio: no lo es. */}
       <p className="rounded-lg border border-teal-200 bg-teal-50 px-3 py-2 text-sm text-teal-900">
-        Para buscar clubes y escribirles no hace falta cuenta.{" "}
-        <Link href="/buscar" className="font-medium underline">
-          Puedes hacerlo ahora mismo
-        </Link>
-        . La cuenta sirve para publicar lo que tu empresa ofrece y para guardar tus favoritos.
+        {t.rich("sinCuentaAviso", {
+          enlace: (texto) => (
+            <Link href="/buscar" className="font-medium underline">
+              {texto}
+            </Link>
+          ),
+        })}
       </p>
 
       <form action={formAction} className="space-y-4">

@@ -1,10 +1,12 @@
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { RUTA_POR_ROL, type Role } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { MenuDeLaCabecera } from "@/components/MenuDeLaCabecera";
+import { SelectorDeIdioma } from "@/components/SelectorDeIdioma";
 
 /**
  * Cabecera pública compartida.
@@ -40,20 +42,21 @@ import { MenuDeLaCabecera } from "@/components/MenuDeLaCabecera";
  * acaba de llegar todavía no sabe cuál de las dos es la suya y un quinto
  * enlace solo le retrasa la decisión. */
 const ENLACES_DE_VISITA = [
-  { href: "/para-clubes", etiqueta: "Para clubes" },
-  { href: "/para-empresas", etiqueta: "Para empresas" },
-  { href: "/buscar", etiqueta: "Buscar clubes" },
+  { href: "/para-clubes", clave: "paraClubes" },
+  { href: "/para-empresas", clave: "paraEmpresas" },
+  { href: "/buscar", clave: "buscarClubes" },
 ] as const;
 
 /** Con sesión: las herramientas. El directorio de empresas vuelve
  * aquí —es a quién escribir, y lo mira un club que ya está dentro— sin
  * competir con "Para empresas", que a estas alturas ya sobra. */
 const ENLACES_CON_SESION = [
-  { href: "/buscar", etiqueta: "Buscar clubes" },
-  { href: "/empresas", etiqueta: "Empresas" },
+  { href: "/buscar", clave: "buscarClubes" },
+  { href: "/empresas", clave: "empresas" },
 ] as const;
 
 export async function Header() {
+  const t = await getTranslations("common.cabecera");
   const supabase = await createClient();
   const {
     data: { user },
@@ -61,8 +64,11 @@ export async function Header() {
 
   const rol = user?.app_metadata?.role as Role | undefined;
   const accesoDirecto =
-    user && rol ? { href: RUTA_POR_ROL[rol], etiqueta: "Ir a mi panel" } : null;
-  const enlaces = accesoDirecto ? ENLACES_CON_SESION : ENLACES_DE_VISITA;
+    user && rol ? { href: RUTA_POR_ROL[rol], etiqueta: t("irAMiPanel") } : null;
+  const enlaces = (accesoDirecto ? ENLACES_CON_SESION : ENLACES_DE_VISITA).map((enlace) => ({
+    href: enlace.href,
+    etiqueta: t(enlace.clave),
+  }));
 
   return (
     <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white print:hidden">
@@ -118,9 +124,14 @@ export async function Header() {
                 href={accesoDirecto ? accesoDirecto.href : "/registro"}
                 size="sm"
               >
-                {accesoDirecto ? accesoDirecto.etiqueta : "Crea tu página"}
+                {accesoDirecto ? accesoDirecto.etiqueta : t("creaTuPagina")}
               </Button>
             </span>
+
+            {/* El idioma, a la vista y no dentro del menú: quien no lee
+                español no va a abrir un menú que no entiende para
+                buscarlo. */}
+            <SelectorDeIdioma compacto />
 
             <MenuDeLaCabecera enlaces={enlaces} accesoDirecto={accesoDirecto} />
           </div>

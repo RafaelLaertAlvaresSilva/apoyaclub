@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Header } from "@/components/Header";
 import { CargandoRegion, Skeleton } from "@/components/ui/Skeleton";
 
@@ -15,8 +16,9 @@ import { CargandoRegion, Skeleton } from "@/components/ui/Skeleton";
  * contenido no salte nada de sitio.
  */
 export default function CargandoFichaDeClub() {
+  const t = useTranslations("club.pagina");
   return (
-    <CargandoRegion etiqueta="Cargando la página del club…">
+    <CargandoRegion etiqueta={t("cargando")}>
       <Header />
 
       <div className="h-64 w-full bg-zinc-100 sm:h-80" />

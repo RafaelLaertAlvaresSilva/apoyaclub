@@ -9,7 +9,7 @@ function leer(...trozos: string[]): string {
 }
 
 const TEXTOS = JSON.parse(leer("messages", "es", "home.json")) as {
-  comoFunciona: { pasos: { clave: string }[]; pieDeFoto: string };
+  comoFunciona: { pasos: { clave: string }[]; pieDeFoto: string; capturas: Record<string, string> };
 };
 const SECCIONES = leer("src", "app", "[locale]", "components", "secciones.tsx");
 
@@ -60,8 +60,10 @@ describe("las pantallas de «Cómo funciona»", () => {
   });
 
   it("cada captura lleva un alt que describe lo que se ve", () => {
-    const alts = [...bloque.matchAll(/alt: "([^"]+)"/g)].map((m) => m[1]);
-    expect(alts).toHaveLength(claves.length);
+    // Los alt viven en `home.json` (`comoFunciona.capturas`), uno por
+    // clave de paso, para que salgan en el idioma de quien mira.
+    const alts = claves.map((clave) => TEXTOS.comoFunciona.capturas[clave]);
+    expect(alts.filter(Boolean)).toHaveLength(claves.length);
     // Un alt de tres palabras ("captura del panel") no le sirve a nadie
     // que navegue con lector de pantalla.
     for (const alt of alts) expect(alt.length, alt).toBeGreaterThan(40);

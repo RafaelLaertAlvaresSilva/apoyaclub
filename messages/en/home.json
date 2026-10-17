@@ -1,0 +1,920 @@
+{
+  "meta": {
+    "titulo": "ApoyaClub — Connect your sports club with sponsoring businesses",
+    "descripcion": "Connect your club with businesses interested in working with you. Publish your sponsorship opportunities, from €50 up to main sponsor, and let them find you and contact you directly. No commission."
+  },
+  "hero": {
+    "etiqueta": "SPORTS SPONSORSHIP MANAGEMENT PLATFORM",
+    "tituloParte1": "Every club has something to offer.",
+    "tituloParte2": "We help you discover it and manage it.",
+    "cta": "Try 1 month free",
+    "condiciones": "1 month free · €29.90/month after · VAT included · No commitment",
+    "ctaSecundario": "See how it works"
+  },
+  "puertas": {
+    "clubCta": "I'm a club",
+    "clubPie": "Discover what you can offer. One month free, no commitment.",
+    "empresaCta": "I'm a business or partner",
+    "empresaPie": "Find opportunities near you. Free, no account needed."
+  },
+  "caminos": {
+    "clubEtiqueta": "FOR CLUBS",
+    "clubTitulo": "I have a club",
+    "clubTexto": "Your page, your sponsorship opportunities and the tools to land them.",
+    "clubCta": "Create your club's page",
+    "clubCondiciones": "1 month free · No commitment",
+    "clubAtajo": "Or go straight to sign-up",
+    "empresaEtiqueta": "FOR BUSINESSES AND PARTNERS",
+    "empresaTitulo": "I'm a business or partner",
+    "empresaTexto": "See what you can sponsor near you, or what a local club needs.",
+    "empresaCta": "I want to discover opportunities",
+    "empresaGratis": "Free, no account and no middlemen.",
+    "empresaAtajo": "Or go straight to the search"
+  },
+  "comoFunciona": {
+    "eyebrow": "In four steps",
+    "titulo": "How it works",
+    "pieDeFoto": "Real ApoyaClub screens. The data is sample data.",
+    "pasos": [
+      {
+        "clave": "CREA",
+        "titulo": "Your club's page",
+        "texto": "Teams, youth teams, facilities and audience. You write it once.",
+        "etiqueta": "CREATE"
+      },
+      {
+        "clave": "PUBLICA",
+        "titulo": "Your opportunities",
+        "texto": "What's included and what you ask in return: money, equipment or a service. You decide.",
+        "etiqueta": "PUBLISH"
+      },
+      {
+        "clave": "CONTACTA",
+        "titulo": "Businesses write to you",
+        "texto": "From your page, without signing up. You manage the follow-up.",
+        "etiqueta": "CONNECT"
+      },
+      {
+        "clave": "CRECE",
+        "titulo": "And next year they renew",
+        "texto": "You deliver what you promised and send them the report.",
+        "etiqueta": "GROW"
+      }
+    ],
+    "capturas": {
+      "CREA": "The club's profile in ApoyaClub, with its sections: identity, teams, facilities, youth teams.",
+      "PUBLICA": "The opportunities screen, with the catalogue of ideas by category open.",
+      "CONTACTA": "The requests inbox, with a message from a business and its status.",
+      "CRECE": "The tasks for each sponsor, with their dates and the button to generate the report."
+    }
+  },
+  "oportunidades": {
+    "eyebrow": "The heart of the platform",
+    "titulo": "Turn what you have into opportunities",
+    "texto": "Each club creates its own, made to measure. And not all of them are about money: some need a coach, a physio or equipment.",
+    "nota": "Examples of what a published opportunity looks like. The data is sample data.",
+    "ejemplos": [
+      {
+        "categoria": "Sponsorship",
+        "titulo": "Women's team sponsor",
+        "precio": "€500",
+        "periodo": "/season",
+        "datos": [
+          "Alicante",
+          "250 families",
+          "4,800 followers"
+        ],
+        "incluye": [
+          "Logo on the kit",
+          "4 posts",
+          "8 stories",
+          "Presence at matches"
+        ],
+        "cta": "I'm interested"
+      },
+      {
+        "categoria": "Event",
+        "titulo": "Christmas tournament sponsor",
+        "precio": "€300",
+        "periodo": "",
+        "datos": [
+          "120 participants",
+          "One weekend",
+          "3 places"
+        ],
+        "incluye": [
+          "Banner in the sports hall",
+          "Brand on the poster",
+          "PA announcement"
+        ],
+        "cta": "See opportunity"
+      },
+      {
+        "categoria": "Partnership",
+        "titulo": "Physiotherapy for the squad",
+        "precio": "Service",
+        "periodo": "",
+        "datos": [
+          "Senior team",
+          "Youth teams",
+          "All year"
+        ],
+        "incluye": [
+          "Brand on the club website",
+          "Social media mention",
+          "Presence in the sports hall"
+        ],
+        "cta": "See opportunity"
+      }
+    ]
+  },
+  "empresas": {
+    "eyebrow": "For businesses",
+    "titulo": "Discover what you can sponsor",
+    "filtros": {
+      "presupuesto": "BUDGET",
+      "presupuestoValor": "€500",
+      "ubicacion": "LOCATION",
+      "ubicacionValor": "Alicante",
+      "publico": "AUDIENCE",
+      "publicoValor": "Families",
+      "deporte": "SPORT",
+      "deporteValor": "All",
+      "buscar": "Find opportunities",
+      "masFiltros": "More filters",
+      "tipo": "TYPE OF OPPORTUNITY",
+      "tipoValor": "Kit",
+      "categoria": "CATEGORY",
+      "categoriaValor": "Youth teams",
+      "alcance": "REACH",
+      "alcanceValor": "Local",
+      "presupuestoEtiqueta": "HOW MUCH DO YOU WANT TO INVEST?",
+      "ubicacionEtiqueta": "WHERE?",
+      "deporteEtiqueta": "WHICH SPORT?",
+      "publicoEtiqueta": "WHO DO YOU WANT TO REACH?"
+    },
+    "resultados": [
+      {
+        "categoria": "Kit",
+        "titulo": "Football club · Youth teams · Alicante",
+        "texto": "Kit sponsorship for the season.",
+        "precio": "€450"
+      },
+      {
+        "categoria": "Social media",
+        "titulo": "Basketball club · Families · Alicante",
+        "texto": "Mentions and social media content during the league.",
+        "precio": "€500"
+      },
+      {
+        "categoria": "Facilities",
+        "titulo": "Padel club · All audiences · Alicante",
+        "texto": "Brand presence on the courts and in the changing rooms.",
+        "precio": "€480"
+      }
+    ],
+    "avisoEjemplos": "Sample results — for illustration only, not real clubs.",
+    "texto": "Tell us how much you want to invest, where, and who you want to reach. And see what's there.",
+    "gratis": "Free, no account and no middlemen.",
+    "nota": "Mock-up of the search. The opportunities shown are samples."
+  },
+  "paginaClub": {
+    "eyebrow": "Your club's page",
+    "titulo": "A professional profile, not just a listing",
+    "texto": "Logo, cover, photos, videos, teams, players, followers, reach, youth teams, honours, facilities, events and current sponsors — everything that makes your club valuable, in one place.",
+    "texto2": "And always on show, your available sponsorship opportunities.",
+    "maqueta": {
+      "url": "apoyaclub.com/club/your-club",
+      "alt": "A club's public page on ApoyaClub: cover photo, crest, name and, below, the sport, top category, players, youth teams and city.",
+      "altTelefono": "The same club page seen on a phone: the cover, the crest, the name, the share and contact buttons, and the club's details below."
+    },
+    "ventajas": {
+      "visibilidad": {
+        "titulo": "Visibility",
+        "texto": "Show your club's identity and reach more people."
+      },
+      "comunidad": {
+        "titulo": "Community",
+        "texto": "Connect with athletes, families and fans."
+      },
+      "oportunidades": {
+        "titulo": "Opportunities",
+        "texto": "Attract sponsors and partners."
+      },
+      "gestion": {
+        "titulo": "Easy to manage",
+        "texto": "Update your club in a few minutes."
+      }
+    }
+  },
+  "herramientas": {
+    "eyebrow": "All included",
+    "titulo": "The tools that come with you",
+    "texto": "It's not a website with a form. It's what a club needs to sell its sponsorship, deliver it and prove it, without paying anyone to do it.",
+    "lista": [
+      {
+        "clave": "dossier",
+        "titulo": "Sponsorship pack in PDF and Word",
+        "corto": "In PDF to send it and in Word to tweak it.",
+        "texto": "It's generated automatically from your club's details. The PDF to send as it is; the Word file to tweak, add photos or change the order."
+      },
+      {
+        "clave": "oportunidades",
+        "titulo": "Opportunity builder",
+        "corto": "What you sell, at what price and how many places are left.",
+        "texto": "What you sell, at what price and how many places are left. With ready-made templates so you don't start from a blank page."
+      },
+      {
+        "clave": "tareas",
+        "titulo": "Task organiser",
+        "corto": "What you promised each business, with its date.",
+        "texto": "What you've promised each business, with its date. When you log in you see what's due today, and anything overdue shows in red."
+      },
+      {
+        "clave": "informe",
+        "titulo": "Progress report per business",
+        "corto": "What you've delivered, in a PDF for the business.",
+        "texto": "A PDF with what was delivered and the links, to send mid-season, at the end, or when a short partnership wraps up."
+      },
+      {
+        "clave": "publico",
+        "titulo": "Match attendance log",
+        "corto": "How many people came to each match, and the average.",
+        "texto": "You note how many people came to each match and you get the average, the season total and the best match. In one click, that average goes onto your page."
+      },
+      {
+        "clave": "estadisticas",
+        "titulo": "Your page statistics",
+        "corto": "Who visits your page and who writes to you.",
+        "texto": "How many people have visited your page, how many have opened your contact details and how many businesses have written to you. By week and by month."
+      },
+      {
+        "clave": "solicitudes",
+        "titulo": "Requests inbox",
+        "corto": "Businesses write to you without signing up for anything.",
+        "texto": "Businesses write to you from your page without signing up for anything, and you get an email notification."
+      },
+      {
+        "clave": "patrocinadores",
+        "titulo": "Your sponsors, front and centre",
+        "corto": "Who already trusts your club, with their logo.",
+        "texto": "Main, official or partner, with their logo. Anyone visiting sees at a glance that businesses already trust the club."
+      },
+      {
+        "clave": "objetivos",
+        "titulo": "Who to write to",
+        "corto": "Your list of businesses, with their status.",
+        "texto": "Your notebook of who you're going to pitch to, sorted by where each name comes from: the club's families, whoever already sponsors a rival, local shops. With each one's status and the next step noted down."
+      },
+      {
+        "clave": "accion-social",
+        "titulo": "The club's community work",
+        "corto": "What your club does off the pitch.",
+        "texto": "Photos of what you do off the pitch: schools, the town council, campaigns, donations. For many businesses, it's what matters most."
+      },
+      {
+        "clave": "servicios",
+        "titulo": "Services you're looking for",
+        "corto": "Coach hire, physio, equipment: things you don't pay for with money.",
+        "texto": "Coach hire, physiotherapy, equipment, printing. Not everything is paid for with money, and this opens the door to exchanges."
+      },
+      {
+        "clave": "pagina",
+        "titulo": "Your club's public page",
+        "corto": "Crest, teams, honours and facilities.",
+        "texto": "Crest, photos, teams, categories, honours and facilities. A link you can send on WhatsApp without being embarrassed."
+      }
+    ],
+    "destacadas": [
+      "pagina",
+      "oportunidades",
+      "solicitudes",
+      "tareas",
+      "dossier",
+      "informe"
+    ],
+    "hayMas": "And {cuantas} more tools: attendance at each match, your page statistics, your sponsors with their logos, your notebook of businesses to write to, the club's community work and the services you need.",
+    "verTodas": "See all {total} tools, one by one"
+  },
+  "panel": {
+    "titulo": "How ApoyaClub works on the inside",
+    "boton": "+ Create opportunity",
+    "metricas": [
+      {
+        "numero": "4",
+        "etiqueta": "Active opportunities"
+      },
+      {
+        "numero": "128",
+        "etiqueta": "Visits to your page"
+      },
+      {
+        "numero": "9",
+        "etiqueta": "Have seen your contact details"
+      },
+      {
+        "numero": "3",
+        "etiqueta": "New requests"
+      },
+      {
+        "numero": "2",
+        "etiqueta": "Tasks for today"
+      },
+      {
+        "numero": "5",
+        "etiqueta": "Sponsors"
+      }
+    ],
+    "saludo": "Good morning, Example Sports Club",
+    "eyebrow": "Your dashboard",
+    "texto": "Everything happening with your club, on one screen: who has seen you, who has written to you and what you need to do today.",
+    "nota": "Mock-up of the dashboard with sample data."
+  },
+  "sector": {
+    "eyebrow": "The sector, in figures",
+    "titulo": "A big market.",
+    "tituloResalte": "And a growing one.",
+    "subtitulo": "These aren't our estimates. All the country figures come from the same report and the same year, so they can genuinely be compared.",
+    "paises": [
+      {
+        "clave": "es",
+        "nombre": "Sponsorship in Spain",
+        "anio": "2025",
+        "cifra": "€2,180M",
+        "insignia": "+14%",
+        "insigniaPie": "vs. 2024",
+        "texto": "The sponsorship market in Spain reached €2,180 million in 2025. It grew the most of Europe's big five."
+      },
+      {
+        "clave": "gb",
+        "nombre": "Sponsorship in the United Kingdom",
+        "anio": "2025",
+        "cifra": "€6,150M",
+        "insignia": "+10.5%",
+        "insigniaPie": "vs. 2024",
+        "texto": "Europe's second-largest market, with €6,150 million in 2025 and 10.5% growth."
+      },
+      {
+        "clave": "it",
+        "nombre": "Sponsorship in Italy",
+        "anio": "2025",
+        "cifra": "€2,010M",
+        "insignia": "+5%",
+        "insigniaPie": "vs. 2024",
+        "texto": "The Italian market reached €2,010 million in 2025, with 5% growth."
+      },
+      {
+        "clave": "fr",
+        "nombre": "Sponsorship in France",
+        "anio": "2025",
+        "cifra": "€1,850M",
+        "insignia": "+10.3%",
+        "insigniaPie": "vs. 2024",
+        "texto": "The French market reached €1,850 million in 2025, with 10.3% growth."
+      }
+    ],
+    "comparativa": {
+      "titulo": "Europe's five biggest markets",
+      "subtitulo": "Millions of euros, 2025",
+      "barras": [
+        {
+          "clave": "de",
+          "nombre": "Germany",
+          "cifra": "€6,260M",
+          "valor": 6260,
+          "destacada": false
+        },
+        {
+          "clave": "gb",
+          "nombre": "United Kingdom",
+          "cifra": "€6,150M",
+          "valor": 6150,
+          "destacada": false
+        },
+        {
+          "clave": "es",
+          "nombre": "Spain",
+          "cifra": "€2,180M",
+          "valor": 2180,
+          "destacada": true
+        },
+        {
+          "clave": "it",
+          "nombre": "Italy",
+          "cifra": "€2,010M",
+          "valor": 2010,
+          "destacada": false
+        },
+        {
+          "clave": "fr",
+          "nombre": "France",
+          "cifra": "€1,850M",
+          "valor": 1850,
+          "destacada": false
+        }
+      ]
+    },
+    "europa": {
+      "titulo": "Sports sponsorship in Europe",
+      "subtitulo": "Breakdown of the sponsorship market, 2025",
+      "porcentaje": 72,
+      "centroCifra": "€24,790M",
+      "centroTexto": "to sport",
+      "texto": "Sport takes 72% of European sponsorship: €24,790 million of the €34,450 million spent in total.",
+      "leyenda": [
+        {
+          "etiqueta": "Sports sponsorship",
+          "cifra": "€24,790M",
+          "porcentaje": "72%",
+          "fuerte": true
+        },
+        {
+          "etiqueta": "Other sectors",
+          "cifra": "€9,660M",
+          "porcentaje": "28%",
+          "fuerte": false
+        }
+      ]
+    },
+    "licencias": {
+      "titulo": "Sports federation licences in Spain",
+      "cifra": "4.31 million",
+      "anio": "2024",
+      "texto": "4,315,809 federation licences in 2024, the second-highest figure on record. Those athletes are spread across thousands of local and neighbourhood clubs."
+    },
+    "fuentes": [
+      {
+        "quien": "Spain, United Kingdom, Italy, France and Germany",
+        "que": "ESA Sponsorship Market Overview 2026. Nielsen Sports · European Sponsorship Association (2025 data)."
+      },
+      {
+        "quien": "Licences in Spain",
+        "que": "Anuario de Estadísticas Deportivas 2025. Spanish Ministry of Education, Vocational Training and Sports (2024 data)."
+      }
+    ]
+  },
+  "precio": {
+    "titulo": "Transparent pricing",
+    "eyebrow": "First month free",
+    "importe": "€29.90",
+    "periodo": "/month",
+    "condiciones": "VAT included · No commitment",
+    "comision": "Commission: 0% — you and the business negotiate directly.",
+    "ventajas": [
+      "Professional public page",
+      "Unlimited opportunities",
+      "Sponsorship pack in PDF and Word",
+      "Requests from businesses, with notifications",
+      "Tasks with your sponsors",
+      "Sponsorship report for each business",
+      "Visit and contact statistics",
+      "Who to write to: your list of businesses, with follow-up"
+    ],
+    "cta": "Try 1 month free",
+    "subtitulo": "The same product in all three. The only thing that changes is how you pay.",
+    "todoIncluye": "All three plans include:",
+    "plazasFundador": "Only 50 places",
+    "gratisPrimerMes": "You start with a free month, on any of the three.",
+    "cancelar": "Cancel whenever you like.",
+    "resumenCondiciones": "One month free on any of the three · VAT included · No commitment · 0% commission",
+    "nota": "Invest in your club's future.",
+    "franja": [
+      {
+        "clave": "cubre",
+        "titulo": "A single partnership can cover several months",
+        "texto": "If you land or keep just one sponsor, the cost of ApoyaClub is more than covered."
+      },
+      {
+        "clave": "renueva",
+        "titulo": "Organise, deliver and renew",
+        "texto": "It's not just about getting sponsors. Manage everything you promise, show results and make them trust your club again."
+      },
+      {
+        "clave": "segura",
+        "titulo": "No strings attached",
+        "texto": "First month free · No commitment · Cancel whenever you like · VAT included · 0% commission"
+      }
+    ]
+  },
+  "faq": {
+    "titulo": "Frequently asked questions",
+    "preguntas": [
+      {
+        "pregunta": "What exactly is ApoyaClub?",
+        "respuesta": "A platform that gives a sports club the means to find sponsors and the means to keep them: a page that shows its real value, a catalogue of priced opportunities, a sponsorship pack ready to send and a record of what it promises each business. The club decides who to approach; any business that lands on its page can contact it directly."
+      },
+      {
+        "pregunta": "Does ApoyaClub find businesses for me?",
+        "respuesta": "No, and it's worth being clear about it: you approach the businesses, because you're the one who knows your area and the people in it. What ApoyaClub does is make sure that approach has something behind it —a serious page, a sponsorship pack in one click, a price you can defend— and that it doesn't fall apart afterwards: what you've promised each business, whether it's done, and a report to show them when it's time to renew."
+      },
+      {
+        "pregunta": "How much does it cost for a club?",
+        "respuesta": "The first month is free. After that, €29.90/month including VAT, with no surprises in the price."
+      },
+      {
+        "pregunta": "Is it free for businesses?",
+        "respuesta": "Yes, and they don't even need to create an account. Finding clubs, viewing their pages and contact details and writing to them costs nothing."
+      },
+      {
+        "pregunta": "Does ApoyaClub take any commission on the sponsorship?",
+        "respuesta": "No, the commission is 0%. The club and the business negotiate and agree the terms directly between themselves."
+      },
+      {
+        "pregunta": "How is the sponsorship paid?",
+        "respuesta": "ApoyaClub doesn't handle payments or act as an agency: payment and the rest of the deal are handled directly between the club and the business, in whatever way you both decide."
+      },
+      {
+        "pregunta": "Can I cancel whenever I want?",
+        "respuesta": "Yes. From the club dashboard you can cancel your subscription whenever you like, and you'll keep access until the end of the period you've already paid for."
+      }
+    ],
+    "fiscalidadTitulo": "About tax and sponsorship",
+    "fiscalidadTexto": "A sponsorship deal between a club and a business may have tax implications (VAT, invoicing, deductions…) for both parties. ApoyaClub doesn't handle payments or act as an agency, and <fuerte>doesn't provide tax advice</fuerte>: we recommend you speak to a tax adviser or accountant before closing any deal.",
+    "verTodas": "See all questions"
+  },
+  "ctaFinal": {
+    "tituloLinea1": "Your club already has value.",
+    "tituloLinea2": "Now it's time to show it.",
+    "cta": "Start your free month",
+    "subtexto": "Create your profile, publish your opportunities and start managing new possibilities for your club.",
+    "condiciones": "1 month free · No commitment"
+  },
+  "contacto": {
+    "titulo": "Any questions? Write to us",
+    "texto": "Whether you're a club, a business or just have a question, tell us and we'll reply by email."
+  },
+  "seguimiento": {
+    "eyebrow": "What you won't find on other platforms",
+    "titulo": "Landing the sponsorship is half the job. The other half is delivering it",
+    "texto": "The reason a local sponsor almost never renews isn't the price: it's that in June they can't say what they got for their money. ApoyaClub gives you somewhere to note it down and the means to prove it.",
+    "puntos": [
+      {
+        "titulo": "Note down what you promise",
+        "texto": "Two posts, a video, a visit from the players. With dates, for each business."
+      },
+      {
+        "titulo": "It reminds you before it's overdue",
+        "texto": "When you open your dashboard you see what's due today and what's overdue. In red."
+      },
+      {
+        "titulo": "And you prove it to them",
+        "texto": "A PDF report with what was delivered and the links. That's what makes them renew next year."
+      }
+    ]
+  },
+  "ofrece": {
+    "eyebrow": "For clubs",
+    "titulo": "Your club has much more to offer than you think",
+    "pie": "Hover over them —or tap them, if you're on a phone— to see what each one includes.",
+    "cierre1": "A sponsorship doesn't have to be just a logo on a shirt.",
+    "cierre2": "ApoyaClub turns everything your club can offer into opportunities you can show and manage."
+  },
+  "embudo": {
+    "eyebrow": "When a business writes to you",
+    "titulo": "You never lose a message",
+    "texto": "Every business that writes to you appears in a list in your dashboard. You move each one along as the conversation progresses, and at a glance you can see who you still need to reply to.",
+    "comoSeLee": "This is how a message moves, step by step:",
+    "estados": [
+      {
+        "nombre": "New",
+        "texto": "A business has just written to you. You get an email notification."
+      },
+      {
+        "nombre": "Seen",
+        "texto": "You've read the message but haven't replied yet."
+      },
+      {
+        "nombre": "In conversation",
+        "texto": "You're talking. This is where the deal gets closed."
+      },
+      {
+        "nombre": "Closed",
+        "texto": "Deal closed. What you promised goes straight onto your task list."
+      }
+    ],
+    "descartada": "Dismissed",
+    "descartadaTexto": "If the business wasn't a good fit, you set it aside and it stops getting in the way. It isn't deleted: next year it might interest you again.",
+    "cierre": "In short: they write to you, you see everything in one place, and when you close the deal ApoyaClub keeps reminding you what you need to do to deliver it."
+  },
+  "ctaFijo": {
+    "texto": "Try 1 month free"
+  },
+  "paraClubes": {
+    "meta": {
+      "titulo": "For clubs — ApoyaClub",
+      "descripcion": "Your page, your sponsorship opportunities and the tools to land and deliver them. 1 month free, no commitment."
+    },
+    "etiqueta": "FOR CLUBS",
+    "titulo": "Everything your club needs to land sponsorships",
+    "texto": "Sponsors, partners, services and opportunities to help your club grow. Here's everything it includes, with no small print.",
+    "menu": {
+      "como-funciona": "How it works",
+      "clubes": "What you can offer",
+      "oportunidades": "Opportunities",
+      "tu-pagina": "Your page",
+      "herramientas": "Tools",
+      "precio": "Pricing",
+      "faq": "Questions"
+    }
+  },
+  "paraEmpresas": {
+    "meta": {
+      "titulo": "For businesses and partners — ApoyaClub",
+      "descripcion": "Discover what you can sponsor at clubs near you, or what they need. Free, no account and no middlemen."
+    },
+    "etiqueta": "FOR BUSINESSES AND PARTNERS",
+    "titulo": "Choose who you support and what you get in return",
+    "texto": "Each club says exactly what it offers and what it needs. You look, choose and write to them directly. No commission and nobody in between.",
+    "cta": "See what I can sponsor",
+    "ctaNecesidades": "See what clubs need",
+    "gratis": "Free, no account and no middlemen.",
+    "comoEyebrow": "In three steps",
+    "comoTitulo": "How it works for you",
+    "pasos": [
+      {
+        "titulo": "You see what's nearby",
+        "texto": "Filter by province, sport, audience and how much you want to invest. Each opportunity says what you get, what the club takes care of and what you contribute."
+      },
+      {
+        "titulo": "You write to the club",
+        "texto": "Directly, from its page. The club gets your message and replies itself. ApoyaClub doesn't get in the middle or take a commission."
+      },
+      {
+        "titulo": "You reach an agreement",
+        "texto": "You agree it between yourselves, as it's always been done. The club keeps track in its dashboard and later shows you it has delivered."
+      }
+    ],
+    "comoCierre": "You don't need an account for any of this. You can browse, compare and write to a club without signing up.",
+    "formas": {
+      "eyebrow": "Not just money",
+      "titulo": "Supporting a club isn't always about writing a cheque",
+      "texto": "Most of what a club needs isn't bought with a marketing budget. It's solved with what your business already does.",
+      "lista": [
+        "A coach for an away trip",
+        "Sports equipment",
+        "Kits",
+        "A physiotherapist",
+        "Food for a tournament",
+        "Printing and posters",
+        "Hours of your trade",
+        "A venue for an event",
+        "€50 a month"
+      ],
+      "cierre": "If what you have is a service, a product or a few hours, clubs are asking for it by name. Search by what they need and you'll see who needs it near you."
+    },
+    "cuenta": {
+      "eyebrow": "Optional and free",
+      "titulo": "What if I sign up?",
+      "texto": "You don't need to in order to browse and write to a club. The account is free and lets clubs find you, instead of you having to look for them every time.",
+      "ventajas": [
+        {
+          "titulo": "Your profile in the directory",
+          "texto": "With your logo, your sector, your area and an introduction. It's what a club looks at when deciding who to write to."
+        },
+        {
+          "titulo": "Publish what you offer",
+          "texto": "A service, a product or an amount. It appears in the directory with your contact details, so the club writes to you."
+        },
+        {
+          "titulo": "Email alerts",
+          "texto": "When a club in your province asks for something you offer, you get an alert. At most one a day, and you can switch it off whenever you like."
+        },
+        {
+          "titulo": "Save your favourites",
+          "texto": "The clubs and opportunities you're interested in, in a list, so you can come back to them once you've decided."
+        }
+      ],
+      "cta": "Create my business account",
+      "condiciones": "Free, no card and no commitment.",
+      "directorio": "See the business directory"
+    },
+    "faq": {
+      "titulo": "Frequently asked questions",
+      "preguntas": [
+        {
+          "pregunta": "Do you charge me anything?",
+          "respuesta": "No. Not for browsing, writing to a club, signing up or publishing what you offer. ApoyaClub is paid for by clubs through their subscription; for a business or a partner it's free."
+        },
+        {
+          "pregunta": "Do you take a commission on what I give the club?",
+          "respuesta": "No. Whatever you agree with the club is between you, and the money never goes through us."
+        },
+        {
+          "pregunta": "Do I need to sign up to contact a club?",
+          "respuesta": "No. You go to the club's page, fill in the contact form and the club receives your message. You only need an account if you want clubs to find you."
+        },
+        {
+          "pregunta": "I don't have a budget, but I can provide a service. Does that work?",
+          "respuesta": "It does, and it's what's needed most. Many clubs publish exactly what they need —a coach, a physio, equipment— instead of asking for money. Look for it under \"what clubs need\"."
+        },
+        {
+          "pregunta": "How do I know the club really exists?",
+          "respuesta": "Each club fills in its page with its teams, facilities and details, and replies to your message itself. If something doesn't add up, write to us and we'll look into it."
+        },
+        {
+          "pregunta": "Can I remove my profile from the directory?",
+          "respuesta": "Whenever you like, from your dashboard, with a checkbox. You stop appearing and your offers are hidden along with it."
+        }
+      ]
+    },
+    "cierre": {
+      "titulo": "There's a club ten minutes from your business",
+      "texto": "See what it's looking for. It might be exactly what you can give.",
+      "cta": "See opportunities near me"
+    },
+    "beneficios": {
+      "eyebrow": "What your business gains",
+      "titulo": "Grow your brand by supporting local sport",
+      "subtitulo": "Connect with an active community and leave an impact that stays in your area.",
+      "tarjetas": [
+        {
+          "clave": "visibilidad",
+          "titulo": "More local visibility",
+          "texto": "Your brand on the club's kits, facilities, events and social media.",
+          "cifra": "4.31 million",
+          "dato": "sports federation licences in Spain.",
+          "fuente": "Anuario de Estadísticas Deportivas 2025 (2024 data)"
+        },
+        {
+          "clave": "comunidad",
+          "titulo": "A real community",
+          "texto": "Athletes, families and fans in your area who already know each other.",
+          "cifra": "77,038",
+          "dato": "federated clubs in Spain. One of them five minutes from your business.",
+          "fuente": "CSD · Federated Sport Statistics (2023)"
+        },
+        {
+          "clave": "reputacion",
+          "titulo": "A better brand reputation",
+          "texto": "You associate your business with health, effort, teamwork and inclusion. And with a club people know.",
+          "cifra": "€2,180M",
+          "dato": "in sponsorship in Spain in 2025, up 14%.",
+          "fuente": "ESA Sponsorship Market Overview 2026 · Nielsen Sports"
+        },
+        {
+          "clave": "fiscal",
+          "titulo": "Tax advantage (Spain)",
+          "texto": "In Spain it's an advertising expense: it's deductible from Corporate Income Tax.",
+          "cifra": "25%",
+          "dato": "is the standard rate in Spain. SMEs, 20%; new companies, 15%.",
+          "fuente": "Spanish Tax Agency · Law 27/2014",
+          "aviso": "It isn't a donation: that has a different regime. Check with your adviser."
+        },
+        {
+          "clave": "medida",
+          "titulo": "Actions tailored to you",
+          "texto": "Kits, a tournament, grants, equipment or content. No fixed packages.",
+          "cifra": "128 ideas",
+          "dato": "in 16 categories, ready to choose from.",
+          "fuente": "The ApoyaClub catalogue"
+        },
+        {
+          "clave": "impacto",
+          "titulo": "Real social impact",
+          "texto": "What you contribute stays in your area: youth teams, facilities and families.",
+          "cifra": "0%",
+          "dato": "commission. What's agreed reaches the club in full.",
+          "fuente": "ApoyaClub"
+        }
+      ],
+      "franjaTitulo": "Grassroots sport is a huge shop window, and it's right next to your business",
+      "franja": [
+        {
+          "clave": "gratis",
+          "titulo": "Free, no account needed",
+          "texto": "See what clubs in your area offer without signing up."
+        },
+        {
+          "clave": "directo",
+          "titulo": "Nobody in between",
+          "texto": "You talk directly with the club. No commission and no middlemen."
+        },
+        {
+          "clave": "digital",
+          "titulo": "Digital too",
+          "texto": "Social media, the club's page, content and events."
+        }
+      ],
+      "franjaCta": "See what I can sponsor"
+    },
+    "menu": {
+      "beneficios": "Why it's worth it",
+      "empresas": "What you can sponsor",
+      "como": "How it works",
+      "colaborar": "Ways to help",
+      "cuenta": "Free account",
+      "faq": "Questions"
+    }
+  },
+  "video": {
+    "eyebrow": "In one minute",
+    "titulo": "See ApoyaClub from the inside",
+    "texto": "A real club, from start to finish: the page, a published opportunity and a business writing to it.",
+    "alternativa": "Your browser can't play this video.",
+    "etiquetaPortada": "ApoyaClub introduction video (in Spanish): what it is, how you discover sponsorship opportunities and how you manage your sponsors.",
+    "etiquetaParaClubes": "Introduction video for clubs (in Spanish): what ApoyaClub is, the 100+ sponsorship ideas, the tools to manage tasks and deals, and how you show results to your sponsors.",
+    "etiquetaParaEmpresas": "Introduction video for businesses and partners (in Spanish): which sponsorship opportunities you can see without signing up, how to filter them by province, sport and budget, and how to contact the club directly.",
+    "irAUnMomento": "Go to a point in the video",
+    "retroceder": "Back 10 seconds",
+    "avanzar": "Forward 10 seconds",
+    "pausar": "Pause the video",
+    "reanudar": "Resume the video",
+    "ponerSonido": "Turn sound on",
+    "quitarSonido": "Turn sound off"
+  },
+  "funciones": {
+    "ideasTitulo": "More than {ideas} sponsorship ideas",
+    "ideasDetalle": "in more than {categorias} categories",
+    "empresasTitulo": "Businesses and partners",
+    "empresasDetalle": "closer to your club",
+    "tareasTitulo": "Your tasks up to date",
+    "tareasDetalle": "with each sponsor",
+    "dossierTitulo": "Sponsorship pack and reports in one click",
+    "dossierDetalle": "ready to share"
+  },
+  "categoriasIdea": {
+    "equipos": {
+      "etiqueta": "Teams",
+      "pista": "Everything around a whole team during the season."
+    },
+    "equipaciones": {
+      "etiqueta": "Kits",
+      "pista": "Every space on the kit is sold separately."
+    },
+    "instalaciones": {
+      "etiqueta": "Facilities",
+      "pista": "What people see in the sports hall or on the pitch on match day."
+    },
+    "intervalo": {
+      "etiqueta": "Half-time",
+      "pista": "The break in a home match: sold per team, men's and women's separately."
+    },
+    "redes": {
+      "etiqueta": "Social media",
+      "pista": "Your audience, which is bigger than you think."
+    },
+    "cantera": {
+      "etiqueta": "Youth teams",
+      "pista": "The kids, their families and everyone who comes with them."
+    },
+    "jugadores": {
+      "etiqueta": "Players",
+      "pista": "The club's people, not the crest."
+    },
+    "eventos": {
+      "etiqueta": "Events",
+      "pista": "Presentations, galas, open days, any special day."
+    },
+    "torneos": {
+      "etiqueta": "Tournaments",
+      "pista": "A tournament is the easiest product a club has to sell."
+    },
+    "contenido": {
+      "etiqueta": "Content",
+      "pista": "Videos, photos, interviews: what you already do, with a brand alongside."
+    },
+    "digital": {
+      "etiqueta": "Digital",
+      "pista": "Your website, your newsletter, your members' list."
+    },
+    "retransmisiones": {
+      "etiqueta": "Live streams",
+      "pista": "If you stream matches, even on YouTube."
+    },
+    "familias": {
+      "etiqueta": "Families and members",
+      "pista": "Discounts and perks: the business gains customers, not just a logo."
+    },
+    "tienda": {
+      "etiqueta": "Club shop",
+      "pista": "What the club sells: past seasons' kit, its own products and whoever sells at your matches."
+    },
+    "visibilidad-local": {
+      "etiqueta": "Local visibility",
+      "pista": "The club leaving the sports hall and getting out into the neighbourhood."
+    },
+    "servicios": {
+      "etiqueta": "What you need",
+      "pista": "The other way round: what you're missing and a business can provide."
+    }
+  },
+  "planes": {
+    "alMes": "per month",
+    "alAnio": "per year",
+    "mensual": {
+      "nombre": "Monthly",
+      "reclamo": "No commitment, cancel whenever you like.",
+      "detalle": "Over a year that's €358.80. If you'll be with us for more than eight months, the season plan works out cheaper."
+    },
+    "temporada": {
+      "nombre": "Season",
+      "reclamo": "One payment a year. You save €109.80.",
+      "detalle": "Designed around how a club works: the board approves the expense once and the whole season is covered."
+    },
+    "fundador": {
+      "nombre": "Founder",
+      "reclamo": "Price frozen for life.",
+      "detalle": "Only for the first clubs to join the platform. The price never goes up for as long as you stay subscribed."
+    }
+  }
+}

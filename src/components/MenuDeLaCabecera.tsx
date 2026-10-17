@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 
@@ -35,6 +36,7 @@ export function MenuDeLaCabecera({
   enlaces: readonly Enlace[];
   accesoDirecto: Enlace | null;
 }) {
+  const t = useTranslations("common.cabecera");
   const [abierto, setAbierto] = useState(false);
   const ruta = usePathname();
 
@@ -86,7 +88,7 @@ export function MenuDeLaCabecera({
         type="button"
         onClick={() => setAbierto(true)}
         aria-expanded={abierto}
-        aria-label="Abrir el menú"
+        aria-label={t("abrirMenu")}
         className="flex h-11 w-11 items-center justify-center rounded-lg bg-zinc-50 text-titular transition-colors hover:bg-zinc-100"
       >
         <span aria-hidden="true" className="flex flex-col gap-[5px]">
@@ -100,25 +102,25 @@ export function MenuDeLaCabecera({
         <div className="fixed inset-0 z-50">
           <button
             type="button"
-            aria-label="Cerrar el menú"
+            aria-label={t("cerrarMenu")}
             onClick={() => setAbierto(false)}
             className="absolute inset-0 bg-brand-navy/50"
           />
 
           <div className="absolute inset-y-0 right-0 w-full max-w-xs overflow-y-auto bg-white shadow-xl">
             <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3">
-              <span className="text-sm font-bold uppercase tracking-wider text-zinc-500">Menú</span>
+              <span className="text-sm font-bold uppercase tracking-wider text-zinc-500">{t("menu")}</span>
               <button
                 type="button"
                 onClick={() => setAbierto(false)}
-                aria-label="Cerrar el menú"
+                aria-label={t("cerrarMenu")}
                 className="flex h-10 w-10 items-center justify-center rounded-lg text-2xl leading-none text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-titular"
               >
                 <span aria-hidden="true">×</span>
               </button>
             </div>
 
-            <nav aria-label="Secciones" className="flex flex-col gap-2 p-4">
+            <nav aria-label={t("secciones")} className="flex flex-col gap-2 p-4">
               {destacado && (
                 <Link
                   href={destacado.href}
@@ -142,7 +144,7 @@ export function MenuDeLaCabecera({
                       {destacado.etiqueta}
                     </span>
                     <span className="block text-sm leading-snug text-sobre-color/80">
-                      Mira qué clubes hay cerca de ti
+                      {t("miraQueClubes")}
                     </span>
                   </span>
                 </Link>
@@ -155,7 +157,7 @@ export function MenuDeLaCabecera({
               ))}
 
               <Link href="/favoritos" className={CLASE_FILA}>
-                <span>Guardados</span>
+                <span>{t("guardados")}</span>
                 <span aria-hidden="true" className="text-lg text-zinc-400">
                   ♡
                 </span>
@@ -195,13 +197,13 @@ export function MenuDeLaCabecera({
                     href="/registro"
                     className="rounded-xl bg-brand-teal-dark px-4 py-3.5 text-center text-base font-bold text-sobre-color transition-colors hover:bg-brand-navy sm:hidden"
                   >
-                    Crea tu página
+                    {t("creaTuPagina")}
                   </Link>
                   <Link
                     href="/login"
                     className="rounded-xl border border-zinc-300 px-4 py-3.5 text-center text-base font-semibold text-titular transition-colors hover:bg-zinc-50"
                   >
-                    Iniciar sesión
+                    {t("iniciarSesion")}
                   </Link>
                 </>
               )}

@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 type Seccion = { id: string; etiqueta: string };
 
 /**
@@ -40,6 +42,7 @@ const CLASES_NORMAL = `${CLASES_PASTILLA} border border-zinc-300 bg-white font-m
  * abierta, antes de que cargue nada.
  */
 export function IndiceDeSecciones({ secciones }: { secciones: Seccion[] }) {
+  const t = useTranslations("club.pagina");
   const esDestacada = (id: string) => (DESTACADAS as readonly string[]).includes(id);
 
   const destacadas = secciones.filter((seccion) => esDestacada(seccion.id));
@@ -49,7 +52,7 @@ export function IndiceDeSecciones({ secciones }: { secciones: Seccion[] }) {
 
   return (
     <nav
-      aria-label="Secciones de la ficha"
+      aria-label={t("seccionesDeLaFicha")}
       className="relative mx-auto mt-6 max-w-5xl px-4 sm:px-6"
     >
       <div className="flex flex-wrap items-center gap-2">
@@ -62,7 +65,7 @@ export function IndiceDeSecciones({ secciones }: { secciones: Seccion[] }) {
         {resto.length > 0 && (
           <details className="group">
             <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:border-teal-600 hover:text-teal-700 [&::-webkit-details-marker]:hidden">
-              Ver todo el club
+              {t("verTodoElClub")}
               <svg
                 className="h-4 w-4 transition-transform group-open:rotate-180"
                 viewBox="0 0 20 20"

@@ -39,24 +39,34 @@
       {
         "clave": "CREA",
         "titulo": "Tu página del club",
-        "texto": "Equipos, cantera, instalaciones y audiencia. Se escribe una vez."
+        "texto": "Equipos, cantera, instalaciones y audiencia. Se escribe una vez.",
+        "etiqueta": "CREA"
       },
       {
         "clave": "PUBLICA",
         "titulo": "Tus oportunidades",
-        "texto": "Qué incluye y qué pides a cambio: dinero, material o un servicio. Tú decides."
+        "texto": "Qué incluye y qué pides a cambio: dinero, material o un servicio. Tú decides.",
+        "etiqueta": "PUBLICA"
       },
       {
         "clave": "CONTACTA",
         "titulo": "Las empresas te escriben",
-        "texto": "Desde tu página y sin registrarse. Tú llevas el seguimiento."
+        "texto": "Desde tu página y sin registrarse. Tú llevas el seguimiento.",
+        "etiqueta": "CONTACTA"
       },
       {
         "clave": "CRECE",
         "titulo": "Y al año siguiente repiten",
-        "texto": "Cumples lo prometido y les mandas el informe."
+        "texto": "Cumples lo prometido y les mandas el informe.",
+        "etiqueta": "CRECE"
       }
-    ]
+    ],
+    "capturas": {
+      "CREA": "La ficha del club en ApoyaClub, con sus apartados: identidad, equipos, instalaciones, cantera.",
+      "PUBLICA": "La pantalla de oportunidades, con el catálogo de ideas por categorías abierto.",
+      "CONTACTA": "La bandeja de solicitudes, con el mensaje de una empresa y su estado.",
+      "CRECE": "Las tareas con cada patrocinador, con sus fechas y el botón de generar el informe."
+    }
   },
   "oportunidades": {
     "eyebrow": "El corazón de la plataforma",
@@ -596,7 +606,16 @@
     },
     "etiqueta": "PARA CLUBES",
     "titulo": "Todo lo que tu club necesita para conseguir patrocinios",
-    "texto": "Patrocinadores, colaboradores, servicios y oportunidades para hacer crecer tu club. Aquí está todo lo que incluye, sin letra pequeña."
+    "texto": "Patrocinadores, colaboradores, servicios y oportunidades para hacer crecer tu club. Aquí está todo lo que incluye, sin letra pequeña.",
+    "menu": {
+      "como-funciona": "Cómo funciona",
+      "clubes": "Qué puedes ofrecer",
+      "oportunidades": "Oportunidades",
+      "tu-pagina": "Tu página",
+      "herramientas": "Herramientas",
+      "precio": "Precio",
+      "faq": "Preguntas"
+    }
   },
   "paraEmpresas": {
     "meta": {
@@ -777,6 +796,14 @@
         }
       ],
       "franjaCta": "Ver qué puedo patrocinar"
+    },
+    "menu": {
+      "beneficios": "Por qué te interesa",
+      "empresas": "Qué puedes patrocinar",
+      "como": "Cómo funciona",
+      "colaborar": "Formas de colaborar",
+      "cuenta": "Cuenta gratuita",
+      "faq": "Preguntas"
     }
   },
   "video": {
@@ -786,7 +813,14 @@
     "alternativa": "Tu navegador no puede reproducir este vídeo.",
     "etiquetaPortada": "Vídeo de presentación de ApoyaClub: qué es, cómo descubres oportunidades de patrocinio y cómo gestionas a tus patrocinadores.",
     "etiquetaParaClubes": "Vídeo de presentación para clubes: qué es ApoyaClub, las más de 100 ideas de patrocinio, las herramientas para gestionar tareas y acuerdos, y cómo demuestras resultados a tus patrocinadores.",
-  "etiquetaParaEmpresas": "Vídeo de presentación para empresas y colaboradores: qué oportunidades de patrocinio puedes ver sin registrarte, cómo filtrarlas por provincia, deporte y presupuesto, y cómo contactar directamente con el club."
+    "etiquetaParaEmpresas": "Vídeo de presentación para empresas y colaboradores: qué oportunidades de patrocinio puedes ver sin registrarte, cómo filtrarlas por provincia, deporte y presupuesto, y cómo contactar directamente con el club.",
+    "irAUnMomento": "Ir a un momento del vídeo",
+    "retroceder": "Retroceder 10 segundos",
+    "avanzar": "Avanzar 10 segundos",
+    "pausar": "Pausar el vídeo",
+    "reanudar": "Reanudar el vídeo",
+    "ponerSonido": "Poner el sonido",
+    "quitarSonido": "Quitar el sonido"
   },
   "funciones": {
     "ideasTitulo": "Más de {ideas} ideas de patrocinio",
@@ -797,5 +831,90 @@
     "tareasDetalle": "con cada patrocinador",
     "dossierTitulo": "Dossier e informes a un clic",
     "dossierDetalle": "listos para compartir"
+  },
+  "categoriasIdea": {
+    "equipos": {
+      "etiqueta": "Equipos",
+      "pista": "Lo que rodea a un equipo entero durante la temporada."
+    },
+    "equipaciones": {
+      "etiqueta": "Equipaciones",
+      "pista": "Cada hueco de la ropa se vende por separado."
+    },
+    "instalaciones": {
+      "etiqueta": "Instalaciones",
+      "pista": "Lo que se ve en el pabellón o el campo un día de partido."
+    },
+    "intervalo": {
+      "etiqueta": "Intervalo del partido",
+      "pista": "El descanso de un partido en casa: se vende por equipo, masculino y femenino por separado."
+    },
+    "redes": {
+      "etiqueta": "Redes sociales",
+      "pista": "Tu audiencia, que es más grande de lo que crees."
+    },
+    "cantera": {
+      "etiqueta": "Cantera",
+      "pista": "Los niños, sus familias y todo lo que arrastran."
+    },
+    "jugadores": {
+      "etiqueta": "Jugadores",
+      "pista": "Las personas del club, no el escudo."
+    },
+    "eventos": {
+      "etiqueta": "Eventos",
+      "pista": "Presentaciones, galas, jornadas, cualquier día señalado."
+    },
+    "torneos": {
+      "etiqueta": "Torneos",
+      "pista": "Un torneo es el producto más fácil de vender que tiene un club."
+    },
+    "contenido": {
+      "etiqueta": "Contenido",
+      "pista": "Vídeos, fotos, entrevistas: lo que ya haces, con una marca al lado."
+    },
+    "digital": {
+      "etiqueta": "Digital",
+      "pista": "Tu web, tu newsletter, tu lista de socios."
+    },
+    "retransmisiones": {
+      "etiqueta": "Retransmisiones",
+      "pista": "Si retransmites partidos, aunque sea por YouTube."
+    },
+    "familias": {
+      "etiqueta": "Familias y socios",
+      "pista": "Descuentos y ventajas: la empresa gana clientes, no solo un logo."
+    },
+    "tienda": {
+      "etiqueta": "Tienda del club",
+      "pista": "Lo que el club vende: ropa de otros años, productos propios y quien venda en tus partidos."
+    },
+    "visibilidad-local": {
+      "etiqueta": "Visibilidad local",
+      "pista": "El club saliendo del pabellón y entrando en el barrio."
+    },
+    "servicios": {
+      "etiqueta": "Lo que necesitas",
+      "pista": "Al revés: lo que te hace falta y una empresa puede cubrir."
+    }
+  },
+  "planes": {
+    "alMes": "al mes",
+    "alAnio": "al año",
+    "mensual": {
+      "nombre": "Mensual",
+      "reclamo": "Sin permanencia, cancelas cuando quieras.",
+      "detalle": "Al año son 358,80 €. Si vas a estar más de ocho meses, sale mejor el de temporada."
+    },
+    "temporada": {
+      "nombre": "Temporada",
+      "reclamo": "Un pago al año. Ahorras 109,80 €.",
+      "detalle": "Pensado para cómo funciona un club: la junta aprueba el gasto una vez y ya está cubierta toda la temporada."
+    },
+    "fundador": {
+      "nombre": "Fundador",
+      "reclamo": "Precio congelado de por vida.",
+      "detalle": "Solo para los primeros clubes que entran en la plataforma. El precio no sube nunca mientras sigas de alta."
+    }
   }
 }

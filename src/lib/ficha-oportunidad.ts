@@ -127,17 +127,38 @@ export function tieneFicha(oportunidad: {
   return oportunidad.beneficios.length > 0 || oportunidad.acciones.length > 0;
 }
 
-const formatoFecha = new Intl.DateTimeFormat("es-ES", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
-
-function fecha(iso: string | null): string | null {
+function fecha(iso: string | null, intlLocale: string): string | null {
   if (!iso) return null;
   const momento = new Date(iso);
-  return Number.isFinite(momento.getTime()) ? formatoFecha.format(momento) : null;
+  if (!Number.isFinite(momento.getTime())) return null;
+  return new Intl.DateTimeFormat(intlLocale, { day: "numeric", month: "long", year: "numeric" }).format(momento);
 }
+
+/** Los rótulos de las condiciones. Por defecto, en español; la página
+ * pública le pasa los del idioma de quien mira. */
+export type TextosDeCondiciones = {
+  duracion: string;
+  frecuencia: string;
+  fechas: string;
+  delAl: (desde: string, hasta: string) => string;
+  desde: string;
+  hasta: string;
+  exclusividad: string;
+  enExclusiva: (sector: string) => string;
+  requisitos: string;
+};
+
+const TEXTOS_EN_ESPANOL: TextosDeCondiciones = {
+  duracion: "Duración",
+  frecuencia: "Frecuencia",
+  fechas: "Fechas",
+  delAl: (desde, hasta) => `Del ${desde} al ${hasta}`,
+  desde: "Desde",
+  hasta: "Hasta",
+  exclusividad: "Exclusividad",
+  enExclusiva: (sector) => `En exclusiva para el sector: ${sector}`,
+  requisitos: "Otros requisitos",
+};
 
 /**
  * Las condiciones, ya en frases, sin las que estén vacías.
@@ -146,22 +167,26 @@ function fecha(iso: string | null): string | null {
  * condición sin rellenar no sale: un "Frecuencia: —" no informa de
  * nada y hace que la ficha parezca a medias.
  */
-export function condicionesEnTexto(condiciones: CondicionesDeLaFicha): { que: string; valor: string }[] {
+export function condicionesEnTexto(
+  condiciones: CondicionesDeLaFicha,
+  textos: TextosDeCondiciones = TEXTOS_EN_ESPANOL,
+  intlLocale = "es-ES",
+): { que: string; valor: string }[] {
   const lineas: { que: string; valor: string }[] = [];
 
-  if (condiciones.duracion) lineas.push({ que: "Duración", valor: condiciones.duracion });
-  if (condiciones.frecuencia) lineas.push({ que: "Frecuencia", valor: condiciones.frecuencia });
+  if (condiciones.duracion) lineas.push({ que: textos.duracion, valor: condiciones.duracion });
+  if (condiciones.frecuencia) lineas.push({ que: textos.frecuencia, valor: condiciones.frecuencia });
 
-  const desde = fecha(condiciones.desde);
-  const hasta = fecha(condiciones.hasta);
-  if (desde && hasta) lineas.push({ que: "Fechas", valor: `Del ${desde} al ${hasta}` });
-  else if (desde) lineas.push({ que: "Desde", valor: desde });
-  else if (hasta) lineas.push({ que: "Hasta", valor: hasta });
+  const desde = fecha(condiciones.desde, intlLocale);
+  const hasta = fecha(condiciones.hasta, intlLocale);
+  if (desde && hasta) lineas.push({ que: textos.fechas, valor: textos.delAl(desde, hasta) });
+  else if (desde) lineas.push({ que: textos.desde, valor: desde });
+  else if (hasta) lineas.push({ que: textos.hasta, valor: hasta });
 
   if (condiciones.exclusividad) {
-    lineas.push({ que: "Exclusividad", valor: `En exclusiva para el sector: ${condiciones.exclusividad}` });
+    lineas.push({ que: textos.exclusividad, valor: textos.enExclusiva(condiciones.exclusividad) });
   }
-  if (condiciones.requisitos) lineas.push({ que: "Otros requisitos", valor: condiciones.requisitos });
+  if (condiciones.requisitos) lineas.push({ que: textos.requisitos, valor: condiciones.requisitos });
 
   return lineas;
 }

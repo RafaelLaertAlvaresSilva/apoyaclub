@@ -14,5 +14,7 @@
   "verPatrocinios": "Ver oportunidades de patrocinio →",
   "verClub": "Ver club",
   "vacioTitulo": "Todavía no hay servicios publicados con estos filtros.",
-  "vacioTexto": "Prueba con otra provincia u otro tipo de servicio, o mira las oportunidades de patrocinio."
+  "vacioTexto": "Prueba con otra provincia u otro tipo de servicio, o mira las oportunidades de patrocinio.",
+  "publicaCta": "¿Tu empresa puede cubrir algo de esto? <enlace>Publica lo que ofreces</enlace> y que te encuentren los clubes. Es gratis.",
+  "verFicha": "Ver ficha"
 }

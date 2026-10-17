@@ -13,7 +13,10 @@ import { defineRouting } from "next-intl/routing";
  * y la carga de mensajes (`src/i18n/request.ts`).
  */
 export const routing = defineRouting({
-  locales: ["es"],
+  // Español, portugués (de Portugal) e inglés. El español es el idioma
+  // de referencia: lo que todavía no está traducido sale en español
+  // (ver `src/i18n/request.ts`), nunca como una clave rota.
+  locales: ["es", "pt", "en"],
   defaultLocale: "es",
   localePrefix: "always",
 });

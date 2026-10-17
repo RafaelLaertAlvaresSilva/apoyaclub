@@ -1,6 +1,7 @@
 "use server";
 
-import { getLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
+import { routing } from "@/i18n/routing";
 import { enviarEmailNuevaSolicitudContacto } from "@/lib/email/resend";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { consumirLimite, ipDelVisitante, pareceBot } from "@/lib/rate-limit";
@@ -42,6 +43,7 @@ export async function crearSolicitudContacto(
   }
 
   const texto = (campo: string) => String(formData.get(campo) ?? "").trim();
+  const t = await getTranslations("club.escribir.errores");
 
   const clubId = texto("clubId");
   const mensaje = texto("message");
@@ -51,13 +53,13 @@ export async function crearSolicitudContacto(
   const telefono = texto("telefono");
   const opportunityId = texto("opportunityId") || null;
 
-  if (!clubId) return { error: "Club no encontrado." };
-  if (nombre.length < 2) return { error: "Escribe tu nombre." };
+  if (!clubId) return { error: t("clubNoEncontrado") };
+  if (nombre.length < 2) return { error: t("nombre") };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(correo)) {
-    return { error: "Escribe un correo válido: es a donde te contestará el club." };
+    return { error: t("correo") };
   }
-  if (mensaje.length < 10) return { error: "Escribe un mensaje para el club." };
-  if (mensaje.length > 2000) return { error: "El mensaje es demasiado largo." };
+  if (mensaje.length < 10) return { error: t("mensaje") };
+  if (mensaje.length > 2000) return { error: t("largo") };
 
   // Una persona real no manda diez solicitudes en una hora. Por IP,
   // que es lo único que hay cuando no hay cuenta.
@@ -69,7 +71,7 @@ export async function crearSolicitudContacto(
   });
 
   if (!cupo) {
-    return { error: "Has enviado muchas solicitudes seguidas. Espera un rato y vuelve a intentarlo." };
+    return { error: t("demasiadas") };
   }
 
   const admin = createAdminClient();
@@ -95,7 +97,7 @@ export async function crearSolicitudContacto(
         ? ` (motivo técnico: ${error.message})`
         : "";
 
-    return { error: `No se ha podido enviar la solicitud. Inténtalo de nuevo.${motivo}` };
+    return { error: `${t("noEnviada")}${motivo}` };
   }
 
   console.log(`[solicitud] Creada para el club ${clubId}, de ${nombre} <${correo}>.`);
@@ -167,7 +169,9 @@ async function notificarClubPorEmail({
       personaTelefono: telefono || null,
       opportunityTitle,
       message: mensaje,
-      panelUrl: `${SITE_URL}/${await getLocale()}/panel/solicitudes`,
+      // El enlace es para el club, no para quien escribe: va a su panel en
+      // español aunque la empresa haya escrito desde la web en inglés.
+      panelUrl: `${SITE_URL}/${routing.defaultLocale}/panel/solicitudes`,
       // Para que el club conteste con "Responder" y le llegue a quien
       // escribió, no a ApoyaClub.
       responderA: correo,

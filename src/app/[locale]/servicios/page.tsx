@@ -2,11 +2,8 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Header } from "@/components/Header";
 import { Link } from "@/i18n/navigation";
-import {
-  CATEGORIAS_NECESIDAD,
-  ETIQUETA_CATEGORIA_NECESIDAD,
-  leerCategoriaNecesidad,
-} from "@/lib/opportunities";
+import { CATEGORIAS_NECESIDAD, leerCategoriaNecesidad } from "@/lib/opportunities";
+import { etiquetador } from "@/lib/etiquetas-traducidas";
 import { buscarOportunidades, obtenerProvinciasDisponibles } from "@/lib/search";
 
 /**
@@ -47,6 +44,7 @@ export default async function PaginaServicios({
 }) {
   const params = await searchParams;
   const t = await getTranslations("servicios");
+  const E = etiquetador(await getTranslations("common.etiquetas"));
 
   const categoriaParam = unParametro(params.categoria);
   const categoria = categoriaParam ? (leerCategoriaNecesidad(categoriaParam) ?? undefined) : undefined;
@@ -88,7 +86,7 @@ export default async function PaginaServicios({
               <option value="">{t("todasLasCategorias")}</option>
               {CATEGORIAS_NECESIDAD.map((opcion) => (
                 <option key={opcion.id} value={opcion.id}>
-                  {opcion.etiqueta}
+                  {E.categoriaNecesidad(opcion.id)}
                 </option>
               ))}
             </select>
@@ -127,11 +125,13 @@ export default async function PaginaServicios({
             ella pone. Es el momento en que ya ha visto que hay demanda
             real de lo suyo. */}
         <p className="mt-4 rounded-xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-900">
-          ¿Tu empresa puede cubrir algo de esto?{" "}
-          <Link href="/registro-empresa" className="font-medium underline">
-            Publica lo que ofreces
-          </Link>{" "}
-          y que te encuentren los clubes. Es gratis.
+          {t.rich("publicaCta", {
+            enlace: (texto) => (
+              <Link href="/registro-empresa" className="font-medium underline">
+                {texto}
+              </Link>
+            ),
+          })}
         </p>
 
         {servicios.length === 0 ? (
@@ -148,7 +148,7 @@ export default async function PaginaServicios({
               >
                 {servicio.categoriaNecesidad && (
                   <p className="text-xs font-semibold uppercase tracking-wide text-accion-tinta">
-                    {ETIQUETA_CATEGORIA_NECESIDAD[servicio.categoriaNecesidad]}
+                    {E.categoriaNecesidad(servicio.categoriaNecesidad)}
                   </p>
                 )}
                 <p className="font-semibold text-zinc-900">{servicio.title}</p>
@@ -172,7 +172,7 @@ export default async function PaginaServicios({
                       href={`/club/${servicio.clubSlug}/oportunidad/${servicio.opportunityId}`}
                       className="rounded-lg border border-accion-tinta px-3 py-1.5 text-xs font-medium text-accion-tinta transition-colors hover:bg-teal-50"
                     >
-                      Ver ficha
+                      {t("verFicha")}
                     </Link>
                     <Link
                       href={`/club/${servicio.clubSlug}`}

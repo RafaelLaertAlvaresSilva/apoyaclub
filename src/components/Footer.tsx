@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { SelectorDeIdioma } from "@/components/SelectorDeIdioma";
 
 // Cada columna apunta a la página de su público, no a la portada. La
 // portada solo pregunta cuál de los dos eres; el detalle está en
@@ -100,9 +101,12 @@ export function Footer() {
           </div>
         </div>
 
-        <p className="pt-6 text-xs text-sobre-color/40">
-          © {new Date().getFullYear()} {t("derechos")}. {t("derechosReservados")}
-        </p>
+        <div className="flex flex-col-reverse gap-3 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-sobre-color/40">
+            © {new Date().getFullYear()} {t("derechos")}. {t("derechosReservados")}
+          </p>
+          <SelectorDeIdioma />
+        </div>
       </div>
     </footer>
   );

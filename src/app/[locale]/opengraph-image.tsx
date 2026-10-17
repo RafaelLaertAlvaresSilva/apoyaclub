@@ -1,4 +1,7 @@
 import { ImageResponse } from "next/og";
+import { getTranslations } from "next-intl/server";
+import { hasLocale } from "next-intl";
+import { routing } from "@/i18n/routing";
 
 /**
  * La imagen que sale al pegar un enlace de ApoyaClub en WhatsApp.
@@ -22,7 +25,11 @@ const NAVY_OSCURO = "#0b1f38";
 const TEAL = "#14b8a6";
 const TEAL_CLARO = "#ccfbf1";
 
-export default function Image() {
+export default async function Image({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: pedido } = await params;
+  const locale = hasLocale(routing.locales, pedido) ? pedido : routing.defaultLocale;
+  const t = await getTranslations({ locale, namespace: "common.imagenCompartir" });
+
   return new ImageResponse(
     (
       <div
@@ -47,7 +54,7 @@ export default function Image() {
         </div>
 
         <div style={{ display: "flex", fontSize: 26, color: TEAL_CLARO, letterSpacing: 6, marginTop: 6 }}>
-          CONECTA · IMPULSA · CRECE
+          {t("eslogan")}
         </div>
 
         <div
@@ -60,13 +67,13 @@ export default function Image() {
             maxWidth: 900,
           }}
         >
-          Conecta tu club deportivo con empresas que quieren patrocinarlo.
+          {t("titular")}
         </div>
 
         {/* Lo que de verdad decide a quien lo ve: que para la empresa
             esto no cuesta nada. */}
         <div style={{ display: "flex", fontSize: 30, color: TEAL_CLARO, marginTop: 28 }}>
-          Para las empresas es gratis y sin cuenta.
+          {t("gratis")}
         </div>
 
         <div

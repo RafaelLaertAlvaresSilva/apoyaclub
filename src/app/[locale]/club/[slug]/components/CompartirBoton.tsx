@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 /** Botón de "Compartir enlace": usa el share nativo del móvil si existe
  * (así comparte directo a WhatsApp, etc.) y si no, copia la URL. */
 export function CompartirBoton({ url, titulo }: { url: string; titulo: string }) {
+  const t = useTranslations("club.ficha");
   const [mensaje, setMensaje] = useState<string | null>(null);
 
   async function compartir() {
@@ -29,7 +31,7 @@ export function CompartirBoton({ url, titulo }: { url: string; titulo: string })
 
     try {
       await navigator.clipboard.writeText(url);
-      setMensaje("¡Enlace copiado!");
+      setMensaje(t("enlaceCopiado"));
     } catch {
       setMensaje(url);
     } finally {
@@ -45,7 +47,7 @@ export function CompartirBoton({ url, titulo }: { url: string; titulo: string })
         className="inline-flex items-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
       >
         <span aria-hidden="true">🔗</span>
-        Compartir enlace
+        {t("compartir")}
       </button>
       {mensaje && (
         <span className="absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-2 py-1 text-xs text-sobre-color shadow-lg">

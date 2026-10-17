@@ -36,7 +36,7 @@ export async function registrarEmpresa(
   const confirmarPassword = String(formData.get("confirmarPassword") ?? "");
   const aceptaTerminos = formData.get("aceptaTerminos") === "on";
 
-  if (!nombre) return { error: "Escribe el nombre de tu empresa." };
+  if (!nombre) return { error: tValidacion("nombreEmpresa") };
   if (!email) return { error: tValidacion("correo") };
   if (password.length < 8) return { error: tValidacion("passwordCorta") };
   if (password !== confirmarPassword) return { error: tValidacion("noCoinciden") };
@@ -84,7 +84,7 @@ export async function registrarEmpresa(
       );
     } catch {
       return {
-        error: "Tu cuenta se ha creado, pero ha habido un problema técnico. Contacta con soporte.",
+        error: tValidacion("problemaTecnico"),
       };
     }
   }

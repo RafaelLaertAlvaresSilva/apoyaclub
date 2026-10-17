@@ -1,9 +1,11 @@
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { CATEGORIAS_IDEA, TOTAL_DE_IDEAS } from "@/lib/catalogo-ideas";
-import { PLANES_EN_ORDEN, periodicidad, precioFormateado } from "@/lib/planes";
+import { PLANES_EN_ORDEN } from "@/lib/planes";
+import { LOCALE_CONFIG } from "@/config/locales";
+import type { AppLocale } from "@/i18n/routing";
 import { FormularioContacto } from "./FormularioContacto";
 import { QuePuedesOfrecer } from "./QuePuedesOfrecer";
 
@@ -212,23 +214,15 @@ export function FondoDeHeroe({
  * `home.json`, cada uno se lleva su pantalla; con una lista por
  * posición se quedarían cruzados y eso no lo detecta ningún test.
  */
-const PANTALLA_DEL_PASO: Record<string, { archivo: string; alt: string }> = {
-  CREA: {
-    archivo: "/paso-perfil.webp",
-    alt: "La ficha del club en ApoyaClub, con sus apartados: identidad, equipos, instalaciones, cantera.",
-  },
-  PUBLICA: {
-    archivo: "/paso-oportunidades.webp",
-    alt: "La pantalla de oportunidades, con el catálogo de ideas por categorías abierto.",
-  },
-  CONTACTA: {
-    archivo: "/paso-solicitudes.webp",
-    alt: "La bandeja de solicitudes, con el mensaje de una empresa y su estado.",
-  },
-  CRECE: {
-    archivo: "/paso-tareas.webp",
-    alt: "Las tareas con cada patrocinador, con sus fechas y el botón de generar el informe.",
-  },
+/* La descripción de cada captura vive en `home.json`
+ * (`comoFunciona.capturas.<CLAVE>`), en cada idioma. La `clave` de cada
+ * paso NO se traduce: es el identificador que une el paso con su
+ * imagen. Lo que se lee en pantalla es `etiqueta`. */
+const PANTALLA_DEL_PASO: Record<string, { archivo: string }> = {
+  CREA: { archivo: "/paso-perfil.webp" },
+  PUBLICA: { archivo: "/paso-oportunidades.webp" },
+  CONTACTA: { archivo: "/paso-solicitudes.webp" },
+  CRECE: { archivo: "/paso-tareas.webp" },
 };
 
 /**
@@ -263,7 +257,7 @@ function Portatil({ archivo, alt }: { archivo: string; alt: string }) {
 
 export async function SeccionComoFunciona() {
   const t = await getTranslations("home");
-  const pasos = t.raw("comoFunciona.pasos") as (TextoConTitulo & { clave: string })[];
+  const pasos = t.raw("comoFunciona.pasos") as (TextoConTitulo & { clave: string; etiqueta?: string })[];
 
   return (
     /* `overflow-x-hidden` por la peana del portátil: es un 5 % más
@@ -297,6 +291,7 @@ export async function SeccionComoFunciona() {
         <div className="mt-16 flex flex-col gap-14 sm:gap-16">
           {pasos.map((paso, indice) => {
             const pantalla = PANTALLA_DEL_PASO[paso.clave];
+            const claveDelPaso = paso.clave;
             const invertido = indice % 2 === 1;
 
             return (
@@ -309,7 +304,7 @@ export async function SeccionComoFunciona() {
                     {String(indice + 1).padStart(2, "0")}
                   </span>
                   <p className="mt-3 text-sm font-extrabold uppercase tracking-wider text-accion-tinta">
-                    {paso.clave}
+                    {paso.etiqueta ?? paso.clave}
                   </p>
                   <h3 className="mt-2 text-2xl font-extrabold leading-snug text-titular">
                     {paso.titulo}
@@ -321,7 +316,7 @@ export async function SeccionComoFunciona() {
 
                 {pantalla && (
                   <div className={invertido ? "lg:order-1" : undefined}>
-                    <Portatil archivo={pantalla.archivo} alt={pantalla.alt} />
+                    <Portatil archivo={pantalla.archivo} alt={t(`comoFunciona.capturas.${claveDelPaso}`)} />
                   </div>
                 )}
               </div>
@@ -1741,6 +1736,12 @@ function FranjaDelPrecio({
 
 export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }) {
   const t = await getTranslations("home");
+  const locale = (await getLocale()) as AppLocale;
+  const formatoPlan = new Intl.NumberFormat(LOCALE_CONFIG[locale].intlLocale, {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: 2,
+  });
   const ventajas = t.raw("precio.ventajas") as string[];
   const franja = t.raw("precio.franja") as { clave: string; titulo: string; texto: string }[];
 
@@ -1781,7 +1782,9 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
         </div>
 
         <div className="mt-14 grid items-start gap-6 lg:grid-cols-3">
-          {PLANES_EN_ORDEN.map((plan) => (
+          {PLANES_EN_ORDEN.map((plan) => {
+            const idPlan = plan.id;
+            return (
             <div
               key={plan.id}
               className={`flex h-full flex-col rounded-3xl bg-white p-8 ${
@@ -1792,7 +1795,7 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
             >
               <div className="flex items-baseline justify-between gap-2">
                 <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
-                  {plan.nombre}
+                  {t(`planes.${idPlan}.nombre`)}
                 </p>
                 {plan.limitado && (
                   <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">
@@ -1803,13 +1806,15 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
 
               <p className="mt-3">
                 <span className="text-4xl font-extrabold tracking-tight text-titular">
-                  {precioFormateado(plan)}
+                  {formatoPlan.format(plan.precioCentimos / 100)}
                 </span>{" "}
-                <span className="text-base text-zinc-500">{periodicidad(plan)}</span>
+                <span className="text-base text-zinc-500">
+                  {plan.intervalo === "mes" ? t("planes.alMes") : t("planes.alAnio")}
+                </span>
               </p>
 
-              <p className="mt-2 text-sm font-medium text-zinc-800">{plan.reclamo}</p>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-500">{plan.detalle}</p>
+              <p className="mt-2 text-sm font-medium text-zinc-800">{t(`planes.${idPlan}.reclamo`)}</p>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-500">{t(`planes.${idPlan}.detalle`)}</p>
 
               <Link
                 href="/registro-club"
@@ -1822,7 +1827,8 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
                 {t("precio.cta")}
               </Link>
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Tres líneas de letra pequeña, una debajo de otra, no se leen:

@@ -1,9 +1,10 @@
 import { ImageResponse } from "next/og";
-import {
-  ETIQUETA_CATEGORIA_NECESIDAD,
-  formatoValorOportunidad,
-  plazasLibres,
-} from "@/lib/opportunities";
+import { getTranslations } from "next-intl/server";
+import { hasLocale } from "next-intl";
+import { plazasLibres } from "@/lib/opportunities";
+import { routing } from "@/i18n/routing";
+import { etiquetador } from "@/lib/etiquetas-traducidas";
+import { formatoDeValor } from "@/lib/format";
 import { obtenerClubPublico } from "../../data";
 
 /**
@@ -38,14 +39,18 @@ function acortar(texto: string, maximo: number): string {
 export default async function Image({
   params,
 }: {
-  params: Promise<{ slug: string; id: string }>;
+  params: Promise<{ slug: string; id: string; locale: string }>;
 }) {
-  const { slug, id } = await params;
+  const { slug, id, locale: pedido } = await params;
+  const locale = hasLocale(routing.locales, pedido) ? pedido : routing.defaultLocale;
+  const t = await getTranslations({ locale, namespace: "club.oportunidadPagina.imagen" });
+  const E = etiquetador(await getTranslations({ locale, namespace: "common.etiquetas" }));
+  const precio = formatoDeValor(locale);
   const datos = await obtenerClubPublico(slug);
   const oportunidad = datos?.oportunidades.find((una) => una.id === id);
 
   const nombreClub = datos?.perfil.name ?? "ApoyaClub";
-  const titulo = oportunidad ? acortar(oportunidad.title, 80) : "Oportunidad de patrocinio";
+  const titulo = oportunidad ? acortar(oportunidad.title, 80) : t("oportunidadDePatrocinio");
 
   // Mejor esfuerzo: si el logo no se puede descargar, se genera la
   // imagen igualmente sin él.
@@ -70,17 +75,17 @@ export default async function Image({
   // como un dato suelto que nadie sabe de qué es.
   const categoria =
     esNecesidad && oportunidad?.categoriaNecesidad
-      ? ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad].toUpperCase()
+      ? E.categoriaNecesidad(oportunidad.categoriaNecesidad).toUpperCase()
       : null;
   const antetitulo = esNecesidad
-    ? ["LO NECESITAMOS", categoria].filter(Boolean).join(" · ")
-    : "OPORTUNIDAD DE PATROCINIO";
+    ? [t("antetituloNecesidad"), categoria].filter(Boolean).join(" · ")
+    : t("antetituloOportunidad");
 
   // En una necesidad no hay precio: lo que se ofrece ES el servicio, y
   // ponerle una cifra delante confunde a quien la lee.
   const destacado =
     !esNecesidad && oportunidad && oportunidad.value > 0
-      ? formatoValorOportunidad.format(oportunidad.value)
+      ? precio.format(oportunidad.value)
       : null;
 
   // `plazasLibres` ya devuelve 0 cuando la oportunidad no va por
@@ -144,7 +149,7 @@ export default async function Image({
             )}
             {libres > 0 && (
               <div style={{ display: "flex", fontSize: 30, color: "#94a3b8" }}>
-                {libres === 1 ? "1 plaza libre" : `${libres} plazas libres`}
+                {t("plazasLibres", { n: libres })}
               </div>
             )}
           </div>

@@ -1,12 +1,14 @@
 import { useTranslations } from "next-intl";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { TITULAR } from "@/lib/titular";
 import { ReenviarCorreo } from "./ReenviarCorreo";
 
-export const metadata: Metadata = {
-  title: "Revisa tu correo",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const tMetadatos = await getTranslations("auth.titulos");
+  return { title: tMetadatos("revisaCorreo") };
+}
 
 /**
  * Donde aterriza un club recién registrado.
@@ -33,14 +35,16 @@ export default function RevisaTuCorreoPage() {
 
       <div className="space-y-2 text-center text-sm">
         <p className="text-zinc-500">
-          ¿Te equivocaste al escribir el correo?{" "}
-          <a
-            href={`mailto:${TITULAR.email}?subject=${encodeURIComponent("No me llega el correo de confirmación")}`}
-            className="font-medium text-accion-tinta hover:underline"
-          >
-            Escríbenos
-          </a>{" "}
-          y lo arreglamos.
+          {t.rich("teEquivocaste", {
+            enlace: (texto) => (
+              <a
+                href={`mailto:${TITULAR.email}?subject=${encodeURIComponent(t("asuntoNoLlega"))}`}
+                className="font-medium text-accion-tinta hover:underline"
+              >
+                {texto}
+              </a>
+            ),
+          })}
         </p>
         <Link href="/login" className="inline-block font-medium text-accion-tinta hover:underline">
           {tComun("volverALogin")}

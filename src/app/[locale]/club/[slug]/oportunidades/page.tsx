@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Link } from "@/i18n/navigation";
@@ -8,7 +9,6 @@ import { obtenerClubPublico } from "../data";
 export const revalidate = 60;
 
 const ES_NECESIDAD = false;
-const TITULO = "Oportunidades de patrocinio";
 
 export async function generateMetadata({
   params,
@@ -17,9 +17,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const datos = await obtenerClubPublico(slug);
+  const tMetadatos = await getTranslations("club.listas");
 
-  if (!datos) return { title: "Club no encontrado — ApoyaClub" };
-  return { title: `${TITULO} — ${datos.perfil.name}` };
+  if (!datos) return { title: `${tMetadatos("clubNoEncontrado")} — ApoyaClub` };
+  return { title: `${tMetadatos("oportunidades.titulo")} — ${datos.perfil.name}` };
 }
 
 export default async function Pagina({ params }: { params: Promise<{ slug: string }> }) {
@@ -27,6 +28,7 @@ export default async function Pagina({ params }: { params: Promise<{ slug: strin
   const datos = await obtenerClubPublico(slug);
 
   if (!datos) notFound();
+  const t = await getTranslations("club.listas");
 
   const { perfil, oportunidades } = datos;
   const delListado = oportunidades.filter((una) => una.esNecesidad === ES_NECESIDAD);
@@ -42,8 +44,8 @@ export default async function Pagina({ params }: { params: Promise<{ slug: strin
           </Link>
         </nav>
 
-        <h1 className="mt-3 text-2xl font-bold text-zinc-900 sm:text-3xl">{TITULO}</h1>
-        <p className="mt-2 max-w-2xl text-zinc-600">Todo lo que este club puede ofrecer a una empresa, con el detalle de cada acuerdo.</p>
+        <h1 className="mt-3 text-2xl font-bold text-zinc-900 sm:text-3xl">{t("oportunidades.titulo")}</h1>
+        <p className="mt-2 max-w-2xl text-zinc-600">{t("oportunidades.intro")}</p>
 
         <div className="mt-6">
           <ListadoDeOportunidades

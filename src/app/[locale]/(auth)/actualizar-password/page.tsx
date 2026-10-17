@@ -3,10 +3,12 @@ import { createClient } from "@/lib/supabase/server";
 import { ActualizarPasswordForm } from "./ActualizarPasswordForm";
 
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "Nueva contraseña",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const tMetadatos = await getTranslations("auth.titulos");
+  return { title: tMetadatos("nuevaContrasena") };
+}
 
 export default async function ActualizarPasswordPage() {
   const supabase = await createClient();
@@ -15,20 +17,20 @@ export default async function ActualizarPasswordPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
+    const t = await getTranslations("auth.actualizarPassword");
     return (
       <div className="space-y-4 text-center">
         <h1 className="text-2xl font-semibold text-zinc-900">
-          Enlace no válido
+          {t("enlaceNoValido")}
         </h1>
         <p className="text-sm text-zinc-500">
-          El enlace ha caducado o ya se ha utilizado. Solicita uno nuevo para
-          restablecer tu contraseña.
+          {t("enlaceCaducado")}
         </p>
         <Link
           href="/recuperar-password"
           className="inline-block text-sm font-medium text-teal-700 hover:underline"
         >
-          Solicitar un nuevo enlace
+          {t("solicitarNuevo")}
         </Link>
       </div>
     );

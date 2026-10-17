@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { AvisoRevisionJuridica } from "./AvisoRevisionJuridica";
@@ -21,6 +21,14 @@ export function LegalPageShell({
   children: React.ReactNode;
 }) {
   const t = useTranslations("common.componentes");
+  const tLegal = useTranslations("common.legal");
+  const locale = useLocale();
+  // Los textos legales están solo en español hasta que los revise un
+  // abogado (traducirlos sin esa revisión sería publicar un compromiso
+  // legal que nadie ha leído). En portugués y en inglés se dice arriba,
+  // en su idioma, y el texto se marca como español para los lectores
+  // de pantalla.
+  const enOtroIdioma = locale !== "es";
   return (
     <>
       <Header />
@@ -28,6 +36,14 @@ export function LegalPageShell({
       <main id="contenido" className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
         <Link href="/" className="text-sm font-medium text-teal-700 hover:underline">{t("volverAApoyaclub")}</Link>
 
+        {enOtroIdioma && (
+          <div className="mt-4 rounded-lg border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-900">
+            <p className="font-semibold">{tLegal("soloEnEspanolTitulo")}</p>
+            <p className="mt-1">{tLegal("soloEnEspanol")}</p>
+          </div>
+        )}
+
+        <div lang={enOtroIdioma ? "es" : undefined}>
         <h1 className="mt-4 text-2xl font-semibold text-zinc-900">{titulo}</h1>
         <p className="mt-1 text-sm text-zinc-500">Última actualización: {actualizado}</p>
 
@@ -35,6 +51,7 @@ export function LegalPageShell({
 
         <div className="mt-8 space-y-6 text-sm leading-relaxed text-zinc-700 [&_h2]:mt-8 [&_h2]:text-base [&_h2]:font-semibold [&_h2]:text-zinc-900 [&_p]:mt-2 [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5 [&_a]:font-medium [&_a]:text-accion-tinta [&_a]:underline [&_a]:underline-offset-2">
           {children}
+        </div>
         </div>
       </main>
     </>

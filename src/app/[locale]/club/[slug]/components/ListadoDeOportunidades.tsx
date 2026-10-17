@@ -2,12 +2,11 @@ import Image from "next/image";
 import { fotoDePortada } from "@/lib/fotos-de-oportunidad";
 import { Link } from "@/i18n/navigation";
 import { BarraDePlazas } from "@/components/BarraDePlazas";
-import {
-  esPorPlazas,
-  ETIQUETA_CATEGORIA_NECESIDAD,
-  ETIQUETA_TIPO_OPORTUNIDAD,
-  formatoValorOportunidad,
-} from "@/lib/opportunities";
+import { useLocale, useTranslations } from "next-intl";
+import { esPorPlazas } from "@/lib/opportunities";
+import { etiquetador } from "@/lib/etiquetas-traducidas";
+import { formatoDeValor } from "@/lib/format";
+import type { AppLocale } from "@/i18n/routing";
 import { beneficioEnTexto } from "@/lib/ficha-oportunidad";
 import type { Opportunity } from "@/lib/types";
 
@@ -28,19 +27,21 @@ export function ListadoDeOportunidades({
   slug: string;
   esNecesidad: boolean;
 }) {
+  const t = useTranslations("club.listado");
+  const E = etiquetador(useTranslations("common.etiquetas"));
+  const precio = formatoDeValor(useLocale() as AppLocale);
+
   if (oportunidades.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-zinc-300 bg-white p-8 text-center">
         <p className="font-medium text-zinc-900">
-          {esNecesidad
-            ? "Este club no ha publicado nada que necesite."
-            : "Este club todavía no ha publicado oportunidades."}
+          {esNecesidad ? t("sinNecesidades") : t("sinOportunidades")}
         </p>
         <Link
           href={`/club/${slug}`}
           className="mt-4 inline-block text-sm font-medium text-accion-tinta hover:underline"
         >
-          Volver a su ficha
+          {t("volverASuFicha")}
         </Link>
       </div>
     );
@@ -61,9 +62,9 @@ export function ListadoDeOportunidades({
             <p className="text-xs font-semibold uppercase tracking-wide text-accion-tinta">
               {esNecesidad
                 ? oportunidad.categoriaNecesidad
-                  ? ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]
-                  : "Lo necesitamos"
-                : ETIQUETA_TIPO_OPORTUNIDAD[oportunidad.opportunityType]}
+                  ? E.categoriaNecesidad(oportunidad.categoriaNecesidad)
+                  : t("loNecesitamos")
+                : E.tipoOportunidad(oportunidad.opportunityType)}
             </p>
 
             {/* La miniatura, cuando la hay (migración 0052). Sin marco
@@ -111,13 +112,13 @@ export function ListadoDeOportunidades({
             <div className="mt-auto flex items-center justify-between gap-3 pt-2">
               {!esNecesidad && oportunidad.value > 0 ? (
                 <span className="font-semibold text-zinc-900">
-                  {formatoValorOportunidad.format(oportunidad.value)}
+                  {precio.format(oportunidad.value)}
                 </span>
               ) : (
                 <span />
               )}
               <span className="text-sm font-medium text-accion-tinta">
-                Ver ficha →
+                {t("verFicha")}
               </span>
             </div>
           </Link>

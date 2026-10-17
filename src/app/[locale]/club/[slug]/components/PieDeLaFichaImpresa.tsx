@@ -1,4 +1,5 @@
 import QRCode from "qrcode";
+import { getTranslations } from "next-intl/server";
 
 /**
  * Lo que solo sale en papel, al pie de la ficha impresa.
@@ -28,6 +29,7 @@ export async function PieDeLaFichaImpresa({
     errorCorrectionLevel: "M",
   });
   const direccionLegible = url.replace(/^https?:\/\//, "");
+  const t = await getTranslations("club.ficha.pieImpreso");
 
   return (
     <div className="mt-6 hidden break-inside-avoid items-center gap-5 border-t border-zinc-300 pt-5 print:flex">
@@ -38,11 +40,10 @@ export async function PieDeLaFichaImpresa({
       />
       <div className="min-w-0 text-sm text-zinc-700">
         <p className="font-semibold text-zinc-900">
-          ¿Te interesa? Escanea el código para ver la oportunidad y
-          escribir a {nombreClub}.
+          {t("teInteresa", { club: nombreClub })}
         </p>
         <p className="mt-1 break-all text-zinc-600">{direccionLegible}</p>
-        <p className="mt-2 text-xs text-zinc-500">Publicado en ApoyaClub</p>
+        <p className="mt-2 text-xs text-zinc-500">{t("publicado")}</p>
       </div>
     </div>
   );

@@ -56,13 +56,19 @@ describe("los mandos del vídeo", () => {
   });
 
   it("están los tres mandos que se pidieron", () => {
-    for (const nombre of [
-      "Pausar el vídeo",
-      "Reanudar el vídeo",
-      "Retroceder 10 segundos",
-      "Avanzar 10 segundos",
+    // Los nombres viven en `home.video`, en cada idioma; el código los
+    // pide por su clave.
+    const textos = JSON.parse(
+      readFileSync(join(RAIZ, "messages", "es", "home.json"), "utf8"),
+    ) as { video: Record<string, string> };
+    for (const [clave, nombre] of [
+      ["pausar", "Pausar el vídeo"],
+      ["reanudar", "Reanudar el vídeo"],
+      ["retroceder", "Retroceder 10 segundos"],
+      ["avanzar", "Avanzar 10 segundos"],
     ]) {
-      expect(CODIGO, `falta el mando "${nombre}"`).toContain(nombre);
+      expect(textos.video[clave], `falta el mando "${nombre}"`).toBe(nombre);
+      expect(CODIGO, `el reproductor no usa "${clave}"`).toContain(`t("${clave}")`);
     }
     expect(CODIGO).toContain("saltar(-10)");
     expect(CODIGO).toContain("saltar(10)");
@@ -90,7 +96,7 @@ describe("los mandos del vídeo", () => {
     // Un div pintado no se arrastra, no se mueve con las flechas del
     // teclado y un lector de pantalla no sabe decir por dónde va.
     expect(CODIGO).toContain('type="range"');
-    expect(CODIGO).toContain('aria-label="Ir a un momento del vídeo"');
+    expect(CODIGO).toContain('aria-label={t("irAUnMomento")}');
   });
 
   it("los dibujos están dibujados, no escritos", () => {

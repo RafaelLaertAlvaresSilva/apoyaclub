@@ -1,12 +1,14 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Caveat, Fraunces, Public_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
 import { CookieBanner } from "@/components/CookieBanner";
 import { FavoritosProvider } from "@/components/Favoritos";
 import { Footer } from "@/components/Footer";
 import { routing } from "@/i18n/routing";
+import { LOCALE_OPEN_GRAPH } from "@/config/locales";
 import { SITE_URL } from "@/lib/site";
 import "../globals.css";
 import { GuionDelTema } from "./panel/components/GuionDelTema";
@@ -51,7 +53,13 @@ const letraAMano = Caveat({
   preload: false,
 });
 
-export const metadata: Metadata = {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale: pedido } = await params;
+  const locale = hasLocale(routing.locales, pedido) ? pedido : routing.defaultLocale;
+  const t = await getTranslations({ locale, namespace: "common.meta" });
+
+  return {
+
   // Necesario para que las URLs de Open Graph (la tarjeta que se ve al
   // compartir la página pública de un club por WhatsApp, Fase 5) se
   // resuelvan como absolutas.
@@ -61,22 +69,20 @@ export const metadata: Metadata = {
   // acceso y registro no ponían ninguno: la pestaña decía "ApoyaClub" a
   // secas, y /registro-club está en el mapa del sitio que lee Google.
   title: {
-    default:
-      "ApoyaClub — Conecta tu club deportivo con empresas patrocinadoras",
+    default: t("tituloPorDefecto"),
     template: "%s | ApoyaClub",
   },
-  description: "Conecta tu club deportivo con empresas patrocinadoras.",
+  description: t("descripcion"),
   // Lo que lee WhatsApp, Telegram o LinkedIn al pegar un enlace. La
   // imagen la pone `opengraph-image.tsx` de esta misma carpeta; las
   // fichas de club tienen la suya y esta les deja el resto puesto.
   openGraph: {
     type: "website",
     siteName: "ApoyaClub",
-    locale: "es_ES",
+    locale: LOCALE_OPEN_GRAPH[locale],
     url: SITE_URL,
-    title: "ApoyaClub — Conecta tu club deportivo con empresas patrocinadoras",
-    description:
-      "Tu club publica lo que puede ofrecer y las empresas de tu zona lo encuentran. Para las empresas es gratis y sin cuenta.",
+    title: t("tituloPorDefecto"),
+    description: t("ogDescripcion"),
   },
   appleWebApp: {
     // Fase 15: para que "Añadir a pantalla de inicio" en iOS use el
@@ -85,7 +91,8 @@ export const metadata: Metadata = {
     title: "ApoyaClub",
     statusBarStyle: "default",
   },
-};
+  };
+}
 
 // Color de la barra de direcciones en Android y de la barra de estado en
 // iOS cuando la web está en pantalla completa (Fase 15, mejoras para
@@ -94,7 +101,7 @@ export const viewport: Viewport = {
   themeColor: "#14304f",
 };
 
-// Fase 14: una versión estática por idioma soportado (solo "es" por ahora).
+// Fase 14: una versión estática por idioma soportado (es, pt, en).
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -111,6 +118,8 @@ export default async function RootLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+
+  const tMeta = await getTranslations({ locale, namespace: "common.meta" });
 
   return (
     <html
@@ -133,7 +142,7 @@ export default async function RootLayout({
           href="#contenido"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-navy focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-sobre-color"
         >
-          Saltar al contenido
+          {tMeta("saltarAlContenido")}
         </a>
 
         <NextIntlClientProvider>

@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
+import { useTranslations } from "next-intl";
 import { CampoTrampa } from "@/components/CampoTrampa";
 import { crearSolicitudContacto, type EstadoSolicitud } from "../contact-actions";
 
@@ -43,6 +44,7 @@ export function SolicitarContactoBoton({
   variante = "primaria",
   children,
 }: Props) {
+  const t = useTranslations("club.escribir");
   const [abierto, setAbierto] = useState(false);
   const [estado, formAction] = useActionState<EstadoSolicitud, FormData>(
     crearSolicitudContacto,
@@ -85,21 +87,21 @@ export function SolicitarContactoBoton({
           <div
             role="dialog"
             aria-modal="true"
-            aria-label={`Escribir a ${clubName}`}
+            aria-label={t("titulo", { club: clubName })}
             className="max-h-full w-full max-w-lg overflow-y-auto rounded-xl bg-white p-6 shadow-xl"
           >
             {enviado ? (
               <div className="text-center">
-                <p className="text-lg font-semibold text-zinc-900">Mensaje enviado</p>
+                <p className="text-lg font-semibold text-zinc-900">{t("enviadoTitulo")}</p>
                 <p className="mt-2 text-sm text-zinc-600">
-                  {clubName} lo recibe ahora mismo y te contestará al correo que has puesto.
+                  {t("enviadoTexto", { club: clubName })}
                 </p>
                 <button
                   type="button"
                   onClick={() => setAbierto(false)}
                   className="mt-5 rounded-lg bg-accion px-5 py-2.5 text-sm font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte"
                 >
-                  Cerrar
+                  {t("cerrar")}
                 </button>
               </div>
             ) : (
@@ -109,50 +111,48 @@ export function SolicitarContactoBoton({
                 <CampoTrampa />
 
                 <div>
-                  <h2 className="text-lg font-semibold text-zinc-900">Escribir a {clubName}</h2>
+                  <h2 className="text-lg font-semibold text-zinc-900">{t("titulo", { club: clubName })}</h2>
                   <p className="mt-1 text-sm text-zinc-600">
-                    {opportunityTitle
-                      ? `Sobre "${opportunityTitle}".`
-                      : "Cuéntales quién eres y qué te interesa."}{" "}
-                    No hace falta registrarse.
+                    {opportunityTitle ? t("sobre", { titulo: opportunityTitle }) : t("cuentales")}{" "}
+                    {t("sinRegistro")}
                   </p>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
                   <label className="block">
-                    <span className="mb-1 block text-sm font-medium text-zinc-700">Tu nombre</span>
+                    <span className="mb-1 block text-sm font-medium text-zinc-700">{t("tuNombre")}</span>
                     <input name="nombre" required minLength={2} maxLength={120} className={clasesCampo} />
                   </label>
 
                   <label className="block">
                     <span className="mb-1 block text-sm font-medium text-zinc-700">
-                      Empresa <span className="font-normal text-zinc-400">(opcional)</span>
+                      {t("empresa")} <span className="font-normal text-zinc-400">{t("opcional")}</span>
                     </span>
                     <input name="empresa" maxLength={120} className={clasesCampo} />
                   </label>
 
                   <label className="block">
-                    <span className="mb-1 block text-sm font-medium text-zinc-700">Tu correo</span>
+                    <span className="mb-1 block text-sm font-medium text-zinc-700">{t("tuCorreo")}</span>
                     <input name="correo" type="email" required maxLength={200} className={clasesCampo} />
                   </label>
 
                   <label className="block">
                     <span className="mb-1 block text-sm font-medium text-zinc-700">
-                      Teléfono <span className="font-normal text-zinc-400">(opcional)</span>
+                      {t("telefono")} <span className="font-normal text-zinc-400">{t("opcional")}</span>
                     </span>
                     <input name="telefono" type="tel" maxLength={40} className={clasesCampo} />
                   </label>
                 </div>
 
                 <label className="block">
-                  <span className="mb-1 block text-sm font-medium text-zinc-700">Mensaje</span>
+                  <span className="mb-1 block text-sm font-medium text-zinc-700">{t("mensaje")}</span>
                   <textarea
                     name="message"
                     required
                     minLength={10}
                     maxLength={2000}
                     rows={5}
-                    placeholder="Hola, tenemos una tienda en el barrio y nos interesa lo del patrocinio de las camisetas. ¿Podemos hablar?"
+                    placeholder={t("ejemplo")}
                     className={clasesCampo}
                   />
                 </label>
@@ -164,8 +164,7 @@ export function SolicitarContactoBoton({
                 )}
 
                 <p className="text-xs text-zinc-500">
-                  Tu nombre y tu correo se los mandamos al club para que pueda contestarte. Nada
-                  más.
+                  {t("privacidad")}
                 </p>
 
                 <div className="flex flex-wrap justify-end gap-2">
@@ -174,7 +173,7 @@ export function SolicitarContactoBoton({
                     onClick={() => setAbierto(false)}
                     className="rounded-lg px-4 py-2.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100"
                   >
-                    Cancelar
+                    {t("cancelar")}
                   </button>
                   <BotonDeEnvio />
                 </div>
@@ -188,6 +187,7 @@ export function SolicitarContactoBoton({
 }
 
 function BotonDeEnvio() {
+  const t = useTranslations("club.escribir");
   const { pending } = useFormStatus();
 
   return (
@@ -196,7 +196,7 @@ function BotonDeEnvio() {
       disabled={pending}
       className="rounded-lg bg-accion px-5 py-2.5 text-sm font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte disabled:opacity-60"
     >
-      {pending ? "Enviando…" : "Enviar mensaje"}
+      {pending ? t("enviando") : t("enviar")}
     </button>
   );
 }

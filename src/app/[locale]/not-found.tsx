@@ -1,11 +1,13 @@
 import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 
-export const metadata: Metadata = {
-  title: "Página no encontrada | ApoyaClub",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const tMetadatos = await getTranslations("common.meta");
+  return { title: tMetadatos("paginaNoEncontrada") };
+}
 
 /**
  * 404 general (Fase 15). Antes solo existía el 404 de la ficha de club,

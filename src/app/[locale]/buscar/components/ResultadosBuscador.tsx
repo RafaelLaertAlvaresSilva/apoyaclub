@@ -3,22 +3,14 @@
 import Image from "next/image";
 import { BotonFavorito } from "@/components/Favoritos";
 import { Link } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 import { filtrosAQueryString, OPCIONES_ORDEN } from "@/lib/buscar-params";
-import {
-  ETIQUETA_FORMA_COLABORACION,
-  ETIQUETA_OBJETIVO,
-  ETIQUETA_PERIODO,
-  CLASES_NIVEL_PATROCINIO,
-  ETIQUETA_CATEGORIA_NECESIDAD,
-  ETIQUETA_NIVEL_PATROCINIO,
-  ETIQUETA_TIPO_OPORTUNIDAD,
-  esPorPlazas,
-  formatoValorOportunidad,
-  plazasLibres,
-} from "@/lib/opportunities";
+import { CLASES_NIVEL_PATROCINIO, esPorPlazas, plazasLibres } from "@/lib/opportunities";
+import { etiquetador } from "@/lib/etiquetas-traducidas";
+import { formatoDeValor } from "@/lib/format";
+import type { AppLocale } from "@/i18n/routing";
 import { BarraDePlazas } from "@/components/BarraDePlazas";
 import {
   agruparPorClub,
@@ -41,6 +33,8 @@ export function ResultadosBuscador({
   vistaInicial: VistaBusqueda;
   paginaInicial: PaginaBusqueda<ResultadoOportunidad>;
 }) {
+  const locale = useLocale();
+  const E = etiquetador(useTranslations("common.etiquetas"));
   const t = useTranslations("buscar.resultados");
   const router = useRouter();
   const [vista, setVista] = useState<VistaBusqueda>(vistaInicial);
@@ -56,7 +50,7 @@ export function ResultadosBuscador({
     // Cambia la URL para que se pueda compartir tal cual, pero sin pasar
     // por el servidor: los resultados ya están cargados en el cliente,
     // así que no hace falta otra consulta.
-    const url = `/buscar?${filtrosAQueryString(filtros, nueva)}`;
+    const url = `/${locale}/buscar?${filtrosAQueryString(filtros, nueva)}`;
     window.history.replaceState(null, "", url);
   }
 
@@ -119,7 +113,7 @@ export function ResultadosBuscador({
           >
             {OPCIONES_ORDEN.map((opcion) => (
               <option key={opcion.id} value={opcion.id}>
-                {opcion.etiqueta}
+                {E.orden(opcion.id)}
               </option>
             ))}
           </select>
@@ -235,12 +229,14 @@ function TarjetaOportunidad({
 }: {
   oportunidad: ResultadoOportunidad;
 }) {
+  const E = etiquetador(useTranslations("common.etiquetas"));
+  const precio = formatoDeValor(useLocale() as AppLocale);
   const tTarjeta = useTranslations("buscar.resultados");
   const etiquetas = [
-    ETIQUETA_TIPO_OPORTUNIDAD[oportunidad.opportunityType],
-    oportunidad.period ? ETIQUETA_PERIODO[oportunidad.period] : null,
+    E.tipoOportunidad(oportunidad.opportunityType),
+    oportunidad.period ? E.periodo(oportunidad.period) : null,
     oportunidad.collaborationType
-      ? ETIQUETA_FORMA_COLABORACION[oportunidad.collaborationType]
+      ? E.formaColaboracion(oportunidad.collaborationType)
       : null,
   ].filter((etiqueta): etiqueta is string => !!etiqueta);
 
@@ -292,7 +288,7 @@ function TarjetaOportunidad({
             <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
               Lo necesitan
               {oportunidad.categoriaNecesidad
-                ? ` · ${ETIQUETA_CATEGORIA_NECESIDAD[oportunidad.categoriaNecesidad]}`
+                ? ` · ${E.categoriaNecesidad(oportunidad.categoriaNecesidad)}`
                 : ""}
             </span>
           )}
@@ -302,7 +298,7 @@ function TarjetaOportunidad({
                 CLASES_NIVEL_PATROCINIO[oportunidad.sponsorLevel]
               }`}
             >
-              {ETIQUETA_NIVEL_PATROCINIO[oportunidad.sponsorLevel]}
+              {E.nivelPatrocinio(oportunidad.sponsorLevel)}
             </span>
           )}
         </div>
@@ -337,7 +333,7 @@ function TarjetaOportunidad({
             key={objetivo}
             className="rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-medium text-teal-700"
           >
-            {ETIQUETA_OBJETIVO[objetivo]}
+            {E.objetivo(objetivo)}
           </span>
         ))}
       </div>
@@ -360,7 +356,7 @@ function TarjetaOportunidad({
 
       <div className="mt-auto flex items-center justify-between pt-1">
         <p className="text-lg font-bold text-teal-700">
-          {formatoValorOportunidad.format(oportunidad.value)}
+          {precio.format(oportunidad.value)}
           {esPorPlazas(oportunidad) && (
             <span className="ml-1 text-xs font-medium text-zinc-500">
               {tTarjeta("porEmpresa")}
@@ -377,7 +373,7 @@ function TarjetaOportunidad({
             href={`/club/${oportunidad.clubSlug}/oportunidad/${oportunidad.opportunityId}`}
             className="rounded-lg border border-teal-700 px-3 py-1.5 text-xs font-medium text-teal-800 transition-colors hover:bg-teal-50"
           >
-            Ver ficha
+            {tTarjeta("verFicha")}
           </Link>
           <Link
             href={`/club/${oportunidad.clubSlug}`}
@@ -392,11 +388,13 @@ function TarjetaOportunidad({
 }
 
 function TarjetaClub({ club }: { club: ResultadoClub }) {
+  const E = etiquetador(useTranslations("common.etiquetas"));
+  const precio = formatoDeValor(useLocale() as AppLocale);
   const tClub = useTranslations("buscar.resultados");
   const rango =
     club.minValue === club.maxValue
-      ? formatoValorOportunidad.format(club.minValue)
-      : `${formatoValorOportunidad.format(club.minValue)} – ${formatoValorOportunidad.format(club.maxValue)}`;
+      ? precio.format(club.minValue)
+      : `${precio.format(club.minValue)} – ${precio.format(club.maxValue)}`;
 
   return (
     <li className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4">
@@ -419,7 +417,7 @@ function TarjetaClub({ club }: { club: ResultadoClub }) {
             key={tipo}
             className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600"
           >
-            {ETIQUETA_TIPO_OPORTUNIDAD[tipo]}
+            {E.tipoOportunidad(tipo)}
           </span>
         ))}
       </div>
@@ -435,7 +433,7 @@ function TarjetaClub({ club }: { club: ResultadoClub }) {
         href={`/club/${club.clubSlug}`}
         className="mt-auto rounded-lg bg-accion px-3 py-2 text-center text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte"
       >
-        Ver página del club
+        {tClub("verPaginaDelClub")}
       </Link>
     </li>
   );

@@ -92,12 +92,11 @@ export function LoginForm() {
               Antes solo se llegaba a esa pantalla justo después de
               registrarse: quien cerraba la pestaña se quedaba fuera. */}
           <Link href="/revisa-tu-correo" className="font-medium text-accion-tinta hover:underline">
-            No me llegó el correo de confirmación
+            {t("noMeLlego")}
           </Link>
         </div>
         <p className="text-xs text-zinc-400">
-          ¿Eres una empresa? No necesitas cuenta: entra en la ficha de cualquier club y escríbele
-          desde ahí.
+          {t("eresEmpresa")}
         </p>
       </div>
     </div>

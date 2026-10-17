@@ -1,4 +1,8 @@
+import { useTranslations } from "next-intl";
 import { porcentajeDePlazas } from "@/lib/opportunities";
+
+/** Las palabras que tienen traducción. Cualquier otra se enseña tal cual. */
+const UNIDADES_CONOCIDAS = ["plazas", "colaboradores", "patrocinadores", "empresas"];
 
 /**
  * Cuántas plazas de una oportunidad están cubiertas, con su barra.
@@ -25,8 +29,12 @@ export function BarraDePlazas({
   /** "oscuro" para fondos de color, donde el gris no se lee. */
   tono?: "claro" | "oscuro";
 }) {
+  const t = useTranslations("common.plazas");
   const total = slotsTotal ?? 0;
   if (total < 2) return null;
+
+  const unidad = UNIDADES_CONOCIDAS.includes(etiqueta) ? t(`unidades.${etiqueta}`) : etiqueta;
+  const progreso = t("progreso", { cubiertas: Math.min(Math.max(slotsTaken, 0), total), total, unidad });
 
   const cubiertas = Math.min(Math.max(slotsTaken, 0), total);
   const porcentaje = porcentajeDePlazas({ slotsTotal, slotsTaken });
@@ -38,7 +46,7 @@ export function BarraDePlazas({
     <div>
       <div className="mb-1.5 flex items-baseline justify-between gap-2">
         <span className={`text-xs font-medium ${oscuro ? "text-sobre-color/70" : "text-zinc-600"}`}>
-          {cubiertas} de {total} {etiqueta}
+          {progreso}
         </span>
         <span
           className={`text-xs font-semibold ${
@@ -51,7 +59,7 @@ export function BarraDePlazas({
                 : "text-zinc-500"
           }`}
         >
-          {completa ? "Completa" : `${porcentaje}%`}
+          {completa ? t("completa") : `${porcentaje}%`}
         </span>
       </div>
       <div
@@ -60,7 +68,7 @@ export function BarraDePlazas({
         aria-valuenow={cubiertas}
         aria-valuemin={0}
         aria-valuemax={total}
-        aria-label={`${cubiertas} de ${total} ${etiqueta}`}
+        aria-label={progreso}
       >
         <div
           className={`h-full rounded-full transition-[width] ${

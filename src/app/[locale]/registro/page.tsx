@@ -27,11 +27,10 @@ import { FondoDeAcceso } from "@/components/FondoDeAcceso";
  * y no pasan por aquí.
  */
 
-export const metadata: Metadata = {
-  title: "Crea tu cuenta en ApoyaClub",
-  description:
-    "Elige si eres un club que busca patrocinadores o una empresa que quiere apoyar al deporte de su zona.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const tMetadatos = await getTranslations("auth.elegirRegistro.meta");
+  return { title: tMetadatos("titulo"), description: tMetadatos("descripcion") };
+}
 
 const OPCIONES = [
   {
