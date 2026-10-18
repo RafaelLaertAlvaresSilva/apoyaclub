@@ -58,19 +58,22 @@ export function CatalogoDeIdeas({
         </>
       )}
 
-      <div className={`flex flex-wrap gap-2 ${enPaso ? "" : "mt-3"}`}>
+      {/* En rejilla y todas del mismo ancho: en fila suelta, cada
+          pastilla medía lo que su nombre y la lista se leía como un
+          montón. Así se recorre por columnas de un vistazo. */}
+      <div className={`grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 ${enPaso ? "" : "mt-3"}`}>
         {CATEGORIAS_IDEA.map((entrada) => (
           <button
             key={entrada.id}
             type="button"
             onClick={() => setCategoria(categoria === entrada.id ? null : entrada.id)}
-            /* `inline-flex` para que el símbolo y el nombre vayan en
+            /* `flex` con `items-center` para que el símbolo y el nombre vayan en
                la misma línea y centrados. Con el `block` de antes, el
                símbolo se colocaba sobre la línea de base del texto y
                quedaba un par de píxeles más abajo. */
-            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+            className={`flex w-full min-w-0 items-center gap-1.5 rounded-lg px-2.5 py-2.5 text-left text-xs font-medium break-words transition-colors sm:gap-2 sm:px-3 sm:text-sm ${
               categoria === entrada.id
-                ? "bg-accion text-sobre-color"
+                ? "border border-transparent bg-accion text-sobre-color"
                 : "border border-zinc-300 bg-white text-zinc-700 hover:border-teal-500 hover:text-teal-700"
             }`}
           >
@@ -78,7 +81,7 @@ export function CatalogoDeIdeas({
                 pública: sale del mismo sitio, así que no pueden
                 separarse. Hereda el color de la pastilla, que cambia a
                 blanco al seleccionarla. */}
-            <IconoDeCategoria categoria={entrada.id} className="h-3.5 w-3.5 flex-none" />
+            <IconoDeCategoria categoria={entrada.id} className="h-4 w-4 flex-none" />
             {tCategorias(`${entrada.id}.etiqueta`)}
           </button>
         ))}
