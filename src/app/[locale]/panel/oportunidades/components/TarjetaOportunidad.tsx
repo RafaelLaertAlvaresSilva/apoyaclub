@@ -67,7 +67,10 @@ export function TarjetaOportunidad({
   const portada = fotoDePortada(oportunidad.fotos);
 
   return (
-    <li className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-5">
+    // El color dice qué es de un vistazo: verde lo que el club ofrece,
+    // naranja lo que necesita (un servicio o un producto a cambio de
+    // visibilidad).
+    <li className={`tonal ${oportunidad.esNecesidad ? "tono-naranja" : "tono-verde"} rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-(--tono-fondo) shadow-sm p-5`}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-1 items-start gap-4">
           {/* LA MINIATURA, para que el club vea de un vistazo qué foto
