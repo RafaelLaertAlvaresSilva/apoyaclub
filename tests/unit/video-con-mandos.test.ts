@@ -160,6 +160,7 @@ describe("los tres vídeos de la web", () => {
     // Para clubes también elige el vídeo según el idioma.
     expect(CLUBES).toContain('"/para-clubes-video.mp4"');
     expect(CLUBES).toContain('"/para-clubes-video-en.mp4"');
+    expect(CLUBES).toContain('"/para-clubes-video-pt.mp4"');
     expect(CLUBES).toContain("src={VIDEO_PARA_CLUBES[locale]");
     // Para empresas también elige el vídeo según el idioma.
     expect(EMPRESAS).toContain('"/para-empresas-video.mp4"');

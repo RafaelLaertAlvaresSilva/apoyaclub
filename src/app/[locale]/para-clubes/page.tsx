@@ -39,12 +39,12 @@ export async function generateMetadata(): Promise<Metadata> {
 const SECCIONES_IDS = ["como-funciona", "clubes", "oportunidades", "tu-pagina", "herramientas", "precio", "faq"] as const;
 
 /**
- * El vídeo para clubes, con la voz en el idioma de la página. El idioma
- * que aún no tiene el suyo sale con el español.
+ * El vídeo para clubes, con la voz en el idioma de la página.
  */
 const VIDEO_PARA_CLUBES: Record<string, string> = {
   es: "/para-clubes-video.mp4",
   en: "/para-clubes-video-en.mp4",
+  pt: "/para-clubes-video-pt.mp4",
 };
 
 export default async function ParaClubesPage() {
