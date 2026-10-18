@@ -158,7 +158,10 @@ describe("los tres vídeos de la web", () => {
     expect(PORTADA).toContain('"/portada-video-pt.mp4"');
     expect(PORTADA).toContain("src={VIDEO_DE_LA_PORTADA[locale]");
     expect(CLUBES).toContain('src="/para-clubes-video.mp4"');
-    expect(EMPRESAS).toContain('src="/para-empresas-video.mp4"');
+    // Para empresas también elige el vídeo según el idioma.
+    expect(EMPRESAS).toContain('"/para-empresas-video.mp4"');
+    expect(EMPRESAS).toContain('"/para-empresas-video-en.mp4"');
+    expect(EMPRESAS).toContain("src={VIDEO_PARA_EMPRESAS[locale]");
   });
 
   it("cada vídeo lleva su propia descripción para quien no lo ve", () => {

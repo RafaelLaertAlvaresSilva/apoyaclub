@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { VideoDeLaPortada } from "../components/VideoDeLaPortada";
@@ -38,7 +38,17 @@ export async function generateMetadata(): Promise<Metadata> {
 /* Los nombres de cada apartado están en `home.paraEmpresas.menu`, por idioma. */
 const SECCIONES_IDS = ["beneficios", "empresas", "como", "colaborar", "cuenta", "faq"] as const;
 
+/**
+ * El vídeo para empresas y colaboradores, con la voz en el idioma de la
+ * página. El idioma que aún no tiene el suyo sale con el español.
+ */
+const VIDEO_PARA_EMPRESAS: Record<string, string> = {
+  es: "/para-empresas-video.mp4",
+  en: "/para-empresas-video-en.mp4",
+};
+
 export default async function ParaEmpresasPage() {
+  const locale = await getLocale();
   const tMenu = await getTranslations("home.paraEmpresas.menu");
   const t = await getTranslations("home.paraEmpresas");
   const tVideo = await getTranslations("home.video");
@@ -102,7 +112,7 @@ export default async function ParaEmpresasPage() {
             </div>
 
             <VideoDeLaPortada
-              src="/para-empresas-video.mp4"
+              src={VIDEO_PARA_EMPRESAS[locale] ?? VIDEO_PARA_EMPRESAS.es}
               poster="/para-empresas-video-poster.webp"
               etiqueta={tVideo("etiquetaParaEmpresas")}
             />
