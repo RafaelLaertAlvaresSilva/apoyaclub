@@ -1,6 +1,7 @@
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { logosDelIdioma } from "@/lib/logos";
 import { createClient } from "@/lib/supabase/server";
 import { RUTA_POR_ROL, type Role } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
@@ -26,7 +27,9 @@ import { SelectorDeIdioma } from "@/components/SelectorDeIdioma";
  * no necesita que le expliquen qué es ApoyaClub: ahí salen las
  * herramientas, el buscador y el directorio de empresas.
  *
- * El logo (`public/logo-full-claro.webp`) es el del usuario, con el
+ * El logo cambia con el idioma, porque el eslogan va dentro de la
+ * imagen (`lib/logos.ts`). El de español (`public/logo-full-claro.webp`)
+ * es el del usuario, con el
  * fondo blanco quitado
  * recortado y reescalado en alta resolución, con el eslogan
  * "CONECTA · IMPULSA · CRECE" incluido. `next/image` sirve el tamaño
@@ -57,6 +60,7 @@ const ENLACES_CON_SESION = [
 
 export async function Header() {
   const t = await getTranslations("common.cabecera");
+  const locale = await getLocale();
   const supabase = await createClient();
   const {
     data: { user },
@@ -93,7 +97,7 @@ export async function Header() {
         <div className="flex items-center justify-between gap-3">
           <Link href="/" className="min-w-0 shrink">
             <Image
-              src="/logo-full-claro.webp"
+              src={logosDelIdioma(locale).claro}
               alt="ApoyaClub"
               width={950}
               height={210}

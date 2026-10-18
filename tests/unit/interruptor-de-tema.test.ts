@@ -1,3 +1,4 @@
+import { logosDelIdioma } from "@/lib/logos";
 import { describe, expect, it } from "vitest";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
@@ -153,6 +154,22 @@ describe("los logos", () => {
       expect(bytes, `${n} se ha ido de tamaño`).toBeLessThan(400_000);
       expect(bytes).toBeGreaterThan(10_000);
     }
+  });
+
+  it("cada idioma tiene sus dos logos, y existen", () => {
+    // El eslogan va dentro de la imagen: en inglés y en portugués es
+    // otro archivo. Si falta uno, la cabecera sale con la imagen rota.
+    for (const idioma of ["es", "pt", "en"]) {
+      const { claro, oscuro } = logosDelIdioma(idioma);
+      for (const ruta of [claro, oscuro]) {
+        const nombre = ruta.replace(/^\//, "");
+        expect(ficheros, `falta ${nombre} (${idioma})`).toContain(nombre);
+        const bytes = statSync(join(RAIZ, "public", nombre)).size;
+        expect(bytes, `${nombre} se ha ido de tamaño`).toBeLessThan(400_000);
+      }
+    }
+    expect(logosDelIdioma("en").claro).not.toBe(logosDelIdioma("es").claro);
+    expect(logosDelIdioma("fr")).toEqual(logosDelIdioma("es"));
   });
 
   it("el oscuro solo se enseña dentro del panel oscuro", () => {

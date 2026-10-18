@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { logosDelIdioma } from "@/lib/logos";
 import { Link } from "@/i18n/navigation";
 
 /**
@@ -26,6 +27,8 @@ import { Link } from "@/i18n/navigation";
  */
 export function BarraLogo({ extra }: { extra?: ReactNode }) {
   const t = useTranslations("common.cabecera");
+  // Cada idioma con su eslogan (`lib/logos.ts`).
+  const logos = logosDelIdioma(useLocale());
   return (
     <div className="border-b border-zinc-200 bg-white">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-2.5 sm:px-6">
@@ -54,7 +57,7 @@ export function BarraLogo({ extra }: { extra?: ReactNode }) {
             modo ni el logo cambia de tamaño.
           */}
           <Image
-            src="/logo-full-claro.webp"
+            src={logos.claro}
             alt="ApoyaClub"
             width={950}
             height={210}
@@ -62,7 +65,7 @@ export function BarraLogo({ extra }: { extra?: ReactNode }) {
             className="logo-claro h-10 w-auto sm:h-12"
           />
           <Image
-            src="/logo-full-oscuro.webp"
+            src={logos.oscuro}
             alt="ApoyaClub"
             width={950}
             height={210}
