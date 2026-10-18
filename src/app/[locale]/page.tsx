@@ -59,12 +59,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /**
  * El vídeo de la portada, con la voz en el idioma de la página. Las
- * imágenes son las mismas; lo que cambia es el audio. El idioma que aún
- * no tiene el suyo sale con el español.
+ * imágenes son las mismas; lo que cambia es el audio.
  */
 const VIDEO_DE_LA_PORTADA: Record<string, string> = {
   es: "/portada-video.mp4",
   en: "/portada-video-en.mp4",
+  pt: "/portada-video-pt.mp4",
 };
 
 export default async function Home() {

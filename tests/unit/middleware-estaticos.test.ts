@@ -70,6 +70,7 @@ describe("el middleware y los archivos estáticos", () => {
     expect(archivos).toContain("/portada-video.mp4");
     expect(archivos).toContain("/portada-video-poster.webp");
     expect(archivos).toContain("/portada-video-en.mp4");
+    expect(archivos).toContain("/portada-video-pt.mp4");
 
     for (const archivo of archivos) {
       expect(() => readFileSync(join(process.cwd(), "public", archivo)), `falta ${archivo}`).not.toThrow();

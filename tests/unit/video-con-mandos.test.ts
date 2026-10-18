@@ -155,6 +155,7 @@ describe("los tres vídeos de la web", () => {
     // La portada elige el vídeo según el idioma (la voz cambia).
     expect(PORTADA).toContain('"/portada-video.mp4"');
     expect(PORTADA).toContain('"/portada-video-en.mp4"');
+    expect(PORTADA).toContain('"/portada-video-pt.mp4"');
     expect(PORTADA).toContain("src={VIDEO_DE_LA_PORTADA[locale]");
     expect(CLUBES).toContain('src="/para-clubes-video.mp4"');
     expect(EMPRESAS).toContain('src="/para-empresas-video.mp4"');
