@@ -67,7 +67,7 @@ export function TarjetaOportunidad({
   const portada = fotoDePortada(oportunidad.fotos);
 
   return (
-    <li className="rounded-xl border border-zinc-200 bg-white p-5">
+    <li className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-1 items-start gap-4">
           {/* LA MINIATURA, para que el club vea de un vistazo qué foto

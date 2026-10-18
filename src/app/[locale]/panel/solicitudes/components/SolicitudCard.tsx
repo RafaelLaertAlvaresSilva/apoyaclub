@@ -32,7 +32,7 @@ export function SolicitudCard({
     solicitud.remitenteEmpresa || solicitud.remitenteNombre || t("solicitudAnterior");
 
   return (
-    <li className="rounded-xl border border-zinc-200 bg-white p-5">
+    <li className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <div className="flex flex-wrap items-center gap-2">

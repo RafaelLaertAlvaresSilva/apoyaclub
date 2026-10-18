@@ -43,7 +43,7 @@ export function BarraProgreso({
   if (huecos.length === 0) return null;
 
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-4">
+    <div className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-4">
       <div className="mb-2 flex items-baseline justify-between">
         <p className="text-sm font-medium text-zinc-700">{t("perfilCompletado")}</p>
         <p className="text-sm font-semibold text-teal-700">{porcentaje}%</p>

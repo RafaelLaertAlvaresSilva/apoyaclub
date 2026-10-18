@@ -105,7 +105,7 @@ export function TareasManager({
           empresasConocidas={empresasConocidas}
         />
       ) : (
-        <details className="group rounded-xl border border-zinc-200 bg-white">
+        <details className="group tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm">
           <summary className="flex cursor-pointer list-none items-center gap-2 px-5 py-4 text-sm font-medium text-accion-tinta [&::-webkit-details-marker]:hidden">
             <span aria-hidden="true" className="text-base leading-none">+</span>
             {t("apuntarAlgoNuevo")}
@@ -245,7 +245,7 @@ function FormularioNuevasTareas({
             <legend className="mb-1 text-[15px] font-bold text-titular">{t("queHayQueHacer")}</legend>
 
             {lineas.map((linea, indice) => (
-              <div key={linea.id} className="rounded-xl border border-zinc-300 bg-white p-4">
+              <div key={linea.id} className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-4">
                 <div className="mb-3 flex items-center justify-between gap-2">
                   <span className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
                     {t("cosa", { n: indice + 1 })}

@@ -64,7 +64,7 @@ export function OportunidadesManager({
         userId={userId}
       />
 
-      <div className="rounded-xl border border-zinc-200 bg-white p-4">
+      <div className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-4">
         <div className="flex flex-wrap items-end gap-4">
           <div>
             <label className="mb-1 block text-xs font-medium text-zinc-500">

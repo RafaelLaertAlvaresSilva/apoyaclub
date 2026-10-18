@@ -10,6 +10,7 @@ import {
 } from "@/lib/catalogo-ideas";
 import type { ClubTeam } from "@/lib/types";
 import { crearOportunidad } from "../actions";
+import { Paso } from "@/app/[locale]/panel/components/SeccionCard";
 import { CatalogoDeIdeas } from "./CatalogoDeIdeas";
 import { OportunidadForm } from "./OportunidadForm";
 
@@ -60,7 +61,7 @@ export function NuevaOportunidad({
       <button
         type="button"
         onClick={() => setAbierto(true)}
-        className="rounded-lg bg-accion px-4 py-2.5 text-sm font-medium text-sobre-color transition-colors hover:bg-accion-fuerte"
+        className="rounded-lg bg-accion px-5 py-3 text-base font-semibold text-sobre-color shadow-sm transition-colors hover:bg-accion-fuerte"
       >
         {t("nuevaOportunidad")}
       </button>
@@ -68,9 +69,9 @@ export function NuevaOportunidad({
   }
 
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-6">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-base font-semibold text-zinc-900">
+    <div className="rounded-xl border-2 border-zinc-200 bg-white p-4 sm:p-6">
+      <div className="mb-5 flex items-center justify-between">
+        <h2 className="text-xl font-bold text-titular">
           {t("nuevaOportunidad2")}
         </h2>
         <button
@@ -82,7 +83,14 @@ export function NuevaOportunidad({
         </button>
       </div>
 
-      <CatalogoDeIdeas requisitos={requisitos} onElegir={setIdea} />
+      {/* Paso 1: empezar por una idea. Al elegirla, el formulario de
+          abajo se rellena casi entero y solo queda el precio y la foto.
+          Quien prefiere escribirla él, sigue bajando. */}
+      <div className="mb-5">
+        <Paso numero={1} tono="rosa" titulo={t("pasos.idea")} descripcion={t("pasos.ideaTexto")}>
+          <CatalogoDeIdeas requisitos={requisitos} onElegir={setIdea} enPaso />
+        </Paso>
+      </div>
 
       <div ref={formulario} className="scroll-mt-4">
         {idea && (
@@ -100,6 +108,7 @@ export function NuevaOportunidad({
           estado={estado}
           equipos={equipos}
           textoBoton={t("crearOportunidad")}
+          primerPaso={2}
           valoresIniciales={
             idea
               ? {

@@ -68,7 +68,7 @@ export function DocumentosDelPatrocinador({
   }, [estado]);
 
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-4">
+    <div className="tonal tonal-auto rounded-lg border border-(--tono-borde) border-l-4 border-l-(--tono-fuerte) bg-white shadow-sm p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <p className="text-sm font-medium text-zinc-900">{t("contratoFacturas")}</p>

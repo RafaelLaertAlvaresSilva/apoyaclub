@@ -65,7 +65,7 @@ export function MetricasClub({
   ];
 
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white p-4">
+    <section className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="text-sm font-semibold text-zinc-900">{t("titulo")}</h2>
         <p className="text-xs text-zinc-500">{t("periodo", { dias: metricas.dias })}</p>

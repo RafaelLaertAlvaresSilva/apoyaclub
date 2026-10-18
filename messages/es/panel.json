@@ -186,7 +186,7 @@
     "introPagina": "Lo que tu club ofrece a una empresa a cambio de patrocinio, y lo que necesita a cambio de visibilidad. Es lo único de tu ficha donde una empresa puede hacer algo.",
     "completaIdentidad": "Completa primero la identidad del club (nombre y localidad) en <enlace>tu perfil</enlace> para poder publicar oportunidades de patrocinio.",
     "anadeAlgoTuyo": "<fuerte>Añade algo tuyo antes de publicarla.</fuerte> Cuánta gente va a vuestros partidos, cuántos equipos sois, cuántos seguidores tenéis. Si todos los clubes publican el mismo texto, la empresa no sabrá por qué elegiros a vosotros.",
-    "crearOportunidad": "Crear oportunidad",
+    "crearOportunidad": "Publicar oportunidad",
     "ningunaCreada": "Todavía no has creado ninguna oportunidad. Empieza con el botón de arriba.",
     "ningunaConFiltros": "No hay oportunidades que coincidan con estos filtros.",
     "loNecesitamos": "Lo necesitamos",
@@ -223,6 +223,27 @@
       "usar": "Usar esta idea",
       "paraEsto": "Para esto, antes {falta}",
       "alElegir": "Al elegir una idea se rellena el formulario de abajo y lo puedes cambiar entero. El precio lo pones tú: nadie sabe mejor que el club lo que vale lo suyo."
+    },
+    "pasos": {
+      "idea": "Elige una idea o empieza desde cero",
+      "ideaTexto": "Al elegir una idea, el formulario de abajo se rellena casi entero. Si prefieres escribirla tú, sigue bajando al paso 2.",
+      "basico": "Lo básico",
+      "basicoTexto": "Qué es y cómo se llama. Es lo primero que ve la empresa.",
+      "precio": "Precio y duración",
+      "precioTexto": "Cuánto cuesta y cuánto dura.",
+      "duracion": "Duración",
+      "duracionTexto": "Cuánto tiempo necesitas la colaboración.",
+      "fotos": "Fotos",
+      "fotosTexto": "Una foto de lo que ofreces convence más que cualquier descripción.",
+      "extra": "Para convencer más (opcional)",
+      "extraTexto": "Ya puedes publicar sin esto. Rellénalo ahora o cuando quieras.",
+      "publicarAyuda": "Con los pasos con * rellenos ya se puede publicar.",
+      "duracionRapida": {
+        "temporada": "Toda la temporada",
+        "mes": "Un mes",
+        "partido": "Un partido",
+        "evento": "Un evento"
+      }
     }
   },
   "perfil": {

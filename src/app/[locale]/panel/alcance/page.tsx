@@ -68,7 +68,7 @@ export default async function AlcancePage() {
       )}
 
       {informe.comparacion && (
-        <section className="rounded-2xl border border-zinc-200 bg-white p-5">
+        <section className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-5">
           <h2 className="text-lg font-semibold text-zinc-900">{t("comparadoTemporadaPasada")}</h2>
           <p className="mt-2 text-sm text-zinc-700">
             {t.rich("comparacion", {
@@ -99,7 +99,7 @@ export default async function AlcancePage() {
       ))}
 
       {informe.hayCifras && (
-        <div className="rounded-2xl border border-zinc-200 bg-white p-5">
+        <div className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-5">
           <AvisoDeOrigen />
           <p className="mt-2 text-sm text-zinc-600">
             {t.rich("mismasCifras", {
@@ -114,7 +114,7 @@ export default async function AlcancePage() {
       )}
 
       {informe.faltan.length > 0 && (
-        <section className="rounded-2xl border border-zinc-200 bg-white p-5">
+        <section className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-5">
           <h2 className="text-lg font-semibold text-zinc-900">
             {informe.hayCifras ? t("teFaltaParaSirve") : t("dondeEmpezar")}
           </h2>

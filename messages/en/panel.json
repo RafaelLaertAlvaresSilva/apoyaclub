@@ -681,7 +681,7 @@
     "introPagina": "What your club offers a business in exchange for sponsorship, and what it needs in exchange for visibility. It’s the only part of your profile where a business can take action.",
     "completaIdentidad": "First fill in the club’s identity (name and town) in <enlace>your profile</enlace> to be able to publish sponsorship opportunities.",
     "anadeAlgoTuyo": "<fuerte>Add something of your own before publishing it.</fuerte> How many people come to your matches, how many teams you have, how many followers. If every club publishes the same text, the business won’t know why it should choose you.",
-    "crearOportunidad": "Create opportunity",
+    "crearOportunidad": "Publish opportunity",
     "ningunaCreada": "You haven’t created any opportunities yet. Start with the button above.",
     "ningunaConFiltros": "No opportunities match these filters.",
     "loNecesitamos": "We need this",
@@ -718,6 +718,27 @@
       "usar": "Use this idea",
       "paraEsto": "For this, first {falta}",
       "alElegir": "Choosing an idea fills in the form below, and you can change all of it. You set the price: nobody knows better than the club what its assets are worth."
+    },
+    "pasos": {
+      "idea": "Pick an idea or start from scratch",
+      "ideaTexto": "Pick an idea and the form below fills itself in almost entirely. If you’d rather write it yourself, carry on to step 2.",
+      "basico": "The basics",
+      "basicoTexto": "What it is and what it’s called. It’s the first thing the company sees.",
+      "precio": "Price and duration",
+      "precioTexto": "How much it costs and how long it lasts.",
+      "duracion": "Duration",
+      "duracionTexto": "How long you need the partnership for.",
+      "fotos": "Photos",
+      "fotosTexto": "A photo of what you offer convinces more than any description.",
+      "extra": "To make it more convincing (optional)",
+      "extraTexto": "You can already publish without this. Fill it in now or whenever you like.",
+      "publicarAyuda": "Once the fields marked * are filled in, you can publish.",
+      "duracionRapida": {
+        "temporada": "All season",
+        "mes": "One month",
+        "partido": "One match",
+        "evento": "One event"
+      }
     }
   },
   "dossier": {

@@ -30,10 +30,13 @@ import {
 export function CatalogoDeIdeas({
   requisitos,
   onElegir,
+  enPaso = false,
 }: {
   /** Lo que el club puede cumplir según su ficha. */
   requisitos: RequisitoIdea[];
   onElegir: (idea: Idea) => void;
+  /** Dentro de un `Paso`, que ya pone el marco, el título y el color. */
+  enPaso?: boolean;
 }) {
   const t = useTranslations("panel.oportunidades.catalogo");
   const tIdeas = useTranslations("ideas");
@@ -47,15 +50,15 @@ export function CatalogoDeIdeas({
   const pista = categoria ? tCategorias(`${categoria}.pista`) : null;
 
   return (
-    <div className="mb-6 rounded-xl border border-teal-200 bg-teal-50/50 p-4">
-      <p className="text-sm font-semibold text-zinc-900">
-        {t("titulo")}
-      </p>
-      <p className="mt-0.5 text-sm text-zinc-600">
-        {t("texto")}
-      </p>
+    <div className={enPaso ? "" : "mb-6 rounded-xl border border-teal-200 bg-teal-50/50 p-4"}>
+      {!enPaso && (
+        <>
+          <p className="text-sm font-semibold text-zinc-900">{t("titulo")}</p>
+          <p className="mt-0.5 text-sm text-zinc-600">{t("texto")}</p>
+        </>
+      )}
 
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className={`flex flex-wrap gap-2 ${enPaso ? "" : "mt-3"}`}>
         {CATEGORIAS_IDEA.map((entrada) => (
           <button
             key={entrada.id}

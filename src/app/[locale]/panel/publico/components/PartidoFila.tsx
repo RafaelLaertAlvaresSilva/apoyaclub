@@ -13,7 +13,7 @@ export function PartidoFila({ partido }: { partido: Partido }) {
   const [estadoBorrado, borrar] = useActionState(borrarPartido, null);
 
   return (
-    <li className="flex flex-wrap items-center gap-3 rounded-lg border border-zinc-200 bg-white p-3">
+    <li className="flex flex-wrap items-center gap-3 tonal tonal-auto rounded-lg border border-(--tono-borde) border-l-4 border-l-(--tono-fuerte) bg-white shadow-sm p-3">
       <span className="w-20 flex-none text-sm tabular-nums text-zinc-500">
         {fechaCorta(partido.fecha)}
       </span>

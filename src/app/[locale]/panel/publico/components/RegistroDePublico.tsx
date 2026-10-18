@@ -72,7 +72,7 @@ export function RegistroDePublico({
     <div className="flex flex-col gap-6">
       {/* ---- Lo que se le enseña a una empresa ---- */}
       {ultima && (
-        <section className="rounded-xl border border-zinc-200 bg-white p-5">
+        <section className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-5">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <h2 className="text-base font-semibold text-zinc-900">
               {t("temporada", { temporada: ultima.temporada })}
@@ -245,7 +245,7 @@ export function RegistroDePublico({
       )}
 
       {/* ---- Apuntar un partido ---- */}
-      <section className="rounded-xl border border-zinc-200 bg-white p-5">
+      <section className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-base font-semibold text-zinc-900">{t("apuntarPartido")}</h2>
           {partidos.length > 0 && (
@@ -372,7 +372,7 @@ export function RegistroDePublico({
         temporadas.map((temporada) => (
           <section
             key={temporada.temporada}
-            className="rounded-xl border border-zinc-200 bg-white p-5"
+            className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-5"
           >
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="text-base font-semibold text-zinc-900">

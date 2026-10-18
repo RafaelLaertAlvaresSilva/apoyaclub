@@ -681,7 +681,7 @@
     "introPagina": "O que o teu clube oferece a uma empresa em troca de patrocínio, e o que precisa em troca de visibilidade. É a única parte da tua ficha onde uma empresa pode fazer alguma coisa.",
     "completaIdentidad": "Completa primeiro a identidade do clube (nome e localidade) em <enlace>o teu perfil</enlace> para poderes publicar oportunidades de patrocínio.",
     "anadeAlgoTuyo": "<fuerte>Acrescenta algo teu antes de a publicar.</fuerte> Quantas pessoas vão aos vossos jogos, quantas equipas têm, quantos seguidores. Se todos os clubes publicarem o mesmo texto, a empresa não vai saber porque vos deve escolher.",
-    "crearOportunidad": "Criar oportunidade",
+    "crearOportunidad": "Publicar oportunidade",
     "ningunaCreada": "Ainda não criaste nenhuma oportunidade. Começa pelo botão acima.",
     "ningunaConFiltros": "Não há oportunidades que correspondam a estes filtros.",
     "loNecesitamos": "Precisamos disto",
@@ -718,6 +718,27 @@
       "usar": "Usar esta ideia",
       "paraEsto": "Para isto, primeiro {falta}",
       "alElegir": "Ao escolheres uma ideia, o formulário abaixo é preenchido e podes alterá-lo por completo. O preço defines tu: ninguém sabe melhor do que o clube quanto vale o que é seu."
+    },
+    "pasos": {
+      "idea": "Escolhe uma ideia ou começa do zero",
+      "ideaTexto": "Ao escolheres uma ideia, o formulário abaixo fica quase todo preenchido. Se preferires escrevê-la tu, continua para o passo 2.",
+      "basico": "O essencial",
+      "basicoTexto": "O que é e como se chama. É a primeira coisa que a empresa vê.",
+      "precio": "Preço e duração",
+      "precioTexto": "Quanto custa e quanto tempo dura.",
+      "duracion": "Duração",
+      "duracionTexto": "Durante quanto tempo precisas da colaboração.",
+      "fotos": "Fotografias",
+      "fotosTexto": "Uma fotografia do que ofereces convence mais do que qualquer descrição.",
+      "extra": "Para convencer mais (opcional)",
+      "extraTexto": "Já podes publicar sem isto. Preenche agora ou quando quiseres.",
+      "publicarAyuda": "Com os campos com * preenchidos já podes publicar.",
+      "duracionRapida": {
+        "temporada": "Toda a época",
+        "mes": "Um mês",
+        "partido": "Um jogo",
+        "evento": "Um evento"
+      }
     }
   },
   "dossier": {

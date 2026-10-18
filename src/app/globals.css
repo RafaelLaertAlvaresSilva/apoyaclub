@@ -527,3 +527,69 @@ html[data-tema-panel="oscuro"] body {
     -webkit-print-color-adjust: exact;
   }
 }
+
+/* ---------------------------------------------------------------------
+ * UN COLOR POR APARTADO.
+ *
+ * En el panel, cada apartado de una página (cada tarjeta de la ficha,
+ * cada paso de crear una oportunidad) lleva su propio color: una banda
+ * a la izquierda, la cabecera teñida y el título en ese tono. Así se ve
+ * de un vistazo dónde empieza y acaba cada cosa, que con todo en blanco
+ * y gris no se veía.
+ *
+ * Cada tono es solo un matiz (`--tono-h`); la claridad y la saturación
+ * las pone `.tonal`, igual para todos, así que los seis pesan lo mismo
+ * y ninguno grita más que los demás. En el modo oscuro se cambian solo
+ * esas cuatro variables y los seis se adaptan a la vez.
+ *
+ * `.tonal-auto` reparte los colores solo, por orden: dos apartados
+ * seguidos nunca salen del mismo color, sin tener que elegirlo a mano
+ * en cada página. Quien quiera uno concreto pone `tono-azul`, etc.
+ * ------------------------------------------------------------------- */
+.tono-azul { --tono-h: 245; }
+.tono-verde { --tono-h: 175; }
+.tono-naranja { --tono-h: 50; }
+.tono-violeta { --tono-h: 300; }
+.tono-rosa { --tono-h: 0; }
+.tono-oliva { --tono-h: 130; }
+
+.tonal-auto:nth-child(6n + 1) { --tono-h: 245; }
+.tonal-auto:nth-child(6n + 2) { --tono-h: 175; }
+.tonal-auto:nth-child(6n + 3) { --tono-h: 50; }
+.tonal-auto:nth-child(6n + 4) { --tono-h: 300; }
+.tonal-auto:nth-child(6n + 5) { --tono-h: 0; }
+.tonal-auto:nth-child(6n + 6) { --tono-h: 130; }
+
+/* Dentro de un paso, las cajas toman el color del paso. */
+.tonal-fijo .tonal-auto:nth-child(n) {
+  --tono-h: inherit;
+}
+
+.tonal {
+  --tono-fondo: oklch(97% 0.022 var(--tono-h, 245));
+  --tono-borde: oklch(86% 0.065 var(--tono-h, 245));
+  --tono-fuerte: oklch(55% 0.13 var(--tono-h, 245));
+  --tono-tinta: oklch(38% 0.1 var(--tono-h, 245));
+}
+
+html[data-tema-panel="oscuro"] .tema-panel .tonal {
+  --tono-fondo: oklch(25% 0.035 var(--tono-h, 245));
+  --tono-borde: oklch(40% 0.07 var(--tono-h, 245));
+  --tono-fuerte: oklch(70% 0.12 var(--tono-h, 245));
+  --tono-tinta: oklch(88% 0.07 var(--tono-h, 245));
+}
+
+/* CADA CAMPO DE SU COLOR. Cada caja de campo (`Campo`) lleva su propio
+ * tono, repartido por orden como los apartados: fondo teñido, banda a la
+ * izquierda y el título en ese color. Dentro de `@layer components` para
+ * que las clases de Tailwind de la banda izquierda puedan con el borde
+ * general. */
+@layer components {
+  .caja-campo {
+    background-color: var(--tono-fondo, var(--lienzo));
+    border-color: var(--tono-borde, var(--lienzo-borde));
+  }
+  .caja-campo-titulo {
+    color: var(--tono-tinta, var(--titular));
+  }
+}

@@ -29,7 +29,7 @@ export default async function PrivacidadClubPage() {
       </div>
 
 
-      <section className="rounded-xl border border-zinc-200 bg-white p-6">
+      <section className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-6">
         <h2 className="text-base font-semibold text-zinc-900">{t("descargarMisDatos")}</h2>
         <p className="mt-1 text-sm text-zinc-500">{t("descargaUnArchivoCon")}</p>
         {/* Descarga de un fichero servido por un Route Handler, no una

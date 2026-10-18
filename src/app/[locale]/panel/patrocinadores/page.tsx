@@ -64,7 +64,7 @@ export default async function PatrocinadoresPage() {
       {/* Sin club creado no hay a qué colgar un patrocinador: la fila
           necesita un `club_id` que todavía no existe. */}
       {!filaClub ? (
-        <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
+        <div className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-6 text-sm text-zinc-600">
           {t.rich("completaIdentidad", {
             enlace: (trozo) => (
               <Link href="/panel" className="font-medium text-teal-700 hover:underline">

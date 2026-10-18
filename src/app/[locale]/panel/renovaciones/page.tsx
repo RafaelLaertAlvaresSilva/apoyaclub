@@ -91,7 +91,7 @@ export default async function RenovacionesPage() {
       )}
 
       {!filaClub ? (
-        <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
+        <div className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-6 text-sm text-zinc-600">
           {t.rich("completaIdentidad", {
             enlace: (trozo) => (
               <Link href="/panel/perfil" className="font-medium text-teal-700 hover:underline">
@@ -101,7 +101,7 @@ export default async function RenovacionesPage() {
           })}
         </div>
       ) : patrocinadores.length === 0 ? (
-        <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
+        <div className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-6 text-sm text-zinc-600">
           {t.rich("sinPatrocinadores", {
             enlace: (trozo) => (
               <Link href="/panel/patrocinadores" className="font-medium text-teal-700 hover:underline">

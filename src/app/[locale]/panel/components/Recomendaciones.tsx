@@ -19,7 +19,7 @@ export function Recomendaciones({ recomendaciones }: { recomendaciones: Recomend
   if (recomendaciones.length === 0) return null;
 
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white p-5">
+    <section className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-5">
       <h2 className="text-base font-semibold text-zinc-900">{t("herramientasTePuedenAyudar")}</h2>
       <p className="mt-1 text-sm text-zinc-500">
         {t("sonOtrasEmpresasNo")}

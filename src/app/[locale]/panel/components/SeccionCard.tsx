@@ -1,19 +1,60 @@
+/** Los colores de los apartados del panel (`globals.css`, "UN COLOR POR APARTADO"). */
+export type Tono = "azul" | "verde" | "naranja" | "violeta" | "rosa" | "oliva";
+
+export const TONOS: Tono[] = ["azul", "verde", "naranja", "violeta", "rosa", "oliva"];
+
+/**
+ * Las clases de un apartado de color, para las tarjetas que no usan
+ * `SeccionCard` (listas, avisos, tablas). Sin `tono`, el color sale
+ * solo según su posición entre sus hermanas.
+ */
+export function clasesApartado(tono?: Tono): string {
+  return `tonal ${tono ? `tono-${tono}` : "tonal-auto"} rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm`;
+}
+
+/**
+ * Un apartado del panel: banda de color a la izquierda, cabecera teñida
+ * y el título en ese tono. Cada apartado de una página sale de un color
+ * distinto, para que se vea de un vistazo dónde empieza y acaba cada
+ * cosa.
+ *
+ * `numero` lo convierte en un paso ("1", "2"...), para los formularios
+ * que se rellenan en orden.
+ */
 export function SeccionCard({
   titulo,
   descripcion,
+  tono,
+  numero,
+  accion,
   children,
 }: {
   titulo: string;
   descripcion?: string;
+  tono?: Tono;
+  numero?: number;
+  /** Algo a la derecha de la cabecera: un botón de cerrar, por ejemplo. */
+  accion?: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white p-6">
-      <div className="mb-4">
-        <h2 className="text-base font-semibold text-zinc-900">{titulo}</h2>
-        {descripcion && <p className="mt-1 text-sm text-zinc-500">{descripcion}</p>}
+    <section className={`${clasesApartado(tono)} overflow-hidden`}>
+      <div className="flex items-start gap-3 border-b border-(--tono-borde) bg-(--tono-fondo) px-5 py-4 sm:px-6">
+        {numero != null && (
+          <span
+            aria-hidden="true"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-(--tono-fuerte) text-sm font-bold text-(--tono-fondo)"
+          >
+            {numero}
+          </span>
+        )}
+        <div className="min-w-0 flex-1">
+          <h2 className="text-lg font-bold text-(--tono-tinta)">{titulo}</h2>
+          {descripcion && <p className="mt-1 text-sm text-zinc-600">{descripcion}</p>}
+        </div>
+        {accion}
       </div>
-      {children}
+      <div className="p-5 sm:p-6">{children}</div>
     </section>
   );
 }
@@ -44,7 +85,7 @@ export function Campo({
   children: React.ReactNode;
 }) {
   const textoEtiqueta = (
-    <span className="mb-2 block text-[15px] font-bold text-titular">{etiqueta}</span>
+    <span className="caja-campo-titulo mb-2 block text-[15px] font-bold">{etiqueta}</span>
   );
   const textoAyuda = ayuda ? (
     <span className="mt-2 block text-xs leading-relaxed text-zinc-500">{ayuda}</span>
@@ -54,7 +95,7 @@ export function Campo({
     return (
       <div className={CLASES_CAJA_CAMPO}>
         <fieldset className="min-w-0">
-          <legend className="mb-2 text-[15px] font-bold text-titular">{etiqueta}</legend>
+          <legend className="caja-campo-titulo mb-2 text-[15px] font-bold">{etiqueta}</legend>
           {children}
           {textoAyuda}
         </fieldset>
@@ -82,14 +123,56 @@ export function Campo({
  * más grande, en negrita y en el azul de los titulares, para que se
  * distinga de un vistazo de la ayuda gris de debajo.
  *
- * El fondo es el gris de lienzo (`zinc-50`) y el control encima es
+ * Y cada caja de su color (`.caja-campo` en `globals.css`): dos campos
+ * seguidos nunca salen iguales, así que se ve dónde acaba uno y empieza
+ * el siguiente sin tener que leer. El control encima es
  * blanco (`clasesInput`), así que el hueco donde se escribe resalta
  * dentro de la caja. Los dos colores son variables del tema: en el modo
  * oscuro del panel se invierten solos.
  */
-const CLASES_CAJA_CAMPO = "rounded-xl border border-zinc-200 bg-zinc-50 p-4";
+export const CLASES_CAJA_CAMPO =
+  "tonal tonal-auto caja-campo rounded-xl border border-l-4 border-l-(--tono-fuerte) p-4";
 
 export const clasesInput =
   "w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-accion-tinta focus:outline-none focus:ring-1 focus:ring-accion-tinta";
 
 export const clasesTextarea = `${clasesInput} min-h-24 resize-y`;
+
+/**
+ * Un paso de un formulario que se rellena en orden (crear una
+ * oportunidad): número, título y todo lo de dentro del mismo color. Las
+ * cajas de los campos de dentro toman el color del paso en vez de ir
+ * cada una del suyo (`.tonal-fijo` en `globals.css`): así se ve qué
+ * campos van juntos.
+ */
+export function Paso({
+  numero,
+  titulo,
+  descripcion,
+  tono,
+  children,
+}: {
+  numero: number;
+  titulo: string;
+  descripcion?: string;
+  tono: Tono;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className={`${clasesApartado(tono)} tonal-fijo p-4 sm:p-5`}>
+      <div className="mb-4 flex items-start gap-3">
+        <span
+          aria-hidden="true"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-(--tono-fuerte) text-base font-bold text-(--tono-fondo)"
+        >
+          {numero}
+        </span>
+        <div className="min-w-0">
+          <h3 className="text-lg font-bold text-(--tono-tinta)">{titulo}</h3>
+          {descripcion && <p className="mt-0.5 text-sm text-zinc-600">{descripcion}</p>}
+        </div>
+      </div>
+      <div className="space-y-4">{children}</div>
+    </section>
+  );
+}

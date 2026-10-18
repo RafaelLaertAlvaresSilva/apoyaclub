@@ -109,7 +109,7 @@ export default async function SuscripcionPage({
       </div>
 
 
-      <section className="rounded-xl border border-zinc-200 bg-white p-6">
+      <section className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-6">
         {/* Volviendo de la pasarela de pago.
             El aviso mira si la confirmación ya ha llegado, en vez de
             fiarse de que la dirección lleve "checkout=success" pegado.

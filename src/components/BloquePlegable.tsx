@@ -15,6 +15,9 @@
  * `resumen` es lo que se lee sin abrirlo. Sirve para que un apartado
  * cerrado no parezca vacío: "3 de 5 rellenados" invita a mirar, "Redes
  * sociales" a secas no dice si hay algo dentro.
+ *
+ * Lleva su color, como las cajas de los campos (`.tonal-auto` en
+ * `globals.css`): dentro de un paso, el del paso.
  */
 export function BloquePlegable({
   titulo,
@@ -28,10 +31,13 @@ export function BloquePlegable({
   children: React.ReactNode;
 }) {
   return (
-    <details open={abierto} className="group rounded-xl border border-zinc-200">
+    <details
+      open={abierto}
+      className="tonal tonal-auto group rounded-xl border border-(--tono-borde) border-l-4 border-l-(--tono-fuerte) bg-white"
+    >
       <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 [&::-webkit-details-marker]:hidden">
         <span>
-          <span className="block text-[15px] font-bold text-titular">{titulo}</span>
+          <span className="block text-[15px] font-bold text-(--tono-tinta)">{titulo}</span>
           {resumen && <span className="mt-0.5 block text-xs text-zinc-500">{resumen}</span>}
         </span>
         <svg
