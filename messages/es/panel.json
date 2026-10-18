@@ -1341,7 +1341,8 @@
     "noProcesada": "No se ha podido procesar la imagen.",
     "noLeida": "No se ha podido leer la imagen.",
     "sinPermiso": "Tu sesión no tiene permiso para subir imágenes. Cierra sesión, vuelve a entrar e inténtalo otra vez.",
-    "noSubida": "No se ha podido subir la imagen. Inténtalo de nuevo."
+    "noSubida": "No se ha podido subir la imagen. Inténtalo de nuevo.",
+    "subiendo": "Subiendo…"
   },
   "huecos": {
     "logo": {

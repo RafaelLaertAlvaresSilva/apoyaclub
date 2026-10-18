@@ -93,6 +93,7 @@ export function FotosDeLaOportunidad({
         <ImageUploader
           userId={userId}
           carpeta="oportunidades"
+          destacado
           label={fotos.length === 0 ? t("anadirUna") : t("anadirOtra")}
           onSubido={(url) =>
             // Con el tope comprobado otra vez aquí: entre que se pulsa

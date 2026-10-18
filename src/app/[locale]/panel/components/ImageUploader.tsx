@@ -18,6 +18,8 @@ type Props = {
     | "oportunidades";
   label: string;
   onSubido: (url: string) => Promise<void> | void;
+  /** Botón relleno y con icono, para cuando subir la foto es lo importante del formulario. */
+  destacado?: boolean;
 };
 
 /**
@@ -37,7 +39,7 @@ const MOTIVOS_CONOCIDOS: Record<string, string> = {
   "No se ha podido leer la imagen.": "noLeida",
 };
 
-export function ImageUploader({ userId, carpeta, label, onSubido }: Props) {
+export function ImageUploader({ userId, carpeta, label, onSubido, destacado = false }: Props) {
   const t = useTranslations("panel.imagenes");
   const [supabase] = useState(() => createClient());
   const inputRef = useRef<HTMLInputElement>(null);
@@ -78,14 +80,38 @@ export function ImageUploader({ userId, carpeta, label, onSubido }: Props) {
 
   return (
     <div>
-      <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-60">
-        {subiendo && (
+      <label
+        className={`inline-flex cursor-pointer items-center gap-2 rounded-lg border text-sm font-medium transition-colors has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-60 ${
+          destacado
+            ? "border-brand-teal-dark bg-brand-teal-dark px-4 py-2.5 text-sobre-color shadow-sm hover:border-accion-fuerte hover:bg-accion-fuerte"
+            : "border-zinc-300 px-3 py-2 text-zinc-700 hover:bg-zinc-100"
+        }`}
+      >
+        {subiendo ? (
           <span
-            className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-600"
+            className={`h-4 w-4 animate-spin rounded-full border-2 ${
+              destacado ? "border-white/40 border-t-white" : "border-zinc-300 border-t-zinc-600"
+            }`}
             aria-hidden="true"
           />
+        ) : (
+          destacado && (
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-5 w-5"
+            >
+              <path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z" />
+              <circle cx="12" cy="12.5" r="3.5" />
+            </svg>
+          )
         )}
-        {subiendo ? "Subiendo…" : label}
+        {subiendo ? t("subiendo") : label}
         <input
           ref={inputRef}
           type="file"

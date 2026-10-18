@@ -82,7 +82,8 @@
     "noProcesada": "Não foi possível processar a imagem.",
     "noLeida": "Não foi possível ler a imagem.",
     "sinPermiso": "A tua sessão não tem permissão para carregar imagens. Termina sessão, volta a entrar e tenta outra vez.",
-    "noSubida": "Não foi possível carregar a imagem. Tenta novamente."
+    "noSubida": "Não foi possível carregar a imagem. Tenta novamente.",
+    "subiendo": "A carregar…"
   },
   "primerosPasos": {
     "titulo": "Começa por aqui",

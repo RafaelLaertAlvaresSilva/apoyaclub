@@ -82,7 +82,8 @@
     "noProcesada": "The image could not be processed.",
     "noLeida": "The image could not be read.",
     "sinPermiso": "Your session is not allowed to upload images. Sign out, sign back in and try again.",
-    "noSubida": "The image could not be uploaded. Please try again."
+    "noSubida": "The image could not be uploaded. Please try again.",
+    "subiendo": "Uploading…"
   },
   "primerosPasos": {
     "titulo": "Start here",
