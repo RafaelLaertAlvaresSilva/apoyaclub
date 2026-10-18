@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Header } from "@/components/Header";
 import { VideoDeLaPortada } from "./components/VideoDeLaPortada";
 import { CtaFijoMovil } from "./components/CtaFijoMovil";
@@ -57,8 +57,19 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: tMeta("titulo"), description: tMeta("descripcion") };
 }
 
+/**
+ * El vídeo de la portada, con la voz en el idioma de la página. Las
+ * imágenes son las mismas; lo que cambia es el audio. El idioma que aún
+ * no tiene el suyo sale con el español.
+ */
+const VIDEO_DE_LA_PORTADA: Record<string, string> = {
+  es: "/portada-video.mp4",
+  en: "/portada-video-en.mp4",
+};
+
 export default async function Home() {
   const t = await getTranslations("home");
+  const locale = await getLocale();
 
   return (
     <div className="flex flex-1 flex-col bg-zinc-50">
@@ -130,7 +141,7 @@ export default async function Home() {
             </div>
 
             <VideoDeLaPortada
-              src="/portada-video.mp4"
+              src={VIDEO_DE_LA_PORTADA[locale] ?? VIDEO_DE_LA_PORTADA.es}
               poster="/portada-video-poster.webp"
               etiqueta={t("video.etiquetaPortada")}
             />

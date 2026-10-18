@@ -64,11 +64,12 @@ describe("el middleware y los archivos estáticos", () => {
       join(process.cwd(), "src", "app", "[locale]", "page.tsx"),
       "utf8",
     );
-    const archivos = [...portada.matchAll(/(?:src|poster)="(\/[^"]+\.(?:mp4|webp))"/g)].map(
+    const archivos = [...portada.matchAll(/"(\/[^"]+\.(?:mp4|webp))"/g)].map(
       (m) => m[1],
     );
     expect(archivos).toContain("/portada-video.mp4");
     expect(archivos).toContain("/portada-video-poster.webp");
+    expect(archivos).toContain("/portada-video-en.mp4");
 
     for (const archivo of archivos) {
       expect(() => readFileSync(join(process.cwd(), "public", archivo)), `falta ${archivo}`).not.toThrow();
