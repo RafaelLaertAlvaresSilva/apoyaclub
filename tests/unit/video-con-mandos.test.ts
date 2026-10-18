@@ -161,6 +161,7 @@ describe("los tres vídeos de la web", () => {
     // Para empresas también elige el vídeo según el idioma.
     expect(EMPRESAS).toContain('"/para-empresas-video.mp4"');
     expect(EMPRESAS).toContain('"/para-empresas-video-en.mp4"');
+    expect(EMPRESAS).toContain('"/para-empresas-video-pt.mp4"');
     expect(EMPRESAS).toContain("src={VIDEO_PARA_EMPRESAS[locale]");
   });
 

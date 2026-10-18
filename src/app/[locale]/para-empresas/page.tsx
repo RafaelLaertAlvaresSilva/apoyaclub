@@ -40,11 +40,12 @@ const SECCIONES_IDS = ["beneficios", "empresas", "como", "colaborar", "cuenta", 
 
 /**
  * El vídeo para empresas y colaboradores, con la voz en el idioma de la
- * página. El idioma que aún no tiene el suyo sale con el español.
+ * página.
  */
 const VIDEO_PARA_EMPRESAS: Record<string, string> = {
   es: "/para-empresas-video.mp4",
   en: "/para-empresas-video-en.mp4",
+  pt: "/para-empresas-video-pt.mp4",
 };
 
 export default async function ParaEmpresasPage() {
