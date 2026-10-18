@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { CtaFijoMovil } from "../components/CtaFijoMovil";
@@ -38,7 +38,17 @@ export async function generateMetadata(): Promise<Metadata> {
 /* Los nombres de cada apartado están en `home.paraClubes.menu`, por idioma. */
 const SECCIONES_IDS = ["como-funciona", "clubes", "oportunidades", "tu-pagina", "herramientas", "precio", "faq"] as const;
 
+/**
+ * El vídeo para clubes, con la voz en el idioma de la página. El idioma
+ * que aún no tiene el suyo sale con el español.
+ */
+const VIDEO_PARA_CLUBES: Record<string, string> = {
+  es: "/para-clubes-video.mp4",
+  en: "/para-clubes-video-en.mp4",
+};
+
 export default async function ParaClubesPage() {
+  const locale = await getLocale();
   const tMenu = await getTranslations("home.paraClubes.menu");
   const t = await getTranslations("home");
 
@@ -103,7 +113,7 @@ export default async function ParaClubesPage() {
             </div>
 
             <VideoDeLaPortada
-              src="/para-clubes-video.mp4"
+              src={VIDEO_PARA_CLUBES[locale] ?? VIDEO_PARA_CLUBES.es}
               poster="/para-clubes-video-poster.webp"
               etiqueta={t("video.etiquetaParaClubes")}
             />
