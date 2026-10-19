@@ -13,6 +13,7 @@ import { BUCKET_DOCUMENTOS, rutasDeLosDocumentos } from "@/lib/documentos-datos"
 import { createClient } from "@/lib/supabase/server";
 import { NIVELES_PATROCINADOR } from "@/lib/types";
 import type { CommunityAction, Milestone, Role, SponsorTier, TeamLevel } from "@/lib/types";
+import { normalizarDeporte } from "@/lib/deportes";
 
 export type EstadoGuardado =
   | { error: string; ok?: false }
@@ -403,7 +404,10 @@ export async function agregarEquipo(
   if ("error" in contexto) return { error: contexto.error };
   const { supabase, user } = contexto;
 
-  const sport = leerTexto(formData, "sport");
+  // De la lista de deportes, o lo escrito con "Otro", normalizado
+  // ("voley" → "Voleibol") para que el buscador no lo parta en dos.
+  const sportEscrito = leerTexto(formData, "sport");
+  const sport = sportEscrito ? normalizarDeporte(sportEscrito) : null;
   if (!sport) return { error: t("indicaDeporteEquipo") };
 
   const teamLevelValor = String(formData.get("teamLevel") ?? "");
@@ -447,7 +451,10 @@ export async function actualizarEquipo(
   const id = String(formData.get("id") ?? "");
   if (!id) return { error: t("sabeEquipoCambiar") };
 
-  const sport = leerTexto(formData, "sport");
+  // De la lista de deportes, o lo escrito con "Otro", normalizado
+  // ("voley" → "Voleibol") para que el buscador no lo parta en dos.
+  const sportEscrito = leerTexto(formData, "sport");
+  const sport = sportEscrito ? normalizarDeporte(sportEscrito) : null;
   if (!sport) return { error: t("indicaDeporteEquipo") };
 
   const teamLevelValor = String(formData.get("teamLevel") ?? "");

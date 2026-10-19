@@ -11,6 +11,7 @@ import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportun
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createPublicClient } from "@/lib/supabase/public";
 import type { ClubProfile, ClubSponsor, ClubTeam, Opportunity } from "@/lib/types";
+import { normalizarDeporte } from "@/lib/deportes";
 
 export type ClubPublico = {
   perfil: ClubProfile;
@@ -101,5 +102,8 @@ export const obtenerEmailContacto = cache(async (clubId: string): Promise<string
  * practican sus equipos.
  */
 export function deportesDelClub(equipos: ClubTeam[]): string[] {
-  return Array.from(new Set(equipos.map((equipo) => equipo.sport.trim()).filter(Boolean)));
+  // Normalizados: "voley" y "Voleibol" son el mismo deporte (`lib/deportes.ts`).
+  return Array.from(
+    new Set(equipos.map((equipo) => equipo.sport.trim()).filter(Boolean).map(normalizarDeporte)),
+  );
 }

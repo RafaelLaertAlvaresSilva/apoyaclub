@@ -50,7 +50,8 @@ export async function generateMetadata({ params }: ParametrosRuta): Promise<Meta
   }
 
   const { perfil, equipos } = datos;
-  const deportes = deportesDelClub(equipos);
+  const E = etiquetador(await getTranslations("common.etiquetas"));
+  const deportes = deportesDelClub(equipos).map(E.deporte);
   const ubicacion = [perfil.city, perfil.province].filter(Boolean).join(", ");
   const resumen = [perfil.name, deportes.join(", "), ubicacion].filter(Boolean).join(" · ");
   const descripcion = perfil.description
@@ -117,7 +118,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
   // de la empresa que no tiene presupuesto de patrocinio pero sí un
   // servicio que ofrecer.
 
-  const deportes = deportesDelClub(equipos);
+  const deportes = deportesDelClub(equipos).map(E.deporte);
   const ubicacion = [perfil.city, perfil.province].filter(Boolean).join(", ");
   // La ficha en una línea, debajo del logo. Solo con lo que el club
   // haya rellenado: ver `DatosDestacados`.
@@ -542,7 +543,7 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                 )}
                 <div className="p-4">
                 <p className="font-medium text-zinc-900">
-                  {equipo.sport}
+                  {E.deporte(equipo.sport)}
                   {equipo.category ? ` · ${equipo.category}` : ""}
                 </p>
                 <p className="mt-1 text-sm text-zinc-500">

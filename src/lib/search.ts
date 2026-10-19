@@ -25,6 +25,7 @@ import {
   type ResultadoOportunidad,
   type VistaBusqueda,
 } from "@/lib/search-types";
+import { normalizarDeporte, variantesDelDeporte } from "@/lib/deportes";
 
 // Este módulo es el único que habla con Supabase; los tipos y
 // `agruparPorClub` viven en `lib/search-types.ts` (sin dependencias de
@@ -187,7 +188,9 @@ async function clubesConEquipoCoincidente(
   const supabase = createPublicClient();
   let consulta = supabase.from("club_teams").select("club_id");
 
-  if (filtros.deporte) consulta = consulta.eq("sport", filtros.deporte);
+  // Con todas las formas en que puede estar escrito: los equipos dados de
+  // alta antes de la lista de deportes pueden decir "voley" o "Vóley".
+  if (filtros.deporte) consulta = consulta.in("sport", variantesDelDeporte(filtros.deporte));
   if (filtros.categoria) consulta = consulta.eq("category", filtros.categoria);
   if (filtros.genero) consulta = consulta.eq("gender", filtros.genero);
   if (filtros.nivelEquipo)
@@ -408,7 +411,7 @@ export async function obtenerOpcionesEquipo(): Promise<{
     ).sort((a, b) => a.localeCompare(b, "es"));
 
   return {
-    deportes: unico(filas.map((fila) => fila.sport)),
+    deportes: unico(filas.map((fila) => (fila.sport ? normalizarDeporte(fila.sport) : null))),
     categorias: unico(filas.map((fila) => fila.category)),
     generos: unico(filas.map((fila) => fila.gender)),
   };

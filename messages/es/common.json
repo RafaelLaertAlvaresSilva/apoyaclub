@@ -209,6 +209,28 @@
       "service": "Fisioterapia, transporte, diseño, asesoría… lo que tu empresa hace.",
       "in_kind": "Material, equipaciones, comida, impresiones… algo que entregas.",
       "money": "Un patrocinio en metálico a cambio de visibilidad."
+    },
+    "deporte": {
+      "balonmano": "Balonmano",
+      "futbol": "Fútbol",
+      "futbolSala": "Fútbol sala",
+      "baloncesto": "Baloncesto",
+      "voleibol": "Voleibol",
+      "voleyPlaya": "Vóley playa",
+      "rugby": "Rugby",
+      "hockeyHierba": "Hockey hierba",
+      "hockeyPatines": "Hockey patines",
+      "waterpolo": "Waterpolo",
+      "padel": "Pádel",
+      "tenis": "Tenis",
+      "tenisMesa": "Tenis de mesa",
+      "atletismo": "Atletismo",
+      "natacion": "Natación",
+      "ciclismo": "Ciclismo",
+      "triatlon": "Triatlón",
+      "gimnasia": "Gimnasia",
+      "patinaje": "Patinaje",
+      "artesMarciales": "Artes marciales"
     }
   },
   "plazas": {

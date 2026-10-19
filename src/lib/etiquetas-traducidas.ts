@@ -9,6 +9,7 @@ import type {
   TeamLevel,
 } from "@/lib/types";
 import type { EstadoOferta, TipoDeOferta } from "@/lib/empresas";
+import { nombreDelDeporte } from "@/lib/deportes";
 import type { Responsable } from "@/lib/ficha-oportunidad";
 import type { OrdenBusqueda } from "@/lib/search-types";
 
@@ -49,6 +50,8 @@ export function etiquetador(t: Traductor) {
     nivelPatrocinioAyuda: (id: SponsorLevel) => t(`nivelPatrocinioAyuda.${id}`),
     nivelEquipo: (id: TeamLevel) => t(`nivelEquipo.${id}`),
     busca: (id: "todo" | "patrocinios" | "necesidades") => t(`busca.${id}`),
+    /** El deporte de un equipo; lo que el club escribió a mano, tal cual. */
+    deporte: (texto: string) => nombreDelDeporte(texto, t),
   };
 }
 

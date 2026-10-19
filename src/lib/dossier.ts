@@ -1,5 +1,6 @@
 import type { Partido } from "@/lib/publico-partidos";
 import type { ClubProfile, ClubSponsor, ClubTeam, DossierSectionKey } from "@/lib/types";
+import { normalizarDeporte } from "@/lib/deportes";
 
 /**
  * Constantes y helpers del dossier PDF (Fase 9), compartidos por el
@@ -131,5 +132,8 @@ export function seccionesPorDefecto(disponibles: Set<DossierSectionKey>): Dossie
  * deportes de sus equipos. Se duplica aquí (helper puro, sin datos) para
  * no importar código de `app/` desde `lib/`. */
 export function deportesDelClub(equipos: ClubTeam[]): string[] {
-  return Array.from(new Set(equipos.map((equipo) => equipo.sport.trim()).filter(Boolean)));
+  // Normalizados: "voley" y "Voleibol" son el mismo deporte (`lib/deportes.ts`).
+  return Array.from(
+    new Set(equipos.map((equipo) => equipo.sport.trim()).filter(Boolean).map(normalizarDeporte)),
+  );
 }

@@ -6,6 +6,8 @@ import { useActionState, useState, useTransition } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
 import { BotonEnviar } from "@/components/BotonEnviar";
+import { DEPORTES, deporteDeLaLista } from "@/lib/deportes";
+import { etiquetador } from "@/lib/etiquetas-traducidas";
 import { etiquetaEquipo } from "@/lib/opportunities";
 import type { ClubTeam } from "@/lib/types";
 import { actualizarEquipo, agregarEquipo, eliminarEquipo, guardarFotoEquipo } from "../actions";
@@ -42,7 +44,7 @@ export function EquiposForm({ equipos, userId }: { equipos: ClubTeam[]; userId: 
       <form key={equipos.length} action={formAction} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <Campo etiqueta={t("deporte")}>
-            <input name="sport" required placeholder={t("futbolBaloncesto")} className={clasesInput} />
+            <SelectorDeDeporte />
           </Campo>
           <Campo etiqueta={t("categoria")}>
             <input name="category" placeholder={t("cadeteSenior")} className={clasesInput} />
@@ -100,6 +102,7 @@ function FilaEquipo({
   etiquetaEliminar: string;
 }) {
   const t = useTranslations("panel.perfil");
+  const E = etiquetador(useTranslations("common.etiquetas"));
   const [errorFoto, setErrorFoto] = useState<string | null>(null);
   const [editando, setEditando] = useState(false);
   const [, iniciarTransicion] = useTransition();
@@ -130,7 +133,7 @@ function FilaEquipo({
 
       <div className="min-w-0 flex-1">
         <p className="font-medium text-zinc-900">
-          {equipo.sport}
+          {E.deporte(equipo.sport)}
           {equipo.category ? ` · ${equipo.category}` : ""}
         </p>
         <p className="text-zinc-500">
@@ -228,7 +231,7 @@ function EditorDeEquipo({ equipo }: { equipo: ClubTeam }) {
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Campo etiqueta={t("deporte")}>
-          <input name="sport" required defaultValue={equipo.sport} className={clasesInput} />
+          <SelectorDeDeporte valor={equipo.sport} />
         </Campo>
         <Campo etiqueta={t("categoria")}>
           <input name="category" defaultValue={equipo.category ?? ""} className={clasesInput} />
@@ -277,5 +280,62 @@ function EditorDeEquipo({ equipo }: { equipo: ClubTeam }) {
 
       <BotonEnviar>{t("guardarCambiosEquipo")}</BotonEnviar>
     </form>
+  );
+}
+
+/** Lo que vale el desplegable cuando el club elige "Otro" y lo escribe. */
+const OTRO_DEPORTE = "__otro";
+
+/**
+ * El deporte del equipo, de una lista (`lib/deportes.ts`).
+ *
+ * Escrito a mano, "Voleibol", "Vóley" y "voley" salían en el buscador
+ * como tres deportes distintos. "Otro" deja escribirlo para lo que no
+ * está en la lista. Lo que se envía es siempre un único campo `sport`.
+ */
+function SelectorDeDeporte({ valor }: { valor?: string }) {
+  const t = useTranslations("panel.perfil");
+  const tEtiquetas = useTranslations("common.etiquetas");
+  const deLaLista = valor ? deporteDeLaLista(valor) : null;
+  const [elegido, setElegido] = useState(valor ? (deLaLista ? deLaLista.nombre : OTRO_DEPORTE) : "");
+  const [otro, setOtro] = useState(valor && !deLaLista ? valor : "");
+
+  // Ordenados por su nombre en el idioma de la pantalla.
+  const opciones = DEPORTES.map((deporte) => ({
+    nombre: deporte.nombre,
+    etiqueta: tEtiquetas(`deporte.${deporte.clave}`),
+  })).sort((a, b) => a.etiqueta.localeCompare(b.etiqueta));
+
+  return (
+    <>
+      <select
+        required
+        value={elegido}
+        onChange={(evento) => setElegido(evento.target.value)}
+        className={clasesInput}
+      >
+        <option value="" disabled>
+          {t("eligeDeporte")}
+        </option>
+        {opciones.map((opcion) => (
+          <option key={opcion.nombre} value={opcion.nombre}>
+            {opcion.etiqueta}
+          </option>
+        ))}
+        <option value={OTRO_DEPORTE}>{t("otroDeporte")}</option>
+      </select>
+      {elegido === OTRO_DEPORTE && (
+        <input
+          required
+          maxLength={60}
+          value={otro}
+          onChange={(evento) => setOtro(evento.target.value)}
+          placeholder={t("escribeDeporte")}
+          aria-label={t("escribeDeporte")}
+          className={`${clasesInput} mt-2`}
+        />
+      )}
+      <input type="hidden" name="sport" value={elegido === OTRO_DEPORTE ? otro : elegido} />
+    </>
   );
 }

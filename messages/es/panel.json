@@ -268,7 +268,6 @@
     "equiposDeCantera": "Equipos de cantera",
     "familias": "Familias",
     "fotosDelClub": "Fotos del club",
-    "futbolBaloncesto": "Fútbol, baloncesto…",
     "genero": "Género",
     "guardarCantera": "Guardar cantera",
     "guardarIdentidad": "Guardar identidad",
@@ -376,7 +375,10 @@
     "fotoDelEquipo": "Foto: {equipo}",
     "tuClub": "Tu club",
     "quitar": "Quitar",
-    "correoContactoEjemplo": "patrocinios@tuclub.es"
+    "correoContactoEjemplo": "patrocinios@tuclub.es",
+    "eligeDeporte": "Elige el deporte…",
+    "otroDeporte": "Otro (escríbelo)",
+    "escribeDeporte": "Escribe el deporte"
   },
   "perfil2": {
     "accionesSocialesEducativasO": "Acciones sociales, educativas o benéficas del club: lo que lo hace más que un resultado deportivo.",

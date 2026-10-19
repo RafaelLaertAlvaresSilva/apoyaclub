@@ -385,7 +385,7 @@ function DossierDocumento({
   const disponibles = seccionesConContenido(perfil, equipos, patrocinadores, partidos);
   const incluir = (clave: DossierSectionKey) => secciones.includes(clave) && disponibles.has(clave);
 
-  const deportes = deportesDelClub(equipos);
+  const deportes = deportesDelClub(equipos).map(E.deporte);
   const ubicacion = [perfil.city, perfil.province].filter(Boolean).join(", ");
   const urlPublica = textos.urlDelClub(perfil.slug);
 
@@ -561,7 +561,7 @@ function DossierDocumento({
               {equipos.map((equipo) => (
                 <View key={equipo.id} style={estilos.tarjeta}>
                   <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold" }}>
-                    {equipo.sport}
+                    {E.deporte(equipo.sport)}
                     {equipo.category ? ` · ${equipo.category}` : ""}
                   </Text>
                   <Text style={estilos.tarjetaEtiqueta}>

@@ -382,7 +382,6 @@
     "equiposDeCantera": "Youth teams",
     "familias": "Families",
     "fotosDelClub": "Club photos",
-    "futbolBaloncesto": "Football, basketball…",
     "genero": "Gender",
     "guardarCantera": "Save youth teams",
     "guardarIdentidad": "Save identity",
@@ -490,7 +489,10 @@
     "fotoDelEquipo": "Photo: {equipo}",
     "tuClub": "Your club",
     "quitar": "Remove",
-    "correoContactoEjemplo": "sponsorship@yourclub.co.uk"
+    "correoContactoEjemplo": "sponsorship@yourclub.co.uk",
+    "eligeDeporte": "Choose the sport…",
+    "otroDeporte": "Other (type it in)",
+    "escribeDeporte": "Type the sport"
   },
   "perfil2": {
     "accionesSocialesEducativasO": "The club’s social, educational or charity work: what makes it more than a sports result.",

@@ -206,7 +206,7 @@ export function FiltrosBuscador({
             <option value="">{t("cualquiera")}</option>
             {opcionesEquipo.deportes.map((deporte) => (
               <option key={deporte} value={deporte}>
-                {deporte}
+                {E.deporte(deporte)}
               </option>
             ))}
           </select>

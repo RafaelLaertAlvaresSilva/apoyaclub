@@ -209,6 +209,28 @@
       "service": "Physio, transport, design, consulting… whatever your company does.",
       "in_kind": "Equipment, kit, food, printing… something you hand over.",
       "money": "A cash sponsorship in exchange for visibility."
+    },
+    "deporte": {
+      "balonmano": "Handball",
+      "futbol": "Football",
+      "futbolSala": "Futsal",
+      "baloncesto": "Basketball",
+      "voleibol": "Volleyball",
+      "voleyPlaya": "Beach volleyball",
+      "rugby": "Rugby",
+      "hockeyHierba": "Field hockey",
+      "hockeyPatines": "Roller hockey",
+      "waterpolo": "Water polo",
+      "padel": "Padel",
+      "tenis": "Tennis",
+      "tenisMesa": "Table tennis",
+      "atletismo": "Athletics",
+      "natacion": "Swimming",
+      "ciclismo": "Cycling",
+      "triatlon": "Triathlon",
+      "gimnasia": "Gymnastics",
+      "patinaje": "Skating",
+      "artesMarciales": "Martial arts"
     }
   },
   "plazas": {

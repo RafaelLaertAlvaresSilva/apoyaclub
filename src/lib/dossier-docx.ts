@@ -146,7 +146,7 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
   const disponibles = seccionesConContenido(perfil, equipos, patrocinadores, partidos);
   const incluir = (clave: DossierSectionKey) => secciones.includes(clave) && disponibles.has(clave);
 
-  const deportes = deportesDelClub(equipos);
+  const deportes = deportesDelClub(equipos).map(E.deporte);
   const ubicacion = [perfil.city, perfil.province].filter(Boolean).join(", ");
   const urlPublica = textos.urlDelClub(perfil.slug);
   const urlLimpia = urlPublica.replace(/^https?:\/\//, "");
@@ -313,7 +313,7 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
           bullet: { level: 0 },
           spacing: { after: 60 },
           children: [
-            new TextRun({ text: `${equipo.sport}${equipo.category ? ` · ${equipo.category}` : ""}`, size: 22, bold: true }),
+            new TextRun({ text: `${E.deporte(equipo.sport)}${equipo.category ? ` · ${equipo.category}` : ""}`, size: 22, bold: true }),
             new TextRun({ text: detalle ? ` — ${detalle}` : "", size: 22, color: GRIS }),
           ],
         }),
