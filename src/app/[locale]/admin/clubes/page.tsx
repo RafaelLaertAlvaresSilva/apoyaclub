@@ -16,6 +16,7 @@ import type { ClubAdminRow } from "./types";
 type ClubRowConAdmin = ClubRow & {
   subscription_status: SubscriptionStatus;
   admin_suspended: boolean;
+  admin_test_mode: boolean | null;
   trial_ends_at: string | null;
   stripe_subscription_id: string | null;
 };
@@ -37,6 +38,15 @@ const AVISOS: Record<string, { texto: string; bien: boolean }> = {
     bien: true,
   },
   reactivado: { texto: "Club reactivado. Vuelve a tener su página y su panel.", bien: true },
+  "modo-pruebas": {
+    texto:
+      "Club en modo de pruebas. En un minuto como mucho deja de verse en la web y en el buscador, y puede seguir entrando a su panel con normalidad.",
+    bien: true,
+  },
+  "fuera-de-pruebas": {
+    texto: "Modo de pruebas quitado. El club vuelve a verse en la web y en el buscador (en un minuto como mucho).",
+    bien: true,
+  },
   verificado: { texto: "Club verificado. Ya le sale la insignia en su página.", bien: true },
   "sin-verificar": { texto: "Verificación quitada.", bien: true },
   regalado: {
@@ -118,6 +128,7 @@ export default async function AdminClubesPage({
         profileCompletion: perfil?.profileScore ?? 0,
         verified: perfil?.verified ?? false,
         suspended: filaClub?.admin_suspended ?? false,
+        modoPruebas: filaClub?.admin_test_mode ?? false,
         visitas: actividad.get(usuario.id)?.visitas ?? 0,
         empresas: actividad.get(usuario.id)?.empresas ?? 0,
         contactos: actividad.get(usuario.id)?.contactos ?? 0,

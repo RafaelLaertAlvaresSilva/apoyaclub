@@ -14,6 +14,7 @@ import { intlLocaleDe } from "@/config/locales";
 import { PLANES, esPlanValido, precioFormateado } from "@/lib/planes";
 import { abrirPortalCliente } from "./actions";
 import { SelectorDePlan } from "./components/SelectorDePlan";
+import { estaEnModoPruebas } from "@/lib/modo-pruebas";
 
 /** Los `?error=` que pueden llegar de las acciones, con su texto en `errores`. */
 const ERRORES_CONOCIDOS = new Set(["sesion", "checkout", "portal", "sin-suscripcion", "sin-plazas"]);
@@ -68,6 +69,7 @@ export default async function SuscripcionPage({
     supabase.rpc("plazas_fundador_libres"),
   ]);
 
+  const modoPruebas = await estaEnModoPruebas(supabase, user.id);
   const planActual = esPlanValido(filaSuscripcion?.plan) ? PLANES[filaSuscripcion.plan] : null;
   const plazasFundadorLibres = typeof plazasLibres === "number" ? plazasLibres : 0;
 
@@ -215,7 +217,7 @@ export default async function SuscripcionPage({
           <div>
             <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{t("visibilidadPublica")}</dt>
             <dd className="mt-1 text-sm text-zinc-700">
-              {esVisiblePublicamente(suscripcion.status)
+              {esVisiblePublicamente(suscripcion.status, modoPruebas)
                 ? t("visible")
                 : t("noVisible")}
             </dd>

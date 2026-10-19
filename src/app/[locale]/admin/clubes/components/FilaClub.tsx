@@ -2,7 +2,9 @@ import { useTranslations } from "next-intl";
 import { diasHasta, esAccesoRegalado, unAnioDesde } from "@/lib/acceso-gratuito";
 import { etiquetaEstadoSuscripcion, type SubscriptionStatus } from "@/lib/subscription-mappers";
 import {
+  activarModoPruebas,
   darAccesoGratuito,
+  quitarModoPruebas,
   quitarVerificacionClub,
   reactivarClub,
   suspenderClub,
@@ -128,7 +130,12 @@ export function FilaClub({ fila }: { fila: ClubAdminRow }) {
           {fila.suspended && (
             <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">{t("suspendido")}</span>
           )}
-          {!fila.verified && !fila.suspended && <span className="text-xs text-zinc-500">—</span>}
+          {fila.modoPruebas && (
+            <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+              Modo de pruebas
+            </span>
+          )}
+          {!fila.verified && !fila.suspended && !fila.modoPruebas && <span className="text-xs text-zinc-500">—</span>}
         </div>
       </td>
       <td className="px-4 py-3">
@@ -140,6 +147,23 @@ export function FilaClub({ fila }: { fila: ClubAdminRow }) {
               className="rounded-lg border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
             >
               {fila.verified ? "Quitar verificación" : "Verificar"}
+            </button>
+          </form>
+          {/* Modo de pruebas: esconde el club de todo lo público sin
+              cortarle el panel. Va directo, sin confirmación, porque se
+              deshace con el mismo botón y no deja a nadie fuera. */}
+          <form action={fila.modoPruebas ? quitarModoPruebas : activarModoPruebas}>
+            <input type="hidden" name="id" value={fila.id} />
+            <button
+              type="submit"
+              title={
+                fila.modoPruebas
+                  ? "Vuelve a mostrar el club en la web y en el buscador"
+                  : "Esconde el club de la web y del buscador, pero le deja usar su panel"
+              }
+              className="rounded-lg border border-amber-300 px-2.5 py-1 text-xs font-medium text-amber-800 transition-colors hover:bg-amber-50"
+            >
+              {fila.modoPruebas ? "Quitar modo de pruebas" : "Modo de pruebas"}
             </button>
           </form>
           {/* Suspender le tumba al club la página pública y le corta el

@@ -26,6 +26,8 @@ export type AvisoAdmin =
   | "no-admin"
   | "suspendido"
   | "reactivado"
+  | "modo-pruebas"
+  | "fuera-de-pruebas"
   | "verificado"
   | "sin-verificar";
 
@@ -90,6 +92,26 @@ export async function suspenderClub(formData: FormData): Promise<void> {
 
 export async function reactivarClub(formData: FormData): Promise<void> {
   await actualizarClub(formData, { admin_suspended: false, admin_suspended_at: null }, "reactivado");
+}
+
+/**
+ * Modo de pruebas (migración 0053): el club desaparece de todo lo
+ * público —página, buscador, /servicios, sitemap y avisos a empresas—
+ * pero sigue entrando a su panel con normalidad. Es lo que se quiere
+ * para el club de pruebas de la plataforma o para preparar la ficha de
+ * un club invitado antes de enseñarla. Suspender, en cambio, le corta
+ * también el panel.
+ */
+export async function activarModoPruebas(formData: FormData): Promise<void> {
+  await actualizarClub(
+    formData,
+    { admin_test_mode: true, admin_test_mode_at: new Date().toISOString() },
+    "modo-pruebas",
+  );
+}
+
+export async function quitarModoPruebas(formData: FormData): Promise<void> {
+  await actualizarClub(formData, { admin_test_mode: false, admin_test_mode_at: null }, "fuera-de-pruebas");
 }
 
 /** Insignia pública de "verificado" en la página del club. */

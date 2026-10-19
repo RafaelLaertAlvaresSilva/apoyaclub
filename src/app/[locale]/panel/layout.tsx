@@ -4,8 +4,10 @@ import {
   subscriptionRowToInfo,
   type SubscriptionRow,
 } from "@/lib/subscription-mappers";
+import { estaEnModoPruebas } from "@/lib/modo-pruebas";
 import { createClient } from "@/lib/supabase/server";
 import type { Role } from "@/lib/types";
+import { AvisoModoPruebas } from "./components/AvisoModoPruebas";
 import { AvisoSuscripcion } from "./components/AvisoSuscripcion";
 import { PanelNav } from "./components/PanelNav";
 import { InterruptorDeTema } from "./components/InterruptorDeTema";
@@ -36,6 +38,10 @@ export default async function PanelLayout({
   // ficha solo se puede rellenar la identidad, y el menú tiene que
   // enseñar el resto de secciones apagadas en vez de dejar pulsarlas.
   let perfilCreado = false;
+  // Modo de pruebas (migración 0053): el club usa su panel, pero no se
+  // ve en público. Su página daría "no encontrada", así que el enlace
+  // a ella se quita y en su lugar sale un aviso arriba.
+  let modoPruebas = false;
 
   if (user && (user.app_metadata?.role as Role | undefined) === "club") {
     const { data } = await supabase
@@ -49,7 +55,8 @@ export default async function PanelLayout({
     const slug = (data as (SubscriptionRow & { slug?: string | null }) | null)
       ?.slug;
     perfilCreado = data != null;
-    if (slug) paginaPublica = `/${await getLocale()}/club/${slug}`;
+    modoPruebas = perfilCreado && (await estaEnModoPruebas(supabase, user.id));
+    if (slug && !modoPruebas) paginaPublica = `/${await getLocale()}/club/${slug}`;
   }
 
   return (
@@ -67,6 +74,7 @@ export default async function PanelLayout({
      */
     <div className="tema-panel flex min-h-dvh flex-1 flex-col bg-zinc-50">
       <BarraLogo extra={<InterruptorDeTema />} />
+      {modoPruebas && <AvisoModoPruebas />}
       {filaSuscripcion && (
         <AvisoSuscripcion
           suscripcion={subscriptionRowToInfo(filaSuscripcion)}

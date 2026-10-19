@@ -52,10 +52,11 @@ export function subscriptionRowToInfo(row: SubscriptionRow): ClubSubscription {
 }
 
 /** Un club solo aparece en su página pública y en el buscador mientras
- * su suscripción está en prueba o activa (Fase 10). Debe coincidir con
- * el filtro de las vistas `club_public_profiles` y
- * `opportunity_search_view` (migración 0007). */
-export function esVisiblePublicamente(status: SubscriptionStatus): boolean {
+ * su suscripción está en prueba o activa (Fase 10) y no está en modo de
+ * pruebas (migración 0053). Debe coincidir con el filtro de las vistas
+ * `club_public_profiles` y `opportunity_search_view`. */
+export function esVisiblePublicamente(status: SubscriptionStatus, modoPruebas = false): boolean {
+  if (modoPruebas) return false;
   return status === "trialing" || status === "active";
 }
 
