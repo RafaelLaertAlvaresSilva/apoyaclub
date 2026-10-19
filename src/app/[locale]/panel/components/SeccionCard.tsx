@@ -1,7 +1,7 @@
 /** Los colores de los apartados del panel (`globals.css`, "UN COLOR POR APARTADO"). */
-export type Tono = "azul" | "verde" | "naranja" | "violeta" | "rosa" | "oliva";
+export type Tono = "azul" | "verde" | "cielo" | "agua" | "naranja";
 
-export const TONOS: Tono[] = ["azul", "verde", "naranja", "violeta", "rosa", "oliva"];
+export const TONOS: Tono[] = ["azul", "verde", "cielo", "agua", "naranja"];
 
 /**
  * Las clases de un apartado de color, para las tarjetas que no usan
@@ -38,7 +38,7 @@ export function SeccionCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className={`${clasesApartado(tono)} overflow-hidden`}>
+    <section className={`${clasesApartado(tono)} tonal-fijo overflow-hidden`}>
       <div className="flex items-start gap-3 border-b border-(--tono-borde) bg-(--tono-fondo) px-5 py-4 sm:px-6">
         {numero != null && (
           <span
@@ -123,9 +123,9 @@ export function Campo({
  * más grande, en negrita y en el azul de los titulares, para que se
  * distinga de un vistazo de la ayuda gris de debajo.
  *
- * Y cada caja de su color (`.caja-campo` en `globals.css`): dos campos
- * seguidos nunca salen iguales, así que se ve dónde acaba uno y empieza
- * el siguiente sin tener que leer. El control encima es
+ * Y la caja toma el color del apartado donde está (`.caja-campo` y
+ * `.tonal-fijo` en `globals.css`): cada menú de un solo color de los del
+ * logo, sin arcoíris dentro. El control encima es
  * blanco (`clasesInput`), así que el hueco donde se escribe resalta
  * dentro de la caja. Los dos colores son variables del tema: en el modo
  * oscuro del panel se invierten solos.

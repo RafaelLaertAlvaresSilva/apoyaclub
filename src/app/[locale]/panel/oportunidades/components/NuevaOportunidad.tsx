@@ -87,7 +87,7 @@ export function NuevaOportunidad({
           abajo se rellena casi entero y solo queda el precio y la foto.
           Quien prefiere escribirla él, sigue bajando. */}
       <div className="mb-5">
-        <Paso numero={1} tono="rosa" titulo={t("pasos.idea")} descripcion={t("pasos.ideaTexto")}>
+        <Paso numero={1} tono="verde" titulo={t("pasos.idea")} descripcion={t("pasos.ideaTexto")}>
           <CatalogoDeIdeas requisitos={requisitos} onElegir={setIdea} enPaso />
         </Paso>
       </div>

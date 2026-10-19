@@ -272,7 +272,7 @@ export function OportunidadForm({
 
       <Paso
         numero={primerPaso + 1}
-        tono="verde"
+        tono="agua"
         titulo={esNecesidad ? t("pasos.duracion") : t("pasos.precio")}
         descripcion={esNecesidad ? t("pasos.duracionTexto") : t("pasos.precioTexto")}
       >
@@ -331,7 +331,7 @@ export function OportunidadForm({
 
       <Paso
         numero={primerPaso + 2}
-        tono="naranja"
+        tono="cielo"
         titulo={t("pasos.fotos")}
         descripcion={t("pasos.fotosTexto")}
       >
@@ -348,7 +348,7 @@ export function OportunidadForm({
       {/* A partir de aquí, todo opcional, y lo dice el título. */}
       <Paso
         numero={primerPaso + 3}
-        tono="violeta"
+        tono="verde"
         titulo={t("pasos.extra")}
         descripcion={t("pasos.extraTexto")}
       >
