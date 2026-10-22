@@ -18,10 +18,13 @@ export function AdminNav({ activo }: { activo: SeccionAdmin }) {
         <Link
           key={enlace.id}
           href={enlace.href}
-          className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+          // Todas con forma de botón, no solo la activa: sobre el fondo
+          // gris, las otras parecían texto suelto y no se veía que se
+          // pudieran pulsar.
+          className={`rounded-lg border px-3 py-1.5 text-sm font-medium shadow-sm transition-colors ${
             activo === enlace.id
-              ? "bg-accion text-sobre-color"
-              : "text-zinc-600 hover:bg-zinc-100"
+              ? "border-transparent bg-accion text-sobre-color"
+              : "border-zinc-300 bg-white text-zinc-700 hover:border-accion-tinta hover:text-accion-tinta"
           }`}
         >
           {enlace.etiqueta}
