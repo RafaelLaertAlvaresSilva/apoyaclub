@@ -69,7 +69,12 @@
     "cerrarSesion": "Terminar sessão",
     "cambiosSinGuardar": "Tens alterações por guardar neste separador. Se saíres agora, perdem-se.",
     "completaParaDesbloquear": "Completa a identidade do clube (nome e localidade) para desbloquear as restantes secções.",
-    "cerrar": "Fechar"
+    "cerrar": "Fechar",
+    "publico": {
+      "apuntar": "Registar um jogo"
+    },
+    "verOpcionesPublico": "Ver as opções de Público",
+    "ocultarOpcionesPublico": "Ocultar as opções de Público"
   },
   "tema": {
     "modoOscuro": "Modo escuro",

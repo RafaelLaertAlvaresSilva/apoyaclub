@@ -34,17 +34,19 @@ describe("el menú del panel", () => {
 
   // Sin esto, un cambio que rompiera la forma del archivo dejaría la
   // lista vacía y las comprobaciones de abajo pasarían sin mirar nada.
-  it("encuentra los trece destinos del menú", () => {
+  it("encuentra los catorce destinos del menú", () => {
     // Trece desde que "Renovaciones" entró en Seguimiento (migración
-    // 0050). Este número está escrito a mano a propósito: si alguien
-    // añade o quita un apartado, esta prueba se lo recuerda y le hace
-    // mirar las de abajo, que son las que de verdad comprueban algo.
-    expect(destinos).toHaveLength(13);
+    // 0050), y catorce con "Público → Apuntar un partido". Este número
+    // está escrito a mano a propósito: si alguien añade o quita un
+    // apartado, esta prueba se lo recuerda y le hace mirar las de abajo,
+    // que son las que de verdad comprueban algo.
+    expect(destinos).toHaveLength(14);
   });
 
   it("todos sus enlaces llevan a una página que existe", () => {
     for (const destino of destinos) {
-      const relativa = destino.replace(/^\/panel\/?/, "");
+      // Sin el ancla: "/panel/publico#apuntar" es la página de Público.
+      const relativa = destino.replace(/#.*$/, "").replace(/^\/panel\/?/, "");
       const carpeta = relativa === "" ? PANEL : join(PANEL, relativa);
       expect(() => leer(carpeta, "page.tsx"), `${destino} no existe`).not.toThrow();
     }

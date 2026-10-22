@@ -69,7 +69,12 @@
     "cerrarSesion": "Sign out",
     "cambiosSinGuardar": "You have unsaved changes on this tab. If you leave now, they will be lost.",
     "completaParaDesbloquear": "Fill in the club’s identity (name and town) to unlock the other sections.",
-    "cerrar": "Close"
+    "cerrar": "Close",
+    "publico": {
+      "apuntar": "Record a match"
+    },
+    "verOpcionesPublico": "Show Attendance options",
+    "ocultarOpcionesPublico": "Hide Attendance options"
   },
   "tema": {
     "modoOscuro": "Dark mode",

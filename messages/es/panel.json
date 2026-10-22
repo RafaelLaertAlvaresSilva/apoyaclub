@@ -1337,7 +1337,12 @@
     "cerrarSesion": "Cerrar sesión",
     "cambiosSinGuardar": "Tienes cambios sin guardar en esta pestaña. Si sales ahora se pierden.",
     "completaParaDesbloquear": "Completa la identidad del club (nombre y localidad) para desbloquear el resto de secciones.",
-    "cerrar": "Cerrar"
+    "cerrar": "Cerrar",
+    "publico": {
+      "apuntar": "Apuntar un partido"
+    },
+    "verOpcionesPublico": "Ver las opciones de Público",
+    "ocultarOpcionesPublico": "Ocultar las opciones de Público"
   },
   "recomendaciones": {
     "herramientasTePuedenAyudar": "Herramientas que te pueden ayudar",

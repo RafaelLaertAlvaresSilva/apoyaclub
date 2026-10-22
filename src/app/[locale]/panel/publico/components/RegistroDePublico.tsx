@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { Link } from "@/i18n/navigation";
@@ -28,6 +28,16 @@ const clasesInput =
  * patrocinador pregunta —cuánta gente pasa por delante de su valla—, y
  * la lista es la prueba de que ese número sale de algún sitio.
  */
+/** Ancla de la dirección, sin la almohadilla ("apuntar"). */
+function leerAncla(): string {
+  return window.location.hash.replace("#", "");
+}
+
+function suscribirseAlAncla(avisar: () => void): () => void {
+  window.addEventListener("hashchange", avisar);
+  return () => window.removeEventListener("hashchange", avisar);
+}
+
 export function RegistroDePublico({
   partidos,
   equiposDelClub,
@@ -43,6 +53,25 @@ export function RegistroDePublico({
   const [estadoAlta, alta] = useActionState(guardarPartido, null);
   const [estadoMedia, copiarMedia] = useActionState(usarMediaEnLaFicha, null);
   const [abierto, setAbierto] = useState(partidos.length === 0);
+
+  // Desde el menú, "Público → Apuntar un partido" lleva a
+  // `/panel/publico#apuntar`: el formulario se abre solo y la página
+  // baja hasta él. Antes había que encontrarlo debajo de todas las
+  // cifras y pulsar "Añadir partido".
+  const ancla = useSyncExternalStore(suscribirseAlAncla, leerAncla, () => "");
+  const [anclaAtendida, setAnclaAtendida] = useState("");
+  if (ancla === "apuntar" && anclaAtendida !== ancla) {
+    setAnclaAtendida(ancla);
+    setAbierto(true);
+  }
+  if (ancla !== "apuntar" && anclaAtendida) setAnclaAtendida("");
+
+  const apuntar = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (ancla !== "apuntar") return;
+    apuntar.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    apuntar.current?.querySelector<HTMLInputElement>("input[name=rival]")?.focus({ preventScroll: true });
+  }, [ancla, anclaAtendida]);
   const [equipoElegido, setEquipoElegido] = useState("");
 
   // Al guardar, React vacía los campos del formulario, pero el
@@ -245,13 +274,22 @@ export function RegistroDePublico({
       )}
 
       {/* ---- Apuntar un partido ---- */}
-      <section className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-5">
+      <section ref={apuntar} id="apuntar" className="scroll-mt-6 tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-base font-semibold text-zinc-900">{t("apuntarPartido")}</h2>
           {partidos.length > 0 && (
             <button
               type="button"
-              onClick={() => setAbierto((valor) => !valor)}
+              onClick={() => {
+                // Al cerrarlo se quita el "#apuntar" de la dirección: si
+                // no, volver a pulsarlo en el menú no cambiaría nada y el
+                // formulario no se abriría.
+                if (abierto && window.location.hash === "#apuntar") {
+                  window.history.replaceState(null, "", window.location.pathname + window.location.search);
+                  window.dispatchEvent(new HashChangeEvent("hashchange"));
+                }
+                setAbierto((valor) => !valor);
+              }}
               className="rounded-lg px-3 py-1.5 text-sm font-medium text-teal-700 transition-colors hover:bg-teal-50"
             >
               {abierto ? t("cerrar") : t("anadirPartido")}

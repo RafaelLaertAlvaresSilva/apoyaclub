@@ -53,7 +53,10 @@ const GRUPOS: Grupo[] = [
       },
       // El recuento de gente en los partidos (migración 0037): de aquí
       // sale la asistencia media que enseña la ficha.
-      { id: "publico", href: "/panel/publico", etiqueta: "Público" },
+      // Con flecha, como "Perfil del club": debajo cuelga "Apuntar un
+      // partido", que es a lo que se entra casi siempre y quedaba al
+      // final de la página, debajo de las cifras.
+      { id: "publico", href: "/panel/publico", etiqueta: "Público", desplegable: true },
       // Lo que sale de juntar la ficha con ese recuento, sin sumar
       // nada: es lo que el club enseña cuando le preguntan "¿y a cuánta
       // gente llegáis?".
@@ -250,6 +253,46 @@ function SeccionesDeLaFicha({
   );
 }
 
+/** Lo que cuelga de "Público": por ahora, ir directo a apuntar un partido. */
+const OPCIONES_DE_PUBLICO = [{ id: "apuntar", href: "/panel/publico#apuntar" }] as const;
+
+function OpcionesDePublico({ alNavegar }: { alNavegar?: () => void }) {
+  const t = useTranslations("panel.menu");
+  const ruta = usePathname();
+  const ancla = useSyncExternalStore(suscribirseAlAncla, leerAncla, () => "");
+
+  return (
+    <div className="mb-1 ml-3 flex flex-col gap-1 pl-2">
+      {OPCIONES_DE_PUBLICO.map((opcion) => {
+        const activa = ruta === "/panel/publico" && ancla === opcion.id;
+        return (
+          <Link
+            key={opcion.id}
+            href={opcion.href}
+            onClick={() => {
+              alNavegar?.();
+              // Estando ya en la página, el enlace solo cambia el ancla:
+              // se avisa a mano para que el formulario se abra.
+              if (ruta === "/panel/publico") {
+                window.setTimeout(() => window.dispatchEvent(new HashChangeEvent("hashchange")), 0);
+              }
+            }}
+            aria-current={activa ? "page" : undefined}
+            className={`flex items-center gap-2 rounded-lg border px-3 py-1.5 text-left text-sm transition-colors ${
+              activa
+                ? "border-teal-200 bg-teal-50 font-semibold text-teal-800"
+                : "border-zinc-200 font-medium text-zinc-500 hover:border-zinc-300 hover:bg-zinc-100 hover:text-titular"
+            }`}
+          >
+            <span aria-hidden="true" className="text-base leading-none">+</span>
+            {t(`publico.${opcion.id}`)}
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
 function Lista({
   sinAbrir,
   vencidas,
@@ -268,11 +311,13 @@ function Lista({
   const t = useTranslations("panel.menu");
   const ruta = usePathname();
 
-  // Desplegado al entrar en la ficha, para no obligar a abrirlo cada
-  // vez; cerrado desde cualquier otra página, donde solo estorbaría.
-  const [fichaDesplegada, setFichaDesplegada] = useState(
-    ruta === "/panel/perfil",
-  );
+  // Cada desplegable, abierto al entrar en su página para no obligar a
+  // abrirlo cada vez; cerrado desde cualquier otra, donde solo estorbaría.
+  const [desplegados, setDesplegados] = useState<Record<string, boolean>>({
+    perfil: ruta === "/panel/perfil",
+    publico: ruta === "/panel/publico",
+  });
+  const alternar = (id: string) => setDesplegados((antes) => ({ ...antes, [id]: !antes[id] }));
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -306,6 +351,8 @@ function Lista({
             }`;
 
             if (enlace.desplegable) {
+              const desplegado = Boolean(desplegados[enlace.id]);
+              const esFicha = enlace.id === "perfil";
               return (
                 <div key={enlace.id}>
                   {/* El nombre lleva a la página y la flecha abre la
@@ -316,7 +363,7 @@ function Lista({
                     <Link
                       href={enlace.href}
                       onClick={() => {
-                        setFichaDesplegada(true);
+                        setDesplegados((antes) => ({ ...antes, [enlace.id]: true }));
                         alNavegar?.();
                       }}
                       aria-current={abierto ? "page" : undefined}
@@ -326,13 +373,16 @@ function Lista({
                     </Link>
                     <button
                       type="button"
-                      onClick={() =>
-                        setFichaDesplegada((desplegada) => !desplegada)
-                      }
-                      aria-expanded={fichaDesplegada}
+                      onClick={() => alternar(enlace.id)}
+                      aria-expanded={desplegado}
                       aria-label={
-                        fichaDesplegada
-                          ? t("ocultarSeccionesFicha") : t("verSeccionesFicha")
+                        esFicha
+                          ? desplegado
+                            ? t("ocultarSeccionesFicha")
+                            : t("verSeccionesFicha")
+                          : desplegado
+                            ? t("ocultarOpcionesPublico")
+                            : t("verOpcionesPublico")
                       }
                       /* Un cuadrado de 32 px y no un texto con relleno:
                          antes era el carácter "▾" a 12 px, que en Windows
@@ -359,7 +409,7 @@ function Lista({
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         className={`h-[18px] w-[18px] transition-transform duration-200 ${
-                          fichaDesplegada ? "rotate-180" : ""
+                          desplegado ? "rotate-180" : ""
                         }`}
                       >
                         <path d="M6 9l6 6 6-6" />
@@ -367,12 +417,13 @@ function Lista({
                     </button>
                   </div>
 
-                  {fichaDesplegada && (
+                  {desplegado && esFicha && (
                     <SeccionesDeLaFicha
                       perfilCreado={perfilCreado}
                       alNavegar={alNavegar}
                     />
                   )}
+                  {desplegado && enlace.id === "publico" && <OpcionesDePublico alNavegar={alNavegar} />}
                 </div>
               );
             }
