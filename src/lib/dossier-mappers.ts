@@ -1,3 +1,4 @@
+import { nivelesValidos } from "@/lib/dossier-patrocinadores";
 import type { DossierConfig, DossierSectionKey } from "@/lib/types";
 
 /**
@@ -12,6 +13,8 @@ export type DossierRow = {
   share_token: string | null;
   share_enabled: boolean;
   share_expires_at: string | null;
+  /** Migración 0056. Opcional: antes de ejecutarla, la columna no viene. */
+  sponsor_tiers?: unknown;
   updated_at: string;
 };
 
@@ -41,6 +44,7 @@ export function dossierRowToConfig(row: DossierRow): DossierConfig {
     shareEnabled: row.share_enabled,
     shareToken: row.share_token,
     shareExpiresAt: row.share_expires_at,
+    sponsorTiers: Array.isArray(row.sponsor_tiers) ? nivelesValidos(row.sponsor_tiers) : null,
     updatedAt: row.updated_at,
   };
 }

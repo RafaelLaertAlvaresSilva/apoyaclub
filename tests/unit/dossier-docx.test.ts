@@ -83,12 +83,17 @@ describe("generarDossierWord", () => {
       ),
     );
 
-    expect(xml).toContain("Seguidores en Instagram");
-    expect(xml).toContain("Seguidores en Facebook");
+    // Cada red en su tarjeta de "Redes sociales", con sus seguidores.
+    expect(xml).toContain("Redes sociales");
+    expect(xml).toContain("Instagram");
+    expect(xml).toContain("Facebook");
+    expect(xml).toContain("1200");
+    expect(xml).toContain("500");
     expect(xml).not.toContain("1.700");
+    expect(xml).not.toContain("1700");
   });
 
-  it("marca de dónde sale cada cifra y enseña la cuenta de las deducidas", async () => {
+  it("marca de dónde sale cada cifra, en sencillo y sin las cuentas deducidas", async () => {
     const partido = (fecha: string, publico: number) => ({
       id: fecha,
       clubId: "club-1",
@@ -114,9 +119,12 @@ describe("generarDossierWord", () => {
       ),
     );
 
-    expect(xml).toContain("Lo que se ha contado");
-    expect(xml).toContain("partidos apuntados");
-    expect(xml).toContain("200 personas × 3 partidos en casa");
+    // Una etiqueta corta por cifra, en vez de los tres bloques
+    // ("contado", "declarado", "deducido") que costaba entender.
+    expect(xml).toContain("Contado en los partidos");
+    expect(xml).toContain("Partidos apuntados");
+    expect(xml).not.toContain("Lo que se deduce");
+    expect(xml).not.toContain("200 personas × 3 partidos en casa");
     expect(xml).toContain("ApoyaClub no las verifica");
   });
 
@@ -128,10 +136,25 @@ describe("generarDossierWord", () => {
     expect(xml).toContain("Quiénes somos");
     expect(xml).not.toContain("Ascenso a Primera Autonómica");
     expect(xml).not.toContain("Patrocinadores actuales");
-    // El nombre del patrocinador sigue saliendo en la portada, en "ya
-    // confían en nosotros", igual que en el PDF: la prueba social vende
-    // aunque el club no quiera el apartado entero.
-    expect(xml).toContain("YA CONFÍAN EN NOSOTROS");
+    // Tampoco en la portada: si el club no quiere enseñar a sus
+    // patrocinadores, no salen en ningún sitio (antes seguían en "ya
+    // confían en nosotros").
+    expect(xml).not.toContain("YA CONFÍAN EN NOSOTROS");
+  });
+
+  it("solo saca los niveles de patrocinador que ha elegido el club", async () => {
+    const datos = datosDePrueba();
+    const nivel = datos.patrocinadores[0].tier;
+    const otro = nivel === "principal" ? "oficial" : "principal";
+
+    const conSuNivel = await textoDelDocumento(await generarDossierWord({ ...datos, nivelesPatrocinadores: [nivel] }));
+    expect(conSuNivel).toContain(datos.patrocinadores[0].name);
+    expect(conSuNivel).toContain("YA CONFÍAN EN NOSOTROS");
+
+    const sinSuNivel = await textoDelDocumento(await generarDossierWord({ ...datos, nivelesPatrocinadores: [otro] }));
+    expect(sinSuNivel).not.toContain(datos.patrocinadores[0].name);
+    expect(sinSuNivel).not.toContain("Patrocinadores actuales");
+    expect(sinSuNivel).not.toContain("YA CONFÍAN EN NOSOTROS");
   });
 
   it("no publica el teléfono si el club no ha autorizado enseñarlo", async () => {

@@ -474,6 +474,9 @@ export type DossierConfig = {
   shareEnabled: boolean;
   shareToken: string | null;
   shareExpiresAt: string | null;
+  /** Niveles de patrocinador que salen en el dossier (migración 0056).
+   * Null = todos. */
+  sponsorTiers: SponsorTier[] | null;
   updatedAt: string;
 };
 

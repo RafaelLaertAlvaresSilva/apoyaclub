@@ -7,6 +7,7 @@ import { useActionState, useRef, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { SECCIONES_DOSSIER } from "@/lib/dossier";
+import { patrocinadoresDelDossier } from "@/lib/dossier-patrocinadores";
 import { formatoDeValor } from "@/lib/format";
 import type { AppLocale } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
@@ -17,6 +18,7 @@ import type {
   DossierConfig,
   DossierSectionKey,
   Opportunity,
+  SponsorTier,
 } from "@/lib/types";
 import { Campo, SeccionCard, clasesInput } from "../../components/SeccionCard";
 import { guardarConfiguracionDossier, type EstadoDossier } from "../actions";
@@ -29,6 +31,7 @@ function aFechaInput(iso: string | null): string {
 
 export function DossierManager({
   perfil,
+  patrocinadores,
   oportunidades,
   seccionesDisponibles,
   configuracion,
@@ -76,6 +79,10 @@ export function DossierManager({
       for (const valor of datosFormulario.getAll("sections")) cuerpo.append("sections", String(valor));
       for (const valor of datosFormulario.getAll("opportunityIds"))
         cuerpo.append("opportunityIds", String(valor));
+      if (datosFormulario.has("sponsorTiersEnviado")) {
+        cuerpo.append("sponsorTiersEnviado", "1");
+        for (const valor of datosFormulario.getAll("sponsorTiers")) cuerpo.append("sponsorTiers", String(valor));
+      }
 
       const respuesta = await fetch(`/${locale}/panel/dossier/${formato}`, { method: "POST", body: cuerpo });
       if (!respuesta.ok) throw new Error("Fallo al generar el dossier");
@@ -173,6 +180,13 @@ export function DossierManager({
           })}
         </div>
       </SeccionCard>
+
+      {patrocinadores.length > 0 && (
+        <PatrocinadoresDelDossier
+          patrocinadores={patrocinadores}
+          nivelesIniciales={configuracion?.sponsorTiers ?? null}
+        />
+      )}
 
       <SeccionCard
         titulo={t("oportunidadesAIncluir")}
@@ -325,5 +339,86 @@ function BotonDescarga({
       )}
       {ocupado ? "Generando…" : children}
     </button>
+  );
+}
+
+/**
+ * Qué patrocinadores salen en el dossier, por nivel (migración 0056).
+ *
+ * Debajo de cada casilla salen los nombres tal y como irán: por orden
+ * alfabético, y diciendo si llevan logo o solo el nombre. Así el club ve
+ * de un vistazo cuántos son y cómo se van a ver antes de descargarlo, y
+ * si algo no le cuadra tiene a mano dónde cambiarle el nivel a uno.
+ */
+function PatrocinadoresDelDossier({
+  patrocinadores,
+  nivelesIniciales,
+}: {
+  patrocinadores: ClubSponsor[];
+  nivelesIniciales: SponsorTier[] | null;
+}) {
+  const tp = useTranslations("panel.dossier.patrocinadores");
+  const locale = useLocale();
+  const grupos = patrocinadoresDelDossier(patrocinadores, null, locale);
+
+  // Un nivel "otro" puede tener varias etiquetas propias: una casilla
+  // para todas ("Otros: Amigos del club, Proveedores").
+  const niveles = Array.from(new Set(grupos.map((grupo) => grupo.nivel)));
+
+  return (
+    <SeccionCard titulo={tp("titulo")} descripcion={tp("descripcion")}>
+      <input type="hidden" name="sponsorTiersEnviado" value="1" />
+      <div className="flex flex-col gap-3">
+        {niveles.map((nivel) => {
+          const delNivel = grupos.filter((grupo) => grupo.nivel === nivel);
+          const total = delNivel.reduce((suma, grupo) => suma + grupo.patrocinadores.length, 0);
+          const nombreNivel =
+            nivel === "otro"
+              ? `${tp("niveles.otro")}: ${delNivel.map((grupo) => grupo.etiqueta).join(", ")}`
+              : tp(`niveles.${nivel}`);
+
+          return (
+            <label key={nivel} className="flex items-start gap-3 rounded-lg border border-zinc-200 p-3 text-sm">
+              <input
+                type="checkbox"
+                name="sponsorTiers"
+                value={nivel}
+                defaultChecked={nivelesIniciales ? nivelesIniciales.includes(nivel) : true}
+                className="mt-0.5 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
+              />
+              <span className="flex min-w-0 flex-1 flex-col gap-2">
+                <span className="flex flex-wrap items-baseline gap-x-2">
+                  <span className="font-medium text-zinc-900">{nombreNivel}</span>
+                  <span className="text-xs text-zinc-500">
+                    {tp("cuantos", { n: total })} · {delNivel.every((grupo) => grupo.conLogo) ? tp("conLogo") : tp("soloNombre")}
+                  </span>
+                </span>
+                <span className="flex flex-wrap gap-1.5">
+                  {delNivel.flatMap((grupo) =>
+                    grupo.patrocinadores.map((patrocinador) => (
+                      <span
+                        key={patrocinador.id}
+                        className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-700"
+                      >
+                        {patrocinador.name}
+                      </span>
+                    )),
+                  )}
+                </span>
+              </span>
+            </label>
+          );
+        })}
+        <p className="text-xs leading-relaxed text-zinc-500">
+          {tp.rich("ayuda", {
+            enlace: (trozo) => (
+              <Link href="/panel/patrocinadores" className="font-medium text-teal-700 hover:underline">
+                {trozo}
+              </Link>
+            ),
+          })}
+        </p>
+      </div>
+    </SeccionCard>
   );
 }

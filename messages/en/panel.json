@@ -780,7 +780,7 @@
     "secciones": {
       "identidad": {
         "etiqueta": "Identity",
-        "descripcion": "Who we are, location and contact."
+        "descripcion": "Who we are, website and social media."
       },
       "historia": {
         "etiqueta": "History",
@@ -796,7 +796,7 @@
       },
       "audiencia": {
         "etiqueta": "Audience",
-        "descripcion": "How many people you reach, with where each figure comes from and without adding them together."
+        "descripcion": "How many people you reach, in plain words."
       },
       "instalaciones": {
         "etiqueta": "Facilities",
@@ -812,7 +812,21 @@
     "descargarPdf": "Download PDF",
     "descargarWord": "Download Word",
     "pdfYWord": "The <fuerte>PDF</fuerte> is the one you send to a business: it looks the same on any screen and doesn’t get messed up. The <fuerte>Word</fuerte> file is for you: open it to change text, add photos or move sections around, then save it as a PDF from Word itself.",
-    "completaIdentidad": "First fill in the club’s identity (name and town) in <enlace>your profile</enlace> to be able to generate your sponsorship dossier."
+    "completaIdentidad": "First fill in the club’s identity (name and town) in <enlace>your profile</enlace> to be able to generate your sponsorship dossier.",
+    "patrocinadores": {
+      "titulo": "Sponsors in the dossier",
+      "descripcion": "Choose which levels appear. The “Current sponsors” section must be ticked too.",
+      "niveles": {
+        "principal": "Main sponsor",
+        "oficial": "Official sponsors",
+        "colaborador": "Partners",
+        "otro": "Others"
+      },
+      "cuantos": "{n, plural, one {# sponsor} other {# sponsors}}",
+      "conLogo": "shown with their logo",
+      "soloNombre": "shown by name only",
+      "ayuda": "In the dossier they appear in alphabetical order within each level. The main and official sponsors are shown with their logo (if there are more than 9, by name only); the rest by name only, in columns, so they all fit. To change a sponsor’s level, go to <enlace>Sponsors</enlace>."
+    }
   },
   "metricas": {
     "titulo": "Your month on ApoyaClub",
@@ -1444,6 +1458,7 @@
       "desde": "You can partner with us from {precio}",
       "detalleSiguiente": "{n, plural, one {You’ll find the details on the next page.} other {# different ways to partner with us, on the next page.}}",
       "yaConfian": "Already backing us",
+      "yMas": "and {n} more",
       "generado": "Pack generated on {fecha}",
       "elClub": "The club",
       "quienesSomos": "Who we are",
@@ -1460,8 +1475,7 @@
       "tarjetaJugadores": "Players",
       "tarjetaFamilias": "Families",
       "audiencia": "Audience in numbers",
-      "audienciaTexto": "The figures are kept separate by where they come from and aren't added together: the same person can be a member, a player's parent and a social media follower.",
-      "cifrasExactas": "The exact figures, and where each one comes from, below.",
+      "audienciaTexto": "The key points in a few words, and the figures one by one below. Each figure stands on its own: they are not added together.",
       "confian": "They trust us",
       "patrocinadores": "Current sponsors",
       "patrocinadoresTexto": "Companies already working with the club.",
@@ -1481,7 +1495,13 @@
       "noValido": "The link isn't valid.",
       "desactivado": "The club has turned off this link.",
       "caducado": "This link has expired.",
-      "clubNoDisponible": "The club is no longer available."
+      "clubNoDisponible": "The club is no longer available.",
+      "redes": "Social media",
+      "redesTexto": "Where to follow the club and how many people do.",
+      "web": "Website",
+      "seguidores": "{n, plural, one {follower} other {followers}}",
+      "origenContado": "Counted at matches",
+      "origenDeclarado": "Club figure"
     },
     "informe": {
       "portada": "Sponsorship report",

@@ -4,14 +4,24 @@ import {
   cifrasDePortada,
   resumenLlano,
   unidadEnTexto,
-  type BloqueDeAlcance,
   type CifraDeAlcance,
 } from "@/lib/alcance";
-import { agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
 import type { DatosDossier } from "@/lib/dossier-datos";
-import { deportesDelClub, seccionesConContenido } from "@/lib/dossier";
+import {
+  cifrasSencillasDeAudiencia,
+  deportesDelClub,
+  limpiarDireccion,
+  redesDelClub,
+  seccionesConContenido,
+} from "@/lib/dossier";
+import {
+  enFilas,
+  nombresDePortada,
+  patrocinadoresDelDossier,
+  type GrupoDePatrocinadores,
+} from "@/lib/dossier-patrocinadores";
 import { textosDeDocumento, type TextosDocumento } from "@/lib/textos-documento";
-import type { DossierSectionKey, SocialLinks } from "@/lib/types";
+import type { DossierSectionKey } from "@/lib/types";
 
 /**
  * Generador del dossier comercial en PDF (Fase 9). Se genera siempre en
@@ -35,15 +45,41 @@ import type { DossierSectionKey, SocialLinks } from "@/lib/types";
  *     catálogo después de la despedida.
  *   - El contacto va destacado y una sola vez. Es la llamada a la
  *     acción de todo el documento.
+ *
+ * Sobre la maqueta (22/10/2026):
+ *
+ *   - Ningún apartado va entero "sin partir" (`wrap={false}`). Antes sí,
+ *     y cuando uno no cabía en una página (diez oportunidades, treinta
+ *     patrocinadores) react-pdf lo apretujaba en la que había: las letras
+ *     salían unas encima de otras. Ahora lo que no se parte es cada
+ *     pieza (una oportunidad, una fila de tarjetas), y el título del
+ *     apartado no se queda solo al final de una página.
+ *   - Las tarjetas van en rejilla de columnas iguales, con el ancho
+ *     calculado, en vez de tantas como quepan: todo queda alineado.
  */
 
 const COLOR_MARCA = "#14304f"; // brand-navy (azul marino de marca)
 const COLOR_ACENTO = "#0f766e"; // brand-teal-dark
 const COLOR_ACENTO_SUAVE = "#e6f0ee";
+const COLOR_FONDO_SUAVE = "#f7f7f8";
 const COLOR_TEXTO = "#18181b"; // zinc-900
 const COLOR_TEXTO_SUAVE = "#52525b"; // zinc-600
 const COLOR_TEXTO_TENUE = "#a1a1aa"; // zinc-400
 const COLOR_BORDE = "#e4e4e7"; // zinc-200
+
+/** Márgenes laterales de todas las páginas y el ancho que queda dentro. */
+const MARGEN = 48;
+const ANCHO_UTIL = 595.28 - MARGEN * 2; // A4 en puntos
+const SEPARACION = 10;
+/** Lo que tiene que caber debajo de un título para no dejarlo solo. */
+const HUECO_BAJO_CABECERA = 130;
+/** Lo mismo para el título de un grupo de patrocinadores o de cifras. */
+const HUECO_BAJO_SUBTITULO = 110;
+
+/** El ancho de una celda de una rejilla de `columnas` columnas. */
+function anchoDeCelda(columnas: number): number {
+  return (ANCHO_UTIL - SEPARACION * (columnas - 1)) / columnas;
+}
 
 const estilos = StyleSheet.create({
   // -----------------------------------------------------------------
@@ -58,7 +94,7 @@ const estilos = StyleSheet.create({
   bandaPortada: { height: 190, backgroundColor: COLOR_MARCA },
   bandaImagen: { width: "100%", height: 190, objectFit: "cover" },
   cuerpoPortada: {
-    paddingHorizontal: 48,
+    paddingHorizontal: MARGEN,
     flexGrow: 1,
     display: "flex",
     flexDirection: "column",
@@ -99,37 +135,35 @@ const estilos = StyleSheet.create({
     fontFamily: "Helvetica-Bold",
     letterSpacing: 1.5,
     color: COLOR_ACENTO,
-    marginTop: 20,
+    marginTop: 22,
   },
-  portadaNombre: { fontSize: 30, fontFamily: "Helvetica-Bold", marginTop: 6, color: COLOR_MARCA },
+  portadaNombre: { fontSize: 28, fontFamily: "Helvetica-Bold", marginTop: 6, color: COLOR_MARCA, lineHeight: 1.2 },
   portadaDetalle: { fontSize: 11, color: COLOR_TEXTO_SUAVE, marginTop: 6 },
-  portadaResumen: { fontSize: 11, color: COLOR_TEXTO, marginTop: 16, lineHeight: 1.5 },
+  portadaResumen: { fontSize: 10.5, color: COLOR_TEXTO, marginTop: 16, lineHeight: 1.55 },
 
-  filaCifras: { display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 10, marginTop: 22 },
   cifra: {
     borderWidth: 1,
     borderColor: COLOR_BORDE,
     borderRadius: 8,
     paddingVertical: 12,
-    paddingHorizontal: 14,
-    minWidth: 108,
+    paddingHorizontal: 12,
   },
-  cifraValor: { fontSize: 22, fontFamily: "Helvetica-Bold", color: COLOR_MARCA },
-  cifraEtiqueta: { fontSize: 8, color: COLOR_TEXTO_SUAVE, marginTop: 3 },
+  cifraValor: { fontSize: 20, fontFamily: "Helvetica-Bold", color: COLOR_MARCA },
+  cifraEtiqueta: { fontSize: 8, color: COLOR_TEXTO_SUAVE, marginTop: 4, lineHeight: 1.3 },
 
   reclamo: { marginTop: 22, backgroundColor: COLOR_ACENTO_SUAVE, borderRadius: 8, padding: 16 },
   reclamoTexto: { fontSize: 12, fontFamily: "Helvetica-Bold", color: COLOR_ACENTO },
   reclamoDetalle: { fontSize: 9, color: COLOR_TEXTO_SUAVE, marginTop: 4 },
 
-  confianza: { marginTop: 28 },
+  confianza: { marginTop: 24 },
   confianzaEtiqueta: {
     fontSize: 8,
     fontFamily: "Helvetica-Bold",
     letterSpacing: 1.2,
     color: COLOR_TEXTO_TENUE,
-    marginBottom: 5,
+    marginBottom: 6,
   },
-  confianzaNombres: { fontSize: 10, fontFamily: "Helvetica-Bold", color: COLOR_TEXTO_SUAVE, lineHeight: 1.5 },
+  confianzaNombres: { fontSize: 9.5, fontFamily: "Helvetica-Bold", color: COLOR_TEXTO_SUAVE, lineHeight: 1.6 },
   portadaPie: {
     borderTopWidth: 1,
     borderTopColor: COLOR_BORDE,
@@ -144,40 +178,50 @@ const estilos = StyleSheet.create({
   // Contenido
   // -----------------------------------------------------------------
   paginaContenido: {
-    padding: 40,
-    paddingBottom: 56,
+    paddingTop: 48,
+    paddingHorizontal: MARGEN,
+    paddingBottom: 70,
     fontFamily: "Helvetica",
     color: COLOR_TEXTO,
     fontSize: 10,
   },
-  seccion: { marginBottom: 22 },
+  // Separaciones con `padding` y no con `margin` por debajo: react-pdf
+  // cuenta el margen inferior como si tuviera que caber en la página, y
+  // un apartado que cabía justo saltaba entero a la siguiente dejando
+  // media página en blanco.
+  seccion: { paddingBottom: 30 },
+  seccionCabecera: { marginBottom: 6 - HUECO_BAJO_CABECERA },
   seccionEtiqueta: {
     fontSize: 8,
     fontFamily: "Helvetica-Bold",
     letterSpacing: 1.2,
     color: COLOR_ACENTO,
-    marginBottom: 3,
+    marginBottom: 4,
   },
-  seccionTitulo: { fontSize: 15, fontFamily: "Helvetica-Bold", color: COLOR_MARCA },
-  seccionDescripcion: { fontSize: 9, color: COLOR_TEXTO_SUAVE, marginTop: 2 },
-  seccionRegla: { borderBottomWidth: 2, borderBottomColor: COLOR_ACENTO, width: 32, marginTop: 6, marginBottom: 10 },
-  parrafo: { fontSize: 10, lineHeight: 1.5, color: COLOR_TEXTO_SUAVE, marginBottom: 6 },
+  seccionTitulo: { fontSize: 16, fontFamily: "Helvetica-Bold", color: COLOR_MARCA },
+  seccionDescripcion: { fontSize: 9, color: COLOR_TEXTO_SUAVE, marginTop: 4, lineHeight: 1.4 },
+  seccionRegla: { borderBottomWidth: 2, borderBottomColor: COLOR_ACENTO, width: 32, marginTop: 8 },
+  parrafo: { fontSize: 10, lineHeight: 1.55, color: COLOR_TEXTO_SUAVE, marginBottom: 6 },
 
-  filaTarjetas: { display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8 },
+  fila: { display: "flex", flexDirection: "row", paddingBottom: SEPARACION },
   tarjeta: {
     borderWidth: 1,
     borderColor: COLOR_BORDE,
     borderRadius: 6,
     paddingVertical: 10,
     paddingHorizontal: 12,
-    minWidth: 104,
   },
+  tarjetaTitulo: { fontSize: 10, fontFamily: "Helvetica-Bold", color: COLOR_TEXTO, lineHeight: 1.3 },
   tarjetaValor: { fontSize: 17, fontFamily: "Helvetica-Bold", color: COLOR_MARCA },
-  tarjetaEtiqueta: { fontSize: 8, color: COLOR_TEXTO_SUAVE, marginTop: 2 },
+  tarjetaEtiqueta: { fontSize: 8, color: COLOR_TEXTO_SUAVE, marginTop: 3, lineHeight: 1.35 },
   tarjetaUnidad: { fontSize: 8, fontFamily: "Helvetica", color: COLOR_TEXTO_SUAVE },
-  tarjetaProcedencia: { fontSize: 7, color: COLOR_TEXTO_SUAVE, marginTop: 3, maxWidth: 150 },
-  bloqueTitulo: { fontSize: 10, fontFamily: "Helvetica-Bold", color: COLOR_MARCA, marginBottom: 2 },
-  bloqueExplicacion: { fontSize: 8, color: COLOR_TEXTO_SUAVE, marginBottom: 6, lineHeight: 1.4 },
+  tarjetaProcedencia: { fontSize: 7, color: COLOR_TEXTO_TENUE, marginTop: 4, lineHeight: 1.35 },
+  origenContado: { fontSize: 7, fontFamily: "Helvetica-Bold", color: COLOR_ACENTO, marginTop: 4 },
+  red: { borderWidth: 1, borderColor: COLOR_BORDE, borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12 },
+  redNombre: { fontSize: 10, fontFamily: "Helvetica-Bold", color: COLOR_MARCA },
+  redDireccion: { fontSize: 8, color: COLOR_ACENTO, marginTop: 3, lineHeight: 1.3 },
+  redSeguidores: { fontSize: 15, fontFamily: "Helvetica-Bold", color: COLOR_TEXTO, marginTop: 6 },
+  redSeguidoresUnidad: { fontSize: 8, fontFamily: "Helvetica", color: COLOR_TEXTO_SUAVE },
 
   // El resumen en cristiano. Va en un recuadro con el filo de color a
   // la izquierda para que sea lo primero que encuentra el ojo al llegar
@@ -185,44 +229,53 @@ const estilos = StyleSheet.create({
   resumenLlano: {
     borderLeftWidth: 3,
     borderLeftColor: COLOR_ACENTO,
-    paddingLeft: 10,
-    paddingVertical: 2,
-    marginBottom: 12,
+    backgroundColor: COLOR_FONDO_SUAVE,
+    paddingLeft: 12,
+    paddingRight: 10,
+    paddingVertical: 10,
   },
-  resumenLlanoFrase: { fontSize: 11, lineHeight: 1.45, marginBottom: 3 },
-  resumenLlanoPie: { fontSize: 7.5, color: COLOR_TEXTO_SUAVE, marginTop: 3 },
-  cuenta: { fontSize: 7.5, color: COLOR_TEXTO_SUAVE, marginTop: 4, lineHeight: 1.4 },
-  avisoDeOrigen: { fontSize: 7.5, color: COLOR_TEXTO_SUAVE, marginTop: 4, fontFamily: "Helvetica-Oblique" },
+  separacionTrasResumen: { height: 16 },
+  resumenLlanoFrase: { fontSize: 10.5, lineHeight: 1.45, marginBottom: 4 },
+  avisoDeOrigen: { fontSize: 7.5, color: COLOR_TEXTO_TENUE, marginTop: 6, fontFamily: "Helvetica-Oblique" },
 
-  hito: { display: "flex", flexDirection: "row", gap: 10, marginBottom: 5 },
-  hitoAno: { fontSize: 10, fontFamily: "Helvetica-Bold", color: COLOR_ACENTO, width: 34 },
+  hito: { display: "flex", flexDirection: "row", paddingBottom: 8 },
+  hitoAno: { fontSize: 10, fontFamily: "Helvetica-Bold", color: COLOR_ACENTO, width: 44 },
+  hitoTexto: { fontSize: 10, lineHeight: 1.5, color: COLOR_TEXTO_SUAVE, flex: 1 },
 
-  filaSponsors: { display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8 },
-  filaSponsor: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
+  grupoPatrocinadores: { paddingBottom: 14 },
+  grupoEtiqueta: {
+    fontSize: 8,
+    fontFamily: "Helvetica-Bold",
+    letterSpacing: 1,
+    color: COLOR_ACENTO,
+    marginBottom: 8,
+    paddingBottom: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: COLOR_BORDE,
+  },
+  patrocinadorConLogo: {
     borderWidth: 1,
     borderColor: COLOR_BORDE,
     borderRadius: 6,
-    paddingVertical: 7,
-    paddingHorizontal: 10,
+    padding: 10,
+    alignItems: "center",
   },
-  logoPequeno: {
-    width: 28,
-    height: 28,
-    borderRadius: 4,
-    // Mismo motivo que el logo del club: el de un patrocinador suele ser
-    // una marca apaisada y recortarla a un cuadrado se come el nombre.
-    objectFit: "contain",
-    marginRight: 8,
+  cajaLogoPatrocinador: { height: 44, width: "100%", alignItems: "center", justifyContent: "center", marginBottom: 6 },
+  logoPatrocinador: { maxHeight: 44, maxWidth: "100%", objectFit: "contain" },
+  inicialPatrocinador: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: COLOR_ACENTO_SUAVE,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  grupoSponsorEtiqueta: {
-    fontSize: 8,
-    fontFamily: "Helvetica-Bold",
-    color: COLOR_TEXTO_TENUE,
-    marginBottom: 4,
-  },
+  inicialPatrocinadorLetra: { fontSize: 18, fontFamily: "Helvetica-Bold", color: COLOR_ACENTO },
+  patrocinadorNombre: { fontSize: 9, fontFamily: "Helvetica-Bold", color: COLOR_TEXTO, textAlign: "center", lineHeight: 1.3 },
+  patrocinadorDesde: { fontSize: 7.5, color: COLOR_TEXTO_TENUE, marginTop: 2, textAlign: "center" },
+  nombreEnLista: { display: "flex", flexDirection: "row", alignItems: "flex-start" },
+  vineta: { width: 4, height: 4, borderRadius: 2, backgroundColor: COLOR_ACENTO, marginTop: 4, marginRight: 6 },
+  nombreEnListaTexto: { fontSize: 9, color: COLOR_TEXTO, lineHeight: 1.35, flex: 1 },
 
   oportunidad: {
     borderWidth: 1,
@@ -230,35 +283,41 @@ const estilos = StyleSheet.create({
     borderLeftWidth: 3,
     borderLeftColor: COLOR_ACENTO,
     borderRadius: 6,
-    padding: 12,
-    marginBottom: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    marginTop: 10,
   },
   oportunidadCabecera: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    gap: 12,
   },
-  oportunidadTitulo: { fontSize: 11, fontFamily: "Helvetica-Bold", color: COLOR_TEXTO, flexGrow: 1 },
-  oportunidadValor: { fontSize: 13, fontFamily: "Helvetica-Bold", color: COLOR_ACENTO },
-  oportunidadDuracion: { fontSize: 8, color: COLOR_TEXTO_TENUE, marginTop: 4 },
-  oportunidadExclusiva: { fontSize: 8, fontFamily: "Helvetica-Bold", color: COLOR_ACENTO, marginTop: 4 },
+  // `flex: 1` en el título y `flexShrink: 0` en el precio: con un título
+  // largo, antes se metía por debajo del importe.
+  oportunidadTitulo: { fontSize: 11, fontFamily: "Helvetica-Bold", color: COLOR_TEXTO, flex: 1, paddingRight: 14, lineHeight: 1.3 },
+  oportunidadValor: { fontSize: 13, fontFamily: "Helvetica-Bold", color: COLOR_ACENTO, flexShrink: 0 },
+  oportunidadTexto: { fontSize: 9.5, lineHeight: 1.5, color: COLOR_TEXTO_SUAVE, marginTop: 6 },
+  oportunidadDetalles: { display: "flex", flexDirection: "row", flexWrap: "wrap", marginTop: 8 },
+  oportunidadDuracion: { fontSize: 8, color: COLOR_TEXTO_SUAVE, marginRight: 14 },
+  oportunidadExclusiva: { fontSize: 8, fontFamily: "Helvetica-Bold", color: COLOR_ACENTO },
+
+  instalacionesDireccion: { fontSize: 10, fontFamily: "Helvetica-Bold", marginBottom: 6, color: COLOR_TEXTO },
 
   // -----------------------------------------------------------------
   // Contacto: la llamada a la acción del documento
   // -----------------------------------------------------------------
-  contacto: { backgroundColor: COLOR_MARCA, borderRadius: 8, padding: 20, marginTop: 8 },
+  contacto: { backgroundColor: COLOR_MARCA, borderRadius: 8, padding: 22, marginTop: 4 },
   contactoEtiqueta: { fontSize: 8, fontFamily: "Helvetica-Bold", letterSpacing: 1.2, color: "#7fcfc3" },
-  contactoTitulo: { fontSize: 15, fontFamily: "Helvetica-Bold", color: "#ffffff", marginTop: 4 },
-  contactoLinea: { fontSize: 11, color: "#ffffff", marginTop: 8 },
+  contactoTitulo: { fontSize: 15, fontFamily: "Helvetica-Bold", color: "#ffffff", marginTop: 4, marginBottom: 6 },
+  contactoLinea: { fontSize: 11, color: "#ffffff", marginTop: 6 },
   contactoTenue: { fontSize: 9, color: "#c7d3e0", marginTop: 8 },
 
   pie: {
     position: "absolute",
-    bottom: 24,
-    left: 40,
-    right: 40,
+    bottom: 28,
+    left: MARGEN,
+    right: MARGEN,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -284,6 +343,30 @@ function Pie({ url, textos }: { url: string; textos: TextosDocumento }) {
   );
 }
 
+/**
+ * Una rejilla de columnas iguales. Cada fila va entera a una página (no
+ * se parte una tarjeta por la mitad), pero la rejilla sí puede seguir en
+ * la siguiente.
+ */
+function Rejilla({ columnas, celdas }: { columnas: number; celdas: React.ReactNode[] }) {
+  const ancho = anchoDeCelda(columnas);
+  // Las filas sueltas, sin una caja que las envuelva: cada una salta
+  // de página por su cuenta.
+  return (
+    <>
+      {enFilas(celdas, columnas).map((fila, indiceFila) => (
+        <View key={indiceFila} style={estilos.fila} wrap={false}>
+          {fila.map((celda, indice) => (
+            <View key={indice} style={{ width: ancho, marginRight: indice < columnas - 1 ? SEPARACION : 0 }}>
+              {celda}
+            </View>
+          ))}
+        </View>
+      ))}
+    </>
+  );
+}
+
 function Tarjeta({ etiqueta, valor }: { etiqueta: string; valor: string }) {
   return (
     <View style={estilos.tarjeta}>
@@ -294,13 +377,14 @@ function Tarjeta({ etiqueta, valor }: { etiqueta: string; valor: string }) {
 }
 
 /**
- * Una cifra del informe de alcance, con su unidad y con de dónde sale
- * escrito debajo. La procedencia no es decoración: es lo que separa
- * "240 personas de media, apuntadas partido a partido" de un número
- * puesto a ojo, y es lo único que hace que la empresa se lo crea.
+ * Una cifra de audiencia, en sencillo: el número con su unidad, qué es,
+ * y una etiqueta corta que dice si se ha contado en los partidos o es
+ * un dato del club. Antes llevaba debajo una frase de metodología y las
+ * cifras iban en tres bloques ("contado", "declarado", "deducido") que
+ * costaba entender.
  */
 function TarjetaDeAlcance({ cifra, textos }: { cifra: CifraDeAlcance; textos: TextosDocumento }) {
-  const { tAlcance, numero: formatoNumero } = textos;
+  const { t, tAlcance, numero: formatoNumero } = textos;
   return (
     <View style={estilos.tarjeta}>
       <Text style={estilos.tarjetaValor}>
@@ -308,28 +392,9 @@ function TarjetaDeAlcance({ cifra, textos }: { cifra: CifraDeAlcance; textos: Te
         <Text style={estilos.tarjetaUnidad}>{unidadEnTexto(cifra.unidad, cifra.valor, tAlcance)}</Text>
       </Text>
       <Text style={estilos.tarjetaEtiqueta}>{cifra.etiqueta}</Text>
-      <Text style={estilos.tarjetaProcedencia}>{cifra.procedencia}</Text>
-    </View>
-  );
-}
-
-function BloqueDeAlcanceEnPdf({ bloque, textos }: { bloque: BloqueDeAlcance; textos: TextosDocumento }) {
-  return (
-    <View style={{ marginBottom: 10 }}>
-      <Text style={estilos.bloqueTitulo}>{bloque.titulo}</Text>
-      <Text style={estilos.bloqueExplicacion}>{bloque.explicacion}</Text>
-      <View style={estilos.filaTarjetas}>
-        {bloque.cifras.map((cifra) => (
-          <TarjetaDeAlcance key={cifra.id} cifra={cifra} textos={textos} />
-        ))}
-      </View>
-      {bloque.cifras
-        .filter((cifra) => cifra.cuenta)
-        .map((cifra) => (
-          <Text key={`${cifra.id}-cuenta`} style={estilos.cuenta}>
-            {cifra.etiqueta}: {cifra.cuenta}
-          </Text>
-        ))}
+      <Text style={cifra.origen === "contado" ? estilos.origenContado : estilos.tarjetaProcedencia}>
+        {cifra.origen === "contado" ? t("origenContado") : t("origenDeclarado")}
+      </Text>
     </View>
   );
 }
@@ -343,6 +408,11 @@ function Cifra({ etiqueta, valor }: { etiqueta: string; valor: string }) {
   );
 }
 
+/**
+ * Un apartado del dossier. El apartado se puede partir entre páginas;
+ * su cabecera no, y además pide sitio para algo de contenido debajo:
+ * así un título nunca se queda solo al pie de una página.
+ */
 function Seccion({
   etiqueta,
   titulo,
@@ -355,12 +425,72 @@ function Seccion({
   children: React.ReactNode;
 }) {
   return (
-    <View style={estilos.seccion} wrap={false}>
-      {etiqueta && <Text style={estilos.seccionEtiqueta}>{etiqueta.toUpperCase()}</Text>}
-      <Text style={estilos.seccionTitulo}>{titulo}</Text>
-      {descripcion && <Text style={estilos.seccionDescripcion}>{descripcion}</Text>}
-      <View style={estilos.seccionRegla} />
+    <View style={estilos.seccion}>
+      <View style={estilos.seccionCabecera} wrap={false}>
+        {etiqueta && <Text style={estilos.seccionEtiqueta}>{etiqueta.toUpperCase()}</Text>}
+        <Text style={estilos.seccionTitulo}>{titulo}</Text>
+        {descripcion && <Text style={estilos.seccionDescripcion}>{descripcion}</Text>}
+        <View style={estilos.seccionRegla} />
+        {/* Hueco invisible que va con la cabecera y que el contenido
+            vuelve a ocupar (margen negativo de la cabecera): si al pie
+            de la página no cabe la cabecera más este hueco, pasa entera
+            a la siguiente. `minPresenceAhead` debería hacerlo y en la
+            práctica no lo hace. */}
+        <View style={{ height: HUECO_BAJO_CABECERA }} />
+      </View>
       {children}
+    </View>
+  );
+}
+
+/**
+ * Un grupo de patrocinadores: los grandes con su logo en tarjetas, el
+ * resto solo con el nombre, en tres columnas. Por orden alfabético
+ * (`lib/dossier-patrocinadores.ts`).
+ */
+function GrupoDePatrocinadoresEnPdf({ grupo, textos }: { grupo: GrupoDePatrocinadores; textos: TextosDocumento }) {
+  const { t } = textos;
+  const titulo = `${textos.nivelPatrocinador(grupo.etiqueta).toUpperCase()}  ·  ${grupo.patrocinadores.length}`;
+
+  return (
+    <View style={estilos.grupoPatrocinadores}>
+      <View wrap={false} style={{ marginBottom: -HUECO_BAJO_SUBTITULO }}>
+        <Text style={estilos.grupoEtiqueta}>{titulo}</Text>
+        <View style={{ height: HUECO_BAJO_SUBTITULO }} />
+      </View>
+      {grupo.conLogo ? (
+        <Rejilla
+          columnas={3}
+          celdas={grupo.patrocinadores.map((patrocinador) => (
+            <View key={patrocinador.id} style={estilos.patrocinadorConLogo}>
+              <View style={estilos.cajaLogoPatrocinador}>
+                {patrocinador.logoUrl ? (
+                  /* eslint-disable-next-line jsx-a11y/alt-text -- Image de @react-pdf/renderer, no la de HTML: no admite alt. */
+                  <Image src={patrocinador.logoUrl} style={estilos.logoPatrocinador} />
+                ) : (
+                  <View style={estilos.inicialPatrocinador}>
+                    <Text style={estilos.inicialPatrocinadorLetra}>{patrocinador.name.trim().charAt(0).toUpperCase()}</Text>
+                  </View>
+                )}
+              </View>
+              <Text style={estilos.patrocinadorNombre}>{patrocinador.name}</Text>
+              {patrocinador.sinceYear != null && (
+                <Text style={estilos.patrocinadorDesde}>{t("desdeAnio", { anio: String(patrocinador.sinceYear) })}</Text>
+              )}
+            </View>
+          ))}
+        />
+      ) : (
+        <Rejilla
+          columnas={3}
+          celdas={grupo.patrocinadores.map((patrocinador) => (
+            <View key={patrocinador.id} style={estilos.nombreEnLista}>
+              <View style={estilos.vineta} />
+              <Text style={estilos.nombreEnListaTexto}>{patrocinador.name}</Text>
+            </View>
+          ))}
+        />
+      )}
     </View>
   );
 }
@@ -378,19 +508,23 @@ function DossierDocumento({
   oportunidades,
   partidos,
   secciones,
+  nivelesPatrocinadores,
   emailContacto,
   textos,
 }: DatosDossierPdf & { textos: TextosDocumento }) {
   const { t, E, numero: formatoNumero, precio: formatoValorOportunidad } = textos;
-  const disponibles = seccionesConContenido(perfil, equipos, patrocinadores, partidos);
+
+  // Solo los niveles de patrocinador que ha elegido el club.
+  const gruposPatrocinadores = patrocinadoresDelDossier(patrocinadores, nivelesPatrocinadores ?? null, textos.intlLocale);
+  const patrocinadoresElegidos = gruposPatrocinadores.flatMap((grupo) => grupo.patrocinadores);
+
+  const disponibles = seccionesConContenido(perfil, equipos, patrocinadoresElegidos, partidos);
   const incluir = (clave: DossierSectionKey) => secciones.includes(clave) && disponibles.has(clave);
 
   const deportes = deportesDelClub(equipos).map(E.deporte);
   const ubicacion = [perfil.city, perfil.province].filter(Boolean).join(", ");
   const urlPublica = textos.urlDelClub(perfil.slug);
 
-  const redesSociales = (Object.entries(perfil.socialLinks) as [keyof SocialLinks, string | undefined][])
-    .filter((entrada): entrada is [keyof SocialLinks, string] => !!entrada[1]);
 
   /**
    * El alcance del club, calculado en un solo sitio (`lib/alcance.ts`)
@@ -411,6 +545,17 @@ function DossierDocumento({
     (minimo, oportunidad) => (minimo == null || oportunidad.value < minimo ? oportunidad.value : minimo),
     null,
   );
+
+  // En la portada, solo si el club ha decidido enseñar sus patrocinadores.
+  const portadaPatrocinadores = incluir("patrocinadores") ? nombresDePortada(gruposPatrocinadores) : null;
+
+  // "Redes sociales": cada red con su dirección y sus seguidores. Sale
+  // con "Quiénes somos" o con "Audiencia", que son de donde venían esos
+  // datos antes de tener apartado propio.
+  const redes = redesDelClub(perfil);
+  const verRedes =
+    (secciones.includes("identidad") || secciones.includes("audiencia")) && (redes.length > 0 || !!perfil.website);
+  const cifrasAudiencia = cifrasSencillasDeAudiencia(alcance);
 
   return (
     <Document
@@ -450,18 +595,17 @@ function DossierDocumento({
             )}
 
             {perfil.description && (
-              <Text style={estilos.portadaResumen}>{recortar(perfil.description, 320)}</Text>
+              <Text style={estilos.portadaResumen}>{recortar(perfil.description, 300)}</Text>
             )}
 
             {cifrasPortada.length > 0 && (
-              <View style={estilos.filaCifras}>
-                {cifrasPortada.map((cifra) => (
-                  <Cifra
-                    key={cifra.id}
-                    etiqueta={cifra.etiqueta}
-                    valor={formatoNumero.format(cifra.valor)}
-                  />
-                ))}
+              <View style={{ marginTop: 22 }}>
+                <Rejilla
+                  columnas={4}
+                  celdas={cifrasPortada.map((cifra) => (
+                    <Cifra key={cifra.id} etiqueta={cifra.etiqueta} valor={formatoNumero.format(cifra.valor)} />
+                  ))}
+                />
               </View>
             )}
 
@@ -479,17 +623,14 @@ function DossierDocumento({
 
           <View>
             {/* Prueba social en la portada: que otras empresas ya estén
-                dentro es lo que más convence a la que aún no lo está, y
-                de paso llena el hueco que quedaba entre el reclamo y el
-                pie. */}
-            {patrocinadores.length > 0 && (
+                dentro es lo que más convence a la que aún no lo está. Las
+                de más nivel primero, y como mucho ocho nombres. */}
+            {portadaPatrocinadores && portadaPatrocinadores.nombres.length > 0 && (
               <View style={estilos.confianza}>
                 <Text style={estilos.confianzaEtiqueta}>{t("yaConfian").toUpperCase()}</Text>
                 <Text style={estilos.confianzaNombres}>
-                  {patrocinadores
-                    .slice(0, 8)
-                    .map((patrocinador) => patrocinador.name)
-                    .join("  ·  ")}
+                  {portadaPatrocinadores.nombres.join("   ·   ")}
+                  {portadaPatrocinadores.resto > 0 ? `   ·   ${t("yMas", { n: portadaPatrocinadores.resto })}` : ""}
                 </Text>
               </View>
             )}
@@ -507,22 +648,72 @@ function DossierDocumento({
 
       {/* Contenido: fluye automáticamente en tantas páginas como haga falta. */}
       <Page size="A4" style={estilos.paginaContenido}>
+        {/* El orden: primero quién es el club (quiénes somos, historia,
+            instalaciones y redes), luego qué ofrece y a quién llega, y al
+            final quién confía ya en él y cómo contactar. */}
         {incluir("identidad") && perfil.description && (
           <Seccion etiqueta={t("elClub")} titulo={t("quienesSomos")}>
             <Text style={estilos.parrafo}>{perfil.description}</Text>
-            {(perfil.website || redesSociales.length > 0) && (
-              <Text style={[estilos.parrafo, { marginBottom: 0 }]}>
-                {[perfil.website, ...redesSociales.map(([, url]) => url)]
-                  .filter(Boolean)
-                  .map((url) => url!.replace(/^https?:\/\//, ""))
-                  .join("  ·  ")}
-              </Text>
-            )}
           </Seccion>
         )}
 
-        {/* Lo que se vende va antes que la historia del club: quien lee
-            esto está decidiendo si colabora, no estudiando su pasado. */}
+        {incluir("historia") && (
+          <Seccion etiqueta={t("elClub")} titulo={t("historia")}>
+            {perfil.foundingYear != null && (
+              <Text style={estilos.parrafo}>{t("fundado", { anio: String(perfil.foundingYear) })}</Text>
+            )}
+            {perfil.milestones
+              .slice()
+              .sort((a, b) => a.year - b.year)
+              .map((hito, indice) => (
+                <View key={`${hito.year}-${indice}`} style={estilos.hito} wrap={false}>
+                  <Text style={estilos.hitoAno}>{hito.year}</Text>
+                  <Text style={estilos.hitoTexto}>{hito.text}</Text>
+                </View>
+              ))}
+          </Seccion>
+        )}
+
+        {incluir("instalaciones") && (perfil.facilities || perfil.facilitiesAddress) && (
+          <Seccion etiqueta={t("elClub")} titulo={t("instalaciones")}>
+            {perfil.facilitiesAddress && (
+              <Text style={estilos.instalacionesDireccion}>{perfil.facilitiesAddress}</Text>
+            )}
+            {perfil.facilities && <Text style={estilos.parrafo}>{perfil.facilities}</Text>}
+          </Seccion>
+        )}
+
+        {verRedes && (
+          <Seccion etiqueta={t("elClub")} titulo={t("redes")} descripcion={t("redesTexto")}>
+            <Rejilla
+              columnas={3}
+              celdas={[
+                ...(perfil.website
+                  ? [
+                      <View key="web" style={estilos.red}>
+                        <Text style={estilos.redNombre}>{t("web")}</Text>
+                        <Text style={estilos.redDireccion}>{limpiarDireccion(perfil.website)}</Text>
+                      </View>,
+                    ]
+                  : []),
+                ...redes.map((red) => (
+                  <View key={red.red} style={estilos.red}>
+                    <Text style={estilos.redNombre}>{red.nombre}</Text>
+                    {red.direccion && <Text style={estilos.redDireccion}>{red.direccion}</Text>}
+                    {red.seguidores != null && (
+                      <Text style={estilos.redSeguidores}>
+                        {formatoNumero.format(red.seguidores)}{" "}
+                        <Text style={estilos.redSeguidoresUnidad}>{t("seguidores", { n: red.seguidores })}</Text>
+                      </Text>
+                    )}
+                  </View>
+                )),
+              ]}
+            />
+          </Seccion>
+        )}
+
+        {/* Lo que se vende, justo después de presentar al club. */}
         {oportunidades.length > 0 && (
           <Seccion
             etiqueta={t("propuesta")}
@@ -538,17 +729,19 @@ function DossierDocumento({
                   </Text>
                 </View>
                 {oportunidad.description && (
-                  <Text style={[estilos.parrafo, { marginTop: 4, marginBottom: 0 }]}>
-                    {oportunidad.description}
-                  </Text>
+                  <Text style={estilos.oportunidadTexto}>{oportunidad.description}</Text>
                 )}
-                {oportunidad.exclusivity && (
-                  <Text style={estilos.oportunidadExclusiva}>
-                    {t("exclusiva", { sector: oportunidad.exclusivity })}
-                  </Text>
-                )}
-                {oportunidad.duration && (
-                  <Text style={estilos.oportunidadDuracion}>{oportunidad.duration}</Text>
+                {(oportunidad.duration || oportunidad.exclusivity) && (
+                  <View style={estilos.oportunidadDetalles}>
+                    {oportunidad.duration && (
+                      <Text style={estilos.oportunidadDuracion}>{oportunidad.duration}</Text>
+                    )}
+                    {oportunidad.exclusivity && (
+                      <Text style={estilos.oportunidadExclusiva}>
+                        {t("exclusiva", { sector: oportunidad.exclusivity })}
+                      </Text>
+                    )}
+                  </View>
                 )}
               </View>
             ))}
@@ -557,23 +750,25 @@ function DossierDocumento({
 
         {incluir("equipos") && (
           <Seccion etiqueta={t("aQuienLlegas")} titulo={t("equipos")}>
-            <View style={estilos.filaTarjetas}>
-              {equipos.map((equipo) => (
+            <Rejilla
+              columnas={3}
+              celdas={equipos.map((equipo) => (
                 <View key={equipo.id} style={estilos.tarjeta}>
-                  <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold" }}>
+                  <Text style={estilos.tarjetaTitulo}>
                     {E.deporte(equipo.sport)}
                     {equipo.category ? ` · ${equipo.category}` : ""}
                   </Text>
                   <Text style={estilos.tarjetaEtiqueta}>
-                    {E.nivelEquipo(equipo.teamLevel)}
-                    {equipo.gender ? ` · ${textos.sexo(equipo.gender)}` : ""}
-                    {equipo.playerCount != null
-                      ? ` · ${t("jugadores", { n: equipo.playerCount })}`
-                      : ""}
+                    {[E.nivelEquipo(equipo.teamLevel), equipo.gender ? textos.sexo(equipo.gender) : null]
+                      .filter(Boolean)
+                      .join(" · ")}
                   </Text>
+                  {equipo.playerCount != null && (
+                    <Text style={estilos.tarjetaEtiqueta}>{t("jugadores", { n: equipo.playerCount })}</Text>
+                  )}
                 </View>
               ))}
-            </View>
+            />
           </Seccion>
         )}
 
@@ -583,47 +778,50 @@ function DossierDocumento({
             titulo={t("cantera")}
             descripcion={t("canteraTexto")}
           >
-            <View style={estilos.filaTarjetas}>
-              {perfil.youthTeamsCount != null && (
-                <Tarjeta etiqueta={t("tarjetaEquipos")} valor={formatoNumero.format(perfil.youthTeamsCount)} />
-              )}
-              {perfil.youthPlayersCount != null && (
-                <Tarjeta etiqueta={t("tarjetaJugadores")} valor={formatoNumero.format(perfil.youthPlayersCount)} />
-              )}
-              {perfil.youthFamiliesCount != null && (
-                <Tarjeta etiqueta={t("tarjetaFamilias")} valor={formatoNumero.format(perfil.youthFamiliesCount)} />
-              )}
-            </View>
+            <Rejilla
+              columnas={3}
+              celdas={[
+                perfil.youthTeamsCount != null && (
+                  <Tarjeta key="equipos" etiqueta={t("tarjetaEquipos")} valor={formatoNumero.format(perfil.youthTeamsCount)} />
+                ),
+                perfil.youthPlayersCount != null && (
+                  <Tarjeta key="jugadores" etiqueta={t("tarjetaJugadores")} valor={formatoNumero.format(perfil.youthPlayersCount)} />
+                ),
+                perfil.youthFamiliesCount != null && (
+                  <Tarjeta key="familias" etiqueta={t("tarjetaFamilias")} valor={formatoNumero.format(perfil.youthFamiliesCount)} />
+                ),
+              ].filter(Boolean)}
+            />
           </Seccion>
         )}
 
-        {incluir("audiencia") && alcance.hayCifras && (
+        {incluir("audiencia") && alcance.hayCifras && (frasesLlanas.length > 0 || cifrasAudiencia.length > 0) && (
           <Seccion
             etiqueta={t("aQuienLlegas")}
             titulo={t("audiencia")}
             descripcion={t("audienciaTexto")}
           >
-            {/* Primero en cristiano, y debajo las cifras con su
-                procedencia. Quien abre esto suele ser el dueño de un
-                comercio decidiendo en dos minutos, no un director de
-                marketing: si lo primero que se encuentra son ocho
-                tarjetas con su metodología, pasa la página. */}
+            {/* Primero en cristiano, y debajo las cifras una a una, cada
+                una con una etiqueta corta de dónde sale. Quien abre esto
+                suele ser el dueño de un comercio decidiendo en dos
+                minutos, no un director de marketing. */}
             {frasesLlanas.length > 0 && (
-              <View style={estilos.resumenLlano}>
+              <View style={estilos.resumenLlano} wrap={false}>
                 {frasesLlanas.map((frase) => (
                   <Text key={frase} style={estilos.resumenLlanoFrase}>
                     {frase}
                   </Text>
                 ))}
-                <Text style={estilos.resumenLlanoPie}>
-                  {t("cifrasExactas")}
-                </Text>
               </View>
             )}
+            {frasesLlanas.length > 0 && <View style={estilos.separacionTrasResumen} />}
 
-            {alcance.bloques.map((bloque) => (
-              <BloqueDeAlcanceEnPdf key={bloque.id} bloque={bloque} textos={textos} />
-            ))}
+            <Rejilla
+              columnas={3}
+              celdas={cifrasAudiencia.map((cifra) => (
+                <TarjetaDeAlcance key={cifra.id} cifra={cifra} textos={textos} />
+              ))}
+            />
             <Text style={estilos.avisoDeOrigen}>{tAlcance("avisoDeOrigen")}</Text>
           </Seccion>
         )}
@@ -634,51 +832,9 @@ function DossierDocumento({
             titulo={t("patrocinadores")}
             descripcion={t("patrocinadoresTexto")}
           >
-            {agruparPatrocinadoresPorNivel(patrocinadores).map((grupo) => (
-              <View key={grupo.etiqueta} style={{ marginBottom: 8 }}>
-                <Text style={estilos.grupoSponsorEtiqueta}>{textos.nivelPatrocinador(grupo.etiqueta).toUpperCase()}</Text>
-                <View style={estilos.filaSponsors}>
-                  {grupo.patrocinadores.map((patrocinador) => (
-                    <View key={patrocinador.id} style={estilos.filaSponsor}>
-                      {/* eslint-disable-next-line jsx-a11y/alt-text -- Image de @react-pdf/renderer, no la de HTML: no admite alt. */}
-                      {patrocinador.logoUrl && <Image src={patrocinador.logoUrl} style={estilos.logoPequeno} />}
-                      <Text style={{ fontSize: 9, fontFamily: "Helvetica-Bold" }}>
-                        {patrocinador.name}
-                        {patrocinador.sinceYear ? ` ${t("desdeAnio", { anio: String(patrocinador.sinceYear) })}` : ""}
-                      </Text>
-                    </View>
-                  ))}
-                </View>
-              </View>
+            {gruposPatrocinadores.map((grupo) => (
+              <GrupoDePatrocinadoresEnPdf key={grupo.etiqueta} grupo={grupo} textos={textos} />
             ))}
-          </Seccion>
-        )}
-
-        {incluir("historia") && (
-          <Seccion etiqueta={t("elClub")} titulo={t("historia")}>
-            {perfil.foundingYear != null && (
-              <Text style={estilos.parrafo}>{t("fundado", { anio: String(perfil.foundingYear) })}</Text>
-            )}
-            {perfil.milestones
-              .slice()
-              .sort((a, b) => a.year - b.year)
-              .map((hito, indice) => (
-                <View key={`${hito.year}-${indice}`} style={estilos.hito}>
-                  <Text style={estilos.hitoAno}>{hito.year}</Text>
-                  <Text style={[estilos.parrafo, { marginBottom: 0, flexGrow: 1 }]}>{hito.text}</Text>
-                </View>
-              ))}
-          </Seccion>
-        )}
-
-        {incluir("instalaciones") && (perfil.facilities || perfil.facilitiesAddress) && (
-          <Seccion etiqueta={t("elClub")} titulo={t("instalaciones")}>
-            {perfil.facilitiesAddress && (
-              <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", marginBottom: 4 }}>
-                {perfil.facilitiesAddress}
-              </Text>
-            )}
-            {perfil.facilities && <Text style={estilos.parrafo}>{perfil.facilities}</Text>}
           </Seccion>
         )}
 

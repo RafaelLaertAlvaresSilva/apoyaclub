@@ -43,7 +43,7 @@
     "secciones": {
       "identidad": {
         "etiqueta": "Identidad",
-        "descripcion": "Quiénes somos, ubicación y contacto."
+        "descripcion": "Quiénes somos, web y redes sociales."
       },
       "historia": {
         "etiqueta": "Historia",
@@ -59,7 +59,7 @@
       },
       "audiencia": {
         "etiqueta": "Audiencia",
-        "descripcion": "A cuánta gente llegas, con el origen de cada cifra y sin sumar unas con otras."
+        "descripcion": "A cuánta gente llegas, explicado de forma sencilla."
       },
       "instalaciones": {
         "etiqueta": "Instalaciones",
@@ -75,7 +75,21 @@
     "descargarPdf": "Descargar PDF",
     "descargarWord": "Descargar Word",
     "pdfYWord": "El <fuerte>PDF</fuerte> es el que se manda a una empresa: se ve igual en cualquier pantalla y no se descoloca. El <fuerte>Word</fuerte> es para ti: ábrelo para cambiar textos, añadir fotos o mover apartados de sitio, y guárdalo después como PDF desde el propio Word.",
-    "completaIdentidad": "Completa primero la identidad del club (nombre y localidad) en <enlace>tu perfil</enlace> para poder generar tu dossier de patrocinio."
+    "completaIdentidad": "Completa primero la identidad del club (nombre y localidad) en <enlace>tu perfil</enlace> para poder generar tu dossier de patrocinio.",
+    "patrocinadores": {
+      "titulo": "Patrocinadores en el dossier",
+      "descripcion": "Elige qué niveles salen. Tienes que tener marcada también la sección «Patrocinadores actuales».",
+      "niveles": {
+        "principal": "Patrocinador principal",
+        "oficial": "Patrocinadores oficiales",
+        "colaborador": "Colaboradores",
+        "otro": "Otros"
+      },
+      "cuantos": "{n, plural, one {# patrocinador} other {# patrocinadores}}",
+      "conLogo": "salen con su logo",
+      "soloNombre": "salen solo con el nombre",
+      "ayuda": "En el dossier van por orden alfabético dentro de cada nivel. El principal y los oficiales salen con su logo (si son más de 9, solo con el nombre); el resto, solo con el nombre y en columnas, para que quepan todos. Para cambiar el nivel de un patrocinador, ve a <enlace>Patrocinadores</enlace>."
+    }
   },
   "metricas": {
     "titulo": "Tu mes en ApoyaClub",
@@ -1444,6 +1458,7 @@
       "desde": "Puedes colaborar con nosotros desde {precio}",
       "detalleSiguiente": "{n, plural, one {Tienes el detalle en la página siguiente.} other {# formas distintas de colaborar, en la página siguiente.}}",
       "yaConfian": "Ya confían en nosotros",
+      "yMas": "y {n} más",
       "generado": "Dossier generado el {fecha}",
       "elClub": "El club",
       "quienesSomos": "Quiénes somos",
@@ -1460,8 +1475,7 @@
       "tarjetaJugadores": "Jugadores",
       "tarjetaFamilias": "Familias",
       "audiencia": "Audiencia en cifras",
-      "audienciaTexto": "Las cifras van separadas según de dónde salen, y no se suman entre sí: la misma persona puede ser socio, padre de un jugador y seguidor en redes.",
-      "cifrasExactas": "Las cifras exactas, y de dónde sale cada una, aquí debajo.",
+      "audienciaTexto": "Lo más importante, en pocas palabras, y debajo las cifras una a una. Cada cifra va por separado: no se suman entre sí.",
       "confian": "Confían en nosotros",
       "patrocinadores": "Patrocinadores actuales",
       "patrocinadoresTexto": "Empresas que ya colaboran con el club.",
@@ -1481,7 +1495,13 @@
       "noValido": "El enlace no es válido.",
       "desactivado": "El club ha desactivado este enlace.",
       "caducado": "Este enlace ha caducado.",
-      "clubNoDisponible": "El club ya no está disponible."
+      "clubNoDisponible": "El club ya no está disponible.",
+      "redes": "Redes sociales",
+      "redesTexto": "Dónde seguir al club y cuánta gente lo sigue.",
+      "web": "Página web",
+      "seguidores": "{n, plural, one {seguidor} other {seguidores}}",
+      "origenContado": "Contado en los partidos",
+      "origenDeclarado": "Dato del club"
     },
     "informe": {
       "portada": "Informe de patrocinio",

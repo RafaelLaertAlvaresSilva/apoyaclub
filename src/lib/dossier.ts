@@ -1,5 +1,6 @@
 import type { Partido } from "@/lib/publico-partidos";
-import type { ClubProfile, ClubSponsor, ClubTeam, DossierSectionKey } from "@/lib/types";
+import { ETIQUETA_RED_SOCIAL, type CifraDeAlcance, type InformeDeAlcance } from "@/lib/alcance";
+import type { ClubProfile, ClubSponsor, ClubTeam, DossierSectionKey, SocialLinks } from "@/lib/types";
 import { normalizarDeporte } from "@/lib/deportes";
 
 /**
@@ -136,4 +137,51 @@ export function deportesDelClub(equipos: ClubTeam[]): string[] {
   return Array.from(
     new Set(equipos.map((equipo) => equipo.sport.trim()).filter(Boolean).map(normalizarDeporte)),
   );
+}
+
+/** Las redes en el orden en que se enseñan en el dossier. */
+const ORDEN_REDES: (keyof SocialLinks)[] = ["instagram", "facebook", "tiktok", "youtube", "twitter"];
+
+export type RedDelClub = {
+  red: keyof SocialLinks;
+  nombre: string;
+  /** La dirección sin "https://", para que se lea entera. */
+  direccion: string | null;
+  seguidores: number | null;
+};
+
+/**
+ * Las redes del club para el apartado "Redes sociales" del dossier: cada
+ * una con su dirección y sus seguidores juntos. Antes las direcciones
+ * iban en una línea suelta debajo de "Quiénes somos" y los seguidores
+ * por otro lado, entre las cifras de audiencia.
+ */
+export function redesDelClub(perfil: ClubProfile): RedDelClub[] {
+  return ORDEN_REDES.map((red) => ({
+    red,
+    nombre: ETIQUETA_RED_SOCIAL[red],
+    direccion: perfil.socialLinks[red] ? limpiarDireccion(perfil.socialLinks[red]!) : null,
+    seguidores: perfil.followersByNetwork[red] ?? null,
+  })).filter((red) => red.direccion || red.seguidores != null);
+}
+
+/** "https://www.club.es/" → "www.club.es". */
+export function limpiarDireccion(url: string): string {
+  return url.trim().replace(/^https?:\/\//, "").replace(/\/$/, "");
+}
+
+/**
+ * Las cifras de audiencia que se enseñan en el dossier, en una sola
+ * rejilla y sin tecnicismos: las contadas y las que da el club. Se
+ * quedan fuera las deducidas (cuentas hechas con las otras, que
+ * costaba entender) y los seguidores, que van con su red en "Redes
+ * sociales". Tampoco el número de equipos, que ya tiene su apartado.
+ */
+export function cifrasSencillasDeAudiencia(informe: InformeDeAlcance): CifraDeAlcance[] {
+  return informe.bloques
+    .filter((bloque) => bloque.id !== "deducido")
+    .flatMap((bloque) => bloque.cifras)
+    .filter((cifra) => !cifra.id.startsWith("seguidores-"))
+    // Cuántos equipos tiene el club ya lo dice el apartado "Equipos".
+    .filter((cifra) => cifra.unidad !== "equipos");
 }

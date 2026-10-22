@@ -5,6 +5,7 @@ import { randomBytes } from "crypto";
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
 import { seccionesValidas, type DossierRow } from "@/lib/dossier-mappers";
+import { nivelesValidos } from "@/lib/dossier-patrocinadores";
 import { getLocale } from "next-intl/server";
 import { SITE_URL } from "@/lib/site";
 import { createClient } from "@/lib/supabase/server";
@@ -104,14 +105,30 @@ export async function guardarConfiguracionDossier(
       ? generarTokenEnlace()
       : (actual?.share_token ?? null);
 
-  const { error } = await supabase.from("club_dossiers").upsert({
+  const fila = {
     id: user.id,
     sections: secciones,
     opportunity_ids: opportunityIds,
     share_enabled: shareEnabledSolicitado,
     share_token: shareToken,
     share_expires_at: shareExpiresAt,
-  });
+  };
+  // Qué patrocinadores salen (migración 0056). Solo si el formulario
+  // trae la opción: el club no tiene patrocinadores y no se le enseña.
+  const nivelesPatrocinadores = formData.has("sponsorTiersEnviado")
+    ? nivelesValidos(formData.getAll("sponsorTiers"))
+    : undefined;
+
+  const filaConPatrocinadores: typeof fila & { sponsor_tiers?: string[] } = nivelesPatrocinadores
+    ? { ...fila, sponsor_tiers: nivelesPatrocinadores }
+    : fila;
+  let { error } = await supabase.from("club_dossiers").upsert(filaConPatrocinadores);
+
+  // Si la web se publica antes de ejecutar la migración 0056, la columna
+  // todavía no existe: se guarda lo demás y el dossier sale con todos.
+  if (error && nivelesPatrocinadores && /sponsor_tiers/.test(error.message ?? "")) {
+    ({ error } = await supabase.from("club_dossiers").upsert(fila));
+  }
 
   if (error) return { error: t("podidoGuardarConfiguracionDossier") };
 

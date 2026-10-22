@@ -1,11 +1,12 @@
 import { clubRowToProfile, clubSponsorRowToSponsor, clubTeamRowToTeam } from "@/lib/club-mappers";
 import type { ClubRow, ClubSponsorRow, ClubTeamRow } from "@/lib/club-mappers";
 import { seccionesValidas } from "@/lib/dossier-mappers";
+import { nivelesValidos } from "@/lib/dossier-patrocinadores";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
 import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
 import type { Partido } from "@/lib/publico-partidos";
 import type { createClient } from "@/lib/supabase/server";
-import type { ClubProfile, ClubSponsor, ClubTeam, DossierSectionKey, Opportunity } from "@/lib/types";
+import type { ClubProfile, ClubSponsor, ClubTeam, DossierSectionKey, Opportunity, SponsorTier } from "@/lib/types";
 
 /**
  * Todo lo que hace falta para montar un dossier, venga en PDF o en Word.
@@ -23,6 +24,8 @@ export type DatosDossier = {
    * contada del alcance, que es la que una empresa se cree. */
   partidos: Partido[];
   secciones: DossierSectionKey[];
+  /** Qué niveles de patrocinador salen (migración 0056). Null = todos. */
+  nivelesPatrocinadores?: SponsorTier[] | null;
   emailContacto: string | null;
 };
 
@@ -45,6 +48,11 @@ export async function reunirDatosDelDossier(
 ): Promise<(DatosDossier & { slug: string }) | null> {
   const secciones = seccionesValidas(formData.getAll("sections"));
   const idsOportunidades = formData.getAll("opportunityIds").map(String);
+  // La marca de que el formulario trae la opción: sin ella (un
+  // formulario de antes), salen todos, como siempre.
+  const nivelesPatrocinadores = formData.has("sponsorTiersEnviado")
+    ? nivelesValidos(formData.getAll("sponsorTiers"))
+    : null;
 
   const [
     { data: filaClub },
@@ -89,6 +97,7 @@ export async function reunirDatosDelDossier(
     oportunidades: (filasOportunidades ?? []).map(opportunityRowToOpportunity),
     partidos,
     secciones,
+    nivelesPatrocinadores,
     emailContacto,
   };
 }
