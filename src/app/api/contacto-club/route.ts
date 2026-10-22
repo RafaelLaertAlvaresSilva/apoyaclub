@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { consumirLimite, ipDelVisitante } from "@/lib/rate-limit";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { estaEnModoPruebas } from "@/lib/modo-pruebas";
+import { estaEscondido } from "@/lib/modo-pruebas";
 
 /**
  * Devuelve los datos de contacto de un club y apunta que alguien los ha
@@ -75,8 +75,9 @@ export async function POST(request: Request) {
     !club.admin_suspended &&
     (club.subscription_status === "trialing" || club.subscription_status === "active");
 
-  // Un club en modo de pruebas (migración 0053) tampoco está publicado.
-  if (!publicado || (await estaEnModoPruebas(admin, club.id))) {
+  // Un club en modo de pruebas (0053) o escondido por él mismo (0055)
+  // tampoco está publicado.
+  if (!publicado || (await estaEscondido(admin, club.id))) {
     return NextResponse.json({ error: "Club no disponible." }, { status: 404 });
   }
 

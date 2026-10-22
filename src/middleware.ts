@@ -121,6 +121,21 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // Migración 0055: lo mismo para una empresa suspendida. Si la columna
+  // todavía no existe (web publicada antes que la migración), la
+  // consulta falla, `fila` queda vacía y la empresa pasa como siempre.
+  if (rol === "empresa") {
+    const { data: fila } = await supabase
+      .from("companies")
+      .select("admin_suspended")
+      .eq("id", user.id)
+      .maybeSingle<{ admin_suspended: boolean | null }>();
+
+    if (fila?.admin_suspended) {
+      return NextResponse.redirect(new URL(`/${locale}/cuenta-suspendida`, request.url));
+    }
+  }
+
   return intlResponse;
 }
 

@@ -33,6 +33,8 @@ type FilaEmpresa = {
   name: string | null;
   province: string | null;
   unsubscribe_token: string;
+  /** Migración 0055. Opcional: antes de ejecutarla, la columna no existe. */
+  admin_suspended?: boolean | null;
 };
 
 type FilaOferta = { company_id: string; category: string | null };
@@ -101,7 +103,9 @@ export async function avisarDeNecesidadesQueEncajan(
     await Promise.all([
       admin
         .from("companies")
-        .select("id, name, province, unsubscribe_token")
+        // `*` y no una lista: así, si la web se publica antes que la
+        // migración 0055, los avisos siguen saliendo en vez de fallar.
+        .select("*")
         .eq("alerts_enabled", true)
         .not("name", "is", null)
         .returns<FilaEmpresa[]>(),
@@ -124,7 +128,11 @@ export async function avisarDeNecesidadesQueEncajan(
     return 0;
   }
 
-  if (!empresas?.length || !necesidades?.length) return 0;
+  // A una empresa suspendida no se le escribe (migración 0055). Una en
+  // modo de pruebas sí: es la que se usa para probar justo esto.
+  const activas = (empresas ?? []).filter((empresa) => !empresa.admin_suspended);
+
+  if (!activas.length || !necesidades?.length) return 0;
 
   // Qué ofrece cada una. Sin categoría no se puede cruzar con nada, así
   // que esa oferta no cuenta para los avisos.
@@ -149,7 +157,7 @@ export async function avisarDeNecesidadesQueEncajan(
 
   let enviados = 0;
 
-  for (const empresa of empresas) {
+  for (const empresa of activas) {
     const categorias = categoriasPorEmpresa.get(empresa.id);
     if (!categorias?.size) continue;
 

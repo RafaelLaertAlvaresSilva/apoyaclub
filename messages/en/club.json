@@ -1,6 +1,6 @@
 {
   "meta": {
-    "noEncontrado": "Club not found — ApoyaClub",
+    "noEncontrado": "Club not found",
     "titulo": "{club} — ApoyaClub",
     "descripcionPorDefecto": "{resumen}. Find out how to sponsor this club on ApoyaClub."
   },

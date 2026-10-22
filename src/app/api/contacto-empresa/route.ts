@@ -47,7 +47,10 @@ export async function POST(request: Request) {
 
   const { data: empresa } = await createAdminClient()
     .from("companies")
-    .select("contact_name, contact_email, contact_phone, contact_public_consent, open_to_sponsor, website")
+    // `*` y no una lista: si la web se publica antes que la migración
+    // 0055, las columnas de suspensión y modo de pruebas todavía no
+    // existen y una lista explícita haría fallar el contacto de todas.
+    .select("*")
     .eq("slug", slug)
     .maybeSingle<{
       contact_name: string | null;
@@ -56,11 +59,13 @@ export async function POST(request: Request) {
       contact_public_consent: boolean | null;
       open_to_sponsor: boolean | null;
       website: string | null;
+      admin_suspended?: boolean | null;
+      admin_test_mode?: boolean | null;
     }>();
 
   // Mismas condiciones que la ficha pública: si la empresa no sale en
   // el directorio, su contacto tampoco.
-  if (!empresa || !empresa.open_to_sponsor) {
+  if (!empresa || !empresa.open_to_sponsor || empresa.admin_suspended || empresa.admin_test_mode) {
     return NextResponse.json({ error: "Empresa no disponible." }, { status: 404 });
   }
 

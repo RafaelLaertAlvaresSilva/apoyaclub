@@ -3,7 +3,7 @@ import { LegalPageShell } from "@/components/LegalPageShell";
 import { LEGAL_VERSIONS, formatearFechaLegal } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Política de cookies | ApoyaClub",
+  title: "Política de cookies",
 };
 
 /**

@@ -1,10 +1,21 @@
 import { Link, redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
+import { AvisoExito } from "@/components/AvisoError";
+import { leerVisibilidadDelClub } from "@/lib/modo-pruebas";
 import { createClient } from "@/lib/supabase/server";
+import { cambiarVisibilidadClub } from "./actions";
 import { EliminarCuentaForm } from "./components/EliminarCuentaForm";
 
-/** Privacidad y datos del club (Fase 11): exportar y eliminar la cuenta. */
-export default async function PrivacidadClubPage() {
+/**
+ * Visibilidad, privacidad y datos del club: si se le ve en la web
+ * (migración 0055), exportar sus datos y eliminar la cuenta (Fase 11).
+ */
+export default async function PrivacidadClubPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ visibilidad?: string }>;
+}) {
+  const { visibilidad } = await searchParams;
   const t = await getTranslations("panel.privacidad");
   const supabase = await createClient();
   const {
@@ -15,6 +26,8 @@ export default async function PrivacidadClubPage() {
     const locale = await getLocale();
     return redirect({ href: "/login", locale });
   }
+
+  const { modoPruebas, ocultoPorElClub } = await leerVisibilidadDelClub(supabase, user.id);
 
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
@@ -28,6 +41,36 @@ export default async function PrivacidadClubPage() {
         </div>
       </div>
 
+      {visibilidad === "guardada" && <AvisoExito mensaje={t("cambioGuardado")} />}
+
+      {/* Si se le ve en la web. Es un solo botón que dice lo que va a
+          hacer, no un interruptor: un interruptor no deja claro si
+          está diciendo cómo está o cómo se va a quedar. */}
+      <section className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-6">
+        <h2 className="text-base font-semibold text-zinc-900">{t("visibilidad")}</h2>
+        <p className="mt-1 max-w-2xl text-sm text-zinc-500">{t("visibilidadTexto")}</p>
+        <p
+          className={`mt-4 inline-block rounded-full px-3 py-1 text-sm font-medium ${
+            ocultoPorElClub ? "bg-zinc-100 text-zinc-700" : "bg-teal-100 text-teal-800"
+          }`}
+        >
+          {ocultoPorElClub ? t("estadoOculto") : t("estadoVisible")}
+        </p>
+        {modoPruebas && <p className="mt-3 max-w-2xl text-sm text-amber-800">{t("estadoModoPruebas")}</p>}
+        <form action={cambiarVisibilidadClub} className="mt-4">
+          <input type="hidden" name="ocultar" value={ocultoPorElClub ? "no" : "si"} />
+          <button
+            type="submit"
+            className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+              ocultoPorElClub
+                ? "bg-accion text-sobre-color hover:opacity-90"
+                : "border border-zinc-300 text-zinc-700 hover:bg-zinc-100"
+            }`}
+          >
+            {ocultoPorElClub ? t("mostrarClub") : t("ocultarClub")}
+          </button>
+        </form>
+      </section>
 
       <section className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-6">
         <h2 className="text-base font-semibold text-zinc-900">{t("descargarMisDatos")}</h2>

@@ -19,7 +19,7 @@ export async function generateMetadata({
   const datos = await obtenerClubPublico(slug);
   const tMetadatos = await getTranslations("club.listas");
 
-  if (!datos) return { title: `${tMetadatos("clubNoEncontrado")} — ApoyaClub` };
+  if (!datos) return { title: `${tMetadatos("clubNoEncontrado")}` };
   return { title: `${tMetadatos("oportunidades.titulo")} — ${datos.perfil.name}` };
 }
 

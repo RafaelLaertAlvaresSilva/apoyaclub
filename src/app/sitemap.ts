@@ -54,16 +54,19 @@ async function empresasPublicas(): Promise<{ slug: string; updatedAt: string | n
     const supabase = createPublicClient();
     const { data, error } = await supabase
       .from("company_public_profiles")
-      .select("slug, updated_at")
+      // La vista no tiene `updated_at`, solo `created_at`. Pedía la que no
+      // existe, la consulta fallaba y ninguna ficha de empresa llegaba
+      // nunca al mapa del sitio, sin ningún error a la vista.
+      .select("slug, created_at")
       .not("slug", "is", null)
-      .order("updated_at", { ascending: false })
+      .order("created_at", { ascending: false })
       .limit(5000);
 
     if (error || !data) return [];
 
     return data.map((fila) => ({
       slug: fila.slug as string,
-      updatedAt: (fila.updated_at as string | null) ?? null,
+      updatedAt: (fila.created_at as string | null) ?? null,
     }));
   } catch {
     return [];
@@ -93,6 +96,21 @@ async function clubesPublicos(): Promise<{ slug: string; updatedAt: string | nul
   }
 }
 
+/**
+ * Las tres versiones de una misma página, para cada entrada del mapa.
+ *
+ * Así Google sabe que /es/para-clubes, /pt/para-clubes y
+ * /en/para-clubes son la misma página en tres idiomas, y no tres
+ * páginas parecidas compitiendo entre sí. Es la forma que Google acepta
+ * de decirlo desde el mapa del sitio, sin tocar cada página.
+ */
+function idiomas(ruta: string) {
+  const languages: Record<string, string> = {};
+  for (const locale of routing.locales) languages[locale] = `${SITE_URL}/${locale}${ruta}`;
+  languages["x-default"] = `${SITE_URL}/${routing.defaultLocale}${ruta}`;
+  return { languages };
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [clubes, empresas] = await Promise.all([clubesPublicos(), empresasPublicas()]);
   const ahora = new Date();
@@ -103,6 +121,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: ahora,
       changeFrequency: entrada.frecuencia,
       priority: entrada.prioridad,
+      alternates: idiomas(entrada.ruta),
     })),
   );
 
@@ -112,6 +131,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: club.updatedAt ? new Date(club.updatedAt) : ahora,
       changeFrequency: "weekly" as const,
       priority: 0.7,
+      alternates: idiomas(`/club/${club.slug}`),
     })),
   );
 
@@ -121,6 +141,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: empresa.updatedAt ? new Date(empresa.updatedAt) : ahora,
       changeFrequency: "weekly" as const,
       priority: 0.6,
+      alternates: idiomas(`/empresas/${empresa.slug}`),
     })),
   );
 

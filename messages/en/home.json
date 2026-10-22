@@ -8,7 +8,7 @@
     "tituloParte1": "Every club has something to offer.",
     "tituloParte2": "We help you discover it and manage it.",
     "cta": "Try 1 month free",
-    "condiciones": "1 month free · €29.90/month after · VAT included · No commitment",
+    "condiciones": "1 month free · then from €199/year · VAT included · No commitment",
     "ctaSecundario": "See how it works"
   },
   "puertas": {
@@ -509,7 +509,7 @@
       },
       {
         "pregunta": "How much does it cost for a club?",
-        "respuesta": "The first month is free. After that, €29.90/month including VAT, with no surprises in the price."
+        "respuesta": "The first month is free. After that you choose how to pay: €199/year on the Founder plan (only for the first 50 places, with the price frozen), €249/year per season, or €29.90/month with no commitment. VAT is included in all three and the product is the same."
       },
       {
         "pregunta": "Is it free for businesses?",
@@ -601,7 +601,7 @@
   },
   "paraClubes": {
     "meta": {
-      "titulo": "For clubs — ApoyaClub",
+      "titulo": "For clubs",
       "descripcion": "Your page, your sponsorship opportunities and the tools to land and deliver them. 1 month free, no commitment."
     },
     "etiqueta": "FOR CLUBS",
@@ -619,7 +619,7 @@
   },
   "paraEmpresas": {
     "meta": {
-      "titulo": "For businesses and partners — ApoyaClub",
+      "titulo": "For businesses and partners",
       "descripcion": "Discover what you can sponsor at clubs near you, or what they need. Free, no account and no middlemen."
     },
     "etiqueta": "FOR BUSINESSES AND PARTNERS",

@@ -79,7 +79,8 @@
     "fichaPublica": "A tua ficha já é pública. <enlace>Vê como a veem os clubes</enlace>.",
     "loQueOfrezco": "O que ofereço",
     "traidos": "Trouxemos para a tua conta {n, plural, one {o que tinhas guardado} other {as # coisas que tinhas guardadas}} neste navegador. Agora vais vê-las a partir de qualquer dispositivo.",
-    "quitar": "Remover"
+    "quitar": "Remover",
+    "avisoModoPruebas": "A tua empresa está em modo de testes: podes usar o painel normalmente, mas a tua ficha e o que ofereces não aparecem no diretório."
   },
   "baja": {
     "titulo": "Deixar de receber avisos",

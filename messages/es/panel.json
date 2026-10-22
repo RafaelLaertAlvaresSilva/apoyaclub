@@ -1,6 +1,6 @@
 {
   "avisos": {
-    "elAccesoAlPanel": "El acceso al panel de tu club está temporalmente suspendido. Si crees que se trata de un error, escríbenos y lo revisamos.",
+    "elAccesoAlPanel": "El acceso a tu panel está temporalmente suspendido. Si crees que se trata de un error, escríbenos y lo revisamos.",
     "elEnlaceHaCaducado": "El enlace ha caducado o ya se ha utilizado antes. Vuelve a solicitarlo desde el inicio de sesión.",
     "elEnlaceNoEs": "El enlace no es válido",
     "escribirnos": "Escribirnos",
@@ -487,7 +487,9 @@
     },
     "quitarFoto": "Quitar foto",
     "desdeAnio": "desde {anio}",
-    "cerrar": "Cerrar"
+    "cerrar": "Cerrar",
+    "avisoOcultoPorElClub": "Has ocultado tu club: tu página y tus oportunidades no se ven en la web.",
+    "avisoOcultoPorElClubEnlace": "Volver a mostrarlo"
   },
   "primerosPasos": {
     "titulo": "Empieza por aquí",
@@ -519,16 +521,24 @@
     "motivoAyuda": "Nos ayuda a mejorar. No es obligatorio y no cambia nada de la baja.",
     "motivoPlaceholder": "Lo dejamos por temas de presupuesto, ninguna empresa nos escribió…",
     "panelDelClub": "Panel del club",
-    "privacidadYDatos": "Privacidad y datos",
+    "privacidadYDatos": "Visibilidad, privacidad y datos",
     "seBorranTuPerfil": "Se borran tu perfil, equipos, patrocinadores, oportunidades, logo y fotos.",
     "seBorranTusSolicitudes": "Se borran tus solicitudes de contacto y tu dossier comercial.",
     "seCancelaDeInmediato": "Se cancela de inmediato cualquier suscripción activa en Stripe.",
     "tuPaginaPublicaDeja": "Tu página pública deja de existir. Esta acción no se puede deshacer.",
-    "datosGuardamosClubComo": "Qué datos guardamos de tu club, cómo descargarlos y cómo borrar la cuenta. Nada de esto depende de que estés al día con el pago.",
+    "datosGuardamosClubComo": "Si tu club se ve en la web, qué datos guardamos, cómo descargarlos y cómo borrar la cuenta. Nada de esto depende de que estés al día con el pago.",
     "eliminando": "Eliminando…",
     "eliminarTodo": "Eliminar mi cuenta y todos mis datos",
     "descargarDatos": "Descargar mis datos (JSON)",
-    "masInformacion": "Más información sobre cómo tratamos tus datos en nuestra <enlace>Política de Privacidad</enlace>."
+    "masInformacion": "Más información sobre cómo tratamos tus datos en nuestra <enlace>Política de Privacidad</enlace>.",
+    "visibilidad": "¿Se ve tu club en ApoyaClub?",
+    "visibilidadTexto": "Cuando está visible, tu página, tus oportunidades y lo que necesitas salen en la web y en el buscador, y las empresas pueden escribirte. Si lo ocultas, desaparece de todo eso, pero tú sigues usando el panel con normalidad y no pierdes nada. Puedes volver a mostrarlo cuando quieras.",
+    "estadoVisible": "Visible: las empresas pueden encontrar tu club.",
+    "estadoOculto": "Oculto: solo tú ves tu club.",
+    "ocultarClub": "Ocultar mi club",
+    "mostrarClub": "Mostrar mi club",
+    "estadoModoPruebas": "Tu club está ahora en modo de pruebas, puesto por el equipo de ApoyaClub, y no se ve en la web aunque lo marques como visible. Escríbenos si crees que es un error.",
+    "cambioGuardado": "Hecho. El cambio se nota en la web en un minuto como mucho."
   },
   "solicitudes": {
     "panelDelClub": "Panel del club",
@@ -1297,7 +1307,7 @@
       "renovaciones": "Renovaciones",
       "tareas": "Tareas",
       "suscripcion": "Suscripción",
-      "privacidad": "Privacidad"
+      "privacidad": "Visibilidad y privacidad"
     },
     "secciones": {
       "identidad": "Identidad",

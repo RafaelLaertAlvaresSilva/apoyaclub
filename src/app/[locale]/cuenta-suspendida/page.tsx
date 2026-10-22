@@ -6,7 +6,7 @@ import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { TITULAR } from "@/lib/titular";
 
 export const metadata: Metadata = {
-  title: "Cuenta suspendida | ApoyaClub",
+  title: "Cuenta suspendida",
 };
 
 /**

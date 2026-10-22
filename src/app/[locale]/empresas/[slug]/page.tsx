@@ -45,10 +45,10 @@ export async function generateMetadata({
   const empresa = await obtenerEmpresa(slug);
   const tMetadatos = await getTranslations("buscar.fichaEmpresa");
 
-  if (!empresa) return { title: `${tMetadatos("noEncontrada")} — ApoyaClub` };
+  if (!empresa) return { title: `${tMetadatos("noEncontrada")}` };
 
   return {
-    title: `${empresa.name} — ApoyaClub`,
+    title: empresa.name,
     description: empresa.description ?? tMetadatos("descripcionPorDefecto", { nombre: empresa.name }),
   };
 }

@@ -14,7 +14,9 @@ import { describe, expect, it } from "vitest";
 const RAIZ = join(process.cwd(), "src/app/[locale]");
 
 /** Rutas que no pintan interfaz: descargas, redirecciones y similares. */
-const SIN_INTERFAZ = ["exportar", "dossier", "auth/callback", "panel/dossier/pdf"];
+// `[...resto]` no pinta nada suyo: lanza el "no encontrado" y lo que se
+// ve es `[locale]/not-found.tsx`, que sí lleva su cabecera.
+const SIN_INTERFAZ = ["exportar", "dossier", "auth/callback", "panel/dossier/pdf", "[...resto]"];
 
 function paginas(directorio: string, acumulado: string[] = []): string[] {
   for (const entrada of readdirSync(directorio)) {

@@ -69,11 +69,13 @@
     "boton": "Ver mis solicitudes"
   },
   "finDePrueba": {
-    "asunto": "{dias, plural, one {Queda # día} other {Quedan # días}} de tu mes gratis en ApoyaClub",
-    "eyebrow": "Tu mes gratis termina pronto",
+    "asunto": "{dias, plural, one {Queda # día} other {Quedan # días}} de tu prueba gratis en ApoyaClub",
+    "eyebrow": "Tu prueba gratis termina pronto",
     "titulo": "{dias, plural, one {Queda # día} other {Quedan # días}} de prueba para {club}",
-    "texto": "El {fecha} empezará la suscripción de 29,90 €/mes con IVA incluido. No tienes que hacer nada para continuar; si prefieres no seguir, puedes cancelar desde tu panel antes de esa fecha y no se te cobrará.",
-    "boton": "Ver mi suscripción"
+    "texto": "El {fecha} empezará tu suscripción, con el plan que elegiste. No tienes que hacer nada para continuar; si prefieres no seguir, puedes cancelar desde tu panel antes de esa fecha y no se te cobrará.",
+    "boton": "Ver mi suscripción",
+    "textoSinTarjeta": "El {fecha} termina tu prueba gratis. Para seguir usando tu panel y que tu club siga viéndose, elige un plan antes de esa fecha: desde 199 €/año, IVA incluido. Si no eliges ninguno, tu página dejará de verse, pero no se borra nada: podrás volver cuando quieras.",
+    "botonSinTarjeta": "Elegir mi plan"
   },
   "fichaIncompleta": {
     "asunto": "Tu ficha está al {porcentaje}% y eso te resta visibilidad",

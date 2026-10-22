@@ -24,7 +24,9 @@ function ultimaDefinicionDeCadaVista(): Map<string, { archivo: string; cuerpo: s
     .sort();
 
   for (const archivo of archivos) {
-    const sql = readFileSync(join(CARPETA, archivo), "utf8");
+    // Sin los comentarios: uno con un ";" dentro cortaría la vista a la
+    // mitad (pasaba con `company_offers_public`).
+    const sql = readFileSync(join(CARPETA, archivo), "utf8").replace(/--.*$/gm, "");
     const patron = /create\s+(?:or\s+replace\s+)?view\s+public\.([a-z_0-9]+)([\s\S]*?);/gi;
     for (const encontrado of sql.matchAll(patron)) {
       vistas.set(encontrado[1], { archivo, cuerpo: encontrado[2] });
@@ -48,7 +50,28 @@ describe("modo de pruebas", () => {
   });
 
   it.each(vistasDeClubes.map(([nombre, datos]) => [nombre, datos.archivo, datos.cuerpo]))(
-    "la última versión de %s (%s) esconde los clubes en pruebas y los suspendidos",
+    "la última versión de %s (%s) esconde los clubes en pruebas, suspendidos u ocultos por ellos mismos",
+    (_nombre, _archivo, cuerpo) => {
+      expect(cuerpo).toMatch(/not\s+(?:c\.)?admin_test_mode/i);
+      expect(cuerpo).toMatch(/not\s+(?:c\.)?admin_suspended/i);
+      expect(cuerpo).toMatch(/not\s+(?:c\.)?hidden_by_club/i);
+    },
+  );
+
+  // Las de empresas (migración 0055): las que leen de `companies`.
+  const vistasDeEmpresas = [...vistas.entries()].filter(([, { cuerpo }]) =>
+    /(from|join)\s+public\.companies\b/i.test(cuerpo),
+  );
+
+  it("encuentra las dos vistas públicas de empresas", () => {
+    expect(vistasDeEmpresas.map(([nombre]) => nombre).sort()).toEqual([
+      "company_offers_public",
+      "company_public_profiles",
+    ]);
+  });
+
+  it.each(vistasDeEmpresas.map(([nombre, datos]) => [nombre, datos.archivo, datos.cuerpo]))(
+    "la última versión de %s (%s) esconde las empresas en pruebas y las suspendidas",
     (_nombre, _archivo, cuerpo) => {
       expect(cuerpo).toMatch(/not\s+(?:c\.)?admin_test_mode/i);
       expect(cuerpo).toMatch(/not\s+(?:c\.)?admin_suspended/i);

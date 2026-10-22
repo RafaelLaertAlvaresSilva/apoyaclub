@@ -61,3 +61,31 @@ describe("columnas de clubs que el club no puede cambiarse", () => {
     expect(trigger).toMatch(new RegExp(`new\\.${columna}\\s*:=\\s*(null|false)\\s*;`));
   });
 });
+
+describe("columnas de companies que la empresa no puede cambiarse", () => {
+  // Las de administración de empresas (migración 0055).
+  let trigger = "";
+  const columnas = new Set<string>();
+  for (const archivo of ARCHIVOS) {
+    const sql = readFileSync(join(CARPETA, archivo), "utf8");
+    for (const bloque of sql.matchAll(/alter\s+table\s+public\.companies([\s\S]*?);/gi)) {
+      for (const columna of bloque[1].matchAll(/add\s+column\s+(?:if\s+not\s+exists\s+)?([a-z_0-9]+)/gi)) {
+        if (columna[1].startsWith("admin_")) columnas.add(columna[1]);
+      }
+    }
+    const encontrado = sql.match(
+      /create\s+or\s+replace\s+function\s+public\.proteger_columnas_de_admin_empresa\(\)([\s\S]*?)\$\$;/i,
+    );
+    if (encontrado) trigger = encontrado[1];
+  }
+
+  it("encuentra el trigger y las columnas", () => {
+    expect(trigger).not.toBe("");
+    expect([...columnas]).toEqual(expect.arrayContaining(["admin_suspended", "admin_test_mode"]));
+  });
+
+  it.each([...columnas])("%s se deja como estaba al actualizar y se limpia al crear", (columna) => {
+    expect(trigger).toMatch(new RegExp(`new\\.${columna}\\s*:=\\s*old\\.${columna}\\s*;`));
+    expect(trigger).toMatch(new RegExp(`new\\.${columna}\\s*:=\\s*(null|false)\\s*;`));
+  });
+});

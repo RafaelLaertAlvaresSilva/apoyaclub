@@ -61,7 +61,10 @@ export async function generateMetadata({ params }: ParametrosRuta): Promise<Meta
   const ruta = `/${locale}/club/${perfil.slug}`;
 
   return {
-    title: titulo,
+    // Solo el nombre: la plantilla del layout ya añade "| ApoyaClub". El
+    // título con la marca (`titulo`) queda para la tarjeta al compartir,
+    // que no pasa por la plantilla.
+    title: perfil.name,
     description: descripcion,
     // La misma ficha en los otros idiomas, para que Google enseñe a cada
     // uno la suya en vez de tratarlas como páginas repetidas.

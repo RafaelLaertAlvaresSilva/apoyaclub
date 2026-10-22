@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
 import { avisarDeFallo } from "@/lib/monitoring";
+import { normalizarProvincia } from "@/lib/provincia";
 import { leerCategoriaNecesidad } from "@/lib/opportunities";
 import { leerEstadoOferta, leerTipoDeOferta, sePuedeContactar } from "@/lib/empresas";
 import { createClient } from "@/lib/supabase/server";
@@ -87,7 +88,7 @@ async function leerFormulario(formData: FormData): Promise<DatosDeOferta | { err
     category,
     value: leerValor(formData, tipo),
     wants: leerTexto(formData, "pideACambio")?.slice(0, 500) ?? null,
-    province: leerTexto(formData, "provincia"),
+    province: normalizarProvincia(leerTexto(formData, "provincia")),
   };
 }
 
@@ -300,7 +301,7 @@ export async function guardarFichaEmpresa(
       name: name.slice(0, 150),
       sector: leerTexto(formData, "sector"),
       city: leerTexto(formData, "localidad"),
-      province: leerTexto(formData, "provincia"),
+      province: normalizarProvincia(leerTexto(formData, "provincia")),
       website: leerTexto(formData, "web"),
       description: leerTexto(formData, "descripcion")?.slice(0, 600) ?? null,
       open_to_sponsor: formData.get("enElDirectorio") === "on",

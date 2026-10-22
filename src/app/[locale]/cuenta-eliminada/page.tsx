@@ -4,7 +4,7 @@ import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cuenta eliminada | ApoyaClub",
+  title: "Cuenta eliminada",
 };
 
 /** Página de despedida tras eliminar la cuenta (Fase 11, club o empresa). */

@@ -1,4 +1,7 @@
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+
+const FRANJA = "bg-aviso px-4 py-2.5 text-center text-sm font-medium text-sobre-aviso";
 
 /**
  * Franja de arriba del panel para un club en modo de pruebas
@@ -12,8 +15,26 @@ export function AvisoModoPruebas() {
   const t = useTranslations("panel.perfil2");
 
   return (
-    <div role="status" className="bg-aviso px-4 py-2.5 text-center text-sm font-medium text-sobre-aviso">
+    <div role="status" className={FRANJA}>
       {t("avisoModoPruebas")}
+    </div>
+  );
+}
+
+/**
+ * La misma franja cuando es el propio club quien ha decidido no
+ * mostrarse (migración 0055). Aquí sí lleva enlace: lo ha apagado él y
+ * tiene que poder encenderlo sin buscar dónde.
+ */
+export function AvisoOcultoPorElClub() {
+  const t = useTranslations("panel.perfil2");
+
+  return (
+    <div role="status" className={FRANJA}>
+      {t("avisoOcultoPorElClub")}{" "}
+      <Link href="/panel/privacidad" className="underline underline-offset-2">
+        {t("avisoOcultoPorElClubEnlace")}
+      </Link>
     </div>
   );
 }

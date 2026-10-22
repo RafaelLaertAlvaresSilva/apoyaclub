@@ -1,6 +1,6 @@
 {
   "avisos": {
-    "elAccesoAlPanel": "O acesso ao painel do teu clube está temporariamente suspenso. Se achas que se trata de um erro, escreve-nos e vamos verificar.",
+    "elAccesoAlPanel": "O acesso ao teu painel está temporariamente suspenso. Se achas que se trata de um erro, escreve-nos e vamos verificar.",
     "elEnlaceHaCaducado": "A ligação expirou ou já foi utilizada. Volta a pedi-la a partir do início de sessão.",
     "elEnlaceNoEs": "A ligação não é válida",
     "escribirnos": "Escrever-nos",
@@ -53,7 +53,7 @@
       "renovaciones": "Renovações",
       "tareas": "Tarefas",
       "suscripcion": "Subscrição",
-      "privacidad": "Privacidade"
+      "privacidad": "Visibilidade e privacidade"
     },
     "secciones": {
       "identidad": "Identidade",
@@ -193,16 +193,24 @@
     "motivoAyuda": "Ajuda-nos a melhorar. Não é obrigatório e não muda nada na eliminação.",
     "motivoPlaceholder": "Deixamos por questões de orçamento, nenhuma empresa nos escreveu…",
     "panelDelClub": "Painel do clube",
-    "privacidadYDatos": "Privacidade e dados",
+    "privacidadYDatos": "Visibilidade, privacidade e dados",
     "seBorranTuPerfil": "São apagados o teu perfil, equipas, patrocinadores, oportunidades, logótipo e fotos.",
     "seBorranTusSolicitudes": "São apagados os teus pedidos de contacto e o teu dossiê comercial.",
     "seCancelaDeInmediato": "Qualquer subscrição ativa na Stripe é cancelada de imediato.",
     "tuPaginaPublicaDeja": "A tua página pública deixa de existir. Esta ação não pode ser desfeita.",
-    "datosGuardamosClubComo": "Que dados guardamos do teu clube, como descarregá-los e como apagar a conta. Nada disto depende de teres os pagamentos em dia.",
+    "datosGuardamosClubComo": "Se o teu clube aparece no site, que dados guardamos, como descarregá-los e como apagar a conta. Nada disto depende de teres os pagamentos em dia.",
     "eliminando": "A eliminar…",
     "eliminarTodo": "Eliminar a minha conta e todos os meus dados",
     "descargarDatos": "Descarregar os meus dados (JSON)",
-    "masInformacion": "Mais informação sobre como tratamos os teus dados na nossa <enlace>Política de Privacidade</enlace>."
+    "masInformacion": "Mais informação sobre como tratamos os teus dados na nossa <enlace>Política de Privacidade</enlace>.",
+    "visibilidad": "O teu clube aparece no ApoyaClub?",
+    "visibilidadTexto": "Quando está visível, a tua página, as tuas oportunidades e aquilo de que precisas aparecem no site e na pesquisa, e as empresas podem escrever-te. Se o ocultares, desaparece de tudo isso, mas continuas a usar o painel normalmente e não perdes nada. Podes voltar a mostrá-lo quando quiseres.",
+    "estadoVisible": "Visível: as empresas podem encontrar o teu clube.",
+    "estadoOculto": "Oculto: só tu vês o teu clube.",
+    "ocultarClub": "Ocultar o meu clube",
+    "mostrarClub": "Mostrar o meu clube",
+    "estadoModoPruebas": "O teu clube está agora em modo de testes, ativado pela equipa do ApoyaClub, e não aparece no site mesmo que o marques como visível. Escreve-nos se achares que é um erro.",
+    "cambioGuardado": "Feito. A alteração nota-se no site num minuto, no máximo."
   },
   "patrocinadores": {
     "contratoFacturas": "Contrato e faturas",
@@ -601,7 +609,9 @@
     },
     "quitarFoto": "Remover foto",
     "desdeAnio": "desde {anio}",
-    "cerrar": "Fechar"
+    "cerrar": "Fechar",
+    "avisoOcultoPorElClub": "Ocultaste o teu clube: a tua página e as tuas oportunidades não aparecem no site.",
+    "avisoOcultoPorElClubEnlace": "Voltar a mostrá-lo"
   },
   "oportunidades": {
     "aQuePublicoO": "A que público ou objetivo se dirige esta oportunidade. Podes marcar vários.",

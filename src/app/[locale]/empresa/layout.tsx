@@ -1,6 +1,6 @@
 import { BarraLogo } from "@/components/BarraLogo";
 import { redirect } from "@/i18n/navigation";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import type { Role } from "@/lib/types";
 
@@ -24,9 +24,24 @@ export default async function EmpresaLayout({ children }: { children: React.Reac
     return redirect({ href: "/login", locale });
   }
 
+  // Modo de pruebas (migración 0055): la empresa usa su panel, pero no
+  // sale en el directorio. Se le dice arriba para que no piense que su
+  // ficha se ha roto. `*` para no fallar si la migración aún no está.
+  const { data: fila } = await supabase
+    .from("companies")
+    .select("*")
+    .eq("id", user.id)
+    .maybeSingle<{ admin_test_mode?: boolean | null }>();
+  const t = await getTranslations("empresa.panel");
+
   return (
     <>
       <BarraLogo />
+      {fila?.admin_test_mode && (
+        <div role="status" className="bg-aviso px-4 py-2.5 text-center text-sm font-medium text-sobre-aviso">
+          {t("avisoModoPruebas")}
+        </div>
+      )}
       {children}
     </>
   );

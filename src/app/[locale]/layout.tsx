@@ -76,13 +76,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   // Lo que lee WhatsApp, Telegram o LinkedIn al pegar un enlace. La
   // imagen la pone `opengraph-image.tsx` de esta misma carpeta; las
   // fichas de club tienen la suya y esta les deja el resto puesto.
+  //
+  // Sin título, descripción ni dirección a propósito: puestos aquí, los
+  // heredaba TODA página que no tuviera los suyos, y al compartir
+  // /para-clubes o /para-empresas la tarjeta enseñaba el título y el
+  // texto de la portada. Sin ellos, cada página sale con su propio
+  // título y su propia descripción.
   openGraph: {
     type: "website",
     siteName: "ApoyaClub",
     locale: LOCALE_OPEN_GRAPH[locale],
-    url: SITE_URL,
-    title: t("tituloPorDefecto"),
-    description: t("ogDescripcion"),
   },
   appleWebApp: {
     // Fase 15: para que "Añadir a pantalla de inicio" en iOS use el

@@ -79,7 +79,8 @@
     "fichaPublica": "Your profile is now public. <enlace>See how clubs see it</enlace>.",
     "loQueOfrezco": "What I offer",
     "traidos": "We've moved {n, plural, one {what you had saved} other {the # things you had saved}} in this browser to your account. You'll now see them from any device.",
-    "quitar": "Remove"
+    "quitar": "Remove",
+    "avisoModoPruebas": "Your business is in test mode: you can use your dashboard as usual, but your profile and what you offer are not shown in the directory."
   },
   "baja": {
     "titulo": "Stop receiving alerts",

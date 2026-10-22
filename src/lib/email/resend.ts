@@ -565,12 +565,22 @@ export async function enviarEmailFinDePrueba({
   fechaFin,
   panelUrl,
   idioma,
+  conTarjeta = false,
 }: {
   clubEmail: string;
   clubName: string;
   diasRestantes: number;
   fechaFin: string;
   panelUrl: string;
+  /**
+   * Si el club ya tiene una suscripción en Stripe que empezará sola al
+   * acabar la prueba. Casi ninguno la tiene: el mes gratis empieza sin
+   * tarjeta (migración 0018) y el acceso de los clubes invitados se da
+   * desde el administrador. A esos, decirles "no tienes que hacer nada
+   * para continuar" era mentira: al acabar la prueba se les corta el
+   * panel. Por eso hay dos textos.
+   */
+  conTarjeta?: boolean;
   /** El idioma del destinatario ("es", "pt", "en"). Sin él, español. */
   idioma?: string;
 }): Promise<ResultadoEnvioEmail> {
@@ -583,8 +593,8 @@ export async function enviarEmailFinDePrueba({
       color: "#047857",
       eyebrow: t("finDePrueba.eyebrow"),
       titulo: t("finDePrueba.titulo", { dias: diasRestantes, club: clubName }),
-      cuerpo: `<p style="margin:0 0 24px;">${t("finDePrueba.texto", { fecha: fechaFin })}</p>`,
-      botonTexto: t("finDePrueba.boton"),
+      cuerpo: `<p style="margin:0 0 24px;">${t(conTarjeta ? "finDePrueba.texto" : "finDePrueba.textoSinTarjeta", { fecha: fechaFin })}</p>`,
+      botonTexto: t(conTarjeta ? "finDePrueba.boton" : "finDePrueba.botonSinTarjeta"),
       botonUrl: panelUrl,
     }),
   });

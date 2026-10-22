@@ -8,7 +8,7 @@
     "tituloParte1": "Cada club tiene algo que ofrecer.",
     "tituloParte2": "Te ayudamos a descubrirlo y a gestionarlo.",
     "cta": "Prueba 1 mes gratis",
-    "condiciones": "1 mes gratis · 29,90 €/mes después · IVA incluido · Sin permanencia",
+    "condiciones": "1 mes gratis · después, desde 199 €/año · IVA incluido · Sin permanencia",
     "ctaSecundario": "Descubre cómo funciona"
   },
   "puertas": {
@@ -509,7 +509,7 @@
       },
       {
         "pregunta": "¿Cuánto cuesta para un club?",
-        "respuesta": "El primer mes es gratis. Después, 29,90 €/mes con el IVA incluido, sin sorpresas en el precio."
+        "respuesta": "El primer mes es gratis. Después eliges cómo pagar: 199 €/año con el plan Fundador (solo para las primeras 50 plazas, con el precio congelado), 249 €/año por temporada o 29,90 €/mes sin permanencia. El IVA va incluido en los tres y el producto es el mismo."
       },
       {
         "pregunta": "¿Es gratis para las empresas?",
@@ -601,7 +601,7 @@
   },
   "paraClubes": {
     "meta": {
-      "titulo": "Para clubes — ApoyaClub",
+      "titulo": "Para clubes",
       "descripcion": "Tu página, tus oportunidades de patrocinio y las herramientas para conseguirlas y cumplirlas. 1 mes gratis, sin permanencia."
     },
     "etiqueta": "PARA CLUBES",
@@ -619,7 +619,7 @@
   },
   "paraEmpresas": {
     "meta": {
-      "titulo": "Para empresas y colaboradores — ApoyaClub",
+      "titulo": "Para empresas y colaboradores",
       "descripcion": "Descubre qué puedes patrocinar en clubes de tu zona, o qué necesitan. Gratis, sin cuenta y sin intermediarios."
     },
     "etiqueta": "PARA EMPRESAS Y COLABORADORES",

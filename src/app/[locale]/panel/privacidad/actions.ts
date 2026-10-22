@@ -1,6 +1,7 @@
 "use server";
 
 import { getTranslations } from "next-intl/server";
+import { revalidatePath } from "next/cache";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import type { User } from "@supabase/supabase-js";
@@ -182,4 +183,32 @@ async function apuntarLaBaja(
   } catch (excepcion) {
     console.error("[eliminar cuenta] No se ha podido apuntar la baja:", excepcion);
   }
+}
+
+/**
+ * El club decide si se le ve en la web (migración 0055).
+ *
+ * Ocultarse no borra ni pierde nada: la página, las oportunidades y lo
+ * que necesita siguen guardados, solo dejan de salir en lo público. Es
+ * para el club que está preparando su ficha y no quiere enseñarla a
+ * medias, o para el que en verano no busca patrocinador.
+ *
+ * Lo escribe el propio club con su sesión, a diferencia del modo de
+ * pruebas, que es del administrador.
+ */
+export async function cambiarVisibilidadClub(formData: FormData): Promise<void> {
+  const contexto = await obtenerClubActual();
+  const locale = await getLocale();
+  if ("error" in contexto) return redirect({ href: "/login", locale });
+
+  const ocultar = formData.get("ocultar") === "si";
+  await contexto.supabase
+    .from("clubs")
+    .update({ hidden_by_club: ocultar, hidden_by_club_at: ocultar ? new Date().toISOString() : null })
+    .eq("id", contexto.user.id);
+
+  // El aviso de arriba del panel y el enlace a la página pública
+  // dependen de esto, y salen del layout.
+  revalidatePath("/[locale]/panel", "layout");
+  return redirect({ href: "/panel/privacidad?visibilidad=guardada", locale });
 }

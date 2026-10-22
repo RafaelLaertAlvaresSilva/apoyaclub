@@ -8,7 +8,7 @@
     "tituloParte1": "Cada clube tem algo para oferecer.",
     "tituloParte2": "Ajudamos-te a descobri‑lo e a geri‑lo.",
     "cta": "Experimenta 1 mês grátis",
-    "condiciones": "1 mês grátis · 29,90 €/mês depois · IVA incluído · Sem fidelização",
+    "condiciones": "1 mês grátis · depois, desde 199 €/ano · IVA incluído · Sem fidelização",
     "ctaSecundario": "Descobre como funciona"
   },
   "puertas": {
@@ -509,7 +509,7 @@
       },
       {
         "pregunta": "Quanto custa para um clube?",
-        "respuesta": "O primeiro mês é grátis. Depois, 29,90 €/mês com IVA incluído, sem surpresas no preço."
+        "respuesta": "O primeiro mês é grátis. Depois escolhes como pagar: 199 €/ano com o plano Fundador (só para as primeiras 50 vagas, com o preço congelado), 249 €/ano por época ou 29,90 €/mês sem fidelização. O IVA está incluído nos três e o produto é o mesmo."
       },
       {
         "pregunta": "É grátis para as empresas?",
@@ -601,7 +601,7 @@
   },
   "paraClubes": {
     "meta": {
-      "titulo": "Para clubes — ApoyaClub",
+      "titulo": "Para clubes",
       "descripcion": "A tua página, as tuas oportunidades de patrocínio e as ferramentas para as conseguir e cumprir. 1 mês grátis, sem fidelização."
     },
     "etiqueta": "PARA CLUBES",
@@ -619,7 +619,7 @@
   },
   "paraEmpresas": {
     "meta": {
-      "titulo": "Para empresas e colaboradores — ApoyaClub",
+      "titulo": "Para empresas e colaboradores",
       "descripcion": "Descobre o que podes patrocinar em clubes da tua zona, ou do que precisam. Grátis, sem conta e sem intermediários."
     },
     "etiqueta": "PARA EMPRESAS E COLABORADORES",

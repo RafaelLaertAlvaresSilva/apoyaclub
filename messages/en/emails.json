@@ -69,11 +69,13 @@
     "boton": "See my requests"
   },
   "finDePrueba": {
-    "asunto": "{dias, plural, one {# day} other {# days}} left of your free month on ApoyaClub",
-    "eyebrow": "Your free month ends soon",
+    "asunto": "{dias, plural, one {# day} other {# days}} left of your free trial on ApoyaClub",
+    "eyebrow": "Your free trial ends soon",
     "titulo": "{dias, plural, one {# day} other {# days}} of trial left for {club}",
-    "texto": "On {fecha} your €29.90/month subscription (VAT included) will start. You don’t need to do anything to continue; if you’d rather not carry on, you can cancel from your dashboard before that date and you won’t be charged.",
-    "boton": "See my subscription"
+    "texto": "On {fecha} your subscription will start, on the plan you chose. You don’t need to do anything to continue; if you’d rather not carry on, you can cancel from your dashboard before that date and you won’t be charged.",
+    "boton": "See my subscription",
+    "textoSinTarjeta": "Your free trial ends on {fecha}. To keep using your dashboard and keep your club visible, choose a plan before that date: from €199/year, VAT included. If you don’t choose one, your page stops being shown, but nothing is deleted: you can come back whenever you like.",
+    "botonSinTarjeta": "Choose my plan"
   },
   "fichaIncompleta": {
     "asunto": "Your profile is {porcentaje}% complete and that costs you visibility",

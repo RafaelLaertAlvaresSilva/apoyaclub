@@ -154,12 +154,12 @@ export async function enviarBienvenidas(admin: ClienteAdmin, ahora = new Date())
 // ---------------------------------------------------------------------
 // 2. Fin del mes gratis
 // ---------------------------------------------------------------------
-type FilaPrueba = { id: string; name: string; trial_ends_at: string | null };
+type FilaPrueba = { id: string; name: string; trial_ends_at: string | null; stripe_subscription_id: string | null };
 
 export async function avisarFinDePrueba(admin: ClienteAdmin, ahora = new Date()): Promise<number> {
   const { data: clubes, error } = await admin
     .from("clubs")
-    .select("id, name, trial_ends_at")
+    .select("id, name, trial_ends_at, stripe_subscription_id")
     .eq("subscription_status", "trialing")
     .eq("cancel_at_period_end", false)
     .not("trial_ends_at", "is", null)
@@ -204,6 +204,7 @@ export async function avisarFinDePrueba(admin: ClienteAdmin, ahora = new Date())
       }),
       panelUrl: urlEn(idioma, "/panel/suscripcion"),
       idioma,
+      conTarjeta: Boolean(club.stripe_subscription_id),
     });
 
     if (seDaPorEnviado(resultado)) await apuntarEnviado(admin, club.id, `trial_${umbral}d`);

@@ -1,6 +1,6 @@
 {
   "avisos": {
-    "elAccesoAlPanel": "Access to your club’s dashboard is temporarily suspended. If you think this is a mistake, write to us and we’ll look into it.",
+    "elAccesoAlPanel": "Access to your dashboard is temporarily suspended. If you think this is a mistake, write to us and we’ll look into it.",
     "elEnlaceHaCaducado": "The link has expired or has already been used. Request a new one from the sign-in page.",
     "elEnlaceNoEs": "The link is not valid",
     "escribirnos": "Write to us",
@@ -53,7 +53,7 @@
       "renovaciones": "Renewals",
       "tareas": "Tasks",
       "suscripcion": "Subscription",
-      "privacidad": "Privacy"
+      "privacidad": "Visibility and privacy"
     },
     "secciones": {
       "identidad": "Identity",
@@ -193,16 +193,24 @@
     "motivoAyuda": "It helps us improve. It’s not required and doesn’t change anything about the deletion.",
     "motivoPlaceholder": "We’re stopping for budget reasons, no business wrote to us…",
     "panelDelClub": "Club dashboard",
-    "privacidadYDatos": "Privacy and data",
+    "privacidadYDatos": "Visibility, privacy and data",
     "seBorranTuPerfil": "Your profile, teams, sponsors, opportunities, logo and photos are deleted.",
     "seBorranTusSolicitudes": "Your contact requests and your sponsorship dossier are deleted.",
     "seCancelaDeInmediato": "Any active Stripe subscription is cancelled immediately.",
     "tuPaginaPublicaDeja": "Your public page stops existing. This cannot be undone.",
-    "datosGuardamosClubComo": "What data we keep about your club, how to download it and how to delete your account. None of this depends on being up to date with payments.",
+    "datosGuardamosClubComo": "Whether your club is shown on the website, what data we keep, how to download it and how to delete your account. None of this depends on being up to date with payments.",
     "eliminando": "Deleting…",
     "eliminarTodo": "Delete my account and all my data",
     "descargarDatos": "Download my data (JSON)",
-    "masInformacion": "More information about how we handle your data in our <enlace>Privacy Policy</enlace>."
+    "masInformacion": "More information about how we handle your data in our <enlace>Privacy Policy</enlace>.",
+    "visibilidad": "Is your club shown on ApoyaClub?",
+    "visibilidadTexto": "When it is visible, your page, your opportunities and what you need appear on the website and in search, and businesses can write to you. If you hide it, it disappears from all of that, but you keep using your dashboard as usual and lose nothing. You can show it again whenever you like.",
+    "estadoVisible": "Visible: businesses can find your club.",
+    "estadoOculto": "Hidden: only you can see your club.",
+    "ocultarClub": "Hide my club",
+    "mostrarClub": "Show my club",
+    "estadoModoPruebas": "Your club is currently in test mode, set by the ApoyaClub team, and is not shown on the website even if you mark it as visible. Write to us if you think this is a mistake.",
+    "cambioGuardado": "Done. The change shows on the website within a minute."
   },
   "patrocinadores": {
     "contratoFacturas": "Contract and invoices",
@@ -601,7 +609,9 @@
     },
     "quitarFoto": "Remove photo",
     "desdeAnio": "since {anio}",
-    "cerrar": "Close"
+    "cerrar": "Close",
+    "avisoOcultoPorElClub": "You have hidden your club: your page and opportunities are not shown on the website.",
+    "avisoOcultoPorElClubEnlace": "Show it again"
   },
   "oportunidades": {
     "aQuePublicoO": "Which audience or goal this opportunity speaks to. You can tick several.",

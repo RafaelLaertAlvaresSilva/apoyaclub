@@ -6,7 +6,7 @@ import { LegalPageShell } from "@/components/LegalPageShell";
 import { LEGAL_VERSIONS, formatearFechaLegal } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Política de privacidad | ApoyaClub",
+  title: "Política de privacidad",
 };
 
 /**

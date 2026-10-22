@@ -42,7 +42,7 @@ export async function generateMetadata({
   const encontrado = await buscar(slug, id);
 
   const tp = await getTranslations("club.oportunidadPagina");
-  if (!encontrado) return { title: `${tp("noEncontrada")} — ApoyaClub` };
+  if (!encontrado) return { title: `${tp("noEncontrada")}` };
 
   const { perfil, oportunidad } = encontrado;
 
