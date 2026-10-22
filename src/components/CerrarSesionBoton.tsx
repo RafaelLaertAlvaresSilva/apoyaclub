@@ -12,7 +12,7 @@ export function CerrarSesionBoton({ ancho = false }: { ancho?: boolean }) {
     <form action={cerrarSesion} className={ancho ? "w-full" : undefined}>
       <button
         type="submit"
-        className={`rounded-lg border border-zinc-300 font-medium text-zinc-700 transition-colors hover:bg-zinc-100 ${
+        className={`rounded-lg border border-zinc-300 bg-white font-medium text-zinc-700 shadow-sm transition-colors hover:border-accion-tinta hover:text-accion-tinta ${
           ancho ? "w-full rounded-xl px-4 py-3.5 text-base" : "px-4 py-2 text-sm"
         }`}
       >

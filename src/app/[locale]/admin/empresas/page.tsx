@@ -164,7 +164,7 @@ export default async function AdminEmpresasPage({
             type="search"
             defaultValue={buscar ?? ""}
             placeholder="Nombre, sector, localidad o correo"
-            className="w-full max-w-xs rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-accion-tinta focus:outline-none focus:ring-1 focus:ring-accion-tinta"
+            className="w-full max-w-xs rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-accion-tinta focus:outline-none focus:ring-1 focus:ring-accion-tinta"
           />
           <button
             type="submit"
