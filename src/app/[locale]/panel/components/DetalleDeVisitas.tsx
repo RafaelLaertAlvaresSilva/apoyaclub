@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import type { ResumenDeVisitas } from "@/lib/club-metrics";
+import { CAJA_METRICA, CUERPO_METRICA, TITULO_METRICA } from "./estilos-metricas";
 
 /**
  * Quién ha entrado en la ficha, por semana o por mes.
@@ -24,7 +25,7 @@ export function DetalleDeVisitas({ resumen }: { resumen: ResumenDeVisitas }) {
   return (
     <div className="mt-5 border-t border-zinc-100 pt-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h3 className="text-sm font-semibold text-zinc-900">{t("quienEntradoFicha")}</h3>
+        <h3 className="text-base font-bold text-titular">{t("quienEntradoFicha")}</h3>
 
         <div className="flex rounded-lg border border-zinc-300 p-0.5">
           {(["semana", "mes"] as const).map((opcion) => (
@@ -42,7 +43,7 @@ export function DetalleDeVisitas({ resumen }: { resumen: ResumenDeVisitas }) {
         </div>
       </div>
 
-      <dl className="mt-3 grid gap-2 sm:grid-cols-2">
+      <dl className="mt-3 grid gap-3 sm:grid-cols-2">
         <Dato
           valor={datos.visitas}
           etiqueta={t("hanVistoFicha")}
@@ -64,10 +65,10 @@ export function DetalleDeVisitas({ resumen }: { resumen: ResumenDeVisitas }) {
 
 function Dato({ valor, etiqueta, ayuda }: { valor: number; etiqueta: string; ayuda: string }) {
   return (
-    <div className="rounded-lg bg-zinc-50 p-3">
-      <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{etiqueta}</dt>
-      <dd className="mt-1 text-xl font-bold tabular-nums text-titular">{valor}</dd>
-      <p className="mt-1 text-xs leading-snug text-zinc-500">{ayuda}</p>
+    <div className={CAJA_METRICA}>
+      <dt className={TITULO_METRICA}>{etiqueta}</dt>
+      <dd className={`${CUERPO_METRICA} pb-0 text-2xl font-bold tabular-nums text-titular`}>{valor}</dd>
+      <p className="px-3 pb-3 pt-1 text-xs leading-snug text-zinc-500">{ayuda}</p>
     </div>
   );
 }

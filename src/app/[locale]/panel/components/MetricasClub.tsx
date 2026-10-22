@@ -8,6 +8,7 @@ import {
   type ResumenDeVisitas,
 } from "@/lib/club-metrics";
 import { DetalleDeVisitas } from "./DetalleDeVisitas";
+import { CAJA_METRICA, CUERPO_METRICA, TITULO_METRICA } from "./estilos-metricas";
 
 /**
  * "Tu mes en ApoyaClub" (migraciones 0014 y 0022): lo que el club recibe
@@ -67,7 +68,7 @@ export function MetricasClub({
   return (
     <section className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-sm font-semibold text-zinc-900">{t("titulo")}</h2>
+        <h2 className="text-base font-bold text-titular">{t("titulo")}</h2>
         <p className="text-xs text-zinc-500">{t("periodo", { dias: metricas.dias })}</p>
       </div>
 
@@ -88,7 +89,7 @@ export function MetricasClub({
         // Dos columnas y no tres: desde que el progreso de la ficha va
         // al lado, esta tarjeta ocupa dos tercios del ancho y con tres
         // columnas los números salían apretados contra su etiqueta.
-        <dl className="mt-3 grid gap-2 sm:grid-cols-2">
+        <dl className="mt-3 grid gap-3 sm:grid-cols-2">
           {tarjetas.map((tarjeta) => (
             <Tarjeta
               key={tarjeta.clave}
@@ -128,10 +129,10 @@ function Tarjeta({
   const porcentaje = variacion(dato);
 
   return (
-    <div className="rounded-lg border border-zinc-200 p-3">
-      <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500">{etiqueta}</dt>
-      <dd className="mt-1 flex items-baseline gap-2">
-        <span className="text-xl font-bold tabular-nums text-titular">{dato.actual}</span>
+    <div className={CAJA_METRICA}>
+      <dt className={TITULO_METRICA}>{etiqueta}</dt>
+      <dd className={`${CUERPO_METRICA} flex items-baseline gap-2 pb-0`}>
+        <span className="text-2xl font-bold tabular-nums text-titular">{dato.actual}</span>
         {porcentaje !== null && porcentaje !== 0 && (
           <span
             className={`text-xs font-semibold ${porcentaje > 0 ? "text-teal-700" : "text-amber-700"}`}
@@ -140,7 +141,7 @@ function Tarjeta({
           </span>
         )}
       </dd>
-      <p className="mt-1 text-xs leading-snug text-zinc-500">{ayuda}</p>
+      <p className="px-3 pb-3 pt-1 text-xs leading-snug text-zinc-500">{ayuda}</p>
     </div>
   );
 }
