@@ -5,6 +5,7 @@ import { obtenerFinanzas, type ClubFacturable } from "@/lib/admin-finanzas";
 import { etiquetaEstadoSuscripcion } from "@/lib/subscription-mappers";
 import { createClient } from "@/lib/supabase/server";
 import { AdminNav } from "../components/AdminNav";
+import { CABECERA_TABLA } from "../components/estilos";
 
 const formatoEuros = new Intl.NumberFormat("es-ES", {
   style: "currency",
@@ -105,7 +106,7 @@ export default async function FinanzasPage() {
         <h2 className="text-sm font-semibold text-zinc-500">Reparto por plan</h2>
         <div className="mt-3 overflow-x-auto rounded-xl border border-zinc-200 bg-white">
           <table className="w-full min-w-[520px] text-left text-sm">
-            <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500">
+            <thead className={CABECERA_TABLA}>
               <tr>
                 <th className="px-4 py-3 font-medium">Plan</th>
                 <th className="px-4 py-3 font-medium">Clubes</th>
@@ -165,7 +166,7 @@ export default async function FinanzasPage() {
         <h2 className="text-sm font-semibold text-zinc-500">Club a club</h2>
         <div className="mt-3 overflow-x-auto rounded-xl border border-zinc-200 bg-white">
           <table className="w-full min-w-[640px] text-left text-sm">
-            <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500">
+            <thead className={CABECERA_TABLA}>
               <tr>
                 <th className="px-4 py-3 font-medium">Club</th>
                 <th className="px-4 py-3 font-medium">Plan</th>

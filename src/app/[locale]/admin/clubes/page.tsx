@@ -11,6 +11,7 @@ import { createClient } from "@/lib/supabase/server";
 import { AdminNav } from "../components/AdminNav";
 import { FilaClub } from "./components/FilaClub";
 import type { ClubAdminRow } from "./types";
+import { CABECERA_TABLA } from "../components/estilos";
 
 /** `clubs.select("*")` con las columnas de Fases 10 y 12 que `ClubRow` no modela (esas viven aparte, en `subscription-mappers.ts`, porque `clubRowToProfile` no las necesita). */
 type ClubRowConAdmin = ClubRow & {
@@ -210,7 +211,7 @@ export default async function AdminClubesPage({
       ) : (
         <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
           <table className="w-full min-w-[840px] text-left text-sm">
-            <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500">
+            <thead className={CABECERA_TABLA}>
               <tr>
                 <th className="px-4 py-3 font-medium">{t("club")}</th>
                 <th className="px-4 py-3 font-medium">{t("alta")}</th>

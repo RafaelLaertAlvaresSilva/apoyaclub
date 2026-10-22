@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { AdminNav } from "../components/AdminNav";
 import { FilaEmpresa } from "./components/FilaEmpresa";
 import type { EmpresaAdminRow } from "./types";
+import { CABECERA_TABLA } from "../components/estilos";
 
 type FilaCompany = {
   id: string;
@@ -194,7 +195,7 @@ export default async function AdminEmpresasPage({
       ) : (
         <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
           <table className="w-full min-w-[840px] text-left text-sm">
-            <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500">
+            <thead className={CABECERA_TABLA}>
               <tr>
                 <th className="px-4 py-3 font-medium">{t("empresa")}</th>
                 <th className="px-4 py-3 font-medium">{t("alta")}</th>

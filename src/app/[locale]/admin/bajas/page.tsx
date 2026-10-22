@@ -11,6 +11,7 @@ import {
 } from "@/lib/admin-bajas";
 import { createClient } from "@/lib/supabase/server";
 import { AdminNav } from "../components/AdminNav";
+import { CABECERA_TABLA } from "../components/estilos";
 
 export const dynamic = "force-dynamic";
 
@@ -109,7 +110,7 @@ export default async function BajasPage() {
         ) : (
           <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
             <table className="w-full min-w-[820px] text-left text-sm">
-              <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500">
+              <thead className={CABECERA_TABLA}>
                 <tr>
                   <th className="px-4 py-3 font-medium">Club</th>
                   <th className="px-4 py-3 font-medium">Qué le pasa</th>
