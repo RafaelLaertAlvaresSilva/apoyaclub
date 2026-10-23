@@ -11,6 +11,14 @@ const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
   : undefined;
 
 const nextConfig: NextConfig = {
+  // La campaña de Instagram empezó con la dirección /piloto y ahora es
+  // /6mesesgratis: quien tenga guardada la vieja llega a la nueva.
+  async redirects() {
+    return [
+      { source: "/piloto", destination: "/6mesesgratis", permanent: true },
+      { source: "/:locale(es|pt|en)/piloto", destination: "/:locale/6mesesgratis", permanent: true },
+    ];
+  },
   images: {
     remotePatterns: supabaseHostname
       ? [

@@ -15,7 +15,7 @@ export default async function RegistroClubPage({
 }: {
   searchParams: Promise<{ piloto?: string }>;
 }) {
-  // Desde apoyaclub.com/piloto: el formulario lo dice arriba y manda la
+  // Desde apoyaclub.com/6mesesgratis: el formulario lo dice arriba y manda la
   // marca. Si ya no quedan plazas lo decide el servidor al registrar.
   const { piloto } = await searchParams;
   return <RegistroClubForm piloto={piloto === "1"} />;

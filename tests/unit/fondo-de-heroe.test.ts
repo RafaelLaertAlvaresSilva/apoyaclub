@@ -68,7 +68,7 @@ describe("la foto de fondo de las portadas", () => {
   });
 
   it("para-clubes y el piloto piden el velo fuerte", () => {
-    for (const nombre of ["para-clubes", "piloto"]) {
+    for (const nombre of ["para-clubes", "6mesesgratis"]) {
       const pagina = usos.find((u) => u.pagina.includes(nombre));
       expect(pagina, `no encuentro la página ${nombre}`).toBeDefined();
       expect(pagina!.llamada).toContain('velo="fuerte"');

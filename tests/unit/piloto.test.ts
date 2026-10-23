@@ -49,4 +49,12 @@ describe("programa piloto (migración 0057)", () => {
     expect(sql).toContain("interval '30 days'");
     expect(sql).toMatch(/revoke all on function public\.plazas_piloto_ocupadas\(\) from public, anon, authenticated/);
   });
+
+  it("la página está en /6mesesgratis y la dirección vieja /piloto lleva a ella", () => {
+    const config = readFileSync(join(process.cwd(), "next.config.ts"), "utf8");
+    expect(config).toContain('{ source: "/piloto", destination: "/6mesesgratis", permanent: true }');
+    expect(() =>
+      readFileSync(join(process.cwd(), "src", "app", "[locale]", "6mesesgratis", "page.tsx"), "utf8"),
+    ).not.toThrow();
+  });
 });

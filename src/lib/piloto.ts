@@ -2,7 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 /**
  * El programa piloto de la campaña de Instagram (migración 0057): los
- * clubes que se registran desde apoyaclub.com/piloto tienen 6 meses de
+ * clubes que se registran desde apoyaclub.com/6mesesgratis tienen 6 meses de
  * prueba gratis en vez de 30 días, mientras queden plazas.
  *
  * Para cambiar el número de plazas basta con tocar esta línea: la

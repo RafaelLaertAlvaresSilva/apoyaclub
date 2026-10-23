@@ -23,7 +23,7 @@ export async function registrarClub(
   const password = String(formData.get("password") ?? "");
   const confirmarPassword = String(formData.get("confirmarPassword") ?? "");
   const aceptaTerminos = formData.get("aceptaTerminos") === "on";
-  // Viene de apoyaclub.com/piloto (la campaña): 6 meses gratis si
+  // Viene de apoyaclub.com/6mesesgratis (la campaña): 6 meses gratis si
   // quedan plazas. Se comprueba aquí, no en el navegador.
   const quierePiloto = formData.get("piloto") === "1";
 
