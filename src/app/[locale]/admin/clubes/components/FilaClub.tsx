@@ -135,7 +135,12 @@ export function FilaClub({ fila }: { fila: ClubAdminRow }) {
               Modo de pruebas
             </span>
           )}
-          {!fila.verified && !fila.suspended && !fila.modoPruebas && <span className="text-xs text-zinc-500">—</span>}
+          {fila.piloto && (
+            <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-800">Piloto</span>
+          )}
+          {!fila.verified && !fila.suspended && !fila.modoPruebas && !fila.piloto && (
+            <span className="text-xs text-zinc-500">—</span>
+          )}
         </div>
       </td>
       <td className="px-4 py-3">

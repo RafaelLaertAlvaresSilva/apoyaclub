@@ -8,7 +8,7 @@ import { BotonEnviar } from "@/components/BotonEnviar";
 import { CLASES_CAMPO_ACCESO, CampoContrasena } from "@/components/CampoContrasena";
 import { registrarClub } from "./actions";
 
-export function RegistroClubForm() {
+export function RegistroClubForm({ piloto = false }: { piloto?: boolean }) {
   const t = useTranslations("auth.registroClub");
   const tComun = useTranslations("auth.comun");
   const [estado, formAction] = useActionState(registrarClub, null);
@@ -19,12 +19,24 @@ export function RegistroClubForm() {
         <h1 className="text-2xl font-semibold text-zinc-900">
           {t("titulo")}
         </h1>
-        <p className="mt-1 text-sm text-zinc-500">
-          {t("subtitulo")}
-        </p>
+        {/* En el piloto no: dice "el primer mes es gratis" y el
+            recuadro de abajo dice 6 meses. */}
+        {!piloto && (
+          <p className="mt-1 text-sm text-zinc-500">
+            {t("subtitulo")}
+          </p>
+        )}
       </div>
 
+      {piloto && (
+        <div className="rounded-xl border border-teal-200 bg-teal-50 p-4 text-sm text-teal-900">
+          <p className="font-bold">{t("pilotoTitulo")}</p>
+          <p className="mt-1">{t("pilotoTexto")}</p>
+        </div>
+      )}
+
       <form action={formAction} className="space-y-4">
+        {piloto && <input type="hidden" name="piloto" value="1" />}
         <div>
           <label htmlFor="nombre" className="mb-1 block text-sm font-medium text-zinc-700">
             {t("nombre")}

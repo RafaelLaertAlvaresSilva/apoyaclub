@@ -916,5 +916,64 @@
       "reclamo": "Price frozen for life.",
       "detalle": "Only for the first clubs to join the platform. The price never goes up for as long as you stay subscribed."
     }
+  },
+  "piloto": {
+    "meta": {
+      "titulo": "Pilot programme: 6 months free for your club",
+      "descripcion": "We're looking for clubs from any sport to try ApoyaClub free for 6 months, no card needed. In return, you tell us what works."
+    },
+    "etiqueta": "Pilot programme · Limited places",
+    "titulo": "{meses} months free for your club",
+    "texto": "We're looking for {plazas} clubs from any sport to try ApoyaClub before anyone else. You get the full tool for {meses} months, no card needed. In return, all we ask is that you tell us what works for you and what doesn't.",
+    "plazasQuedan": "{n, plural, one {# place left} other {# places left}} out of {total}",
+    "completo": "All pilot places have been taken. You can still start with the usual free month.",
+    "cta": "I want my place",
+    "ctaCompleto": "Start with 1 month free",
+    "condiciones": "No card · No commitment · All sports",
+    "queTeLlevas": {
+      "titulo": "What you get",
+      "pagina": {
+        "titulo": "Your club page",
+        "texto": "A professional page with your teams, your youth sections and your audience, ready to show any business."
+      },
+      "oportunidades": {
+        "titulo": "Priced sponsorship offers",
+        "texto": "Over 100 sponsorship ideas to create your offers in minutes: shirts, boards, social media, tournaments…"
+      },
+      "dossier": {
+        "titulo": "PDF and Word dossier",
+        "texto": "Your club in a professional document, ready to send by email or WhatsApp to local businesses."
+      },
+      "seguimiento": {
+        "titulo": "Everything under control",
+        "texto": "Who visits your page, which sponsorships renew soon and what you owe each sponsor."
+      }
+    },
+    "quePedimos": {
+      "titulo": "What we ask in return",
+      "usarla": {
+        "titulo": "Really use it",
+        "texto": "Fill in your club page and create at least one sponsorship offer."
+      },
+      "opinion": {
+        "titulo": "Tell us what you think",
+        "texto": "A few messages or a call each month: what helps, what's missing and what's not needed."
+      },
+      "nadaMas": {
+        "titulo": "That's all",
+        "texto": "No card and no commitment. If it's not for you, you just stop."
+      }
+    },
+    "pasos": {
+      "titulo": "How to join",
+      "paso1": "Tap “I want my place” and create your club account.",
+      "paso2": "Confirm your email and fill in your club profile.",
+      "paso3": "Done: you have {meses} months to try everything."
+    },
+    "despues": {
+      "titulo": "And when the {meses} months are over?",
+      "texto": "If you stay, you get the Founder price: €199 a year, VAT included. If not, nothing is charged: you don't need a card to start."
+    },
+    "dudas": "Questions? Email me at <correo>info@apoyaclub.com</correo>. Rafael, creator of ApoyaClub."
   }
 }

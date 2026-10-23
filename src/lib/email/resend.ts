@@ -307,17 +307,20 @@ export async function enviarEmailBienvenidaClub({
   clubName,
   panelUrl,
   idioma,
+  piloto = false,
 }: {
   clubEmail: string;
   clubName: string;
   panelUrl: string;
+  /** Del programa piloto (migración 0057): 6 meses gratis, no uno. */
+  piloto?: boolean;
   /** El idioma del destinatario ("es", "pt", "en"). Sin él, español. */
   idioma?: string;
 }): Promise<ResultadoEnvioEmail> {
   const t = await traductorEmails(idioma);
 
   const cuerpo = `
-    <p style="margin:0 0 16px;">${t("bienvenidaClub.texto")}</p>
+    <p style="margin:0 0 16px;">${t(piloto ? "bienvenidaClub.textoPiloto" : "bienvenidaClub.texto")}</p>
     <ol style="margin:0 0 24px;padding-left:20px;color:#3f3f46;line-height:1.7;">
       <li>${t("bienvenidaClub.paso1")}</li>
       <li>${t("bienvenidaClub.paso2")}</li>

@@ -130,6 +130,7 @@ export default async function AdminClubesPage({
         verified: perfil?.verified ?? false,
         suspended: filaClub?.admin_suspended ?? false,
         modoPruebas: filaClub?.admin_test_mode ?? false,
+        piloto: usuario.piloto,
         visitas: actividad.get(usuario.id)?.visitas ?? 0,
         empresas: actividad.get(usuario.id)?.empresas ?? 0,
         contactos: actividad.get(usuario.id)?.contactos ?? 0,

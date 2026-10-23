@@ -603,14 +603,14 @@
     "intro": "Tu plan, tus facturas y tus datos de facturación. Desde aquí se cambia el método de pago y se cancela, sin llamar a nadie.",
     "confirmada": "Suscripción confirmada. Ya está todo en marcha.",
     "confirmando": "¡Gracias! Estamos confirmando tu suscripción con Stripe. Suele tardar unos segundos: vuelve a cargar la página en un momento.",
-    "pruebaTerminada": "Tu mes de prueba ha terminado.",
+    "pruebaTerminada": "Tu periodo de prueba ha terminado.",
     "pruebaTerminadaTexto": "Para volver a usar tu panel y que tu página vuelva a verse, elige uno de los planes de abajo. No pierdes nada de lo que tienes guardado: sigue todo ahí esperándote.",
     "pagoCancelado": "Has salido de la pasarela sin terminar el pago. No se ha cobrado nada y puedes volver a intentarlo cuando quieras.",
     "planNombre": "Plan {nombre}",
     "tuPlan": "Tu plan",
     "precioConIva": "{precio} {periodo}, IVA incluido.",
     "eresFundador": "Eres el club fundador nº {numero}: este precio no te sube nunca.",
-    "eligeComoPagar": "Elige cómo quieres pagar cuando termine tu mes gratis.",
+    "eligeComoPagar": "Elige cómo quieres pagar cuando termine tu periodo gratis.",
     "invitadoHasta": "Acceso de invitado hasta",
     "eseDiaSeCobra": "ese día se cobra el primer recibo de tu plan.",
     "hastaEntoncesNada": "hasta entonces no se te cobra nada. Te avisaremos por correo antes de esa fecha.",
@@ -629,7 +629,7 @@
       "recomendado": "Recomendado",
       "quedan": "Quedan {n}",
       "ivaIncluido": "{periodo}, IVA incluido",
-      "empiezas": "Empiezas con <fuerte>30 días gratis</fuerte> y no se cobra nada hasta que terminen. Si un solo patrocinador te deja 300 €, ya has cubierto el año entero."
+      "empiezas": "No se cobra nada hasta que termine tu periodo gratis: <fuerte>30 días</fuerte>, o <fuerte>6 meses</fuerte> si eres del programa piloto. Si un solo patrocinador te deja 300 €, ya has cubierto el año entero."
     }
   },
   "comun": {

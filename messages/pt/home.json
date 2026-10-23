@@ -916,5 +916,64 @@
       "reclamo": "Preço congelado para sempre.",
       "detalle": "Só para os primeiros clubes que entram na plataforma. O preço nunca sobe enquanto continuares inscrito."
     }
+  },
+  "piloto": {
+    "meta": {
+      "titulo": "Programa piloto: 6 meses grátis para o teu clube",
+      "descripcion": "Procuramos clubes de qualquer modalidade para experimentar a ApoyaClub 6 meses grátis, sem cartão. Em troca, contas-nos o que funciona."
+    },
+    "etiqueta": "Programa piloto · Vagas limitadas",
+    "titulo": "{meses} meses grátis para o teu clube",
+    "texto": "Procuramos {plazas} clubes de qualquer modalidade para experimentar a ApoyaClub antes de toda a gente. Tens a ferramenta completa durante {meses} meses, sem cartão. Em troca, só te pedimos que nos contes o que funciona e o que não funciona.",
+    "plazasQuedan": "{n, plural, one {Resta # vaga} other {Restam # vagas}} de {total}",
+    "completo": "As vagas do piloto já estão preenchidas. Podes começar na mesma com o mês grátis habitual.",
+    "cta": "Quero a minha vaga",
+    "ctaCompleto": "Começar com 1 mês grátis",
+    "condiciones": "Sem cartão · Sem fidelização · Todas as modalidades",
+    "queTeLlevas": {
+      "titulo": "O que ganhas",
+      "pagina": {
+        "titulo": "A página do teu clube",
+        "texto": "Uma página profissional com as tuas equipas, a tua formação e o teu público, pronta para mostrar a qualquer empresa."
+      },
+      "oportunidades": {
+        "titulo": "Ofertas de patrocínio com preço",
+        "texto": "Mais de 100 ideias de patrocínio para criares as tuas ofertas em minutos: camisola, painéis, redes, torneios…"
+      },
+      "dossier": {
+        "titulo": "Dossier em PDF e Word",
+        "texto": "O teu clube num documento profissional, pronto para enviar por e-mail ou WhatsApp às empresas da tua zona."
+      },
+      "seguimiento": {
+        "titulo": "Tudo sob controlo",
+        "texto": "Quem visita a tua página, que patrocínios renovam em breve e o que tens de cumprir com cada patrocinador."
+      }
+    },
+    "quePedimos": {
+      "titulo": "O que te pedimos em troca",
+      "usarla": {
+        "titulo": "Usá-la a sério",
+        "texto": "Preencher a página do teu clube e criar pelo menos uma oferta de patrocínio."
+      },
+      "opinion": {
+        "titulo": "Dar-nos a tua opinião",
+        "texto": "Umas mensagens ou uma chamada por mês: o que te serve, o que falta e o que sobra."
+      },
+      "nadaMas": {
+        "titulo": "Mais nada",
+        "texto": "Sem cartão e sem compromisso. Se não te convencer, deixas."
+      }
+    },
+    "pasos": {
+      "titulo": "Como te inscreves",
+      "paso1": "Carrega em «Quero a minha vaga» e cria a conta do teu clube.",
+      "paso2": "Confirma o teu e-mail e preenche a ficha do teu clube.",
+      "paso3": "Pronto: tens {meses} meses para experimentar tudo."
+    },
+    "despues": {
+      "titulo": "E quando acabarem os {meses} meses?",
+      "texto": "Se ficares, tens o preço Fundador: 199 € por ano, IVA incluído. Se não, não é cobrado nada: não precisas de cartão para começar."
+    },
+    "dudas": "Dúvidas? Escreve-me para <correo>info@apoyaclub.com</correo>. Rafael, criador da ApoyaClub."
   }
 }

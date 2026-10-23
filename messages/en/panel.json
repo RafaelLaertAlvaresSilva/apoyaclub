@@ -158,14 +158,14 @@
     "intro": "Your plan, your invoices and your billing details. This is where you change the payment method or cancel, without calling anyone.",
     "confirmada": "Subscription confirmed. Everything is up and running.",
     "confirmando": "Thank you! We are confirming your subscription with Stripe. It usually takes a few seconds: reload the page in a moment.",
-    "pruebaTerminada": "Your trial month has ended.",
+    "pruebaTerminada": "Your free trial has ended.",
     "pruebaTerminadaTexto": "To use your dashboard again and make your page visible again, choose one of the plans below. You don’t lose anything you have saved: it’s all still there waiting for you.",
     "pagoCancelado": "You left the payment page without finishing the payment. Nothing has been charged and you can try again whenever you like.",
     "planNombre": "{nombre} plan",
     "tuPlan": "Your plan",
     "precioConIva": "{precio} {periodo}, VAT included.",
     "eresFundador": "You are founding club no. {numero}: this price will never go up for you.",
-    "eligeComoPagar": "Choose how you want to pay when your free month ends.",
+    "eligeComoPagar": "Choose how you want to pay when your free period ends.",
     "invitadoHasta": "Guest access until",
     "eseDiaSeCobra": "on that day the first payment of your plan is charged.",
     "hastaEntoncesNada": "until then you won’t be charged anything. We will email you before that date.",
@@ -184,7 +184,7 @@
       "recomendado": "Recommended",
       "quedan": "{n} left",
       "ivaIncluido": "{periodo}, VAT included",
-      "empiezas": "You start with <fuerte>30 days free</fuerte> and nothing is charged until they are over. If a single sponsor gives you €300, you have already covered the whole year."
+      "empiezas": "Nothing is charged until your free period ends: <fuerte>30 days</fuerte>, or <fuerte>6 months</fuerte> if you are in the pilot programme. If a single sponsor gives you €300, you have already covered the whole year."
     }
   },
   "privacidad": {

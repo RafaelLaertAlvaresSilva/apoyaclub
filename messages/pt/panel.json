@@ -158,14 +158,14 @@
     "intro": "O teu plano, as tuas faturas e os teus dados de faturação. É aqui que se muda o método de pagamento e se cancela, sem ligar a ninguém.",
     "confirmada": "Subscrição confirmada. Já está tudo a funcionar.",
     "confirmando": "Obrigado! Estamos a confirmar a tua subscrição com a Stripe. Costuma demorar alguns segundos: volta a carregar a página daqui a pouco.",
-    "pruebaTerminada": "O teu mês experimental terminou.",
+    "pruebaTerminada": "O teu período experimental terminou.",
     "pruebaTerminadaTexto": "Para voltares a usar o teu painel e a tua página voltar a estar visível, escolhe um dos planos abaixo. Não perdes nada do que tens guardado: está tudo aí à tua espera.",
     "pagoCancelado": "Saíste da página de pagamento sem concluir o pagamento. Não foi cobrado nada e podes tentar novamente quando quiseres.",
     "planNombre": "Plano {nombre}",
     "tuPlan": "O teu plano",
     "precioConIva": "{precio} {periodo}, IVA incluído.",
     "eresFundador": "És o clube fundador n.º {numero}: este preço nunca sobe.",
-    "eligeComoPagar": "Escolhe como queres pagar quando terminar o teu mês grátis.",
+    "eligeComoPagar": "Escolhe como queres pagar quando terminar o teu período grátis.",
     "invitadoHasta": "Acesso de convidado até",
     "eseDiaSeCobra": "nesse dia é cobrado o primeiro pagamento do teu plano.",
     "hastaEntoncesNada": "até lá não te é cobrado nada. Vamos avisar-te por e-mail antes dessa data.",
@@ -184,7 +184,7 @@
       "recomendado": "Recomendado",
       "quedan": "Restam {n}",
       "ivaIncluido": "{periodo}, IVA incluído",
-      "empiezas": "Começas com <fuerte>30 dias grátis</fuerte> e não é cobrado nada até terminarem. Se um único patrocinador te deixar 300 €, já cobriste o ano inteiro."
+      "empiezas": "Não é cobrado nada até terminar o teu período grátis: <fuerte>30 dias</fuerte>, ou <fuerte>6 meses</fuerte> se fazes parte do programa piloto. Se um único patrocinador te deixar 300 €, já cobriste o ano inteiro."
     }
   },
   "privacidad": {

@@ -7,6 +7,7 @@ import { redirect } from "@/i18n/navigation";
 import { mensajeErrorAuth } from "@/lib/auth-errors";
 import { registrarConsentimiento } from "@/lib/consent";
 import { CONSENT_TYPES, LEGAL_VERSIONS } from "@/lib/legal";
+import { plazasPilotoLibres } from "@/lib/piloto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -22,6 +23,9 @@ export async function registrarClub(
   const password = String(formData.get("password") ?? "");
   const confirmarPassword = String(formData.get("confirmarPassword") ?? "");
   const aceptaTerminos = formData.get("aceptaTerminos") === "on";
+  // Viene de apoyaclub.com/piloto (la campaña): 6 meses gratis si
+  // quedan plazas. Se comprueba aquí, no en el navegador.
+  const quierePiloto = formData.get("piloto") === "1";
 
   if (!nombre) {
     return { error: tValidacion("nombreClub") };
@@ -61,8 +65,12 @@ export async function registrarClub(
   if (data.user) {
     try {
       const admin = createAdminClient();
+      const piloto = quierePiloto && ((await plazasPilotoLibres(admin)) ?? 0) > 0;
       await admin.auth.admin.updateUserById(data.user.id, {
-        app_metadata: { role: "club" },
+        // `piloto` también aquí y no en `user_metadata`: el propio
+        // usuario puede cambiar su `user_metadata`, y así se daría 6
+        // meses gratis él solo (migración 0057).
+        app_metadata: piloto ? { role: "club", piloto: true } : { role: "club" },
       });
       // Registro del consentimiento (Fase 11): se hace con el cliente
       // admin porque, con la confirmación de email activada, todavía

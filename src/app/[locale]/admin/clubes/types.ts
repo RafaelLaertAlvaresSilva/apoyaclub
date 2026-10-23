@@ -17,6 +17,8 @@ export type ClubAdminRow = {
   suspended: boolean;
   /** Modo de pruebas (migración 0053): conserva el panel, pero no se ve en público. */
   modoPruebas: boolean;
+  /** Llegó por la campaña: 6 meses gratis (migración 0057). */
+  piloto: boolean;
   /** Actividad de los últimos 90 días (migración 0022). */
   visitas: number;
   empresas: number;

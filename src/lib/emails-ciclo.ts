@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import type { AppLocale } from "@/i18n/routing";
 import { LOCALE_CONFIG } from "@/config/locales";
 import { idiomaDe } from "@/lib/idioma-usuario";
+import { esDelPiloto } from "@/lib/piloto";
 import {
   enviarEmailBienvenidaClub,
   enviarEmailBienvenidaEmpresa,
@@ -135,6 +136,7 @@ export async function enviarBienvenidas(admin: ClienteAdmin, ahora = new Date())
           club?.name ?? (usuario.user_metadata?.name as string | undefined) ?? tEmails("comun.tuClub"),
         panelUrl: urlEn(idioma, "/panel"),
         idioma,
+        piloto: esDelPiloto(usuario.app_metadata),
       });
     } else {
       resultado = await enviarEmailBienvenidaEmpresa({

@@ -10,6 +10,13 @@ export async function generateMetadata(): Promise<Metadata> {
 /* El formulario vive aparte porque necesita ejecutarse en el navegador,
  * y una página que lo hace no puede declarar el título de la pestaña.
  * Es el mismo reparto que ya tenía /login. */
-export default function RegistroClubPage() {
-  return <RegistroClubForm />;
+export default async function RegistroClubPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ piloto?: string }>;
+}) {
+  // Desde apoyaclub.com/piloto: el formulario lo dice arriba y manda la
+  // marca. Si ya no quedan plazas lo decide el servidor al registrar.
+  const { piloto } = await searchParams;
+  return <RegistroClubForm piloto={piloto === "1"} />;
 }

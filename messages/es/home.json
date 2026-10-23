@@ -916,5 +916,64 @@
       "reclamo": "Precio congelado de por vida.",
       "detalle": "Solo para los primeros clubes que entran en la plataforma. El precio no sube nunca mientras sigas de alta."
     }
+  },
+  "piloto": {
+    "meta": {
+      "titulo": "Programa piloto: 6 meses gratis para tu club",
+      "descripcion": "Buscamos clubes de cualquier deporte para probar ApoyaClub 6 meses gratis, sin tarjeta. A cambio, nos cuentas qué te funciona."
+    },
+    "etiqueta": "Programa piloto · Plazas limitadas",
+    "titulo": "{meses} meses gratis para tu club",
+    "texto": "Buscamos {plazas} clubes de cualquier deporte para probar ApoyaClub antes que nadie. Tienes la herramienta completa durante {meses} meses, sin tarjeta. A cambio, solo te pedimos que nos cuentes qué te funciona y qué no.",
+    "plazasQuedan": "{n, plural, one {Queda # plaza} other {Quedan # plazas}} de {total}",
+    "completo": "Las plazas del piloto ya están cubiertas. Puedes empezar igualmente con el mes gratis de siempre.",
+    "cta": "Quiero mi plaza",
+    "ctaCompleto": "Empezar con 1 mes gratis",
+    "condiciones": "Sin tarjeta · Sin permanencia · Todos los deportes",
+    "queTeLlevas": {
+      "titulo": "Qué te llevas",
+      "pagina": {
+        "titulo": "Tu página de club",
+        "texto": "Una página profesional con tus equipos, tu cantera y tu público, lista para enseñar a cualquier empresa."
+      },
+      "oportunidades": {
+        "titulo": "Ofertas de patrocinio con precio",
+        "texto": "Más de 100 ideas de patrocinio para crear tus ofertas en minutos: camiseta, vallas, redes, torneos…"
+      },
+      "dossier": {
+        "titulo": "Dossier en PDF y Word",
+        "texto": "Tu club en un documento profesional, listo para mandar por correo o WhatsApp a las empresas de tu zona."
+      },
+      "seguimiento": {
+        "titulo": "Todo bajo control",
+        "texto": "Quién visita tu página, qué patrocinios renuevan pronto y qué tienes que cumplir con cada patrocinador."
+      }
+    },
+    "quePedimos": {
+      "titulo": "Qué te pedimos a cambio",
+      "usarla": {
+        "titulo": "Usarla de verdad",
+        "texto": "Rellenar la página de tu club y crear al menos una oferta de patrocinio."
+      },
+      "opinion": {
+        "titulo": "Contarnos tu opinión",
+        "texto": "Unos mensajes o una llamada al mes: qué te sirve, qué falta y qué sobra."
+      },
+      "nadaMas": {
+        "titulo": "Nada más",
+        "texto": "Sin tarjeta y sin compromiso. Si no te convence, lo dejas."
+      }
+    },
+    "pasos": {
+      "titulo": "Cómo apuntarte",
+      "paso1": "Pulsa «Quiero mi plaza» y crea la cuenta de tu club.",
+      "paso2": "Confirma tu correo y rellena la ficha de tu club.",
+      "paso3": "Listo: tienes {meses} meses para probarlo todo."
+    },
+    "despues": {
+      "titulo": "¿Y cuando acaben los {meses} meses?",
+      "texto": "Si te quedas, tienes el precio Fundador: 199 € al año, IVA incluido. Si no, no se cobra nada: no hace falta tarjeta para empezar."
+    },
+    "dudas": "¿Dudas? Escríbeme a <correo>info@apoyaclub.com</correo>. Rafael, creador de ApoyaClub."
   }
 }

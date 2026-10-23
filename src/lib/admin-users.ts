@@ -5,6 +5,8 @@ export type UsuarioPorRol = {
   id: string;
   email: string | null;
   createdAt: string;
+  /** Se apuntó desde la página del piloto (migración 0057). */
+  piloto: boolean;
 };
 
 const TAMANO_PAGINA = 200;
@@ -32,7 +34,12 @@ export async function obtenerUsuariosPorRol(rol: Role): Promise<UsuarioPorRol[]>
 
     for (const usuario of data.users) {
       if ((usuario.app_metadata?.role as Role | undefined) === rol) {
-        usuarios.push({ id: usuario.id, email: usuario.email ?? null, createdAt: usuario.created_at });
+        usuarios.push({
+          id: usuario.id,
+          email: usuario.email ?? null,
+          createdAt: usuario.created_at,
+          piloto: usuario.app_metadata?.piloto === true,
+        });
       }
     }
 
