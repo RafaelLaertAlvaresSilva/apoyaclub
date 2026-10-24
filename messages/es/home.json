@@ -571,8 +571,8 @@
   },
   "embudo": {
     "eyebrow": "Cuando una empresa te escribe",
-    "titulo": "No se te pierde ningún mensaje",
-    "texto": "Cada empresa que te escribe aparece en una lista dentro de tu panel. Tú la vas moviendo según cómo va la conversación, y de un vistazo ves a quién tienes pendiente de contestar.",
+    "titulo": "No se te pierde <resalte>ningún mensaje</resalte>",
+    "texto": "Cada empresa que te escribe aparece en una <b>lista dentro de tu panel</b>. Tú la vas moviendo según cómo va la conversación, y de un <b>vistazo</b> ves a quién tienes pendiente de contestar.",
     "comoSeLee": "Así se mueve un mensaje, paso a paso:",
     "estados": [
       {
@@ -585,16 +585,47 @@
       },
       {
         "nombre": "En conversación",
-        "texto": "Estáis hablando. Aquí es donde se cierra el acuerdo."
+        "texto": "Habláis por teléfono o por correo. Aquí es donde se cierra el acuerdo."
       },
       {
         "nombre": "Cerrada",
-        "texto": "Acuerdo cerrado. Lo que prometiste pasa solo a tu lista de tareas."
+        "texto": "Acuerdo cerrado. Con un botón apuntas lo que prometiste y pasa a tu lista de tareas."
       }
     ],
     "descartada": "Descartada",
     "descartadaTexto": "Si la empresa no encajaba, la apartas y deja de molestar. No se borra: el año que viene puede volver a interesarte.",
-    "cierre": "En resumen: te escriben, lo ves todo en un sitio, y cuando cerráis el acuerdo ApoyaClub te va recordando lo que te toca hacer para cumplirlo."
+    "cierre": "En resumen: te escriben, lo ves todo en un sitio, y cuando cerráis el acuerdo <resalte>ApoyaClub te va recordando</resalte> lo que te toca hacer para cumplirlo.",
+    "maqueta": {
+      "avisoTitulo": "Nueva solicitud de contacto",
+      "avisoTexto": "Deportes Plus quiere hablar con tu club",
+      "hora": "10:24",
+      "empresas": [
+        {
+          "nombre": "Deportes Plus",
+          "cuando": "Hace 2 horas"
+        },
+        {
+          "nombre": "Grupo Martínez",
+          "cuando": "Hace 1 día"
+        },
+        {
+          "nombre": "AutoSur",
+          "cuando": "Hace 1 día"
+        }
+      ],
+      "mensaje": "Hola, nos interesa patrocinar al equipo. ¿Podemos ver las opciones?",
+      "correo": "hola@deportesplus.es",
+      "telefono": "600 000 000",
+      "cerradoTitulo": "¡Acuerdo cerrado!",
+      "cerradoBoton": "Apuntar lo prometido",
+      "tareas": [
+        "Logo en la camiseta",
+        "2 publicaciones en Instagram",
+        "Mención en el torneo de Navidad",
+        "Informe de fin de temporada"
+      ],
+      "nota": "Ejemplo con datos de muestra."
+    }
   },
   "ctaFijo": {
     "texto": "Prueba 1 mes gratis"

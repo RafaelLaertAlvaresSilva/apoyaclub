@@ -129,7 +129,9 @@
     "sobreElClub": "Sobre o clube em geral",
     "persona": "Pessoa: {nombre}",
     "correo": "E-mail:",
-    "telefono": "Telefone:"
+    "telefono": "Telefone:",
+    "cerradaTexto": "Acordo fechado. Regista o que lhe prometeste e o ApoyaClub vai-te lembrando.",
+    "cerradaApuntar": "Registar o prometido →"
   },
   "suscripcion": {
     "estado": "Estado",

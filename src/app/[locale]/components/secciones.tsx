@@ -1097,6 +1097,18 @@ export async function SeccionBuscadorEmpresas() {
 export async function SeccionEmbudo() {
   const t = await getTranslations("home");
   const estadosEmbudo = t.raw("embudo.estados") as { nombre: string; texto: string }[];
+  const m = t.raw("embudo.maqueta") as MaquetaEmbudo;
+  const resalte = (trozo: React.ReactNode) => <span className="text-accion-tinta">{trozo}</span>;
+  const negrita = (trozo: React.ReactNode) => <strong className="font-semibold text-titular">{trozo}</strong>;
+
+  // Cada paso con su dibujo y su color: el mismo número de color en la
+  // casilla y en su dibujo, para que se lea como una secuencia.
+  const pasos = [
+    { tono: "bg-sky-100 text-sky-800", maqueta: <MaquetaAviso m={m} /> },
+    { tono: "bg-amber-100 text-amber-800", maqueta: <MaquetaLista m={m} estados={estadosEmbudo} /> },
+    { tono: "bg-teal-100 text-teal-800", maqueta: <MaquetaConversacion m={m} estado={estadosEmbudo[2]?.nombre ?? ""} /> },
+    { tono: "bg-emerald-100 text-emerald-800", maqueta: <MaquetaCerrada m={m} /> },
+  ];
 
   return (
     <section id="seguimiento" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-14 sm:px-6 sm:py-28">
@@ -1105,57 +1117,51 @@ export async function SeccionEmbudo() {
           {t("embudo.eyebrow")}
         </p>
         <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-titular sm:text-4xl">
-          {t("embudo.titulo")}
+          {t.rich("embudo.titulo", { resalte })}
         </h2>
-        <p className="mt-4 leading-relaxed text-zinc-600">{t("embudo.texto")}</p>
+        <p className="mt-4 leading-relaxed text-zinc-600">{t.rich("embudo.texto", { b: negrita })}</p>
       </div>
 
-      {/* Sin esta línea, las cuatro casillas son cuatro palabras
-          sueltas: nadie sabe si hay que elegir una, si son opciones o
-          si van en orden. */}
-      <p className="mt-8 text-center text-sm font-semibold text-titular sm:mt-10">
-        {t("embudo.comoSeLee")}
-      </p>
+      {/* Fuera de la vista pero para los lectores de pantalla: en el
+          dibujo las flechas ya dicen que es una secuencia. */}
+      <p className="sr-only">{t("embudo.comoSeLee")}</p>
 
-      {/* LAS MISMAS CUATRO CASILLAS Y LAS MISMAS PALABRAS, EN MENOS CAJA.
-          En el teléfono eran cuatro tarjetas sueltas, cada una con su
-          borde, su sombra y 24 px de relleno por lado, y el número
-          encima del nombre en vez de a su lado: 704 px para cuatro
-          frases cortas.
+      {/* UNA SOLA LISTA que cambia de forma con el ancho. En el teléfono,
+          un recuadro con las cuatro frases separadas por una raya y sin
+          dibujos (eran 700 px para cuatro frases cortas). A partir de
+          `sm`, tarjetas; en `lg`, las cuatro en fila con flechas.
 
-          Ahora, en el teléfono, las cuatro van dentro de un solo
-          recuadro separadas por una raya, y el número va al lado del
-          nombre. A partir de `sm` vuelven a ser cuatro tarjetas con sus
-          flechas, que es donde esa forma se entiende.
-
-          Es la MISMA lista, con las mismas clases cambiando de
-          significado según el ancho, no dos listas con una escondida:
-          duplicar el contenido para enseñar uno u otro deja el texto dos
-          veces en la página y da el doble de trabajo cada vez que se
-          cambia una palabra. */}
-      <ol className="mt-6 divide-y divide-zinc-200 overflow-hidden rounded-2xl border border-zinc-200 bg-white sm:grid sm:gap-4 sm:divide-y-0 sm:border-0 sm:bg-transparent sm:grid-cols-2 lg:grid-cols-4">
+          Los dibujos enseñan lo que el club ve de verdad: la bandeja de
+          Solicitudes y el botón de apuntar lo prometido. Nada de
+          burbujas de chat: en ApoyaClub no se chatea, la conversación
+          sigue por teléfono o correo. */}
+      <ol className="mt-10 divide-y divide-zinc-200 overflow-hidden rounded-2xl border border-zinc-200 bg-white sm:grid sm:gap-5 sm:divide-y-0 sm:overflow-visible sm:border-0 sm:bg-transparent sm:grid-cols-2 lg:grid-cols-4">
         {estadosEmbudo.map((estado, indice) => (
           <li
             key={estado.nombre}
-            className="relative p-4 sm:rounded-2xl sm:border sm:border-zinc-200 sm:bg-white sm:p-6 sm:shadow-sm"
+            className="relative flex flex-col p-4 sm:rounded-2xl sm:border sm:border-zinc-200 sm:bg-white sm:p-6 sm:shadow-sm"
           >
             <div className="flex items-center gap-2.5 sm:block">
-              <span className="inline-flex h-7 w-7 flex-none items-center justify-center rounded-full bg-brand-teal-light text-sm font-extrabold text-accion-tinta sm:h-8 sm:w-8">
+              <span
+                className={`inline-flex h-7 w-7 flex-none items-center justify-center rounded-full text-sm font-extrabold sm:h-11 sm:w-11 sm:text-lg ${pasos[indice]?.tono ?? ""}`}
+              >
                 {indice + 1}
               </span>
-              <h3 className="font-extrabold text-titular sm:mt-4">{estado.nombre}</h3>
+              <h3 className="font-extrabold text-titular sm:mt-4 sm:text-xl">{estado.nombre}</h3>
             </div>
             <p className="mt-1.5 text-sm leading-relaxed text-zinc-600 sm:mt-2">{estado.texto}</p>
 
-            {/* La flecha entre casillas solo tiene sentido cuando van en
-                fila; apiladas en el móvil sobra. */}
+            <div aria-hidden="true" className="mt-5 hidden flex-1 items-end sm:flex">
+              <div className="w-full">{pasos[indice]?.maqueta}</div>
+            </div>
+
             {indice < estadosEmbudo.length - 1 && (
               <span
                 aria-hidden="true"
-                className="absolute -right-3 top-1/2 hidden -translate-y-1/2 text-zinc-300 lg:block"
+                className="absolute -right-[18px] top-24 z-10 hidden h-7 w-7 items-center justify-center rounded-full bg-white text-accion-tinta shadow-sm ring-1 ring-zinc-200 lg:flex"
               >
-                <svg width="18" height="12" viewBox="0 0 24 14" fill="none">
-                  <path d="M1 7h20M15 1l6 6-6 6" stroke="currentColor" strokeWidth="2" />
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 6l6 6-6 6" />
                 </svg>
               </span>
             )}
@@ -1163,21 +1169,138 @@ export async function SeccionEmbudo() {
         ))}
       </ol>
 
-      {/* En blanco y con borde, como las cuatro casillas de arriba.
-          Era `bg-zinc-50`, que funcionaba cuando el fondo de la página
-          era blanco; desde que el fondo es el lienzo —del mismo tono—
-          esta caja desaparecía del todo. */}
-      <div className="mx-auto mt-5 flex max-w-3xl flex-wrap items-center justify-center gap-2.5 rounded-2xl border border-zinc-200 bg-white px-5 py-4 text-center sm:mt-6 sm:gap-3 sm:px-6 sm:py-5">
-        <span className="rounded-full border border-zinc-300 bg-white px-4 py-1.5 text-sm font-semibold text-zinc-500">
-          {t("embudo.descartada")}
+      {/* Descartada, aparte y debajo: no es un paso más, es la salida
+          que puede tomar cualquiera de ellos. */}
+      <div className="mx-auto mt-5 flex max-w-3xl items-center gap-4 rounded-2xl border border-zinc-200 bg-white px-5 py-4 sm:mt-6 sm:px-6 sm:py-5">
+        <span aria-hidden="true" className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-zinc-100 text-zinc-500">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M5.6 5.6l12.8 12.8" />
+          </svg>
         </span>
-        <span className="text-sm leading-relaxed text-zinc-600">{t("embudo.descartadaTexto")}</span>
+        <span>
+          <span className="block font-extrabold text-titular">{t("embudo.descartada")}</span>
+          <span className="block text-sm leading-relaxed text-zinc-600">{t("embudo.descartadaTexto")}</span>
+        </span>
       </div>
 
-      <p className="mx-auto mt-8 max-w-2xl text-center text-[15px] font-medium leading-relaxed text-titular sm:mt-10 sm:text-base">
-        {t("embudo.cierre")}
+      <p className="mx-auto mt-8 max-w-2xl text-center text-[15px] font-semibold leading-relaxed text-titular sm:mt-10 sm:text-lg">
+        {t.rich("embudo.cierre", { resalte })}
       </p>
+      <p className="mt-3 hidden text-center text-xs text-zinc-400 sm:block">{t("embudo.maqueta.nota")}</p>
     </section>
+  );
+}
+
+type MaquetaEmbudo = {
+  avisoTitulo: string;
+  avisoTexto: string;
+  hora: string;
+  empresas: { nombre: string; cuando: string }[];
+  mensaje: string;
+  correo: string;
+  telefono: string;
+  cerradoTitulo: string;
+  cerradoBoton: string;
+  tareas: string[];
+};
+
+/** Paso 1: el aviso que le llega al club al correo. */
+function MaquetaAviso({ m }: { m: MaquetaEmbudo }) {
+  return (
+    <div className="relative -rotate-2 rounded-xl border border-zinc-200 bg-white p-3 shadow-md">
+      <span className="absolute -left-1 -top-1 h-2.5 w-2.5 rounded-full bg-peligro" />
+      <div className="flex items-start gap-2.5">
+        <span className="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-sky-100 text-sky-700">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="M3 7l9 6 9-6" />
+          </svg>
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="flex items-baseline justify-between gap-2">
+            <span className="text-xs font-bold leading-tight text-titular">{m.avisoTitulo}</span>
+            <span className="text-[10px] text-zinc-400">{m.hora}</span>
+          </span>
+          <span className="mt-0.5 block text-[11px] leading-snug text-zinc-500">{m.avisoTexto}</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/** Paso 2: la bandeja de Solicitudes, con su recuento por estado. */
+function MaquetaLista({ m, estados }: { m: MaquetaEmbudo; estados: { nombre: string }[] }) {
+  const cuentas = [3, 5, 4, 12];
+  return (
+    <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white text-[11px] shadow-sm">
+      <ul className="flex flex-wrap gap-1 border-b border-zinc-100 bg-zinc-50 p-1.5">
+        {estados.map(({ nombre }, indice) => (
+          <li
+            key={nombre}
+            className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 ${indice === 1 ? "bg-amber-100 font-semibold text-amber-900" : "text-zinc-500"}`}
+          >
+            {nombre}
+            <span className="tabular-nums opacity-70">{cuentas[indice]}</span>
+          </li>
+        ))}
+      </ul>
+      <ul className="divide-y divide-zinc-100">
+        {m.empresas.map((empresa) => (
+          <li key={empresa.nombre} className="flex items-center gap-2 px-2.5 py-1.5">
+            <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-zinc-200 text-[10px] font-bold text-zinc-600">
+              {empresa.nombre.charAt(0)}
+            </span>
+            <span className="min-w-0 flex-1 font-semibold text-titular">{empresa.nombre}</span>
+            <span className="text-[10px] text-zinc-400">{empresa.cuando}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/** Paso 3: la solicitud abierta, con lo que escribió y cómo contestarle. */
+function MaquetaConversacion({ m, estado }: { m: MaquetaEmbudo; estado: string }) {
+  return (
+    <div className="rounded-xl border border-zinc-200 bg-white p-3 text-[11px] shadow-sm">
+      <div className="flex items-center justify-between gap-2">
+        <span className="truncate text-xs font-bold text-titular">{m.empresas[0]?.nombre}</span>
+        <span className="whitespace-nowrap rounded-full bg-aviso px-1.5 py-0.5 text-[10px] font-semibold text-sobre-aviso">{estado}</span>
+      </div>
+      <p className="mt-2 rounded-lg bg-zinc-50 p-2 leading-snug text-zinc-600">{m.mensaje}</p>
+      <div className="mt-2 flex flex-col gap-0.5 text-teal-700">
+        <span className="break-all">{m.correo}</span>
+        <span>{m.telefono}</span>
+      </div>
+    </div>
+  );
+}
+
+/** Paso 4: acuerdo cerrado y lo prometido, ya en Tareas. */
+function MaquetaCerrada({ m }: { m: MaquetaEmbudo }) {
+  return (
+    <div className="rounded-xl border border-zinc-200 bg-white p-3 text-[11px] shadow-sm">
+      <div className="flex items-center gap-2">
+        <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-emerald-500 text-sobre-color">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12l5 5 9-10" />
+          </svg>
+        </span>
+        <span className="text-xs font-bold text-titular">{m.cerradoTitulo}</span>
+      </div>
+      <span className="mt-2 inline-block rounded-md bg-accion px-2 py-1 text-[10px] font-semibold text-sobre-color">
+        {m.cerradoBoton} →
+      </span>
+      <ul className="mt-2 flex flex-col gap-1">
+        {m.tareas.map((tarea) => (
+          <li key={tarea} className="flex items-center gap-1.5 text-zinc-600">
+            <span className="h-3 w-3 flex-none rounded border border-emerald-400" />
+            <span className="leading-tight">{tarea}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

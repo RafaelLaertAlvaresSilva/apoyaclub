@@ -129,7 +129,9 @@
     "sobreElClub": "About the club in general",
     "persona": "Person: {nombre}",
     "correo": "Email:",
-    "telefono": "Phone:"
+    "telefono": "Phone:",
+    "cerradaTexto": "Deal closed. Note down what you promised and ApoyaClub will keep reminding you.",
+    "cerradaApuntar": "Add what you promised →"
   },
   "suscripcion": {
     "estado": "Status",

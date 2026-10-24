@@ -52,9 +52,13 @@ const nuevaLinea = (accion = ""): LineaFormulario => ({ id: (siguienteId += 1), 
 export function TareasManager({
   tareas,
   empresasConocidas,
+  empresaInicial = null,
 }: {
   tareas: TareaPatrocinio[];
   empresasConocidas: EmpresaConocida[];
+  /** La empresa de una solicitud recién cerrada: el formulario se abre
+   * con ella ya elegida. */
+  empresaInicial?: string | null;
 }) {
   const t = useTranslations("panel.tareas");
   const [estado, formAction] = useActionState(crearTareas, null);
@@ -98,14 +102,20 @@ export function TareasManager({
           debajo, fuera de pantalla en el móvil— y era lo contrario de
           lo que hacen Oportunidades y "A quién escribir". */}
       {tareas.length === 0 ? (
-        <FormularioNuevasTareas
-          key={claveFormulario}
-          accion={formAction}
-          estado={estado}
-          empresasConocidas={empresasConocidas}
-        />
+        <div id="apuntar" className="scroll-mt-6">
+          <FormularioNuevasTareas
+            key={claveFormulario}
+            accion={formAction}
+            estado={estado}
+            empresasConocidas={empresasConocidas}
+            empresaInicial={claveFormulario === 0 ? empresaInicial : null}
+          />
+        </div>
       ) : (
-        <details className="group tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm">
+        <details
+          id="apuntar"
+          open={empresaInicial != null && claveFormulario === 0 ? true : undefined}
+          className="group scroll-mt-6 tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm">
           <summary className="flex cursor-pointer list-none items-center gap-2 px-5 py-4 text-sm font-medium text-accion-tinta [&::-webkit-details-marker]:hidden">
             <span aria-hidden="true" className="text-base leading-none">+</span>
             {t("apuntarAlgoNuevo")}
@@ -116,6 +126,7 @@ export function TareasManager({
               accion={formAction}
               estado={estado}
               empresasConocidas={empresasConocidas}
+              empresaInicial={claveFormulario === 0 ? empresaInicial : null}
               sinTarjeta
             />
           </div>
@@ -193,11 +204,13 @@ function FormularioNuevasTareas({
   accion: formAction,
   estado,
   empresasConocidas,
+  empresaInicial = null,
   sinTarjeta = false,
 }: {
   accion: (formData: FormData) => void;
   estado: { error?: string; ok?: boolean } | null;
   empresasConocidas: EmpresaConocida[];
+  empresaInicial?: string | null;
   /** Dentro del desplegable ya hay recuadro y título propios: no hacen
    * falta otros. Solo la primera vez, con la lista vacía, va con
    * tarjeta. */
@@ -223,7 +236,7 @@ function FormularioNuevasTareas({
 
   const formulario = (
         <form action={formAction} className="flex flex-col gap-5">
-          <SelectorDeEmpresa empresasConocidas={empresasConocidas} />
+          <SelectorDeEmpresa empresasConocidas={empresasConocidas} empresaInicial={empresaInicial} />
 
           <div>
             <p className="mb-2 text-[15px] font-bold text-titular">{t("loHabitual")}</p>
@@ -349,14 +362,28 @@ function FormularioNuevasTareas({
  * acuerdos de un club de barrio son con empresas que no están en
  * ninguna parte.
  */
-function SelectorDeEmpresa({ empresasConocidas }: { empresasConocidas: EmpresaConocida[] }) {
+function SelectorDeEmpresa({
+  empresasConocidas,
+  empresaInicial = null,
+}: {
+  empresasConocidas: EmpresaConocida[];
+  empresaInicial?: string | null;
+}) {
   const t = useTranslations("panel.tareas");
   const OTRA = "__otra__";
+
+  // Si viene de una solicitud cerrada: la empresa ya conocida con ese
+  // nombre (sin mirar mayúsculas), o "Otra" con el nombre ya escrito.
+  const conocidaInicial = empresaInicial
+    ? empresasConocidas.find((empresa) => empresa.nombre.toLowerCase() === empresaInicial.toLowerCase())
+    : undefined;
 
   // Sin nada conocido todavía, un desplegable con una sola opción
   // ("Otra empresa") es un paso de más que no elige nada: se va
   // directo a escribir el nombre.
-  const [eleccion, setEleccion] = useState(() => (empresasConocidas.length > 0 ? "" : OTRA));
+  const [eleccion, setEleccion] = useState(() =>
+    conocidaInicial ? conocidaInicial.nombre : empresaInicial || empresasConocidas.length === 0 ? OTRA : "",
+  );
 
   const elegida = empresasConocidas.find((empresa) => empresa.nombre === eleccion);
   const esOtra = eleccion === OTRA;
@@ -395,6 +422,7 @@ function SelectorDeEmpresa({ empresasConocidas }: { empresasConocidas: EmpresaCo
             name="empresa"
             required
             maxLength={120}
+            defaultValue={conocidaInicial ? undefined : (empresaInicial ?? undefined)}
             placeholder={t("empresaEjemplo")}
             className={clasesInput}
           />

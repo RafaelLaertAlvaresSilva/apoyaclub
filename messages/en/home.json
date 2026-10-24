@@ -571,8 +571,8 @@
   },
   "embudo": {
     "eyebrow": "When a business writes to you",
-    "titulo": "You never lose a message",
-    "texto": "Every business that writes to you appears in a list in your dashboard. You move each one along as the conversation progresses, and at a glance you can see who you still need to reply to.",
+    "titulo": "You never lose <resalte>a single message</resalte>",
+    "texto": "Every business that writes to you appears in a <b>list in your dashboard</b>. You move each one along as the conversation progresses, and <b>at a glance</b> you can see who you still need to reply to.",
     "comoSeLee": "This is how a message moves, step by step:",
     "estados": [
       {
@@ -585,16 +585,47 @@
       },
       {
         "nombre": "In conversation",
-        "texto": "You're talking. This is where the deal gets closed."
+        "texto": "You talk by phone or email. This is where the deal gets closed."
       },
       {
         "nombre": "Closed",
-        "texto": "Deal closed. What you promised goes straight onto your task list."
+        "texto": "Deal closed. One button adds what you promised to your task list."
       }
     ],
     "descartada": "Dismissed",
     "descartadaTexto": "If the business wasn't a good fit, you set it aside and it stops getting in the way. It isn't deleted: next year it might interest you again.",
-    "cierre": "In short: they write to you, you see everything in one place, and when you close the deal ApoyaClub keeps reminding you what you need to do to deliver it."
+    "cierre": "In short: they write to you, you see everything in one place, and when you close the deal <resalte>ApoyaClub keeps reminding you</resalte> what you need to do to deliver it.",
+    "maqueta": {
+      "avisoTitulo": "New contact request",
+      "avisoTexto": "Deportes Plus wants to talk to your club",
+      "hora": "10:24",
+      "empresas": [
+        {
+          "nombre": "Deportes Plus",
+          "cuando": "2 hours ago"
+        },
+        {
+          "nombre": "Grupo Martínez",
+          "cuando": "1 day ago"
+        },
+        {
+          "nombre": "AutoSur",
+          "cuando": "1 day ago"
+        }
+      ],
+      "mensaje": "Hi, we'd like to sponsor the team. Can we see the options?",
+      "correo": "hello@deportesplus.co.uk",
+      "telefono": "07700 900000",
+      "cerradoTitulo": "Deal closed!",
+      "cerradoBoton": "Add what you promised",
+      "tareas": [
+        "Logo on the shirt",
+        "2 Instagram posts",
+        "Mention at the Christmas tournament",
+        "End-of-season report"
+      ],
+      "nota": "Example with sample data."
+    }
   },
   "ctaFijo": {
     "texto": "Try 1 month free"

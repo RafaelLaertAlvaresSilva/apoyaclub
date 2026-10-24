@@ -15,7 +15,11 @@ import { TareasManager } from "./components/TareasManager";
  * Vive en el panel del club y no la ve nadie más: ni el público, ni las
  * empresas. Es la libreta del club, no un escaparate.
  */
-export default async function TareasPage() {
+export default async function TareasPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ empresa?: string | string[] }>;
+}) {
   const t = await getTranslations("panel.tareas.cabecera");
   const supabase = await createClient();
   const {
@@ -43,6 +47,11 @@ export default async function TareasPage() {
   // patrocinador y no solo a un nombre escrito.
   const empresasConocidas = empresasConocidasDe(patrocinadores ?? [], tareas);
 
+  // Al cerrar una solicitud, su tarjeta trae aquí con el nombre de la
+  // empresa (`?empresa=`): el formulario se abre ya con ella puesta.
+  const { empresa } = await searchParams;
+  const empresaInicial = (Array.isArray(empresa) ? empresa[0] : empresa)?.trim().slice(0, 120) || null;
+
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
@@ -58,7 +67,7 @@ export default async function TareasPage() {
 
       <RecordatorioInforme tareas={tareas} ultimosInformes={ultimosInformes} hoy={hoyISO()} />
 
-      <TareasManager tareas={tareas} empresasConocidas={empresasConocidas} />
+      <TareasManager tareas={tareas} empresasConocidas={empresasConocidas} empresaInicial={empresaInicial} />
     </div>
   );
 }

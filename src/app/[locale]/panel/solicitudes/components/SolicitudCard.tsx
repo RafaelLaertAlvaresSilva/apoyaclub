@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { useIntlLocale } from "@/i18n/use-intl-locale";
 import { ESTADOS_SOLICITUD } from "@/lib/contact-requests";
 import type { ContactRequest, ContactRequestStatus } from "@/lib/types";
@@ -102,6 +103,26 @@ export function SolicitudCard({
           </form>
         ))}
       </div>
+
+      {/* Acuerdo cerrado: el siguiente paso es apuntar lo prometido, que
+          es lo que hace que ApoyaClub se lo recuerde al club y que en
+          junio pueda enseñarle a la empresa lo que recibió. El botón
+          abre Tareas con esta empresa ya elegida. */}
+      {solicitud.status === "closed" && (
+        <div className="mt-4 flex flex-wrap items-center gap-3 rounded-lg border border-teal-200 bg-teal-50 p-3">
+          <p className="min-w-0 flex-1 text-sm text-teal-900">{t("cerradaTexto")}</p>
+          <Link
+            href={
+              solicitud.remitenteEmpresa || solicitud.remitenteNombre
+                ? `/panel/tareas?empresa=${encodeURIComponent(solicitud.remitenteEmpresa || solicitud.remitenteNombre || "")}#apuntar`
+                : "/panel/tareas#apuntar"
+            }
+            className="shrink-0 rounded-lg bg-accion px-3 py-2 text-sm font-semibold text-sobre-color transition-colors hover:bg-accion-fuerte"
+          >
+            {t("cerradaApuntar")}
+          </Link>
+        </div>
+      )}
     </li>
   );
 }
