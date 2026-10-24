@@ -128,6 +128,32 @@ describe("generarDossierWord", () => {
     expect(xml).toContain("ApoyaClub no las verifica");
   });
 
+  it("saca los apartados en el orden que ha elegido el club", async () => {
+    const posiciones = (xml: string) => ({
+      historia: xml.indexOf("Ascenso a Primera Autonómica"),
+      patrocinadores: xml.lastIndexOf("Ferretería Ramírez"),
+      instalaciones: xml.indexOf("Pabellón municipal con dos pistas."),
+    });
+
+    // El de siempre: historia e instalaciones arriba, patrocinadores al final.
+    const deSiempre = posiciones(await textoDelDocumento(await generarDossierWord(datosDePrueba())));
+    expect(deSiempre.historia).toBeLessThan(deSiempre.instalaciones);
+    expect(deSiempre.instalaciones).toBeLessThan(deSiempre.patrocinadores);
+
+    // Patrocinadores lo primero e historia lo último.
+    const cambiado = posiciones(
+      await textoDelDocumento(
+        await generarDossierWord(
+          datosDePrueba({
+            orden: ["patrocinadores", "identidad", "instalaciones", "oportunidades", "equipos", "cantera", "audiencia", "historia"],
+          }),
+        ),
+      ),
+    );
+    expect(cambiado.patrocinadores).toBeLessThan(cambiado.instalaciones);
+    expect(cambiado.instalaciones).toBeLessThan(cambiado.historia);
+  });
+
   it("deja fuera las secciones que el club no ha marcado", async () => {
     const xml = await textoDelDocumento(
       await generarDossierWord(datosDePrueba({ secciones: ["identidad"] })),

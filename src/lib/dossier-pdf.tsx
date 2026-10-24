@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Document, Image, Page, StyleSheet, Text, View, renderToBuffer } from "@react-pdf/renderer";
 import {
   calcularAlcance,
@@ -7,6 +8,8 @@ import {
   type CifraDeAlcance,
 } from "@/lib/alcance";
 import type { DatosDossier } from "@/lib/dossier-datos";
+import { ORDEN_POR_DEFECTO, type BloqueDossier } from "@/lib/dossier-orden";
+import { ALTO_LOGO_DOSSIER, ANCHO_LOGO_DOSSIER, logoDelDossier } from "@/lib/dossier-marca";
 import {
   cifrasSencillasDeAudiencia,
   deportesDelClub,
@@ -164,15 +167,24 @@ const estilos = StyleSheet.create({
     marginBottom: 6,
   },
   confianzaNombres: { fontSize: 9.5, fontFamily: "Helvetica-Bold", color: COLOR_TEXTO_SUAVE, lineHeight: 1.6 },
+  // El pie de la portada es una franja azul marino con el logo de
+  // ApoyaClub: el logo nuevo tiene las letras blancas y sobre el blanco
+  // de la página no se vería (ver `dossier-marca.ts`).
   portadaPie: {
-    borderTopWidth: 1,
-    borderTopColor: COLOR_BORDE,
-    paddingTop: 10,
-    paddingBottom: 40,
     marginTop: 24,
+    marginBottom: 40,
+    backgroundColor: COLOR_MARCA,
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
-  marcaApoyaClub: { fontSize: 11, fontFamily: "Helvetica-Bold", color: COLOR_MARCA },
-  marcaApoyaClubSub: { fontSize: 8, color: COLOR_TEXTO_TENUE, marginTop: 2 },
+  marcaApoyaClubLogo: { width: 150, height: (150 * ALTO_LOGO_DOSSIER) / ANCHO_LOGO_DOSSIER },
+  marcaApoyaClubTextos: { alignItems: "flex-end", marginLeft: 12, flexShrink: 1 },
+  marcaApoyaClubSub: { fontSize: 8, color: "#cbd5e1", textAlign: "right" },
+  marcaApoyaClubUrl: { fontSize: 8.5, fontFamily: "Helvetica-Bold", color: "#5eead4", marginTop: 3, textAlign: "right" },
 
   // -----------------------------------------------------------------
   // Contenido
@@ -508,6 +520,7 @@ function DossierDocumento({
   oportunidades,
   partidos,
   secciones,
+  orden,
   nivelesPatrocinadores,
   emailContacto,
   textos,
@@ -556,6 +569,230 @@ function DossierDocumento({
   const verRedes =
     (secciones.includes("identidad") || secciones.includes("audiencia")) && (redes.length > 0 || !!perfil.website);
   const cifrasAudiencia = cifrasSencillasDeAudiencia(alcance);
+
+  // Cada apartado, listo para colocarlo donde diga el orden. Los que no
+  // van (sin marcar o sin datos) quedan en `false` y no pintan nada.
+  const bloquesDelDossier: Record<BloqueDossier, React.ReactNode> = {
+    identidad: (
+      <>
+        {incluir("identidad") && perfil.description && (
+          <Seccion etiqueta={t("elClub")} titulo={t("quienesSomos")}>
+            <Text style={estilos.parrafo}>{perfil.description}</Text>
+          </Seccion>
+        )}
+      </>
+    ),
+    historia: (
+      <>
+        {incluir("historia") && (
+          <Seccion etiqueta={t("elClub")} titulo={t("historia")}>
+            {perfil.foundingYear != null && (
+              <Text style={estilos.parrafo}>{t("fundado", { anio: String(perfil.foundingYear) })}</Text>
+            )}
+            {perfil.milestones
+              .slice()
+              .sort((a, b) => a.year - b.year)
+              .map((hito, indice) => (
+                <View key={`${hito.year}-${indice}`} style={estilos.hito} wrap={false}>
+                  <Text style={estilos.hitoAno}>{hito.year}</Text>
+                  <Text style={estilos.hitoTexto}>{hito.text}</Text>
+                </View>
+              ))}
+          </Seccion>
+        )}
+      </>
+    ),
+    instalaciones: (
+      <>
+        {incluir("instalaciones") && (perfil.facilities || perfil.facilitiesAddress) && (
+          <Seccion etiqueta={t("elClub")} titulo={t("instalaciones")}>
+            {perfil.facilitiesAddress && (
+              <Text style={estilos.instalacionesDireccion}>{perfil.facilitiesAddress}</Text>
+            )}
+            {perfil.facilities && <Text style={estilos.parrafo}>{perfil.facilities}</Text>}
+          </Seccion>
+        )}
+      </>
+    ),
+    oportunidades: (
+      <>
+        {oportunidades.length > 0 && (
+          <Seccion
+            etiqueta={t("propuesta")}
+            titulo={t("comoColaborar")}
+            descripcion={t("comoColaborarTexto")}
+          >
+            {oportunidades.map((oportunidad) => (
+              <View key={oportunidad.id} style={estilos.oportunidad} wrap={false}>
+                <View style={estilos.oportunidadCabecera}>
+                  <Text style={estilos.oportunidadTitulo}>{oportunidad.title}</Text>
+                  <Text style={estilos.oportunidadValor}>
+                    {formatoValorOportunidad.format(oportunidad.value)}
+                  </Text>
+                </View>
+                {oportunidad.description && (
+                  <Text style={estilos.oportunidadTexto}>{oportunidad.description}</Text>
+                )}
+                {(oportunidad.duration || oportunidad.exclusivity) && (
+                  <View style={estilos.oportunidadDetalles}>
+                    {oportunidad.duration && (
+                      <Text style={estilos.oportunidadDuracion}>{oportunidad.duration}</Text>
+                    )}
+                    {oportunidad.exclusivity && (
+                      <Text style={estilos.oportunidadExclusiva}>
+                        {t("exclusiva", { sector: oportunidad.exclusivity })}
+                      </Text>
+                    )}
+                  </View>
+                )}
+              </View>
+            ))}
+          </Seccion>
+        )}
+      </>
+    ),
+    equipos: (
+      <>
+        {incluir("equipos") && (
+          <Seccion etiqueta={t("aQuienLlegas")} titulo={t("equipos")}>
+            <Rejilla
+              columnas={3}
+              celdas={equipos.map((equipo) => (
+                <View key={equipo.id} style={estilos.tarjeta}>
+                  <Text style={estilos.tarjetaTitulo}>
+                    {E.deporte(equipo.sport)}
+                    {equipo.category ? ` · ${equipo.category}` : ""}
+                  </Text>
+                  <Text style={estilos.tarjetaEtiqueta}>
+                    {[E.nivelEquipo(equipo.teamLevel), equipo.gender ? textos.sexo(equipo.gender) : null]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </Text>
+                  {equipo.playerCount != null && (
+                    <Text style={estilos.tarjetaEtiqueta}>{t("jugadores", { n: equipo.playerCount })}</Text>
+                  )}
+                </View>
+              ))}
+            />
+          </Seccion>
+        )}
+      </>
+    ),
+    cantera: (
+      <>
+        {incluir("cantera") && (
+          <Seccion
+            etiqueta={t("aQuienLlegas")}
+            titulo={t("cantera")}
+            descripcion={t("canteraTexto")}
+          >
+            <Rejilla
+              columnas={3}
+              celdas={[
+                perfil.youthTeamsCount != null && (
+                  <Tarjeta key="equipos" etiqueta={t("tarjetaEquipos")} valor={formatoNumero.format(perfil.youthTeamsCount)} />
+                ),
+                perfil.youthPlayersCount != null && (
+                  <Tarjeta key="jugadores" etiqueta={t("tarjetaJugadores")} valor={formatoNumero.format(perfil.youthPlayersCount)} />
+                ),
+                perfil.youthFamiliesCount != null && (
+                  <Tarjeta key="familias" etiqueta={t("tarjetaFamilias")} valor={formatoNumero.format(perfil.youthFamiliesCount)} />
+                ),
+              ].filter(Boolean)}
+            />
+          </Seccion>
+        )}
+      </>
+    ),
+    audiencia: (
+      <>
+        {incluir("audiencia") && alcance.hayCifras && (frasesLlanas.length > 0 || cifrasAudiencia.length > 0) && (
+          <Seccion
+            etiqueta={t("aQuienLlegas")}
+            titulo={t("audiencia")}
+            descripcion={t("audienciaTexto")}
+          >
+            {/* Primero en cristiano, y debajo las cifras una a una, cada
+                una con una etiqueta corta de dónde sale. Quien abre esto
+                suele ser el dueño de un comercio decidiendo en dos
+                minutos, no un director de marketing. */}
+            {frasesLlanas.length > 0 && (
+              <View style={estilos.resumenLlano} wrap={false}>
+                {frasesLlanas.map((frase) => (
+                  <Text key={frase} style={estilos.resumenLlanoFrase}>
+                    {frase}
+                  </Text>
+                ))}
+              </View>
+            )}
+            {frasesLlanas.length > 0 && <View style={estilos.separacionTrasResumen} />}
+
+            <Rejilla
+              columnas={3}
+              celdas={cifrasAudiencia.map((cifra) => (
+                <TarjetaDeAlcance key={cifra.id} cifra={cifra} textos={textos} />
+              ))}
+            />
+            <Text style={estilos.avisoDeOrigen}>{tAlcance("avisoDeOrigen")}</Text>
+          </Seccion>
+        )}
+      </>
+    ),
+    patrocinadores: (
+      <>
+        {incluir("patrocinadores") && (
+          <Seccion
+            etiqueta={t("confian")}
+            titulo={t("patrocinadores")}
+            descripcion={t("patrocinadoresTexto")}
+          >
+            {gruposPatrocinadores.map((grupo) => (
+              <GrupoDePatrocinadoresEnPdf key={grupo.etiqueta} grupo={grupo} textos={textos} />
+            ))}
+          </Seccion>
+        )}
+      </>
+    ),
+  };
+
+  // "Redes sociales" no es una sección con casilla: va pegada a
+  // "Identidad" (quiénes somos y cómo encontrarnos) y, si esa no va, a
+  // "Audiencia", que es donde cuentan los seguidores.
+  const bloqueRedes = (
+    <>
+      {verRedes && (
+        <Seccion etiqueta={t("elClub")} titulo={t("redes")} descripcion={t("redesTexto")}>
+          <Rejilla
+            columnas={3}
+            celdas={[
+              ...(perfil.website
+                ? [
+                    <View key="web" style={estilos.red}>
+                      <Text style={estilos.redNombre}>{t("web")}</Text>
+                      <Text style={estilos.redDireccion}>{limpiarDireccion(perfil.website)}</Text>
+                    </View>,
+                  ]
+                : []),
+              ...redes.map((red) => (
+                <View key={red.red} style={estilos.red}>
+                  <Text style={estilos.redNombre}>{red.nombre}</Text>
+                  {red.direccion && <Text style={estilos.redDireccion}>{red.direccion}</Text>}
+                  {red.seguidores != null && (
+                    <Text style={estilos.redSeguidores}>
+                      {formatoNumero.format(red.seguidores)}{" "}
+                      <Text style={estilos.redSeguidoresUnidad}>{t("seguidores", { n: red.seguidores })}</Text>
+                    </Text>
+                  )}
+                </View>
+              )),
+            ]}
+          />
+        </Seccion>
+      )}
+    </>
+  );
+  const ordenBloques = orden ?? ORDEN_POR_DEFECTO;
+  const bloqueDeLasRedes: BloqueDossier = secciones.includes("identidad") ? "identidad" : "audiencia";
 
   return (
     <Document
@@ -636,11 +873,12 @@ function DossierDocumento({
             )}
 
             <View style={estilos.portadaPie}>
-              <Text style={estilos.marcaApoyaClub}>ApoyaClub</Text>
-              <Text style={estilos.marcaApoyaClubSub}>
-                {t("generado", { fecha: textos.fechaLarga(new Date()) })} ·{" "}
-                {urlPublica.replace(/^https?:\/\//, "")}
-              </Text>
+              {/* eslint-disable-next-line jsx-a11y/alt-text -- react-pdf no tiene `alt` */}
+              <Image src={logoDelDossier(textos.locale)} style={estilos.marcaApoyaClubLogo} />
+              <View style={estilos.marcaApoyaClubTextos}>
+                <Text style={estilos.marcaApoyaClubSub}>{t("generado", { fecha: textos.fechaLarga(new Date()) })}</Text>
+                <Text style={estilos.marcaApoyaClubUrl}>{urlPublica.replace(/^https?:\/\//, "")}</Text>
+              </View>
             </View>
           </View>
         </View>
@@ -648,195 +886,16 @@ function DossierDocumento({
 
       {/* Contenido: fluye automáticamente en tantas páginas como haga falta. */}
       <Page size="A4" style={estilos.paginaContenido}>
-        {/* El orden: primero quién es el club (quiénes somos, historia,
-            instalaciones y redes), luego qué ofrece y a quién llega, y al
-            final quién confía ya en él y cómo contactar. */}
-        {incluir("identidad") && perfil.description && (
-          <Seccion etiqueta={t("elClub")} titulo={t("quienesSomos")}>
-            <Text style={estilos.parrafo}>{perfil.description}</Text>
-          </Seccion>
-        )}
-
-        {incluir("historia") && (
-          <Seccion etiqueta={t("elClub")} titulo={t("historia")}>
-            {perfil.foundingYear != null && (
-              <Text style={estilos.parrafo}>{t("fundado", { anio: String(perfil.foundingYear) })}</Text>
-            )}
-            {perfil.milestones
-              .slice()
-              .sort((a, b) => a.year - b.year)
-              .map((hito, indice) => (
-                <View key={`${hito.year}-${indice}`} style={estilos.hito} wrap={false}>
-                  <Text style={estilos.hitoAno}>{hito.year}</Text>
-                  <Text style={estilos.hitoTexto}>{hito.text}</Text>
-                </View>
-              ))}
-          </Seccion>
-        )}
-
-        {incluir("instalaciones") && (perfil.facilities || perfil.facilitiesAddress) && (
-          <Seccion etiqueta={t("elClub")} titulo={t("instalaciones")}>
-            {perfil.facilitiesAddress && (
-              <Text style={estilos.instalacionesDireccion}>{perfil.facilitiesAddress}</Text>
-            )}
-            {perfil.facilities && <Text style={estilos.parrafo}>{perfil.facilities}</Text>}
-          </Seccion>
-        )}
-
-        {verRedes && (
-          <Seccion etiqueta={t("elClub")} titulo={t("redes")} descripcion={t("redesTexto")}>
-            <Rejilla
-              columnas={3}
-              celdas={[
-                ...(perfil.website
-                  ? [
-                      <View key="web" style={estilos.red}>
-                        <Text style={estilos.redNombre}>{t("web")}</Text>
-                        <Text style={estilos.redDireccion}>{limpiarDireccion(perfil.website)}</Text>
-                      </View>,
-                    ]
-                  : []),
-                ...redes.map((red) => (
-                  <View key={red.red} style={estilos.red}>
-                    <Text style={estilos.redNombre}>{red.nombre}</Text>
-                    {red.direccion && <Text style={estilos.redDireccion}>{red.direccion}</Text>}
-                    {red.seguidores != null && (
-                      <Text style={estilos.redSeguidores}>
-                        {formatoNumero.format(red.seguidores)}{" "}
-                        <Text style={estilos.redSeguidoresUnidad}>{t("seguidores", { n: red.seguidores })}</Text>
-                      </Text>
-                    )}
-                  </View>
-                )),
-              ]}
-            />
-          </Seccion>
-        )}
-
-        {/* Lo que se vende, justo después de presentar al club. */}
-        {oportunidades.length > 0 && (
-          <Seccion
-            etiqueta={t("propuesta")}
-            titulo={t("comoColaborar")}
-            descripcion={t("comoColaborarTexto")}
-          >
-            {oportunidades.map((oportunidad) => (
-              <View key={oportunidad.id} style={estilos.oportunidad} wrap={false}>
-                <View style={estilos.oportunidadCabecera}>
-                  <Text style={estilos.oportunidadTitulo}>{oportunidad.title}</Text>
-                  <Text style={estilos.oportunidadValor}>
-                    {formatoValorOportunidad.format(oportunidad.value)}
-                  </Text>
-                </View>
-                {oportunidad.description && (
-                  <Text style={estilos.oportunidadTexto}>{oportunidad.description}</Text>
-                )}
-                {(oportunidad.duration || oportunidad.exclusivity) && (
-                  <View style={estilos.oportunidadDetalles}>
-                    {oportunidad.duration && (
-                      <Text style={estilos.oportunidadDuracion}>{oportunidad.duration}</Text>
-                    )}
-                    {oportunidad.exclusivity && (
-                      <Text style={estilos.oportunidadExclusiva}>
-                        {t("exclusiva", { sector: oportunidad.exclusivity })}
-                      </Text>
-                    )}
-                  </View>
-                )}
-              </View>
-            ))}
-          </Seccion>
-        )}
-
-        {incluir("equipos") && (
-          <Seccion etiqueta={t("aQuienLlegas")} titulo={t("equipos")}>
-            <Rejilla
-              columnas={3}
-              celdas={equipos.map((equipo) => (
-                <View key={equipo.id} style={estilos.tarjeta}>
-                  <Text style={estilos.tarjetaTitulo}>
-                    {E.deporte(equipo.sport)}
-                    {equipo.category ? ` · ${equipo.category}` : ""}
-                  </Text>
-                  <Text style={estilos.tarjetaEtiqueta}>
-                    {[E.nivelEquipo(equipo.teamLevel), equipo.gender ? textos.sexo(equipo.gender) : null]
-                      .filter(Boolean)
-                      .join(" · ")}
-                  </Text>
-                  {equipo.playerCount != null && (
-                    <Text style={estilos.tarjetaEtiqueta}>{t("jugadores", { n: equipo.playerCount })}</Text>
-                  )}
-                </View>
-              ))}
-            />
-          </Seccion>
-        )}
-
-        {incluir("cantera") && (
-          <Seccion
-            etiqueta={t("aQuienLlegas")}
-            titulo={t("cantera")}
-            descripcion={t("canteraTexto")}
-          >
-            <Rejilla
-              columnas={3}
-              celdas={[
-                perfil.youthTeamsCount != null && (
-                  <Tarjeta key="equipos" etiqueta={t("tarjetaEquipos")} valor={formatoNumero.format(perfil.youthTeamsCount)} />
-                ),
-                perfil.youthPlayersCount != null && (
-                  <Tarjeta key="jugadores" etiqueta={t("tarjetaJugadores")} valor={formatoNumero.format(perfil.youthPlayersCount)} />
-                ),
-                perfil.youthFamiliesCount != null && (
-                  <Tarjeta key="familias" etiqueta={t("tarjetaFamilias")} valor={formatoNumero.format(perfil.youthFamiliesCount)} />
-                ),
-              ].filter(Boolean)}
-            />
-          </Seccion>
-        )}
-
-        {incluir("audiencia") && alcance.hayCifras && (frasesLlanas.length > 0 || cifrasAudiencia.length > 0) && (
-          <Seccion
-            etiqueta={t("aQuienLlegas")}
-            titulo={t("audiencia")}
-            descripcion={t("audienciaTexto")}
-          >
-            {/* Primero en cristiano, y debajo las cifras una a una, cada
-                una con una etiqueta corta de dónde sale. Quien abre esto
-                suele ser el dueño de un comercio decidiendo en dos
-                minutos, no un director de marketing. */}
-            {frasesLlanas.length > 0 && (
-              <View style={estilos.resumenLlano} wrap={false}>
-                {frasesLlanas.map((frase) => (
-                  <Text key={frase} style={estilos.resumenLlanoFrase}>
-                    {frase}
-                  </Text>
-                ))}
-              </View>
-            )}
-            {frasesLlanas.length > 0 && <View style={estilos.separacionTrasResumen} />}
-
-            <Rejilla
-              columnas={3}
-              celdas={cifrasAudiencia.map((cifra) => (
-                <TarjetaDeAlcance key={cifra.id} cifra={cifra} textos={textos} />
-              ))}
-            />
-            <Text style={estilos.avisoDeOrigen}>{tAlcance("avisoDeOrigen")}</Text>
-          </Seccion>
-        )}
-
-        {incluir("patrocinadores") && (
-          <Seccion
-            etiqueta={t("confian")}
-            titulo={t("patrocinadores")}
-            descripcion={t("patrocinadoresTexto")}
-          >
-            {gruposPatrocinadores.map((grupo) => (
-              <GrupoDePatrocinadoresEnPdf key={grupo.etiqueta} grupo={grupo} textos={textos} />
-            ))}
-          </Seccion>
-        )}
+        {/* Los apartados, en el orden que ha elegido el club
+            (`lib/dossier-orden.ts`). Por defecto: primero quién es el
+            club, luego qué ofrece, a quién llega y quién confía ya en él.
+            El contacto cierra siempre, aquí debajo. */}
+        {ordenBloques.map((bloque) => (
+          <Fragment key={bloque}>
+            {bloquesDelDossier[bloque]}
+            {bloque === bloqueDeLasRedes && bloqueRedes}
+          </Fragment>
+        ))}
 
         {/* Una sola vez y destacado: es a lo que tiene que llevar todo lo
             anterior. Antes salía dos veces (en "Quiénes somos" y al final)

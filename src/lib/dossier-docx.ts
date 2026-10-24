@@ -31,6 +31,8 @@ import {
   unidadEnTexto,
 } from "@/lib/alcance";
 import type { DatosDossier } from "@/lib/dossier-datos";
+import { ORDEN_POR_DEFECTO, type BloqueDossier } from "@/lib/dossier-orden";
+import { ALTO_LOGO_DOSSIER, ANCHO_LOGO_DOSSIER, logoDelDossier } from "@/lib/dossier-marca";
 import {
   enFilas,
   nombresDePortada,
@@ -178,6 +180,8 @@ function celda(
     fondo?: string;
     bordes?: Partial<Record<"top" | "bottom" | "left" | "right", typeof BORDE_FINO>>;
     margen?: number;
+    /** Contenido centrado en vertical dentro de la celda. */
+    centrado?: boolean;
   } = {},
 ) {
   const margen = opciones.margen ?? 120;
@@ -186,6 +190,7 @@ function celda(
     shading: opciones.fondo ? { type: ShadingType.CLEAR, color: "auto", fill: opciones.fondo } : undefined,
     borders: { top: SIN_BORDE, bottom: SIN_BORDE, left: SIN_BORDE, right: SIN_BORDE, ...opciones.bordes },
     margins: { top: margen, bottom: margen, left: margen + 40, right: margen + 40 },
+    verticalAlign: opciones.centrado ? "center" : undefined,
     children: hijos.length > 0 ? hijos : [new Paragraph({})],
   });
 }
@@ -475,200 +480,251 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
     }
   }
 
-  cuerpo.push(
+  // El pie de la portada: una franja azul marino con el logo de
+  // ApoyaClub, que tiene las letras blancas y sobre el blanco de la
+  // página no se vería (ver `dossier-marca.ts`). Igual que en el PDF.
+  const anchoLogo = 200;
+  const logoMarca = new Paragraph({
+    children: [
+      new ImageRun({
+        type: "png",
+        data: Buffer.from(logoDelDossier(textos.locale).split(",")[1], "base64"),
+        transformation: { width: anchoLogo, height: Math.round((anchoLogo * ALTO_LOGO_DOSSIER) / ANCHO_LOGO_DOSSIER) },
+      }),
+    ],
+  });
+  const textosMarca = [
     new Paragraph({
-      border: { top: { style: BorderStyle.SINGLE, size: 4, color: BORDE, space: 6 } },
-      spacing: { before: 200, after: 0 },
-      children: [
-        new TextRun({ text: "ApoyaClub", size: 21, bold: true, color: NAVY }),
-        new TextRun({ text: `   ${t("generado", { fecha: textos.fechaLarga(new Date()) })} · ${urlLimpia}`, size: 16, color: GRIS_TENUE }),
-      ],
+      alignment: AlignmentType.RIGHT,
+      children: [new TextRun({ text: t("generado", { fecha: textos.fechaLarga(new Date()) }), size: 16, color: "CBD5E1" })],
     }),
+    new Paragraph({
+      alignment: AlignmentType.RIGHT,
+      spacing: { before: 40 },
+      children: [new TextRun({ text: urlLimpia, size: 17, bold: true, color: "5EEAD4" })],
+    }),
+  ];
+  const anchoLogoTwips = 3400;
+  cuerpo.push(new Paragraph({ spacing: { before: 200, after: 0 }, children: [] }));
+  cuerpo.push(
+    tabla(
+      [
+        [
+          celda([logoMarca], { ancho: anchoLogoTwips, fondo: NAVY, margen: 100 }),
+          celda(textosMarca, { ancho: ANCHO_UTIL_TWIPS - anchoLogoTwips, fondo: NAVY, margen: 100, centrado: true }),
+        ],
+      ],
+      [anchoLogoTwips, ANCHO_UTIL_TWIPS - anchoLogoTwips],
+    ),
   );
 
   cuerpo.push(new Paragraph({ children: [new PageBreak()] }));
 
   // ---------- Contenido ----------
-  // El orden: primero quién es el club (quiénes somos, historia,
-  // instalaciones y redes), luego qué ofrece y a quién llega, y al final
-  // quién confía ya en él y cómo contactar.
-  if (incluir("identidad") && perfil.description) {
-    cuerpo.push(...cabecera(t("elClub"), t("quienesSomos")));
-    cuerpo.push(parrafo(perfil.description, { interlineado: 320 }));
-  }
+  // Los apartados, en el orden que ha elegido el club
+  // (`lib/dossier-orden.ts`). Por defecto: primero quién es el club,
+  // luego qué ofrece, a quién llega y quién confía ya en él. Cada uno
+  // añade lo suyo a `cuerpo` si va (marcado y con datos). El contacto
+  // cierra siempre, aquí debajo.
+  const bloques: Record<BloqueDossier | "redes", () => void> = {
+    identidad: () => {
+      if (incluir("identidad") && perfil.description) {
+        cuerpo.push(...cabecera(t("elClub"), t("quienesSomos")));
+        cuerpo.push(parrafo(perfil.description, { interlineado: 320 }));
+      }
+    },
+    historia: () => {
+      if (incluir("historia")) {
+        cuerpo.push(...cabecera(t("elClub"), t("historia")));
+        if (perfil.foundingYear != null) cuerpo.push(parrafo(t("fundado", { anio: String(perfil.foundingYear) })));
+        const hitos = perfil.milestones.slice().sort((a, b) => a.year - b.year);
+        if (hitos.length > 0) {
+          const anchoAno = 900;
+          cuerpo.push(
+            tabla(
+              hitos.map((hito) => [
+                celda([parrafo(String(hito.year), { negrita: true, color: TEAL, espacioDespues: 0 })], { ancho: anchoAno, margen: 60 }),
+                celda([parrafo(hito.text, { color: GRIS, espacioDespues: 0 })], { ancho: ANCHO_UTIL_TWIPS - anchoAno, margen: 60 }),
+              ]),
+              [anchoAno, ANCHO_UTIL_TWIPS - anchoAno],
+            ),
+          );
+        }
+      }
+    },
+    instalaciones: () => {
+      if (incluir("instalaciones") && (perfil.facilities || perfil.facilitiesAddress)) {
+        cuerpo.push(...cabecera(t("elClub"), t("instalaciones")));
+        if (perfil.facilitiesAddress) cuerpo.push(parrafo(perfil.facilitiesAddress, { negrita: true, espacioDespues: 80 }));
+        if (perfil.facilities) cuerpo.push(parrafo(perfil.facilities, { color: GRIS, interlineado: 320 }));
+      }
 
-  if (incluir("historia")) {
-    cuerpo.push(...cabecera(t("elClub"), t("historia")));
-    if (perfil.foundingYear != null) cuerpo.push(parrafo(t("fundado", { anio: String(perfil.foundingYear) })));
-    const hitos = perfil.milestones.slice().sort((a, b) => a.year - b.year);
-    if (hitos.length > 0) {
-      const anchoAno = 900;
-      cuerpo.push(
-        tabla(
-          hitos.map((hito) => [
-            celda([parrafo(String(hito.year), { negrita: true, color: TEAL, espacioDespues: 0 })], { ancho: anchoAno, margen: 60 }),
-            celda([parrafo(hito.text, { color: GRIS, espacioDespues: 0 })], { ancho: ANCHO_UTIL_TWIPS - anchoAno, margen: 60 }),
-          ]),
-          [anchoAno, ANCHO_UTIL_TWIPS - anchoAno],
-        ),
-      );
-    }
-  }
+      // "Redes sociales": cada red con su dirección y sus seguidores juntos.
+    },
+    redes: () => {
+      // "Redes sociales": cada red con su dirección y sus seguidores juntos.
+      if (verRedes) {
+        cuerpo.push(...cabecera(t("elClub"), t("redes"), t("redesTexto")));
+        const tarjetas: Paragraph[][] = [];
+        if (perfil.website) {
+          tarjetas.push([
+            parrafo(t("web"), { negrita: true, color: NAVY, tamano: 20, espacioDespues: 40 }),
+            parrafo(limpiarDireccion(perfil.website), { color: TEAL, tamano: 16, espacioDespues: 0, interlineado: 240 }),
+          ]);
+        }
+        for (const red of redes) {
+          const hijos = [parrafo(red.nombre, { negrita: true, color: NAVY, tamano: 20, espacioDespues: 40 })];
+          if (red.direccion) hijos.push(parrafo(red.direccion, { color: TEAL, tamano: 16, espacioDespues: red.seguidores != null ? 80 : 0, interlineado: 240 }));
+          if (red.seguidores != null) {
+            hijos.push(
+              new Paragraph({
+                spacing: { after: 0 },
+                children: [
+                  new TextRun({ text: formatoNumero.format(red.seguidores), size: 28, bold: true }),
+                  new TextRun({ text: ` ${t("seguidores", { n: red.seguidores })}`, size: 16, color: GRIS }),
+                ],
+              }),
+            );
+          }
+          tarjetas.push(hijos);
+        }
+        cuerpo.push(rejillaDeTarjetas(tarjetas, 3));
+      }
+    },
+    oportunidades: () => {
+      if (oportunidades.length > 0) {
+        cuerpo.push(...cabecera(t("propuesta"), t("comoColaborar"), t("comoColaborarTexto")));
 
-  if (incluir("instalaciones") && (perfil.facilities || perfil.facilitiesAddress)) {
-    cuerpo.push(...cabecera(t("elClub"), t("instalaciones")));
-    if (perfil.facilitiesAddress) cuerpo.push(parrafo(perfil.facilitiesAddress, { negrita: true, espacioDespues: 80 }));
-    if (perfil.facilities) cuerpo.push(parrafo(perfil.facilities, { color: GRIS, interlineado: 320 }));
-  }
+        // Una tarjeta por oportunidad: a la izquierda qué es, a la derecha
+        // cuánto. Con una raya de color a la izquierda, como en el PDF.
+        const anchoPrecio = 1900;
+        const anchoTexto = ANCHO_UTIL_TWIPS - anchoPrecio;
+        const filas: TableCell[][] = [];
+        oportunidades.forEach((oportunidad, indice) => {
+          if (indice > 0) filas.push([celda([parrafo("", { espacioDespues: 0, tamano: 8 })], { ancho: anchoTexto, margen: 0 }), celda([], { ancho: anchoPrecio, margen: 0 })]);
 
-  // "Redes sociales": cada red con su dirección y sus seguidores juntos.
-  if (verRedes) {
-    cuerpo.push(...cabecera(t("elClub"), t("redes"), t("redesTexto")));
-    const tarjetas: Paragraph[][] = [];
-    if (perfil.website) {
-      tarjetas.push([
-        parrafo(t("web"), { negrita: true, color: NAVY, tamano: 20, espacioDespues: 40 }),
-        parrafo(limpiarDireccion(perfil.website), { color: TEAL, tamano: 16, espacioDespues: 0, interlineado: 240 }),
-      ]);
-    }
-    for (const red of redes) {
-      const hijos = [parrafo(red.nombre, { negrita: true, color: NAVY, tamano: 20, espacioDespues: 40 })];
-      if (red.direccion) hijos.push(parrafo(red.direccion, { color: TEAL, tamano: 16, espacioDespues: red.seguidores != null ? 80 : 0, interlineado: 240 }));
-      if (red.seguidores != null) {
-        hijos.push(
-          new Paragraph({
-            spacing: { after: 0 },
-            children: [
-              new TextRun({ text: formatoNumero.format(red.seguidores), size: 28, bold: true }),
-              new TextRun({ text: ` ${t("seguidores", { n: red.seguidores })}`, size: 16, color: GRIS }),
-            ],
-          }),
+          const detalles = [
+            oportunidad.duration,
+            oportunidad.exclusivity ? t("exclusiva", { sector: oportunidad.exclusivity }) : null,
+          ].filter((linea): linea is string => !!linea);
+
+          const izquierda: Paragraph[] = [
+            parrafo(oportunidad.title, { negrita: true, tamano: 22, espacioDespues: oportunidad.description || detalles.length ? 80 : 0, interlineado: 270 }),
+          ];
+          if (oportunidad.description) {
+            izquierda.push(parrafo(oportunidad.description, { color: GRIS, tamano: 19, espacioDespues: detalles.length ? 80 : 0 }));
+          }
+          if (detalles.length > 0) izquierda.push(parrafo(detalles.join("   ·   "), { color: TEAL, tamano: 16, negrita: true, espacioDespues: 0 }));
+
+          const bordes = { top: BORDE_FINO, bottom: BORDE_FINO };
+          filas.push([
+            celda(izquierda, {
+              ancho: anchoTexto,
+              margen: 160,
+              bordes: { ...bordes, left: { style: BorderStyle.SINGLE, size: 24, color: TEAL } },
+            }),
+            celda(
+              [
+                parrafo(formatoValorOportunidad.format(oportunidad.value), {
+                  negrita: true,
+                  color: TEAL,
+                  tamano: 26,
+                  alineacion: AlignmentType.RIGHT,
+                  espacioDespues: 0,
+                }),
+              ],
+              { ancho: anchoPrecio, margen: 160, bordes: { ...bordes, right: BORDE_FINO } },
+            ),
+          ]);
+        });
+        cuerpo.push(tabla(filas, [anchoTexto, anchoPrecio]));
+      }
+    },
+    equipos: () => {
+      if (incluir("equipos")) {
+        cuerpo.push(...cabecera(t("aQuienLlegas"), t("equipos")));
+        cuerpo.push(
+          rejillaDeTarjetas(
+            equipos.map((equipo) => {
+              const hijos = [
+                parrafo(`${E.deporte(equipo.sport)}${equipo.category ? ` · ${equipo.category}` : ""}`, {
+                  negrita: true,
+                  tamano: 20,
+                  espacioDespues: 40,
+                  interlineado: 260,
+                }),
+                parrafo(
+                  [E.nivelEquipo(equipo.teamLevel), equipo.gender ? textos.sexo(equipo.gender) : null].filter(Boolean).join(" · "),
+                  { color: GRIS, tamano: 17, espacioDespues: 0 },
+                ),
+              ];
+              if (equipo.playerCount != null) {
+                hijos.push(parrafo(t("jugadores", { n: equipo.playerCount }), { color: GRIS, tamano: 17, espacioDespues: 0 }));
+              }
+              return hijos;
+            }),
+            3,
+          ),
         );
       }
-      tarjetas.push(hijos);
-    }
-    cuerpo.push(rejillaDeTarjetas(tarjetas, 3));
-  }
+    },
+    cantera: () => {
+      if (incluir("cantera")) {
+        const cifras = [
+          perfil.youthTeamsCount != null ? tarjetaDeCifra(formatoNumero.format(perfil.youthTeamsCount), t("tarjetaEquipos")) : null,
+          perfil.youthPlayersCount != null ? tarjetaDeCifra(formatoNumero.format(perfil.youthPlayersCount), t("tarjetaJugadores")) : null,
+          perfil.youthFamiliesCount != null ? tarjetaDeCifra(formatoNumero.format(perfil.youthFamiliesCount), t("tarjetaFamilias")) : null,
+        ].filter((cifra): cifra is Paragraph[] => cifra !== null);
 
-  if (oportunidades.length > 0) {
-    cuerpo.push(...cabecera(t("propuesta"), t("comoColaborar"), t("comoColaborarTexto")));
-
-    // Una tarjeta por oportunidad: a la izquierda qué es, a la derecha
-    // cuánto. Con una raya de color a la izquierda, como en el PDF.
-    const anchoPrecio = 1900;
-    const anchoTexto = ANCHO_UTIL_TWIPS - anchoPrecio;
-    const filas: TableCell[][] = [];
-    oportunidades.forEach((oportunidad, indice) => {
-      if (indice > 0) filas.push([celda([parrafo("", { espacioDespues: 0, tamano: 8 })], { ancho: anchoTexto, margen: 0 }), celda([], { ancho: anchoPrecio, margen: 0 })]);
-
-      const detalles = [
-        oportunidad.duration,
-        oportunidad.exclusivity ? t("exclusiva", { sector: oportunidad.exclusivity }) : null,
-      ].filter((linea): linea is string => !!linea);
-
-      const izquierda: Paragraph[] = [
-        parrafo(oportunidad.title, { negrita: true, tamano: 22, espacioDespues: oportunidad.description || detalles.length ? 80 : 0, interlineado: 270 }),
-      ];
-      if (oportunidad.description) {
-        izquierda.push(parrafo(oportunidad.description, { color: GRIS, tamano: 19, espacioDespues: detalles.length ? 80 : 0 }));
+        if (cifras.length > 0) {
+          cuerpo.push(...cabecera(t("aQuienLlegas"), t("cantera"), t("canteraTexto")));
+          cuerpo.push(rejillaDeTarjetas(cifras, 3));
+        }
       }
-      if (detalles.length > 0) izquierda.push(parrafo(detalles.join("   ·   "), { color: TEAL, tamano: 16, negrita: true, espacioDespues: 0 }));
+    },
+    audiencia: () => {
+      if (incluir("audiencia") && alcance.hayCifras && (frasesLlanas.length > 0 || cifrasAudiencia.length > 0)) {
+        cuerpo.push(...cabecera(t("aQuienLlegas"), t("audiencia"), t("audienciaTexto")));
 
-      const bordes = { top: BORDE_FINO, bottom: BORDE_FINO };
-      filas.push([
-        celda(izquierda, {
-          ancho: anchoTexto,
-          margen: 160,
-          bordes: { ...bordes, left: { style: BorderStyle.SINGLE, size: 24, color: TEAL } },
-        }),
-        celda(
-          [
-            parrafo(formatoValorOportunidad.format(oportunidad.value), {
-              negrita: true,
-              color: TEAL,
-              tamano: 26,
-              alineacion: AlignmentType.RIGHT,
-              espacioDespues: 0,
-            }),
-          ],
-          { ancho: anchoPrecio, margen: 160, bordes: { ...bordes, right: BORDE_FINO } },
-        ),
-      ]);
-    });
-    cuerpo.push(tabla(filas, [anchoTexto, anchoPrecio]));
-  }
+        // Primero en cristiano, y debajo las cifras una a una, cada una con
+        // una etiqueta corta de dónde sale: lo mismo que el PDF.
+        if (frasesLlanas.length > 0) {
+          cuerpo.push(recuadro(frasesLlanas.map((frase, indice) => parrafo(frase, { tamano: 21, espacioDespues: indice < frasesLlanas.length - 1 ? 60 : 0 }))));
+          cuerpo.push(separacion(160));
+        }
 
-  if (incluir("equipos")) {
-    cuerpo.push(...cabecera(t("aQuienLlegas"), t("equipos")));
-    cuerpo.push(
-      rejillaDeTarjetas(
-        equipos.map((equipo) => {
-          const hijos = [
-            parrafo(`${E.deporte(equipo.sport)}${equipo.category ? ` · ${equipo.category}` : ""}`, {
-              negrita: true,
-              tamano: 20,
-              espacioDespues: 40,
-              interlineado: 260,
-            }),
-            parrafo(
-              [E.nivelEquipo(equipo.teamLevel), equipo.gender ? textos.sexo(equipo.gender) : null].filter(Boolean).join(" · "),
-              { color: GRIS, tamano: 17, espacioDespues: 0 },
+        if (cifrasAudiencia.length > 0) {
+          cuerpo.push(
+            rejillaDeTarjetas(
+              cifrasAudiencia.map((cifra) =>
+                tarjetaDeCifra(
+                  `${formatoNumero.format(cifra.valor)} ${unidadEnTexto(cifra.unidad, cifra.valor, tAlcance)}`,
+                  cifra.etiqueta,
+                  cifra.origen === "contado" ? t("origenContado") : t("origenDeclarado"),
+                ),
+              ),
+              3,
             ),
-          ];
-          if (equipo.playerCount != null) {
-            hijos.push(parrafo(t("jugadores", { n: equipo.playerCount }), { color: GRIS, tamano: 17, espacioDespues: 0 }));
-          }
-          return hijos;
-        }),
-        3,
-      ),
-    );
-  }
+          );
+        }
 
-  if (incluir("cantera")) {
-    const cifras = [
-      perfil.youthTeamsCount != null ? tarjetaDeCifra(formatoNumero.format(perfil.youthTeamsCount), t("tarjetaEquipos")) : null,
-      perfil.youthPlayersCount != null ? tarjetaDeCifra(formatoNumero.format(perfil.youthPlayersCount), t("tarjetaJugadores")) : null,
-      perfil.youthFamiliesCount != null ? tarjetaDeCifra(formatoNumero.format(perfil.youthFamiliesCount), t("tarjetaFamilias")) : null,
-    ].filter((cifra): cifra is Paragraph[] => cifra !== null);
+        cuerpo.push(parrafo(tAlcance("avisoDeOrigen"), { color: GRIS_TENUE, tamano: 16, espacioAntes: 160 }));
+      }
+    },
+    patrocinadores: () => {
+      if (incluir("patrocinadores")) {
+        cuerpo.push(...cabecera(t("confian"), t("patrocinadores"), t("patrocinadoresTexto")));
+        for (const grupo of gruposPatrocinadores) cuerpo.push(...grupoDePatrocinadores(grupo, logoPorId, textos));
+      }
+    },
+  };
 
-    if (cifras.length > 0) {
-      cuerpo.push(...cabecera(t("aQuienLlegas"), t("cantera"), t("canteraTexto")));
-      cuerpo.push(rejillaDeTarjetas(cifras, 3));
-    }
-  }
-
-  if (incluir("audiencia") && alcance.hayCifras && (frasesLlanas.length > 0 || cifrasAudiencia.length > 0)) {
-    cuerpo.push(...cabecera(t("aQuienLlegas"), t("audiencia"), t("audienciaTexto")));
-
-    // Primero en cristiano, y debajo las cifras una a una, cada una con
-    // una etiqueta corta de dónde sale: lo mismo que el PDF.
-    if (frasesLlanas.length > 0) {
-      cuerpo.push(recuadro(frasesLlanas.map((frase, indice) => parrafo(frase, { tamano: 21, espacioDespues: indice < frasesLlanas.length - 1 ? 60 : 0 }))));
-      cuerpo.push(separacion(160));
-    }
-
-    if (cifrasAudiencia.length > 0) {
-      cuerpo.push(
-        rejillaDeTarjetas(
-          cifrasAudiencia.map((cifra) =>
-            tarjetaDeCifra(
-              `${formatoNumero.format(cifra.valor)} ${unidadEnTexto(cifra.unidad, cifra.valor, tAlcance)}`,
-              cifra.etiqueta,
-              cifra.origen === "contado" ? t("origenContado") : t("origenDeclarado"),
-            ),
-          ),
-          3,
-        ),
-      );
-    }
-
-    cuerpo.push(parrafo(tAlcance("avisoDeOrigen"), { color: GRIS_TENUE, tamano: 16, espacioAntes: 160 }));
-  }
-
-  if (incluir("patrocinadores")) {
-    cuerpo.push(...cabecera(t("confian"), t("patrocinadores"), t("patrocinadoresTexto")));
-    for (const grupo of gruposPatrocinadores) cuerpo.push(...grupoDePatrocinadores(grupo, logoPorId, textos));
+  // "Redes sociales" no es una sección con casilla: va pegada a
+  // "Identidad" y, si esa no va, a "Audiencia". Igual que en el PDF.
+  const bloqueDeLasRedes: BloqueDossier = secciones.includes("identidad") ? "identidad" : "audiencia";
+  for (const bloque of datos.orden ?? ORDEN_POR_DEFECTO) {
+    bloques[bloque]();
+    if (bloque === bloqueDeLasRedes) bloques.redes();
   }
 
   // El contacto, destacado en un recuadro azul: es a lo que tiene que

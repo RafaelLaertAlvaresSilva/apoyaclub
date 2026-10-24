@@ -1,3 +1,4 @@
+import { ordenDelDossier } from "@/lib/dossier-orden";
 import { nivelesValidos } from "@/lib/dossier-patrocinadores";
 import type { DossierConfig, DossierSectionKey } from "@/lib/types";
 
@@ -40,6 +41,7 @@ export function dossierRowToConfig(row: DossierRow): DossierConfig {
   return {
     clubId: row.id,
     sections: seccionesValidas(row.sections ?? []),
+    orden: ordenDelDossier(row.sections ?? []),
     opportunityIds: (row.opportunity_ids ?? []).map(String),
     shareEnabled: row.share_enabled,
     shareToken: row.share_token,

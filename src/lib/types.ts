@@ -1,3 +1,4 @@
+import type { BloqueDossier } from "@/lib/dossier-orden";
 import type { Accion, Beneficio } from "@/lib/ficha-oportunidad";
 export type Role = "club" | "empresa" | "admin";
 
@@ -470,6 +471,8 @@ export type DossierSectionKey =
 export type DossierConfig = {
   clubId: string;
   sections: DossierSectionKey[];
+  /** En qué orden van los apartados (ver `lib/dossier-orden.ts`). */
+  orden: BloqueDossier[];
   opportunityIds: string[];
   shareEnabled: boolean;
   shareToken: string | null;

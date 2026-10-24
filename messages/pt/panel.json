@@ -771,12 +771,12 @@
     "dossierComercialEnPdf": "Dossiê comercial em PDF",
     "generaElPdfAl": "Gera o PDF no momento com a seleção acima.",
     "guardarSeleccion": "Guardar seleção",
-    "laPortadaConTu": "A capa com a tua marca e o rodapé do ApoyaClub aparecem sempre, escolhas o que escolheres aqui.",
+    "laPortadaConTu": "Marca as que queres incluir e usa as setas para escolher a ordem em que aparecem. A capa abre sempre o dossier e o contacto fecha-o.",
     "oportunidades": "Oportunidades",
     "oportunidadesAIncluir": "Oportunidades a incluir",
     "panelDelClub": "Painel do clube",
     "seAbreDirectamenteEn": "Abre diretamente no navegador, sem precisar de sessão: ideal para enviar por e-mail ou WhatsApp.",
-    "seccionesAIncluir": "Secções a incluir",
+    "seccionesAIncluir": "Secções e ordem",
     "caducidadOpcional": "Expiração (opcional)",
     "seleccionGuardada": "Seleção guardada.",
     "anadirlosAhora": "Adicioná-los agora",
@@ -834,6 +834,16 @@
       "conLogo": "aparecem com o logótipo",
       "soloNombre": "aparecem só com o nome",
       "ayuda": "No dossier aparecem por ordem alfabética dentro de cada nível. O principal e os oficiais aparecem com o logótipo (se forem mais de 9, só com o nome); os restantes, só com o nome e em colunas, para caberem todos. Para mudar o nível de um patrocinador, vai a <enlace>Patrocinadores</enlace>."
+    },
+    "orden": {
+      "subir": "Subir «{nombre}»",
+      "bajar": "Descer «{nombre}»",
+      "puesto": "{n}.",
+      "oportunidades": "Como colaborar",
+      "oportunidadesTexto": "As tuas oportunidades de patrocínio. Escolhes quais vão mais abaixo.",
+      "sinOportunidades": "Agora não aparece: não há oportunidades marcadas mais abaixo.",
+      "sinDatosTitulo": "Ainda sem dados",
+      "restablecer": "Voltar à ordem habitual"
     }
   },
   "metricas": {

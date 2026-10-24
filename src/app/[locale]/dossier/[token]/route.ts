@@ -121,6 +121,7 @@ export async function GET(_request: Request, { params }: ParametrosRuta) {
     oportunidades: (filasOportunidades ?? []).map(opportunityRowToOpportunity),
     partidos: (filasPartidos ?? []).map(partidoRowToPartido),
     secciones: configuracion.sections,
+    orden: configuracion.orden,
     nivelesPatrocinadores: configuracion.sponsorTiers,
     emailContacto: usuario.user?.email ?? null,
   }, locale);

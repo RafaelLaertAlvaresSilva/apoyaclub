@@ -1,6 +1,7 @@
 import { clubRowToProfile, clubSponsorRowToSponsor, clubTeamRowToTeam } from "@/lib/club-mappers";
 import type { ClubRow, ClubSponsorRow, ClubTeamRow } from "@/lib/club-mappers";
 import { seccionesValidas } from "@/lib/dossier-mappers";
+import { ordenDelDossier, type BloqueDossier } from "@/lib/dossier-orden";
 import { nivelesValidos } from "@/lib/dossier-patrocinadores";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
 import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
@@ -24,6 +25,8 @@ export type DatosDossier = {
    * contada del alcance, que es la que una empresa se cree. */
   partidos: Partido[];
   secciones: DossierSectionKey[];
+  /** En qué orden van los apartados. Sin él, el de siempre. */
+  orden?: BloqueDossier[];
   /** Qué niveles de patrocinador salen (migración 0056). Null = todos. */
   nivelesPatrocinadores?: SponsorTier[] | null;
   emailContacto: string | null;
@@ -47,6 +50,7 @@ export async function reunirDatosDelDossier(
   emailContacto: string | null,
 ): Promise<(DatosDossier & { slug: string }) | null> {
   const secciones = seccionesValidas(formData.getAll("sections"));
+  const orden = ordenDelDossier(formData.getAll("orden"));
   const idsOportunidades = formData.getAll("opportunityIds").map(String);
   // La marca de que el formulario trae la opción: sin ella (un
   // formulario de antes), salen todos, como siempre.
@@ -97,6 +101,7 @@ export async function reunirDatosDelDossier(
     oportunidades: (filasOportunidades ?? []).map(opportunityRowToOpportunity),
     partidos,
     secciones,
+    orden,
     nivelesPatrocinadores,
     emailContacto,
   };

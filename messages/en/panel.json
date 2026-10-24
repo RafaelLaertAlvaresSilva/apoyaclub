@@ -771,12 +771,12 @@
     "dossierComercialEnPdf": "Sponsorship dossier as PDF",
     "generaElPdfAl": "Generates the PDF instantly with the selection above.",
     "guardarSeleccion": "Save selection",
-    "laPortadaConTu": "The cover with your branding and the ApoyaClub footer always appear, whatever you choose here.",
+    "laPortadaConTu": "Tick the ones you want to include and use the arrows to choose the order they appear in. The cover always opens the pack and the contact details close it.",
     "oportunidades": "Opportunities",
     "oportunidadesAIncluir": "Opportunities to include",
     "panelDelClub": "Club dashboard",
     "seAbreDirectamenteEn": "It opens straight in the browser, no sign-in needed: ideal for sending by email or WhatsApp.",
-    "seccionesAIncluir": "Sections to include",
+    "seccionesAIncluir": "Sections and order",
     "caducidadOpcional": "Expiry (optional)",
     "seleccionGuardada": "Selection saved.",
     "anadirlosAhora": "Add them now",
@@ -834,6 +834,16 @@
       "conLogo": "shown with their logo",
       "soloNombre": "shown by name only",
       "ayuda": "In the dossier they appear in alphabetical order within each level. The main and official sponsors are shown with their logo (if there are more than 9, by name only); the rest by name only, in columns, so they all fit. To change a sponsor’s level, go to <enlace>Sponsors</enlace>."
+    },
+    "orden": {
+      "subir": "Move “{nombre}” up",
+      "bajar": "Move “{nombre}” down",
+      "puesto": "{n}.",
+      "oportunidades": "How to partner with us",
+      "oportunidadesTexto": "Your sponsorship opportunities. You choose which ones further down.",
+      "sinOportunidades": "Not shown right now: no opportunities are ticked further down.",
+      "sinDatosTitulo": "No data yet",
+      "restablecer": "Back to the usual order"
     }
   },
   "metricas": {
