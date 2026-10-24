@@ -48,7 +48,7 @@
       "oportunidades": "Opportunities",
       "objetivos": "Who to contact",
       "solicitudes": "Requests",
-      "dossier": "Dossier",
+      "dossier": "Sponsorship pack",
       "patrocinadores": "Sponsors",
       "renovaciones": "Renewals",
       "tareas": "Tasks",
@@ -191,7 +191,7 @@
     }
   },
   "privacidad": {
-    "descargaUnArchivoCon": "Download a file with all your account data: club profile, teams, sponsors, opportunities, dossier, contact requests received and the record of your consents.",
+    "descargaUnArchivoCon": "Download a file with all your account data: club profile, teams, sponsors, opportunities, sponsorship pack, contact requests received and the record of your consents.",
     "descargarMisDatos": "Download my data",
     "eliminaDeFormaPermanente": "Permanently delete your account and all its data. This cannot be undone.",
     "eliminar": "DELETE",
@@ -203,7 +203,7 @@
     "panelDelClub": "Club dashboard",
     "privacidadYDatos": "Visibility, privacy and data",
     "seBorranTuPerfil": "Your profile, teams, sponsors, opportunities, logo and photos are deleted.",
-    "seBorranTusSolicitudes": "Your contact requests and your sponsorship dossier are deleted.",
+    "seBorranTusSolicitudes": "Your contact requests and your sponsorship pack are deleted.",
     "seCancelaDeInmediato": "Any active Stripe subscription is cancelled immediately.",
     "tuPaginaPublicaDeja": "Your public page stops existing. This cannot be undone.",
     "datosGuardamosClubComo": "Whether your club is shown on the website, what data we keep, how to download it and how to delete your account. None of this depends on being up to date with payments.",
@@ -231,7 +231,7 @@
     "guardado": "Saved.",
     "panelClub": "Club dashboard",
     "patrocinadores": "Sponsors",
-    "empresasYaColaboranContigo": "The businesses that already work with you. They appear on your public page and in your dossier, and they are your best calling card for the next one: seeing others already on board is what convinces those who aren’t yet.",
+    "empresasYaColaboranContigo": "The businesses that already work with you. They appear on your public page and in your sponsorship pack, and they are your best calling card for the next one: seeing others already on board is what convinces those who aren’t yet.",
     "perfil": "your profile",
     "completaIdentidad": "First fill in your club’s identity (name and town) in <enlace>your profile</enlace> and you’ll be able to add your sponsors.",
     "ningunPapel": "You haven’t saved any documents for this sponsorship yet.",
@@ -245,11 +245,11 @@
     "borrar": "Delete",
     "tope": "You have reached the limit of {maximo}. Delete one to upload another.",
     "formatos": "PDF or photo, up to {mb} MB. If you signed it on paper, a photo of the document will do.",
-    "soloLoVesTu": "Only you can see this. These files don’t appear on {nombre}’s public page or in your dossier."
+    "soloLoVesTu": "Only you can see this. These files don’t appear on {nombre}’s public page or in your sponsorship pack."
   },
   "recomendaciones": {
     "herramientasTePuedenAyudar": "Tools that can help you",
-    "sonOtrasEmpresasNo": "They belong to other companies, not ApoyaClub. We suggest them because they solve something for a grassroots club that we don’t do: finding who to show your dossier to.",
+    "sonOtrasEmpresasNo": "They belong to other companies, not ApoyaClub. We suggest them because they solve something for a grassroots club that we don’t do: finding who to show your sponsorship pack to.",
     "incluidaCuota": "Included in your fee",
     "siContratasDesdeEste": "If you sign up through this link, ApoyaClub receives a commission. We don’t share any of your data with them.",
     "entrar": "Go to",
@@ -257,7 +257,7 @@
     "herramientas": {
       "prospectpro": {
         "queEs": "A tool for pulling lists of businesses by area and sector, with their website and phone number.",
-        "paraQue": "Your page and your dossier are ready, but they need to be sent to someone. This tells you who: the businesses in your area that fit what you offer.",
+        "paraQue": "Your page and your sponsorship pack are ready, but they need to be sent to someone. This tells you who: the businesses in your area that fit what you offer.",
         "precio": "Less than €5 a month",
         "comoSeActiva": "Write to us and we’ll set you up. It’s included in your fee, you don’t pay anything extra."
       }
@@ -309,7 +309,7 @@
     "podidoAnadirPatrocinador": "The sponsor couldn’t be added.",
     "hanPodidoGuardarCambios": "The changes couldn’t be saved.",
     "fechaCaducidadValida": "The expiry date isn’t valid.",
-    "podidoGuardarConfiguracionDossier": "The dossier settings couldn’t be saved.",
+    "podidoGuardarConfiguracionDossier": "The sponsorship pack settings couldn’t be saved.",
     "escribeMenosNombreEmpresa": "Enter at least the business’s name.",
     "fechaVolverLlamarValida": "The call-back date isn’t valid.",
     "podidoGuardarIntentaloOtraVez": "It couldn’t be saved. Please try again.",
@@ -419,7 +419,7 @@
     "panelDelClub": "Club dashboard",
     "personaALaQue": "Person to write to",
     "primerEquipo": "First team",
-    "provincia": "Region",
+    "provincia": "Province",
     "redesSociales": "Social media",
     "sinLogo": "No logo",
     "soloDatosAgregadosNo": "Totals only: you don’t need to break down each team.",
@@ -428,8 +428,8 @@
     "titulosAscensosHitosDeportivos": "Titles, promotions, sporting milestones…",
     "web": "Website",
     "paginaPublicaYaEsta": "Your public page is live at <enlace>{ruta}</enlace>. Share it with any businesses you like.",
-    "imagenesTitulo": "Badge, cover and photos, in a moment",
-    "imagenesTexto": "First save your club’s name and town, down below. As soon as you do, the buttons to upload your badge, cover photo and club photos will appear here.",
+    "imagenesTitulo": "Crest, cover and photos, in a moment",
+    "imagenesTexto": "First save your club’s name and town, down below. As soon as you do, the buttons to upload your crest, cover photo and club photos will appear here.",
     "cambiarLogo": "Change logo",
     "subirLogo": "Upload logo",
     "avisoMenores": "Don’t upload photos in which minors can be clearly identified (for example, close-ups with their face visible) without the consent of their parents or legal guardians, and don’t include their full names in descriptions or titles. Youth team data is always stored as totals, never as records of specific children.",
@@ -706,7 +706,7 @@
     "ningunaCreada": "You haven’t created any opportunities yet. Start with the button above.",
     "ningunaConFiltros": "No opportunities match these filters.",
     "loNecesitamos": "We need this",
-    "enExclusiva": "Exclusive for the sector: {sector}",
+    "enExclusiva": "Exclusive to the sector: {sector}",
     "guardarCambios": "Save changes",
     "editor": {
       "empresaRecibe": "The business gets",
@@ -768,7 +768,7 @@
     "compartirConUnEnlace": "Share with a public link",
     "dejaloEnBlancoPara": "Leave it blank so the link never expires.",
     "descargar": "Download",
-    "dossierComercialEnPdf": "Sponsorship dossier as PDF",
+    "dossierComercialEnPdf": "Sponsorship pack as PDF",
     "generaElPdfAl": "Generates the PDF instantly with the selection above.",
     "guardarSeleccion": "Save selection",
     "laPortadaConTu": "Tick the ones you want to include and use the arrows to choose the order they appear in. The cover always opens the pack and the contact details close it.",
@@ -820,9 +820,9 @@
     "descargarPdf": "Download PDF",
     "descargarWord": "Download Word",
     "pdfYWord": "The <fuerte>PDF</fuerte> is the one you send to a business: it looks the same on any screen and doesn’t get messed up. The <fuerte>Word</fuerte> file is for you: open it to change text, add photos or move sections around, then save it as a PDF from Word itself.",
-    "completaIdentidad": "First fill in the club’s identity (name and town) in <enlace>your profile</enlace> to be able to generate your sponsorship dossier.",
+    "completaIdentidad": "First fill in the club’s identity (name and town) in <enlace>your profile</enlace> to be able to generate your sponsorship pack.",
     "patrocinadores": {
-      "titulo": "Sponsors in the dossier",
+      "titulo": "Sponsors in the pack",
       "descripcion": "Choose which levels appear. The “Current sponsors” section must be ticked too.",
       "niveles": {
         "principal": "Main sponsor",
@@ -833,7 +833,7 @@
       "cuantos": "{n, plural, one {# sponsor} other {# sponsors}}",
       "conLogo": "shown with their logo",
       "soloNombre": "shown by name only",
-      "ayuda": "In the dossier they appear in alphabetical order within each level. The main and official sponsors are shown with their logo (if there are more than 9, by name only); the rest by name only, in columns, so they all fit. To change a sponsor’s level, go to <enlace>Sponsors</enlace>."
+      "ayuda": "In the pack they appear in alphabetical order within each level. The main and official sponsors are shown with their logo (if there are more than 9, by name only); the rest by name only, in columns, so they all fit. To change a sponsor’s level, go to <enlace>Sponsors</enlace>."
     },
     "orden": {
       "subir": "Move “{nombre}” up",
@@ -853,8 +853,8 @@
     "aparicionesAyuda": "Times your club has appeared in a business’s results.",
     "visitas": "Visits to your page",
     "visitasAyuda": "People who have opened your club’s public page.",
-    "dossieres": "Dossiers opened",
-    "dossieresAyuda": "Opens of the dossier link you share.",
+    "dossieres": "Packs opened",
+    "dossieresAyuda": "Opens of the pack link you share.",
     "solicitudes": "Requests received",
     "solicitudesAyuda": "Businesses that have asked to get in touch.",
     "subida": "+{porcentaje}% vs. previous period",
@@ -862,7 +862,7 @@
     "vacioTitulo": "No activity yet this month",
     "vacioTexto": "Businesses find clubs through their published opportunities. Publish at least one and share your link: that’s what moves the needle most.",
     "vacioOportunidades": "Create an opportunity",
-    "vacioDossier": "Prepare my dossier",
+    "vacioDossier": "Prepare my sponsorship pack",
     "contactos": "Contacts viewed",
     "contactosAyuda": "Times someone has opened your contact details. It’s the step right before writing to you.",
     "hanVistoFicha": "Have seen your profile",
@@ -1246,7 +1246,7 @@
     "nadaEstoObligatorioCada": "None of this is compulsory. Everything you fill in is one less question the business will ask you.",
     "fichaTodaviaNoTiene": "Your profile doesn’t have anything to calculate with yet. These are the things that change the report most, in order.",
     "comparacion": "From an average of {antes} people in {temporadaAntes} to {ahora} in {temporadaAhora}: <fuerte>{signo}{diferencia} people ({signo}{porcentaje}%)</fuerte>.",
-    "mismasCifras": "These same figures are the ones in the audience section of your <enlace>dossier</enlace>. They’re calculated in a single place, so the two documents can’t say different things.",
+    "mismasCifras": "These same figures are the ones in the audience section of your <enlace>sponsorship pack</enlace>. They’re calculated in a single place, so the two documents can’t say different things.",
     "informe": {
       "avisoDeOrigen": "Figures provided by the club. ApoyaClub does not verify them.",
       "bloques": {
@@ -1386,7 +1386,7 @@
     },
     "huecos": {
       "cifras": "How many of you there are: players, families, members or match attendance",
-      "dossier": "The link to your dossier, so the business can see what you offer at a glance",
+      "dossier": "The link to your sponsorship pack, so the business can see what you offer at a glance",
       "firma": "Who signs the email"
     },
     "comun": {
@@ -1484,7 +1484,7 @@
       "propuesta": "The offer",
       "comoColaborar": "How you can get involved",
       "comoColaborarTexto": "Specific ways to sponsor the club, with their price.",
-      "exclusiva": "Exclusive for the {sector} sector",
+      "exclusiva": "Exclusive to the {sector} sector",
       "aQuienLlegas": "Who you reach",
       "equipos": "Teams",
       "jugadores": "{n, plural, one {# player} other {# players}}",

@@ -155,7 +155,7 @@
       "checkout": "Não foi possível abrir a página de pagamento. Tenta novamente dentro de alguns minutos.",
       "portal": "Não foi possível abrir o portal de gestão da subscrição. Tenta novamente dentro de alguns minutos.",
       "sin-suscripcion": "Ainda não tens nenhuma subscrição para gerir.",
-      "sin-plazas": "Esgotaram-se os lugares de clube fundador enquanto escolhias. Podes contratar o plano de temporada, que é o seguinte mais barato.",
+      "sin-plazas": "Esgotaram-se as vagas de clube fundador enquanto escolhias. Podes contratar o plano de época, que é o seguinte mais barato.",
       "inesperado": "Ocorreu um erro inesperado."
     },
     "intro": "O teu plano, as tuas faturas e os teus dados de faturação. É aqui que se muda o método de pagamento e se cancela, sem ligar a ninguém.",
@@ -257,7 +257,7 @@
     "herramientas": {
       "prospectpro": {
         "queEs": "Uma ferramenta para obter listas de empresas por zona e por setor, com o site e o telefone.",
-        "paraQue": "A tua página e o teu dossiê já estão prontos, mas é preciso enviá-los a alguém. Isto diz-te a quem: as empresas do teu distrito que encaixam no que ofereces.",
+        "paraQue": "A tua página e o teu dossiê já estão prontos, mas é preciso enviá-los a alguém. Isto diz-te a quem: as empresas da tua província que encaixam no que ofereces.",
         "precio": "Menos de 5 € por mês",
         "comoSeActiva": "Escreve-nos e damos-te acesso. Está incluído na tua quota, não pagas mais nada."
       }
@@ -367,8 +367,8 @@
     "escribeOfrecesAlgoMasDetalle": "Escreve o que ofereces, com um pouco mais de detalhe.",
     "tituloDemasiadoLargo": "O título é demasiado longo.",
     "eligeSiOfrecesServicioProducto": "Escolhe se ofereces um serviço, um produto ou dinheiro.",
-    "ponCorreoOTelefonoSin": "Indica um email ou um telefone: sem isso, o clube não te pode escrever.",
-    "eseCorreoPareceCorreo": "Esse email não parece um email.",
+    "ponCorreoOTelefonoSin": "Indica um e-mail ou um telefone: sem isso, o clube não te pode escrever.",
+    "eseCorreoPareceCorreo": "Esse e-mail não parece um e-mail.",
     "encontradoOferta": "Não foi possível encontrar a oferta.",
     "podidoCambiarEstado": "Não foi possível alterar o estado.",
     "nombreEmpresaPuedeQuedarseVacio": "O nome da empresa não pode ficar vazio.",
@@ -419,7 +419,7 @@
     "panelDelClub": "Painel do clube",
     "personaALaQue": "Pessoa a quem escrever",
     "primerEquipo": "Equipa principal",
-    "provincia": "Distrito",
+    "provincia": "Província",
     "redesSociales": "Redes sociais",
     "sinLogo": "Sem logótipo",
     "soloDatosAgregadosNo": "Apenas dados agregados: não é preciso detalhar cada equipa, bastam os totais.",
@@ -484,7 +484,7 @@
     "equipoFemenino": "Equipa feminina",
     "veFoto": "O que se vê na foto",
     "lineaParaQuienNo": "Uma linha, para quem não conhece os escalões. Aparece por baixo da foto.",
-    "primerEquipoTemporada2025": "Equipa principal, temporada 2025/26. Subimos de divisão em maio.",
+    "primerEquipoTemporada2025": "Equipa principal, época 2025/26. Subimos de divisão em maio.",
     "masAltaJuegaCada": "O escalão mais alto em que joga cada equipa. Preenche só o que tiveres.",
     "subirFotoEquipo": "Carregar foto da equipa",
     "imagenPortada": "Imagem de capa",
@@ -637,7 +637,7 @@
     "duracion": "Duração",
     "editar": "Editar",
     "ejemplosPatrocinioDelDescanso": "Exemplos: «Patrocínio do intervalo dos jogos em casa», «Camisola de treino da formação».",
-    "ejemplosTodaLaTemporada": "Exemplos: «Toda a temporada», «Um jogo», «3 meses».",
+    "ejemplosTodaLaTemporada": "Exemplos: «Toda a época», «Um jogo», «3 meses».",
     "eligeUnTipo": "Escolhe um tipo…",
     "eliminar": "Eliminar",
     "equipoAsociado": "Equipa associada",
@@ -659,8 +659,8 @@
     "periodo": "Período",
     "plazas": "É repartida por várias empresas?",
     "plazasAyuda": "Número de patrocinadores que procuras. Deixa vazio se for para uma só empresa. Exemplo: 10 empresas de 100 € para o torneio de Natal.",
-    "plazasCubiertas": "Lugares já preenchidos",
-    "plazasCubiertasAyuda": "És tu que o geres: a plataforma não reserva lugares nem cobra nada.",
+    "plazasCubiertas": "Vagas já preenchidas",
+    "plazasCubiertasAyuda": "És tu que o geres: a plataforma não reserva vagas nem cobra nada.",
     "queIncluye": "O que inclui",
     "restaurar": "Restaurar",
     "siLaEmpresaQue": "Se a empresa que o contratar será a única do seu setor. Exemplos: «automóvel», «seguros», «supermercados». Deixa vazio se não houver exclusividade.",
@@ -694,12 +694,12 @@
     "otrosRequisitos": "Outros requisitos",
     "otrosRequisitosAyuda": "Qualquer coisa que convenha deixar por escrito.",
     "masDetalles": "Mais detalhes",
-    "masDetallesResumen": "Nível, lugares, exclusividade, a quem se dirige… Nada disto é preciso para publicar: podes preencher mais tarde.",
+    "masDetallesResumen": "Nível, vagas, exclusividade, a quem se dirige… Nada disto é preciso para publicar: podes preencher mais tarde.",
     "equipoAsociadoAyuda": "Se a oportunidade é de uma equipa concreta (a equipa principal, uma equipa de formação). Deixa em branco se for do clube inteiro.",
     "cuantosColaboradores": "De quantos colaboradores precisas",
     "cuantosColaboradoresAyuda": "Se um te chega, deixa vazio. A partir de dois aparece uma barra com o que já tens preenchido.",
     "cuantosTienesYa": "Quantos já tens",
-    "introPagina": "O que o teu clube oferece a uma empresa em troca de patrocínio, e o que precisa em troca de visibilidade. É a única parte da tua ficha onde uma empresa pode fazer alguma coisa.",
+    "introPagina": "O que o teu clube oferece a uma empresa em troca de patrocínio, e aquilo de que precisa em troca de visibilidade. É a única parte da tua ficha onde uma empresa pode fazer alguma coisa.",
     "completaIdentidad": "Completa primeiro a identidade do clube (nome e localidade) em <enlace>o teu perfil</enlace> para poderes publicar oportunidades de patrocínio.",
     "anadeAlgoTuyo": "<fuerte>Acrescenta algo teu antes de a publicar.</fuerte> Quantas pessoas vão aos vossos jogos, quantas equipas têm, quantos seguidores. Se todos os clubes publicarem o mesmo texto, a empresa não vai saber porque vos deve escolher.",
     "crearOportunidad": "Publicar oportunidade",
@@ -771,7 +771,7 @@
     "dossierComercialEnPdf": "Dossiê comercial em PDF",
     "generaElPdfAl": "Gera o PDF no momento com a seleção acima.",
     "guardarSeleccion": "Guardar seleção",
-    "laPortadaConTu": "Marca as que queres incluir e usa as setas para escolher a ordem em que aparecem. A capa abre sempre o dossier e o contacto fecha-o.",
+    "laPortadaConTu": "Marca as que queres incluir e usa as setas para escolher a ordem em que aparecem. A capa abre sempre o dossiê e o contacto fecha-o.",
     "oportunidades": "Oportunidades",
     "oportunidadesAIncluir": "Oportunidades a incluir",
     "panelDelClub": "Painel do clube",
@@ -822,7 +822,7 @@
     "pdfYWord": "O <fuerte>PDF</fuerte> é o que se envia a uma empresa: vê-se igual em qualquer ecrã e não se desformata. O <fuerte>Word</fuerte> é para ti: abre-o para mudar textos, acrescentar fotos ou mudar secções de lugar, e guarda-o depois como PDF no próprio Word.",
     "completaIdentidad": "Completa primeiro a identidade do clube (nome e localidade) em <enlace>o teu perfil</enlace> para poderes gerar o teu dossiê de patrocínio.",
     "patrocinadores": {
-      "titulo": "Patrocinadores no dossier",
+      "titulo": "Patrocinadores no dossiê",
       "descripcion": "Escolhe que níveis aparecem. Também tens de ter marcada a secção «Patrocinadores atuais».",
       "niveles": {
         "principal": "Patrocinador principal",
@@ -833,7 +833,7 @@
       "cuantos": "{n, plural, one {# patrocinador} other {# patrocinadores}}",
       "conLogo": "aparecem com o logótipo",
       "soloNombre": "aparecem só com o nome",
-      "ayuda": "No dossier aparecem por ordem alfabética dentro de cada nível. O principal e os oficiais aparecem com o logótipo (se forem mais de 9, só com o nome); os restantes, só com o nome e em colunas, para caberem todos. Para mudar o nível de um patrocinador, vai a <enlace>Patrocinadores</enlace>."
+      "ayuda": "No dossiê aparecem por ordem alfabética dentro de cada nível. O principal e os oficiais aparecem com o logótipo (se forem mais de 9, só com o nome); os restantes, só com o nome e em colunas, para caberem todos. Para mudar o nível de um patrocinador, vai a <enlace>Patrocinadores</enlace>."
     },
     "orden": {
       "subir": "Subir «{nombre}»",
@@ -877,7 +877,7 @@
   "publico": {
     "equipoBorrado": "Equipa apagada",
     "sinEquipoAsignado": "Sem equipa atribuída",
-    "temporada": "Temporada {temporada}",
+    "temporada": "Época {temporada}",
     "partidosApuntados": "{n, plural, one {# jogo registado} other {# jogos registados}}",
     "personasEnTotal": "Pessoas no total",
     "sumandoTodos": "Somando todos os jogos registados",
@@ -892,9 +892,9 @@
     "personasEnTotalCuantas": "{personas} pessoas no total",
     "deMediaEnCasa": "de média em casa",
     "deMedia": "de média",
-    "sinEquipoNota": "Os jogos sem equipa atribuída são de antes de ser possível escolher. Contam para o total da temporada, mas não para nenhuma equipa.",
+    "sinEquipoNota": "Os jogos sem equipa atribuída são de antes de ser possível escolher. Contam para o total da época, mas não para nenhuma equipa.",
     "mesAMes": "Mês a mês",
-    "mesAMesTexto": "Para ver se a bancada cresce à medida que a temporada avança.",
+    "mesAMesTexto": "Para ver se a bancada cresce à medida que a época avança.",
     "mes": "Mês",
     "partidosColumna": "Jogos",
     "total": "Total",
@@ -990,11 +990,11 @@
       "terminadasPorQue": "Quanto antes, melhor: acabado de terminar ainda está fresco, e esse é o momento de mostrar o que resultou. Depois já é um lembrete de algo antigo.",
       "ventana": {
         "mitad": {
-          "titulo": "Estás a meio da temporada: boa altura para enviar o relatório de progresso",
+          "titulo": "Estás a meio da época: boa altura para enviar o relatório de progresso",
           "porQue": "Agora ainda há tempo para corrigir o que falta. Se esperares por junho, o que não estiver feito já não se resolve — só se conta."
         },
         "final": {
-          "titulo": "A temporada está a acabar: envia o relatório antes de falar em renovar",
+          "titulo": "A época está a acabar: envia o relatório antes de falar em renovar",
           "porQue": "É quando a empresa decide se continua. Convém que decida a olhar para o que recebeu, não para o que se lembra."
         }
       },
@@ -1096,7 +1096,7 @@
     },
     "video": {
       "titulo": "Adiciona um vídeo",
-      "porQue": "Um minuto de jogo ou de resumo da temporada."
+      "porQue": "Um minuto de jogo ou de resumo da época."
     },
     "logros": {
       "titulo": "Escreve as vossas conquistas",
@@ -1201,11 +1201,11 @@
     },
     "mensaje": {
       "hola": "Olá,",
-      "desde": "Estão connosco desde {anio}, {anios, plural, one {uma temporada} other {# temporadas}}.",
-      "estaTemporada": "Obrigado por terem estado connosco esta temporada.",
+      "desde": "Estão connosco desde {anio}, {anios, plural, one {uma época} other {# épocas}}.",
+      "estaTemporada": "Obrigado por terem estado connosco esta época.",
       "loAcordado": "O que acordámos: {notas}",
       "osEscribo": "Escrevo-vos do {club}. {desde} O vosso apoio notou-se no clube e queríamos, antes de mais, agradecer-vos.",
-      "cerrando": "Estamos a fechar a temporada {temporada} e gostava de saber se querem continuar connosco. Se acharem bem, preparo-vos o que fizemos este ano e o que vos podemos oferecer no próximo, e vemos isso sem compromisso.",
+      "cerrando": "Estamos a fechar a época {temporada} e gostava de saber se querem continuar connosco. Se acharem bem, preparo-vos o que fizemos este ano e o que vos podemos oferecer no próximo, e vemos isso sem compromisso.",
       "llamada": "Dá-vos jeito que vos ligue esta semana?",
       "despedida": "Cumprimentos,"
     },
@@ -1216,7 +1216,7 @@
     "cuandoAcaba": "Quando acaba o acordo",
     "queAcordasteis": "O que acordaram",
     "queAcordasteisAyuda": "O que hoje está na cabeça de quem o assinou. Quando a direção mudar, é a única coisa que fica.",
-    "queAcordasteisEjemplo": "600 € por temporada, logótipo na camisola e duas publicações por mês.",
+    "queAcordasteisEjemplo": "600 € por época, logótipo na camisola e duas publicações por mês.",
     "guardado": "Guardado.",
     "guardando": "A guardar…",
     "guardar": "Guardar",
@@ -1239,7 +1239,7 @@
     "alcanceClub": "Alcance do clube",
     "cuantaGenteLlegasDicho": "A quantas pessoas chegas, dito de forma a aguentar uma pergunta. Aqui os números não se somam entre si: a mesma pessoa pode ser sócia, pai de um jogador e seguidora nas redes, e somá-la três vezes nota-se logo.",
     "siTuvierasDecirSola": "Se tivesses de dizer um só número, seria este",
-    "comparadoTemporadaPasada": "Comparado com a temporada passada",
+    "comparadoTemporadaPasada": "Comparado com a época passada",
     "estoHacePatrocinadorRenueve": "É isto que faz um patrocinador renovar: não é simpatizar com o clube, é mostrar-lhe que este ano há mais gente do que no anterior.",
     "teFaltaParaSirve": "O que te falta, e para que serve",
     "dondeEmpezar": "Por onde começar",
@@ -1276,16 +1276,16 @@
         "alcanceEscrito": "Alcance estimado",
         "publicoDeUnPartido": "Público de um jogo",
         "personasDistintas": "Pessoas diferentes, no mínimo",
-        "asistencias": "Entradas no recinto na temporada"
+        "asistencias": "Entradas no recinto na época"
       },
       "procedencia": {
         "unEquipo": "jogadores da única equipa com contagem na ficha",
         "variosEquipos": "somando os jogadores de {n} equipas da ficha",
         "declarado": "declarado pelo clube",
-        "mediaDe": "média de {n, plural, one {# jogo registado} other {# jogos registados}} da temporada {temporada}",
+        "mediaDe": "média de {n, plural, one {# jogo registado} other {# jogos registados}} da época {temporada}",
         "contra": "contra o {rival}, a {fecha}",
-        "temporada": "temporada {temporada}",
-        "temporadaEnCasa": "temporada {temporada}, {n} deles em casa",
+        "temporada": "época {temporada}",
+        "temporadaEnCasa": "época {temporada}, {n} deles em casa",
         "equipos": "equipas registadas na ficha",
         "estimacion": "estimativa escrita pelo clube na sua ficha",
         "mayorGrupo": "o maior dos grupos do clube, não a sua soma"
@@ -1302,7 +1302,7 @@
         },
         "masPartidos": {
           "que": "Mais jogos registados",
-          "porQue": "Com {n, plural, one {# jogo} other {# jogos}} a média ainda oscila muito. A partir de {minimo} o número já se aguenta, e com uma temporada inteira pode comparar-se com a seguinte.",
+          "porQue": "Com {n, plural, one {# jogo} other {# jogos}} a média ainda oscila muito. A partir de {minimo} o número já se aguenta, e com uma época inteira pode comparar-se com a seguinte.",
           "enlace": "Registar um jogo"
         },
         "jugadores": {
@@ -1371,7 +1371,7 @@
       },
       "renovar": {
         "etiqueta": "Renovar com quem já vos apoia",
-        "cuando": "Antes de a temporada acabar, não depois."
+        "cuando": "Antes de a época acabar, não depois."
       },
       "cierre": {
         "etiqueta": "Quando vos dizem que não",
@@ -1405,7 +1405,7 @@
       "asunto1": "Uma ideia para a {empresa} e o {club}",
       "asunto2": "Posso contar-te uma coisa sobre o {club}?",
       "asunto3": "{club}: queríamos propor-te uma coisa",
-      "propuesta": "Estamos à procura de empresas daqui que queiram aparecer connosco esta temporada. Não tem de ser muito: há desde coisas pequenas até ao patrocínio principal, e também nos serve em espécie.",
+      "propuesta": "Estamos à procura de empresas daqui que queiram aparecer connosco esta época. Não tem de ser muito: há desde coisas pequenas até ao patrocínio principal, e também nos serve em espécie.",
       "llamada": "Dá-te jeito que te ligue esta semana e vemos isto em cinco minutos?",
       "despedida": "Cumprimentos,"
     },
@@ -1423,8 +1423,8 @@
       "asunto1": "Podiam dar uma ajuda ao {club}?",
       "asunto2": "Uma colaboração sem dinheiro pelo meio",
       "asunto3": "{club}: propomos-vos uma troca",
-      "necesidad": "O que precisamos é isto: {detalle}",
-      "necesidadHueco": "O que precisamos não é dinheiro, é [diz aqui exatamente o quê: fisioterapia para os jogos em casa, uma carrinha para as deslocações, as lonas do pavilhão…].",
+      "necesidad": "Aquilo de que precisamos é isto: {detalle}",
+      "necesidadHueco": "Aquilo de que precisamos não é dinheiro, é [diz aqui exatamente o quê: fisioterapia para os jogos em casa, uma carrinha para as deslocações, as lonas do pavilhão…].",
       "aCambio": "Em troca damos-vos a mesma visibilidade que a qualquer patrocinador: o vosso logótipo, o vosso nome nas nossas redes e no pavilhão, e a nossa gente a falar disso.",
       "llamada": "Falamos? Com uma chamada curta ficamos esclarecidos.",
       "despedida": "Cumprimentos,"
@@ -1449,10 +1449,10 @@
       "despedida": "Cumprimentos,"
     },
     "renovar": {
-      "asunto1": "Continuamos juntos na próxima temporada?",
+      "asunto1": "Continuamos juntos na próxima época?",
       "asunto2": "{club}: obrigado por este ano",
       "asunto3": "Renovação {club} — {empresa}",
-      "gracias": "A temporada está a acabar e queria escrever-te antes que me esquecesse: obrigado por teres estado com o {club} este ano.",
+      "gracias": "A época está a acabar e queria escrever-te antes que me esquecesse: obrigado por teres estado com o {club} este ano.",
       "hecho": "Isto é o que fizemos convosco: {detalle}",
       "hechoHueco": "[Conta aqui o que recebeu: as publicações, a lona, as menções. Se o tens registado em Tarefas, tira-o daí.]",
       "seguir": "Para o próximo ano gostávamos de continuar e, se quiseres, podemos rever o que fazemos para vos dar mais destaque.",
@@ -1470,15 +1470,15 @@
   },
   "documentos": {
     "dossier": {
-      "tituloDocumento": "Dossier de patrocínio — {club}",
-      "asunto": "Dossier comercial de patrocínio desportivo",
-      "portada": "Dossier de patrocínio",
+      "tituloDocumento": "Dossiê de patrocínio — {club}",
+      "asunto": "Dossiê comercial de patrocínio desportivo",
+      "portada": "Dossiê de patrocínio",
       "desde": "Podes colaborar connosco a partir de {precio}",
       "desdeSinPrecio": "Podes colaborar connosco em troca de visibilidade",
       "detalleSiguiente": "{n, plural, one {Tens o detalhe na página seguinte.} other {# formas diferentes de colaborar, na página seguinte.}}",
       "yaConfian": "Já confiam em nós",
       "yMas": "e mais {n}",
-      "generado": "Dossier gerado a {fecha}",
+      "generado": "Dossiê gerado a {fecha}",
       "elClub": "O clube",
       "quienesSomos": "Quem somos",
       "propuesta": "A proposta",

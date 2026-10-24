@@ -494,8 +494,8 @@
     },
     "digital-newsletter": {
       "titulo": "Patrocinador da newsletter do clube",
-      "queEs": "O email que o clube envia a sócios e famílias tem um patrocinador fixo.",
-      "queRecibe": "Chegar à caixa de correio de gente que abre esse email porque lhe interessa, não a uma lista comprada.",
+      "queEs": "O e-mail que o clube envia a sócios e famílias tem um patrocinador fixo.",
+      "queRecibe": "Chegar à caixa de correio de gente que abre esse e-mail porque lhe interessa, não a uma lista comprada.",
       "duracion": "Por envio ou por época"
     },
     "digital-qr": {
@@ -758,7 +758,7 @@
     },
     "necesita-informatica": {
       "titulo": "Site e informática",
-      "queEs": "Manter o site do clube, o email ou os computadores do escritório.",
+      "queEs": "Manter o site do clube, o e-mail ou os computadores do escritório.",
       "queRecibe": "A sua marca no rodapé do site e um cliente visível na terra.",
       "duracion": "Toda a época"
     },

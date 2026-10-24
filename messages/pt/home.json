@@ -605,7 +605,7 @@
       "descripcion": "A tua página, as tuas oportunidades de patrocínio e as ferramentas para as conseguir e cumprir. 1 mês grátis, sem fidelização."
     },
     "etiqueta": "PARA CLUBES",
-    "titulo": "Tudo o que o teu clube precisa para conseguir patrocínios",
+    "titulo": "Tudo aquilo de que o teu clube precisa para conseguir patrocínios",
     "texto": "Patrocinadores, colaboradores, serviços e oportunidades para fazer crescer o teu clube. Aqui está tudo o que inclui, sem letras pequenas.",
     "menu": {
       "como-funciona": "Como funciona",
@@ -648,7 +648,7 @@
     "formas": {
       "eyebrow": "Não só dinheiro",
       "titulo": "Colaborar nem sempre é passar um cheque",
-      "texto": "A maior parte do que um clube precisa não se compra com orçamento de marketing. Resolve-se com o que o teu negócio já faz.",
+      "texto": "A maior parte daquilo de que um clube precisa não se compra com orçamento de marketing. Resolve-se com o que o teu negócio já faz.",
       "lista": [
         "Um autocarro para uma deslocação",
         "Material desportivo",
@@ -660,7 +660,7 @@
         "Um espaço para um evento",
         "Contribuir com 50 € por mês"
       ],
-      "cierre": "Se o teu é um serviço, um produto ou umas horas, os clubes estão a pedi-lo pelo nome. Procura pelo que precisam e verás quem precisa perto de ti."
+      "cierre": "Se o teu é um serviço, um produto ou umas horas, os clubes estão a pedi-lo pelo nome. Procura pelo que pedem e verás quem precisa perto de ti."
     },
     "cuenta": {
       "eyebrow": "Opcional e grátis",
@@ -705,7 +705,7 @@
         },
         {
           "pregunta": "Não tenho orçamento, mas posso contribuir com um serviço. Serve?",
-          "respuesta": "Serve, e é o que mais falta faz. Muitos clubes publicam diretamente o que precisam —um autocarro, um fisioterapeuta, material— em vez de pedirem dinheiro. Procura em «do que precisam os clubes»."
+          "respuesta": "Serve, e é o que mais falta faz. Muitos clubes publicam diretamente aquilo de que precisam —um autocarro, um fisioterapeuta, material— em vez de pedirem dinheiro. Procura em «do que precisam os clubes»."
         },
         {
           "pregunta": "Como sei que o clube existe mesmo?",
@@ -920,11 +920,11 @@
   "piloto": {
     "meta": {
       "titulo": "6 meses grátis para o teu clube",
-      "descripcion": "Procuramos clubes de qualquer modalidade para experimentar a ApoyaClub 6 meses grátis, sem cartão. Em troca, contas-nos o que funciona."
+      "descripcion": "Procuramos clubes de qualquer modalidade para experimentar o ApoyaClub 6 meses grátis, sem cartão. Em troca, contas-nos o que funciona."
     },
     "etiqueta": "6 meses grátis · Só 20 clubes",
     "titulo": "{meses} meses grátis para o teu clube",
-    "texto": "Procuramos {plazas} clubes de qualquer modalidade para experimentar a ApoyaClub antes de toda a gente. Tens a ferramenta completa durante {meses} meses, sem cartão. Em troca, só te pedimos que nos contes o que funciona e o que não funciona.",
+    "texto": "Procuramos {plazas} clubes de qualquer modalidade para experimentar o ApoyaClub antes de toda a gente. Tens a ferramenta completa durante {meses} meses, sem cartão. Em troca, só te pedimos que nos contes o que funciona e o que não funciona.",
     "plazasQuedan": "{n, plural, one {Resta # vaga} other {Restam # vagas}} de {total}",
     "completo": "As vagas dos 6 meses grátis já estão preenchidas. Podes começar na mesma com o mês grátis habitual.",
     "cta": "Quero a minha vaga",
@@ -941,7 +941,7 @@
         "texto": "Mais de 100 ideias de patrocínio para criares as tuas ofertas em minutos: camisola, painéis, redes, torneios…"
       },
       "dossier": {
-        "titulo": "Dossier em PDF e Word",
+        "titulo": "Dossiê em PDF e Word",
         "texto": "O teu clube num documento profissional, pronto para enviar por e-mail ou WhatsApp às empresas da tua zona."
       },
       "seguimiento": {
@@ -974,6 +974,6 @@
       "titulo": "E quando acabarem os {meses} meses?",
       "texto": "Se ficares, tens o preço Fundador: 199 € por ano, IVA incluído, congelado para sempre enquanto continuares inscrito. Se não, não é cobrado nada: não precisas de cartão para começar."
     },
-    "dudas": "Dúvidas? Escreve-me para <correo>info@apoyaclub.com</correo>. Rafael, criador da ApoyaClub."
+    "dudas": "Dúvidas? Escreve-me para <correo>info@apoyaclub.com</correo>. Rafael, criador do ApoyaClub."
   }
 }

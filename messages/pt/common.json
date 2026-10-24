@@ -16,7 +16,7 @@
       "buscarClubes": "Procurar clubes",
       "comoFunciona": "Como funciona",
       "accesoGratuito": "Acesso gratuito",
-      "queNecesitan": "O que os clubes precisam",
+      "queNecesitan": "Do que precisam os clubes",
       "publicarOferta": "Publicar o que ofereço"
     },
     "legalTitulo": "Legal",
@@ -198,7 +198,7 @@
     "busca": {
       "todo": "Tudo",
       "patrocinios": "Patrocínios",
-      "necesidades": "O que precisam"
+      "necesidades": "Do que precisam"
     },
     "estadoOferta": {
       "available": "Disponível",

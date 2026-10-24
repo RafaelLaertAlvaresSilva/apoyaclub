@@ -35,7 +35,7 @@
     "comunidad": "Community",
     "comunidadDescripcion": "The club's social, educational and charity work.",
     "contacto": "Contact",
-    "contactoHorario": "Opening hours",
+    "contactoHorario": "Contact hours",
     "contactoPersona": "Contact person",
     "contactoTelefono": "Phone",
     "equipos": "Teams",
@@ -137,7 +137,7 @@
     "persona": "Contact person",
     "telefono": "Phone",
     "correo": "Email",
-    "horario": "Opening hours"
+    "horario": "Contact hours"
   },
   "listado": {
     "sinNecesidades": "This club hasn't published anything it needs.",
@@ -187,7 +187,7 @@
     "fotoDe": "Photo of {club}",
     "jugadores": "{n} players",
     "redesSociales": "Social media",
-    "redesDescripcion": "Where the club is and how many people it reaches.",
+    "redesDescripcion": "Where to find the club online and how many people it reaches.",
     "seguidores": "{n} followers",
     "verPerfil": "See profile ↗",
     "instalacionesDe": "{club}'s facilities",
