@@ -57,6 +57,21 @@ describe("agruparPorClub", () => {
     expect(primero.maxValue).toBe(900);
   });
 
+  it("el rango de precios no cuenta las necesidades ni las que no tienen cifra", () => {
+    const [club] = agruparPorClub([
+      oportunidad({ opportunityId: "o1", value: 0, esNecesidad: true }),
+      oportunidad({ opportunityId: "o2", value: 0 }),
+      oportunidad({ opportunityId: "o3", value: 500 }),
+      oportunidad({ opportunityId: "o4", value: 200 }),
+    ]);
+    expect(club.minValue).toBe(200);
+    expect(club.maxValue).toBe(500);
+
+    // Solo necesidades: sin cifra (la tarjeta dice "A cambio de visibilidad").
+    const [soloNecesidades] = agruparPorClub([oportunidad({ value: 0, esNecesidad: true })]);
+    expect(soloNecesidades.maxValue).toBe(0);
+  });
+
   it("enseña como vista previa las de mayor valor, y como mucho tres", () => {
     const clubes = agruparPorClub([
       oportunidad({ opportunityId: "o1", value: 50 }),

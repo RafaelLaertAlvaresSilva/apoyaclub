@@ -1474,6 +1474,7 @@
       "asunto": "Sports sponsorship sales pack",
       "portada": "Sponsorship pack",
       "desde": "You can partner with us from {precio}",
+      "desdeSinPrecio": "You can partner with us in exchange for visibility",
       "detalleSiguiente": "{n, plural, one {You’ll find the details on the next page.} other {# different ways to partner with us, on the next page.}}",
       "yaConfian": "Already backing us",
       "yMas": "and {n} more",

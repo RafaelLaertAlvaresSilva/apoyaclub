@@ -47,3 +47,35 @@ export function formatoDeValor(locale: AppLocale): Intl.NumberFormat {
     maximumFractionDigits: 2,
   });
 }
+
+/**
+ * Lo que se enseña en el sitio del precio de una oportunidad.
+ *
+ * Una necesidad (el club pide un servicio, no vende nada) no tiene
+ * precio: lo que recibe la empresa es visibilidad. Antes salía "0,00 €",
+ * que se leía como un error o como "esto no vale nada". Una oferta sin
+ * precio puesto tampoco enseña "0,00 €": el precio se habla.
+ */
+export function textoDelPrecio(
+  oportunidad: { value: number; esNecesidad?: boolean },
+  formato: Intl.NumberFormat,
+  textos: { necesidad: string; aConvenir: string },
+): string {
+  if (oportunidad.esNecesidad) return textos.necesidad;
+  return oportunidad.value > 0 ? formato.format(oportunidad.value) : textos.aConvenir;
+}
+
+/** Si al lado del precio cabe "por empresa": solo cuando hay una cifra. */
+export function tienePrecio(oportunidad: { value: number; esNecesidad?: boolean }): boolean {
+  return !oportunidad.esNecesidad && oportunidad.value > 0;
+}
+
+/**
+ * La oportunidad más barata con precio de verdad, para el "desde ..." de
+ * la portada del dossier. Las necesidades y las que no tienen precio no
+ * cuentan: si no, un dossier con una necesidad diría "desde 0,00 €".
+ */
+export function precioMasBajo(oportunidades: { value: number; esNecesidad?: boolean }[]): number | null {
+  const conPrecio = oportunidades.filter(tienePrecio).map((oportunidad) => oportunidad.value);
+  return conPrecio.length > 0 ? Math.min(...conPrecio) : null;
+}

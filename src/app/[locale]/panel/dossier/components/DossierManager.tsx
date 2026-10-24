@@ -9,7 +9,7 @@ import { BotonEnviar } from "@/components/BotonEnviar";
 import { SECCIONES_DOSSIER } from "@/lib/dossier";
 import { ORDEN_POR_DEFECTO, moverBloque, type BloqueDossier } from "@/lib/dossier-orden";
 import { patrocinadoresDelDossier } from "@/lib/dossier-patrocinadores";
-import { formatoDeValor } from "@/lib/format";
+import { formatoDeValor, textoDelPrecio } from "@/lib/format";
 import type { AppLocale } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
 import type {
@@ -47,6 +47,7 @@ export function DossierManager({
   seccionesPorDefecto: DossierSectionKey[];
 }) {
   const t = useTranslations("panel.dossier");
+  const tPrecio = useTranslations("common.precio");
   const formRef = useRef<HTMLFormElement>(null);
   const [estado, accion] = useActionState<EstadoDossier, FormData>(guardarConfiguracionDossier, null);
   const [descargando, setDescargando] = useState<"pdf" | "word" | null>(null);
@@ -179,7 +180,10 @@ export function DossierManager({
                   <span className="font-medium text-zinc-900">{oportunidad.title}</span>
                 </span>
                 <span className="whitespace-nowrap font-semibold text-teal-700">
-                  {formatoDeValor(locale as AppLocale).format(oportunidad.value)}
+                  {textoDelPrecio(oportunidad, formatoDeValor(locale as AppLocale), {
+                    necesidad: tPrecio("necesidad"),
+                    aConvenir: tPrecio("aConvenir"),
+                  })}
                 </span>
               </label>
             ))}

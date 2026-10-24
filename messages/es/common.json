@@ -254,5 +254,9 @@
     "confirmar": "Sí, borrar",
     "enCurso": "Borrando…",
     "no": "No"
+  },
+  "precio": {
+    "necesidad": "A cambio de visibilidad",
+    "aConvenir": "Precio a convenir"
   }
 }

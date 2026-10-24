@@ -8,7 +8,7 @@ import { LOCALE_CONFIG } from "@/config/locales";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { CLASES_NIVEL_PATROCINIO, esPorPlazas, plazasLibres } from "@/lib/opportunities";
 import { etiquetador } from "@/lib/etiquetas-traducidas";
-import { formatoDeValor } from "@/lib/format";
+import { formatoDeValor, textoDelPrecio, tienePrecio } from "@/lib/format";
 import { agruparEquiposPorSexo, agruparPatrocinadoresPorNivel } from "@/lib/club-mappers";
 import { SITE_URL } from "@/lib/site";
 import type { SocialLinks } from "@/lib/types";
@@ -103,6 +103,8 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
     valor === "Masculino" || valor === "Femenino" || valor === "Mixto" ? tSexo(valor) : valor;
   const formatoNumero = new Intl.NumberFormat(LOCALE_CONFIG[locale].intlLocale);
   const precio = formatoDeValor(locale);
+  const tPrecio = await getTranslations("common.precio");
+  const textosPrecio = { necesidad: tPrecio("necesidad"), aConvenir: tPrecio("aConvenir") };
 
   // Los niveles fijos de patrocinador vienen en español de `lib/`; el
   // nombre que el club haya escrito a mano para su nivel se deja tal cual.
@@ -310,8 +312,8 @@ export default async function PaginaPublicaClub({ params }: ParametrosRuta) {
                       )}
                     </div>
                     <p className="whitespace-nowrap text-lg font-bold text-teal-700">
-                      {precio.format(oportunidad.value)}
-                      {esPorPlazas(oportunidad) && (
+                      {textoDelPrecio(oportunidad, precio, textosPrecio)}
+                      {esPorPlazas(oportunidad) && tienePrecio(oportunidad) && (
                         <span className="ml-1 text-xs font-medium text-zinc-500">
                           {t("oportunidades.porEmpresa")}
                         </span>

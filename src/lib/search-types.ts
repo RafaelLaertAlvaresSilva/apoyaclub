@@ -1,3 +1,4 @@
+import { tienePrecio } from "@/lib/format";
 import type {
   CategoriaNecesidad,
   BudgetPeriod,
@@ -146,8 +147,10 @@ export function agruparPorClub(
         clubLogoUrl: oportunidad.clubLogoUrl,
         distanceKm: oportunidad.distanceKm,
         opportunitiesCount: 0,
-        minValue: oportunidad.value,
-        maxValue: oportunidad.value,
+        // Se rellenan abajo, solo con las que tienen precio: una
+        // necesidad (o una oferta sin cifra) no puede dejar "desde 0 €".
+        minValue: 0,
+        maxValue: 0,
         opportunityTypes: [],
         topOpportunities: [],
       };
@@ -155,8 +158,10 @@ export function agruparPorClub(
     }
 
     club.opportunitiesCount += 1;
-    club.minValue = Math.min(club.minValue, oportunidad.value);
-    club.maxValue = Math.max(club.maxValue, oportunidad.value);
+    if (tienePrecio(oportunidad)) {
+      club.minValue = club.maxValue > 0 ? Math.min(club.minValue, oportunidad.value) : oportunidad.value;
+      club.maxValue = Math.max(club.maxValue, oportunidad.value);
+    }
     if (!club.opportunityTypes.includes(oportunidad.opportunityType)) {
       club.opportunityTypes.push(oportunidad.opportunityType);
     }

@@ -29,6 +29,8 @@ export type TextosDocumento = {
   E: Etiquetas;
   numero: Intl.NumberFormat;
   precio: Intl.NumberFormat;
+  /** Lo que va en lugar del precio cuando no hay cifra (`textoDelPrecio`). */
+  textosPrecio: { necesidad: string; aConvenir: string };
   /** "3 de octubre de 2026", en la hora del mercado de ese idioma. */
   fechaLarga: (fecha: Date) => string;
   /** El nombre de un nivel de patrocinador; el que el club escribió a mano se deja tal cual. */
@@ -82,6 +84,7 @@ export async function textosDeDocumento(
     E,
     numero: new Intl.NumberFormat(config.intlLocale),
     precio: formatoDeValor(locale),
+    textosPrecio: { necesidad: traducir("common.precio.necesidad"), aConvenir: traducir("common.precio.aConvenir") },
     fechaLarga: (fecha) => formatoFecha.format(fecha),
     nivelPatrocinador: (etiqueta) => (NIVELES_FIJOS[etiqueta] ? E.nivelPatrocinio(NIVELES_FIJOS[etiqueta]) : etiqueta),
     sexo: (valor) => (SEXOS.includes(valor) ? traducir(`panel.perfil.sexo.${valor}`) : valor),

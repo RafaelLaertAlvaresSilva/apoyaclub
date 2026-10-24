@@ -254,5 +254,9 @@
     "confirmar": "Yes, delete",
     "enCurso": "Deleting…",
     "no": "No"
+  },
+  "precio": {
+    "necesidad": "In exchange for visibility",
+    "aConvenir": "Price on request"
   }
 }

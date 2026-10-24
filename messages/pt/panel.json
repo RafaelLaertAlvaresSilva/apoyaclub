@@ -1474,6 +1474,7 @@
       "asunto": "Dossier comercial de patrocínio desportivo",
       "portada": "Dossier de patrocínio",
       "desde": "Podes colaborar connosco a partir de {precio}",
+      "desdeSinPrecio": "Podes colaborar connosco em troca de visibilidade",
       "detalleSiguiente": "{n, plural, one {Tens o detalhe na página seguinte.} other {# formas diferentes de colaborar, na página seguinte.}}",
       "yaConfian": "Já confiam em nós",
       "yMas": "e mais {n}",

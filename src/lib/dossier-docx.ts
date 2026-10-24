@@ -40,6 +40,7 @@ import {
   type GrupoDePatrocinadores,
 } from "@/lib/dossier-patrocinadores";
 import { descargarImagen, encajarEn, type ImagenDescargada } from "@/lib/imagenes-remotas";
+import { precioMasBajo, textoDelPrecio } from "@/lib/format";
 import { textosDeDocumento, type TextosDocumento } from "@/lib/textos-documento";
 import type { DossierSectionKey } from "@/lib/types";
 
@@ -400,10 +401,8 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
   const verRedes =
     (secciones.includes("identidad") || secciones.includes("audiencia")) && (redes.length > 0 || !!perfil.website);
 
-  const masBarata = oportunidades.reduce<number | null>(
-    (minimo, oportunidad) => (minimo == null || oportunidad.value < minimo ? oportunidad.value : minimo),
-    null,
-  );
+  // Solo cuentan las que tienen precio (ver `precioMasBajo`).
+  const masBarata = precioMasBajo(oportunidades);
 
   const cuerpo: (Paragraph | Table)[] = [];
 
@@ -446,11 +445,11 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
     cuerpo.push(separacion(320));
   }
 
-  if (masBarata != null) {
+  if (oportunidades.length > 0) {
     cuerpo.push(
       recuadro(
         [
-          parrafo(t("desde", { precio: formatoValorOportunidad.format(masBarata) }), {
+          parrafo(masBarata != null ? t("desde", { precio: formatoValorOportunidad.format(masBarata) }) : t("desdeSinPrecio"), {
             negrita: true,
             color: TEAL,
             tamano: 24,
@@ -625,7 +624,7 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
             }),
             celda(
               [
-                parrafo(formatoValorOportunidad.format(oportunidad.value), {
+                parrafo(textoDelPrecio(oportunidad, formatoValorOportunidad, textos.textosPrecio), {
                   negrita: true,
                   color: TEAL,
                   tamano: 26,

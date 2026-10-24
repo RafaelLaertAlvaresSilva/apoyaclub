@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { etiquetador } from "@/lib/etiquetas-traducidas";
-import { formatoDeValor } from "@/lib/format";
+import { formatoDeValor, textoDelPrecio } from "@/lib/format";
 import type { AppLocale } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
 import { useActionState, useState } from "react";
@@ -49,6 +49,7 @@ export function TarjetaOportunidad({
   const t = useTranslations("panel.oportunidades");
   const E = etiquetador(useTranslations("common.etiquetas"));
   const precio = formatoDeValor(useLocale() as AppLocale);
+  const tPrecio = useTranslations("common.precio");
   const [enEdicion, setEnEdicion] = useState(false);
 
   if (enEdicion) {
@@ -149,8 +150,15 @@ export function TarjetaOportunidad({
           </div>
         </div>
 
-        <p className="whitespace-nowrap text-lg font-bold text-teal-700">
-          {precio.format(oportunidad.value)}
+        {/* Una necesidad no tiene precio: lo que recibe la empresa es
+            visibilidad. Antes salía "0,00 €". Va en naranja, como el
+            resto de lo que el club necesita. */}
+        <p
+          className={`whitespace-nowrap font-bold ${
+            oportunidad.esNecesidad || oportunidad.value <= 0 ? "text-sm text-orange-700" : "text-lg text-teal-700"
+          }`}
+        >
+          {textoDelPrecio(oportunidad, precio, { necesidad: tPrecio("necesidad"), aConvenir: tPrecio("aConvenir") })}
         </p>
       </div>
 

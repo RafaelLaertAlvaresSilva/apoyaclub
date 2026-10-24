@@ -9,7 +9,7 @@ import { useState } from "react";
 import { filtrosAQueryString, OPCIONES_ORDEN } from "@/lib/buscar-params";
 import { CLASES_NIVEL_PATROCINIO, esPorPlazas, plazasLibres } from "@/lib/opportunities";
 import { etiquetador } from "@/lib/etiquetas-traducidas";
-import { formatoDeValor } from "@/lib/format";
+import { formatoDeValor, textoDelPrecio, tienePrecio } from "@/lib/format";
 import type { AppLocale } from "@/i18n/routing";
 import { BarraDePlazas } from "@/components/BarraDePlazas";
 import {
@@ -232,6 +232,7 @@ function TarjetaOportunidad({
   const E = etiquetador(useTranslations("common.etiquetas"));
   const precio = formatoDeValor(useLocale() as AppLocale);
   const tTarjeta = useTranslations("buscar.resultados");
+  const tPrecio = useTranslations("common.precio");
   const etiquetas = [
     E.tipoOportunidad(oportunidad.opportunityType),
     oportunidad.period ? E.periodo(oportunidad.period) : null,
@@ -355,9 +356,9 @@ function TarjetaOportunidad({
       )}
 
       <div className="mt-auto flex items-center justify-between pt-1">
-        <p className="text-lg font-bold text-teal-700">
-          {precio.format(oportunidad.value)}
-          {esPorPlazas(oportunidad) && (
+        <p className={`font-bold ${tienePrecio(oportunidad) ? "text-lg text-teal-700" : "text-sm text-zinc-700"}`}>
+          {textoDelPrecio(oportunidad, precio, { necesidad: tPrecio("necesidad"), aConvenir: tPrecio("aConvenir") })}
+          {esPorPlazas(oportunidad) && tienePrecio(oportunidad) && (
             <span className="ml-1 text-xs font-medium text-zinc-500">
               {tTarjeta("porEmpresa")}
             </span>
@@ -391,10 +392,15 @@ function TarjetaClub({ club }: { club: ResultadoClub }) {
   const E = etiquetador(useTranslations("common.etiquetas"));
   const precio = formatoDeValor(useLocale() as AppLocale);
   const tClub = useTranslations("buscar.resultados");
+  const tPrecio = useTranslations("common.precio");
+  // Sin ninguna oportunidad con precio (solo necesidades o sin cifra),
+  // nada de "0,00 €": lo que se ofrece a cambio es visibilidad.
   const rango =
-    club.minValue === club.maxValue
-      ? precio.format(club.minValue)
-      : `${precio.format(club.minValue)} – ${precio.format(club.maxValue)}`;
+    club.maxValue <= 0
+      ? tPrecio("necesidad")
+      : club.minValue === club.maxValue
+        ? precio.format(club.minValue)
+        : `${precio.format(club.minValue)} – ${precio.format(club.maxValue)}`;
 
   return (
     <li className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4">

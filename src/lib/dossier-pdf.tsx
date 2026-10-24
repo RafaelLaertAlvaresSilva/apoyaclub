@@ -23,6 +23,7 @@ import {
   patrocinadoresDelDossier,
   type GrupoDePatrocinadores,
 } from "@/lib/dossier-patrocinadores";
+import { precioMasBajo, textoDelPrecio } from "@/lib/format";
 import { textosDeDocumento, type TextosDocumento } from "@/lib/textos-documento";
 import type { DossierSectionKey } from "@/lib/types";
 
@@ -554,10 +555,9 @@ function DossierDocumento({
   const cifrasPortada = cifrasDePortada(alcance);
   const frasesLlanas = resumenLlano(alcance, tAlcance, textos.intlLocale);
 
-  const masBarata = oportunidades.reduce<number | null>(
-    (minimo, oportunidad) => (minimo == null || oportunidad.value < minimo ? oportunidad.value : minimo),
-    null,
-  );
+  // Solo cuentan las que tienen precio: una necesidad no puede dejar
+  // "desde 0,00 €" en la portada.
+  const masBarata = precioMasBajo(oportunidades);
 
   // En la portada, solo si el club ha decidido enseñar sus patrocinadores.
   const portadaPatrocinadores = incluir("patrocinadores") ? nombresDePortada(gruposPatrocinadores) : null;
@@ -627,7 +627,7 @@ function DossierDocumento({
                 <View style={estilos.oportunidadCabecera}>
                   <Text style={estilos.oportunidadTitulo}>{oportunidad.title}</Text>
                   <Text style={estilos.oportunidadValor}>
-                    {formatoValorOportunidad.format(oportunidad.value)}
+                    {textoDelPrecio(oportunidad, formatoValorOportunidad, textos.textosPrecio)}
                   </Text>
                 </View>
                 {oportunidad.description && (
@@ -846,10 +846,12 @@ function DossierDocumento({
               </View>
             )}
 
-            {masBarata != null && (
+            {oportunidades.length > 0 && (
               <View style={estilos.reclamo}>
                 <Text style={estilos.reclamoTexto}>
-                  {t("desde", { precio: formatoValorOportunidad.format(masBarata) })}
+                  {masBarata != null
+                    ? t("desde", { precio: formatoValorOportunidad.format(masBarata) })
+                    : t("desdeSinPrecio")}
                 </Text>
                 <Text style={estilos.reclamoDetalle}>
                   {t("detalleSiguiente", { n: oportunidades.length })}
