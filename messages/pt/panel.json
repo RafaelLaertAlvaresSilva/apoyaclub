@@ -69,6 +69,9 @@
     "cerrarSesion": "Terminar sessão",
     "cambiosSinGuardar": "Tens alterações por guardar neste separador. Se saíres agora, perdem-se.",
     "completaParaDesbloquear": "Completa a identidade do clube (nome e localidade) para desbloquear as restantes secções.",
+    "ocultarMenu": "Ocultar menu",
+    "mostrarMenu": "Mostrar menu",
+    "menuPlegado": "Menu",
     "cerrar": "Fechar",
     "publico": {
       "apuntar": "Registar um jogo"
@@ -184,7 +187,7 @@
       "recomendado": "Recomendado",
       "quedan": "Restam {n}",
       "ivaIncluido": "{periodo}, IVA incluído",
-      "empiezas": "Não é cobrado nada até terminar o teu período grátis: <fuerte>30 dias</fuerte>, ou <fuerte>6 meses</fuerte> se fazes parte do programa piloto. Se um único patrocinador te deixar 300 €, já cobriste o ano inteiro."
+      "empiezas": "Não é cobrado nada até terminar o teu período grátis: <fuerte>30 dias</fuerte>, ou <fuerte>6 meses</fuerte> se entraste com os 6 meses grátis. Se um único patrocinador te deixar 300 €, já cobriste o ano inteiro."
     }
   },
   "privacidad": {

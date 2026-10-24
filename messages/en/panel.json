@@ -69,6 +69,9 @@
     "cerrarSesion": "Sign out",
     "cambiosSinGuardar": "You have unsaved changes on this tab. If you leave now, they will be lost.",
     "completaParaDesbloquear": "Fill in the club’s identity (name and town) to unlock the other sections.",
+    "ocultarMenu": "Hide menu",
+    "mostrarMenu": "Show menu",
+    "menuPlegado": "Menu",
     "cerrar": "Close",
     "publico": {
       "apuntar": "Record a match"
@@ -184,7 +187,7 @@
       "recomendado": "Recommended",
       "quedan": "{n} left",
       "ivaIncluido": "{periodo}, VAT included",
-      "empiezas": "Nothing is charged until your free period ends: <fuerte>30 days</fuerte>, or <fuerte>6 months</fuerte> if you are in the pilot programme. If a single sponsor gives you €300, you have already covered the whole year."
+      "empiezas": "Nothing is charged until your free period ends: <fuerte>30 days</fuerte>, or <fuerte>6 months</fuerte> if you joined with the 6 months free. If a single sponsor gives you €300, you have already covered the whole year."
     }
   },
   "privacidad": {

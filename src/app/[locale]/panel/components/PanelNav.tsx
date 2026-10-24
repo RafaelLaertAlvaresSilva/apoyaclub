@@ -22,9 +22,12 @@ import { MenuDelPanel } from "./MenuDelPanel";
 export async function PanelNav({
   paginaPublica,
   perfilCreado,
+  plegado,
 }: {
   paginaPublica: string | null;
   perfilCreado: boolean;
+  /** Si el club dejó el menú plegado (cookie, ver `menu-plegado.ts`). */
+  plegado: boolean;
 }) {
   const [sinAbrir, vencidas, renovaciones] = await Promise.all([
     contarSolicitudesNuevas(),
@@ -39,6 +42,7 @@ export async function PanelNav({
       renovaciones={renovaciones}
       paginaPublica={paginaPublica}
       perfilCreado={perfilCreado}
+      plegadoInicial={plegado}
     />
   );
 }

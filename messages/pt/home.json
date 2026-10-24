@@ -919,14 +919,14 @@
   },
   "piloto": {
     "meta": {
-      "titulo": "Programa piloto: 6 meses grátis para o teu clube",
+      "titulo": "6 meses grátis para o teu clube",
       "descripcion": "Procuramos clubes de qualquer modalidade para experimentar a ApoyaClub 6 meses grátis, sem cartão. Em troca, contas-nos o que funciona."
     },
-    "etiqueta": "Programa piloto · Vagas limitadas",
+    "etiqueta": "6 meses grátis · Só 20 clubes",
     "titulo": "{meses} meses grátis para o teu clube",
     "texto": "Procuramos {plazas} clubes de qualquer modalidade para experimentar a ApoyaClub antes de toda a gente. Tens a ferramenta completa durante {meses} meses, sem cartão. Em troca, só te pedimos que nos contes o que funciona e o que não funciona.",
     "plazasQuedan": "{n, plural, one {Resta # vaga} other {Restam # vagas}} de {total}",
-    "completo": "As vagas do piloto já estão preenchidas. Podes começar na mesma com o mês grátis habitual.",
+    "completo": "As vagas dos 6 meses grátis já estão preenchidas. Podes começar na mesma com o mês grátis habitual.",
     "cta": "Quero a minha vaga",
     "ctaCompleto": "Começar com 1 mês grátis",
     "condiciones": "Sem cartão · Sem fidelização · Todas as modalidades",

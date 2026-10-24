@@ -629,7 +629,7 @@
       "recomendado": "Recomendado",
       "quedan": "Quedan {n}",
       "ivaIncluido": "{periodo}, IVA incluido",
-      "empiezas": "No se cobra nada hasta que termine tu periodo gratis: <fuerte>30 días</fuerte>, o <fuerte>6 meses</fuerte> si eres del programa piloto. Si un solo patrocinador te deja 300 €, ya has cubierto el año entero."
+      "empiezas": "No se cobra nada hasta que termine tu periodo gratis: <fuerte>30 días</fuerte>, o <fuerte>6 meses</fuerte> si entraste con los 6 meses gratis. Si un solo patrocinador te deja 300 €, ya has cubierto el año entero."
     }
   },
   "comun": {
@@ -1337,6 +1337,9 @@
     "cerrarSesion": "Cerrar sesión",
     "cambiosSinGuardar": "Tienes cambios sin guardar en esta pestaña. Si sales ahora se pierden.",
     "completaParaDesbloquear": "Completa la identidad del club (nombre y localidad) para desbloquear el resto de secciones.",
+    "ocultarMenu": "Ocultar menú",
+    "mostrarMenu": "Mostrar menú",
+    "menuPlegado": "Menú",
     "cerrar": "Cerrar",
     "publico": {
       "apuntar": "Apuntar un partido"

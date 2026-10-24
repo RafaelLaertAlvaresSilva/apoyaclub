@@ -1,9 +1,11 @@
+import { cookies } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { BarraLogo } from "@/components/BarraLogo";
 import {
   subscriptionRowToInfo,
   type SubscriptionRow,
 } from "@/lib/subscription-mappers";
+import { COOKIE_MENU_PLEGADO, estaPlegado } from "@/lib/menu-plegado";
 import { leerVisibilidadDelClub } from "@/lib/modo-pruebas";
 import { createClient } from "@/lib/supabase/server";
 import type { Role } from "@/lib/types";
@@ -61,6 +63,9 @@ export default async function PanelLayout({
     if (slug && !modoPruebas && !ocultoPorElClub) paginaPublica = `/${await getLocale()}/club/${slug}`;
   }
 
+  // Si el club dejó el menú plegado la última vez, llega ya plegado.
+  const menuPlegado = estaPlegado((await cookies()).get(COOKIE_MENU_PLEGADO)?.value);
+
   return (
     /*
      * `tema-panel` es el interruptor del modo oscuro, y vive aquí a
@@ -87,7 +92,7 @@ export default async function PanelLayout({
           páginas del panel no tienen que acordarse de ponerlo, ni de
           decir cuál es su sección (lo deduce de la dirección). */}
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-4 px-4 pt-6 sm:px-6 lg:flex-row lg:gap-6">
-        <PanelNav paginaPublica={paginaPublica} perfilCreado={perfilCreado} />
+        <PanelNav paginaPublica={paginaPublica} perfilCreado={perfilCreado} plegado={menuPlegado} />
         <div className="flex min-w-0 flex-1 flex-col">{children}</div>
       </div>
     </div>

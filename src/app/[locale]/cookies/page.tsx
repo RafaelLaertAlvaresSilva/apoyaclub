@@ -40,6 +40,11 @@ export default function CookiesPage() {
             Cookie de preferencia de cookies: guarda si has aceptado o rechazado las
             cookies no técnicas, para no volver a preguntártelo en cada visita.
           </li>
+          <li>
+            Cookie del menú del panel (<code>menu-panel</code>): solo se guarda si plegas el
+            menú lateral de tu panel, para que siga plegado al cambiar de página. Dura un año
+            y se borra al volver a abrirlo.
+          </li>
         </ul>
       </section>
 

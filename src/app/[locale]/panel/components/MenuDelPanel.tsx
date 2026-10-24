@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { cerrarSesion } from "@/app/[locale]/actions";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { cookieDelMenu } from "@/lib/menu-plegado";
 import { sePuedeSalir } from "./guardia-sin-guardar";
 import { SECCIONES_DE_LA_FICHA } from "./secciones-de-la-ficha";
 
@@ -479,10 +480,31 @@ function Lista({
 }
 
 /**
+ * La flecha doble de plegar y desplegar el menú: hacia la izquierda
+ * para recogerlo, hacia la derecha para sacarlo.
+ */
+function IconoPlegar({ haciaLaDerecha = false }: { haciaLaDerecha?: boolean }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`h-[18px] w-[18px] flex-none ${haciaLaDerecha ? "rotate-180" : ""}`}
+    >
+      <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" />
+    </svg>
+  );
+}
+
+/**
  * El menú del panel del club.
  *
- * En el ordenador es una columna fija a la izquierda, siempre a la
- * vista. En el móvil no cabe: ahí es un botón que abre el menú entero
+ * En el ordenador es una columna fija a la izquierda, que el club
+ * puede plegar en una franja estrecha cuando quiere más ancho. En el móvil no cabe: ahí es un botón que abre el menú entero
  * por encima de la página, y se cierra solo al pulsar cualquier enlace
  * — si no, el club se quedaba con el menú abierto tapando aquello a lo
  * que acababa de entrar.
@@ -493,15 +515,28 @@ export function MenuDelPanel({
   renovaciones,
   paginaPublica,
   perfilCreado,
+  plegadoInicial = false,
 }: {
   sinAbrir: number;
   vencidas: number;
   renovaciones: number;
   paginaPublica: string | null;
   perfilCreado: boolean;
+  /** Cómo lo dejó el club la última vez (lo lee el layout de la cookie). */
+  plegadoInicial?: boolean;
 }) {
   const t = useTranslations("panel.menu");
   const [abierto, setAbierto] = useState(false);
+
+  // Solo en el ordenador: el club puede plegar la columna para trabajar
+  // con más ancho (el dossier, las tablas de patrocinadores...). Se
+  // recuerda en una cookie para que siga plegado al cambiar de página
+  // y al volver otro día.
+  const [plegado, setPlegado] = useState(plegadoInicial);
+  function cambiarPlegado(nuevo: boolean) {
+    setPlegado(nuevo);
+    document.cookie = cookieDelMenu(nuevo);
+  }
   const ruta = usePathname();
 
   // Cambiar de página con el menú abierto lo deja abierto encima de la
@@ -532,8 +567,35 @@ export function MenuDelPanel({
 
   return (
     <>
-      {/* Ordenador */}
-      <aside className="hidden w-60 shrink-0 lg:block">
+      {/* Ordenador, plegado: una franja estrecha con el botón para
+          volver a abrirlo. Lleva el total de avisos en rojo para que
+          plegar el menú no esconda que hay solicitudes o tareas
+          esperando. */}
+      {plegado && (
+        <aside className="hidden w-12 shrink-0 lg:block">
+          <button
+            type="button"
+            onClick={() => cambiarPlegado(false)}
+            aria-expanded={false}
+            aria-label={t("mostrarMenu")}
+            title={t("mostrarMenu")}
+            className="sticky top-6 flex w-12 flex-col items-center gap-3 rounded-xl border border-zinc-200 bg-white px-1 py-3 text-titular transition-colors hover:border-zinc-300 hover:bg-zinc-100"
+          >
+            <IconoPlegar haciaLaDerecha />
+            <span className="text-xs font-bold uppercase tracking-wider [writing-mode:vertical-rl]">
+              {t("menuPlegado")}
+            </span>
+            {avisos > 0 && (
+              <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-peligro px-1.5 py-0.5 text-xs font-bold text-sobre-color">
+                {avisos}
+              </span>
+            )}
+          </button>
+        </aside>
+      )}
+
+      {/* Ordenador, abierto */}
+      <aside className={plegado ? "hidden" : "hidden w-60 shrink-0 lg:block"}>
         {/* `max-h` + `overflow-y-auto`: el menú tiene cuatro grupos y,
             con el de "Perfil del club" desplegado, pasa de lo que mide
             una pantalla de portátil. Al ser `sticky` no se desplazaba
@@ -544,6 +606,15 @@ export function MenuDelPanel({
             * El 3rem son los `top-6` de arriba más el mismo hueco
             * abajo, para que no acabe pegado al borde de la ventana. */}
         <div className="sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto overscroll-contain rounded-xl border border-zinc-200 bg-white p-2">
+          <button
+            type="button"
+            onClick={() => cambiarPlegado(true)}
+            aria-expanded={true}
+            className="mb-1.5 flex w-full items-center justify-end gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-titular"
+          >
+            {t("ocultarMenu")}
+            <IconoPlegar />
+          </button>
           <Lista
             sinAbrir={sinAbrir}
             vencidas={vencidas}

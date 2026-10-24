@@ -919,14 +919,14 @@
   },
   "piloto": {
     "meta": {
-      "titulo": "Pilot programme: 6 months free for your club",
+      "titulo": "6 months free for your club",
       "descripcion": "We're looking for clubs from any sport to try ApoyaClub free for 6 months, no card needed. In return, you tell us what works."
     },
-    "etiqueta": "Pilot programme · Limited places",
+    "etiqueta": "6 months free · Only 20 clubs",
     "titulo": "{meses} months free for your club",
     "texto": "We're looking for {plazas} clubs from any sport to try ApoyaClub before anyone else. You get the full tool for {meses} months, no card needed. In return, all we ask is that you tell us what works for you and what doesn't.",
     "plazasQuedan": "{n, plural, one {# place left} other {# places left}} out of {total}",
-    "completo": "All pilot places have been taken. You can still start with the usual free month.",
+    "completo": "All places for the 6 months free have been taken. You can still start with the usual free month.",
     "cta": "I want my place",
     "ctaCompleto": "Start with 1 month free",
     "condiciones": "No card · No commitment · All sports",
