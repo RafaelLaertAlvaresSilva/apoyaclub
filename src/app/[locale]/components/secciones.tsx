@@ -932,7 +932,7 @@ export async function SeccionBeneficiosEmpresa() {
                 </h3>
               </div>
 
-              <p className="mt-3 text-sm leading-relaxed text-zinc-600">{tarjeta.texto}</p>
+              <p className="mt-3 text-base leading-relaxed text-zinc-600">{tarjeta.texto}</p>
 
               {/* El recuadro del dato. `mt-auto` lo pega abajo: los seis
                   textos miden distinto y sin esto cada recuadro quedaba
@@ -950,7 +950,7 @@ export async function SeccionBeneficiosEmpresa() {
                       crecen hasta la altura de la más alta: cada bloque
                       de más que lleve una abre un hueco blanco en las
                       otras dos de su fila. */}
-                  <p className="mt-2 text-[11px] leading-snug text-zinc-500">
+                  <p className="mt-2 text-[13px] leading-snug text-zinc-600">
                     {tarjeta.fuente}
                     {tarjeta.aviso ? ` · ${tarjeta.aviso}` : ""}
                   </p>
@@ -987,7 +987,7 @@ export async function SeccionBeneficiosEmpresa() {
                 </span>
                 <div className="min-w-0">
                   <p className="font-bold text-sobre-color">{bloque.titulo}</p>
-                  <p className="mt-1 text-sm leading-relaxed text-sobre-color/75">{bloque.texto}</p>
+                  <p className="mt-1 text-base leading-relaxed text-sobre-color/85">{bloque.texto}</p>
                 </div>
               </div>
             ))}
@@ -1032,7 +1032,7 @@ export async function SeccionBuscadorEmpresas() {
             Y el recuadro entero es un enlace al buscador de verdad:
             antes se podían tocar cuatro cosas que no respondían, en la
             única sección pensada para la empresa. */}
-        <p className="mt-10 text-center text-sm font-medium text-zinc-500">{t("empresas.nota")}</p>
+        <p className="mt-10 text-center text-[15px] font-medium text-zinc-600">{t("empresas.nota")}</p>
 
         <Link
           href="/buscar"
@@ -1071,16 +1071,16 @@ export async function SeccionBuscadorEmpresas() {
               <Badge tone="teal" className="mb-3 self-start">
                 {resultado.categoria.toUpperCase()}
               </Badge>
-              <h3 className="text-[15px] font-bold leading-snug text-titular">
+              <h3 className="text-base font-bold leading-snug text-titular">
                 {resultado.titulo}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-500">{resultado.texto}</p>
+              <p className="mt-2 text-[15px] leading-relaxed text-zinc-600">{resultado.texto}</p>
               <div className="mt-4 text-xl font-extrabold text-titular">{resultado.precio}</div>
             </div>
           ))}
         </div>
 
-        <p className="mt-5 text-center text-sm font-medium text-zinc-600">{t("empresas.gratis")}</p>
+        <p className="mt-5 text-center text-base font-medium text-zinc-600">{t("empresas.gratis")}</p>
       </div>
     </section>
   );
@@ -2805,7 +2805,7 @@ export async function PuertasDelHero({ enColumna = false }: { enColumna?: boolea
 function CasillaFiltro({ etiqueta, valor }: { etiqueta: string; valor: string }) {
   return (
     <div className="rounded-2xl border border-zinc-200 px-5 py-3.5">
-      <div className="text-[11px] font-bold uppercase tracking-wide text-zinc-500">{etiqueta}</div>
+      <div className="text-[12px] font-bold uppercase tracking-wide text-zinc-600">{etiqueta}</div>
       <div className="mt-0.5 text-base font-bold text-titular">{valor}</div>
     </div>
   );

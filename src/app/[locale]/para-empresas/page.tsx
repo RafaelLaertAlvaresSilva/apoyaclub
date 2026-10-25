@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { VideoDeLaPortada } from "../components/VideoDeLaPortada";
 import { MenuDeSecciones } from "../components/MenuDeSecciones";
+import { EntradaAlBajar } from "../components/EntradaAlBajar";
 import {
   FondoDeHeroe,
   SeccionBeneficiosEmpresa,
@@ -89,7 +90,7 @@ export default async function ParaEmpresasPage() {
               <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-titular sm:text-4xl lg:text-5xl">
                 {t("titulo")}
               </h1>
-              <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-zinc-600 sm:text-lg lg:mx-0">
+              <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg lg:mx-0">
                 {t("texto")}
               </p>
 
@@ -108,7 +109,7 @@ export default async function ParaEmpresasPage() {
                     {t("ctaNecesidades")}
                   </Link>
                 </div>
-                <p className="text-sm font-medium text-zinc-600">{t("gratis")}</p>
+                <p className="text-base font-medium text-zinc-600">{t("gratis")}</p>
               </div>
             </div>
 
@@ -149,12 +150,12 @@ export default async function ParaEmpresasPage() {
                 <h3 className="mt-4 text-lg font-extrabold leading-snug text-titular">
                   {paso.titulo}
                 </h3>
-                <p className="mt-3 text-[15px] leading-relaxed text-zinc-600">{paso.texto}</p>
+                <p className="mt-3 text-base leading-relaxed text-zinc-600">{paso.texto}</p>
               </li>
             ))}
           </ol>
 
-          <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] leading-relaxed text-zinc-600 sm:text-base">
+          <p className="mx-auto mt-10 max-w-2xl text-center text-base leading-relaxed text-zinc-600 sm:text-lg">
             {t("comoCierre")}
           </p>
         </section>
@@ -182,14 +183,14 @@ export default async function ParaEmpresasPage() {
               {formas.map((forma) => (
                 <div
                   key={forma}
-                  className="rounded-2xl bg-white/[0.07] px-4 py-5 text-center text-sm font-bold text-sobre-color sm:text-[15px]"
+                  className="rounded-2xl bg-white/[0.07] px-4 py-5 text-center text-[15px] font-bold text-sobre-color sm:text-base"
                 >
                   {forma}
                 </div>
               ))}
             </div>
 
-            <p className="mt-10 text-center text-[15px] leading-relaxed text-sobre-color/70">
+            <p className="mt-10 text-center text-base leading-relaxed text-sobre-color/80">
               {t("formas.cierre")}
             </p>
           </div>
@@ -216,7 +217,7 @@ export default async function ParaEmpresasPage() {
                 <Tic className="mt-1 flex-none text-brand-teal" tamano={18} />
                 <div>
                   <h3 className="font-extrabold text-titular">{ventaja.titulo}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-zinc-600">{ventaja.texto}</p>
+                  <p className="mt-1.5 text-base leading-relaxed text-zinc-600">{ventaja.texto}</p>
                 </div>
               </div>
             ))}
@@ -229,10 +230,10 @@ export default async function ParaEmpresasPage() {
             >
               {t("cuenta.cta")}
             </Link>
-            <p className="text-sm text-zinc-500">{t("cuenta.condiciones")}</p>
+            <p className="text-[15px] text-zinc-600">{t("cuenta.condiciones")}</p>
             <Link
               href="/empresas"
-              className="mt-1 text-sm font-semibold text-accion-tinta underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
+              className="mt-1 text-base font-semibold text-accion-tinta underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
             >
               {t("cuenta.directorio")}
             </Link>
@@ -257,7 +258,7 @@ export default async function ParaEmpresasPage() {
                     +
                   </span>
                 </summary>
-                <p className="mt-3 text-sm leading-relaxed text-zinc-600">{item.respuesta}</p>
+                <p className="mt-3 text-base leading-relaxed text-zinc-600">{item.respuesta}</p>
               </details>
             ))}
           </div>
@@ -282,12 +283,14 @@ export default async function ParaEmpresasPage() {
             >
               {t("cierre.cta")}
             </Link>
-            <p className="mt-4 text-sm text-sobre-color/60">{t("gratis")}</p>
+            <p className="mt-4 text-base text-sobre-color/75">{t("gratis")}</p>
           </div>
         </section>
 
         <SeccionContacto />
       </main>
+
+      <EntradaAlBajar />
     </div>
   );
 }
