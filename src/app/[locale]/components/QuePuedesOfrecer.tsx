@@ -78,7 +78,7 @@ export function QuePuedesOfrecer() {
                   el `hover` se perdería y la pista parpadearía sin
                   parar. */}
               <span
-                className={`pointer-events-none absolute inset-0 flex items-center justify-center bg-brand-navy px-3.5 text-[12.5px] leading-snug text-sobre-color transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100 ${
+                className={`pointer-events-none absolute inset-0 flex items-center justify-center bg-brand-navy px-3.5 text-[13px] leading-snug text-sobre-color transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100 ${
                   estaAbierta ? "opacity-100" : "opacity-0"
                 }`}
               >

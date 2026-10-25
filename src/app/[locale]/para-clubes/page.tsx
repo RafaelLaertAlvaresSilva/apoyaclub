@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { CtaFijoMovil } from "../components/CtaFijoMovil";
 import { VideoDeLaPortada } from "../components/VideoDeLaPortada";
 import { MenuDeSecciones } from "../components/MenuDeSecciones";
+import { EntradaAlBajar } from "../components/EntradaAlBajar";
 import {
   FondoDeHeroe,
   FuncionesDestacadas,
@@ -84,7 +85,7 @@ export default async function ParaClubesPage() {
               <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-titular sm:text-4xl lg:text-5xl">
                 {t("paraClubes.titulo")}
               </h1>
-              <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-zinc-600 sm:text-lg lg:mx-0">
+              <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg lg:mx-0">
                 {t("paraClubes.texto")}
               </p>
 
@@ -108,7 +109,7 @@ export default async function ParaClubesPage() {
                     {t("hero.ctaSecundario")}
                   </a>
                 </div>
-                <p className="text-sm text-zinc-500">{t("hero.condiciones")}</p>
+                <p className="text-sm text-zinc-600">{t("hero.condiciones")}</p>
               </div>
             </div>
 
@@ -134,6 +135,7 @@ export default async function ParaClubesPage() {
         <SeccionContacto />
       </main>
 
+      <EntradaAlBajar />
       <CtaFijoMovil
         texto={t("ctaFijo.texto")}
         condiciones={t("ctaFinal.condiciones")}

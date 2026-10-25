@@ -360,13 +360,13 @@ export async function SeccionQueOfrece() {
           Ver el comentario de `QuePuedesOfrecer`. */}
       <QuePuedesOfrecer />
 
-      <p className="mt-4 text-center text-sm text-zinc-500">{t("ofrece.pie")}</p>
+      <p className="mt-4 text-center text-base text-zinc-600">{t("ofrece.pie")}</p>
 
       <div className="mx-auto mt-12 max-w-2xl text-center">
         <p className="text-xl font-extrabold leading-snug text-titular sm:text-2xl">
           {t("ofrece.cierre1")}
         </p>
-        <p className="mt-4 text-[15px] leading-relaxed text-zinc-600 sm:text-base">
+        <p className="mt-4 text-base leading-relaxed text-zinc-600 sm:text-lg">
           {t("ofrece.cierre2")}
         </p>
       </div>
@@ -425,7 +425,7 @@ export async function SeccionOportunidades() {
                     {oportunidad.precio}
                   </span>
                   {oportunidad.periodo && (
-                    <span className="text-base text-zinc-500">{oportunidad.periodo}</span>
+                    <span className="text-base text-zinc-600">{oportunidad.periodo}</span>
                   )}
                 </p>
 
@@ -433,7 +433,7 @@ export async function SeccionOportunidades() {
                   {oportunidad.datos.map((dato) => (
                     <span
                       key={dato}
-                      className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600"
+                      className="rounded-full bg-zinc-100 px-3 py-1 text-[13px] font-medium text-zinc-600"
                     >
                       {dato}
                     </span>
@@ -444,7 +444,7 @@ export async function SeccionOportunidades() {
                   {oportunidad.incluye.map((cosa) => (
                     <li key={cosa} className="flex items-start gap-2.5">
                       <Tic className="mt-0.5 flex-none text-brand-teal" tamano={16} />
-                      <span className="text-sm text-zinc-700">{cosa}</span>
+                      <span className="text-base text-zinc-700">{cosa}</span>
                     </li>
                   ))}
                 </ul>
@@ -457,7 +457,7 @@ export async function SeccionOportunidades() {
           ))}
         </div>
 
-        <p className="mt-8 text-center text-xs text-sobre-color/50">{t("oportunidades.nota")}</p>
+        <p className="mt-8 text-center text-[13px] text-sobre-color/70">{t("oportunidades.nota")}</p>
       </div>
     </section>
   );
@@ -631,11 +631,11 @@ export async function SeccionPaginaClub() {
                       {ICONO_DE_LA_VENTAJA[ventaja]}
                     </svg>
                   </span>
-                  <p className="mt-3 text-[15px] font-bold text-titular lg:mt-0">
+                  <p className="mt-3 text-base font-bold text-titular lg:mt-0">
                     {t(`paginaClub.ventajas.${ventaja}.titulo`)}
                   </p>
                 </div>
-                <p className="mt-1 text-sm leading-relaxed text-zinc-600 lg:mt-2">
+                <p className="mt-1 text-base leading-relaxed text-zinc-600 lg:mt-2">
                   {t(`paginaClub.ventajas.${ventaja}.texto`)}
                 </p>
               </li>
@@ -1149,7 +1149,7 @@ export async function SeccionEmbudo() {
               </span>
               <h3 className="font-extrabold text-titular sm:mt-4 sm:text-xl">{estado.nombre}</h3>
             </div>
-            <p className="mt-1.5 text-sm leading-relaxed text-zinc-600 sm:mt-2">{estado.texto}</p>
+            <p className="mt-1.5 text-[15px] leading-relaxed text-zinc-600 sm:mt-2">{estado.texto}</p>
 
             <div aria-hidden="true" className="mt-5 hidden flex-1 items-end sm:flex">
               <div className="w-full">{pasos[indice]?.maqueta}</div>
@@ -1180,14 +1180,14 @@ export async function SeccionEmbudo() {
         </span>
         <span>
           <span className="block font-extrabold text-titular">{t("embudo.descartada")}</span>
-          <span className="block text-sm leading-relaxed text-zinc-600">{t("embudo.descartadaTexto")}</span>
+          <span className="block text-base leading-relaxed text-zinc-600">{t("embudo.descartadaTexto")}</span>
         </span>
       </div>
 
-      <p className="mx-auto mt-8 max-w-2xl text-center text-[15px] font-semibold leading-relaxed text-titular sm:mt-10 sm:text-lg">
+      <p className="mx-auto mt-8 max-w-2xl text-center text-base font-semibold leading-relaxed text-titular sm:mt-10 sm:text-lg">
         {t.rich("embudo.cierre", { resalte })}
       </p>
-      <p className="mt-3 hidden text-center text-xs text-zinc-400 sm:block">{t("embudo.maqueta.nota")}</p>
+      <p className="mt-3 hidden text-center text-[13px] text-zinc-600 sm:block">{t("embudo.maqueta.nota")}</p>
     </section>
   );
 }
@@ -1591,8 +1591,13 @@ export async function SeccionPanelYHerramientas() {
   const metricasPanel = t.raw("panel.metricas") as { numero: string; etiqueta: string }[];
   const tMenu = await getTranslations("panel.menu.enlaces");
 
+  /* Dos secciones: el panel por dentro, sobre el fondo claro, y las
+     herramientas en un campo azul marino con sus tarjetas blancas, como
+     en la portada. El ancla `#herramientas` va en la azul, que es a
+     donde lleva el menú de la página. */
   return (
-    <section id="herramientas" className="scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
+    <>
+    <section id="panel" className="scroll-mt-32 px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-28">
       <div className="mx-auto max-w-6xl">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
@@ -1664,18 +1669,23 @@ export async function SeccionPanelYHerramientas() {
                 );
               })}
             </div>
-            <p className="mt-6 text-center text-xs text-sobre-color/40">{t("panel.nota")}</p>
+            <p className="mt-6 text-center text-[13px] text-sobre-color/60">{t("panel.nota")}</p>
           </div>
         </div>
 
-        <div className="mx-auto mt-20 max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
+      </div>
+    </section>
+
+    <section id="herramientas" className="scroll-mt-32 bg-brand-navy px-4 py-20 sm:px-6 sm:py-28">
+      <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-light">
             {t("herramientas.eyebrow")}
           </p>
-          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-titular sm:text-4xl">
-            {t.rich("herramientas.titulo", { resalte: (trozo) => <span className="text-accion-tinta">{trozo}</span> })}
-          </h3>
-          <p className="mt-4 leading-relaxed text-zinc-600">{t("herramientas.texto")}</p>
+          <h2 className="mt-3 text-2xl font-extrabold tracking-tight text-sobre-color sm:text-4xl">
+            {t.rich("herramientas.titulo", { resalte: (trozo) => <span className="text-brand-teal-light">{trozo}</span> })}
+          </h2>
+          <p className="mt-4 text-lg leading-relaxed text-sobre-color/85">{t("herramientas.texto")}</p>
         </div>
 
         {/* DOCE HERRAMIENTAS, CADA UNA CON SU PÁRRAFO LARGO, ERAN 4.033 px
@@ -1719,7 +1729,7 @@ export async function SeccionPanelYHerramientas() {
                     <span className={`block font-extrabold text-titular ${herramienta.clave === "dossier" ? "text-lg" : ""}`}>
                       {herramienta.titulo}
                     </span>
-                    <span className="mt-1 block text-sm leading-relaxed text-zinc-600">
+                    <span className="mt-1 block text-[15px] leading-relaxed text-zinc-600">
                       {herramienta.corto}
                     </span>
                   </span>
@@ -1734,7 +1744,7 @@ export async function SeccionPanelYHerramientas() {
                   </span>
                 </summary>
 
-                <p className="mt-3 border-t border-zinc-100 pt-3 text-sm leading-relaxed text-zinc-600">
+                <p className="mt-3 border-t border-zinc-100 pt-3 text-base leading-relaxed text-zinc-600">
                   {herramienta.texto}
                 </p>
               </details>
@@ -1765,6 +1775,7 @@ export async function SeccionPanelYHerramientas() {
         </div>
       </div>
     </section>
+    </>
   );
 }
 
@@ -2357,7 +2368,7 @@ export async function SeccionFaq({ limite }: { limite?: number } = {}) {
                 +
               </span>
             </summary>
-            <p className="mt-3 text-sm leading-relaxed text-zinc-600">{item.respuesta}</p>
+            <p className="mt-3 text-base leading-relaxed text-zinc-600">{item.respuesta}</p>
           </details>
         ))}
       </div>
@@ -2366,7 +2377,7 @@ export async function SeccionFaq({ limite }: { limite?: number } = {}) {
         <p className="mt-6 text-center">
           <Link
             href="/para-clubes#faq"
-            className="text-sm font-bold text-accion-tinta underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
+            className="text-base font-bold text-accion-tinta underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
           >
             {t("faq.verTodas")}
           </Link>
@@ -2395,7 +2406,7 @@ export async function SeccionFaq({ limite }: { limite?: number } = {}) {
         </span>
         <div>
           <p className="font-semibold text-amber-900">{t("faq.fiscalidadTitulo")}</p>
-          <p className="mt-1 text-sm leading-relaxed text-amber-800">
+          <p className="mt-1 text-base leading-relaxed text-amber-800">
             {t.rich("faq.fiscalidadTexto", {
               fuerte: (contenido) => <strong>{contenido}</strong>,
             })}
