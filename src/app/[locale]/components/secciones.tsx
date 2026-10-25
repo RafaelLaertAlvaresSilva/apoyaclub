@@ -1322,10 +1322,86 @@ function MaquetaCerrada({ m }: { m: MaquetaEmbudo }) {
  * dice una sola vez.
  */
 
+/** Las secciones del menú del panel que dibuja la maqueta, en su orden real. */
+const ENLACES_MAQUETA_PANEL = [
+  { clave: "inicio", icono: "casa" },
+  { clave: "perfil", icono: "escudo" },
+  { clave: "oportunidades", icono: "bombilla" },
+  { clave: "solicitudes", icono: "sobre" },
+  { clave: "dossier", icono: "documento" },
+  { clave: "patrocinadores", icono: "personas" },
+  { clave: "tareas", icono: "tarea" },
+] as const;
+
+/** Color e icono de cada cifra, en el orden de `panel.metricas`. */
+const ESTILOS_METRICA_PANEL = [
+  { icono: "bombilla", fondo: "bg-teal-400/15 text-teal-300" },
+  { icono: "barras", fondo: "bg-sky-400/15 text-sky-300" },
+  { icono: "ojo", fondo: "bg-violet-400/15 text-violet-300" },
+  { icono: "sobre", fondo: "bg-sky-400/15 text-sky-300" },
+  { icono: "tarea", fondo: "bg-amber-400/15 text-amber-300" },
+  { icono: "personas", fondo: "bg-emerald-400/15 text-emerald-300" },
+] as const;
+
+type NombreIconoPanel = "casa" | "escudo" | "bombilla" | "sobre" | "documento" | "personas" | "tarea" | "barras" | "ojo";
+
+const TRAZOS_ICONO_PANEL: Record<NombreIconoPanel, React.ReactNode> = {
+  casa: <path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" />,
+  escudo: <path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z" />,
+  bombilla: <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z" />,
+  sobre: (
+    <>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="M3 7l9 6 9-6" />
+    </>
+  ),
+  documento: (
+    <>
+      <path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z" />
+      <path d="M14 3v5h5M9 13h6M9 17h6" />
+    </>
+  ),
+  personas: (
+    <>
+      <circle cx="9" cy="8" r="3.5" />
+      <path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18 14.8c1.8.8 3 2.6 3.5 5.2" />
+    </>
+  ),
+  tarea: (
+    <>
+      <rect x="4" y="4" width="16" height="17" rx="2" />
+      <path d="M9 3h6v3H9zM8.5 13l2.5 2.5 4.5-5" />
+    </>
+  ),
+  barras: (
+    <>
+      <rect x="4" y="12" width="4" height="8" rx="1" />
+      <rect x="10" y="7" width="4" height="13" rx="1" />
+      <rect x="16" y="3" width="4" height="17" rx="1" />
+    </>
+  ),
+  ojo: (
+    <>
+      <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" />
+      <circle cx="12" cy="12" r="3" />
+    </>
+  ),
+};
+
+function IconoMaquetaPanel({ nombre, grande = false }: { nombre: NombreIconoPanel; grande?: boolean }) {
+  const lado = grande ? 24 : 18;
+  return (
+    <svg width={lado} height={lado} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-none">
+      {TRAZOS_ICONO_PANEL[nombre]}
+    </svg>
+  );
+}
+
 export async function SeccionPanelYHerramientas() {
   const t = await getTranslations("home");
   const herramientas = t.raw("herramientas.lista") as Herramienta[];
   const metricasPanel = t.raw("panel.metricas") as { numero: string; etiqueta: string }[];
+  const tMenu = await getTranslations("panel.menu.enlaces");
 
   return (
     <section id="herramientas" className="scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
@@ -1335,28 +1411,73 @@ export async function SeccionPanelYHerramientas() {
             {t("panel.eyebrow")}
           </p>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
-            {t("panel.titulo")}
+            {t.rich("panel.titulo", { resalte: (trozo) => <span className="text-accion-tinta">{trozo}</span> })}
           </h2>
           <p className="mt-4 leading-relaxed text-zinc-600">{t("panel.texto")}</p>
         </div>
 
-        {/* Maqueta del panel del club. */}
-        <div className="mx-auto mt-12 max-w-4xl rounded-3xl bg-brand-navy-dark p-6 shadow-2xl shadow-brand-navy-dark/30 sm:p-9">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <p className="text-lg font-extrabold text-sobre-color sm:text-xl">{t("panel.saludo")}</p>
-            <span className="rounded-full bg-brand-teal-dark px-5 py-2.5 text-sm font-bold text-sobre-color">
-              {t("panel.boton")}
-            </span>
+        {/* MAQUETA DEL PANEL DEL CLUB. Las seis cifras son las mismas
+            que ve el club en su Inicio, y el menú de la izquierda usa los
+            nombres de verdad del menú del panel (`panel.menu.enlaces`):
+            si mañana se renombra una sección, la maqueta cambia sola y
+            no promete una pantalla que no existe. El menú solo se dibuja
+            en pantallas anchas; en el teléfono no cabría y sobra. */}
+        <div
+          aria-hidden="true"
+          className="mx-auto mt-12 max-w-6xl overflow-hidden rounded-3xl bg-brand-navy-dark shadow-2xl shadow-brand-navy-dark/30 ring-1 ring-white/10 lg:grid lg:grid-cols-[13rem_1fr]"
+        >
+          <div className="hidden border-r border-white/10 p-5 lg:block">
+            <p className="mb-6 px-2 text-xl font-extrabold text-sobre-color">
+              Apoya<span className="text-brand-teal">Club</span>
+            </p>
+            <ul className="flex flex-col gap-1">
+              {ENLACES_MAQUETA_PANEL.map(({ clave, icono }, indice) => (
+                <li
+                  key={clave}
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm ${
+                    indice === 0
+                      ? "border-l-[3px] border-brand-teal bg-brand-teal-dark font-semibold text-sobre-color"
+                      : "text-sobre-color/70"
+                  }`}
+                >
+                  <IconoMaquetaPanel nombre={icono} />
+                  {tMenu(clave)}
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {metricasPanel.map((metrica) => (
-              <div key={metrica.etiqueta} className="rounded-2xl bg-white/[0.07] p-4">
-                <div className="text-2xl font-extrabold text-sobre-color">{metrica.numero}</div>
-                <div className="mt-0.5 text-xs text-sobre-color/60">{metrica.etiqueta}</div>
-              </div>
-            ))}
+
+          <div className="p-5 sm:p-8">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <p className="text-lg font-extrabold text-sobre-color sm:text-2xl">{t("panel.saludo")}</p>
+              <span className="rounded-full bg-brand-teal-dark px-5 py-2.5 text-sm font-bold text-sobre-color">
+                {t("panel.boton")}
+              </span>
+            </div>
+            <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+              {metricasPanel.map((metrica, indice) => {
+                const estilo = ESTILOS_METRICA_PANEL[indice % ESTILOS_METRICA_PANEL.length];
+                return (
+                  <div
+                    key={metrica.etiqueta}
+                    className="flex flex-col gap-3 rounded-2xl bg-white/[0.06] p-4 ring-1 ring-white/5 sm:flex-row sm:items-center sm:p-5"
+                  >
+                    <span className={`flex h-11 w-11 flex-none items-center justify-center rounded-xl sm:h-14 sm:w-14 ${estilo.fondo}`}>
+                      <IconoMaquetaPanel nombre={estilo.icono} grande />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-2xl font-extrabold leading-none text-sobre-color sm:text-3xl">{metrica.numero}</span>
+                      <span className="mt-1 block text-xs text-sobre-color/70 sm:text-sm">{metrica.etiqueta}</span>
+                    </span>
+                    <svg className="hidden flex-none text-sobre-color/50 sm:block" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 6l6 6-6 6" />
+                    </svg>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="mt-6 text-center text-xs text-sobre-color/40">{t("panel.nota")}</p>
           </div>
-          <p className="mt-5 text-center text-xs text-sobre-color/40">{t("panel.nota")}</p>
         </div>
 
         <div className="mx-auto mt-20 max-w-2xl text-center">

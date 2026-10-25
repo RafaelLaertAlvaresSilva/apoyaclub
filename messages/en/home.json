@@ -297,7 +297,7 @@
     "verTodas": "See all {total} tools, one by one"
   },
   "panel": {
-    "titulo": "How ApoyaClub works on the inside",
+    "titulo": "How <resalte>ApoyaClub</resalte> works on the inside",
     "boton": "+ Create opportunity",
     "metricas": [
       {
