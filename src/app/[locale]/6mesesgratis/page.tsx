@@ -6,6 +6,7 @@ import { MESES_PILOTO, PLAZAS_PILOTO, plazasPilotoLibres } from "@/lib/piloto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { FondoDeHeroe } from "../components/secciones";
 import { EntradaAlBajar } from "../components/EntradaAlBajar";
+import { VideoDeLaPortada } from "../components/VideoDeLaPortada";
 
 /**
  * La página de la campaña de Instagram: el programa piloto (migración
@@ -32,6 +33,7 @@ const PASOS = ["paso1", "paso2", "paso3"] as const;
 
 export default async function PilotoPage() {
   const t = await getTranslations("home.piloto");
+  const tVideo = await getTranslations("home.video");
 
   let libres: number | null = null;
   try {
@@ -61,7 +63,13 @@ export default async function PilotoPage() {
         <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-white to-zinc-50 px-4 pb-14 pt-10 sm:px-6 sm:pb-20 sm:pt-16">
           <FondoDeHeroe archivo="/fondo-clubes.webp" tono="claro" velo="fuerte" />
 
-          <div className="relative mx-auto max-w-3xl text-center">
+          {/* Dos columnas, como la portada y "Para clubes": el mensaje y,
+              al lado, el vídeo del anuncio. Quien llega desde Instagram ve
+              aquí el mismo vídeo que le trajo, así sabe que está en el
+              sitio correcto. En el teléfono se apilan: primero el mensaje
+              y el botón, y el vídeo debajo. */}
+          <div className="relative mx-auto grid max-w-6xl items-center gap-10 text-center lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-14 lg:text-left">
+            <div className="min-w-0">
             <span className="mb-6 inline-flex items-center rounded-full bg-brand-teal-light px-4 py-2 text-xs font-bold uppercase tracking-wide text-accion-tinta">
               {t("etiqueta")}
             </span>
@@ -69,7 +77,7 @@ export default async function PilotoPage() {
             <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-titular sm:text-5xl">
               {t("titulo", { meses: MESES_PILOTO })}
             </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg lg:mx-0">
               {t("texto", { plazas: PLAZAS_PILOTO, meses: MESES_PILOTO })}
             </p>
 
@@ -86,10 +94,17 @@ export default async function PilotoPage() {
               </p>
             )}
 
-            <div className="mt-8 flex flex-col items-center gap-3">
+            <div className="mt-8 flex flex-col items-center gap-3 lg:items-start">
               {boton(true)}
               <p className="text-sm text-zinc-600">{t("condiciones")}</p>
             </div>
+            </div>
+
+            <VideoDeLaPortada
+              src="/6meses-video.mp4"
+              poster="/6meses-video-poster.webp"
+              etiqueta={tVideo("etiquetaPiloto")}
+            />
           </div>
         </section>
 
