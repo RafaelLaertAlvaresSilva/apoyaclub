@@ -619,3 +619,16 @@ html[data-tema-panel="oscuro"] .tema-panel .tonal {
     transform: none;
   }
 }
+
+/* CAMPOS A 16 PX EN EL TELÉFONO. Safari del iPhone hace zoom a toda la
+ * página al tocar un campo con letra de menos de 16 px, y luego hay que
+ * deshacerlo con los dedos. Pasaba en los filtros del buscador (12 y
+ * 14 px). En pantallas pequeñas todos los campos van a 16 px; en el
+ * ordenador se quedan con su tamaño. */
+@media (max-width: 639px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}

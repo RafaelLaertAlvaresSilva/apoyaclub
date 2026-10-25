@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { MESES_PILOTO, PLAZAS_PILOTO, plazasPilotoLibres } from "@/lib/piloto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { FondoDeHeroe } from "../components/secciones";
+import { EntradaAlBajar } from "../components/EntradaAlBajar";
 
 /**
  * La página de la campaña de Instagram: el programa piloto (migración
@@ -68,7 +69,7 @@ export default async function PilotoPage() {
             <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-titular sm:text-5xl">
               {t("titulo", { meses: MESES_PILOTO })}
             </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-[15px] leading-relaxed text-zinc-600 sm:text-lg">
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
               {t("texto", { plazas: PLAZAS_PILOTO, meses: MESES_PILOTO })}
             </p>
 
@@ -87,7 +88,7 @@ export default async function PilotoPage() {
 
             <div className="mt-8 flex flex-col items-center gap-3">
               {boton(true)}
-              <p className="text-sm text-zinc-500">{t("condiciones")}</p>
+              <p className="text-sm text-zinc-600">{t("condiciones")}</p>
             </div>
           </div>
         </section>
@@ -102,7 +103,7 @@ export default async function PilotoPage() {
                     {indice + 1}
                   </span>
                   <h3 className="mt-3 text-lg font-bold text-titular">{t(`queTeLlevas.${clave}.titulo`)}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-zinc-600">{t(`queTeLlevas.${clave}.texto`)}</p>
+                  <p className="mt-1 text-base leading-relaxed text-zinc-600">{t(`queTeLlevas.${clave}.texto`)}</p>
                 </div>
               ))}
             </div>
@@ -114,7 +115,7 @@ export default async function PilotoPage() {
               {QUE_PEDIMOS.map((clave) => (
                 <div key={clave} className="rounded-2xl bg-white/10 p-5">
                   <h3 className="text-base font-bold">{t(`quePedimos.${clave}.titulo`)}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-sobre-color/80">{t(`quePedimos.${clave}.texto`)}</p>
+                  <p className="mt-1 text-[15px] leading-relaxed text-sobre-color/80">{t(`quePedimos.${clave}.texto`)}</p>
                 </div>
               ))}
             </div>
@@ -128,7 +129,7 @@ export default async function PilotoPage() {
                   <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-brand-teal-dark text-sm font-bold text-sobre-color">
                     {indice + 1}
                   </span>
-                  <p className="text-sm leading-relaxed text-zinc-700">{t(`pasos.${clave}`, { meses: MESES_PILOTO })}</p>
+                  <p className="text-[15px] leading-relaxed text-zinc-700">{t(`pasos.${clave}`, { meses: MESES_PILOTO })}</p>
                 </li>
               ))}
             </ol>
@@ -136,12 +137,12 @@ export default async function PilotoPage() {
 
           <section className="mx-auto max-w-3xl rounded-2xl border border-teal-200 bg-teal-50 p-6 text-center">
             <h2 className="text-xl font-extrabold text-titular">{t("despues.titulo", { meses: MESES_PILOTO })}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-700">{t("despues.texto")}</p>
+            <p className="mt-2 text-base leading-relaxed text-zinc-700">{t("despues.texto")}</p>
           </section>
 
           <section className="flex flex-col items-center gap-3 text-center">
             {boton(true)}
-            <p className="text-sm text-zinc-500">
+            <p className="text-sm text-zinc-600">
               {t.rich("dudas", {
                 correo: (trozo) => (
                   <a href="mailto:info@apoyaclub.com" className="font-medium text-teal-700 hover:underline">
@@ -153,6 +154,8 @@ export default async function PilotoPage() {
           </section>
         </div>
       </main>
+
+      <EntradaAlBajar />
     </div>
   );
 }

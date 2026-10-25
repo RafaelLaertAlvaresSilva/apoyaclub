@@ -100,7 +100,7 @@ export function ResultadosBuscador({
         </div>
 
         <div className="flex items-center gap-2 text-sm">
-          <label htmlFor="orden" className="text-zinc-500">
+          <label htmlFor="orden" className="text-zinc-600">
             {t("ordenarPor")}
           </label>
           <select
@@ -120,7 +120,7 @@ export function ResultadosBuscador({
         </div>
       </div>
 
-      <p className="text-sm text-zinc-500">
+      <p className="text-sm text-zinc-600">
         {total != null
           ? t("cuenta", { total })
           : t("cuentaAproximada", { cantidad: oportunidades.length })}
@@ -213,7 +213,7 @@ function Ubicacion({
   const tUbicacion = useTranslations("buscar.resultados");
 
   return (
-    <p className="text-xs text-zinc-500">
+    <p className="text-[13px] text-zinc-600">
       {[ciudad, provincia].filter(Boolean).join(", ")}
       {distanceKm != null && (
         <span className="font-medium text-teal-700">
@@ -304,7 +304,7 @@ function TarjetaOportunidad({
           )}
         </div>
         {oportunidad.teamLabel && (
-          <p className="mt-0.5 text-xs text-zinc-500">
+          <p className="mt-0.5 text-[13px] text-zinc-600">
             {oportunidad.teamLabel}
           </p>
         )}
@@ -359,7 +359,7 @@ function TarjetaOportunidad({
         <p className={`font-bold ${tienePrecio(oportunidad) ? "text-lg text-teal-700" : "text-sm text-zinc-700"}`}>
           {textoDelPrecio(oportunidad, precio, { necesidad: tPrecio("necesidad"), aConvenir: tPrecio("aConvenir") })}
           {esPorPlazas(oportunidad) && tienePrecio(oportunidad) && (
-            <span className="ml-1 text-xs font-medium text-zinc-500">
+            <span className="ml-1 text-[13px] font-medium text-zinc-600">
               {tTarjeta("porEmpresa")}
             </span>
           )}
@@ -471,7 +471,7 @@ function EstadoVacio({
       <p className="font-medium text-zinc-900">
         {tieneFiltros ? tVacio("vacioTitulo") : tVacio("vacioSinFiltrosTitulo")}
       </p>
-      <p className="mx-auto mt-1 max-w-md text-sm text-zinc-500">
+      <p className="mx-auto mt-1 max-w-md text-sm text-zinc-600">
         {!tieneFiltros
           ? tVacio("vacioSinFiltrosTexto")
           : filtros.radioKm
