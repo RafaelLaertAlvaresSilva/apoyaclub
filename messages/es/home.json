@@ -209,7 +209,7 @@
   },
   "herramientas": {
     "eyebrow": "Todo incluido",
-    "titulo": "Las herramientas que vienen contigo",
+    "titulo": "Las herramientas que <resalte>vienen contigo</resalte>",
     "texto": "No es una web con un formulario. Es lo que un club necesita para vender su patrocinio, cumplirlo y demostrarlo, sin pagar a nadie por hacerlo.",
     "lista": [
       {

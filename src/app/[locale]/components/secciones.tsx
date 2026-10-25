@@ -1397,6 +1397,194 @@ function IconoMaquetaPanel({ nombre, grande = false }: { nombre: NombreIconoPane
   );
 }
 
+/** Dónde va cada herramienta en la rejilla de 12 columnas del ordenador. */
+const CELDA_HERRAMIENTA: Record<string, string> = {
+  dossier: "lg:col-span-4 lg:row-span-2",
+  oportunidades: "lg:col-span-4",
+  tareas: "lg:col-span-4",
+  informe: "lg:col-span-4",
+  publico: "lg:col-span-4",
+  estadisticas: "lg:col-span-4",
+  solicitudes: "lg:col-span-4",
+  patrocinadores: "lg:col-span-4",
+};
+
+/**
+ * Un dibujo pequeño por herramienta, hecho con cajas y trazos: pesa
+ * casi nada, se ve nítido en cualquier pantalla y no lleva texto
+ * dentro, así que vale igual en los tres idiomas. Si una herramienta
+ * no tiene dibujo, no sale nada.
+ */
+function DibujoHerramienta({ clave }: { clave: string }) {
+  const caja = "rounded-xl border border-zinc-200 bg-white shadow-md shadow-brand-navy/5";
+  const linea = (ancho: string, color = "bg-zinc-200") => <span className={`block h-1.5 rounded ${ancho} ${color}`} />;
+  switch (clave) {
+    case "oportunidades":
+      return (
+        <div className="relative h-20 w-36">
+          <svg className="absolute left-0 top-0 text-amber-400" width="38" height="38" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2a7 7 0 0 0-4 12.7V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.3A7 7 0 0 0 12 2z" />
+            <rect x="9" y="19" width="6" height="2.5" rx="1" className="text-zinc-400" fill="currentColor" />
+          </svg>
+          <div className={`absolute bottom-0 right-0 flex w-24 flex-col gap-1.5 p-2.5 ${caja}`}>
+            {["w-full", "w-4/5", "w-11/12"].map((ancho, i) => (
+              <span key={ancho} className="flex items-center gap-1.5">
+                <span className={`h-2.5 w-2.5 flex-none rounded-sm ${i < 2 ? "bg-brand-teal" : "border border-zinc-300"}`} />
+                {linea(ancho)}
+              </span>
+            ))}
+          </div>
+        </div>
+      );
+    case "tareas":
+      return (
+        <div className="relative h-20 w-32">
+          <div className={`absolute left-0 top-0 w-24 overflow-hidden ${caja}`}>
+            <span className="block h-3 bg-blue-500" />
+            <span className="flex flex-col gap-1.5 p-2">
+              {["w-full", "w-4/5", "w-11/12"].map((ancho) => (
+                <span key={ancho} className="flex items-center gap-1.5">
+                  <span className="h-2.5 w-2.5 flex-none rounded-sm bg-brand-teal" />
+                  {linea(ancho)}
+                </span>
+              ))}
+            </span>
+          </div>
+          <svg className="absolute bottom-0 right-0 text-blue-600" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+            <circle cx="12" cy="12" r="9" fill="white" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+        </div>
+      );
+    case "informe":
+      return (
+        <div className={`flex h-20 w-28 items-end gap-1.5 p-3 ${caja}`}>
+          {["h-3", "h-5", "h-7", "h-10", "h-12"].map((alto, i) => (
+            <span key={alto} className={`w-3 rounded-t ${alto} ${i > 2 ? "bg-brand-navy" : "bg-brand-teal"}`} />
+          ))}
+        </div>
+      );
+    case "publico":
+      return (
+        <div className="relative h-20 w-32 overflow-hidden rounded-xl bg-gradient-to-b from-sky-200 to-sky-400 shadow-md">
+          {[0, 1, 2].map((fila) => (
+            <span key={fila} className="absolute left-2 right-2 flex justify-between" style={{ top: 10 + fila * 16 }}>
+              {Array.from({ length: 7 }, (_, i) => (
+                <span key={i} className="h-3 w-3 rounded-full bg-brand-navy/70" />
+              ))}
+            </span>
+          ))}
+          <span className={`absolute bottom-1.5 right-1.5 flex items-end gap-1 px-2 py-1.5 ${caja}`}>
+            {["h-2", "h-3", "h-4"].map((alto) => (
+              <span key={alto} className={`w-1.5 rounded-t bg-brand-teal ${alto}`} />
+            ))}
+          </span>
+        </div>
+      );
+    case "estadisticas":
+      return (
+        <div className="flex flex-col items-center">
+          <div className="h-16 w-28 rounded-t-lg border-4 border-b-0 border-brand-navy bg-white p-2">
+            <svg width="100%" height="100%" viewBox="0 0 80 36" fill="none">
+              <path d="M2 30 L20 22 L34 26 L52 12 L78 4" stroke="#14b8a6" strokeWidth="3" strokeLinecap="round" />
+              <circle cx="14" cy="10" r="6" stroke="#0b1f38" strokeWidth="2.5" />
+              <circle cx="14" cy="10" r="2" fill="#0b1f38" />
+            </svg>
+          </div>
+          <span className="block h-2 w-36 rounded-b-lg bg-zinc-300" />
+        </div>
+      );
+    case "solicitudes":
+      return (
+        <div className={`relative w-28 p-2.5 ${caja}`}>
+          <span className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-peligro text-[11px] font-bold text-sobre-color">3</span>
+          <span className="mb-2 block h-2.5 w-full rounded bg-blue-500" />
+          {["w-full", "w-4/5", "w-11/12"].map((ancho) => (
+            <span key={ancho} className="mb-1.5 flex items-center gap-1.5">
+              <span className="h-2.5 w-3.5 flex-none rounded-sm border border-blue-400" />
+              {linea(ancho)}
+            </span>
+          ))}
+        </div>
+      );
+    case "patrocinadores":
+      return (
+        <div className="relative h-20 w-32">
+          <svg className="absolute right-6 top-0" width="34" height="38" viewBox="0 0 24 28">
+            <path d="M12 1l10 4v8c0 6-4.4 11-10 13C6.4 24 2 19 2 13V5z" fill="#1d4ed8" />
+            <path d="M12 4l7 3v6c0 4.4-3 8-7 9.5V4z" fill="#facc15" />
+          </svg>
+          <span className={`absolute bottom-0 left-0 flex h-9 w-16 items-center justify-center gap-1 ${caja}`}>
+            <span className="h-3 w-3 rounded-full bg-blue-500" />
+            <span className="h-1.5 w-7 rounded bg-brand-navy" />
+          </span>
+          <span className={`absolute bottom-3 right-0 flex h-9 w-14 rotate-3 items-center justify-center ${caja}`}>
+            <span className="h-2 w-9 rounded bg-red-500" />
+          </span>
+        </div>
+      );
+    case "objetivos":
+      return (
+        <div className={`flex w-28 flex-col gap-1.5 p-2.5 ${caja}`}>
+          {["bg-zinc-200", "bg-amber-200", "bg-blue-200"].map((color) => (
+            <span key={color} className="flex items-center gap-2">
+              <span className="h-4 w-4 flex-none rounded-full bg-brand-navy/70" />
+              <span className={`h-3 flex-1 rounded-full ${color}`} />
+            </span>
+          ))}
+        </div>
+      );
+    case "accion-social":
+      return (
+        <svg width="80" height="64" viewBox="0 0 80 64" fill="none">
+          <path d="M40 46C24 34 18 26 18 18a10 10 0 0 1 22-4 10 10 0 0 1 22 4c0 8-6 16-22 28z" fill="#ef4444" />
+          <path d="M6 44c8 2 14 8 20 14h28c6-6 12-12 20-14" stroke="#f5c9a5" strokeWidth="8" strokeLinecap="round" />
+        </svg>
+      );
+    case "servicios":
+      return (
+        <div className="relative h-20 w-36">
+          <svg className="absolute bottom-0 left-0" width="76" height="46" viewBox="0 0 76 46">
+            <path d="M2 10a6 6 0 0 1 6-6h36v30H2z" fill="#f4f4f5" stroke="#0b1f38" strokeWidth="2" />
+            <path d="M44 14h14l12 12v8H44z" fill="#e4e4e7" stroke="#0b1f38" strokeWidth="2" />
+            <circle cx="16" cy="38" r="6" fill="#0b1f38" />
+            <circle cx="58" cy="38" r="6" fill="#0b1f38" />
+          </svg>
+          <span className="absolute right-6 top-1 flex h-11 w-11 items-center justify-center rounded-lg bg-white shadow-md">
+            <svg width="22" height="22" viewBox="0 0 24 24"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z" fill="#ef4444" /></svg>
+          </span>
+          <svg className="absolute bottom-0 right-0" width="28" height="28" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10.5" fill="white" stroke="#0b1f38" strokeWidth="1.8" />
+            <path d="M12 7.5l3.6 2.6-1.4 4.2H9.8L8.4 10.1z" fill="#0b1f38" />
+            <path d="M12 7.5V3M15.6 10.1l4-1.5M14.2 14.3l2.6 3.7M9.8 14.3l-2.6 3.7M8.4 10.1l-4-1.5" stroke="#0b1f38" strokeWidth="1.4" />
+          </svg>
+        </div>
+      );
+    case "pagina":
+      return (
+        <div className={`w-32 overflow-hidden ${caja}`}>
+          <span className="flex gap-1 border-b border-zinc-100 px-2 py-1.5">
+            {["bg-red-300", "bg-amber-300", "bg-emerald-300"].map((color) => (
+              <span key={color} className={`h-1.5 w-1.5 rounded-full ${color}`} />
+            ))}
+          </span>
+          <span className="relative block h-9 bg-gradient-to-r from-emerald-500 to-sky-500">
+            <svg className="absolute -bottom-3 left-2" width="20" height="24" viewBox="0 0 24 28">
+              <path d="M12 1l10 4v8c0 6-4.4 11-10 13C6.4 24 2 19 2 13V5z" fill="#1d4ed8" stroke="white" strokeWidth="2" />
+            </svg>
+          </span>
+          <span className="flex gap-1 p-2 pt-4">
+            {[0, 1, 2].map((i) => (
+              <span key={i} className="h-4 flex-1 rounded bg-zinc-200" />
+            ))}
+          </span>
+        </div>
+      );
+    default:
+      return null;
+  }
+}
+
 export async function SeccionPanelYHerramientas() {
   const t = await getTranslations("home");
   const herramientas = t.raw("herramientas.lista") as Herramienta[];
@@ -1484,8 +1672,8 @@ export async function SeccionPanelYHerramientas() {
           <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
             {t("herramientas.eyebrow")}
           </p>
-          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-titular sm:text-3xl">
-            {t("herramientas.titulo")}
+          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-titular sm:text-4xl">
+            {t.rich("herramientas.titulo", { resalte: (trozo) => <span className="text-accion-tinta">{trozo}</span> })}
           </h3>
           <p className="mt-4 leading-relaxed text-zinc-600">{t("herramientas.texto")}</p>
         </div>
@@ -1506,11 +1694,20 @@ export async function SeccionPanelYHerramientas() {
             JavaScript, se abre con el teclado, se puede buscar dentro
             con Ctrl+F y los buscadores leen el texto de dentro aunque
             esté cerrado. */}
-        <div className="mt-12 grid items-start gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Rejilla de tamaños distintos (12 columnas en el ordenador):
+            el dossier en grande, ocupando dos filas, porque es lo que
+            más vende; luego dos filas de tres y una de cuatro. Las
+            tarjetas que no tienen sitio asignado aquí caen en una de
+            cuatro columnas. En el teléfono es una sola columna y los
+            dibujos se esconden, salvo el del dossier: ahí la sección
+            ya fue una vez la más larga de la página. */}
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:gap-5">
           {herramientas.map((herramienta) => (
             <div
               key={herramienta.clave}
-              className="rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6"
+              className={`flex flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-6 ${
+                CELDA_HERRAMIENTA[herramienta.clave] ?? "lg:col-span-3"
+              }`}
             >
               <details className="group">
                 <summary className="flex cursor-pointer list-none items-start gap-3 [&::-webkit-details-marker]:hidden">
@@ -1519,7 +1716,7 @@ export async function SeccionPanelYHerramientas() {
                   </span>
 
                   <span className="min-w-0 flex-1">
-                    <span className="block font-extrabold text-titular">
+                    <span className={`block font-extrabold text-titular ${herramienta.clave === "dossier" ? "text-lg" : ""}`}>
                       {herramienta.titulo}
                     </span>
                     <span className="mt-1 block text-sm leading-relaxed text-zinc-600">
@@ -1529,10 +1726,10 @@ export async function SeccionPanelYHerramientas() {
 
                   <span
                     aria-hidden="true"
-                    className="mt-1 flex-none text-zinc-400 transition-transform group-open:rotate-180"
+                    className="flex h-7 w-7 flex-none items-center justify-center rounded-full border border-zinc-200 text-zinc-400 transition-transform group-open:rotate-90"
                   >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M6 9l6 6 6-6" />
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 6l6 6-6 6" />
                     </svg>
                   </span>
                 </summary>
@@ -1542,14 +1739,25 @@ export async function SeccionPanelYHerramientas() {
                 </p>
               </details>
 
-              {/* La maqueta del dossier, que antes tenía sección propia.
-                  Va FUERA del `<details>` y no dentro: es la única vez
-                  en toda la web que se ve qué pinta tiene un dossier, y
-                  escondida tras un clic no la vería casi nadie. */}
-              {herramienta.clave === "dossier" && (
-                <div className="mt-5 flex justify-center gap-4">
-                  <HojaDeDossier pequena />
-                  <HojaDeDossier pequena segunda />
+              {/* El dibujo de cada herramienta va FUERA del `<details>`:
+                  dentro no se vería sin pulsar. El del dossier es la
+                  única vez en toda la web que se ve qué pinta tiene un
+                  dossier, por eso es el único que sale también en el
+                  teléfono. */}
+              {herramienta.clave === "dossier" ? (
+                <div aria-hidden="true" className="relative mt-6 flex flex-1 items-end justify-center gap-4">
+                  <span className="relative">
+                    <HojaDeDossier pequena />
+                    <span className="absolute -bottom-2 -left-3 rotate-[-8deg] rounded-md bg-peligro px-1.5 py-1 text-[10px] font-extrabold text-sobre-color shadow-md">PDF</span>
+                  </span>
+                  <span className="relative">
+                    <HojaDeDossier pequena segunda />
+                    <span className="absolute -bottom-2 -left-3 rotate-[6deg] rounded-md bg-blue-600 px-2 py-1 text-xs font-extrabold text-sobre-color shadow-md">W</span>
+                  </span>
+                </div>
+              ) : (
+                <div aria-hidden="true" className="mt-4 hidden flex-1 items-end justify-end sm:flex">
+                  <DibujoHerramienta clave={herramienta.clave} />
                 </div>
               )}
             </div>
@@ -2350,7 +2558,7 @@ export async function SeccionHerramientasClave() {
             {t("herramientas.eyebrow")}
           </p>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
-            {t("herramientas.titulo")}
+            {t.rich("herramientas.titulo", { resalte: (trozo) => <span className="text-accion-tinta">{trozo}</span> })}
           </h2>
           <p className="mt-4 leading-relaxed text-zinc-600">{t("herramientas.texto")}</p>
         </div>

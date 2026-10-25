@@ -209,7 +209,7 @@
   },
   "herramientas": {
     "eyebrow": "All included",
-    "titulo": "The tools that come with you",
+    "titulo": "The tools that <resalte>come with you</resalte>",
     "texto": "It's not a website with a form. It's what a club needs to sell its sponsorship, deliver it and prove it, without paying anyone to do it.",
     "lista": [
       {

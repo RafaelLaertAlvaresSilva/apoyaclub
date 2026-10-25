@@ -209,7 +209,7 @@
   },
   "herramientas": {
     "eyebrow": "Tudo incluído",
-    "titulo": "As ferramentas que vêm contigo",
+    "titulo": "As ferramentas que <resalte>vêm contigo</resalte>",
     "texto": "Não é um site com um formulário. É o que um clube precisa para vender o seu patrocínio, cumpri-lo e demonstrá-lo, sem pagar a ninguém para o fazer.",
     "lista": [
       {
