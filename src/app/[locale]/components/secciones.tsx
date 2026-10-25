@@ -309,7 +309,7 @@ export async function SeccionComoFunciona() {
                   <h3 className="mt-2 text-2xl font-extrabold leading-snug text-titular">
                     {paso.titulo}
                   </h3>
-                  <p className="mt-3 max-w-md text-[15px] leading-relaxed text-zinc-600">
+                  <p className="mt-3 max-w-md text-[17px] leading-relaxed text-zinc-600">
                     {paso.texto}
                   </p>
                 </div>
@@ -328,7 +328,7 @@ export async function SeccionComoFunciona() {
             dos cosas importan: la primera es lo que hace creíble a la
             sección, y la segunda evita que alguien piense que esos
             patrocinadores son clientes de alguien. */}
-        <p className="mt-12 text-center text-xs text-zinc-500">
+        <p className="mt-12 text-center text-[13px] text-zinc-600">
           {t("comoFunciona.pieDeFoto")}
         </p>
       </div>
@@ -1898,7 +1898,7 @@ export async function SeccionSector() {
           <br className="hidden sm:block" />{" "}
           <span className="text-accion-tinta">{t("sector.tituloResalte")}</span>
         </h2>
-        <p className="mt-4 max-w-3xl text-zinc-600">{t("sector.subtitulo")}</p>
+        <p className="mt-4 max-w-2xl text-lg text-zinc-600">{t("sector.subtitulo")}</p>
 
         {/* Fila 1: un país por tarjeta. */}
         <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -1920,15 +1920,15 @@ export async function SeccionSector() {
                   <span className="block whitespace-nowrap text-[13px] font-extrabold leading-tight text-accion-tinta tabular-nums">
                     {pais.insignia}
                   </span>
-                  <span className="block whitespace-nowrap text-[11px] leading-tight text-accion-tinta/80">
+                  <span className="block whitespace-nowrap text-[13px] leading-tight text-accion-tinta/80">
                     {pais.insigniaPie}
                   </span>
                 </span>
               </div>
 
               <p className="mt-3 font-bold text-titular">{pais.nombre}</p>
-              <p className="text-sm text-zinc-500">{pais.anio}</p>
-              <p className="mt-2.5 text-sm leading-relaxed text-zinc-600">{pais.texto}</p>
+              <p className="text-base text-zinc-600">{pais.anio}</p>
+              <p className="mt-2.5 text-base leading-relaxed text-zinc-600">{pais.texto}</p>
             </div>
           ))}
         </div>
@@ -1938,7 +1938,7 @@ export async function SeccionSector() {
           {/* Comparativa por país */}
           <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
             <h3 className="font-bold text-titular">{comparativa.titulo}</h3>
-            <p className="text-sm text-zinc-500">{comparativa.subtitulo}</p>
+            <p className="text-base text-zinc-600">{comparativa.subtitulo}</p>
 
             <ul className="mt-5 space-y-3">
               {comparativa.barras.map((barra) => (
@@ -1946,7 +1946,7 @@ export async function SeccionSector() {
                   <span className="h-5 w-5 shrink-0 overflow-hidden rounded-full ring-1 ring-zinc-300">
                     <Bandera pais={barra.clave} />
                   </span>
-                  <span className="w-24 shrink-0 text-sm font-medium text-titular">
+                  <span className="w-24 shrink-0 text-base font-medium text-titular">
                     {barra.nombre}
                   </span>
                   <span className="h-3 min-w-0 flex-1 overflow-hidden rounded-full bg-zinc-200">
@@ -1958,7 +1958,7 @@ export async function SeccionSector() {
                     />
                   </span>
                   <span
-                    className={`w-20 shrink-0 text-right text-sm tabular-nums ${
+                    className={`w-20 shrink-0 text-right text-base tabular-nums ${
                       barra.destacada
                         ? "font-extrabold text-accion-tinta"
                         : "font-medium text-zinc-600"
@@ -1974,7 +1974,7 @@ export async function SeccionSector() {
           {/* Reparto del patrocinio europeo */}
           <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
             <h3 className="font-bold text-titular">{europa.titulo}</h3>
-            <p className="text-sm text-zinc-500">{europa.subtitulo}</p>
+            <p className="text-base text-zinc-600">{europa.subtitulo}</p>
 
             <div className="mt-5 flex items-center gap-5">
               <div className="relative h-28 w-28 shrink-0">
@@ -2003,7 +2003,7 @@ export async function SeccionSector() {
                   <span className="text-xl font-extrabold leading-none text-titular tabular-nums">
                     {europa.porcentaje} %
                   </span>
-                  <span className="mt-1 text-[11px] leading-tight text-zinc-500">
+                  <span className="mt-1 text-[13px] leading-tight text-zinc-600">
                     {europa.centroTexto}
                   </span>
                 </span>
@@ -2029,7 +2029,7 @@ export async function SeccionSector() {
               </ul>
             </div>
 
-            <p className="mt-4 text-sm leading-relaxed text-zinc-600">{europa.texto}</p>
+            <p className="mt-4 text-base leading-relaxed text-zinc-600">{europa.texto}</p>
           </div>
 
           {/* Licencias federativas */}
@@ -2052,13 +2052,13 @@ export async function SeccionSector() {
             <p className="mt-3 text-3xl font-extrabold tracking-tight text-accion-tinta tabular-nums">
               {licencias.cifra}
             </p>
-            <p className="text-sm text-zinc-500">{licencias.anio}</p>
-            <p className="mt-2.5 text-sm leading-relaxed text-zinc-600">{licencias.texto}</p>
+            <p className="text-base text-zinc-600">{licencias.anio}</p>
+            <p className="mt-2.5 text-base leading-relaxed text-zinc-600">{licencias.texto}</p>
           </div>
         </div>
 
         {/* Las fuentes, al pie y completas: es lo que sostiene la sección. */}
-        <dl className="mt-6 grid gap-x-8 gap-y-2 border-t border-zinc-200 pt-5 text-xs leading-relaxed text-zinc-500 sm:grid-cols-2">
+        <dl className="mt-6 grid gap-x-8 gap-y-2 border-t border-zinc-200 pt-5 text-[13px] leading-relaxed text-zinc-600 sm:grid-cols-2">
           {fuentes.map((fuente) => (
             <div key={fuente.quien}>
               <dt className="inline font-semibold text-zinc-600">{fuente.quien}: </dt>
@@ -2178,7 +2178,7 @@ function FranjaDelPrecio({
           </span>
           <div className="min-w-0">
             <p className="font-extrabold leading-snug text-titular">{bloque.titulo}</p>
-            <p className="mt-1.5 text-sm leading-relaxed text-zinc-600">{bloque.texto}</p>
+            <p className="mt-1.5 text-base leading-relaxed text-zinc-600">{bloque.texto}</p>
           </div>
         </div>
       ))}
@@ -2230,7 +2230,7 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
           <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
             {t("precio.titulo")}
           </h2>
-          <p className="mt-4 text-zinc-600">{t("precio.subtitulo")}</p>
+          <p className="mt-4 text-lg text-zinc-600">{t("precio.subtitulo")}</p>
         </div>
 
         <div className="mt-14 grid items-start gap-6 lg:grid-cols-3">
@@ -2250,7 +2250,7 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
                   {t(`planes.${idPlan}.nombre`)}
                 </p>
                 {plan.limitado && (
-                  <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">
+                  <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[13px] font-bold text-amber-800">
                     {t("precio.plazasFundador")}
                   </span>
                 )}
@@ -2260,13 +2260,13 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
                 <span className="text-4xl font-extrabold tracking-tight text-titular">
                   {formatoPlan.format(plan.precioCentimos / 100)}
                 </span>{" "}
-                <span className="text-base text-zinc-500">
+                <span className="text-base text-zinc-600">
                   {plan.intervalo === "mes" ? t("planes.alMes") : t("planes.alAnio")}
                 </span>
               </p>
 
-              <p className="mt-2 text-sm font-medium text-zinc-800">{t(`planes.${idPlan}.reclamo`)}</p>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-500">{t(`planes.${idPlan}.detalle`)}</p>
+              <p className="mt-2 text-base font-medium text-zinc-800">{t(`planes.${idPlan}.reclamo`)}</p>
+              <p className="mt-2 text-base leading-relaxed text-zinc-600">{t(`planes.${idPlan}.detalle`)}</p>
 
               <Link
                 href="/registro-club"
@@ -2290,16 +2290,16 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
             en el mismo pantallazo las hace menos creíbles, no más. */}
         <div className="lg:hidden">
           {compacta ? (
-            <p className="mt-7 text-center text-sm text-zinc-600">
+            <p className="mt-7 text-center text-base text-zinc-600">
               {t("precio.resumenCondiciones")}
             </p>
           ) : (
             <>
-              <p className="mt-7 text-center text-sm text-zinc-600">
+              <p className="mt-7 text-center text-base text-zinc-600">
                 {t("precio.gratisPrimerMes")}
               </p>
-              <p className="mt-1 text-center text-sm text-zinc-500">{t("precio.cancelar")}</p>
-              <p className="mt-1 text-center text-sm text-zinc-500">{t("precio.comision")}</p>
+              <p className="mt-1 text-center text-base text-zinc-600">{t("precio.cancelar")}</p>
+              <p className="mt-1 text-center text-base text-zinc-600">{t("precio.comision")}</p>
             </>
           )}
         </div>
@@ -2315,7 +2315,7 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
               {ventajas.map((ventaja) => (
                 <div key={ventaja} className="flex items-center gap-2.5">
                   <Tic className="flex-none text-brand-teal" tamano={17} />
-                  <span className="text-sm font-medium text-zinc-700">{ventaja}</span>
+                  <span className="text-base font-medium text-zinc-700">{ventaja}</span>
                 </div>
               ))}
             </div>
@@ -2425,7 +2425,7 @@ export async function SeccionCtaFinal() {
           <br />
           {t("ctaFinal.tituloLinea2")}
         </h2>
-        <p className="mx-auto mt-5 max-w-xl leading-relaxed text-sobre-color/70">
+        <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-sobre-color/80">
           {t("ctaFinal.subtexto")}
         </p>
         <Link
@@ -2434,7 +2434,7 @@ export async function SeccionCtaFinal() {
         >
           {t("ctaFinal.cta")}
         </Link>
-        <p className="mt-4 text-sm text-sobre-color/60">{t("ctaFinal.condiciones")}</p>
+        <p className="mt-4 text-base text-sobre-color/75">{t("ctaFinal.condiciones")}</p>
       </div>
     </section>
   );
@@ -2550,24 +2550,38 @@ export async function SeccionHerramientasClave() {
 
   const cuantasMas = todas.length - destacadas.length;
 
+  /* Un campo azul marino entero: a la izquierda el titular y lo que
+     significa, a la derecha las seis tarjetas blancas con su dibujo. El
+     cambio de color separa esta sección de las dos claras que la rodean,
+     y las tarjetas blancas resaltan encima. La etiqueta "Todo incluido" de encima del
+     titular se queda: Rafael prefiere las etiquetas en mayúsculas, que
+     en el teléfono ahorran una línea de texto. */
   return (
-    <section id="herramientas" className="scroll-mt-32 px-4 py-20 sm:px-6 sm:py-24">
-      <div className="mx-auto max-w-6xl">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
+    <section id="herramientas" className="scroll-mt-32 bg-brand-navy px-4 py-20 sm:px-6 sm:py-28">
+      {/* Tres piezas en una rejilla: en el ordenador, el titular y el
+          "y hay más" a la izquierda y las tarjetas a la derecha; en el
+          teléfono, titular, tarjetas y al final el "y hay más", para no
+          tener dos párrafos seguidos antes de ver ninguna herramienta. */}
+      <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-x-16 lg:gap-y-8">
+        <div className="lg:col-start-1 lg:row-start-1">
+          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-light">
             {t("herramientas.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
-            {t.rich("herramientas.titulo", { resalte: (trozo) => <span className="text-accion-tinta">{trozo}</span> })}
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-sobre-color sm:text-4xl">
+            {t.rich("herramientas.titulo", { resalte: (trozo) => <span className="text-brand-teal-light">{trozo}</span> })}
           </h2>
-          <p className="mt-4 leading-relaxed text-zinc-600">{t("herramientas.texto")}</p>
+          <p className="mt-5 max-w-md text-lg leading-relaxed text-sobre-color/85">
+            {t("herramientas.texto")}
+          </p>
         </div>
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Las seis, en sus tarjetas blancas con el dibujo de siempre,
+            encima del azul: así resaltan y se reconocen de un vistazo. */}
+        <div className="grid content-start gap-4 sm:grid-cols-2 lg:col-start-2 lg:row-span-2 lg:row-start-1">
           {destacadas.map((herramienta) => (
             <div
               key={herramienta.clave}
-              className="flex gap-4 rounded-2xl border border-zinc-200 bg-white p-5"
+              className="flex gap-4 rounded-2xl bg-white p-5"
             >
               <span className="inline-flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-accion-tinta">
                 <IconoHerramienta clave={herramienta.clave} />
@@ -2582,21 +2596,23 @@ export async function SeccionHerramientasClave() {
           ))}
         </div>
 
-        {/* El "y hay más". El número sale de la resta, no escrito a mano:
-            el día que se añada una herramienta, la portada lo dice sola. */}
-        {cuantasMas > 0 && (
-          <div className="mx-auto mt-8 max-w-3xl text-center">
-            <p className="text-[15px] leading-relaxed text-zinc-600">
-              {t("herramientas.hayMas", { cuantas: cuantasMas })}
-            </p>
-            <Link
-              href="/para-clubes#herramientas"
-              className="mt-4 inline-block text-sm font-bold text-accion-tinta underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
-            >
-              {t("herramientas.verTodas", { total: todas.length })}
-            </Link>
-          </div>
-        )}
+          {/* El "y hay más". El número sale de la resta, no escrito a
+              mano: el día que se añada una herramienta, la portada lo
+              dice sola. */}
+          {cuantasMas > 0 && (
+            <div className="max-w-md lg:col-start-1 lg:row-start-2">
+              <p className="text-base leading-relaxed text-sobre-color/75">
+                {t("herramientas.hayMas", { cuantas: cuantasMas })}
+              </p>
+              <Link
+                href="/para-clubes#herramientas"
+                className="mt-5 inline-flex items-center gap-2 rounded-full bg-brand-teal-dark px-6 py-3 text-base font-bold text-sobre-color transition-colors hover:bg-brand-teal"
+              >
+                {t("herramientas.verTodas", { total: todas.length })}
+                <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          )}
       </div>
     </section>
   );
@@ -2758,7 +2774,7 @@ export async function PuertasDelHero({ enColumna = false }: { enColumna?: boolea
             </span>
           </Link>
           <p
-            className={`mt-2.5 text-[13px] leading-snug text-zinc-500 ${
+            className={`mt-2.5 text-[15px] leading-snug text-zinc-600 ${
               enColumna ? "text-center lg:text-left" : "text-center"
             }`}
           >

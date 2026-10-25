@@ -596,3 +596,26 @@ html[data-tema-panel="oscuro"] .tema-panel .tonal {
     color: var(--tono-tinta, var(--titular));
   }
 }
+
+/* LA ENTRADA AL BAJAR (portada). `EntradaAlBajar` marca con `.entra`
+ * las piezas de cada sección que todavía no se ven y les pone
+ * `.entra-ya` cuando la sección asoma: suben 24 px y aparecen, una
+ * detrás de otra. Sin JavaScript nada lleva `.entra`, así que todo se
+ * ve desde el principio; con "reducir movimiento" no se marca nada. */
+.entra {
+  opacity: 0;
+  transform: translateY(24px);
+}
+.entra.entra-ya {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .entra {
+    opacity: 1;
+    transform: none;
+  }
+}

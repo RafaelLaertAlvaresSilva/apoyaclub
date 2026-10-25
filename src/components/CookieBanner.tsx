@@ -106,7 +106,7 @@ export function CookieBanner() {
       ref={caja}
       role="dialog"
       aria-label={tc("aviso")}
-      className="fixed inset-x-0 bottom-0 z-50 print:hidden border-t border-zinc-200 bg-white px-3 py-2.5 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] sm:px-4 sm:py-4"
+      className="fixed inset-x-0 bottom-0 z-50 print:hidden border-t border-zinc-200 bg-white px-4 py-2.5 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] sm:px-4 sm:py-4"
     >
       {/* EN EL MÓVIL, UNA FRANJA BAJA Y NO UNA CAJA.
           Con el texto entero y los botones debajo medía 171 px en un
@@ -117,7 +117,7 @@ export function CookieBanner() {
           texto completo. Los dos botones siguen con el mismo peso: el
           RGPD no deja que "Rechazar" sea más difícil que "Aceptar". */}
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3">
-        <p className="text-xs leading-snug text-zinc-600 sm:text-sm">
+        <p className="text-[13px] leading-snug text-zinc-600 sm:text-sm">
           <span className="sm:hidden">{tc("corto")} </span>
           <span className="hidden sm:inline">
             {tc("largo")}{" "}

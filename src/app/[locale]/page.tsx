@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Header } from "@/components/Header";
 import { VideoDeLaPortada } from "./components/VideoDeLaPortada";
 import { CtaFijoMovil } from "./components/CtaFijoMovil";
+import { EntradaAlBajar } from "./components/EntradaAlBajar";
 import {
   FondoDeHeroe,
   FuncionesDestacadas,
@@ -158,6 +159,7 @@ export default async function Home() {
         <SeccionCtaFinal />
       </main>
 
+      <EntradaAlBajar />
       <CtaFijoMovil texto={t("ctaFijo.texto")} condiciones={t("ctaFinal.condiciones")} />
     </div>
   );
