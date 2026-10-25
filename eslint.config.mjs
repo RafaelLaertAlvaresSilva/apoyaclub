@@ -13,7 +13,7 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     // La skill de diseño trae sus propios scripts; no son código de la web.
-    "diseno/taste-skill/**",
+    "diseno/**",
   ]),
 ]);
 

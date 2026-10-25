@@ -102,7 +102,7 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col-reverse gap-3 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-sobre-color/40">
+          <p className="text-[13px] text-sobre-color/65">
             © {new Date().getFullYear()} {t("derechos")}. {t("derechosReservados")}
           </p>
           <SelectorDeIdioma />

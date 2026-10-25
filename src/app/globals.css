@@ -632,3 +632,23 @@ html[data-tema-panel="oscuro"] .tema-panel .tonal {
     font-size: 16px !important;
   }
 }
+
+/* CORTES DE LÍNEA MÁS LIMPIOS. Los titulares reparten sus líneas para
+ * que la última no se quede con una palabra suelta, y los párrafos
+ * evitan acabar con una sola palabra en la última línea. Los navegadores
+ * que no lo entienden lo ignoran y cortan como siempre. */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+p {
+  text-wrap: pretty;
+}
+
+/* El texto de ejemplo dentro de los campos, con contraste suficiente
+ * (el gris por defecto del navegador se quedaba en 3,4:1). */
+::placeholder {
+  color: #71717a;
+  opacity: 1;
+}

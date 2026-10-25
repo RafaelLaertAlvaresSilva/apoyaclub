@@ -199,7 +199,7 @@ export function VideoDeLaPortada({
             misma fila, cualquier otra cosa los descoloca al cambiar de
             "0:09" a "0:10". */}
         <div className="mt-2 grid grid-cols-[1fr_auto_1fr] items-center">
-          <span className="text-xs tabular-nums text-zinc-500">
+          <span className="text-xs tabular-nums text-zinc-600">
             {reloj(momento)} / {reloj(duracion)}
           </span>
 
