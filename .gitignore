@@ -54,3 +54,6 @@ next-env.d.ts
 /_to_delete/
 *.tgz
 _to_delete/
+
+# Archivos de trabajo de la skill de diseño (capturas, notas): no son parte del proyecto
+/.taste-skill/
