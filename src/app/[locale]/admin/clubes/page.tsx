@@ -131,6 +131,7 @@ export default async function AdminClubesPage({
         suspended: filaClub?.admin_suspended ?? false,
         modoPruebas: filaClub?.admin_test_mode ?? false,
         piloto: usuario.piloto,
+        origenCampana: usuario.origenCampana,
         visitas: actividad.get(usuario.id)?.visitas ?? 0,
         empresas: actividad.get(usuario.id)?.empresas ?? 0,
         contactos: actividad.get(usuario.id)?.contactos ?? 0,

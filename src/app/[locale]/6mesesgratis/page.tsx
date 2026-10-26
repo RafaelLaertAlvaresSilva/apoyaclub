@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Header } from "@/components/Header";
 import { Link } from "@/i18n/navigation";
-import { MESES_PILOTO, PLAZAS_PILOTO, plazasPilotoLibres } from "@/lib/piloto";
+import { MESES_PILOTO, PLAZAS_PILOTO, origenDeCampana, plazasPilotoLibres } from "@/lib/piloto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { FondoDeHeroe } from "../components/secciones";
 import { EntradaAlBajar } from "../components/EntradaAlBajar";
@@ -31,7 +31,11 @@ const QUE_TE_LLEVAS = ["pagina", "oportunidades", "dossier", "seguimiento"] as c
 const QUE_PEDIMOS = ["usarla", "opinion", "nadaMas"] as const;
 const PASOS = ["paso1", "paso2", "paso3"] as const;
 
-export default async function PilotoPage() {
+export default async function PilotoPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ a?: string }>;
+}) {
   const t = await getTranslations("home.piloto");
   const tVideo = await getTranslations("home.video");
 
@@ -42,7 +46,12 @@ export default async function PilotoPage() {
     // Sin la clave de servicio (en local) la página se enseña sin contador.
   }
   const completo = libres === 0;
-  const destino = completo ? "/registro-club" : "/registro-club?piloto=1";
+  // De qué anuncio viene (?a=A): se pasa al registro para que el panel
+  // de administrador sepa qué anuncio trae clubes.
+  const origen = origenDeCampana((await searchParams).a);
+  const destino = completo
+    ? origen ? `/registro-club?a=${origen}` : "/registro-club"
+    : origen ? `/registro-club?piloto=1&a=${origen}` : "/registro-club?piloto=1";
 
   const boton = (grande: boolean) => (
     <Link

@@ -8,7 +8,13 @@ import { BotonEnviar } from "@/components/BotonEnviar";
 import { CLASES_CAMPO_ACCESO, CampoContrasena } from "@/components/CampoContrasena";
 import { registrarClub } from "./actions";
 
-export function RegistroClubForm({ piloto = false }: { piloto?: boolean }) {
+export function RegistroClubForm({
+  piloto = false,
+  origen = null,
+}: {
+  piloto?: boolean;
+  origen?: string | null;
+}) {
   const t = useTranslations("auth.registroClub");
   const tComun = useTranslations("auth.comun");
   const [estado, formAction] = useActionState(registrarClub, null);
@@ -37,6 +43,7 @@ export function RegistroClubForm({ piloto = false }: { piloto?: boolean }) {
 
       <form action={formAction} className="space-y-4">
         {piloto && <input type="hidden" name="piloto" value="1" />}
+        {origen && <input type="hidden" name="origen" value={origen} />}
         <div>
           <label htmlFor="nombre" className="mb-1 block text-sm font-medium text-zinc-700">
             {t("nombre")}

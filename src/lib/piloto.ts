@@ -33,3 +33,18 @@ export async function plazasPilotoLibres(admin: SupabaseClient): Promise<number 
 export function esDelPiloto(appMetadata: Record<string, unknown> | null | undefined): boolean {
   return appMetadata?.piloto === true;
 }
+
+/**
+ * De qué anuncio llega un club: la letra del final del enlace del
+ * anuncio (apoyaclub.com/6mesesgratis?a=A). Así se sabe qué anuncio trae
+ * registros y no solo clics.
+ *
+ * Solo se aceptan letras y números, hasta 8, en mayúsculas: lo escribe
+ * cualquiera en la barra del navegador, y lo que no tenga esa forma se
+ * descarta en vez de guardarse.
+ */
+export function origenDeCampana(valor: unknown): string | null {
+  if (typeof valor !== "string") return null;
+  const limpio = valor.trim().toUpperCase();
+  return /^[A-Z0-9]{1,8}$/.test(limpio) ? limpio : null;
+}

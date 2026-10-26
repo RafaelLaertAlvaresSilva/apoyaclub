@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { origenDeCampana } from "@/lib/piloto";
 import { RegistroClubForm } from "./RegistroClubForm";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -13,10 +14,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RegistroClubPage({
   searchParams,
 }: {
-  searchParams: Promise<{ piloto?: string }>;
+  searchParams: Promise<{ piloto?: string; a?: string }>;
 }) {
   // Desde apoyaclub.com/6mesesgratis: el formulario lo dice arriba y manda la
   // marca. Si ya no quedan plazas lo decide el servidor al registrar.
-  const { piloto } = await searchParams;
-  return <RegistroClubForm piloto={piloto === "1"} />;
+  // `a` = de qué anuncio de la campaña llega (ver `origenDeCampana`).
+  const { piloto, a } = await searchParams;
+  return <RegistroClubForm piloto={piloto === "1"} origen={origenDeCampana(a)} />;
 }

@@ -19,6 +19,8 @@ export type ClubAdminRow = {
   modoPruebas: boolean;
   /** Llegó por la campaña: 6 meses gratis (migración 0057). */
   piloto: boolean;
+  /** De qué anuncio de la campaña llegó (`?a=A`), si llegó de uno. */
+  origenCampana: string | null;
   /** Actividad de los últimos 90 días (migración 0022). */
   visitas: number;
   empresas: number;

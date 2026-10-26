@@ -7,7 +7,7 @@ import { redirect } from "@/i18n/navigation";
 import { mensajeErrorAuth } from "@/lib/auth-errors";
 import { registrarConsentimiento } from "@/lib/consent";
 import { CONSENT_TYPES, LEGAL_VERSIONS } from "@/lib/legal";
-import { plazasPilotoLibres } from "@/lib/piloto";
+import { origenDeCampana, plazasPilotoLibres } from "@/lib/piloto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -26,6 +26,8 @@ export async function registrarClub(
   // Viene de apoyaclub.com/6mesesgratis (la campaña): 6 meses gratis si
   // quedan plazas. Se comprueba aquí, no en el navegador.
   const quierePiloto = formData.get("piloto") === "1";
+  // De qué anuncio de la campaña llega, si llega de uno (?a=A).
+  const origen = origenDeCampana(formData.get("origen"));
 
   if (!nombre) {
     return { error: tValidacion("nombreClub") };
@@ -70,7 +72,13 @@ export async function registrarClub(
         // `piloto` también aquí y no en `user_metadata`: el propio
         // usuario puede cambiar su `user_metadata`, y así se daría 6
         // meses gratis él solo (migración 0057).
-        app_metadata: piloto ? { role: "club", piloto: true } : { role: "club" },
+        // `origen_campana`, en el mismo sitio y por lo mismo: es un dato
+        // para el administrador que el club no tiene que poder cambiar.
+        app_metadata: {
+          role: "club",
+          ...(piloto ? { piloto: true } : {}),
+          ...(origen ? { origen_campana: origen } : {}),
+        },
       });
       // Registro del consentimiento (Fase 11): se hace con el cliente
       // admin porque, con la confirmación de email activada, todavía

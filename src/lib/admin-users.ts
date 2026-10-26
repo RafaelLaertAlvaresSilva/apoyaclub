@@ -7,6 +7,8 @@ export type UsuarioPorRol = {
   createdAt: string;
   /** Se apuntó desde la página del piloto (migración 0057). */
   piloto: boolean;
+  /** De qué anuncio de la campaña llegó (`?a=A`), si llegó de uno. */
+  origenCampana: string | null;
 };
 
 const TAMANO_PAGINA = 200;
@@ -39,6 +41,8 @@ export async function obtenerUsuariosPorRol(rol: Role): Promise<UsuarioPorRol[]>
           email: usuario.email ?? null,
           createdAt: usuario.created_at,
           piloto: usuario.app_metadata?.piloto === true,
+          origenCampana:
+            typeof usuario.app_metadata?.origen_campana === "string" ? usuario.app_metadata.origen_campana : null,
         });
       }
     }

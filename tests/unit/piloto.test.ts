@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { PLAZAS_PILOTO, esDelPiloto, plazasPilotoLibres } from "@/lib/piloto";
+import { PLAZAS_PILOTO, esDelPiloto, origenDeCampana, plazasPilotoLibres } from "@/lib/piloto";
 
 /** Un cliente de Supabase de mentira que solo sabe contestar a `rpc`. */
 function cliente(respuesta: { data: unknown; error: unknown } | Error) {
@@ -36,10 +36,14 @@ describe("programa piloto (migración 0057)", () => {
       join(process.cwd(), "src", "app", "[locale]", "(auth)", "registro-club", "actions.ts"),
       "utf8",
     );
-    expect(accion).toMatch(/app_metadata:\s*piloto\s*\?\s*\{\s*role:\s*"club",\s*piloto:\s*true\s*\}/);
+    expect(accion).toMatch(/app_metadata:\s*\{\s*role:\s*"club",\s*\.\.\.\(piloto\s*\?\s*\{\s*piloto:\s*true\s*\}\s*:\s*\{\}\)/);
+    // El anuncio de origen también va en app_metadata, nunca en user_metadata.
+    expect(accion).toMatch(/\.\.\.\(origen\s*\?\s*\{\s*origen_campana:\s*origen\s*\}\s*:\s*\{\}\)/);
     // Y solo si quedan plazas.
     expect(accion).toContain("plazasPilotoLibres(admin)");
-    expect(accion).not.toMatch(/data:\s*\{[^}]*piloto/);
+    // Ni el piloto ni el anuncio en los datos que manda el registro
+    // (`data` de signUp = user_metadata, que el usuario sí puede cambiar).
+    expect(accion).not.toMatch(/(?<!app_meta)data:\s*\{[^}]*(piloto|origen)/);
   });
 
   it("la migración da 6 meses al piloto y 30 días al resto", () => {
@@ -56,5 +60,23 @@ describe("programa piloto (migración 0057)", () => {
     expect(() =>
       readFileSync(join(process.cwd(), "src", "app", "[locale]", "6mesesgratis", "page.tsx"), "utf8"),
     ).not.toThrow();
+  });
+});
+
+describe("origenDeCampana", () => {
+  it("acepta la letra del anuncio y la pasa a mayúsculas", () => {
+    expect(origenDeCampana("A")).toBe("A");
+    expect(origenDeCampana(" b ")).toBe("B");
+    expect(origenDeCampana("reel2")).toBe("REEL2");
+  });
+
+  it("descarta lo que no es un código corto de letras y números", () => {
+    expect(origenDeCampana(undefined)).toBeNull();
+    expect(origenDeCampana(null)).toBeNull();
+    expect(origenDeCampana("")).toBeNull();
+    expect(origenDeCampana("A&piloto=1")).toBeNull();
+    expect(origenDeCampana("<script>")).toBeNull();
+    expect(origenDeCampana("ABCDEFGHI")).toBeNull();
+    expect(origenDeCampana(["A"])).toBeNull();
   });
 });
