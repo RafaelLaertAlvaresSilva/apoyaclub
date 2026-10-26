@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { VideoDeLaPortada } from "./components/VideoDeLaPortada";
 import { CtaFijoMovil } from "./components/CtaFijoMovil";
 import { EntradaAlBajar } from "./components/EntradaAlBajar";
+import { FranjaSeisMeses, TarjetaSeisMeses } from "./components/AvisoSeisMeses";
 import {
   FondoDeHeroe,
   FuncionesDestacadas,
@@ -75,6 +76,7 @@ export default async function Home() {
   return (
     <div className="flex flex-1 flex-col bg-zinc-50">
       <Header />
+      <FranjaSeisMeses />
 
       {/* El hueco de abajo es para el botón fijo del móvil, que si no
           taparía la última línea de la página. */}
@@ -149,6 +151,7 @@ export default async function Home() {
           </div>
         </section>
 
+        <TarjetaSeisMeses />
         <SeccionVideo />
         <SeccionComoFunciona />
         <SeccionHerramientasClave />

@@ -6,6 +6,7 @@ import { CtaFijoMovil } from "../components/CtaFijoMovil";
 import { VideoDeLaPortada } from "../components/VideoDeLaPortada";
 import { MenuDeSecciones } from "../components/MenuDeSecciones";
 import { EntradaAlBajar } from "../components/EntradaAlBajar";
+import { FranjaSeisMeses } from "../components/AvisoSeisMeses";
 import {
   FondoDeHeroe,
   FuncionesDestacadas,
@@ -56,6 +57,7 @@ export default async function ParaClubesPage() {
   return (
     <div className="flex flex-1 flex-col bg-zinc-50">
       <Header />
+      <FranjaSeisMeses />
 
       <main id="contenido" className="flex-1 pb-24 sm:pb-0">
         <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-white to-zinc-50 px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-16">

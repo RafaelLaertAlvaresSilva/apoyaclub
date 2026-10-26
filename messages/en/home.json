@@ -1006,6 +1006,10 @@
       "titulo": "And when the {meses} months are over?",
       "texto": "If you stay, you get the Founder price: €199 a year, VAT included, locked in for life as long as you stay subscribed. If not, nothing is charged: you don't need a card to start."
     },
-    "dudas": "Questions? Email me at <correo>info@apoyaclub.com</correo>. Rafael, creator of ApoyaClub."
+    "dudas": "Questions? Email me at <correo>info@apoyaclub.com</correo>. Rafael, creator of ApoyaClub.",
+    "tarjetaAlt": "{meses} months free for the first {plazas} clubs: full access to the platform in exchange for telling us what works for you. Go to apoyaclub.com/6mesesgratis",
+    "franjaCorta": "{meses} months free",
+    "plazasCorto": "{n, plural, one {# place left} other {# places left}}",
+    "cerrarTarjeta": "Close"
   }
 }

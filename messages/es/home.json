@@ -1006,6 +1006,10 @@
       "titulo": "¿Y cuando acaben los {meses} meses?",
       "texto": "Si te quedas, tienes el precio Fundador: 199 € al año, IVA incluido, congelado de por vida mientras sigas de alta. Si no, no se cobra nada: no hace falta tarjeta para empezar."
     },
-    "dudas": "¿Dudas? Escríbeme a <correo>info@apoyaclub.com</correo>. Rafael, creador de ApoyaClub."
+    "dudas": "¿Dudas? Escríbeme a <correo>info@apoyaclub.com</correo>. Rafael, creador de ApoyaClub.",
+    "tarjetaAlt": "{meses} meses gratis para los primeros {plazas} clubes: acceso completo a la plataforma a cambio de contarnos qué te funciona. Ir a apoyaclub.com/6mesesgratis",
+    "franjaCorta": "{meses} meses gratis",
+    "plazasCorto": "{n, plural, one {Queda # plaza} other {Quedan # plazas}}",
+    "cerrarTarjeta": "Cerrar"
   }
 }
