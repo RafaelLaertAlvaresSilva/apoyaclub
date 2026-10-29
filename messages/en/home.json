@@ -1011,5 +1011,125 @@
     "franjaCorta": "{meses} months free",
     "plazasCorto": "{n, plural, one {# place left} other {# places left}}",
     "cerrarTarjeta": "Close"
+  },
+  "quienes": {
+    "meta": {
+      "titulo": "About us",
+      "descripcion": "Behind ApoyaClub is Rafael Alvares, a physiotherapist in grassroots sport. Why he built the platform and how he works with clubs."
+    },
+    "etiqueta": "About us",
+    "titulo": "ApoyaClub was born in grassroots sport",
+    "intro": "I'm Rafael Alvares, a physiotherapist living in Benidorm. Since 2014 I've been physiotherapist to Spain's senior men's beach handball team, and I spent eleven years in Liga ASOBAL changing rooms.",
+    "fotoAlt": "Rafael Alvares, physiotherapist and founder of ApoyaClub",
+    "historia": {
+      "etiqueta": "The story",
+      "titulo": "Why I built ApoyaClub",
+      "parrafos": [
+        "Over all these years I've seen up close what a club is worth: hundreds of families, youth teams that grow every season and matches that fill the stands every weekend. And how much it takes to keep it going, often thanks to people giving up their free time.",
+        "Finding sponsors and looking after them is one more part of that effort, and it's nearly always done against the clock. ApoyaClub exists to make it easier: the club has everything it can offer in one place, shows it well and keeps track of every business. And local businesses can find it and write to it directly."
+      ]
+    },
+    "trayectoria": {
+      "etiqueta": "Background",
+      "titulo": "Over ten years in sport",
+      "lista": [
+        {
+          "anos": "Since 2014",
+          "titulo": "Royal Spanish Handball Federation",
+          "texto": "Physiotherapist to Spain's senior men's beach handball team: World Championships, European Championships, Global Tour, World Beach Games and World University Games."
+        },
+        {
+          "anos": "2018 – 2025",
+          "titulo": "Club Balonmano Benidorm",
+          "texto": "Club physiotherapist in Liga ASOBAL."
+        },
+        {
+          "anos": "2014 – 2018",
+          "titulo": "Club Balonmano Guadalajara",
+          "texto": "Club physiotherapist in Liga ASOBAL."
+        },
+        {
+          "anos": "Two seasons",
+          "titulo": "Club Rugby Alcalá",
+          "texto": "Team physiotherapist."
+        }
+      ],
+      "reconocimiento": "Bronze Medal and Badge of the Royal Spanish Handball Federation."
+    },
+    "logros": {
+      "etiqueta": "With the teams",
+      "titulo": "Shared achievements",
+      "lista": [
+        {
+          "puesto": "oro",
+          "texto": "FISU World University Champions, Portugal 2026, with Spain."
+        },
+        {
+          "puesto": "plata",
+          "texto": "European runners-up, Turkey 2025, with Spain."
+        },
+        {
+          "puesto": "oro",
+          "texto": "European Games champions, Poland 2023, with Spain."
+        },
+        {
+          "puesto": "plata",
+          "texto": "Copa del Rey runners-up 2020 with Benidorm: the club's first European qualification."
+        },
+        {
+          "puesto": "plata",
+          "texto": "Second place at the World Beach Games, Qatar 2019, with Spain."
+        }
+      ]
+    },
+    "formacion": {
+      "etiqueta": "Education",
+      "titulo": "Where I trained",
+      "lista": [
+        {
+          "anos": "2014 – 2015",
+          "titulo": "Specialist course in Sports Physiotherapy",
+          "texto": "Universidad Rey Juan Carlos"
+        },
+        {
+          "anos": "2012 – 2014",
+          "titulo": "University Master's in Musculoskeletal Physiotherapy",
+          "texto": "Universidad de Alcalá"
+        },
+        {
+          "anos": "2007 – 2012",
+          "titulo": "Degree in Physiotherapy",
+          "texto": "Centro Universitário Tabosa de Almeida (ASCES-UNITA), Brazil"
+        }
+      ]
+    },
+    "valores": {
+      "etiqueta": "How I work",
+      "titulo": "Three things that don't change",
+      "lista": [
+        {
+          "clave": "comision",
+          "titulo": "No commission",
+          "texto": "Whatever you agree with a business goes to your club. ApoyaClub charges a flat fee, never a percentage."
+        },
+        {
+          "clave": "club",
+          "titulo": "The club decides",
+          "texto": "You choose what you offer, at what price and with whom. The platform doesn't negotiate for you or get in the middle."
+        },
+        {
+          "clave": "escucho",
+          "titulo": "I listen",
+          "texto": "ApoyaClub gets better with what clubs tell me. If something doesn't work for you, write to me and we'll change it."
+        }
+      ]
+    },
+    "contacto": {
+      "titulo": "Shall we talk?",
+      "texto": "Email me at <correo>info@apoyaclub.com</correo> and I'll reply myself.",
+      "cta": "How it works for clubs"
+    },
+    "frase": "“Every club has something to offer, and near every club there's a business that wants to help. My job is to bring them together.”",
+    "firma": "Rafael Alvares, founder of ApoyaClub"
   }
 }

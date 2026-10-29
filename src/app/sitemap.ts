@@ -27,6 +27,7 @@ const RUTAS_ESTATICAS: { ruta: string; prioridad: number; frecuencia: "daily" | 
   { ruta: "/buscar", prioridad: 0.9, frecuencia: "daily" },
   { ruta: "/servicios", prioridad: 0.8, frecuencia: "daily" },
   { ruta: "/empresas", prioridad: 0.8, frecuencia: "daily" },
+  { ruta: "/quienes-somos", prioridad: 0.6, frecuencia: "monthly" },
   // La bifurcación: es la que enlaza la cabecera, así que es la que
   // Google va a ver más veces.
   { ruta: "/registro", prioridad: 0.8, frecuencia: "monthly" },

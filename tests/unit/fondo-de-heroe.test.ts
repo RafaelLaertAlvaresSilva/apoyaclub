@@ -55,10 +55,10 @@ function llamadas(): { pagina: string; llamada: string }[] {
 describe("la foto de fondo de las portadas", () => {
   const usos = llamadas();
 
-  it("la usan las tres portadas y la página del piloto", () => {
-    // La del piloto (campaña de Instagram) lleva la misma foto que
-    // "Para clubes", con el mismo velo fuerte.
-    expect(usos.length).toBe(4);
+  it("la usan las tres portadas, la página del piloto y quiénes somos", () => {
+    // La del piloto (campaña de Instagram) y "Quiénes somos" llevan la
+    // misma foto que "Para clubes", con el mismo velo fuerte.
+    expect(usos.length).toBe(5);
   });
 
   it("cada una pide su tono", () => {
@@ -67,8 +67,8 @@ describe("la foto de fondo de las portadas", () => {
     }
   });
 
-  it("para-clubes y el piloto piden el velo fuerte", () => {
-    for (const nombre of ["para-clubes", "6mesesgratis"]) {
+  it("para-clubes, el piloto y quiénes somos piden el velo fuerte", () => {
+    for (const nombre of ["para-clubes", "6mesesgratis", "quienes-somos"]) {
       const pagina = usos.find((u) => u.pagina.includes(nombre));
       expect(pagina, `no encuentro la página ${nombre}`).toBeDefined();
       expect(pagina!.llamada).toContain('velo="fuerte"');

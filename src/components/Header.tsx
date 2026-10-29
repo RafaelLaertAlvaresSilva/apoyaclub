@@ -48,6 +48,7 @@ const ENLACES_DE_VISITA = [
   { href: "/para-clubes", clave: "paraClubes" },
   { href: "/para-empresas", clave: "paraEmpresas" },
   { href: "/buscar", clave: "buscarClubes" },
+  { href: "/quienes-somos", clave: "quienesSomos" },
 ] as const;
 
 /** Con sesión: las herramientas. El directorio de empresas vuelve

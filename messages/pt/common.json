@@ -27,7 +27,8 @@
       "condicionesDeUso": "Condições de utilização"
     },
     "apoyaclub": "ApoyaClub",
-    "derechosReservados": "Todos os direitos reservados."
+    "derechosReservados": "Todos os direitos reservados.",
+    "quienesSomos": "Quem somos"
   },
   "componentes": {
     "aceptar": "Aceitar",
@@ -69,7 +70,8 @@
     "guardados": "Guardados",
     "iniciarSesion": "Iniciar sessão",
     "irALaPortada": "Ir para a página inicial do ApoyaClub",
-    "volverALaPortada": "Voltar à página inicial"
+    "volverALaPortada": "Voltar à página inicial",
+    "quienesSomos": "Quem somos"
   },
   "idioma": {
     "elegir": "Idioma"

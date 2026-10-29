@@ -1011,5 +1011,125 @@
     "franjaCorta": "{meses} meses grátis",
     "plazasCorto": "{n, plural, one {Resta # vaga} other {Restam # vagas}}",
     "cerrarTarjeta": "Fechar"
+  },
+  "quienes": {
+    "meta": {
+      "titulo": "Quem somos",
+      "descripcion": "Por trás do ApoyaClub está Rafael Alvares, fisioterapeuta no desporto de formação. Porque criou a plataforma e como trabalha com os clubes."
+    },
+    "etiqueta": "Quem somos",
+    "titulo": "O ApoyaClub nasce do desporto de base",
+    "intro": "Sou o Rafael Alvares, fisioterapeuta, e vivo em Benidorm. Desde 2014 sou fisioterapeuta da seleção espanhola absoluta masculina de andebol de praia, e passei onze anos nos balneários da Liga ASOBAL.",
+    "fotoAlt": "Rafael Alvares, fisioterapeuta e criador do ApoyaClub",
+    "historia": {
+      "etiqueta": "A história",
+      "titulo": "Porque criei o ApoyaClub",
+      "parrafos": [
+        "Em todos estes anos vi de perto o que vale um clube: centenas de famílias, uma formação que cresce a cada época e jogos que enchem a bancada todos os fins de semana. E também o que custa levá-lo para a frente, muitas vezes com pessoas que dedicam o seu tempo livre.",
+        "Procurar patrocinadores e cuidar deles é mais uma parte desse esforço, e quase sempre feita contra o relógio. O ApoyaClub nasce para o tornar mais fácil: que o clube tenha num só sítio tudo o que pode oferecer, o mostre bem e faça o acompanhamento de cada empresa. E que as empresas da sua zona o encontrem e lhe escrevam diretamente."
+      ]
+    },
+    "trayectoria": {
+      "etiqueta": "Percurso",
+      "titulo": "Mais de dez anos no desporto",
+      "lista": [
+        {
+          "anos": "Desde 2014",
+          "titulo": "Real Federación Española de Balonmano",
+          "texto": "Fisioterapeuta da seleção espanhola absoluta masculina de andebol de praia: Mundiais, Europeus, Global Tour, Jogos Mundiais de Praia e Jogos Mundiais Universitários."
+        },
+        {
+          "anos": "2018 – 2025",
+          "titulo": "Club Balonmano Benidorm",
+          "texto": "Fisioterapeuta do clube na Liga ASOBAL."
+        },
+        {
+          "anos": "2014 – 2018",
+          "titulo": "Club Balonmano Guadalajara",
+          "texto": "Fisioterapeuta do clube na Liga ASOBAL."
+        },
+        {
+          "anos": "Duas épocas",
+          "titulo": "Club Rugby Alcalá",
+          "texto": "Fisioterapeuta da equipa."
+        }
+      ],
+      "reconocimiento": "Medalha e Insígnia de Bronze da Real Federación Española de Balonmano."
+    },
+    "logros": {
+      "etiqueta": "Com as equipas",
+      "titulo": "Conquistas partilhadas",
+      "lista": [
+        {
+          "puesto": "oro",
+          "texto": "Campeões do Mundial Universitário FISU, Portugal 2026, com Espanha."
+        },
+        {
+          "puesto": "plata",
+          "texto": "Vice-campeões da Europa, Turquia 2025, com Espanha."
+        },
+        {
+          "puesto": "oro",
+          "texto": "Campeões dos Jogos Europeus, Polónia 2023, com Espanha."
+        },
+        {
+          "puesto": "plata",
+          "texto": "Finalistas da Copa del Rey 2020 com o Benidorm: a primeira qualificação europeia do clube."
+        },
+        {
+          "puesto": "plata",
+          "texto": "Segundo lugar nos World Beach Games, Catar 2019, com Espanha."
+        }
+      ]
+    },
+    "formacion": {
+      "etiqueta": "Formação",
+      "titulo": "Onde me formei",
+      "lista": [
+        {
+          "anos": "2014 – 2015",
+          "titulo": "Especialização em Fisioterapia Desportiva",
+          "texto": "Universidad Rey Juan Carlos"
+        },
+        {
+          "anos": "2012 – 2014",
+          "titulo": "Mestrado Universitário em Fisioterapia do Aparelho Locomotor",
+          "texto": "Universidad de Alcalá"
+        },
+        {
+          "anos": "2007 – 2012",
+          "titulo": "Licenciatura em Fisioterapia",
+          "texto": "Centro Universitário Tabosa de Almeida (ASCES-UNITA), Brasil"
+        }
+      ]
+    },
+    "valores": {
+      "etiqueta": "Como trabalho",
+      "titulo": "Três coisas que não mudam",
+      "lista": [
+        {
+          "clave": "comision",
+          "titulo": "Sem comissões",
+          "texto": "O que acordares com uma empresa é para o teu clube. O ApoyaClub cobra uma mensalidade fixa, nunca uma percentagem."
+        },
+        {
+          "clave": "club",
+          "titulo": "O clube decide",
+          "texto": "Tu escolhes o que ofereces, a que preço e com quem. A plataforma não negoceia por ti nem se mete no meio."
+        },
+        {
+          "clave": "escucho",
+          "titulo": "Ouço-te",
+          "texto": "O ApoyaClub melhora com o que os clubes me contam. Se algo não te funciona, escreve-me e mudamos."
+        }
+      ]
+    },
+    "contacto": {
+      "titulo": "Falamos?",
+      "texto": "Escreve-me para <correo>info@apoyaclub.com</correo> e respondo eu mesmo.",
+      "cta": "Como funciona para clubes"
+    },
+    "frase": "«Cada clube tem algo para oferecer, e perto de cada clube há uma empresa que quer ajudar. O meu trabalho é que se encontrem.»",
+    "firma": "Rafael Alvares, criador do ApoyaClub"
   }
 }

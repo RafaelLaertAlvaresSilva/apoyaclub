@@ -62,7 +62,10 @@ export function Footer() {
           <div>
             <p className="text-lg font-extrabold text-sobre-color">{t("apoyaclub")}</p>
             <p className="mt-3 max-w-xs text-sm text-sobre-color/55">{t("descripcion")}</p>
-            <Link href="/para-clubes#contacto" className="mt-2 inline-flex min-h-11 items-center text-sm font-medium text-sobre-color/70 hover:text-sobre-color">
+            <Link href="/quienes-somos" className="mt-2 flex min-h-11 items-center text-sm font-medium text-sobre-color/70 hover:text-sobre-color sm:min-h-9">
+              {t("quienesSomos")}
+            </Link>
+            <Link href="/para-clubes#contacto" className="flex min-h-11 items-center text-sm font-medium text-sobre-color/70 hover:text-sobre-color sm:min-h-9">
               {t("contacto")}
             </Link>
           </div>
