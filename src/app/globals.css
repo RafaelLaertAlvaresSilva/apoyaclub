@@ -597,26 +597,42 @@ html[data-tema-panel="oscuro"] .tema-panel .tonal {
   }
 }
 
-/* LA ENTRADA AL BAJAR (portada). `EntradaAlBajar` marca con `.entra`
- * las piezas de cada sección que todavía no se ven y les pone
- * `.entra-ya` cuando la sección asoma: suben 24 px y aparecen, una
- * detrás de otra. Sin JavaScript nada lleva `.entra`, así que todo se
- * ve desde el principio; con "reducir movimiento" no se marca nada. */
-.entra {
+/* LA ENTRADA AL BAJAR. `EntradaAlBajar` marca con `.entra` las piezas de
+ * cada sección que van a entrar y les pone `.entra-ya` cuando la sección
+ * asoma: suben 24 px y aparecen, una detrás de otra (`--retraso`).
+ *
+ * Es una animación y no una transición a propósito: una transición en
+ * estas piezas pisaría las suyas propias (el cambio de color de un botón
+ * al pasar el ratón) y las retrasaría. Y `backwards`, no `both`: al
+ * acabar, la pieza vuelve a sus estilos de siempre, así que el
+ * movimiento de las tarjetas al pasar el ratón sigue funcionando.
+ *
+ * Sin JavaScript nada lleva `.entra`, así que todo se ve desde el
+ * principio; con "reducir movimiento" no se marca nada. */
+.entra:not(.entra-ya) {
   opacity: 0;
   transform: translateY(24px);
 }
 .entra.entra-ya {
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
-    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  animation: entrar 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: var(--retraso, 0ms);
 }
-@media (prefers-reduced-motion: reduce) {
-  .entra {
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
     opacity: 1;
     transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .entra,
+  .entra.entra-ya {
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 }
 
