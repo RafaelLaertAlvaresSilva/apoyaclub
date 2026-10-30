@@ -1,0 +1,206 @@
+{
+  "meta": {
+    "noEncontrado": "Clube não encontrado",
+    "titulo": "{club} — ApoyaClub",
+    "descripcionPorDefecto": "{resumen}. Descubra como patrocinar este clube no ApoyaClub."
+  },
+  "portada": {
+    "verificado": "Verificado",
+    "verificadoAyuda": "Clube verificado pela equipe do ApoyaClub",
+    "solicitarContacto": "Escrever para o clube",
+    "contactar": "Contatar",
+    "compartirTitulo": "{club} — ApoyaClub",
+    "verFotoCompleta": "Ver foto completa",
+    "cerrarFoto": "Fechar a foto",
+    "verFoto": "Ver a foto completa de {club}"
+  },
+  "oportunidades": {
+    "titulo": "Oportunidades disponíveis",
+    "vacio": "Este clube ainda não publicou oportunidades de patrocínio. Volte em breve ou entre em contato diretamente com o clube para propor uma colaboração.",
+    "exclusiva": "Com exclusividade para o setor: {sector}",
+    "solicitar": "Escrever para o clube",
+    "plazas": "{libres, plural, =0 {Todas as vagas preenchidas} one {Resta # vaga de {total}} other {Restam # vagas de {total}}}",
+    "porEmpresa": "por empresa"
+  },
+  "secciones": {
+    "alcanceEstimado": "Alcance estimado",
+    "asistenciaMedia": "Assistência média",
+    "audiencia": "Audiência em números",
+    "cantera": "Categorias de base",
+    "canteraDescripcion": "Dados agregados das categorias de base do clube.",
+    "canteraEquipos": "Equipes",
+    "canteraFamilias": "Famílias",
+    "canteraJugadores": "Jogadores",
+    "competiciones": "Competições",
+    "comunidad": "Comunidade",
+    "comunidadDescripcion": "Ações sociais, educativas ou solidárias do clube.",
+    "contacto": "Contato",
+    "contactoHorario": "Horário de atendimento",
+    "contactoPersona": "Pessoa de contato",
+    "contactoTelefono": "Telefone",
+    "equipos": "Equipes",
+    "escribirEmail": "Enviar e-mail",
+    "fundadoEn": "Fundado em",
+    "historia": "A nossa história",
+    "instalaciones": "Instalações",
+    "llamar": "Ligar",
+    "logros": "Conquistas",
+    "maximaCategoria": "Categoria máxima",
+    "palmares": "Títulos",
+    "patrocinadores": "Patrocinadores atuais",
+    "quienesSomos": "Quem somos",
+    "seguidoresEn": "Seguidores no {red}",
+    "socios": "Sócios",
+    "verContacto": "Ver contatos",
+    "verVideo": "Ver vídeo"
+  },
+  "pie": "Página de {club} no ApoyaClub — a plataforma que conecta clubes esportivos a empresas patrocinadoras.",
+  "servicios": {
+    "titulo": "Do que precisamos",
+    "descripcion": "Serviços e produtos de que o clube precisa. Em troca, a mesma visibilidade que qualquer patrocinador."
+  },
+  "verMas": "Ver mais {cuantos}",
+  "escribir": {
+    "titulo": "Escrever para {club}",
+    "enviadoTitulo": "Mensagem enviada",
+    "enviadoTexto": "{club} recebe a mensagem agora mesmo e vai responder no e-mail que você informou.",
+    "cerrar": "Fechar",
+    "sobre": "Sobre \"{titulo}\".",
+    "cuentales": "Diga quem você é e o que te interessa.",
+    "sinRegistro": "Não é preciso cadastro.",
+    "tuNombre": "O seu nome",
+    "empresa": "Empresa",
+    "opcional": "(opcional)",
+    "tuCorreo": "O seu e-mail",
+    "telefono": "Telefone",
+    "mensaje": "Mensagem",
+    "ejemplo": "Olá, temos uma loja no bairro e estamos interessados no patrocínio das camisas. Podemos falar?",
+    "privacidad": "Enviamos o seu nome e o seu e-mail ao clube para que ele possa responder. Mais nada.",
+    "cancelar": "Cancelar",
+    "enviando": "Enviando…",
+    "enviar": "Enviar mensagem",
+    "errores": {
+      "clubNoEncontrado": "Clube não encontrado.",
+      "nombre": "Escreva o seu nome.",
+      "correo": "Escreva um e-mail válido: é nele que o clube vai responder.",
+      "mensaje": "Escreva uma mensagem para o clube.",
+      "largo": "A mensagem é muito longa.",
+      "demasiadas": "Enviou muitos pedidos seguidos. Espere um pouco e tente de novo.",
+      "noEnviada": "Não foi possível enviar o pedido. Tente de novo."
+    }
+  },
+  "ficha": {
+    "laEmpresaRecibe": "A empresa recebe",
+    "quienHaceQue": "Quem faz o quê",
+    "condiciones": "Condições",
+    "responsable": {
+      "club": "O clube se encarrega de",
+      "empresa": "A empresa contribui com",
+      "ambos": "Entre os dois"
+    },
+    "cond": {
+      "duracion": "Duração",
+      "frecuencia": "Frequência",
+      "fechas": "Datas",
+      "delAl": "De {desde} a {hasta}",
+      "desde": "Desde",
+      "hasta": "Até",
+      "exclusividad": "Exclusividade",
+      "enExclusiva": "Com exclusividade para o setor: {sector}",
+      "requisitos": "Outros requisitos"
+    },
+    "imprimir": "Imprimir perfil",
+    "compartir": "Compartilhar link",
+    "enlaceCopiado": "Link copiado!",
+    "pieImpreso": {
+      "teInteresa": "Tem interesse? Escaneie o código para ver a oportunidade e escrever para {club}.",
+      "publicado": "Publicado no ApoyaClub"
+    },
+    "fotoPrincipal": "{titulo} — foto principal",
+    "fotoN": "{titulo} — foto {numero}"
+  },
+  "destacados": {
+    "deporte": "Esporte",
+    "deportes": "Esportes",
+    "maximaCategoria": "Categoria máxima",
+    "jugadores": "Jogadores",
+    "equiposCantera": "Equipes de base",
+    "dondeEsta": "Onde fica",
+    "masculino": "M",
+    "femenino": "F"
+  },
+  "contactoPublico": {
+    "errorCarga": "Não foi possível carregar os contatos. Verifique a sua conexão.",
+    "cargando": "Carregando…",
+    "unSoloClic": "Um só clique, sem cadastro. Assim o clube não acaba em listas de spam.",
+    "sinDatos": "Este clube ainda não publicou os seus contatos. Você pode escrever para ele com o botão abaixo.",
+    "persona": "Pessoa de contato",
+    "telefono": "Telefone",
+    "correo": "E-mail",
+    "horario": "Horário de atendimento"
+  },
+  "listado": {
+    "sinNecesidades": "Este clube não publicou nada de que precise.",
+    "sinOportunidades": "Este clube ainda não publicou oportunidades.",
+    "volverASuFicha": "Voltar ao perfil",
+    "loNecesitamos": "Precisamos disto",
+    "verFicha": "Ver perfil →"
+  },
+  "pagina": {
+    "seccionesDeLaFicha": "Seções do perfil",
+    "verTodoElClub": "Ver o clube todo",
+    "cargando": "Carregando a página do clube…",
+    "noEncontradoTitulo": "Não encontramos este clube",
+    "noEncontradoTexto": "O link pode ter expirado ou o clube pode ter mudado de endereço. Verifique o URL ou volte ao início.",
+    "volverAlInicio": "Voltar ao início"
+  },
+  "listas": {
+    "clubNoEncontrado": "Clube não encontrado",
+    "oportunidades": {
+      "titulo": "Oportunidades de patrocínio",
+      "intro": "Tudo o que este clube pode oferecer a uma empresa, com o detalhe de cada acordo."
+    },
+    "necesidades": {
+      "titulo": "Do que precisamos",
+      "intro": "Serviços e produtos de que o clube precisa. Em troca, a mesma visibilidade que qualquer patrocinador."
+    }
+  },
+  "oportunidadPagina": {
+    "noEncontrada": "Oportunidade não encontrada",
+    "resumenPorDefecto": "Oportunidade de patrocínio com {club}.",
+    "loQueNecesitamos": "Do que precisamos",
+    "oportunidades": "Oportunidades",
+    "loNecesitamos": "Precisamos disto",
+    "verFichaCompleta": "Ver o perfil completo de {club}",
+    "imagen": {
+      "oportunidadDePatrocinio": "Oportunidade de patrocínio",
+      "antetituloNecesidad": "PRECISAMOS DISTO",
+      "antetituloOportunidad": "OPORTUNIDADE DE PATROCÍNIO",
+      "plazasLibres": "{n, plural, one {# vaga livre} other {# vagas livres}}"
+    }
+  },
+  "paginaClub": {
+    "verLasOportunidades": "{n, plural, one {Ver a oportunidade} other {Ver as # oportunidades}}",
+    "verLasNecesidades": "{n, plural, one {Ver do que precisamos} other {Ver as # coisas de que precisamos}}",
+    "loNecesitamos": "Precisamos disto",
+    "verFicha": "Ver perfil",
+    "fotoDe": "Foto de {club}",
+    "jugadores": "{n} jogadores",
+    "redesSociales": "Redes sociais",
+    "redesDescripcion": "Onde e a quanta gente chega o clube.",
+    "seguidores": "{n} seguidores",
+    "verPerfil": "Ver perfil ↗",
+    "instalacionesDe": "Instalações de {club}",
+    "masculino": "Masculino",
+    "femenino": "Feminino",
+    "logoDe": "Logotipo de {club}",
+    "sitioWeb": "Site",
+    "videoPresentacion": "Vídeo de apresentação",
+    "gruposEquipos": {
+      "Equipos femeninos": "Equipes femininas",
+      "Equipos masculinos": "Equipes masculinas",
+      "Equipos mixtos": "Equipes mistas",
+      "Otros equipos": "Outras equipes"
+    }
+  }
+}

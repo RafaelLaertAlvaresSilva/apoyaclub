@@ -4,7 +4,7 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
-import { LOCALE_CONFIG } from "@/config/locales";
+import { LOCALE_CONFIG, LANG_HTML } from "@/config/locales";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { CLASES_NIVEL_PATROCINIO, esPorPlazas, plazasLibres } from "@/lib/opportunities";
 import { etiquetador } from "@/lib/etiquetas-traducidas";
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: ParametrosRuta): Promise<Meta
     alternates: {
       canonical: ruta,
       languages: Object.fromEntries(
-        routing.locales.map((otro) => [otro, `/${otro}/club/${perfil.slug}`]),
+        routing.locales.map((otro) => [LANG_HTML[otro], `/${otro}/club/${perfil.slug}`]),
       ),
     },
     openGraph: {

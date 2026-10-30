@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
+import { LANG_HTML } from "@/config/locales";
 import { SITE_URL } from "@/lib/site";
 import { createPublicClient } from "@/lib/supabase/public";
 
@@ -107,7 +108,7 @@ async function clubesPublicos(): Promise<{ slug: string; updatedAt: string | nul
  */
 function idiomas(ruta: string) {
   const languages: Record<string, string> = {};
-  for (const locale of routing.locales) languages[locale] = `${SITE_URL}/${locale}${ruta}`;
+  for (const locale of routing.locales) languages[LANG_HTML[locale]] = `${SITE_URL}/${locale}${ruta}`;
   languages["x-default"] = `${SITE_URL}/${routing.defaultLocale}${ruta}`;
   return { languages };
 }

@@ -17,7 +17,28 @@ function sinPrefijoDeIdioma(pathname: string): string {
   return sinPrefijo === "" ? "/" : sinPrefijo;
 }
 
+/**
+ * Quien llega sin idioma en la dirección (apoyaclub.com a secas) con el
+ * navegador en portugués de Brasil va a /br. next-intl por sí solo le
+ * mandaría a /pt (Portugal): para él "br" es otro idioma, el bretón, y
+ * "pt-BR" se parece más a "pt". Si ya eligió idioma alguna vez (la
+ * cookie de next-intl), manda lo que eligió.
+ */
+function esBrasilSinIdioma(request: NextRequest): boolean {
+  const { pathname } = request.nextUrl;
+  if (new RegExp(`^/(${routing.locales.join("|")})(/|$)`).test(pathname)) return false;
+  if (request.cookies.get("NEXT_LOCALE")) return false;
+  const preferido = (request.headers.get("accept-language") ?? "").split(",")[0]?.trim().toLowerCase() ?? "";
+  return preferido.startsWith("pt-br");
+}
+
 export async function middleware(request: NextRequest) {
+  if (esBrasilSinIdioma(request)) {
+    const destino = request.nextUrl.clone();
+    destino.pathname = `/br${request.nextUrl.pathname === "/" ? "" : request.nextUrl.pathname}`;
+    return NextResponse.redirect(destino);
+  }
+
   // 1. next-intl decide el idioma (cookie, cabecera Accept-Language o el
   // que ya lleve la URL) y, si la ruta pedida no llevaba prefijo,
   // devuelve directamente la redirección a la versión con prefijo — en

@@ -67,6 +67,8 @@ const VIDEO_DE_LA_PORTADA: Record<string, string> = {
   es: "/portada-video.mp4",
   en: "/portada-video-en.mp4",
   pt: "/portada-video-pt.mp4",
+  // De momento, la voz de Portugal también para Brasil.
+  br: "/portada-video-pt.mp4",
 };
 
 export default async function Home() {

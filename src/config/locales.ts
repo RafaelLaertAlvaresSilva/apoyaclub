@@ -49,14 +49,23 @@ export const LOCALE_CONFIG: Record<AppLocale, LocaleConfig> = {
     currency: { code: "EUR", symbol: "€" },
     timeZone: "Europe/Madrid",
   },
+  // Portugués de Brasil. Los precios siguen en euros hasta que se decidan
+  // los de Brasil (y cómo se cobra allí): cambiar `currency` aquí no basta,
+  // Stripe cobra en la moneda de cada precio.
+  br: {
+    intlLocale: "pt-BR",
+    currency: { code: "EUR", symbol: "€" },
+    timeZone: "America/Sao_Paulo",
+  },
 };
 
 /** El nombre de cada idioma escrito en ese mismo idioma, que es como lo
  * busca quien no entiende el que está viendo. */
 export const NOMBRE_DEL_IDIOMA: Record<AppLocale, string> = {
   es: "Español",
-  pt: "Português",
+  pt: "Português (Portugal)",
   en: "English",
+  br: "Português (Brasil)",
 };
 
 /** Lo que usa Open Graph (`og:locale`), con guion bajo. */
@@ -64,6 +73,19 @@ export const LOCALE_OPEN_GRAPH: Record<AppLocale, string> = {
   es: "es_ES",
   pt: "pt_PT",
   en: "en_GB",
+  br: "pt_BR",
+};
+
+/**
+ * El código de idioma para el atributo `lang` del HTML y para `hreflang`.
+ * No es el de la URL: "br" a secas sería bretón para un lector de
+ * pantalla o para Google.
+ */
+export const LANG_HTML: Record<AppLocale, string> = {
+  es: "es",
+  pt: "pt-PT",
+  en: "en-GB",
+  br: "pt-BR",
 };
 
 /**

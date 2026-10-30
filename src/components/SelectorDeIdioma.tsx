@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { Link, usePathname } from "@/i18n/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
-import { NOMBRE_DEL_IDIOMA } from "@/config/locales";
+import { LANG_HTML, NOMBRE_DEL_IDIOMA } from "@/config/locales";
 
 /**
  * El cambio de idioma: español, portugués e inglés.
@@ -56,7 +56,7 @@ function Selector({ compacto, consulta }: { compacto: boolean; consulta: string 
             key={locale}
             href={destino}
             locale={locale}
-            hrefLang={locale}
+            hrefLang={LANG_HTML[locale]}
             aria-current={locale === actual ? "true" : undefined}
             className={`inline-flex min-h-11 items-center rounded-md px-2.5 text-sm sm:min-h-9 ${
               locale === actual
@@ -123,13 +123,13 @@ function DesplegableDeIdioma({
       </button>
 
       {abierto && (
-        <ul className="absolute right-0 top-full z-50 mt-1 min-w-36 overflow-hidden rounded-lg border border-zinc-200 bg-white py-1 shadow-lg">
+        <ul className="absolute right-0 top-full z-50 mt-1 min-w-56 overflow-hidden rounded-lg border border-zinc-200 bg-white py-1 shadow-lg">
           {routing.locales.map((locale) => (
             <li key={locale}>
               <Link
                 href={destino}
                 locale={locale}
-                hrefLang={locale}
+                hrefLang={LANG_HTML[locale]}
                 aria-current={locale === actual ? "true" : undefined}
                 onClick={() => setAbierto(false)}
                 className={`flex min-h-11 items-center justify-between gap-3 px-4 text-sm hover:bg-zinc-50 ${

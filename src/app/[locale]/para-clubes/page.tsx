@@ -47,6 +47,8 @@ const VIDEO_PARA_CLUBES: Record<string, string> = {
   es: "/para-clubes-video.mp4",
   en: "/para-clubes-video-en.mp4",
   pt: "/para-clubes-video-pt.mp4",
+  // De momento, la voz de Portugal también para Brasil.
+  br: "/para-clubes-video-pt.mp4",
 };
 
 export default async function ParaClubesPage() {

@@ -16,7 +16,10 @@ export const routing = defineRouting({
   // Español, portugués (de Portugal) e inglés. El español es el idioma
   // de referencia: lo que todavía no está traducido sale en español
   // (ver `src/i18n/request.ts`), nunca como una clave rota.
-  locales: ["es", "pt", "en"],
+  // "br" es el portugués de Brasil (pt-BR): va en /br, que es más corto
+  // de decir a un club. Para todo lo que entiende de idiomas (Intl, el
+  // atributo lang, hreflang) se traduce a "pt-BR" en `src/config/locales.ts`.
+  locales: ["es", "pt", "en", "br"],
   defaultLocale: "es",
   localePrefix: "always",
 });

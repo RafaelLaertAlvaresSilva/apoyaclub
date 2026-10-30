@@ -73,8 +73,11 @@ export async function mensajesDe(locale: string): Promise<Arbol> {
     MODULOS.map(async (nombre) => {
       const espanol = (await cargar(routing.defaultLocale, nombre)) ?? {};
       if (locale === routing.defaultLocale) return [nombre, espanol] as const;
+      // El portugués de Brasil se apoya en el de Portugal antes que en el
+      // español: un texto que todavía no esté adaptado sale en portugués.
+      const base = locale === "br" ? fundir(espanol, (await cargar("pt", nombre)) ?? {}) : espanol;
       const traducido = await cargar(locale, nombre);
-      return [nombre, traducido ? fundir(espanol, traducido) : espanol] as const;
+      return [nombre, traducido ? fundir(base, traducido) : base] as const;
     }),
   );
   return Object.fromEntries(modulos);

@@ -47,6 +47,8 @@ const VIDEO_PARA_EMPRESAS: Record<string, string> = {
   es: "/para-empresas-video.mp4",
   en: "/para-empresas-video-en.mp4",
   pt: "/para-empresas-video-pt.mp4",
+  // De momento, la voz de Portugal también para Brasil.
+  br: "/para-empresas-video-pt.mp4",
 };
 
 export default async function ParaEmpresasPage() {

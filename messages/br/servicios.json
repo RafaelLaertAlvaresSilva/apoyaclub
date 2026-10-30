@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "titulo": "Do que os clubes precisam",
+    "descripcion": "Clubes esportivos que procuram fisioterapia, transporte, gráfica, refeições para o time e outros serviços em troca de visibilidade. Acesso gratuito para empresas."
+  },
+  "eyebrow": "Para empresas",
+  "titulo": "Do que os clubes precisam",
+  "texto": "Nem tudo é dar dinheiro. Muitos clubes procuram serviços —fisioterapia, transporte, gráfica, refeições para o time— em troca de visibilidade. Se a sua empresa pode cobrir algum, é o jeito mais fácil de começar uma parceria.",
+  "filtroCategoria": "Tipo de serviço",
+  "todasLasCategorias": "Todos",
+  "filtroProvincia": "Província",
+  "todaEspana": "Toda a Espanha",
+  "filtrar": "Filtrar",
+  "verPatrocinios": "Ver oportunidades de patrocínio →",
+  "verClub": "Ver clube",
+  "vacioTitulo": "Ainda não há serviços publicados com esses filtros.",
+  "vacioTexto": "Tente outra província ou outro tipo de serviço, ou veja as oportunidades de patrocínio.",
+  "publicaCta": "A sua empresa pode cobrir alguma dessas coisas? <enlace>Publique o que você oferece</enlace> e deixe que os clubes encontrem você. É grátis.",
+  "verFicha": "Ver perfil"
+}

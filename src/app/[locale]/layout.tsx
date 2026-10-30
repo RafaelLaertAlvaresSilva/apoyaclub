@@ -8,7 +8,7 @@ import { CookieBanner } from "@/components/CookieBanner";
 import { FavoritosProvider } from "@/components/Favoritos";
 import { Footer } from "@/components/Footer";
 import { routing } from "@/i18n/routing";
-import { LOCALE_OPEN_GRAPH } from "@/config/locales";
+import { LOCALE_OPEN_GRAPH, LANG_HTML } from "@/config/locales";
 import { SITE_URL } from "@/lib/site";
 import "../globals.css";
 import { GuionDelTema } from "./panel/components/GuionDelTema";
@@ -126,7 +126,7 @@ export default async function RootLayout({
 
   return (
     <html
-      lang={locale}
+      lang={LANG_HTML[locale]}
       className={`${tituloSerif.variable} ${textoSans.variable} ${letraAMano.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">

@@ -7,7 +7,8 @@ import { routing } from "@/i18n/routing";
 const RAIZ = process.cwd();
 
 /**
- * Los tres idiomas de la web: español, portugués e inglés.
+ * Los idiomas de la web: español, portugués de Portugal, inglés y
+ * portugués de Brasil ("br").
  *
  * Lo que se comprueba aquí es lo que, si se rompe, no avisa en ningún
  * otro sitio: una frase nueva escrita en español y olvidada en los
@@ -20,7 +21,7 @@ const RAIZ = process.cwd();
  * se comprueban.
  */
 const TRADUCIDOS = ["common", "home", "auth", "club", "buscar", "servicios", "panel", "emails", "ideas", "empresa"] as const;
-const OTROS = ["pt", "en"] as const;
+const OTROS = ["pt", "en", "br"] as const;
 
 /** Campos que, dentro de una lista, son identificadores y no se
  * traducen nunca: unen cada elemento con su icono o su imagen. */
@@ -73,8 +74,8 @@ function textos(arbol: Arbol, ruta: string, salida: [string, string][]) {
 }
 
 describe("los idiomas de la web", () => {
-  it("son español, portugués e inglés, con el español por defecto", () => {
-    expect([...routing.locales]).toEqual(["es", "pt", "en"]);
+  it("son español, portugués de Portugal, inglés y portugués de Brasil, con el español por defecto", () => {
+    expect([...routing.locales]).toEqual(["es", "pt", "en", "br"]);
     expect(routing.defaultLocale).toBe("es");
   });
 
@@ -94,7 +95,8 @@ describe("los idiomas de la web", () => {
         textos(leer(idioma, nombre), `${idioma}/${nombre}`, lista);
         for (const [ruta, texto] of lista) {
           try {
-            new IntlMessageFormat(texto, idioma);
+            // "br" en la URL, pero "pt-BR" para las reglas de plurales.
+            new IntlMessageFormat(texto, idioma === "br" ? "pt-BR" : idioma);
           } catch (error) {
             errores.push(`${ruta}: ${(error as Error).message}`);
           }

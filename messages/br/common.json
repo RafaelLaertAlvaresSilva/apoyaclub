@@ -1,0 +1,264 @@
+{
+  "footer": {
+    "derechos": "ApoyaClub",
+    "descripcion": "Conecte o seu clube esportivo a empresas patrocinadoras.",
+    "contacto": "Contato",
+    "clubes": {
+      "titulo": "Para clubes",
+      "comoFunciona": "Como funciona",
+      "precios": "Preços",
+      "crearPagina": "Crie a página do seu clube",
+      "faq": "Perguntas frequentes",
+      "empresasQueAyudan": "Empresas que ajudam"
+    },
+    "empresas": {
+      "titulo": "Para empresas",
+      "buscarClubes": "Procurar clubes",
+      "comoFunciona": "Como funciona",
+      "accesoGratuito": "Acesso gratuito",
+      "queNecesitan": "Do que precisam os clubes",
+      "publicarOferta": "Publicar o que ofereço"
+    },
+    "legalTitulo": "Legal",
+    "enlaces": {
+      "avisoLegal": "Aviso legal",
+      "privacidad": "Privacidade",
+      "cookies": "Cookies",
+      "condicionesDeUso": "Termos de Uso"
+    },
+    "apoyaclub": "ApoyaClub",
+    "derechosReservados": "Todos os direitos reservados.",
+    "quienesSomos": "Quem somos"
+  },
+  "componentes": {
+    "aceptar": "Aceitar",
+    "algoHaFallado": "Algo deu errado",
+    "buscarClubes": "Procurar clubes",
+    "cerrarSesion": "Sair",
+    "cuentanosSiEscribesComo": "Conte se você escreve como clube, como empresa, ou qualquer outra dúvida…",
+    "email": "E-mail",
+    "enviarMensaje": "Enviar mensagem",
+    "estaPaginaNoExiste": "Esta página não existe",
+    "esteTextoEsUn": "Este texto é um rascunho inicial e ainda não foi revisado por um advogado. Não o publique como definitivo nem o use como base legal real até contar com essa revisão.",
+    "mensaje": "Mensagem",
+    "noHemosPodidoCargar": "Não conseguimos carregar esta página",
+    "nombre": "Nome",
+    "plantillaPendienteDeRevision": "⚠️ Modelo pendente de revisão jurídica",
+    "politicaDeCookies": "Política de Cookies",
+    "puedeQueElEnlace": "Pode ser que o link esteja copiado errado ou que a página tenha mudado de lugar.",
+    "rechazar": "Rejeitar",
+    "reintentar": "Tentar de novo",
+    "volverAApoyaclub": "← Voltar ao ApoyaClub",
+    "volverAlInicio": "Voltar ao início",
+    "falloNuestro": "A falha foi nossa, não sua. Você pode tentar de novo agora mesmo; se acontecer de novo, escreva para nós e vemos o que está acontecendo.",
+    "referenciaDelError": "Referência do erro: {codigo}",
+    "seccionesDeLaPagina": "Seções da página",
+    "graciasMensaje": "Obrigado, recebemos a sua mensagem. Vamos responder por e-mail em breve."
+  },
+  "cabecera": {
+    "paraClubes": "Para clubes",
+    "paraEmpresas": "Para empresas",
+    "buscarClubes": "Procurar clubes",
+    "empresas": "Empresas",
+    "irAMiPanel": "Ir para o meu painel",
+    "creaTuPagina": "Crie a sua página",
+    "abrirMenu": "Abrir o menu",
+    "cerrarMenu": "Fechar o menu",
+    "menu": "Menu",
+    "secciones": "Seções",
+    "miraQueClubes": "Veja quais clubes há perto de você",
+    "guardados": "Salvos",
+    "iniciarSesion": "Entrar",
+    "irALaPortada": "Ir para a página inicial do ApoyaClub",
+    "volverALaPortada": "Voltar à página inicial",
+    "quienesSomos": "Quem somos"
+  },
+  "idioma": {
+    "elegir": "Idioma"
+  },
+  "cookies": {
+    "aviso": "Aviso de cookies",
+    "corto": "Usamos cookies técnicos.",
+    "largo": "Usamos os cookies técnicos necessários para o ApoyaClub funcionar. Pode aceitar ou rejeitar os cookies não técnicos; mais informação na nossa",
+    "masInformacion": "Mais informação"
+  },
+  "favoritos": {
+    "guardar": "Salvar {nombre}",
+    "quitar": "Remover {nombre} dos salvos",
+    "guardarParaLuego": "Salvar para mais tarde",
+    "quitarDeGuardados": "Remover dos salvos"
+  },
+  "meta": {
+    "tituloPorDefecto": "ApoyaClub — Conecte o seu clube esportivo a empresas patrocinadoras",
+    "descripcion": "Conecte o seu clube esportivo a empresas patrocinadoras.",
+    "ogDescripcion": "O seu clube publica o que pode oferecer e as empresas da sua região o encontram. Para as empresas é grátis e sem conta.",
+    "saltarAlContenido": "Pular para o conteúdo",
+    "paginaNoEncontrada": "Página não encontrada"
+  },
+  "imagenCompartir": {
+    "eslogan": "CONECTA · IMPULSIONA · CRESCE",
+    "titular": "Conecte o seu clube esportivo a empresas que o querem patrocinar.",
+    "gratis": "Para as empresas é grátis e sem conta."
+  },
+  "etiquetas": {
+    "tipoOportunidad": {
+      "equipment": "Uniformes",
+      "venue_matches": "Ginásio e jogos",
+      "social_content": "Redes e conteúdo",
+      "events_tournaments": "Eventos e torneios",
+      "youth": "Categorias de base",
+      "in_kind": "Serviços em espécie"
+    },
+    "estadoOportunidad": {
+      "available": "Disponível",
+      "reserved": "Reservada",
+      "closed": "Fechada"
+    },
+    "nivelPatrocinio": {
+      "principal": "Patrocinador principal",
+      "oficial": "Patrocinador oficial",
+      "colaborador": "Colaborador",
+      "libre": "Sem categoria"
+    },
+    "formaColaboracion": {
+      "money": "Dinheiro",
+      "product": "Produto",
+      "service": "Serviço",
+      "mixed": "Mista"
+    },
+    "periodo": {
+      "match": "Por jogo",
+      "month": "Por mês",
+      "season": "Por temporada",
+      "event": "Por evento"
+    },
+    "objetivo": {
+      "familias": "Famílias",
+      "jovenes": "Jovens",
+      "comunidad_local": "Comunidade local",
+      "deporte_femenino": "Esporte feminino",
+      "deporte_masculino": "Esporte masculino",
+      "deporte_base": "Esporte de base",
+      "visibilidad": "Visibilidade da marca",
+      "contenido": "Conteúdo",
+      "clientes": "Captação de clientes",
+      "empleados": "Colaboradores",
+      "rsc": "RSE"
+    },
+    "categoriaNecesidad": {
+      "fisioterapia": "Fisioterapia",
+      "medico": "Serviço médico",
+      "fotografia": "Fotografia",
+      "video": "Vídeo",
+      "marketing": "Marketing e redes",
+      "imprenta": "Gráfica e sinalização",
+      "transporte": "Transporte e ônibus",
+      "material": "Material esportivo",
+      "equipacion": "Uniformes",
+      "limpieza": "Limpeza",
+      "restauracion": "Alimentação e buffet",
+      "alojamiento": "Hospedagem",
+      "gimnasio": "Academia e preparação física",
+      "nutricion": "Nutrição",
+      "asesoria": "Contabilidade e consultoria",
+      "informatica": "Informática e web",
+      "otro": "Outro"
+    },
+    "tipoOferta": {
+      "service": "Um serviço",
+      "in_kind": "Um produto",
+      "money": "Dinheiro"
+    },
+    "responsable": {
+      "club": "O clube",
+      "empresa": "A empresa",
+      "ambos": "Os dois"
+    },
+    "redSocial": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "twitter": "X",
+      "tiktok": "TikTok",
+      "youtube": "YouTube"
+    },
+    "orden": {
+      "recomendado": "Recomendadas",
+      "novedad": "Mais recentes",
+      "valor": "Maior valor",
+      "cercania": "Mais perto"
+    },
+    "nivelPatrocinioAyuda": {
+      "principal": "O patrocínio com mais visibilidade do clube.",
+      "oficial": "Patrocinador de destaque, normalmente com exclusividade no seu setor.",
+      "colaborador": "Colaboração de menor dimensão, sem exclusividade.",
+      "libre": "Não encaixa em nenhum dos níveis anteriores."
+    },
+    "nivelEquipo": {
+      "primer_equipo": "Equipe principal",
+      "cantera": "Categorias de base"
+    },
+    "busca": {
+      "todo": "Tudo",
+      "patrocinios": "Patrocínios",
+      "necesidades": "Do que precisam"
+    },
+    "estadoOferta": {
+      "available": "Disponível",
+      "reserved": "Combinada",
+      "closed": "Fechada"
+    },
+    "tipoOfertaAyuda": {
+      "service": "Fisioterapia, transporte, design, consultoria… o que a sua empresa faz.",
+      "in_kind": "Material, uniformes, comida, impressões… algo que você entrega.",
+      "money": "Um patrocínio em dinheiro em troca de visibilidade."
+    },
+    "deporte": {
+      "balonmano": "Handebol",
+      "futbol": "Futebol",
+      "futbolSala": "Futsal",
+      "baloncesto": "Basquete",
+      "voleibol": "Vôlei",
+      "voleyPlaya": "Vôlei de praia",
+      "rugby": "Rúgbi",
+      "hockeyHierba": "Hóquei sobre grama",
+      "hockeyPatines": "Hóquei sobre patins",
+      "waterpolo": "Polo aquático",
+      "padel": "Padel",
+      "tenis": "Tênis",
+      "tenisMesa": "Tênis de mesa",
+      "atletismo": "Atletismo",
+      "natacion": "Natação",
+      "ciclismo": "Ciclismo",
+      "triatlon": "Triatlo",
+      "gimnasia": "Ginástica",
+      "patinaje": "Patinação",
+      "artesMarciales": "Artes marciais"
+    }
+  },
+  "plazas": {
+    "progreso": "{cubiertas} de {total} {unidad}",
+    "completa": "Completa",
+    "unidades": {
+      "plazas": "vagas",
+      "colaboradores": "colaboradores",
+      "patrocinadores": "patrocinadores",
+      "empresas": "empresas"
+    }
+  },
+  "legal": {
+    "ultimaActualizacion": "Última atualização: {fecha}",
+    "soloEnEspanolTitulo": "Este texto só está disponível em espanhol",
+    "soloEnEspanol": "Os textos legais do ApoyaClub só estão disponíveis em espanhol, que é a versão válida."
+  },
+  "confirmacion": {
+    "eliminar": "Excluir",
+    "pregunta": "Apagar",
+    "confirmar": "Sim, apagar",
+    "enCurso": "Apagando…",
+    "no": "Não"
+  },
+  "precio": {
+    "necesidad": "Em troca de visibilidade",
+    "aConvenir": "Preço a combinar"
+  }
+}

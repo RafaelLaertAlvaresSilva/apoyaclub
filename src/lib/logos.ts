@@ -14,6 +14,8 @@ const LOGOS: Record<string, { claro: string; oscuro: string }> = {
   es: { claro: "/logo-full-claro.webp", oscuro: "/logo-full-oscuro.webp" },
   en: { claro: "/logo-full-claro-en.webp", oscuro: "/logo-full-oscuro-en.webp" },
   pt: { claro: "/logo-full-claro-pt.webp", oscuro: "/logo-full-oscuro-pt.webp" },
+  // El eslogan en portugués ("Conecta · Impulsiona · Cresce") vale igual en Brasil.
+  br: { claro: "/logo-full-claro-pt.webp", oscuro: "/logo-full-oscuro-pt.webp" },
 };
 
 export function logosDelIdioma(locale: string): { claro: string; oscuro: string } {
