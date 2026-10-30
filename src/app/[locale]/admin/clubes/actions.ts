@@ -6,7 +6,9 @@ import { redirect } from "@/i18n/navigation";
 import { fechaDeAccesoValida, fechaDelPlazo, finalDelDia } from "@/lib/acceso-gratuito";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import type { Role } from "@/lib/types";
+import { puedeGestionarPais, type AccesoAdmin } from "@/lib/acceso-admin";
+import { accesoAdminDeLaAccion } from "@/lib/acceso-admin-servidor";
+import { esPaisValido, paisDeLaCuenta } from "@/lib/paises";
 
 const RUTA_CLUBES = "/admin/clubes";
 
@@ -29,7 +31,8 @@ export type AvisoAdmin =
   | "modo-pruebas"
   | "fuera-de-pruebas"
   | "verificado"
-  | "sin-verificar";
+  | "sin-verificar"
+  | "pais-cambiado";
 
 async function volverConAviso(aviso: AvisoAdmin): Promise<void> {
   const locale = await getLocale();
@@ -44,25 +47,34 @@ async function volverConAviso(aviso: AvisoAdmin): Promise<void> {
  * acciones tocan clubes que no son del usuario que las ejecuta —no
  * tendría sentido escribir políticas de RLS "de admin" fila a fila
  * cuando el rol ya se comprueba aquí antes de tocar la base de datos.
+ *
+ * Un representante puede hacer lo mismo que el administrador, pero
+ * solo con los clubes de su país: se comprueba el país del club que
+ * llega en el formulario, no el que diga la página, porque el
+ * formulario lo puede reescribir cualquiera desde su navegador.
  */
-async function obtenerAdminActual(): Promise<
-  { admin: ReturnType<typeof createAdminClient> } | { error: string }
-> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+async function obtenerAdminActual(
+  idClub: string,
+): Promise<{ admin: ReturnType<typeof createAdminClient>; acceso: AccesoAdmin } | { error: string }> {
+  const acceso = await accesoAdminDeLaAccion();
+  if (!acceso || !idClub) {
     return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
   }
 
-  const rol = user.app_metadata?.role as Role | undefined;
-  if (rol !== "admin") {
-    return { error: "Esta acción solo está disponible para administradores." };
+  const admin = createAdminClient();
+
+  if (acceso.tipo === "representante") {
+    const { data } = await admin.auth.admin.getUserById(idClub);
+    const cuenta = data?.user;
+    if (!cuenta || cuenta.app_metadata?.role !== "club") {
+      return { error: "Ese club no existe." };
+    }
+    if (!puedeGestionarPais(acceso, paisDeLaCuenta(cuenta.app_metadata))) {
+      return { error: "Ese club no es de tu país." };
+    }
   }
 
-  return { admin: createAdminClient() };
+  return { admin, acceso };
 }
 
 async function actualizarClub(
@@ -70,11 +82,9 @@ async function actualizarClub(
   cambios: Record<string, unknown>,
   aviso: AvisoAdmin,
 ): Promise<void> {
-  const contexto = await obtenerAdminActual();
-  if ("error" in contexto) return volverConAviso("no-admin");
-
   const id = String(formData.get("id") ?? "");
-  if (!id) return volverConAviso("no-admin");
+  const contexto = await obtenerAdminActual(id);
+  if ("error" in contexto) return volverConAviso("no-admin");
 
   await contexto.admin.from("clubs").update(cambios).eq("id", id);
   revalidatePath(RUTA_CLUBES);
@@ -138,10 +148,9 @@ export async function quitarVerificacionClub(formData: FormData): Promise<void> 
  * una cosa y a Stripe cobrando otra.
  */
 export async function darAccesoGratuito(formData: FormData): Promise<void> {
-  const contexto = await obtenerAdminActual();
-  if ("error" in contexto) return volverConAviso("no-admin");
-
   const id = String(formData.get("id") ?? "");
+  const contexto = await obtenerAdminActual(id);
+  if ("error" in contexto) return volverConAviso("no-admin");
 
   // El plazo llega de los botones rápidos (seis meses, un año, fin de
   // temporada) y la fecha, del calendario de al lado. El botón manda:
@@ -185,4 +194,30 @@ export async function darAccesoGratuito(formData: FormData): Promise<void> {
 
   revalidatePath(RUTA_CLUBES);
   return volverConAviso("regalado");
+}
+
+/**
+ * Cambia el país de un club (solo el administrador): por si se equivocó
+ * al registrarse. Mueve el club a la lista del representante de ese
+ * país, y con él su comisión de aquí en adelante.
+ */
+export async function cambiarPaisClub(formData: FormData): Promise<void> {
+  const id = String(formData.get("id") ?? "");
+  const pais = formData.get("pais");
+  const contexto = await obtenerAdminActual(id);
+  if ("error" in contexto || contexto.acceso.tipo !== "admin" || !esPaisValido(pais)) {
+    return volverConAviso("no-admin");
+  }
+
+  const { data } = await contexto.admin.auth.admin.getUserById(id);
+  if (!data?.user) return volverConAviso("no-admin");
+
+  // `app_metadata` se reescribe entero: se parte del que tiene para no
+  // perder el rol, el piloto ni el origen de la campaña.
+  await contexto.admin.auth.admin.updateUserById(id, {
+    app_metadata: { ...data.user.app_metadata, pais },
+  });
+
+  revalidatePath(RUTA_CLUBES);
+  return volverConAviso("pais-cambiado");
 }

@@ -9,6 +9,7 @@ import {
   type ClubQueSeVa,
   type MotivoDeSalida,
 } from "@/lib/admin-bajas";
+import { soloAdministrador } from "@/lib/acceso-admin-servidor";
 import { createClient } from "@/lib/supabase/server";
 import { AdminNav } from "../components/AdminNav";
 import { CABECERA_TABLA } from "../components/estilos";
@@ -57,6 +58,9 @@ export default async function BajasPage() {
     const locale = await getLocale();
     return redirect({ href: "/login", locale });
   }
+
+  // Solo del administrador: un representante va a su lista de clubes.
+  await soloAdministrador();
 
   const informe = await obtenerInformeDeBajas();
 

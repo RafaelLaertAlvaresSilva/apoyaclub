@@ -1,11 +1,12 @@
 "use client";
 
 import { Link } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { AvisoError } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { CLASES_CAMPO_ACCESO, CampoContrasena } from "@/components/CampoContrasena";
+import { PAISES, paisDelIdioma } from "@/lib/paises";
 import { registrarClub } from "./actions";
 
 export function RegistroClubForm({
@@ -18,6 +19,9 @@ export function RegistroClubForm({
   const t = useTranslations("auth.registroClub");
   const tComun = useTranslations("auth.comun");
   const [estado, formAction] = useActionState(registrarClub, null);
+  // Marcado de antemano el del idioma de la web, que es lo normal; se
+  // pregunta igualmente porque el país es del club, no del idioma.
+  const paisInicial = paisDelIdioma(useLocale());
 
   return (
     <div className="space-y-6">
@@ -56,6 +60,19 @@ export function RegistroClubForm({
             autoComplete="organization"
             className={CLASES_CAMPO_ACCESO}
           />
+        </div>
+
+        <div>
+          <label htmlFor="pais" className="mb-1 block text-sm font-medium text-zinc-700">
+            {t("pais")}
+          </label>
+          <select id="pais" name="pais" defaultValue={paisInicial} className={CLASES_CAMPO_ACCESO}>
+            {PAISES.map((pais) => (
+              <option key={pais} value={pais}>
+                {t(`paises.${pais}`)}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div>

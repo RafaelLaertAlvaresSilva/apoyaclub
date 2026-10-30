@@ -4,6 +4,7 @@ import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { obtenerUsuariosPorRol } from "@/lib/admin-users";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { soloAdministrador } from "@/lib/acceso-admin-servidor";
 import { createClient } from "@/lib/supabase/server";
 import { AdminNav } from "../components/AdminNav";
 import { FilaEmpresa } from "./components/FilaEmpresa";
@@ -80,6 +81,9 @@ export default async function AdminEmpresasPage({
     const locale = await getLocale();
     return redirect({ href: "/login", locale });
   }
+
+  // Solo del administrador: un representante va a su lista de clubes.
+  await soloAdministrador();
 
   const admin = createAdminClient();
   const usuarios = await obtenerUsuariosPorRol("empresa");

@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { obtenerFinanzas, type ClubFacturable } from "@/lib/admin-finanzas";
 import { etiquetaEstadoSuscripcion } from "@/lib/subscription-mappers";
+import { soloAdministrador } from "@/lib/acceso-admin-servidor";
 import { createClient } from "@/lib/supabase/server";
 import { AdminNav } from "../components/AdminNav";
 import { CABECERA_TABLA } from "../components/estilos";
@@ -54,6 +55,9 @@ export default async function FinanzasPage() {
     const locale = await getLocale();
     return redirect({ href: "/login", locale });
   }
+
+  // Solo del administrador: un representante va a su lista de clubes.
+  await soloAdministrador();
 
   const finanzas = await obtenerFinanzas();
 

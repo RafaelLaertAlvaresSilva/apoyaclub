@@ -2,6 +2,7 @@ import { Link, redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { obtenerMetricasAdmin } from "@/lib/admin-metrics";
+import { soloAdministrador } from "@/lib/acceso-admin-servidor";
 import { createClient } from "@/lib/supabase/server";
 import { AdminNav } from "./components/AdminNav";
 
@@ -76,6 +77,9 @@ export default async function AdminPage() {
     const locale = await getLocale();
     return redirect({ href: "/login", locale });
   }
+
+  // Solo del administrador: un representante va a su lista de clubes.
+  await soloAdministrador();
 
   const metricas = await obtenerMetricasAdmin();
 

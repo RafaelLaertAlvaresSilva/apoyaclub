@@ -2,7 +2,7 @@ import { BarraLogo } from "@/components/BarraLogo";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import type { Role } from "@/lib/types";
+import { accesoAdminDe } from "@/lib/acceso-admin";
 
 /**
  * El middleware ya restringe `/admin` al rol "admin" (Fase 12); este
@@ -18,9 +18,15 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     data: { user },
   } = await supabase.auth.getUser();
 
-  const rol = user?.app_metadata?.role as Role | undefined;
-  if (!user || rol !== "admin") {
+  // Administrador o representante. Lo que ve cada uno lo recorta cada
+  // página con `accesoAdminDeLaPagina`.
+  if (!accesoAdminDe(user)) {
     const locale = await getLocale();
+    // Un representante al que se le ha quitado el acceso: al login
+    // volvería aquí (su rol sigue siendo ese) y daría vueltas sin fin.
+    if (user?.app_metadata?.role === "representante") {
+      return redirect({ href: "/cuenta-suspendida", locale });
+    }
     return redirect({ href: "/login", locale });
   }
 

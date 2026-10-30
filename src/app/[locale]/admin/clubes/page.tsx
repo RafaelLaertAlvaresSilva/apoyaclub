@@ -1,5 +1,5 @@
-import { Link, redirect } from "@/i18n/navigation";
-import { getLocale, getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import { getTranslations } from "next-intl/server";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { obtenerUsuariosPorRol } from "@/lib/admin-users";
@@ -7,7 +7,9 @@ import { obtenerActividadPorClub } from "@/lib/admin-actividad-clubes";
 import { clubRowToProfile, type ClubRow } from "@/lib/club-mappers";
 import type { SubscriptionStatus } from "@/lib/subscription-mappers";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { accesoAdminDeLaPagina } from "@/lib/acceso-admin-servidor";
+import { BANDERA_DEL_PAIS, NOMBRE_DEL_PAIS, PAISES, esPaisValido } from "@/lib/paises";
+import { SITE_URL } from "@/lib/site";
 import { AdminNav } from "../components/AdminNav";
 import { FilaClub } from "./components/FilaClub";
 import type { ClubAdminRow } from "./types";
@@ -68,6 +70,10 @@ const AVISOS: Record<string, { texto: string; bien: boolean }> = {
     texto: "Pon una fecha de hoy en adelante: con una fecha pasada le estarías quitando el acceso.",
     bien: false,
   },
+  "pais-cambiado": {
+    texto: "País cambiado. El club pasa a la lista del representante de ese país.",
+    bien: true,
+  },
   "no-admin": {
     texto: "Tu sesión ha caducado. Vuelve a iniciar sesión e inténtalo otra vez.",
     bien: false,
@@ -77,26 +83,32 @@ const AVISOS: Record<string, { texto: string; bien: boolean }> = {
 export default async function AdminClubesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ aviso?: string; buscar?: string }>;
+  searchParams: Promise<{ aviso?: string; buscar?: string; pais?: string }>;
 }) {
-  const { aviso, buscar } = await searchParams;
+  const { aviso, buscar, pais: paisPedido } = await searchParams;
   const busqueda = (buscar ?? "").trim().toLowerCase();
   const mensaje = aviso ? AVISOS[aviso] : undefined;
   const t = await getTranslations("admin.clubes");
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // El layout ya protege esta ruta; esta comprobación es una segunda
-  // capa de seguridad por si se renderiza en otro contexto.
-  if (!user) {
-    const locale = await getLocale();
-    return redirect({ href: "/login", locale });
-  }
+  // Administrador: todos los países, con filtro. Representante: solo el
+  // suyo, diga lo que diga la dirección.
+  const acceso = await accesoAdminDeLaPagina();
+  const esAdministrador = acceso.tipo === "admin";
+  const paisFiltro = acceso.tipo === "representante" ? acceso.pais : esPaisValido(paisPedido) ? paisPedido : null;
 
   const admin = createAdminClient();
-  const usuarios = await obtenerUsuariosPorRol("club");
+  const [todos, representantes] = await Promise.all([
+    obtenerUsuariosPorRol("club"),
+    obtenerUsuariosPorRol("representante"),
+  ]);
+  const usuarios = paisFiltro ? todos.filter((usuario) => usuario.pais === paisFiltro) : todos;
+
+  // Los clubes que entraron por el enlace propio de un representante
+  // (`?a=BR1`): solo es un dato, la comisión es de todo su país.
+  const representantePorCodigo = new Map(
+    representantes
+      .filter((representante) => typeof representante.appMetadata.codigo === "string")
+      .map((representante) => [String(representante.appMetadata.codigo), representante.email ?? "un representante"]),
+  );
   const ids = usuarios.map((usuario) => usuario.id);
 
   // El porcentaje de ficha rellenada ya viene calculado en la propia
@@ -132,6 +144,8 @@ export default async function AdminClubesPage({
         modoPruebas: filaClub?.admin_test_mode ?? false,
         piloto: usuario.piloto,
         origenCampana: usuario.origenCampana,
+        pais: usuario.pais,
+        traidoPor: usuario.origenCampana ? (representantePorCodigo.get(usuario.origenCampana) ?? null) : null,
         visitas: actividad.get(usuario.id)?.visitas ?? 0,
         empresas: actividad.get(usuario.id)?.empresas ?? 0,
         contactos: actividad.get(usuario.id)?.contactos ?? 0,
@@ -155,12 +169,34 @@ export default async function AdminClubesPage({
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-teal-700">{t("panelDeAdministracion")}</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("clubes")}</h1>
+          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">
+            {t("clubes")}
+            {paisFiltro && (
+              <>
+                {" "}
+                de {NOMBRE_DEL_PAIS[paisFiltro]} <span aria-hidden="true">{BANDERA_DEL_PAIS[paisFiltro]}</span>
+              </>
+            )}
+          </h1>
         </div>
         <CerrarSesionBoton />
       </div>
 
-      <AdminNav activo="clubes" />
+      <AdminNav activo="clubes" esAdministrador={esAdministrador} />
+
+      {/* El enlace propio del representante: los clubes que entren por
+          él salen marcados con su nombre en la lista. */}
+      {acceso.tipo === "representante" && acceso.codigo && (
+        <div className="rounded-xl border border-zinc-200 bg-white p-4 text-sm text-zinc-700">
+          <p className="font-medium text-zinc-900">Tu enlace</p>
+          <p className="mt-1 break-all font-mono text-xs text-accion-tinta">
+            {SITE_URL}/{acceso.pais === "BR" ? "br" : acceso.pais === "PT" ? "pt" : "es"}/6mesesgratis?a={acceso.codigo}
+          </p>
+          <p className="mt-1 text-xs text-zinc-500">
+            Los clubes que se registren por este enlace salen marcados con tu nombre.
+          </p>
+        </div>
+      )}
 
       {mensaje &&
         (mensaje.bien ? (
@@ -169,7 +205,7 @@ export default async function AdminClubesPage({
           <AvisoError mensaje={mensaje.texto} />
         ))}
 
-      {filas.length > 0 && (
+      {(filas.length > 0 || paisFiltro) && (
         <form className="flex flex-wrap items-center gap-2">
           <label htmlFor="buscar-club" className="sr-only">
             Buscar un club por nombre, localidad o correo
@@ -182,13 +218,33 @@ export default async function AdminClubesPage({
             placeholder="Nombre, localidad o correo"
             className="w-full max-w-xs rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-accion-tinta focus:outline-none focus:ring-1 focus:ring-accion-tinta"
           />
+          {esAdministrador && (
+            <>
+              <label htmlFor="pais-club" className="sr-only">
+                País
+              </label>
+              <select
+                id="pais-club"
+                name="pais"
+                defaultValue={paisFiltro ?? ""}
+                className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm"
+              >
+                <option value="">Todos los países</option>
+                {PAISES.map((pais) => (
+                  <option key={pais} value={pais}>
+                    {NOMBRE_DEL_PAIS[pais]} ({todos.filter((usuario) => usuario.pais === pais).length})
+                  </option>
+                ))}
+              </select>
+            </>
+          )}
           <button
             type="submit"
             className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
           >
             Buscar
           </button>
-          {busqueda && (
+          {(busqueda || (esAdministrador && paisFiltro)) && (
             <>
               <Link
                 href="/admin/clubes"
@@ -226,7 +282,7 @@ export default async function AdminClubesPage({
             </thead>
             <tbody className="divide-y divide-zinc-100">
               {visibles.map((fila) => (
-                <FilaClub key={fila.id} fila={fila} />
+                <FilaClub key={fila.id} fila={fila} esAdministrador={esAdministrador} />
               ))}
             </tbody>
           </table>

@@ -106,7 +106,10 @@ export async function middleware(request: NextRequest) {
   const [rolDeLaRuta] = rutaProtegida;
 
   // No es la ruta de su rol: a la suya propia, no a la que pedía.
-  if (rolDeLaRuta !== rol) {
+  // El representante entra en el admin; lo que ve dentro lo recorta
+  // cada página (`lib/acceso-admin.ts`), no esta puerta.
+  const entraComoRepresentante = rol === "representante" && rolDeLaRuta === "admin";
+  if (rolDeLaRuta !== rol && !entraComoRepresentante) {
     return NextResponse.redirect(new URL(`/${locale}${RUTA_POR_ROL[rol]}`, request.url));
   }
 

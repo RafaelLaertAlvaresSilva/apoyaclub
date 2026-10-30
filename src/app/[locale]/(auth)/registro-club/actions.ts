@@ -7,6 +7,7 @@ import { redirect } from "@/i18n/navigation";
 import { mensajeErrorAuth } from "@/lib/auth-errors";
 import { registrarConsentimiento } from "@/lib/consent";
 import { CONSENT_TYPES, LEGAL_VERSIONS } from "@/lib/legal";
+import { esPaisValido, paisDelIdioma } from "@/lib/paises";
 import { origenDeCampana, plazasPilotoLibres } from "@/lib/piloto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -48,6 +49,10 @@ export async function registrarClub(
   const origin = (await headers()).get("origin");
   const locale = await getLocale();
   const supabase = await createClient();
+  // El país del club (lo elige al registrarse). Si llega algo raro, el
+  // del idioma de la web.
+  const paisElegido = formData.get("pais");
+  const pais = esPaisValido(paisElegido) ? paisElegido : paisDelIdioma(locale);
 
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -78,6 +83,9 @@ export async function registrarClub(
           role: "club",
           ...(piloto ? { piloto: true } : {}),
           ...(origen ? { origen_campana: origen } : {}),
+          // Aquí y no en `user_metadata` por lo mismo que el piloto: es
+          // lo que decide qué representante lo lleva (y cobra por él).
+          pais,
         },
       });
       // Registro del consentimiento (Fase 11): se hace con el cliente

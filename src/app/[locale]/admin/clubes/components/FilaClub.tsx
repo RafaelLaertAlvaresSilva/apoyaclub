@@ -1,8 +1,10 @@
 import { useTranslations } from "next-intl";
 import { diasHasta, esAccesoRegalado, unAnioDesde } from "@/lib/acceso-gratuito";
 import { etiquetaEstadoSuscripcion, type SubscriptionStatus } from "@/lib/subscription-mappers";
+import { BANDERA_DEL_PAIS, NOMBRE_DEL_PAIS, PAISES } from "@/lib/paises";
 import {
   activarModoPruebas,
+  cambiarPaisClub,
   darAccesoGratuito,
   quitarModoPruebas,
   quitarVerificacionClub,
@@ -27,7 +29,7 @@ const ESTILO_SUSCRIPCION: Record<Exclude<SubscriptionStatus, null>, string> = {
 };
 
 /** Una fila del listado de clubes del admin (Fase 12), con las acciones de suspender/verificar. */
-export function FilaClub({ fila }: { fila: ClubAdminRow }) {
+export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdministrador: boolean }) {
   const t = useTranslations("admin.clubes");
 
   // Un club "invitado" no es un estado nuevo en la base de datos: es una
@@ -42,6 +44,37 @@ export function FilaClub({ fila }: { fila: ClubAdminRow }) {
         <p className="font-medium text-zinc-900">{fila.name}</p>
         <p className="text-xs text-zinc-500">{fila.city}</p>
         {fila.email && <p className="text-xs text-zinc-500">{fila.email}</p>}
+        <p className="mt-1 text-xs text-zinc-600">
+          <span aria-hidden="true">{BANDERA_DEL_PAIS[fila.pais]}</span> {NOMBRE_DEL_PAIS[fila.pais]}
+        </p>
+        {/* Cambiar el país es solo del administrador: mueve el club a la
+            lista (y a la comisión) de otro representante. */}
+        {esAdministrador && (
+          <form action={cambiarPaisClub} className="mt-1 flex items-center gap-1">
+            <input type="hidden" name="id" value={fila.id} />
+            <label htmlFor={`pais-${fila.id}`} className="sr-only">
+              País del club
+            </label>
+            <select
+              id={`pais-${fila.id}`}
+              name="pais"
+              defaultValue={fila.pais}
+              className="rounded border border-zinc-300 bg-white px-1.5 py-0.5 text-xs"
+            >
+              {PAISES.map((pais) => (
+                <option key={pais} value={pais}>
+                  {NOMBRE_DEL_PAIS[pais]}
+                </option>
+              ))}
+            </select>
+            <button
+              type="submit"
+              className="rounded border border-zinc-300 bg-white px-1.5 py-0.5 text-xs text-zinc-700 hover:border-accion-tinta"
+            >
+              Cambiar
+            </button>
+          </form>
+        )}
       </td>
       <td className="whitespace-nowrap px-4 py-3 text-zinc-600">
         {formatoFecha.format(new Date(fila.createdAt))}
@@ -138,10 +171,16 @@ export function FilaClub({ fila }: { fila: ClubAdminRow }) {
           {fila.piloto && (
             <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-800">6 meses gratis</span>
           )}
-          {fila.origenCampana && (
-            <span className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-800">
-              Anuncio {fila.origenCampana}
+          {fila.traidoPor ? (
+            <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-900">
+              Traído por {fila.traidoPor}
             </span>
+          ) : (
+            fila.origenCampana && (
+              <span className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-800">
+                Anuncio {fila.origenCampana}
+              </span>
+            )
           )}
           {!fila.verified && !fila.suspended && !fila.modoPruebas && !fila.piloto && !fila.origenCampana && (
             <span className="text-xs text-zinc-500">—</span>

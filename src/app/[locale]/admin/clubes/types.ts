@@ -1,3 +1,4 @@
+import type { Pais } from "@/lib/paises";
 import type { SubscriptionStatus } from "@/lib/subscription-mappers";
 
 /** Una fila del listado de clubes del admin (Fase 12): ya traducida a camelCase y con el % de perfil ya calculado. */
@@ -21,6 +22,10 @@ export type ClubAdminRow = {
   piloto: boolean;
   /** De qué anuncio de la campaña llegó (`?a=A`), si llegó de uno. */
   origenCampana: string | null;
+  /** País del club (migración: ninguna; va en la cuenta, ver `lib/paises.ts`). */
+  pais: Pais;
+  /** Si llegó por el enlace propio de un representante, su correo. */
+  traidoPor: string | null;
   /** Actividad de los últimos 90 días (migración 0022). */
   visitas: number;
   empresas: number;

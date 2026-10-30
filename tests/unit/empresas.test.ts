@@ -125,6 +125,12 @@ describe("el panel de empresa está enchufado", () => {
   it("el destino de cada rol es una zona protegida, salvo que sea la portada", () => {
     for (const [rol, ruta] of Object.entries(RUTA_POR_ROL)) {
       if (ruta === "/") continue;
+      // El representante no tiene zona propia: entra en la del admin
+      // (el middleware le deja) y empieza por su lista de clubes.
+      if (rol === "representante") {
+        expect(areaPrivadaDe(ruta)?.[0]).toBe("admin");
+        continue;
+      }
       expect(AREAS_PRIVADAS.some(([unRol, prefijo]) => unRol === rol && prefijo === ruta)).toBe(true);
     }
   });

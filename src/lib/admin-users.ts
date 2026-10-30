@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { paisDeLaCuenta, type Pais } from "@/lib/paises";
 import type { Role } from "@/lib/types";
 
 export type UsuarioPorRol = {
@@ -9,6 +10,10 @@ export type UsuarioPorRol = {
   piloto: boolean;
   /** De qué anuncio de la campaña llegó (`?a=A`), si llegó de uno. */
   origenCampana: string | null;
+  /** País del club (sin guardar: España). Ver `lib/paises.ts`. */
+  pais: Pais;
+  /** El resto de `app_metadata`, para quien lo necesite (representantes). */
+  appMetadata: Record<string, unknown>;
 };
 
 const TAMANO_PAGINA = 200;
@@ -43,6 +48,8 @@ export async function obtenerUsuariosPorRol(rol: Role): Promise<UsuarioPorRol[]>
           piloto: usuario.app_metadata?.piloto === true,
           origenCampana:
             typeof usuario.app_metadata?.origen_campana === "string" ? usuario.app_metadata.origen_campana : null,
+          pais: paisDeLaCuenta(usuario.app_metadata),
+          appMetadata: usuario.app_metadata ?? {},
         });
       }
     }

@@ -1,6 +1,11 @@
 import type { BloqueDossier } from "@/lib/dossier-orden";
 import type { Accion, Beneficio } from "@/lib/ficha-oportunidad";
-export type Role = "club" | "empresa" | "admin";
+/**
+ * "representante": lleva ApoyaClub en un país (Brasil, Portugal…). Entra
+ * en el admin, pero solo ve los clubes de su país y su comisión. Ver
+ * `lib/acceso-admin.ts`.
+ */
+export type Role = "club" | "empresa" | "admin" | "representante";
 
 export const RUTA_POR_ROL: Record<Role, string> = {
   club: "/panel",
@@ -10,6 +15,7 @@ export const RUTA_POR_ROL: Record<Role, string> = {
   empresa: "/empresa",
   // Fase 12: panel de administración interno.
   admin: "/admin",
+  representante: "/admin/clubes",
 };
 
 // ---------------------------------------------------------------------
