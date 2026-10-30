@@ -1,7 +1,8 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { intlLocaleDe } from "@/config/locales";
 import { diasHasta, esAccesoRegalado, unAnioDesde } from "@/lib/acceso-gratuito";
-import { etiquetaEstadoSuscripcion, type SubscriptionStatus } from "@/lib/subscription-mappers";
-import { BANDERA_DEL_PAIS, NOMBRE_DEL_PAIS, PAISES } from "@/lib/paises";
+import type { SubscriptionStatus } from "@/lib/subscription-mappers";
+import { BANDERA_DEL_PAIS, PAISES } from "@/lib/paises";
 import {
   activarModoPruebas,
   cambiarPaisClub,
@@ -15,7 +16,6 @@ import {
 import type { ClubAdminRow } from "../types";
 import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
 
-const formatoFecha = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric" });
 
 const ESTILO_SUSCRIPCION: Record<Exclude<SubscriptionStatus, null>, string> = {
   trialing: "bg-sky-100 text-sky-700",
@@ -31,6 +31,16 @@ const ESTILO_SUSCRIPCION: Record<Exclude<SubscriptionStatus, null>, string> = {
 /** Una fila del listado de clubes del admin (Fase 12), con las acciones de suspender/verificar. */
 export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdministrador: boolean }) {
   const t = useTranslations("admin.clubes");
+  // El administrador en español; el representante, en el idioma con el
+  // que entra (/br/admin para el de Brasil).
+  const tf = useTranslations("admin.clubes.fila");
+  const tPais = useTranslations("admin.paises");
+  const tEstado = useTranslations("panel.suscripcion.estados");
+  const formatoFecha = new Intl.DateTimeFormat(intlLocaleDe(useLocale()), {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 
   // Un club "invitado" no es un estado nuevo en la base de datos: es una
   // prueba gratuita que dura mucho más que el mes normal. Ver
@@ -45,7 +55,7 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
         <p className="text-xs text-zinc-500">{fila.city}</p>
         {fila.email && <p className="text-xs text-zinc-500">{fila.email}</p>}
         <p className="mt-1 text-xs text-zinc-600">
-          <span aria-hidden="true">{BANDERA_DEL_PAIS[fila.pais]}</span> {NOMBRE_DEL_PAIS[fila.pais]}
+          <span aria-hidden="true">{BANDERA_DEL_PAIS[fila.pais]}</span> {tPais(fila.pais)}
         </p>
         {/* Cambiar el país es solo del administrador: mueve el club a la
             lista (y a la comisión) de otro representante. */}
@@ -53,7 +63,7 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
           <form action={cambiarPaisClub} className="mt-1 flex items-center gap-1">
             <input type="hidden" name="id" value={fila.id} />
             <label htmlFor={`pais-${fila.id}`} className="sr-only">
-              País del club
+              {tf("paisDelClub")}
             </label>
             <select
               id={`pais-${fila.id}`}
@@ -63,7 +73,7 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
             >
               {PAISES.map((pais) => (
                 <option key={pais} value={pais}>
-                  {NOMBRE_DEL_PAIS[pais]}
+                  {tPais(pais)}
                 </option>
               ))}
             </select>
@@ -71,7 +81,7 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
               type="submit"
               className="rounded border border-zinc-300 bg-white px-1.5 py-0.5 text-xs text-zinc-700 hover:border-accion-tinta"
             >
-              Cambiar
+              {tf("cambiar")}
             </button>
           </form>
         )}
@@ -82,15 +92,15 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
       <td className="px-4 py-3 text-zinc-600">{fila.profileCompletion}%</td>
       <td className="whitespace-nowrap px-4 py-3 text-xs text-zinc-600">
         <p className="tabular-nums">
-          {fila.visitas} {fila.visitas === 1 ? "visita" : "visitas"}
+          {tf("visitas", { n: fila.visitas })}
         </p>
         <p className="tabular-nums text-zinc-500">
-          {fila.empresas} {fila.empresas === 1 ? "empresa" : "empresas"}
+          {tf("empresas", { n: fila.empresas })}
         </p>
         <p
           className={`tabular-nums ${fila.contactos > 0 ? "font-medium text-teal-700" : "text-zinc-400"}`}
         >
-          {fila.contactos} {fila.contactos === 1 ? "contacto visto" : "contactos vistos"}
+          {tf("contactosVistos", { n: fila.contactos })}
         </p>
       </td>
       <td className="px-4 py-3">
@@ -103,18 +113,18 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
                 : "bg-zinc-100 text-zinc-500"
           }`}
         >
-          {invitado ? "Invitado" : etiquetaEstadoSuscripcion(fila.subscriptionStatus)}
+          {invitado ? tf("invitado") : tEstado(fila.subscriptionStatus ?? "ninguno")}
         </span>
 
         {fila.trialEndsAt && (fila.subscriptionStatus === "trialing" || invitado) && (
           <p className="mt-1 text-xs text-zinc-500">
-            Hasta el {formatoFecha.format(new Date(fila.trialEndsAt))}
-            {diasQueQuedan > 0 && ` · ${diasQueQuedan} ${diasQueQuedan === 1 ? "día" : "días"}`}
+            {tf("hasta", { fecha: formatoFecha.format(new Date(fila.trialEndsAt)) })}
+            {diasQueQuedan > 0 && ` · ${tf("dias", { n: diasQueQuedan })}`}
           </p>
         )}
 
         {fila.tieneSuscripcionEnStripe ? (
-          <p className="mt-2 text-xs text-zinc-500">Paga por Stripe</p>
+          <p className="mt-2 text-xs text-zinc-500">{tf("pagaStripe")}</p>
         ) : (
           /* El acceso de los clubes invitados. Es la prueba gratuita con
              la fecha movida, así que se termina poniendo la de hoy: esa
@@ -129,14 +139,14 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
             <input type="hidden" name="id" value={fila.id} />
 
             <div className="flex flex-wrap gap-1">
-              <BotonDePlazo plazo="6-meses">6 meses</BotonDePlazo>
-              <BotonDePlazo plazo="1-anio">1 año</BotonDePlazo>
-              <BotonDePlazo plazo="temporada">Hasta junio</BotonDePlazo>
+              <BotonDePlazo plazo="6-meses">{tf("seisMeses")}</BotonDePlazo>
+              <BotonDePlazo plazo="1-anio">{tf("unAnio")}</BotonDePlazo>
+              <BotonDePlazo plazo="temporada">{tf("hastaJunio")}</BotonDePlazo>
             </div>
 
             <div className="mt-1.5 flex flex-wrap items-center gap-1">
               <label htmlFor={`hasta-${fila.id}`} className="sr-only">
-                Acceso gratuito hasta una fecha concreta
+                {tf("accesoHastaFecha")}
               </label>
               <input
                 id={`hasta-${fila.id}`}
@@ -149,7 +159,7 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
                 type="submit"
                 className="rounded-lg border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
               >
-                Esa fecha
+                {tf("esaFecha")}
               </button>
             </div>
           </form>
@@ -165,20 +175,20 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
           )}
           {fila.modoPruebas && (
             <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
-              Modo de pruebas
+              {tf("modoPruebas")}
             </span>
           )}
           {fila.piloto && (
-            <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-800">6 meses gratis</span>
+            <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-800">{tf("seisMesesGratis")}</span>
           )}
           {fila.traidoPor ? (
             <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-900">
-              Traído por {fila.traidoPor}
+              {tf("traidoPor", { quien: fila.traidoPor })}
             </span>
           ) : (
             fila.origenCampana && (
               <span className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-800">
-                Anuncio {fila.origenCampana}
+                {tf("anuncio", { codigo: fila.origenCampana })}
               </span>
             )
           )}
@@ -195,7 +205,7 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
               type="submit"
               className="rounded-lg border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
             >
-              {fila.verified ? "Quitar verificación" : "Verificar"}
+              {fila.verified ? tf("quitarVerificacion") : tf("verificar")}
             </button>
           </form>
           {/* Modo de pruebas: esconde el club de todo lo público sin
@@ -207,12 +217,12 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
               type="submit"
               title={
                 fila.modoPruebas
-                  ? "Vuelve a mostrar el club en la web y en el buscador"
-                  : "Esconde el club de la web y del buscador, pero le deja usar su panel"
+                  ? tf("tituloQuitarPruebas")
+                  : tf("tituloPruebas")
               }
               className="rounded-lg border border-amber-300 px-2.5 py-1 text-xs font-medium text-amber-800 transition-colors hover:bg-amber-50"
             >
-              {fila.modoPruebas ? "Quitar modo de pruebas" : "Modo de pruebas"}
+              {fila.modoPruebas ? tf("quitarModoPruebas") : tf("modoPruebas")}
             </button>
           </form>
           {/* Suspender le tumba al club la página pública y le corta el
@@ -226,7 +236,7 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
                 type="submit"
                 className="rounded-lg border border-zinc-300 px-2.5 py-1 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-100"
               >
-                Reactivar
+                {tf("reactivar")}
               </button>
             </form>
           ) : (
@@ -234,10 +244,10 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
               accion={suspenderClub}
               id={fila.id}
               nombre={fila.name}
-              etiqueta="Suspender"
-              pregunta="¿Suspender a"
-              confirmar="Sí, suspender"
-              enCurso="Suspendiendo…"
+              etiqueta={tf("suspender")}
+              pregunta={tf("preguntaSuspender")}
+              confirmar={tf("confirmarSuspender")}
+              enCurso={tf("suspendiendo")}
               clases="rounded-lg border border-red-200 px-2.5 py-1 text-xs font-medium text-red-700 transition-colors hover:bg-red-50"
             />
           )}

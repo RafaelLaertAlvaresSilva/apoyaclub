@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { accesoAdminDe, puedeGestionarPais } from "@/lib/acceso-admin";
 import { comisionPorMes, ivaIncluido, parteDelCobro, type Cobro } from "@/lib/comisiones";
@@ -97,4 +99,28 @@ describe("comisión", () => {
     ]);
     expect(meses[0].parteCentimos).toBe(meses[0].cobros.reduce((suma, c) => suma + c.parteCentimos, 0));
   });
+});
+
+describe("el admin del representante, en su idioma", () => {
+  // Lo que ve un representante (sus clubes y su comisión) tiene que
+  // estar entero en portugués: lo demás del admin sigue en español.
+  const leer = (idioma: string) =>
+    JSON.parse(readFileSync(join(process.cwd(), "messages", idioma, "admin.json"), "utf8")) as Record<string, unknown>;
+  const hojas = (arbol: unknown, ruta = ""): string[] =>
+    typeof arbol === "object" && arbol !== null
+      ? Object.entries(arbol).flatMap(([clave, valor]) => hojas(valor, ruta ? `${ruta}.${clave}` : clave))
+      : [ruta];
+  const espanol = leer("es");
+
+  for (const idioma of ["pt", "br"]) {
+    it(`${idioma}: están todas las claves de clubes, comisión, menú y países`, () => {
+      const traducido = leer(idioma);
+      for (const seccion of ["nav", "paises", "clubes", "comisiones"]) {
+        const faltan = hojas(espanol[seccion], seccion).filter(
+          (ruta) => !hojas(traducido[seccion], seccion).includes(ruta),
+        );
+        expect(faltan).toEqual([]);
+      }
+    });
+  }
 });

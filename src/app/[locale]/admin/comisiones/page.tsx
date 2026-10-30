@@ -1,26 +1,15 @@
+import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
+import { intlLocaleDe } from "@/config/locales";
 import { Link } from "@/i18n/navigation";
 import { PORCENTAJE_POR_DEFECTO } from "@/lib/acceso-admin";
 import { accesoAdminDeLaPagina } from "@/lib/acceso-admin-servidor";
 import { obtenerUsuariosPorRol } from "@/lib/admin-users";
 import { comisionPorMes, type MesDeComision } from "@/lib/comisiones";
 import { cobrosDeClubes } from "@/lib/comisiones-stripe";
-import { BANDERA_DEL_PAIS, NOMBRE_DEL_PAIS, type Pais } from "@/lib/paises";
+import { BANDERA_DEL_PAIS, type Pais } from "@/lib/paises";
 import { AdminNav } from "../components/AdminNav";
 import { CABECERA_TABLA } from "../components/estilos";
-
-const formatoEuros = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", minimumFractionDigits: 2 });
-const formatoMes = new Intl.DateTimeFormat("es-ES", { month: "long", year: "numeric", timeZone: "UTC" });
-const formatoFecha = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", timeZone: "Europe/Madrid" });
-
-function euros(centimos: number): string {
-  return formatoEuros.format(centimos / 100);
-}
-
-function nombreDelMes(mes: string): string {
-  const texto = formatoMes.format(new Date(`${mes}-01T00:00:00Z`));
-  return texto.charAt(0).toUpperCase() + texto.slice(1);
-}
 
 type Liquidacion = {
   email: string;
@@ -42,6 +31,18 @@ export default async function ComisionesPage({ searchParams }: { searchParams: P
   const { rep } = await searchParams;
   const acceso = await accesoAdminDeLaPagina();
   const esAdministrador = acceso.tipo === "admin";
+
+  // En el idioma con el que entra: el representante de Brasil, en /br.
+  const t = await getTranslations("admin.comisiones");
+  const idioma = intlLocaleDe(await getLocale());
+  const formatoEuros = new Intl.NumberFormat(idioma, { style: "currency", currency: "EUR", minimumFractionDigits: 2 });
+  const formatoMes = new Intl.DateTimeFormat(idioma, { month: "long", year: "numeric", timeZone: "UTC" });
+  const formatoFecha = new Intl.DateTimeFormat(idioma, { day: "numeric", month: "short", timeZone: "Europe/Madrid" });
+  const euros = (centimos: number) => formatoEuros.format(centimos / 100);
+  const nombreDelMes = (mes: string) => {
+    const texto = formatoMes.format(new Date(`${mes}-01T00:00:00Z`));
+    return texto.charAt(0).toUpperCase() + texto.slice(1);
+  };
 
   const [clubes, representantes] = await Promise.all([
     obtenerUsuariosPorRol("club"),
@@ -93,9 +94,9 @@ export default async function ComisionesPage({ searchParams }: { searchParams: P
     <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8 sm:px-6">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-teal-700">Panel de administración</p>
+          <p className="text-sm font-medium text-teal-700">{t("panel")}</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">
-            {esAdministrador ? "Comisiones de los representantes" : "Mi comisión"}
+            {esAdministrador ? t("tituloAdmin") : t("titulo")}
           </h1>
         </div>
         <CerrarSesionBoton />
@@ -104,7 +105,7 @@ export default async function ComisionesPage({ searchParams }: { searchParams: P
       <AdminNav activo="comisiones" esAdministrador={esAdministrador} />
 
       {esAdministrador && representantes.length > 1 && (
-        <nav className="flex flex-wrap gap-2" aria-label="Elegir representante">
+        <nav className="flex flex-wrap gap-2" aria-label={t("elegir")}>
           {representantes.map((representante) => (
             <Link
               key={representante.id}
@@ -123,52 +124,52 @@ export default async function ComisionesPage({ searchParams }: { searchParams: P
 
       {!liquidacion ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
-          Todavía no hay ningún representante. Dalo de alta en{" "}
-          <Link href="/admin/representantes" className="font-medium text-accion-tinta underline">
-            Representantes
-          </Link>
-          .
+          {t.rich("sinRepresentantes", {
+            enlace: (trozo) => (
+              <Link href="/admin/representantes" className="font-medium text-accion-tinta underline">
+                {trozo}
+              </Link>
+            ),
+          })}
         </div>
       ) : (
         <>
           <section className="rounded-xl border border-zinc-200 bg-white p-5">
             <p className="text-sm text-zinc-500">
               {esAdministrador && <>{liquidacion.email} · </>}
-              {BANDERA_DEL_PAIS[liquidacion.pais]} Clubes de {NOMBRE_DEL_PAIS[liquidacion.pais]} · {liquidacion.porcentaje} %
+              {BANDERA_DEL_PAIS[liquidacion.pais]} {t("clubesDe", { pais: liquidacion.pais })} · {liquidacion.porcentaje} %
             </p>
             <p className="mt-1 text-3xl font-semibold text-zinc-900 tabular-nums">{euros(total)}</p>
             <p className="mt-1 text-sm text-zinc-600">
-              {esAdministrador ? "Su parte" : "Tu parte"} de todo lo cobrado desde que{" "}
-              {esAdministrador ? "empezó" : "empezaste"}.
+              {esAdministrador ? t("suParte") : t("tuParte")}
             </p>
             <p className="mt-3 text-xs leading-relaxed text-zinc-500">
-              Cómo se calcula, en cada cobro: lo que paga el club, menos el IVA que va dentro del precio, menos
-              lo que Stripe se queda de ese cobro. De lo que queda, el {liquidacion.porcentaje} %. Cuentan todos los
-              clubes de {NOMBRE_DEL_PAIS[liquidacion.pais]} y las devoluciones ya están descontadas.
+              {t("comoSeCalcula", { porcentaje: liquidacion.porcentaje, pais: liquidacion.pais })}
             </p>
           </section>
 
           {falloStripe ? (
             <p className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
-              No se han podido leer los cobros de Stripe ahora mismo. Vuelve a cargar la página en un rato.
+              {t("falloStripe")}
             </p>
           ) : meses.length === 0 ? (
             <p className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
-              Todavía no hay cobros de clubes de {NOMBRE_DEL_PAIS[liquidacion.pais]}. Aparecerán aquí en cuanto el
-              primero pague.
+              {t("sinCobros", { pais: liquidacion.pais })}
             </p>
           ) : (
             <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
               <table className="w-full min-w-[720px] text-left text-sm">
                 <thead className={CABECERA_TABLA}>
                   <tr>
-                    <th className="px-4 py-3 font-medium">Mes</th>
-                    <th className="px-4 py-3 text-right font-medium">Cobrado</th>
-                    <th className="px-4 py-3 text-right font-medium">IVA</th>
-                    <th className="px-4 py-3 text-right font-medium">Stripe</th>
-                    <th className="px-4 py-3 text-right font-medium">Queda</th>
+                    <th className="px-4 py-3 font-medium">{t("mes")}</th>
+                    <th className="px-4 py-3 text-right font-medium">{t("cobrado")}</th>
+                    <th className="px-4 py-3 text-right font-medium">{t("iva")}</th>
+                    <th className="px-4 py-3 text-right font-medium">{t("stripe")}</th>
+                    <th className="px-4 py-3 text-right font-medium">{t("queda")}</th>
                     <th className="px-4 py-3 text-right font-medium">
-                      {esAdministrador ? "Su parte" : "Tu parte"} ({liquidacion.porcentaje} %)
+                      {esAdministrador
+                        ? t("columnaSuParte", { porcentaje: liquidacion.porcentaje })
+                        : t("columnaTuParte", { porcentaje: liquidacion.porcentaje })}
                     </th>
                   </tr>
                 </thead>
@@ -178,7 +179,7 @@ export default async function ComisionesPage({ searchParams }: { searchParams: P
                       <td className="px-4 py-3">
                         {nombreDelMes(mes.mes)}{" "}
                         <span className="font-normal text-zinc-500">
-                          · {mes.cobros.length} {mes.cobros.length === 1 ? "cobro" : "cobros"}
+                          · {t("cobros", { n: mes.cobros.length })}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-right tabular-nums">{euros(mes.cobradoCentimos)}</td>

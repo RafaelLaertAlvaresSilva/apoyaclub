@@ -1,13 +1,14 @@
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
 const ENLACES = [
-  { id: "resumen", href: "/admin", etiqueta: "Resumen", soloAdmin: true },
-  { id: "clubes", href: "/admin/clubes", etiqueta: "Clubes", soloAdmin: false },
-  { id: "empresas", href: "/admin/empresas", etiqueta: "Empresas", soloAdmin: true },
-  { id: "finanzas", href: "/admin/finanzas", etiqueta: "Finanzas", soloAdmin: true },
-  { id: "comisiones", href: "/admin/comisiones", etiqueta: "Comisiones", soloAdmin: false },
-  { id: "representantes", href: "/admin/representantes", etiqueta: "Representantes", soloAdmin: true },
-  { id: "bajas", href: "/admin/bajas", etiqueta: "Bajas", soloAdmin: true },
+  { id: "resumen", href: "/admin", soloAdmin: true },
+  { id: "clubes", href: "/admin/clubes", soloAdmin: false },
+  { id: "empresas", href: "/admin/empresas", soloAdmin: true },
+  { id: "finanzas", href: "/admin/finanzas", soloAdmin: true },
+  { id: "comisiones", href: "/admin/comisiones", soloAdmin: false },
+  { id: "representantes", href: "/admin/representantes", soloAdmin: true },
+  { id: "bajas", href: "/admin/bajas", soloAdmin: true },
 ] as const;
 
 type SeccionAdmin = (typeof ENLACES)[number]["id"];
@@ -21,6 +22,7 @@ type SeccionAdmin = (typeof ENLACES)[number]["id"];
  * para que no vea botones que no le sirven.
  */
 export function AdminNav({ activo, esAdministrador = true }: { activo: SeccionAdmin; esAdministrador?: boolean }) {
+  const t = useTranslations("admin.nav");
   const enlaces = ENLACES.filter((enlace) => esAdministrador || !enlace.soloAdmin);
 
   return (
@@ -38,7 +40,7 @@ export function AdminNav({ activo, esAdministrador = true }: { activo: SeccionAd
               : "border-zinc-300 bg-white text-zinc-700 hover:border-accion-tinta hover:text-accion-tinta"
           }`}
         >
-          {enlace.id === "comisiones" && !esAdministrador ? "Mi comisión" : enlace.etiqueta}
+          {enlace.id === "comisiones" && !esAdministrador ? t("miComision") : t(enlace.id)}
         </Link>
       ))}
     </nav>

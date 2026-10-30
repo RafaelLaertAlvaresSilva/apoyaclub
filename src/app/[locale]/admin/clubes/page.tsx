@@ -8,7 +8,7 @@ import { clubRowToProfile, type ClubRow } from "@/lib/club-mappers";
 import type { SubscriptionStatus } from "@/lib/subscription-mappers";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { accesoAdminDeLaPagina } from "@/lib/acceso-admin-servidor";
-import { BANDERA_DEL_PAIS, NOMBRE_DEL_PAIS, PAISES, esPaisValido } from "@/lib/paises";
+import { BANDERA_DEL_PAIS, PAISES, esPaisValido } from "@/lib/paises";
 import { SITE_URL } from "@/lib/site";
 import { AdminNav } from "../components/AdminNav";
 import { FilaClub } from "./components/FilaClub";
@@ -35,49 +35,20 @@ type ClubRowConAdmin = ClubRow & {
  * tiene fila ahí y, aun así, tiene que aparecer en este listado (con
  * 0% de perfil y sin suscripción).
  */
-const AVISOS: Record<string, { texto: string; bien: boolean }> = {
-  suspendido: {
-    texto: "Club suspendido. Su página pública ya no se ve y no puede entrar a su panel.",
-    bien: true,
-  },
-  reactivado: { texto: "Club reactivado. Vuelve a tener su página y su panel.", bien: true },
-  "modo-pruebas": {
-    texto:
-      "Club en modo de pruebas. En un minuto como mucho deja de verse en la web y en el buscador, y puede seguir entrando a su panel con normalidad.",
-    bien: true,
-  },
-  "fuera-de-pruebas": {
-    texto: "Modo de pruebas quitado. El club vuelve a verse en la web y en el buscador (en un minuto como mucho).",
-    bien: true,
-  },
-  verificado: { texto: "Club verificado. Ya le sale la insignia en su página.", bien: true },
-  "sin-verificar": { texto: "Verificación quitada.", bien: true },
-  regalado: {
-    texto: "Listo. Ese club ya tiene el acceso gratuito hasta la fecha que has puesto.",
-    bien: true,
-  },
-  "sin-ficha": {
-    texto:
-      "Ese club todavía no ha guardado su ficha, así que no hay dónde apuntarle el acceso. En cuanto entre en su panel y guarde al menos el nombre y la localidad, podrás regalárselo.",
-    bien: false,
-  },
-  "paga-stripe": {
-    texto:
-      "Ese club tiene una suscripción activa en Stripe y no se le puede poner una prueba por encima: la plataforma diría una cosa y Stripe estaría cobrando otra. Tendría que cancelarla él desde su panel.",
-    bien: false,
-  },
-  fecha: {
-    texto: "Pon una fecha de hoy en adelante: con una fecha pasada le estarías quitando el acceso.",
-    bien: false,
-  },
-  "pais-cambiado": {
-    texto: "País cambiado. El club pasa a la lista del representante de ese país.",
-    bien: true,
-  },
-  "no-admin": {
-    texto: "Tu sesión ha caducado. Vuelve a iniciar sesión e inténtalo otra vez.",
-    bien: false,
-  },
+/** Si cada aviso es bueno o malo; el texto está en `admin.clubes.avisos`. */
+const AVISOS: Record<string, { bien: boolean }> = {
+  suspendido: { bien: true },
+  reactivado: { bien: true },
+  "modo-pruebas": { bien: true },
+  "fuera-de-pruebas": { bien: true },
+  verificado: { bien: true },
+  "sin-verificar": { bien: true },
+  regalado: { bien: true },
+  "pais-cambiado": { bien: true },
+  "sin-ficha": { bien: false },
+  "paga-stripe": { bien: false },
+  fecha: { bien: false },
+  "no-admin": { bien: false },
 };
 
 export default async function AdminClubesPage({
@@ -87,8 +58,10 @@ export default async function AdminClubesPage({
 }) {
   const { aviso, buscar, pais: paisPedido } = await searchParams;
   const busqueda = (buscar ?? "").trim().toLowerCase();
-  const mensaje = aviso ? AVISOS[aviso] : undefined;
   const t = await getTranslations("admin.clubes");
+  const tPais = await getTranslations("admin.paises");
+  const mensaje =
+    aviso && AVISOS[aviso] ? { texto: t(`avisos.${aviso}` as "avisos.suspendido"), bien: AVISOS[aviso].bien } : undefined;
   // Administrador: todos los países, con filtro. Representante: solo el
   // suyo, diga lo que diga la dirección.
   const acceso = await accesoAdminDeLaPagina();
@@ -129,7 +102,7 @@ export default async function AdminClubesPage({
 
       return {
         id: usuario.id,
-        name: perfil?.name || "(perfil sin completar)",
+        name: perfil?.name || t("perfilSinCompletar"),
         city: perfil?.city ?? "—",
         email: usuario.email,
         // Fecha de alta real (registro en Auth), no la de la primera vez
@@ -170,12 +143,13 @@ export default async function AdminClubesPage({
         <div>
           <p className="text-sm font-medium text-teal-700">{t("panelDeAdministracion")}</p>
           <h1 className="mt-1 text-2xl font-semibold text-zinc-900">
-            {t("clubes")}
-            {paisFiltro && (
+            {paisFiltro ? (
               <>
-                {" "}
-                de {NOMBRE_DEL_PAIS[paisFiltro]} <span aria-hidden="true">{BANDERA_DEL_PAIS[paisFiltro]}</span>
+                {t("tituloDePais", { pais: paisFiltro })}{" "}
+                <span aria-hidden="true">{BANDERA_DEL_PAIS[paisFiltro]}</span>
               </>
+            ) : (
+              t("clubes")
             )}
           </h1>
         </div>
@@ -188,12 +162,12 @@ export default async function AdminClubesPage({
           él salen marcados con su nombre en la lista. */}
       {acceso.tipo === "representante" && acceso.codigo && (
         <div className="rounded-xl border border-zinc-200 bg-white p-4 text-sm text-zinc-700">
-          <p className="font-medium text-zinc-900">Tu enlace</p>
+          <p className="font-medium text-zinc-900">{t("tuEnlace")}</p>
           <p className="mt-1 break-all font-mono text-xs text-accion-tinta">
             {SITE_URL}/{acceso.pais === "BR" ? "br" : acceso.pais === "PT" ? "pt" : "es"}/6mesesgratis?a={acceso.codigo}
           </p>
           <p className="mt-1 text-xs text-zinc-500">
-            Los clubes que se registren por este enlace salen marcados con tu nombre.
+            {t("tuEnlaceTexto")}
           </p>
         </div>
       )}
@@ -208,20 +182,20 @@ export default async function AdminClubesPage({
       {(filas.length > 0 || paisFiltro) && (
         <form className="flex flex-wrap items-center gap-2">
           <label htmlFor="buscar-club" className="sr-only">
-            Buscar un club por nombre, localidad o correo
+            {t("buscarEtiqueta")}
           </label>
           <input
             id="buscar-club"
             name="buscar"
             type="search"
             defaultValue={buscar ?? ""}
-            placeholder="Nombre, localidad o correo"
+            placeholder={t("buscarPlaceholder")}
             className="w-full max-w-xs rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-accion-tinta focus:outline-none focus:ring-1 focus:ring-accion-tinta"
           />
           {esAdministrador && (
             <>
               <label htmlFor="pais-club" className="sr-only">
-                País
+                {t("paisEtiqueta")}
               </label>
               <select
                 id="pais-club"
@@ -229,10 +203,10 @@ export default async function AdminClubesPage({
                 defaultValue={paisFiltro ?? ""}
                 className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm"
               >
-                <option value="">Todos los países</option>
+                <option value="">{t("todosLosPaises")}</option>
                 {PAISES.map((pais) => (
                   <option key={pais} value={pais}>
-                    {NOMBRE_DEL_PAIS[pais]} ({todos.filter((usuario) => usuario.pais === pais).length})
+                    {tPais(pais)} ({todos.filter((usuario) => usuario.pais === pais).length})
                   </option>
                 ))}
               </select>
@@ -242,7 +216,7 @@ export default async function AdminClubesPage({
             type="submit"
             className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
           >
-            Buscar
+            {t("buscar")}
           </button>
           {(busqueda || (esAdministrador && paisFiltro)) && (
             <>
@@ -250,10 +224,10 @@ export default async function AdminClubesPage({
                 href="/admin/clubes"
                 className="rounded-lg border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm hover:bg-zinc-100"
               >
-                Ver todos
+                {t("verTodos")}
               </Link>
               <span className="text-sm text-zinc-500">
-                {visibles.length} de {filas.length}
+                {t("cuantos", { visibles: visibles.length, total: filas.length })}
               </span>
             </>
           )}
@@ -264,7 +238,7 @@ export default async function AdminClubesPage({
         <p className="text-sm text-zinc-500">{t("todaviaNoSeHa")}</p>
       ) : visibles.length === 0 ? (
         <p className="text-sm text-zinc-500">
-          Ningún club coincide con «{buscar}».
+          {t("ningunoCoincide", { busqueda: buscar ?? "" })}
         </p>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
@@ -274,7 +248,7 @@ export default async function AdminClubesPage({
                 <th className="px-4 py-3 font-medium">{t("club")}</th>
                 <th className="px-4 py-3 font-medium">{t("alta")}</th>
                 <th className="px-4 py-3 font-medium">{t("perfil")}</th>
-                <th className="px-4 py-3 font-medium">Actividad 90d</th>
+                <th className="px-4 py-3 font-medium">{t("actividad90")}</th>
                 <th className="px-4 py-3 font-medium">{t("suscripcion")}</th>
                 <th className="px-4 py-3 font-medium">{t("estado")}</th>
                 <th className="px-4 py-3 font-medium">{t("acciones")}</th>
