@@ -19,6 +19,7 @@ export function OportunidadesManager({
   equipos = [],
   requisitos,
   slugDelClub = null,
+  fichaPublica = false,
   userId,
 }: {
   oportunidades: Opportunity[];
@@ -26,6 +27,8 @@ export function OportunidadesManager({
   requisitos?: RequisitoIdea[];
   /** La dirección pública del club, o null si todavía no tiene ficha. */
   slugDelClub?: string | null;
+  /** Si la ficha del club se ve en público ahora mismo. */
+  fichaPublica?: boolean;
   /** El identificador del club, para subir las fotos al almacén. */
   userId: string;
 }) {
@@ -127,6 +130,7 @@ export function OportunidadesManager({
               oportunidad={oportunidad}
               equipos={equipos}
               slugDelClub={slugDelClub}
+              fichaPublica={fichaPublica}
               userId={userId}
             />
           ))}

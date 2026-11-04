@@ -44,6 +44,20 @@ function layoutsQueLaEnvuelven(pagina: string): string[] {
   return encontrados;
 }
 
+/** Componentes compartidos por varias páginas que pintan ellos la cabecera. */
+const COMPONENTES_CON_CABECERA = ["FichaDelClub", "VistaDeOportunidad", "ListaVistaPrevia"];
+const ARCHIVO_DEL_COMPONENTE: Record<string, string> = {
+  FichaDelClub: "club/[slug]/components/FichaDelClub.tsx",
+  VistaDeOportunidad: "club/[slug]/components/VistaDeOportunidad.tsx",
+  ListaVistaPrevia: "vista-previa/ListaVistaPrevia.tsx",
+};
+
+describe("los componentes de ficha compartidos llevan cabecera", () => {
+  it.each(COMPONENTES_CON_CABECERA)("%s pinta <Header", (nombre) => {
+    expect(readFileSync(join(RAIZ, ARCHIVO_DEL_COMPONENTE[nombre]), "utf8")).toContain("<Header");
+  });
+});
+
 describe("todas las páginas dejan volver a la portada", () => {
   const todas = paginas(RAIZ).filter(
     (ruta) => !SIN_INTERFAZ.some((excluida) => ruta.includes(excluida.replace("/", "/"))),
@@ -61,7 +75,9 @@ describe("todas las páginas dejan volver a la portada", () => {
         (fuente) =>
           fuente.includes("<BarraLogo") ||
           fuente.includes("<Header") ||
-          fuente.includes("LegalPageShell"),
+          fuente.includes("LegalPageShell") ||
+          // Pintan la ficha del club, que lleva la cabecera (se comprueba abajo).
+          COMPONENTES_CON_CABECERA.some((nombre) => fuente.includes(`<${nombre}`)),
       );
 
       expect(tieneCabecera).toBe(true);

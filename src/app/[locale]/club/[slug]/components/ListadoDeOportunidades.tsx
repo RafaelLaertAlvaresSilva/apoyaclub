@@ -22,10 +22,13 @@ export function ListadoDeOportunidades({
   oportunidades,
   slug,
   esNecesidad,
+  base = `/club/${slug}`,
 }: {
   oportunidades: Opportunity[];
   slug: string;
   esNecesidad: boolean;
+  /** A dónde llevan los enlaces: la ficha pública, o `/vista-previa`. */
+  base?: string;
 }) {
   const t = useTranslations("club.listado");
   const E = etiquetador(useTranslations("common.etiquetas"));
@@ -38,7 +41,7 @@ export function ListadoDeOportunidades({
           {esNecesidad ? t("sinNecesidades") : t("sinOportunidades")}
         </p>
         <Link
-          href={`/club/${slug}`}
+          href={base}
           className="mt-4 inline-block text-sm font-medium text-accion-tinta hover:underline"
         >
           {t("volverASuFicha")}
@@ -52,7 +55,7 @@ export function ListadoDeOportunidades({
       {oportunidades.map((oportunidad) => (
         <li key={oportunidad.id}>
           <Link
-            href={`/club/${slug}/oportunidad/${oportunidad.id}`}
+            href={`${base}/oportunidad/${oportunidad.id}`}
             className={`flex h-full flex-col gap-2 rounded-xl border p-5 transition-colors ${
               esNecesidad
                 ? "border-teal-200 bg-teal-50 hover:border-accion-tinta"

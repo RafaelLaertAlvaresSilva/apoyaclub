@@ -1,4 +1,12 @@
 {
+  "vistaPrevia": {
+    "titulo": "Vista previa: así verá tu página una empresa.",
+    "paginaOculta": "Ahora mismo solo la ves tú: tu página no es pública (modo de pruebas, oculta o sin suscripción activa).",
+    "oportunidadNoDisponible": "Solo la ves tú: esta oportunidad no está «Disponible», así que no sale en la web.",
+    "yaPublica": "Esta página ya es pública.",
+    "abrirPublica": "Abrir la página pública",
+    "volverAlPanel": "Volver al panel"
+  },
   "meta": {
     "noEncontrado": "Club no encontrado",
     "titulo": "{club} — ApoyaClub",

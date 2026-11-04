@@ -1,4 +1,12 @@
 {
+  "vistaPrevia": {
+    "titulo": "Preview: this is how a business will see your page.",
+    "paginaOculta": "Right now only you can see it: your page is not public (test mode, hidden or no active subscription).",
+    "oportunidadNoDisponible": "Only you can see it: this opportunity is not “Available”, so it is not shown on the website.",
+    "yaPublica": "This page is already public.",
+    "abrirPublica": "Open the public page",
+    "volverAlPanel": "Back to dashboard"
+  },
   "meta": {
     "noEncontrado": "Club not found",
     "titulo": "{club} — ApoyaClub",

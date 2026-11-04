@@ -127,7 +127,8 @@ describe("los datos destacados de un club", () => {
 describe("las medidas de la ficha en el teléfono", () => {
   const RAIZ = join(process.cwd(), "src", "app", "[locale]", "club", "[slug]");
   const TARJETAS = readFileSync(join(RAIZ, "components", "DatosDestacados.tsx"), "utf8");
-  const PAGINA = readFileSync(join(RAIZ, "page.tsx"), "utf8");
+  // La página pinta `FichaDelClub`, que es donde está la ficha.
+  const PAGINA = readFileSync(join(RAIZ, "components", "FichaDelClub.tsx"), "utf8");
 
   // Sin esto, un archivo renombrado o vacío dejaría pasar todo lo demás.
   it("encuentra los dos archivos", () => {

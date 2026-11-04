@@ -6,7 +6,8 @@ import QRCode from "qrcode";
 const RAIZ = join(process.cwd(), "src");
 const leer = (...partes: string[]) => readFileSync(join(RAIZ, ...partes), "utf8");
 
-const PAGINA = leer("app", "[locale]", "club", "[slug]", "oportunidad", "[id]", "page.tsx");
+// La página pinta `VistaDeOportunidad`, que es donde está la ficha.
+const PAGINA = leer("app", "[locale]", "club", "[slug]", "components", "VistaDeOportunidad.tsx");
 const PIE = leer("app", "[locale]", "club", "[slug]", "components", "PieDeLaFichaImpresa.tsx");
 const CABECERA = leer("components", "Header.tsx");
 const PIE_WEB = leer("components", "Footer.tsx");

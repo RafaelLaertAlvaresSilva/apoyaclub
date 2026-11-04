@@ -13,6 +13,7 @@ import {
   type OpportunityRow,
 } from "@/lib/opportunity-mappers";
 import { createClient } from "@/lib/supabase/server";
+import { obtenerClubPublico } from "../../club/[slug]/data";
 import { OportunidadesManager } from "./components/OportunidadesManager";
 
 export default async function OportunidadesPage() {
@@ -95,6 +96,10 @@ export default async function OportunidadesPage() {
              empresa. Va en `null` mientras el club no haya guardado
              su ficha: sin ficha no hay página pública a la que ir. */
           slugDelClub={perfil?.slug ?? null}
+          /* Si la ficha se ve en público. Si no (modo de pruebas,
+             oculta, sin suscripción), "Visualizar" abre la vista previa,
+             que solo ve el club: la página pública daría "no encontrada". */
+          fichaPublica={perfil?.slug ? (await obtenerClubPublico(perfil.slug)) !== null : false}
           userId={user.id}
         />
       )}

@@ -275,9 +275,8 @@ describe("las fotos llegan de punta a punta", () => {
           "[locale]",
           "club",
           "[slug]",
-          "oportunidad",
-          "[id]",
-          "page.tsx",
+          "components",
+          "VistaDeOportunidad.tsx",
         ],
       ],
       [

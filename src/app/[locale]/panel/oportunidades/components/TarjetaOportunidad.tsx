@@ -42,12 +42,15 @@ export function TarjetaOportunidad({
   oportunidad,
   equipos = [],
   slugDelClub = null,
+  fichaPublica = false,
   userId,
 }: {
   oportunidad: Opportunity;
   equipos?: ClubTeam[];
   /** La dirección pública del club, o null si todavía no tiene ficha. */
   slugDelClub?: string | null;
+  /** Si la ficha del club se ve en público ahora mismo. */
+  fichaPublica?: boolean;
   /** El identificador del club, para subir las fotos al almacén. */
   userId: string;
 }) {
@@ -202,7 +205,14 @@ export function TarjetaOportunidad({
             que es peor que no tener botón. */}
         {slugDelClub && !oportunidad.archivedAt && (
           <Link
-            href={`/club/${slugDelClub}/oportunidad/${oportunidad.id}`}
+            /* La página pública solo si la ve una empresa de verdad: el
+               club se ve en público y la oportunidad está disponible. Si
+               no, la vista previa, que solo ve el club (`/vista-previa`). */
+            href={
+              fichaPublica && oportunidad.status === "available"
+                ? `/club/${slugDelClub}/oportunidad/${oportunidad.id}`
+                : `/vista-previa/oportunidad/${oportunidad.id}`
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 rounded-lg border border-teal-300 bg-white px-3 py-1.5 text-xs font-medium text-teal-700 transition-colors hover:bg-teal-50"

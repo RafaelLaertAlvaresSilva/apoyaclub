@@ -42,7 +42,7 @@ export default async function PanelLayout({
   let perfilCreado = false;
   // Modo de pruebas (0053, lo pone el admin) u oculto por el propio
   // club (0055): usa su panel, pero no se ve en público. Su página daría
-  // "no encontrada", así que el enlace a ella se quita y en su lugar
+  // "no encontrada", así que el enlace lleva a la vista previa y además
   // sale un aviso arriba.
   let modoPruebas = false;
   let ocultoPorElClub = false;
@@ -60,7 +60,12 @@ export default async function PanelLayout({
       ?.slug;
     perfilCreado = data != null;
     if (perfilCreado) ({ modoPruebas, ocultoPorElClub } = await leerVisibilidadDelClub(supabase, user.id));
-    if (slug && !modoPruebas && !ocultoPorElClub) paginaPublica = `/${await getLocale()}/club/${slug}`;
+    // Si no se ve en público, el enlace lleva a la vista previa, que
+    // solo ve el club: la página pública daría "no encontrada".
+    if (slug) {
+      paginaPublica =
+        !modoPruebas && !ocultoPorElClub ? `/${await getLocale()}/club/${slug}` : `/${await getLocale()}/vista-previa`;
+    }
   }
 
   // Si el club dejó el menú plegado la última vez, llega ya plegado.
