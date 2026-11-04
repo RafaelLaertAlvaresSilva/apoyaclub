@@ -35,6 +35,8 @@ export const DEPORTES: Deporte[] = [
   { clave: "gimnasia", nombre: "Gimnasia", sinonimos: ["gimnasia ritmica", "gimnasia rítmica"] },
   { clave: "patinaje", nombre: "Patinaje", sinonimos: ["patinaje artistico", "patinaje artístico"] },
   { clave: "artesMarciales", nombre: "Artes marciales", sinonimos: ["karate", "judo", "taekwondo"] },
+  { clave: "airsoft", nombre: "Airsoft", sinonimos: ["speedsoft", "softair", "air soft"] },
+  { clave: "paintball", nombre: "Paintball", sinonimos: ["paint ball", "speedball"] },
 ];
 
 /** "Vóley-Playa " → "voleyplaya": sin acentos, sin mayúsculas, sin espacios ni guiones. */

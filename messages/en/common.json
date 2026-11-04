@@ -232,7 +232,9 @@
       "triatlon": "Triathlon",
       "gimnasia": "Gymnastics",
       "patinaje": "Skating",
-      "artesMarciales": "Martial arts"
+      "artesMarciales": "Martial arts",
+      "airsoft": "Airsoft",
+      "paintball": "Paintball"
     }
   },
   "plazas": {
