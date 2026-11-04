@@ -137,7 +137,9 @@ export function TarjetaOportunidad({
               </p>
             )}
             {oportunidad.description && (
-              <p className="mt-2 text-sm text-zinc-600">
+              /* En un recuadro blanco, como los botones de abajo: suelto
+                 sobre el fondo verde se perdía (pedido por Rafael). */
+              <p className="mt-3 whitespace-pre-line rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700">
                 {oportunidad.description}
               </p>
             )}
