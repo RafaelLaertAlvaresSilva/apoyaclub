@@ -14,7 +14,8 @@ export const LEGAL_VERSIONS = {
   // del club (correo, teléfono, WhatsApp) para hablar con él.
   privacy: "2026-11-04",
   cookies: "2026-08-31",
-  terms: "2026-08-31",
+  // 2026-11-04: los tres planes y los precios de Brasil.
+  terms: "2026-11-04",
   minorsPhotoUpload: "2026-08-31",
 } as const;
 

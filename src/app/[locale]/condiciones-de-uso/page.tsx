@@ -46,10 +46,15 @@ export default function CondicionesDeUsoPage() {
       <section>
         <h2>3. Cuenta de club: precio y suscripción</h2>
         <p>
-          El registro del club incluye un primer mes de acceso gratuito. Transcurrido ese
-          mes, el uso continuado de la Plataforma tiene un coste de 29,90 €/mes (IVA
-          incluido), gestionado mediante suscripción recurrente a través de Stripe. El club
-          puede cancelar la suscripción en cualquier momento desde su panel; el acceso a las
+          El registro del club incluye un periodo de prueba gratuito (de 30 días, o más largo
+          en las campañas que se anuncien). Después, el club elige uno de los planes de la
+          página de precios, gestionado mediante suscripción recurrente a través de Stripe.
+          En España y Portugal: Mensual, 29,90 €/mes; Temporada, 249 €/año; o Fundador,
+          199 €/año con el precio congelado mientras siga de alta (plazas limitadas), con
+          IVA incluido. En Brasil: R$ 89/mes, R$ 790/año o R$ 590/año (Fundador), sin IVA
+          español. Los planes de Brasil son solo para clubes de Brasil y se pagan con Pix o
+          con tarjeta emitida en Brasil; si se pagan con otro medio, la suscripción se
+          cancela y se devuelve lo cobrado. El club puede cancelar la suscripción en cualquier momento desde su panel; el acceso a las
           funciones de pago se mantiene hasta el final del periodo ya abonado. Si la
           suscripción no está activa, el club conserva sus datos, pero su página pública y
           sus oportunidades dejan de ser visibles para las empresas.

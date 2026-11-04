@@ -1,7 +1,7 @@
 {
   "meta": {
     "titulo": "ApoyaClub — Conecte o seu clube esportivo a empresas patrocinadoras",
-    "descripcion": "Conecte o seu clube a empresas interessadas em colaborar. Publique as suas oportunidades de patrocínio, de 50 € até o patrocínio principal, e deixe que as empresas encontrem você e entrem em contato diretamente. Sem comissões."
+    "descripcion": "Conecte o seu clube a empresas interessadas em colaborar. Publique as suas oportunidades de patrocínio, de R$ 200 até o patrocínio principal, e deixe que as empresas encontrem você e entrem em contato diretamente. Sem comissões."
   },
   "hero": {
     "etiqueta": "PLATAFORMA DE GESTÃO DE PATROCÍNIOS ESPORTIVOS",
@@ -77,10 +77,10 @@
       {
         "categoria": "Patrocínio",
         "titulo": "Patrocinador da equipe feminina",
-        "precio": "500 €",
+        "precio": "R$ 1.500",
         "periodo": "/temporada",
         "datos": [
-          "Alicante",
+          "Campinas",
           "250 famílias",
           "4.800 seguidores"
         ],
@@ -95,7 +95,7 @@
       {
         "categoria": "Evento",
         "titulo": "Patrocinador do torneio de Natal",
-        "precio": "300 €",
+        "precio": "R$ 900",
         "periodo": "",
         "datos": [
           "120 participantes",
@@ -133,9 +133,9 @@
     "titulo": "Descubra o que pode patrocinar",
     "filtros": {
       "presupuesto": "ORÇAMENTO",
-      "presupuestoValor": "500 €",
+      "presupuestoValor": "R$ 1.500",
       "ubicacion": "LOCALIZAÇÃO",
-      "ubicacionValor": "Alicante",
+      "ubicacionValor": "Campinas",
       "publico": "PÚBLICO",
       "publicoValor": "Famílias",
       "deporte": "ESPORTE",
@@ -156,21 +156,21 @@
     "resultados": [
       {
         "categoria": "Uniformes",
-        "titulo": "Clube de futebol · Base · Alicante",
+        "titulo": "Clube de futebol · Base · Campinas",
         "texto": "Patrocínio dos uniformes para a temporada.",
-        "precio": "450 €"
+        "precio": "R$ 1.200"
       },
       {
         "categoria": "Redes sociais",
-        "titulo": "Clube de basquete · Famílias · Alicante",
+        "titulo": "Clube de basquete · Famílias · Campinas",
         "texto": "Menções e conteúdo nas redes durante o campeonato.",
-        "precio": "500 €"
+        "precio": "R$ 1.500"
       },
       {
         "categoria": "Instalações",
-        "titulo": "Clube de padel · Todos os públicos · Alicante",
+        "titulo": "Clube de padel · Todos os públicos · Campinas",
         "texto": "Presença de marca nas quadras e nos vestiários.",
-        "precio": "480 €"
+        "precio": "R$ 1.400"
       }
     ],
     "avisoEjemplos": "Resultados de exemplo — ilustrativos, não são clubes reais.",
@@ -689,7 +689,7 @@
         "Gráfica e cartazes",
         "Horas do seu ofício",
         "Um espaço para um evento",
-        "Contribuir com 50 € por mês"
+        "Contribuir com R$ 200 por mês"
       ],
       "cierre": "Se o seu é um serviço, um produto ou umas horas, os clubes estão pedindo isso pelo nome. Procure pelo que pedem e você verá quem precisa perto de você."
     },
