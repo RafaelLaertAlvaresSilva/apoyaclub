@@ -33,6 +33,11 @@ const ESTILO_ESTADO: Record<OpportunityStatus, string> = {
   closed: "bg-zinc-400 text-sobre-color",
 };
 
+/** Las acciones de la tarjeta, con borde para que se vean como botones
+ * y no como palabras sueltas sobre el fondo (pedido por Rafael). */
+const BOTON_ACCION =
+  "rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50";
+
 export function TarjetaOportunidad({
   oportunidad,
   equipos = [],
@@ -200,7 +205,7 @@ export function TarjetaOportunidad({
             href={`/club/${slugDelClub}/oportunidad/${oportunidad.id}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-teal-700 transition-colors hover:bg-teal-50"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-teal-300 bg-white px-3 py-1.5 text-xs font-medium text-teal-700 transition-colors hover:bg-teal-50"
           >
             {t("visualizar")}
             {/* La flecha dice que se abre en otra pestaña antes de
@@ -212,7 +217,7 @@ export function TarjetaOportunidad({
         <button
           type="button"
           onClick={() => setEnEdicion(true)}
-          className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
+          className={BOTON_ACCION}
         >
           {t("editar")}
         </button>
@@ -222,7 +227,7 @@ export function TarjetaOportunidad({
           <button
             type="submit"
             title={t("compartirPlantillaAyuda")}
-            className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
+            className={BOTON_ACCION}
           >
             {t("compartirPlantilla")}
           </button>
@@ -232,7 +237,7 @@ export function TarjetaOportunidad({
           <input type="hidden" name="id" value={oportunidad.id} />
           <button
             type="submit"
-            className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
+            className={BOTON_ACCION}
           >
             {t("duplicar")}
           </button>
@@ -243,7 +248,7 @@ export function TarjetaOportunidad({
             <input type="hidden" name="id" value={oportunidad.id} />
             <button
               type="submit"
-              className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
+              className={BOTON_ACCION}
             >
               {t("restaurar")}
             </button>
@@ -253,7 +258,7 @@ export function TarjetaOportunidad({
             <input type="hidden" name="id" value={oportunidad.id} />
             <button
               type="submit"
-              className="rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100"
+              className={BOTON_ACCION}
             >
               {t("archivar")}
             </button>
@@ -265,7 +270,7 @@ export function TarjetaOportunidad({
           id={oportunidad.id}
           nombre={oportunidad.title}
           etiqueta={t("eliminar")}
-          clases="rounded-lg px-3 py-1.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50"
+          clases="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50"
         />
       </div>
     </li>
