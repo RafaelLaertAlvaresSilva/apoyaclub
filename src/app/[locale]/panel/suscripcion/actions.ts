@@ -7,7 +7,9 @@ import { getLocale } from "next-intl/server";
 import type { User } from "@supabase/supabase-js";
 import { redirect as redirectLocalizado } from "@/i18n/navigation";
 import { SITE_URL } from "@/lib/site";
-import { esPlanValido, priceIdDelPlan, type PlanId } from "@/lib/planes";
+import { paisDeLaCuenta } from "@/lib/paises";
+import { esPlanValido, monedaDelPais, priceIdDelPlan, type PlanId } from "@/lib/planes";
+import type Stripe from "stripe";
 import { obtenerStripe } from "@/lib/stripe/client";
 import type { SubscriptionRow } from "@/lib/subscription-mappers";
 import { createClient } from "@/lib/supabase/server";
@@ -61,6 +63,9 @@ export async function iniciarSuscripcion(formData: FormData): Promise<void> {
 
   const solicitado = String(formData.get("plan") ?? "");
   const planId: PlanId = esPlanValido(solicitado) ? solicitado : "temporada";
+  // La moneda la decide el país de la cuenta del club, que él no puede
+  // cambiar: un club de Brasil paga en reales, el resto en euros.
+  const moneda = monedaDelPais(paisDeLaCuenta(user.app_metadata));
 
   const { data: filaClub } = await supabase
     .from("clubs")
@@ -95,15 +100,18 @@ export async function iniciarSuscripcion(formData: FormData): Promise<void> {
 
   let priceId: string;
   try {
-    priceId = priceIdDelPlan(planId);
+    priceId = priceIdDelPlan(planId, moneda);
   } catch (excepcion) {
     console.error("[stripe] Plan sin precio configurado:", excepcion);
     return redirectLocalizado({ href: `${RUTA_SUSCRIPCION}?error=checkout`, locale });
   }
 
   const stripe = obtenerStripe();
-  const sesionCheckout = await stripe.checkout.sessions
-    .create({
+  const crearSesion = (metodos?: Stripe.Checkout.SessionCreateParams.PaymentMethodType[]) =>
+    stripe.checkout.sessions.create({
+      // En reales, Pix (que exige un banco de Brasil) y tarjeta (que
+      // luego se comprueba que sea de Brasil: `lib/pago-brasil.ts`).
+      ...(metodos ? { payment_method_types: metodos } : {}),
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
       subscription_data: {
@@ -140,13 +148,23 @@ export async function iniciarSuscripcion(formData: FormData): Promise<void> {
       // Recupera el club en el webhook aunque todavía no tenga cliente
       // de Stripe asociado (primera suscripción).
       client_reference_id: user.id,
-      success_url: `${SITE_URL}/${locale}${RUTA_SUSCRIPCION}?checkout=success`,
+      // Con el id de la sesión, la página de vuelta puede comprobar el
+      // pago de Brasil sin esperar al webhook.
+      success_url: `${SITE_URL}/${locale}${RUTA_SUSCRIPCION}?checkout=success&sesion={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/${locale}${RUTA_SUSCRIPCION}?checkout=cancel`,
-    })
-    .catch((excepcion) => {
-      console.error("[stripe] No se ha podido crear la sesión de Checkout:", excepcion);
-      return null;
     });
+
+  const alFallar = (excepcion: unknown) => {
+    console.error("[stripe] No se ha podido crear la sesión de Checkout:", excepcion);
+    return null;
+  };
+
+  // Si Pix todavía no está activado en Stripe, la sesión con Pix falla:
+  // entonces se abre solo con tarjeta, que se comprueba igual.
+  const sesionCheckout =
+    moneda === "BRL"
+      ? await crearSesion(["card", "pix"]).catch(() => crearSesion(["card"]).catch(alFallar))
+      : await crearSesion().catch(alFallar);
 
   if (!sesionCheckout) {
     return redirectLocalizado({ href: `${RUTA_SUSCRIPCION}?error=checkout`, locale });

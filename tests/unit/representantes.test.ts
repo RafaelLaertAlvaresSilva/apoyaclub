@@ -124,3 +124,35 @@ describe("el admin del representante, en su idioma", () => {
     });
   }
 });
+
+describe("precios de Brasil", () => {
+  it("los planes en reales: R$ 89, R$ 790 y R$ 590, sin IVA", async () => {
+    const { PLANES, PRECIOS_BRL, llevaIva, monedaDelPais, precioFormateado, variableDelPrecio } = await import(
+      "@/lib/planes"
+    );
+    expect(PRECIOS_BRL).toEqual({ mensual: 8900, temporada: 79000, fundador: 59000 });
+    expect(monedaDelPais("BR")).toBe("BRL");
+    expect(monedaDelPais("ES")).toBe("EUR");
+    expect(monedaDelPais("PT")).toBe("EUR");
+    expect(llevaIva("BRL")).toBe(false);
+    expect(precioFormateado(PLANES.mensual, "pt-BR", "BRL").replace(/\s/g, " ")).toBe("R$ 89");
+    expect(variableDelPrecio("fundador", "BRL")).toBe("STRIPE_PRICE_FUNDADOR_BRL");
+    expect(variableDelPrecio("fundador")).toBe("STRIPE_PRICE_FUNDADOR");
+  });
+
+  it("en reales, solo Pix o tarjeta de Brasil", async () => {
+    const { metodoValidoParaBrasil } = await import("@/lib/pago-brasil");
+    expect(metodoValidoParaBrasil({ type: "pix", card: undefined } as never)).toBe(true);
+    expect(metodoValidoParaBrasil({ type: "card", card: { country: "BR" } } as never)).toBe(true);
+    expect(metodoValidoParaBrasil({ type: "card", card: { country: "ES" } } as never)).toBe(false);
+    expect(metodoValidoParaBrasil({ type: "card", card: { country: "PT" } } as never)).toBe(false);
+    expect(metodoValidoParaBrasil({ type: "sepa_debit" } as never)).toBe(false);
+  });
+
+  it("la comisión de un cobro de Brasil no resta IVA", () => {
+    const parte = parteDelCobro({ ...cobro("2026-11-03T10:00:00Z", 13000, 600), conIva: false }, 30);
+    expect(parte.ivaCentimos).toBe(0);
+    expect(parte.netoCentimos).toBe(12400);
+    expect(parte.parteCentimos).toBe(3720);
+  });
+});

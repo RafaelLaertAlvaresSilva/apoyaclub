@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { paisDelIdioma } from "@/lib/paises";
 import { MESES_PILOTO, PLAZAS_PILOTO, plazasPilotoLibres } from "@/lib/piloto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { TarjetaCerrable } from "./TarjetaCerrable";
@@ -24,7 +25,8 @@ const ENLACE = "/6mesesgratis?a=WEB";
 
 async function plazasLibres(): Promise<number | null> {
   try {
-    return await plazasPilotoLibres(createAdminClient());
+    // Las plazas del país de la página: en /br, las de Brasil.
+    return await plazasPilotoLibres(createAdminClient(), paisDelIdioma(await getLocale()));
   } catch {
     return null;
   }

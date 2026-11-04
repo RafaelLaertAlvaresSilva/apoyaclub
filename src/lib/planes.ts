@@ -72,14 +72,68 @@ export const PLANES: Record<PlanId, Plan> = {
 
 export const PLANES_EN_ORDEN: Plan[] = [PLANES.fundador, PLANES.temporada, PLANES.mensual];
 
+// ---------------------------------------------------------------------
+// Brasil: los mismos tres planes, en reales
+// ---------------------------------------------------------------------
+
+/**
+ * La moneda en la que paga un club. La decide su PAÍS (el de su cuenta,
+ * ver `lib/paises.ts`), no el idioma de la web: un club español que lea
+ * la web en /br sigue pagando en euros.
+ */
+export type Moneda = "EUR" | "BRL";
+
+export function monedaDelPais(pais: string | null | undefined): Moneda {
+  return pais === "BR" ? "BRL" : "EUR";
+}
+
+/**
+ * Los precios de Brasil (decididos por Rafael el 4-11-2026). No son la
+ * conversión del euro: están ajustados a lo que puede pagar un club de
+ * base brasileño, y sin IVA, porque un servicio electrónico prestado a
+ * un cliente de fuera de la UE no lo lleva (art. 69.Dos.m de la Ley del
+ * IVA).
+ *
+ * Como salen más baratos que en España, solo se cobran a clubes con
+ * país Brasil y con Pix o tarjeta brasileña (ver `lib/pago-brasil.ts`).
+ */
+export const PRECIOS_BRL: Record<PlanId, number> = {
+  mensual: 8900,
+  temporada: 79000,
+  fundador: 59000,
+};
+
+/** Si el precio de esta moneda lleva el IVA español dentro. */
+export function llevaIva(moneda: Moneda): boolean {
+  return moneda === "EUR";
+}
+
+/** El precio de un plan en una moneda, en céntimos. */
+export function precioDelPlan(planId: PlanId, moneda: Moneda = "EUR"): number {
+  return moneda === "BRL" ? PRECIOS_BRL[planId] : PLANES[planId].precioCentimos;
+}
+
+/** La variable de entorno con el Price de Stripe de un plan en una moneda. */
+export function variableDelPrecio(planId: PlanId, moneda: Moneda = "EUR"): string {
+  return moneda === "BRL" ? `${PLANES[planId].variableEntorno}_BRL` : PLANES[planId].variableEntorno;
+}
+
 const formatoEuros = new Intl.NumberFormat("es-ES", {
   style: "currency",
   currency: "EUR",
   minimumFractionDigits: 2,
 });
 
-/** "29,90 €" ("€29.90" en inglés, si se pasa `intlLocale`). */
-export function precioFormateado(plan: Plan, intlLocale?: string): string {
+/**
+ * "29,90 €" ("€29.90" en inglés, si se pasa `intlLocale`). En reales,
+ * "R$ 89" sin céntimos: los precios de Brasil son redondos.
+ */
+export function precioFormateado(plan: Plan, intlLocale?: string, moneda: Moneda = "EUR"): string {
+  if (moneda === "BRL") {
+    return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(
+      PRECIOS_BRL[plan.id] / 100,
+    );
+  }
   const formato = intlLocale
     ? new Intl.NumberFormat(intlLocale, { style: "currency", currency: "EUR", minimumFractionDigits: 2 })
     : formatoEuros;
@@ -120,15 +174,15 @@ export function esPlanValido(valor: string | null | undefined): valor is PlanId 
  * romper las instalaciones que ya lo tenían configurado antes de que
  * existieran los tres planes.
  */
-export function priceIdDelPlan(planId: PlanId): string {
+export function priceIdDelPlan(planId: PlanId, moneda: Moneda = "EUR"): string {
   const plan = PLANES[planId];
+  const variable = variableDelPrecio(planId, moneda);
   const valor =
-    process.env[plan.variableEntorno] ??
-    (planId === "mensual" ? process.env.STRIPE_PRICE_ID : undefined);
+    process.env[variable] ?? (planId === "mensual" && moneda === "EUR" ? process.env.STRIPE_PRICE_ID : undefined);
 
   if (!valor) {
     throw new Error(
-      `Falta ${plan.variableEntorno}: crea en Stripe el precio del plan "${plan.nombre}" (${precioFormateado(plan)} ${periodicidad(plan)}) y pon su id en .env.local.`,
+      `Falta ${variable}: crea en Stripe el precio del plan "${plan.nombre}" (${precioFormateado(plan, undefined, moneda)} ${periodicidad(plan)}) y pon su id en las variables de entorno.`,
     );
   }
 
@@ -142,6 +196,9 @@ export function planDelPriceId(priceId: string): PlanId | null {
       process.env[plan.variableEntorno] ??
       (plan.id === "mensual" ? process.env.STRIPE_PRICE_ID : undefined);
     if (configurado && configurado === priceId) return plan.id;
+    // El mismo plan, en reales.
+    const enReales = process.env[variableDelPrecio(plan.id, "BRL")];
+    if (enReales && enReales === priceId) return plan.id;
   }
   return null;
 }

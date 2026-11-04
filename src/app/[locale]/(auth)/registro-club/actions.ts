@@ -72,7 +72,7 @@ export async function registrarClub(
   if (data.user) {
     try {
       const admin = createAdminClient();
-      const piloto = quierePiloto && ((await plazasPilotoLibres(admin)) ?? 0) > 0;
+      const piloto = quierePiloto && ((await plazasPilotoLibres(admin, pais)) ?? 0) > 0;
       await admin.auth.admin.updateUserById(data.user.id, {
         // `piloto` también aquí y no en `user_metadata`: el propio
         // usuario puede cambiar su `user_metadata`, y así se daría 6

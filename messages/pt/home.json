@@ -949,6 +949,23 @@
       "detalle": "Só para os primeiros clubes que entram na plataforma. O preço nunca sobe enquanto continuares inscrito."
     }
   },
+  "planesBrl": {
+    "mensual": {
+      "nombre": "Mensal",
+      "reclamo": "Sem fidelização, cancelas quando quiseres.",
+      "detalle": "Num ano são R$ 1.068. Se vais ficar mais de nove meses, compensa mais o anual."
+    },
+    "temporada": {
+      "nombre": "Anual",
+      "reclamo": "Um pagamento por ano. Poupas R$ 278.",
+      "detalle": "A direção aprova a despesa uma vez e o ano inteiro fica coberto."
+    },
+    "fundador": {
+      "nombre": "Fundador",
+      "reclamo": "Preço congelado para sempre.",
+      "detalle": "Só para os primeiros 50 clubes do Brasil. O preço nunca sobe enquanto continuares inscrito."
+    }
+  },
   "piloto": {
     "meta": {
       "titulo": "6 meses grátis para o teu clube",

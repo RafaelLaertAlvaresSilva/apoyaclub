@@ -949,6 +949,23 @@
       "detalle": "Only for the first clubs to join the platform. The price never goes up for as long as you stay subscribed."
     }
   },
+  "planesBrl": {
+    "mensual": {
+      "nombre": "Monthly",
+      "reclamo": "No commitment, cancel anytime.",
+      "detalle": "Over a year that's R$ 1,068. If you'll stay more than nine months, the annual plan works out better."
+    },
+    "temporada": {
+      "nombre": "Annual",
+      "reclamo": "One payment a year. You save R$ 278.",
+      "detalle": "The board approves the expense once and the whole year is covered."
+    },
+    "fundador": {
+      "nombre": "Founder",
+      "reclamo": "Price frozen for life.",
+      "detalle": "Only for the first 50 clubs in Brazil. The price never goes up while you stay subscribed."
+    }
+  },
   "piloto": {
     "meta": {
       "titulo": "6 months free for your club",

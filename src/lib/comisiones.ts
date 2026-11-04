@@ -6,7 +6,8 @@ import { TIPO_IVA } from "@/lib/admin-finanzas";
  * Lo acordado con Rafael: de cada cobro de un club de su país,
  *
  *   lo que paga el club
- *   − el IVA que va dentro del precio (no es dinero del negocio: se liquida)
+ *   − el IVA que va dentro del precio (no es dinero del negocio: se liquida;
+ *     en Brasil no hay, ver `conIva`)
  *   − lo que Stripe se queda de ese cobro (la comisión real, no una estimada)
  *   = lo que queda; y de eso, su porcentaje (30 %).
  *
@@ -29,6 +30,12 @@ export type Cobro = {
   cobradoCentimos: number;
   /** Lo que Stripe se quedó de este cobro. En céntimos. */
   stripeCentimos: number;
+  /**
+   * Si el precio llevaba el IVA español dentro. Los de Brasil no: un
+   * servicio electrónico a un cliente de fuera de la UE no lo lleva.
+   * Sin decir nada, sí (España y Portugal).
+   */
+  conIva?: boolean;
 };
 
 export type CobroConParte = Cobro & {
@@ -54,7 +61,7 @@ export function ivaIncluido(conIvaCentimos: number, tipo = TIPO_IVA): number {
 }
 
 export function parteDelCobro(cobro: Cobro, porcentaje: number): CobroConParte {
-  const ivaCentimos = ivaIncluido(cobro.cobradoCentimos);
+  const ivaCentimos = cobro.conIva === false ? 0 : ivaIncluido(cobro.cobradoCentimos);
   // Un cobro devuelto entero puede dejar la comisión de Stripe sin
   // nada de qué salir: entonces no hay parte, pero tampoco se resta.
   const netoCentimos = Math.max(0, cobro.cobradoCentimos - ivaCentimos - cobro.stripeCentimos);

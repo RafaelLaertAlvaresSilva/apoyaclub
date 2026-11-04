@@ -949,6 +949,23 @@
       "detalle": "Solo para los primeros clubes que entran en la plataforma. El precio no sube nunca mientras sigas de alta."
     }
   },
+  "planesBrl": {
+    "mensual": {
+      "nombre": "Mensual",
+      "reclamo": "Sin permanencia, cancelas cuando quieras.",
+      "detalle": "Al año son R$ 1.068. Si vas a estar más de nueve meses, sale mejor el anual."
+    },
+    "temporada": {
+      "nombre": "Anual",
+      "reclamo": "Un pago al año. Ahorras R$ 278.",
+      "detalle": "La directiva aprueba el gasto una vez y el año entero queda cubierto."
+    },
+    "fundador": {
+      "nombre": "Fundador",
+      "reclamo": "Precio congelado de por vida.",
+      "detalle": "Solo para los primeros 50 clubes de Brasil. El precio no sube nunca mientras sigas de alta."
+    }
+  },
   "piloto": {
     "meta": {
       "titulo": "6 meses gratis para tu club",

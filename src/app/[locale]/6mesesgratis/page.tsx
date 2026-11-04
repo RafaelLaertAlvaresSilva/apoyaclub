@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Header } from "@/components/Header";
 import { Link } from "@/i18n/navigation";
+import { paisDelIdioma } from "@/lib/paises";
 import { MESES_PILOTO, PLAZAS_PILOTO, origenDeCampana, plazasPilotoLibres } from "@/lib/piloto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { FondoDeHeroe } from "../components/secciones";
@@ -41,7 +42,8 @@ export default async function PilotoPage({
 
   let libres: number | null = null;
   try {
-    libres = await plazasPilotoLibres(createAdminClient());
+    // Las plazas del país de la página: en /br, las de Brasil.
+    libres = await plazasPilotoLibres(createAdminClient(), paisDelIdioma(await getLocale()));
   } catch {
     // Sin la clave de servicio (en local) la página se enseña sin contador.
   }

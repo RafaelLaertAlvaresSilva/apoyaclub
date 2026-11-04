@@ -3,7 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { CATEGORIAS_IDEA, TOTAL_DE_IDEAS } from "@/lib/catalogo-ideas";
-import { PLANES_EN_ORDEN } from "@/lib/planes";
+import { PLANES_EN_ORDEN, precioFormateado, type Moneda } from "@/lib/planes";
 import { LOCALE_CONFIG } from "@/config/locales";
 import type { AppLocale } from "@/i18n/routing";
 import { FormularioContacto } from "./FormularioContacto";
@@ -2200,11 +2200,11 @@ function FranjaDelPrecio({
 export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }) {
   const t = await getTranslations("home");
   const locale = (await getLocale()) as AppLocale;
-  const formatoPlan = new Intl.NumberFormat(LOCALE_CONFIG[locale].intlLocale, {
-    style: "currency",
-    currency: "EUR",
-    minimumFractionDigits: 2,
-  });
+  // En /br, los precios de Brasil, en reales y sin IVA (ver
+  // `lib/planes.ts`). Se cobran según el país del club, no según la
+  // página: esto solo enseña los de quien lee la página de su país.
+  const moneda: Moneda = locale === "br" ? "BRL" : "EUR";
+  const textosPlan = moneda === "BRL" ? "planesBrl" : "planes";
   const ventajas = t.raw("precio.ventajas") as string[];
   const franja = t.raw("precio.franja") as { clave: string; titulo: string; texto: string }[];
 
@@ -2258,7 +2258,7 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
             >
               <div className="flex items-baseline justify-between gap-2">
                 <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
-                  {t(`planes.${idPlan}.nombre`)}
+                  {t(`${textosPlan}.${idPlan}.nombre`)}
                 </p>
                 {plan.limitado && (
                   <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[13px] font-bold text-amber-800">
@@ -2269,15 +2269,15 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
 
               <p className="mt-3">
                 <span className="text-4xl font-extrabold tracking-tight text-titular">
-                  {formatoPlan.format(plan.precioCentimos / 100)}
+                  {precioFormateado(plan, LOCALE_CONFIG[locale].intlLocale, moneda)}
                 </span>{" "}
                 <span className="text-base text-zinc-600">
                   {plan.intervalo === "mes" ? t("planes.alMes") : t("planes.alAnio")}
                 </span>
               </p>
 
-              <p className="mt-2 text-base font-medium text-zinc-800">{t(`planes.${idPlan}.reclamo`)}</p>
-              <p className="mt-2 text-base leading-relaxed text-zinc-600">{t(`planes.${idPlan}.detalle`)}</p>
+              <p className="mt-2 text-base font-medium text-zinc-800">{t(`${textosPlan}.${idPlan}.reclamo`)}</p>
+              <p className="mt-2 text-base leading-relaxed text-zinc-600">{t(`${textosPlan}.${idPlan}.detalle`)}</p>
 
               <Link
                 href="/registro-club"

@@ -158,7 +158,8 @@
       "portal": "Não foi possível abrir o portal de gestão da subscrição. Tenta novamente dentro de alguns minutos.",
       "sin-suscripcion": "Ainda não tens nenhuma subscrição para gerir.",
       "sin-plazas": "Esgotaram-se as vagas de clube fundador enquanto escolhias. Podes contratar o plano de época, que é o seguinte mais barato.",
-      "inesperado": "Ocorreu um erro inesperado."
+      "inesperado": "Ocorreu um erro inesperado.",
+      "tarjeta-extranjera": "Os planos do Brasil pagam-se com Pix ou com um cartão emitido no Brasil, e o cartão que usaste é de outro país. Não te foi cobrado nada. Se o teu clube é do Brasil, tenta de novo com Pix; se não é, escreve-nos para info@apoyaclub.com e mudamos o país para pagares o plano do teu país."
     },
     "intro": "O teu plano, as tuas faturas e os teus dados de faturação. É aqui que se muda o método de pagamento e se cancela, sem ligar a ninguém.",
     "confirmada": "Subscrição confirmada. Já está tudo a funcionar.",
@@ -169,6 +170,7 @@
     "planNombre": "Plano {nombre}",
     "tuPlan": "O teu plano",
     "precioConIva": "{precio} {periodo}, IVA incluído.",
+    "precioSinIva": "{precio} {periodo}.",
     "eresFundador": "És o clube fundador n.º {numero}: este preço nunca sobe.",
     "eligeComoPagar": "Escolhe como queres pagar quando terminar o teu período grátis.",
     "invitadoHasta": "Acesso de convidado até",

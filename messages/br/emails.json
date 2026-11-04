@@ -75,7 +75,7 @@
     "titulo": "{dias, plural, one {Falta # dia} other {Faltam # dias}} de período experimental para o {club}",
     "texto": "Em {fecha} começa a sua assinatura, com o plano que você escolheu. Você não precisa fazer nada para continuar; se preferir não continuar, pode cancelar no seu painel antes dessa data e nada será cobrado.",
     "boton": "Ver minha assinatura",
-    "textoSinTarjeta": "Em {fecha} termina o seu período grátis. Para continuar usando o painel e o seu clube continuar visível, escolha um plano antes dessa data: a partir de 199 €/ano, IVA incluído. Se você não escolher nenhum, a sua página deixa de aparecer, mas nada é apagado: você pode voltar quando quiser.",
+    "textoSinTarjeta": "Em {fecha} termina o seu período grátis. Para continuar usando o painel e o seu clube continuar visível, escolha um plano antes dessa data: a partir de R$ 590/ano. Se você não escolher nenhum, a sua página deixa de aparecer, mas nada é apagado: você pode voltar quando quiser.",
     "botonSinTarjeta": "Escolher meu plano"
   },
   "fichaIncompleta": {

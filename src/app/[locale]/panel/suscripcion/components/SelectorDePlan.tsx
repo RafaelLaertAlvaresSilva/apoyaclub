@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { useIntlLocale } from "@/i18n/use-intl-locale";
-import { PLANES_EN_ORDEN, precioFormateado } from "@/lib/planes";
+import { PLANES_EN_ORDEN, llevaIva, precioFormateado, type Moneda } from "@/lib/planes";
 import { iniciarSuscripcion } from "../actions";
 
 /**
@@ -14,14 +14,19 @@ import { iniciarSuscripcion } from "../actions";
  * parezcan lo que son.
  */
 export function SelectorDePlan({
+  moneda = "EUR",
   plazasFundadorLibres,
   textoBoton,
 }: {
+  /** La del país del club: Brasil paga en reales y sin IVA. */
+  moneda?: Moneda;
   plazasFundadorLibres: number;
   textoBoton: string;
 }) {
   const t = useTranslations("panel.suscripcion.selector");
   const tPlanes = useTranslations("home.planes");
+  const tHome = useTranslations("home");
+  const textos = moneda === "BRL" ? "planesBrl" : "planes";
   const intlLocale = useIntlLocale();
   const planes = PLANES_EN_ORDEN.filter(
     (plan) => !plan.limitado || plazasFundadorLibres > 0,
@@ -41,7 +46,7 @@ export function SelectorDePlan({
             <input type="hidden" name="plan" value={plan.id} />
 
             <div className="flex items-baseline justify-between gap-2">
-              <h3 className="text-sm font-semibold text-zinc-900">{tPlanes(`${plan.id}.nombre`)}</h3>
+              <h3 className="text-sm font-semibold text-zinc-900">{tHome(`${textos}.${plan.id}.nombre`)}</h3>
               {plan.destacado && (
                 <span className="rounded-full bg-teal-50 px-2 py-0.5 text-xs font-medium text-teal-700">
                   {t("recomendado")}
@@ -55,14 +60,16 @@ export function SelectorDePlan({
             </div>
 
             <p className="mt-3 text-3xl font-semibold tabular-nums text-zinc-900">
-              {precioFormateado(plan, intlLocale)}
+              {precioFormateado(plan, intlLocale, moneda)}
             </p>
             <p className="text-sm text-zinc-500">
-              {t("ivaIncluido", { periodo: tPlanes(plan.intervalo === "mes" ? "alMes" : "alAnio") })}
+              {llevaIva(moneda)
+                ? t("ivaIncluido", { periodo: tPlanes(plan.intervalo === "mes" ? "alMes" : "alAnio") })
+                : tPlanes(plan.intervalo === "mes" ? "alMes" : "alAnio")}
             </p>
 
-            <p className="mt-3 text-sm font-medium text-zinc-700">{tPlanes(`${plan.id}.reclamo`)}</p>
-            <p className="mt-1 flex-1 text-sm text-zinc-500">{tPlanes(`${plan.id}.detalle`)}</p>
+            <p className="mt-3 text-sm font-medium text-zinc-700">{tHome(`${textos}.${plan.id}.reclamo`)}</p>
+            <p className="mt-1 flex-1 text-sm text-zinc-500">{tHome(`${textos}.${plan.id}.detalle`)}</p>
 
             <div className="mt-5">
               <BotonEnviar>{textoBoton}</BotonEnviar>

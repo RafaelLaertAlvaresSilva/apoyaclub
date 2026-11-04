@@ -103,6 +103,7 @@
     "columnaSuParte": "A parte dele ({porcentaje} %)",
     "columnaTuParte": "Sua parte ({porcentaje} %)",
     "cobros": "{n, plural, one {# cobrança} other {# cobranças}}",
-    "panel": "Painel de administração"
+    "panel": "Painel de administração",
+    "comoSeCalculaSinIva": "Como é calculado, em cada cobrança: o que o clube paga, menos o que a Stripe fica dessa cobrança (no Brasil não há IVA). Do que sobra, {porcentaje} %. Contam todos os clubes {pais, select, BR {do Brasil} PT {de Portugal} other {da Espanha}} e os reembolsos já estão descontados."
   }
 }

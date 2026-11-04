@@ -144,7 +144,10 @@ export default async function ComisionesPage({ searchParams }: { searchParams: P
               {esAdministrador ? t("suParte") : t("tuParte")}
             </p>
             <p className="mt-3 text-xs leading-relaxed text-zinc-500">
-              {t("comoSeCalcula", { porcentaje: liquidacion.porcentaje, pais: liquidacion.pais })}
+              {t(liquidacion.pais === "BR" ? "comoSeCalculaSinIva" : "comoSeCalcula", {
+                porcentaje: liquidacion.porcentaje,
+                pais: liquidacion.pais,
+              })}
             </p>
           </section>
 

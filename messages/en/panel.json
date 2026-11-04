@@ -158,7 +158,8 @@
       "portal": "The subscription management portal could not be opened. Please try again in a few minutes.",
       "sin-suscripcion": "You don’t have a subscription to manage yet.",
       "sin-plazas": "The founding club places ran out while you were choosing. You can take the season plan, which is the next cheapest.",
-      "inesperado": "An unexpected error occurred."
+      "inesperado": "An unexpected error occurred.",
+      "tarjeta-extranjera": "Brazil plans are paid with Pix or a card issued in Brazil, and the card you used is from another country. You haven't been charged. If your club is in Brazil, try again with Pix; if not, write to info@apoyaclub.com and we'll change your country so you can pay your country's plan."
     },
     "intro": "Your plan, your invoices and your billing details. This is where you change the payment method or cancel, without calling anyone.",
     "confirmada": "Subscription confirmed. Everything is up and running.",
@@ -169,6 +170,7 @@
     "planNombre": "{nombre} plan",
     "tuPlan": "Your plan",
     "precioConIva": "{precio} {periodo}, VAT included.",
+    "precioSinIva": "{precio} {periodo}.",
     "eresFundador": "You are founding club no. {numero}: this price will never go up for you.",
     "eligeComoPagar": "Choose how you want to pay when your free period ends.",
     "invitadoHasta": "Guest access until",

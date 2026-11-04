@@ -8,7 +8,7 @@
     "tituloParte1": "Cada clube tem algo para oferecer.",
     "tituloParte2": "Ajudamos você a descobri‑lo e a gerenciá‑lo.",
     "cta": "Experimente 1 mês grátis",
-    "condiciones": "1 mês grátis · depois, a partir de 199 €/ano · IVA incluído · Sem fidelidade",
+    "condiciones": "1 mês grátis · depois, a partir de R$ 590/ano · Sem fidelidade",
     "ctaSecundario": "Descubra como funciona"
   },
   "puertas": {
@@ -456,9 +456,9 @@
   "precio": {
     "titulo": "Preço transparente",
     "eyebrow": "Primeiro mês grátis",
-    "importe": "29,90 €",
+    "importe": "R$ 89",
     "periodo": "/mês",
-    "condiciones": "IVA incluído · Sem fidelidade",
+    "condiciones": "Sem fidelidade",
     "comision": "Comissão: 0 % — você e a empresa negociam diretamente.",
     "ventajas": [
       "Página pública profissional",
@@ -476,7 +476,7 @@
     "plazasFundador": "Só 50 vagas",
     "gratisPrimerMes": "Comece com um mês grátis, em qualquer um dos três.",
     "cancelar": "Cancele quando quiser.",
-    "resumenCondiciones": "Um mês grátis em qualquer um dos três · IVA incluído · Sem fidelidade · Comissão de 0 %",
+    "resumenCondiciones": "Um mês grátis em qualquer um dos três · Sem fidelidade · Comissão de 0 %",
     "nota": "Invista no futuro do seu clube.",
     "franja": [
       {
@@ -492,7 +492,7 @@
       {
         "clave": "segura",
         "titulo": "Sem amarras",
-        "texto": "Primeiro mês grátis · Sem fidelidade · Cancele quando quiser · IVA incluído · Comissão de 0 %"
+        "texto": "Primeiro mês grátis · Sem fidelidade · Cancele quando quiser · Comissão de 0 %"
       }
     ]
   },
@@ -509,7 +509,7 @@
       },
       {
         "pregunta": "Quanto custa para um clube?",
-        "respuesta": "O primeiro mês é grátis. Depois você escolhe como pagar: 199 €/ano com o plano Fundador (só para as primeiras 50 vagas, com o preço congelado), 249 €/ano por temporada ou 29,90 €/mês sem fidelidade. O IVA está incluído nos três e o produto é o mesmo."
+        "respuesta": "O primeiro mês é grátis. Depois você escolhe como pagar: R$ 590/ano com o plano Fundador (só para os primeiros 50 clubes do Brasil, com o preço congelado), R$ 790/ano no plano anual ou R$ 89/mês sem fidelidade. O produto é o mesmo nos três."
       },
       {
         "pregunta": "É grátis para as empresas?",
@@ -529,7 +529,7 @@
       }
     ],
     "fiscalidadTitulo": "Sobre a tributação do patrocínio",
-    "fiscalidadTexto": "Um acordo de patrocínio entre um clube e uma empresa pode ter implicações fiscais (IVA, faturamento, deduções…) para ambas as partes. O ApoyaClub não gerencia o pagamento nem atua como agência, e <fuerte>não presta assessoria fiscal</fuerte>: recomendamos que consulte um consultor fiscal ou um contador antes de fechar qualquer acordo.",
+    "fiscalidadTexto": "Um acordo de patrocínio entre um clube e uma empresa pode ter implicações fiscais (impostos, faturamento, deduções…) para ambas as partes. O ApoyaClub não gerencia o pagamento nem atua como agência, e <fuerte>não presta assessoria fiscal</fuerte>: recomendamos que consulte um consultor fiscal ou um contador antes de fechar qualquer acordo.",
     "verTodas": "Ver todas as perguntas"
   },
   "ctaFinal": {
@@ -949,6 +949,23 @@
       "detalle": "Só para os primeiros clubes que entram na plataforma. O preço nunca sobe enquanto você continuar inscrito."
     }
   },
+  "planesBrl": {
+    "mensual": {
+      "nombre": "Mensal",
+      "reclamo": "Sem fidelidade, cancele quando quiser.",
+      "detalle": "Em um ano são R$ 1.068. Se você vai ficar mais de nove meses, o anual compensa mais."
+    },
+    "temporada": {
+      "nombre": "Anual",
+      "reclamo": "Um pagamento por ano. Você economiza R$ 278.",
+      "detalle": "A diretoria aprova a despesa uma vez e o ano inteiro fica coberto."
+    },
+    "fundador": {
+      "nombre": "Fundador",
+      "reclamo": "Preço congelado para sempre.",
+      "detalle": "Só para os primeiros 50 clubes do Brasil. O preço nunca sobe enquanto você continuar inscrito."
+    }
+  },
   "piloto": {
     "meta": {
       "titulo": "6 meses grátis para o seu clube",
@@ -1004,7 +1021,7 @@
     },
     "despues": {
       "titulo": "E quando acabarem os {meses} meses?",
-      "texto": "Se ficar, você tem o preço Fundador: 199 € por ano, IVA incluído, congelado para sempre enquanto continuar inscrito. Se não, nada é cobrado: você não precisa de cartão para começar."
+      "texto": "Se ficar, você tem o preço Fundador: R$ 590 por ano, congelado para sempre enquanto continuar inscrito. Se não, nada é cobrado: você não precisa de cartão para começar."
     },
     "dudas": "Dúvidas? Escreva para mim em <correo>info@apoyaclub.com</correo>. Rafael, criador do ApoyaClub.",
     "tarjetaAlt": "{meses} meses grátis para os primeiros {plazas} clubes: acesso completo à plataforma em troca de nos contar o que funciona. Ir para apoyaclub.com/6mesesgratis",

@@ -57,6 +57,8 @@ export async function cobrosDeClubes(idsClubes: string[]): Promise<Cobro[]> {
         fecha: new Date(cargo.created * 1000).toISOString(),
         cobradoCentimos: Math.round(importe * proporcionCobrada),
         stripeCentimos: movimiento?.fee ?? 0,
+        // Los planes en reales (Brasil) no llevan IVA.
+        conIva: cargo.currency !== "brl",
       });
     }
   }

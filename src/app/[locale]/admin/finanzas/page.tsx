@@ -125,7 +125,7 @@ export default async function FinanzasPage() {
                     {fila.nombre}
                     {fila.planId === "fundador" && (
                       <span className="ml-2 text-xs font-normal text-zinc-500">
-                        {finanzas.plazasFundadorLibres} plazas libres
+                        {finanzas.plazasFundadorLibres} plazas libres en España
                       </span>
                     )}
                   </td>

@@ -1,4 +1,5 @@
-import { PLANES, centimosAlAnio, centimosAlMes, esPlanValido, type PlanId } from "@/lib/planes";
+import { obtenerUsuariosPorRol } from "@/lib/admin-users";
+import { PLANES, PRECIOS_BRL, centimosAlAnio, centimosAlMes, esPlanValido, type PlanId } from "@/lib/planes";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { SubscriptionStatus } from "@/lib/subscription-mappers";
 
@@ -87,6 +88,18 @@ type FilaFinanzas = {
   current_period_end: string | null;
 };
 
+/**
+ * Reales por euro, aproximado, solo para sumar los clubes de Brasil con
+ * los demás en este resumen. Lo que entra de verdad, al cambio de cada
+ * día, está en Stripe y en la página de Comisiones.
+ */
+export const REALES_POR_EURO = 6.05;
+
+/** Lo que aporta un club de Brasil, pasado a céntimos de euro (sin IVA: no lleva). */
+function enEurosDesdeReales(centimosReales: number): number {
+  return Math.round(centimosReales / REALES_POR_EURO);
+}
+
 /** Quita el IVA de un importe que ya lo lleva dentro. */
 export function sinIva(centimos: number): number {
   return Math.round(centimos / (1 + TIPO_IVA));
@@ -95,15 +108,34 @@ export function sinIva(centimos: number): number {
 export async function obtenerFinanzas(ahora: Date = new Date()): Promise<Finanzas> {
   const admin = createAdminClient();
 
-  const [{ data: filas }, { data: plazasLibres }] = await Promise.all([
+  const [{ data: filas }, { data: plazasLibres }, cuentas] = await Promise.all([
     admin
       .from("clubs")
       .select("id, name, plan, founder_number, subscription_status, current_period_end")
       .returns<FilaFinanzas[]>(),
-    admin.rpc("plazas_fundador_libres"),
+    // Las de España (cada país tiene las suyas desde la migración 0058).
+    admin
+      .rpc("plazas_fundador_libres", { p_pais: "ES" })
+      .then((respuesta) => (respuesta.error ? admin.rpc("plazas_fundador_libres") : respuesta)),
+    obtenerUsuariosPorRol("club").catch(() => []),
   ]);
 
   const clubes = filas ?? [];
+  // Los clubes de Brasil pagan en reales y sin IVA (ver `lib/planes.ts`).
+  const deBrasil = new Set(cuentas.filter((cuenta) => cuenta.pais === "BR").map((cuenta) => cuenta.id));
+  const alMesDe = (fila: FilaFinanzas, planId: PlanId) =>
+    deBrasil.has(fila.id)
+      ? enEurosDesdeReales(planId === "mensual" ? PRECIOS_BRL[planId] : Math.round(PRECIOS_BRL[planId] / 12))
+      : centimosAlMes(planId);
+  const alAnioDe = (fila: FilaFinanzas, planId: PlanId) =>
+    deBrasil.has(fila.id)
+      ? enEurosDesdeReales(planId === "mensual" ? PRECIOS_BRL[planId] * 12 : PRECIOS_BRL[planId])
+      : centimosAlAnio(planId);
+  const porCobroDe = (fila: FilaFinanzas, planId: PlanId) =>
+    deBrasil.has(fila.id) ? enEurosDesdeReales(PRECIOS_BRL[planId]) : PLANES[planId].precioCentimos;
+  // El IVA solo va dentro de lo de España y Portugal.
+  let mrrSinIvaDentro = 0;
+  let arrSinIvaDentro = 0;
 
   const paga = (fila: FilaFinanzas) => ESTADOS_QUE_PAGAN.includes(fila.subscription_status);
   const enRiesgo = (fila: FilaFinanzas) => ESTADOS_EN_RIESGO.includes(fila.subscription_status);
@@ -128,14 +160,18 @@ export async function obtenerFinanzas(ahora: Date = new Date()): Promise<Finanza
     if (paga(fila) && !planId) clubesSinPlan += 1;
 
     if (planId) {
-      const alMes = centimosAlMes(planId);
+      const alMes = alMesDe(fila, planId);
 
       if (paga(fila)) {
         mrrCentimos += alMes;
         const acumulado = porPlan.get(planId)!;
         acumulado.clubes += 1;
         acumulado.centimosAlMes += alMes;
-        acumulado.centimosAlAnio += centimosAlAnio(planId);
+        acumulado.centimosAlAnio += alAnioDe(fila, planId);
+        if (deBrasil.has(fila.id)) {
+          mrrSinIvaDentro += alMes;
+          arrSinIvaDentro += alAnioDe(fila, planId);
+        }
       }
 
       if (fila.subscription_status === "trialing") mrrPotencialCentimos += alMes;
@@ -150,7 +186,7 @@ export async function obtenerFinanzas(ahora: Date = new Date()): Promise<Finanza
         renovacion > ahora &&
         renovacion <= dentroDe30dias;
 
-      if (cobraPronto) cobrosProximos30diasCentimos += PLANES[planId].precioCentimos;
+      if (cobraPronto) cobrosProximos30diasCentimos += porCobroDe(fila, planId);
     }
 
     if (paga(fila) || enRiesgo(fila) || fila.subscription_status === "trialing") {
@@ -159,7 +195,7 @@ export async function obtenerFinanzas(ahora: Date = new Date()): Promise<Finanza
         nombre: fila.name,
         planId,
         estado: fila.subscription_status,
-        centimosPorCobro: planId ? PLANES[planId].precioCentimos : null,
+        centimosPorCobro: planId ? porCobroDe(fila, planId) : null,
         proximaRenovacion: fila.current_period_end,
         esFundador: fila.founder_number != null,
         numeroFundador: fila.founder_number,
@@ -174,9 +210,9 @@ export async function obtenerFinanzas(ahora: Date = new Date()): Promise<Finanza
 
   return {
     mrrCentimos,
-    mrrNetoCentimos: sinIva(mrrCentimos),
+    mrrNetoCentimos: sinIva(mrrCentimos - mrrSinIvaDentro) + mrrSinIvaDentro,
     arrCentimos,
-    arrNetoCentimos: sinIva(arrCentimos),
+    arrNetoCentimos: sinIva(arrCentimos - arrSinIvaDentro) + arrSinIvaDentro,
     mrrPotencialCentimos,
     mrrEnRiesgoCentimos,
 

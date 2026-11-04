@@ -11,13 +11,16 @@ import {
 import { esAccesoRegalado } from "@/lib/acceso-gratuito";
 import { createClient } from "@/lib/supabase/server";
 import { intlLocaleDe } from "@/config/locales";
-import { PLANES, esPlanValido, precioFormateado } from "@/lib/planes";
+import { PLANES, esPlanValido, llevaIva, monedaDelPais, precioFormateado } from "@/lib/planes";
+import { paisDeLaCuenta } from "@/lib/paises";
+import { vigilarPagoBrasil } from "@/lib/pago-brasil";
+import { obtenerStripe } from "@/lib/stripe/client";
 import { abrirPortalCliente } from "./actions";
 import { SelectorDePlan } from "./components/SelectorDePlan";
 import { estaEscondido } from "@/lib/modo-pruebas";
 
 /** Los `?error=` que pueden llegar de las acciones, con su texto en `errores`. */
-const ERRORES_CONOCIDOS = new Set(["sesion", "checkout", "portal", "sin-suscripcion", "sin-plazas"]);
+const ERRORES_CONOCIDOS = new Set(["sesion", "checkout", "portal", "sin-suscripcion", "sin-plazas", "tarjeta-extranjera"]);
 
 /** Los estados de Stripe que tienen texto propio; el resto es "sin suscripción". */
 const ESTADOS_CONOCIDOS = new Set([
@@ -34,16 +37,18 @@ const ESTADOS_CONOCIDOS = new Set([
 export default async function SuscripcionPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; checkout?: string; motivo?: string }>;
+  searchParams: Promise<{ error?: string; checkout?: string; motivo?: string; sesion?: string }>;
 }) {
   const t = await getTranslations("panel.suscripcion");
   const tPlanes = await getTranslations("home.planes");
+  const tHome = await getTranslations("home");
   const intlLocale = intlLocaleDe(await getLocale());
   const formatearFecha = (fechaIso: string) =>
     new Date(fechaIso).toLocaleDateString(intlLocale, { day: "numeric", month: "long", year: "numeric" });
   const estadoTexto = (estado: SubscriptionStatus) =>
     t(`estados.${ESTADOS_CONOCIDOS.has(estado ?? "") ? estado : "ninguno"}`);
-  const { error, checkout, motivo } = await searchParams;
+  const { error: errorPedido, checkout, motivo, sesion } = await searchParams;
+  let error = errorPedido;
 
   const supabase = await createClient();
   const {
@@ -53,6 +58,28 @@ export default async function SuscripcionPage({
   if (!user) {
     const locale = await getLocale();
     return redirect({ href: "/login", locale });
+  }
+
+  // La moneda la decide el país del club: Brasil, en reales y sin IVA.
+  const pais = paisDeLaCuenta(user.app_metadata);
+  const moneda = monedaDelPais(pais);
+
+  // Vuelve de pagar un plan de Brasil: se comprueba aquí mismo que la
+  // tarjeta sea brasileña, sin esperar al webhook, para poder decírselo.
+  if (checkout === "success" && sesion && moneda === "BRL") {
+    try {
+      const stripe = obtenerStripe();
+      const sesionPago = await stripe.checkout.sessions.retrieve(sesion);
+      const idSuscripcion =
+        typeof sesionPago.subscription === "string" ? sesionPago.subscription : sesionPago.subscription?.id;
+      if (sesionPago.client_reference_id === user.id && idSuscripcion) {
+        if ((await vigilarPagoBrasil(stripe, idSuscripcion)) === "tarjeta-extranjera") {
+          error = "tarjeta-extranjera";
+        }
+      }
+    } catch {
+      // Sin Stripe a mano, lo hace el webhook igualmente.
+    }
   }
 
   const [{ data: filaSuscripcion }, { data: plazasLibres }] = await Promise.all([
@@ -66,7 +93,11 @@ export default async function SuscripcionPage({
     // Cuántas plazas de fundador quedan (migración 0021). Si la función
     // todavía no existe en esta base de datos, se toma como 0 y el plan
     // fundador simplemente no se ofrece.
-    supabase.rpc("plazas_fundador_libres"),
+    // Las del país del club (migración 0058). Si esa migración todavía
+    // no está, las de siempre, que son las de España.
+    supabase
+      .rpc("plazas_fundador_libres", { p_pais: pais })
+      .then((respuesta) => (respuesta.error ? supabase.rpc("plazas_fundador_libres") : respuesta)),
   ]);
 
   const escondido = await estaEscondido(supabase, user.id);
@@ -119,7 +150,7 @@ export default async function SuscripcionPage({
             siempre, incluso con la suscripción ya activa debajo y por
             mucho que se recargara la página: el club leía que algo
             seguía a medias cuando ya estaba hecho. */}
-        {checkout === "success" && (
+        {checkout === "success" && error !== "tarjeta-extranjera" && (
           <div className="mb-4">
             <AvisoExito
               mensaje={
@@ -153,12 +184,16 @@ export default async function SuscripcionPage({
         )}
 
         <h2 className="text-base font-semibold text-zinc-900">
-          {planActual ? t("planNombre", { nombre: tPlanes(`${planActual.id}.nombre`) }) : t("tuPlan")}
+          {planActual
+            ? t("planNombre", {
+                nombre: tHome(`${moneda === "BRL" ? "planesBrl" : "planes"}.${planActual.id}.nombre`),
+              })
+            : t("tuPlan")}
         </h2>
         <p className="mt-1 text-sm text-zinc-500">
           {planActual
-            ? `${t("precioConIva", {
-                precio: precioFormateado(planActual, intlLocale),
+            ? `${t(llevaIva(moneda) ? "precioConIva" : "precioSinIva", {
+                precio: precioFormateado(planActual, intlLocale, moneda),
                 periodo: tPlanes(planActual.intervalo === "mes" ? "alMes" : "alAnio"),
               })}${
                 planActual.id === "fundador" && filaSuscripcion?.founder_number
@@ -259,6 +294,7 @@ export default async function SuscripcionPage({
             )}
 
             <SelectorDePlan
+              moneda={moneda}
               plazasFundadorLibres={plazasFundadorLibres}
               textoBoton={suscripcion.status === "canceled" ? t("volverASuscribirse") : t("elegirPlan")}
             />

@@ -39,8 +39,8 @@ describe("programa piloto (migración 0057)", () => {
     expect(accion).toMatch(/app_metadata:\s*\{\s*role:\s*"club",\s*\.\.\.\(piloto\s*\?\s*\{\s*piloto:\s*true\s*\}\s*:\s*\{\}\)/);
     // El anuncio de origen también va en app_metadata, nunca en user_metadata.
     expect(accion).toMatch(/\.\.\.\(origen\s*\?\s*\{\s*origen_campana:\s*origen\s*\}\s*:\s*\{\}\)/);
-    // Y solo si quedan plazas.
-    expect(accion).toContain("plazasPilotoLibres(admin)");
+    // Y solo si quedan plazas, las del país del club (migración 0058).
+    expect(accion).toContain("plazasPilotoLibres(admin, pais)");
     // Ni el piloto ni el anuncio en los datos que manda el registro
     // (`data` de signUp = user_metadata, que el usuario sí puede cambiar).
     expect(accion).not.toMatch(/(?<!app_meta)data:\s*\{[^}]*(piloto|origen)/);

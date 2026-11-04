@@ -2,6 +2,7 @@ import { avisarDeFallo } from "@/lib/monitoring";
 import { planDelPriceId, type PlanId } from "@/lib/planes";
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
+import { vigilarPagoBrasil } from "@/lib/pago-brasil";
 import { obtenerStripe } from "@/lib/stripe/client";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -58,6 +59,10 @@ export async function POST(request: Request) {
           break;
         }
 
+        // El candado del precio de Brasil: en reales, solo Pix o tarjeta
+        // brasileña. Si no, se cancela aquí mismo (`lib/pago-brasil.ts`)
+        // y se guarda ya cancelada.
+        await vigilarPagoBrasil(stripe, subscriptionId);
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
         await guardarSuscripcionPorClubId(admin, clubId, customerId, subscription);
         break;
@@ -65,9 +70,16 @@ export async function POST(request: Request) {
 
       case "customer.subscription.created":
       case "customer.subscription.updated": {
-        const subscription = evento.data.object as Stripe.Subscription;
+        let subscription = evento.data.object as Stripe.Subscription;
         const customerId =
           typeof subscription.customer === "string" ? subscription.customer : subscription.customer.id;
+        // Lo mismo si un club de Brasil cambia después su tarjeta por
+        // una de fuera desde el portal de Stripe.
+        if (subscription.currency === "brl" && subscription.status !== "canceled") {
+          if ((await vigilarPagoBrasil(stripe, subscription.id)) === "tarjeta-extranjera") {
+            subscription = await stripe.subscriptions.retrieve(subscription.id);
+          }
+        }
         await guardarSuscripcionPorCustomerId(admin, customerId, subscription);
         break;
       }
