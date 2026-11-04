@@ -1,4 +1,5 @@
 import { obtenerUsuariosPorRol } from "@/lib/admin-users";
+import type { Pais } from "@/lib/paises";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { SubscriptionStatus } from "@/lib/subscription-mappers";
 
@@ -59,27 +60,49 @@ type ClubMetricaRow = {
  */
 const ESTADOS_CONVERTIDOS: SubscriptionStatus[] = ["active", "past_due", "unpaid", "canceled"];
 
-export async function obtenerMetricasAdmin(): Promise<MetricasAdmin> {
+/**
+ * Con `pais`, solo los clubes de ese país y lo suyo (sus oportunidades y
+ * las solicitudes que han recibido). Las empresas y las búsquedas no
+ * tienen país: esas cifras son siempre de toda la plataforma.
+ */
+export async function obtenerMetricasAdmin(pais: Pais | null = null): Promise<MetricasAdmin> {
   const admin = createAdminClient();
 
+  const todosLosClubes = await obtenerUsuariosPorRol("club");
+  const delPais = pais ? todosLosClubes.filter((club) => club.pais === pais) : todosLosClubes;
+  const ids = delPais.map((club) => club.id);
+  // Sin clubes en ese país no hay nada que contar (y `.in` con una
+  // lista vacía no se puede pedir).
+  const nadaQueContar = pais !== null && ids.length === 0;
+  const contarDeLosClubes = (tabla: "opportunities" | "contact_requests") => {
+    if (nadaQueContar) return Promise.resolve({ count: 0 });
+    let consulta = admin.from(tabla).select("*", { count: "exact", head: true });
+    if (tabla === "opportunities") consulta = consulta.is("archived_at", null);
+    return pais ? consulta.in("club_id", ids) : consulta;
+  };
+
   const [
-    totalClubesRegistrados,
     totalEmpresasRegistradas,
     { data: filasClubes },
     { count: oportunidadesPublicadas },
     { count: solicitudesContacto },
     { count: busquedasRealizadas },
   ] = await Promise.all([
-    obtenerUsuariosPorRol("club").then((usuarios) => usuarios.length),
     obtenerUsuariosPorRol("empresa").then((usuarios) => usuarios.length),
-    admin
-      .from("clubs")
-      .select("subscription_status, admin_suspended, verified, stripe_subscription_id")
-      .returns<ClubMetricaRow[]>(),
-    admin.from("opportunities").select("*", { count: "exact", head: true }).is("archived_at", null),
-    admin.from("contact_requests").select("*", { count: "exact", head: true }),
+    nadaQueContar
+      ? Promise.resolve({ data: [] as ClubMetricaRow[] })
+      : (pais
+          ? admin
+              .from("clubs")
+              .select("subscription_status, admin_suspended, verified, stripe_subscription_id")
+              .in("id", ids)
+          : admin.from("clubs").select("subscription_status, admin_suspended, verified, stripe_subscription_id")
+        ).returns<ClubMetricaRow[]>(),
+    contarDeLosClubes("opportunities"),
+    contarDeLosClubes("contact_requests"),
     admin.from("search_logs").select("*", { count: "exact", head: true }),
   ]);
+  const totalClubesRegistrados = delPais.length;
 
   const clubes = filasClubes ?? [];
   const contar = (predicado: (fila: ClubMetricaRow) => boolean) => clubes.filter(predicado).length;

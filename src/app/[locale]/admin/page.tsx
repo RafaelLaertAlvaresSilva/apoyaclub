@@ -2,6 +2,7 @@ import { Link, redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { obtenerMetricasAdmin } from "@/lib/admin-metrics";
+import { BANDERA_DEL_PAIS, NOMBRE_DEL_PAIS, PAISES, esPaisValido } from "@/lib/paises";
 import { soloAdministrador } from "@/lib/acceso-admin-servidor";
 import { createClient } from "@/lib/supabase/server";
 import { AdminNav } from "./components/AdminNav";
@@ -64,7 +65,7 @@ function TarjetaMetrica({
 }
 
 /** Resumen del panel de administración (Fase 12). */
-export default async function AdminPage() {
+export default async function AdminPage({ searchParams }: { searchParams: Promise<{ pais?: string }> }) {
   const t = await getTranslations("admin.panel");
   const supabase = await createClient();
   const {
@@ -81,7 +82,12 @@ export default async function AdminPage() {
   // Solo del administrador: un representante va a su lista de clubes.
   await soloAdministrador();
 
-  const metricas = await obtenerMetricasAdmin();
+  // Filtro por país: los mismos números, solo de los clubes de ese país.
+  const { pais: paisPedido } = await searchParams;
+  const pais = esPaisValido(paisPedido) ? paisPedido : null;
+  const metricas = await obtenerMetricasAdmin(pais);
+  // Las tarjetas que llevan a la lista de clubes, ya con el mismo filtro.
+  const listaDeClubes = pais ? `/admin/clubes?pais=${pais}` : "/admin/clubes";
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
@@ -94,6 +100,27 @@ export default async function AdminPage() {
       </div>
 
       <AdminNav activo="resumen" />
+
+      <nav aria-label="Filtrar por país" className="flex flex-wrap gap-2">
+        {[null, ...PAISES].map((opcion) => (
+          <Link
+            key={opcion ?? "todos"}
+            href={opcion ? `/admin?pais=${opcion}` : "/admin"}
+            className={`rounded-lg border px-3 py-1.5 text-sm ${
+              opcion === pais
+                ? "border-accion-tinta bg-white font-medium text-accion-tinta"
+                : "border-zinc-300 bg-white text-zinc-700 hover:border-accion-tinta"
+            }`}
+          >
+            {opcion ? `${BANDERA_DEL_PAIS[opcion]} ${NOMBRE_DEL_PAIS[opcion]}` : "Todos los países"}
+          </Link>
+        ))}
+      </nav>
+      {pais && (
+        <p className="-mt-3 text-xs text-zinc-500">
+          Empresas y búsquedas no tienen país: esas dos cifras son siempre de toda la plataforma.
+        </p>
+      )}
 
       <section>
         <h2 className="text-sm font-semibold text-zinc-500">{t("clubesYEmpresas")}</h2>
@@ -143,20 +170,20 @@ export default async function AdminPage() {
             etiqueta={t("pagoPendiente")}
             valor={formatoNumero.format(metricas.clubes.pagoPendiente)}
             pideAtencion
-            href="/admin/clubes"
+            href={listaDeClubes}
           />
           <TarjetaMetrica
             etiqueta={t("cancelados")}
             valor={formatoNumero.format(metricas.clubes.cancelados)}
             pideAtencion
-            href="/admin/clubes"
+            href={listaDeClubes}
           />
           <TarjetaMetrica
             etiqueta={t("nuncaHanEmpezado")}
             valor={formatoNumero.format(metricas.clubes.sinEmpezar)}
             detalle="No han iniciado la suscripción"
             pideAtencion
-            href="/admin/clubes"
+            href={listaDeClubes}
           />
         </div>
       </section>
@@ -168,7 +195,7 @@ export default async function AdminPage() {
             etiqueta={t("clubesSuspendidos")}
             valor={formatoNumero.format(metricas.clubes.suspendidos)}
             pideAtencion
-            href="/admin/clubes"
+            href={listaDeClubes}
           />
           <TarjetaMetrica etiqueta={t("clubesVerificados")} valor={formatoNumero.format(metricas.clubes.verificados)} />
         </div>
