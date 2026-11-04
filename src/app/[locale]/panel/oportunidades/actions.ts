@@ -1,5 +1,7 @@
 "use server";
 
+import { exclusividadReal } from "@/lib/opportunity-mappers";
+
 import { getTranslations } from "next-intl/server";
 import {
   leerAcciones,
@@ -383,7 +385,7 @@ export async function crearOportunidad(
     collaboration_type: leerFormaColaboracion(formData),
     objectives: leerObjetivos(formData),
     sponsor_level: leerNivelPatrocinio(formData),
-    exclusivity: leerTexto(formData, "exclusivity"),
+    exclusivity: exclusividadReal(leerTexto(formData, "exclusivity")),
     team_id: await leerEquipo(supabase, user.id, formData),
     slots_total: plazas.total,
     slots_taken: plazas.cubiertas,
@@ -455,7 +457,7 @@ export async function actualizarOportunidad(
       collaboration_type: leerFormaColaboracion(formData),
       objectives: leerObjetivos(formData),
       sponsor_level: leerNivelPatrocinio(formData),
-      exclusivity: leerTexto(formData, "exclusivity"),
+      exclusivity: exclusividadReal(leerTexto(formData, "exclusivity")),
       team_id: await leerEquipo(supabase, user.id, formData),
       slots_total: plazas.total,
       slots_taken: plazas.cubiertas,

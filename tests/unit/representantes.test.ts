@@ -174,3 +174,14 @@ describe("WhatsApp del club en el admin", () => {
     expect(enlaceWhatsapp(null, "ES")).toBeNull();
   });
 });
+
+describe("exclusividad", () => {
+  it("«No» y similares no son un sector en exclusiva", async () => {
+    const { exclusividadReal } = await import("@/lib/opportunity-mappers");
+    for (const sin of ["No", "no.", " NINGUNA ", "-", "n/a", "Não", "sem exclusividade", ""]) {
+      expect(exclusividadReal(sin)).toBeNull();
+    }
+    expect(exclusividadReal("Automoción")).toBe("Automoción");
+    expect(exclusividadReal("Notarías")).toBe("Notarías");
+  });
+});

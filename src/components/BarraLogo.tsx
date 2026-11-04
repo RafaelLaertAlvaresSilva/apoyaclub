@@ -62,7 +62,7 @@ export function BarraLogo({ extra }: { extra?: ReactNode }) {
             width={950}
             height={210}
             priority
-            className="logo-claro h-10 w-auto sm:h-12"
+            className="logo-claro h-9 w-auto sm:h-12"
           />
           <Image
             src={logos.oscuro}
@@ -70,11 +70,15 @@ export function BarraLogo({ extra }: { extra?: ReactNode }) {
             width={950}
             height={210}
             priority
-            className="logo-oscuro h-10 w-auto sm:h-12"
+            className="logo-oscuro h-9 w-auto sm:h-12"
           />
         </Link>
 
-        <div className="flex shrink-0 items-center gap-3">
+        {/* En un móvil de 375 px el logo, el botón de modo oscuro y
+            «Voltar à página inicial» no cabían en una línea y la página
+            entera se movía de lado. Ahora el texto puede partirse en dos
+            líneas en vez de empujar. */}
+        <div className="flex min-w-0 items-center gap-3">
           {extra}
 
           {/* El logo ya lleva a la portada, pero no todo el mundo sabe
@@ -82,7 +86,7 @@ export function BarraLogo({ extra }: { extra?: ReactNode }) {
               palabras. */}
           <Link
             href="/"
-            className="shrink-0 text-sm font-medium text-zinc-600 transition hover:text-titular"
+            className="max-w-[8.5rem] text-right text-sm leading-tight font-medium text-zinc-600 transition hover:text-titular sm:max-w-none"
           >
             {t("volverALaPortada")}
           </Link>

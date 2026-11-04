@@ -66,7 +66,7 @@ export function opportunityRowToOpportunity(row: OpportunityRow): Opportunity {
     // aquí por si la fila viene de una consulta hecha antes de aplicar la
     // migración 0011.
     sponsorLevel: row.sponsor_level ?? "libre",
-    exclusivity: row.exclusivity,
+    exclusivity: exclusividadReal(row.exclusivity),
     teamId: row.team_id,
     slotsTotal: row.slots_total,
     slotsTaken: row.slots_taken ?? 0,
@@ -89,4 +89,19 @@ export function opportunityRowToOpportunity(row: OpportunityRow): Opportunity {
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
+}
+
+/**
+ * El sector en exclusiva, o null si en realidad no hay exclusividad.
+ *
+ * El campo es de texto libre y "déjalo vacío si no hay exclusividad",
+ * pero hay clubes que escriben "No". Salía "En exclusiva para el
+ * sector: No", que dice justo lo contrario de lo que el club quería.
+ */
+export function exclusividadReal(texto: string | null | undefined): string | null {
+  const limpio = (texto ?? "").trim();
+  if (!limpio) return null;
+  const normal = limpio.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[.!]+$/, "");
+  const SIN = ["no", "ninguna", "ninguno", "nada", "-", "–", "—", "n/a", "na", "sin exclusividad", "no hay", "nao", "nenhuma", "nenhum", "sem exclusividade", "none", "no exclusivity"];
+  return SIN.includes(normal) ? null : limpio;
 }

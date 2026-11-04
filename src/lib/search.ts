@@ -1,3 +1,4 @@
+import { exclusividadReal } from "@/lib/opportunity-mappers";
 import { fotoDePortada } from "@/lib/fotos-de-oportunidad";
 import {
   cajaDelimitadora,
@@ -134,7 +135,7 @@ function filaAResultado(
     foto: fotoDePortada(fila.photos),
     profileScore: fila.club_profile_score ?? 0,
     visibilityBucket: fila.club_visibility_bucket ?? 0,
-    exclusivity: fila.exclusivity,
+    exclusivity: exclusividadReal(fila.exclusivity),
     teamLabel: etiquetaEquipo({
       sport: fila.team_sport,
       category: fila.team_category,
