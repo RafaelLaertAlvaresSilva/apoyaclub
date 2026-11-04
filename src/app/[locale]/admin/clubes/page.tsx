@@ -105,6 +105,8 @@ export default async function AdminClubesPage({
         name: perfil?.name || t("perfilSinCompletar"),
         city: perfil?.city ?? "—",
         email: usuario.email,
+        contactoNombre: perfil?.contactName ?? null,
+        telefono: perfil?.contactPhone ?? null,
         // Fecha de alta real (registro en Auth), no la de la primera vez
         // que guardó su perfil.
         createdAt: usuario.createdAt,
@@ -131,7 +133,7 @@ export default async function AdminClubesPage({
   // guardar en favoritos y recargar, y funciona igual en el móvil.
   const visibles = busqueda
     ? filas.filter((fila) =>
-        [fila.name, fila.city, fila.email].some((campo) =>
+        [fila.name, fila.city, fila.email, fila.contactoNombre, fila.telefono].some((campo) =>
           (campo ?? "").toLowerCase().includes(busqueda),
         ),
       )

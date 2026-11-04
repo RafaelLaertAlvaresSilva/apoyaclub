@@ -7,6 +7,9 @@ export type ClubAdminRow = {
   name: string;
   city: string;
   email: string | null;
+  /** El contacto que el club puso en su perfil (para llamarle o escribirle por WhatsApp). */
+  contactoNombre: string | null;
+  telefono: string | null;
   createdAt: string;
   subscriptionStatus: SubscriptionStatus;
   /** Fin de la prueba gratuita, que es también el fin del acceso regalado. */

@@ -35,7 +35,7 @@ export default function PrivacidadPage() {
           <li>
             Perfil del club: nombre, localidad, provincia, código postal, instalaciones,
             web, redes sociales, descripción, logo y fotos, nombre y teléfono de contacto
-            (solo si el club decide mostrarlos públicamente), nivel deportivo, historia,
+            (que solo se muestran públicamente si el club lo autoriza), nivel deportivo, historia,
             cifras de audiencia y, sobre la cantera, únicamente totales agregados (número
             de equipos, jugadores y familias — nunca nombres ni fotos individuales de
             menores a través de ese formulario).
@@ -69,6 +69,15 @@ export default function PrivacidadPage() {
           entre club y empresa, el interés legítimo de facilitar el contacto que ambas
           partes han buscado activamente.
         </p>
+        <p>
+          ApoyaClub también usa el correo de la cuenta y el nombre y teléfono de contacto que
+          el club indica en su perfil para comunicarse con el club sobre su cuenta, su
+          suscripción y el uso de la Plataforma (avisos, ayuda y seguimiento), por correo,
+          por teléfono o por WhatsApp. La base legal es la ejecución del contrato de uso y el
+          interés legítimo de atender al club. Estos datos no se usan para publicidad de
+          terceros, y el club puede pedir en cualquier momento que no se le contacte por
+          teléfono o WhatsApp escribiendo a la dirección indicada en el apartado 1.
+        </p>
       </section>
 
       <section>
@@ -81,6 +90,12 @@ export default function PrivacidadPage() {
           catálogo público de un club (identidad, oportunidades) son visibles para
           cualquier empresa registrada, porque esa visibilidad es el propósito del
           servicio. ApoyaClub no vende datos a terceros.
+        </p>
+        <p>
+          En algunos países ApoyaClub trabaja con un representante, que atiende a los
+          clubes de ese país. Solo puede ver los datos de los clubes de su país (los mismos
+          que ve el equipo de ApoyaClub, incluidos el correo y el teléfono de contacto) y
+          solo para atenderlos en nombre de ApoyaClub.
         </p>
       </section>
 

@@ -3,6 +3,7 @@ import { intlLocaleDe } from "@/config/locales";
 import { diasHasta, esAccesoRegalado, unAnioDesde } from "@/lib/acceso-gratuito";
 import type { SubscriptionStatus } from "@/lib/subscription-mappers";
 import { BANDERA_DEL_PAIS, PAISES } from "@/lib/paises";
+import { enlaceWhatsapp } from "@/lib/whatsapp";
 import {
   activarModoPruebas,
   cambiarPaisClub,
@@ -47,13 +48,42 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
   // `lib/acceso-gratuito.ts`.
   const invitado = esAccesoRegalado(fila.subscriptionStatus, fila.trialEndsAt);
   const diasQueQuedan = diasHasta(fila.trialEndsAt);
+  const whatsapp = enlaceWhatsapp(fila.telefono, fila.pais);
 
   return (
     <tr className="align-top">
       <td className="px-4 py-3">
         <p className="font-medium text-zinc-900">{fila.name}</p>
         <p className="text-xs text-zinc-500">{fila.city}</p>
-        {fila.email && <p className="text-xs text-zinc-500">{fila.email}</p>}
+        {fila.email && (
+          <a href={`mailto:${fila.email}`} className="block text-xs text-zinc-500 hover:text-accion-tinta hover:underline">
+            {fila.email}
+          </a>
+        )}
+        {/* El contacto que el club puso en su perfil: para llamarle o
+            escribirle por WhatsApp sin tener que ir a buscarlo. */}
+        {(fila.contactoNombre || fila.telefono) && (
+          <p className="mt-1 text-xs text-zinc-600">
+            {fila.contactoNombre}
+            {fila.contactoNombre && fila.telefono && " · "}
+            {fila.telefono && (
+              <a href={`tel:${fila.telefono.replace(/[^\d+]/g, "")}`} className="hover:text-accion-tinta hover:underline">
+                {fila.telefono}
+              </a>
+            )}
+          </p>
+        )}
+        {whatsapp && (
+          <a
+            href={whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1 inline-flex items-center gap-1 rounded-full bg-[#25D366]/15 px-2 py-0.5 text-xs font-medium text-[#0b6b3a] hover:bg-[#25D366]/25"
+          >
+            {tf("whatsapp")}
+          </a>
+        )}
+        {!fila.telefono && <p className="mt-1 text-xs text-zinc-400">{tf("sinTelefono")}</p>}
         <p className="mt-1 text-xs text-zinc-600">
           <span aria-hidden="true">{BANDERA_DEL_PAIS[fila.pais]}</span> {tPais(fila.pais)}
         </p>

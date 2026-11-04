@@ -331,6 +331,9 @@ export function IdentidadForm({
           )}
         >
           <p className="text-xs text-zinc-500">{t("elCorreoDeTu")}</p>
+          {/* Que lo sepa al rellenarlo: ApoyaClub (o el representante de
+              su país) puede llamarle o escribirle por WhatsApp. */}
+          <p className="text-xs text-zinc-500">{t("contactoConApoyaclub")}</p>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Campo etiqueta={t("nombreDeContacto")}>

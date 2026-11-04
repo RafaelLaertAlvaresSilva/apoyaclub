@@ -156,3 +156,21 @@ describe("precios de Brasil", () => {
     expect(parte.parteCentimos).toBe(3720);
   });
 });
+
+describe("WhatsApp del club en el admin", () => {
+  it("pone el prefijo del país si el club no lo escribió", async () => {
+    const { enlaceWhatsapp } = await import("@/lib/whatsapp");
+    expect(enlaceWhatsapp("600 12 34 56", "ES")).toBe("https://wa.me/34600123456");
+    expect(enlaceWhatsapp("+34 600 123 456", "ES")).toBe("https://wa.me/34600123456");
+    expect(enlaceWhatsapp("0034600123456", "ES")).toBe("https://wa.me/34600123456");
+    expect(enlaceWhatsapp("34600123456", "ES")).toBe("https://wa.me/34600123456");
+    expect(enlaceWhatsapp("912 345 678", "PT")).toBe("https://wa.me/351912345678");
+    expect(enlaceWhatsapp("(11) 91234-5678", "BR")).toBe("https://wa.me/5511912345678");
+    // Rio Grande do Sul: su zona es la 55, igual que el prefijo de Brasil.
+    expect(enlaceWhatsapp("(55) 99123-4567", "BR")).toBe("https://wa.me/5555991234567");
+    expect(enlaceWhatsapp("+55 55 99123-4567", "BR")).toBe("https://wa.me/5555991234567");
+    expect(enlaceWhatsapp("", "ES")).toBeNull();
+    expect(enlaceWhatsapp("no tengo", "ES")).toBeNull();
+    expect(enlaceWhatsapp(null, "ES")).toBeNull();
+  });
+});

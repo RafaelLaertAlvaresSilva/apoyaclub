@@ -10,7 +10,9 @@
  */
 export const LEGAL_VERSIONS = {
   legalNotice: "2026-08-31",
-  privacy: "2026-08-31",
+  // 2026-11-04: ApoyaClub y sus representantes pueden usar el contacto
+  // del club (correo, teléfono, WhatsApp) para hablar con él.
+  privacy: "2026-11-04",
   cookies: "2026-08-31",
   terms: "2026-08-31",
   minorsPhotoUpload: "2026-08-31",

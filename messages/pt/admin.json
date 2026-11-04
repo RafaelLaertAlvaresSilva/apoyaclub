@@ -81,7 +81,9 @@
       "suspender": "Suspender",
       "preguntaSuspender": "Suspender",
       "confirmarSuspender": "Sim, suspender",
-      "suspendiendo": "A suspender…"
+      "suspendiendo": "A suspender…",
+      "whatsapp": "Escrever por WhatsApp",
+      "sinTelefono": "Sem telefone no perfil"
     }
   },
   "comisiones": {
