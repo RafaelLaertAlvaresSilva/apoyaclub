@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { puedeGestionarPais, type AccesoAdmin } from "@/lib/acceso-admin";
 import { accesoAdminDeLaAccion } from "@/lib/acceso-admin-servidor";
 import { esPaisValido, paisDeLaCuenta } from "@/lib/paises";
+import { MESES_PILOTO, esDelPiloto, plazasPilotoLibres } from "@/lib/piloto";
 
 const RUTA_CLUBES = "/admin/clubes";
 
@@ -32,7 +33,9 @@ export type AvisoAdmin =
   | "fuera-de-pruebas"
   | "verificado"
   | "sin-verificar"
-  | "pais-cambiado";
+  | "pais-cambiado"
+  | "pasado-a-seis-meses"
+  | "sin-plazas-piloto";
 
 async function volverConAviso(aviso: AvisoAdmin): Promise<void> {
   const locale = await getLocale();
@@ -220,4 +223,73 @@ export async function cambiarPaisClub(formData: FormData): Promise<void> {
 
   revalidatePath(RUTA_CLUBES);
   return volverConAviso("pais-cambiado");
+}
+
+/**
+ * Pasa un club a la promoción de "6 meses gratis" (pedido por Rafael el
+ * 5-11-2026, para el CD Maciot Sport, que se registró por la página
+ * normal y le tocó 1 mes).
+ *
+ * Hace lo mismo que si se hubiera registrado por apoyaclub.com/6mesesgratis:
+ *   - le pone la marca `piloto` en la cuenta, así ocupa una de las 20
+ *     plazas de su país, el contador de la campaña lo descuenta y sale
+ *     la etiqueta violeta en el listado;
+ *   - le da los 6 meses contados desde que se registró, como al resto.
+ *     Si ya tenía más tiempo (por ejemplo, porque se le dio "6 meses"
+ *     desde hoy con el otro botón), no se le quita.
+ *
+ * Si no quedan plazas en su país, no hace nada y lo dice. A un club que
+ * ya paga por Stripe tampoco se le toca, por lo mismo que en
+ * `darAccesoGratuito`.
+ */
+export async function pasarASeisMesesGratis(formData: FormData): Promise<void> {
+  const id = String(formData.get("id") ?? "");
+  const contexto = await obtenerAdminActual(id);
+  if ("error" in contexto) return volverConAviso("no-admin");
+  const { admin } = contexto;
+
+  const { data: cuenta } = await admin.auth.admin.getUserById(id);
+  const usuario = cuenta?.user;
+  if (!usuario || usuario.app_metadata?.role !== "club") return volverConAviso("no-admin");
+
+  const { data: fila } = await admin
+    .from("clubs")
+    .select("stripe_subscription_id, trial_ends_at")
+    .eq("id", id)
+    .maybeSingle<{ stripe_subscription_id: string | null; trial_ends_at: string | null }>();
+  if (!fila) return volverConAviso("sin-ficha");
+  if (fila.stripe_subscription_id) return volverConAviso("paga-stripe");
+
+  // La plaza: solo si todavía no la tiene y queda alguna en su país.
+  if (!esDelPiloto(usuario.app_metadata)) {
+    const libres = await plazasPilotoLibres(admin, paisDeLaCuenta(usuario.app_metadata));
+    if (libres !== null && libres <= 0) return volverConAviso("sin-plazas-piloto");
+    await admin.auth.admin.updateUserById(id, {
+      app_metadata: { ...usuario.app_metadata, piloto: true },
+    });
+  }
+
+  // Los 6 meses, desde el registro; nunca menos de lo que ya tenía.
+  const desdeElRegistro = new Date(usuario.created_at);
+  desdeElRegistro.setMonth(desdeElRegistro.getMonth() + MESES_PILOTO);
+  const yaTenia = fila.trial_ends_at ? new Date(fila.trial_ends_at) : null;
+  const fin = finalDelDia(
+    (yaTenia && yaTenia > desdeElRegistro ? yaTenia : desdeElRegistro).toISOString().slice(0, 10),
+  );
+
+  await admin
+    .from("clubs")
+    .update({
+      subscription_status: "trialing",
+      trial_ends_at: fin,
+      current_period_end: fin,
+      cancel_at_period_end: false,
+      reminder_7d_sent_at: null,
+      reminder_3d_sent_at: null,
+      reminder_1d_sent_at: null,
+    })
+    .eq("id", id);
+
+  revalidatePath(RUTA_CLUBES);
+  return volverConAviso("pasado-a-seis-meses");
 }

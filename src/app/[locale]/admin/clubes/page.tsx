@@ -45,6 +45,8 @@ const AVISOS: Record<string, { bien: boolean }> = {
   "sin-verificar": { bien: true },
   regalado: { bien: true },
   "pais-cambiado": { bien: true },
+  "pasado-a-seis-meses": { bien: true },
+  "sin-plazas-piloto": { bien: false },
   "sin-ficha": { bien: false },
   "paga-stripe": { bien: false },
   fecha: { bien: false },

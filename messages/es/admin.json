@@ -36,7 +36,9 @@
       "paga-stripe": "Ese club tiene una suscripción activa en Stripe y no se le puede poner una prueba por encima: la plataforma diría una cosa y Stripe estaría cobrando otra. Tendría que cancelarla él desde su panel.",
       "fecha": "Pon una fecha de hoy en adelante: con una fecha pasada le estarías quitando el acceso.",
       "pais-cambiado": "País cambiado. El club pasa a la lista del representante de ese país.",
-      "no-admin": "Tu sesión ha caducado. Vuelve a iniciar sesión e inténtalo otra vez."
+      "no-admin": "Tu sesión ha caducado. Vuelve a iniciar sesión e inténtalo otra vez.",
+      "pasado-a-seis-meses": "Listo. El club ya está en la promoción de 6 meses gratis: ocupa una de las 20 plazas de su país y tiene los 6 meses desde que se registró.",
+      "sin-plazas-piloto": "No quedan plazas de 6 meses gratis en el país de ese club. Si quieres darle más tiempo igualmente, usa el botón «6 meses»."
     },
     "fila": {
       "paisDelClub": "País del club",
@@ -68,7 +70,8 @@
       "confirmarSuspender": "Sí, suspender",
       "suspendiendo": "Suspendiendo…",
       "whatsapp": "Escribir por WhatsApp",
-      "sinTelefono": "Sin teléfono en su perfil"
+      "sinTelefono": "Sin teléfono en su perfil",
+      "pasarASeisMesesGratis": "Pasar a 6 meses gratis"
     }
   },
   "empresas": {

@@ -8,6 +8,7 @@ import {
   activarModoPruebas,
   cambiarPaisClub,
   darAccesoGratuito,
+  pasarASeisMesesGratis,
   quitarModoPruebas,
   quitarVerificacionClub,
   reactivarClub,
@@ -192,6 +193,21 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
                 {tf("esaFecha")}
               </button>
             </div>
+          </form>
+        )}
+
+        {/* Pasarlo a la promoción de "6 meses gratis" si se registró por
+            la página normal: ocupa una de las 20 plazas de su país y
+            cuenta los 6 meses desde que se registró (`pasarASeisMesesGratis`). */}
+        {!fila.piloto && !fila.tieneSuscripcionEnStripe && (
+          <form action={pasarASeisMesesGratis} className="mt-1.5">
+            <input type="hidden" name="id" value={fila.id} />
+            <button
+              type="submit"
+              className="rounded-lg border border-violet-300 bg-violet-50 px-2.5 py-1 text-xs font-medium text-violet-800 transition-colors hover:bg-violet-100"
+            >
+              {tf("pasarASeisMesesGratis")}
+            </button>
           </form>
         )}
       </td>
