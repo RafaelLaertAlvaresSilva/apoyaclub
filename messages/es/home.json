@@ -928,6 +928,14 @@
     "servicios": {
       "etiqueta": "Lo que necesitas",
       "pista": "Al revés: lo que te hace falta y una empresa puede cubrir."
+    },
+    "speedsoft": {
+      "etiqueta": "Speedsoft y airsoft",
+      "pista": "Jersey, máscaras, réplicas y la zona de equipos, sin tocar el campo de juego."
+    },
+    "running": {
+      "etiqueta": "Running",
+      "pista": "Carreras, dorsales, avituallamiento y las salidas del grupo."
     }
   },
   "planes": {

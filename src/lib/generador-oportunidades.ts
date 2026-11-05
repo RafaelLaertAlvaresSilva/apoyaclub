@@ -1,6 +1,8 @@
 import {
-  CATEGORIAS_IDEA,
   buscarIdea,
+  categoriasDeDeporteDelClub,
+  categoriasDelClub,
+  deportesDeLosEquipos,
   descripcionDeLaIdea,
   ideasDeCategoria,
   type CategoriaIdea,
@@ -76,13 +78,22 @@ export const NECESIDADES_DEL_GENERADOR = ["necesita-material", "necesita-fisiote
 export const MAXIMO_DE_PROPUESTAS = 8;
 
 /** Ideas que van con un equipo concreto. */
-const CATEGORIAS_DE_EQUIPO = new Set(["equipos", "equipaciones", "jugadores", "intervalo"]);
+const CATEGORIAS_DE_EQUIPO = new Set(["equipos", "equipaciones", "jugadores", "intervalo", "speedsoft"]);
+
+/** En "un poco de todo", cuántas de su deporte van delante, si tiene. */
+const DE_SU_DEPORTE_EN_LA_MEZCLA = 4;
 
 /**
  * Las de esas categorías que son de todo el club y no de un equipo:
  * "Mochilas y bolsas del club · Senior Masculino" no tiene sentido.
  */
 const DE_TODO_EL_CLUB = new Set([
+  "speedsoft-carpa",
+  "speedsoft-bandera",
+  "speedsoft-videos-pov",
+  "speedsoft-prueba-de-material",
+  "speedsoft-team-building",
+  "speedsoft-material-de-juego",
   "equipo-empresa-oficial",
   "equipacion-chandal",
   "equipacion-mochilas",
@@ -209,11 +220,24 @@ export function generarPropuestas({
       .map((idea) => construir(idea, true));
   }
 
+  // Un club de un deporte con ideas propias (speedsoft, running) ve
+  // primero unas cuantas de las suyas y luego las de todos.
+  const deSuDeporte = categoriasDeDeporteDelClub(deportesDeLosEquipos(equipos))
+    .flatMap((categoria) => elegir(ideasDeCategoria(categoria).map((idea) => idea.id)))
+    .slice(0, DE_SU_DEPORTE_EN_LA_MEZCLA);
+
   return [
-    ...elegir(IDEAS_DEL_GENERADOR).slice(0, MAXIMO_DE_PROPUESTAS).map((idea) => construir(idea, true)),
+    ...[...deSuDeporte, ...elegir(IDEAS_DEL_GENERADOR)]
+      .slice(0, MAXIMO_DE_PROPUESTAS)
+      .map((idea) => construir(idea, true)),
     ...elegir(NECESIDADES_DEL_GENERADOR).map((idea) => construir(idea, false)),
   ];
 }
 
-/** Las categorías que se le ofrecen al club, en el orden del catálogo. */
-export const CATEGORIAS_DEL_GENERADOR: CategoriaIdea[] = CATEGORIAS_IDEA.map((categoria) => categoria.id);
+/**
+ * Las categorías que se le ofrecen a un club: primero las de su deporte
+ * (solo si tiene un equipo de ese deporte), luego las de todos.
+ */
+export function categoriasDelGenerador(equipos: Pick<ClubTeam, "sport">[]): CategoriaIdea[] {
+  return categoriasDelClub(deportesDeLosEquipos(equipos));
+}

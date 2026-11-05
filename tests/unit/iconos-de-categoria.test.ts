@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { CATEGORIAS_CON_SIMBOLO } from "@/components/IconoDeCategoria";
-import { CATEGORIAS_IDEA } from "@/lib/catalogo-ideas";
+import { CATEGORIAS_DE_DEPORTE, CATEGORIAS_IDEA } from "@/lib/catalogo-ideas";
 
 /**
  * Un símbolo por categoría, y el mismo en los dos sitios.
@@ -17,14 +17,15 @@ import { CATEGORIAS_IDEA } from "@/lib/catalogo-ideas";
  * meses siendo de catorce en los textos y de dieciséis en el catálogo.
  */
 describe("los símbolos de las categorías", () => {
-  it("hay exactamente uno por categoría del catálogo", () => {
-    const delCatalogo = CATEGORIAS_IDEA.map((c) => c.id).sort();
+  it("hay exactamente uno por categoría del catálogo (también las de un deporte)", () => {
+    const delCatalogo = [...CATEGORIAS_IDEA, ...CATEGORIAS_DE_DEPORTE].map((c) => c.id).sort();
     expect(CATEGORIAS_CON_SIMBOLO.slice().sort()).toEqual(delCatalogo);
   });
 
-  it("siguen siendo dieciséis", () => {
+  it("siguen siendo dieciséis, más las de deporte", () => {
     // A mano a propósito: si alguien añade o quita una, que se entere.
     expect(CATEGORIAS_IDEA).toHaveLength(16);
+    expect(CATEGORIAS_DE_DEPORTE.map((c) => c.id)).toEqual(["speedsoft", "running"]);
   });
 });
 

@@ -767,6 +767,144 @@
       "queEs": "Keeping the dressing rooms and common areas clean.",
       "queRecibe": "A contract visible in the community and its brand at the facilities.",
       "duracion": "All season"
+    },
+    "speedsoft-jersey": {
+      "titulo": "Front and back of the match jersey",
+      "queEs": "The jersey is what shows most in every game, every photo and every team video. The brand goes in the most visible spot, without touching the playing field.",
+      "queRecibe": "Its logo on the front or back of the whole team's match jersey for the season, and in every photo and video.",
+      "duracion": "The whole season"
+    },
+    "speedsoft-mangas": {
+      "titulo": "Jersey sleeves",
+      "queEs": "One spot per sleeve: ideal for a smaller brand or a second sponsor alongside the main one.",
+      "queRecibe": "Its logo on one sleeve of the match jersey for the season, visible in photos and videos.",
+      "duracion": "The whole season"
+    },
+    "speedsoft-colores-de-la-marca": {
+      "titulo": "Kit in the brand's colours",
+      "queEs": "Instead of covering the jersey in logos, the team plays in a colour or pattern that belongs to the brand. Recognisable from afar on the field and online, and it looks clean.",
+      "queRecibe": "The team tied to its colours for the whole season, with a discreet logo on the kit and a mention in every post.",
+      "duracion": "The whole season"
+    },
+    "speedsoft-pegatinas": {
+      "titulo": "Stickers on masks, helmets and magazines",
+      "queEs": "Players' gear is what appears in close-up in helmet-camera videos and in close-up photos.",
+      "queRecibe": "Its logo on stickers on the players' masks, helmets and magazines for the season.",
+      "duracion": "The whole season"
+    },
+    "speedsoft-vinilo-replicas": {
+      "titulo": "Branded wraps on the replicas",
+      "queEs": "The team's replicas are wrapped in a vinyl skin with the brand's colours or logo. It is one of the most photographed things in this sport.",
+      "queRecibe": "The team's replicas in its wrap for the season, and its brand in every photo and video they appear in.",
+      "duracion": "The whole season"
+    },
+    "speedsoft-carpa": {
+      "titulo": "Team tent at competitions",
+      "queEs": "At every league round and tournament, teams have their own area off the field. The team tent with the sponsor's brand is what every player and spectator sees between games.",
+      "queRecibe": "Its brand on the team tent at every league round and tournament of the season, and in photos of the team area.",
+      "duracion": "The whole season"
+    },
+    "speedsoft-bandera": {
+      "titulo": "Team flag or banner",
+      "queEs": "The team flag goes with the club to every competition, in the team area and in the group photo, without touching the playing field.",
+      "queRecibe": "Its logo on the team flag or banner at every competition and in the official group photo.",
+      "duracion": "The whole season"
+    },
+    "speedsoft-videos-pov": {
+      "titulo": "Helmet-camera videos",
+      "queEs": "First-person (POV) game videos are the most shared content in this sport. Every video carries the sponsor's brand.",
+      "queRecibe": "Its logo and a mention in the team's POV videos for a month, with a link to its profile.",
+      "duracion": "One month"
+    },
+    "speedsoft-prueba-de-material": {
+      "titulo": "Testing the sponsor's gear",
+      "queEs": "The team tests the brand's gear in competition (replicas, batteries, goggles, protection, technical clothing) and shares its opinion online. Ideal for airsoft shops.",
+      "queRecibe": "Real reviews of its product from competitive players, in video and posts, which it can also use in its own advertising.",
+      "duracion": "The whole season"
+    },
+    "speedsoft-team-building": {
+      "titulo": "Speedsoft day for a company's staff",
+      "queEs": "The team organises and runs a Speedsoft day for a company's employees: briefing, gear, games and a final photo. Works for any sector.",
+      "queRecibe": "A different team activity for its staff, run by competitive players, and a post about the day on the club's social media.",
+      "duracion": "One day"
+    },
+    "speedsoft-desplazamientos": {
+      "titulo": "League travel sponsor",
+      "queEs": "A company covers the team's travel to league rounds and tournaments, with money or by providing the transport.",
+      "queRecibe": "Its brand tied to every trip, with posts on departure and arrival, and on the vehicle if it provides it.",
+      "duracion": "The whole season"
+    },
+    "speedsoft-material-de-juego": {
+      "titulo": "Game supplies for the season",
+      "queEs": "BBs, batteries, gas or spare parts: what the team uses at every training session and competition, supplied by a shop or distributor.",
+      "queRecibe": "Its brand as the team's official supplier, with a social media mention whenever its supplies are used.",
+      "duracion": "The whole season"
+    },
+    "running-carrera-con-nombre": {
+      "titulo": "A race named after the company",
+      "queEs": "The group organises a fun run (for example, a 5K or 10K) named after the sponsoring company.",
+      "queRecibe": "The race name, its logo on the poster, at the start and the finish, and in every post before and after.",
+      "duracion": "One race"
+    },
+    "running-dorsales": {
+      "titulo": "Race bibs with the company logo",
+      "queEs": "Every runner wears the bib for the whole race, and it shows in every photo.",
+      "queRecibe": "Its logo on the bibs of a race organised by the group and in the runners' photos.",
+      "duracion": "One race"
+    },
+    "running-avituallamiento": {
+      "titulo": "Sponsored refreshment station",
+      "queEs": "The company provides the water, sports drink or fruit for a race or a long group run.",
+      "queRecibe": "Its brand on the refreshment table, in the photos and in the race post.",
+      "duracion": "One race"
+    },
+    "running-medallas": {
+      "titulo": "Medals and trophies",
+      "queEs": "The company provides finisher medals or trophies for the winners of a group race.",
+      "queRecibe": "Its logo on the medals or trophies, and in the prize-giving photo.",
+      "duracion": "One race"
+    },
+    "running-camiseta-del-grupo": {
+      "titulo": "Group technical T-shirt",
+      "queEs": "The T-shirt the group trains and races in. Seen on the street every week and in every photo.",
+      "queRecibe": "Its logo on every runner's technical T-shirt for the season.",
+      "duracion": "The whole season"
+    },
+    "running-salida-desde-el-negocio": {
+      "titulo": "Weekly run from the business",
+      "queEs": "Once a week the group starts and finishes its run at the company's premises (a café, a sports shop, a gym). Runners become customers.",
+      "queRecibe": "A group of runners at its premises every week, with a social media mention for every run.",
+      "duracion": "One month"
+    },
+    "running-beca-corredor": {
+      "titulo": "Grant for a standout runner",
+      "queEs": "The company pays race entries, running shoes or gear for one of the runners who most deserves it, and the group tells the story.",
+      "queRecibe": "Its brand tied to the supported runner at every race and in the group's posts about their season.",
+      "duracion": "The whole season"
+    },
+    "running-reto-de-kilometros": {
+      "titulo": "Monthly distance challenge",
+      "queEs": "A challenge for group members to add up kilometres over a month, with a prize for whoever runs the most. Provided by the company.",
+      "queRecibe": "The challenge name, weekly posts with the leaderboard and the prize-giving photo.",
+      "duracion": "One month"
+    },
+    "running-fotos": {
+      "titulo": "Photos and videos of runs and races",
+      "queEs": "Photos of runs and races are the group's most shared content. Each one carries the sponsor's brand.",
+      "queRecibe": "Its logo on the group's photos and videos for a month, with a mention in every post.",
+      "duracion": "One month"
+    },
+    "running-descuento-miembros": {
+      "titulo": "Discount for group members",
+      "queEs": "A discount at the company's shop or business for every runner in the group and their families.",
+      "queRecibe": "New customers from the group's community and promotion of the discount on its social media.",
+      "duracion": "The whole season"
+    },
+    "running-para-empresas": {
+      "titulo": "Running session for a company's staff",
+      "queEs": "The group organises a run or training session for a company's employees, suitable for every level.",
+      "queRecibe": "A healthy activity for its staff, led by experienced runners, and a post on the group's social media.",
+      "duracion": "One day"
     }
   },
   "falta": {

@@ -767,6 +767,144 @@
       "queEs": "Mantener limpios vestuarios y zonas comunes.",
       "queRecibe": "Un contrato visible en la comunidad y su marca en las instalaciones.",
       "duracion": "Toda la temporada"
+    },
+    "speedsoft-jersey": {
+      "titulo": "Pecho y espalda del jersey de competición",
+      "queEs": "El jersey es lo que más se ve en cada partida, en cada foto y en cada vídeo del equipo. La marca va en el hueco más visible, sin tocar el campo de juego.",
+      "queRecibe": "Su logo en el pecho o la espalda del jersey de competición de todo el equipo durante la temporada, y en todas las fotos y vídeos.",
+      "duracion": "Toda la temporada"
+    },
+    "speedsoft-mangas": {
+      "titulo": "Mangas del jersey",
+      "queEs": "Un hueco por manga: ideal para una marca más pequeña o para un segundo patrocinador junto al principal.",
+      "queRecibe": "Su logo en una manga del jersey de competición durante la temporada, visible en fotos y vídeos.",
+      "duracion": "Toda la temporada"
+    },
+    "speedsoft-colores-de-la-marca": {
+      "titulo": "Equipación con los colores de la marca",
+      "queEs": "En vez de llenar el jersey de logos, el equipo compite con un color o un patrón propio de la marca. Se reconoce de lejos en el campo y en las redes, y queda limpio.",
+      "queRecibe": "El equipo asociado a sus colores durante toda la temporada, con su logo discreto en la equipación y la mención en cada publicación.",
+      "duracion": "Toda la temporada"
+    },
+    "speedsoft-pegatinas": {
+      "titulo": "Pegatinas en máscaras, cascos y cargadores",
+      "queEs": "El material del jugador es lo que sale en primer plano en los vídeos con cámara en el casco y en las fotos de cerca.",
+      "queRecibe": "Su logo en pegatinas en las máscaras, cascos y cargadores de los jugadores durante la temporada.",
+      "duracion": "Toda la temporada"
+    },
+    "speedsoft-vinilo-replicas": {
+      "titulo": "Vinilo con la marca en las réplicas",
+      "queEs": "Las réplicas del equipo se forran con un vinilo (skin) con los colores o el logo de la marca. Es de lo más fotografiado en este deporte.",
+      "queRecibe": "Las réplicas del equipo con su vinilo durante la temporada, y su marca en las fotos y vídeos donde salgan.",
+      "duracion": "Toda la temporada"
+    },
+    "speedsoft-carpa": {
+      "titulo": "Carpa del equipo en las competiciones",
+      "queEs": "En cada liga y torneo los equipos tienen su zona fuera del campo. La carpa del equipo con la marca del patrocinador es lo que ven todos los jugadores y el público entre partidas.",
+      "queRecibe": "Su marca en la carpa del equipo en todas las jornadas de liga y torneos de la temporada, y en las fotos de la zona de equipos.",
+      "duracion": "Toda la temporada"
+    },
+    "speedsoft-bandera": {
+      "titulo": "Bandera o lona del equipo",
+      "queEs": "La bandera del equipo acompaña al club en cada competición, en la zona de equipos y en la foto de grupo, sin tocar el campo de juego.",
+      "queRecibe": "Su logo en la bandera o lona del equipo en cada competición y en la foto oficial de grupo.",
+      "duracion": "Toda la temporada"
+    },
+    "speedsoft-videos-pov": {
+      "titulo": "Vídeos con cámara en el casco",
+      "queEs": "Los vídeos en primera persona (POV) de las partidas son el contenido que más se comparte en este deporte. Cada vídeo lleva la marca del patrocinador.",
+      "queRecibe": "Su logo y una mención en los vídeos POV del equipo durante un mes, con enlace a su perfil.",
+      "duracion": "Un mes"
+    },
+    "speedsoft-prueba-de-material": {
+      "titulo": "Pruebas de material del patrocinador",
+      "queEs": "El equipo prueba en competición el material de la marca (réplicas, baterías, gafas, protecciones, ropa técnica) y cuenta su opinión en redes. Ideal para tiendas de airsoft.",
+      "queRecibe": "Opiniones reales de jugadores de competición sobre su producto, en vídeo y en publicaciones, para usar también en su publicidad.",
+      "duracion": "Toda la temporada"
+    },
+    "speedsoft-team-building": {
+      "titulo": "Jornada de Speedsoft para la plantilla de una empresa",
+      "queEs": "El equipo organiza y dirige una jornada de Speedsoft para los trabajadores de una empresa: explicación, material, partidas y foto final. Sirve para cualquier sector.",
+      "queRecibe": "Una actividad de equipo distinta para su plantilla, dirigida por jugadores de competición, y la publicación de la jornada en las redes del club.",
+      "duracion": "Una jornada"
+    },
+    "speedsoft-desplazamientos": {
+      "titulo": "Patrocinador de los desplazamientos a la liga",
+      "queEs": "Una empresa cubre los viajes del equipo a las jornadas de liga y torneos, en dinero o poniendo el transporte.",
+      "queRecibe": "Su marca asociada a cada desplazamiento, con publicación de salida y llegada, y en el vehículo si lo pone ella.",
+      "duracion": "Toda la temporada"
+    },
+    "speedsoft-material-de-juego": {
+      "titulo": "Material de juego para la temporada",
+      "queEs": "Bolas, baterías, gas o repuestos: lo que el equipo gasta en cada entrenamiento y competición, aportado por una tienda o distribuidor.",
+      "queRecibe": "Su marca como proveedor oficial del equipo, con mención en redes cada vez que se use su material.",
+      "duracion": "Toda la temporada"
+    },
+    "running-carrera-con-nombre": {
+      "titulo": "Una carrera con el nombre de la empresa",
+      "queEs": "El grupo organiza una carrera popular (por ejemplo, un 5K o un 10K) que lleva el nombre de la empresa patrocinadora.",
+      "queRecibe": "El nombre de la carrera, su logo en el cartel, en la salida y en la meta, y en todas las publicaciones antes y después.",
+      "duracion": "Una carrera"
+    },
+    "running-dorsales": {
+      "titulo": "Dorsales con el logo de la empresa",
+      "queEs": "Cada corredor lleva el dorsal durante toda la carrera, y sale en todas las fotos.",
+      "queRecibe": "Su logo en los dorsales de una carrera organizada por el grupo y en las fotos de los corredores.",
+      "duracion": "Una carrera"
+    },
+    "running-avituallamiento": {
+      "titulo": "Avituallamiento patrocinado",
+      "queEs": "La empresa pone el agua, la bebida isotónica o la fruta de una carrera o de una salida larga del grupo.",
+      "queRecibe": "Su marca en la mesa de avituallamiento, en las fotos y en la publicación de la carrera.",
+      "duracion": "Una carrera"
+    },
+    "running-medallas": {
+      "titulo": "Medallas y trofeos",
+      "queEs": "La empresa pone las medallas para todos los que terminan o los trofeos para los ganadores de una carrera del grupo.",
+      "queRecibe": "Su logo en las medallas o trofeos, y en la foto de la entrega de premios.",
+      "duracion": "Una carrera"
+    },
+    "running-camiseta-del-grupo": {
+      "titulo": "Camiseta técnica del grupo",
+      "queEs": "La camiseta con la que el grupo entrena y corre todas sus carreras. Se ve cada semana en la calle y en cada foto.",
+      "queRecibe": "Su logo en la camiseta técnica de todos los corredores durante la temporada.",
+      "duracion": "Toda la temporada"
+    },
+    "running-salida-desde-el-negocio": {
+      "titulo": "Salida semanal desde el negocio",
+      "queEs": "El grupo empieza y termina una salida a la semana en el local de la empresa (una cafetería, una tienda de deporte, un gimnasio). Los corredores se convierten en clientes.",
+      "queRecibe": "Un grupo de corredores en su local cada semana, con mención en redes en cada salida.",
+      "duracion": "Un mes"
+    },
+    "running-beca-corredor": {
+      "titulo": "Beca para un corredor destacado",
+      "queEs": "La empresa paga las inscripciones a carreras, las zapatillas o el material de uno de los corredores que más lo merecen, y el grupo lo cuenta.",
+      "queRecibe": "Su marca asociada al corredor becado en cada carrera y en las publicaciones del grupo sobre su temporada.",
+      "duracion": "Toda la temporada"
+    },
+    "running-reto-de-kilometros": {
+      "titulo": "Reto mensual de kilómetros",
+      "queEs": "Un reto entre los miembros del grupo para sumar kilómetros en un mes, con premio para quien más corra. Lo pone la empresa.",
+      "queRecibe": "El nombre del reto, las publicaciones semanales con la clasificación y la foto de la entrega del premio.",
+      "duracion": "Un mes"
+    },
+    "running-fotos": {
+      "titulo": "Fotos y vídeos de las salidas y carreras",
+      "queEs": "Las fotos de las salidas y de las carreras son lo que más se comparte del grupo. Cada una lleva la marca del patrocinador.",
+      "queRecibe": "Su logo en las fotos y vídeos del grupo durante un mes, con mención en cada publicación.",
+      "duracion": "Un mes"
+    },
+    "running-descuento-miembros": {
+      "titulo": "Descuento para los miembros del grupo",
+      "queEs": "Un descuento en la tienda o el negocio de la empresa para todos los corredores del grupo y sus familias.",
+      "queRecibe": "Clientes nuevos de la comunidad del grupo y la promoción del descuento en sus redes.",
+      "duracion": "Toda la temporada"
+    },
+    "running-para-empresas": {
+      "titulo": "Running para la plantilla de una empresa",
+      "queEs": "El grupo organiza una salida o un entrenamiento para los trabajadores de una empresa, adaptado a todos los niveles.",
+      "queRecibe": "Una actividad saludable para su plantilla, dirigida por corredores con experiencia, y la publicación en las redes del grupo.",
+      "duracion": "Una jornada"
     }
   },
   "falta": {

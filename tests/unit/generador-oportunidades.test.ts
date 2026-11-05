@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import type { RequisitoIdea } from "@/lib/catalogo-ideas";
 import {
-  CATEGORIAS_DEL_GENERADOR,
+  categoriasDelGenerador,
   IDEAS_DEL_GENERADOR,
   MAXIMO_DE_PROPUESTAS,
   equipoPrincipal,
@@ -101,7 +101,7 @@ describe("generar mis oportunidades", () => {
 
   it("todas las categorías del generador tienen nombre para enseñarlas", () => {
     const home = JSON.parse(readFileSync("messages/es/home.json", "utf8"));
-    for (const categoria of CATEGORIAS_DEL_GENERADOR) {
+    for (const categoria of [...categoriasDelGenerador([]), "speedsoft", "running"]) {
       expect(home.categoriasIdea[categoria]?.etiqueta).toBeTruthy();
     }
   });
@@ -121,6 +121,36 @@ describe("generar mis oportunidades", () => {
     expect(mochilas.title).not.toContain("Senior");
     expect(mochilas.teamId).toBeNull();
     expect(generarPropuestas(base).find((p) => p.ideaId === "equipo-empresa-oficial")?.teamId ?? null).toBeNull();
+  });
+
+  it("las categorías de un deporte solo le salen a un club de ese deporte, y las primeras", () => {
+    expect(categoriasDelGenerador([{ sport: "Balonmano" }])).not.toContain("speedsoft");
+    expect(categoriasDelGenerador([{ sport: "Balonmano" }])).not.toContain("running");
+    expect(categoriasDelGenerador([{ sport: "Airsoft" }])[0]).toBe("speedsoft");
+    // Escrito a mano también vale: "speedsoft" y "runners" son sinónimos.
+    expect(categoriasDelGenerador([{ sport: "speedsoft" }])[0]).toBe("speedsoft");
+    expect(categoriasDelGenerador([{ sport: "Runners" }])[0]).toBe("running");
+  });
+
+  it("un club de speedsoft ve sus ideas en la mezcla, con su equipo en las de equipación", () => {
+    const speedsoft = { ...base, equipos: [{ ...equipo("a", "Masculino"), sport: "Airsoft" } as ClubTeam] };
+    const mezcla = generarPropuestas(speedsoft);
+    expect(mezcla.slice(0, 4).every((p) => p.ideaId.startsWith("speedsoft-"))).toBe(true);
+    expect(mezcla.find((p) => p.ideaId === "speedsoft-jersey")!.title).toContain("Senior Masculino");
+    const carpa = generarPropuestas({ ...speedsoft, eleccion: "speedsoft" }).find((p) => p.ideaId === "speedsoft-carpa")!;
+    expect(carpa.teamId).toBeNull();
+    // Y un club de balonmano no ve ninguna.
+    expect(generarPropuestas(base).some((p) => p.ideaId.startsWith("speedsoft-") || p.ideaId.startsWith("running-"))).toBe(false);
+  });
+
+  it("todas las ideas de deporte tienen texto en los cuatro idiomas", () => {
+    for (const idioma of ["es", "pt", "br", "en"]) {
+      const ideas = JSON.parse(readFileSync(`messages/${idioma}/ideas.json`, "utf8")).ideas;
+      for (const id of Object.keys(ideas).filter((clave) => /^(speedsoft|running)-/.test(clave))) {
+        expect(ideas[id].titulo && ideas[id].queEs && ideas[id].queRecibe && ideas[id].duracion).toBeTruthy();
+      }
+      expect(Object.keys(ideas).filter((clave) => /^(speedsoft|running)-/.test(clave))).toHaveLength(23);
+    }
   });
 
   it("nunca lleva precio: eso lo pone el club", () => {

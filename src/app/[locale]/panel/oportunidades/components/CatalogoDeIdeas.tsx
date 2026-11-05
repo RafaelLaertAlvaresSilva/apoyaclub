@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useIntlLocale } from "@/i18n/use-intl-locale";
 import { IconoDeCategoria } from "@/components/IconoDeCategoria";
 import {
-  CATEGORIAS_IDEA,
+  categoriasDelClub,
   ideasParaElClub,
   textoDeLoQueFalta,
   textosDeLaIdea,
@@ -31,12 +31,16 @@ export function CatalogoDeIdeas({
   requisitos,
   onElegir,
   enPaso = false,
+  deportes = [],
 }: {
   /** Lo que el club puede cumplir según su ficha. */
   requisitos: RequisitoIdea[];
   onElegir: (idea: Idea) => void;
   /** Dentro de un `Paso`, que ya pone el marco, el título y el color. */
   enPaso?: boolean;
+  /** Las claves de deporte del club: con speedsoft o running, sus
+   * categorías propias salen las primeras (`CATEGORIAS_DE_DEPORTE`). */
+  deportes?: string[];
 }) {
   const t = useTranslations("panel.oportunidades.catalogo");
   const tIdeas = useTranslations("ideas");
@@ -62,7 +66,7 @@ export function CatalogoDeIdeas({
           pastilla medía lo que su nombre y la lista se leía como un
           montón. Así se recorre por columnas de un vistazo. */}
       <div className={`grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 ${enPaso ? "" : "mt-3"}`}>
-        {CATEGORIAS_IDEA.map((entrada) => (
+        {categoriasDelClub(deportes).map((id) => ({ id })).map((entrada) => (
           <button
             key={entrada.id}
             type="button"

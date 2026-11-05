@@ -1,5 +1,6 @@
 "use client";
 
+import { deportesDeLosEquipos } from "@/lib/catalogo-ideas";
 import { useTranslations } from "next-intl";
 import { useActionState, useEffect, useRef, useState } from "react";
 import {
@@ -88,7 +89,7 @@ export function NuevaOportunidad({
           Quien prefiere escribirla él, sigue bajando. */}
       <div className="mb-5">
         <Paso numero={1} tono="verde" titulo={t("pasos.idea")} descripcion={t("pasos.ideaTexto")}>
-          <CatalogoDeIdeas requisitos={requisitos} onElegir={setIdea} enPaso />
+          <CatalogoDeIdeas requisitos={requisitos} onElegir={setIdea} enPaso deportes={deportesDeLosEquipos(equipos)} />
         </Paso>
       </div>
 

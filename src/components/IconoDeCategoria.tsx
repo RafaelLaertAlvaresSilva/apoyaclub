@@ -104,6 +104,20 @@ const FORMA_DE_LA_CATEGORIA: Record<string, React.ReactNode> = {
       <circle cx="12" cy="10" r="2.5" />
     </>
   ),
+  // Las de un deporte (`CATEGORIAS_DE_DEPORTE`): una mira y una zapatilla.
+  speedsoft: (
+    <>
+      <circle cx="12" cy="12" r="7" />
+      <path d="M12 3v4M12 17v4M3 12h4M17 12h4" />
+      <circle cx="12" cy="12" r="1.5" />
+    </>
+  ),
+  running: (
+    <>
+      <path d="M3 17h13.5a4.5 4.5 0 004.5-4.5V12l-6-2-2.5-4H9l1 4-7 3v4z" />
+      <path d="M3 20h18" />
+    </>
+  ),
   servicios: (
     <>
       <path d="M14.5 6.5a3.5 3.5 0 004.8 4.8l-8 8a2.4 2.4 0 01-3.4-3.4l8-8z" />

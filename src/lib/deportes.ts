@@ -29,6 +29,9 @@ export const DEPORTES: Deporte[] = [
   { clave: "tenis", nombre: "Tenis", sinonimos: ["tennis"] },
   { clave: "tenisMesa", nombre: "Tenis de mesa", sinonimos: ["ping pong", "pingpong"] },
   { clave: "atletismo", nombre: "Atletismo", sinonimos: ["athletics"] },
+  // Separado de atletismo: un grupo de corredores no es un club de pista,
+  // y tiene sus propias ideas de patrocinio (`catalogo-ideas.ts`).
+  { clave: "running", nombre: "Running", sinonimos: ["corredores", "runners", "carreras populares", "trail", "trail running", "correr"] },
   { clave: "natacion", nombre: "Natación", sinonimos: ["swimming"] },
   { clave: "ciclismo", nombre: "Ciclismo", sinonimos: ["cycling"] },
   { clave: "triatlon", nombre: "Triatlón", sinonimos: ["triathlon"] },

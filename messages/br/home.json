@@ -928,6 +928,14 @@
     "servicios": {
       "etiqueta": "Do que precisa",
       "pista": "Ao contrário: o que falta para você e uma empresa pode cobrir."
+    },
+    "speedsoft": {
+      "etiqueta": "Speedsoft e airsoft",
+      "pista": "Camisa, máscaras, réplicas e a área das equipes, sem mexer no campo de jogo."
+    },
+    "running": {
+      "etiqueta": "Corrida",
+      "pista": "Provas, números de peito, hidratação e os treinos do grupo."
     }
   },
   "planes": {

@@ -928,6 +928,14 @@
     "servicios": {
       "etiqueta": "What you need",
       "pista": "The other way round: what you're missing and a business can provide."
+    },
+    "speedsoft": {
+      "etiqueta": "Speedsoft and airsoft",
+      "pista": "Jersey, masks, replicas and the team area, without touching the playing field."
+    },
+    "running": {
+      "etiqueta": "Running",
+      "pista": "Races, bibs, refreshment stations and group runs."
     }
   },
   "planes": {

@@ -7,7 +7,7 @@ import { BotonEnviar } from "@/components/BotonEnviar";
 import { IconoDeCategoria } from "@/components/IconoDeCategoria";
 import type { RequisitoIdea } from "@/lib/catalogo-ideas";
 import {
-  CATEGORIAS_DEL_GENERADOR,
+  categoriasDelGenerador,
   generarPropuestas,
   type EleccionDelGenerador,
   type Propuesta,
@@ -66,7 +66,7 @@ export function GeneradorDeOportunidades({
         lineaDeDatos,
         eleccion: opcion,
       });
-    const opciones: EleccionDelGenerador[] = ["mezcla", ...CATEGORIAS_DEL_GENERADOR];
+    const opciones: EleccionDelGenerador[] = ["mezcla", ...categoriasDelGenerador(equipos)];
     return new Map(opciones.map((opcion) => [opcion, generar(opcion)]));
   }, [perfil, equipos, requisitos, existentes, lineaDeDatos, tIdeas, tPerfil]);
 
@@ -91,7 +91,7 @@ export function GeneradorDeOportunidades({
   }
 
   if (paso === "categoria") {
-    const conAlguna = CATEGORIAS_DEL_GENERADOR.filter((categoria) => (porEleccion.get(categoria)?.length ?? 0) > 0);
+    const conAlguna = categoriasDelGenerador(equipos).filter((categoria) => (porEleccion.get(categoria)?.length ?? 0) > 0);
     const pastilla =
       "flex w-full min-w-0 items-center gap-2 rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-left text-sm font-medium text-zinc-700 transition-colors hover:border-teal-500 hover:text-teal-700";
     const elegir = (opcion: EleccionDelGenerador) => {

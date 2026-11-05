@@ -1,3 +1,4 @@
+import { deporteDeLaLista } from "@/lib/deportes";
 import type {
   BudgetPeriod,
   CategoriaNecesidad,
@@ -45,7 +46,11 @@ export type CategoriaIdea =
   | "contenido"
   | "digital"
   | "retransmisiones"
-  | "servicios";
+  | "servicios"
+  // Las de un deporte: solo las ve un club que tiene un equipo de ese
+  // deporte (`CATEGORIAS_DE_DEPORTE`).
+  | "speedsoft"
+  | "running";
 
 export const CATEGORIAS_IDEA: {
   id: CategoriaIdea;
@@ -71,10 +76,63 @@ export const CATEGORIAS_IDEA: {
   { id: "servicios", etiqueta: "Lo que necesitas", pista: "Al revés: lo que te hace falta y una empresa puede cubrir." },
 ];
 
-export const ETIQUETA_CATEGORIA_IDEA: Record<CategoriaIdea, string> = CATEGORIAS_IDEA.reduce(
+/**
+ * Categorías de un deporte concreto (pedido por Rafael el 5-11-2026,
+ * para Orphan's Dynasty y Santa Ana Runners). Solo le salen a un club
+ * que tiene un equipo de ese deporte (`deporte` es la clave de
+ * `lib/deportes.ts`), y le salen las primeras. Al resto de clubes, y en
+ * la página pública, no: un club de balonmano no vende pegatinas en los
+ * cargadores.
+ */
+export const CATEGORIAS_DE_DEPORTE: {
+  id: CategoriaIdea;
+  deporte: string;
+  etiqueta: string;
+  pista: string;
+}[] = [
+  {
+    id: "speedsoft",
+    deporte: "airsoft",
+    etiqueta: "Speedsoft y airsoft",
+    pista: "Jersey, máscaras, réplicas y la zona de equipos, sin tocar el campo de juego.",
+  },
+  {
+    id: "running",
+    deporte: "running",
+    etiqueta: "Running",
+    pista: "Carreras, dorsales, avituallamiento y las salidas del grupo.",
+  },
+];
+
+export const ETIQUETA_CATEGORIA_IDEA: Record<CategoriaIdea, string> = [...CATEGORIAS_IDEA, ...CATEGORIAS_DE_DEPORTE].reduce(
   (acumulado, categoria) => ({ ...acumulado, [categoria.id]: categoria.etiqueta }),
   {} as Record<CategoriaIdea, string>,
 );
+
+/**
+ * Las categorías que ve un club: primero las de sus deportes, luego las
+ * de todos. `deportes` son las claves de `lib/deportes.ts`.
+ */
+export function categoriasDelClub(deportes: Iterable<string>): CategoriaIdea[] {
+  const suyos = new Set(deportes);
+  return [
+    ...CATEGORIAS_DE_DEPORTE.filter((categoria) => suyos.has(categoria.deporte)).map((categoria) => categoria.id),
+    ...CATEGORIAS_IDEA.map((categoria) => categoria.id),
+  ];
+}
+
+/** Las claves de deporte (`lib/deportes.ts`) de los equipos de un club. */
+export function deportesDeLosEquipos(equipos: Pick<ClubTeam, "sport">[]): string[] {
+  return Array.from(
+    new Set(equipos.map((equipo) => deporteDeLaLista(equipo.sport)?.clave).filter((clave): clave is string => !!clave)),
+  );
+}
+
+/** Las categorías de deporte de un club (las que no son de todos). */
+export function categoriasDeDeporteDelClub(deportes: Iterable<string>): CategoriaIdea[] {
+  const suyos = new Set(deportes);
+  return CATEGORIAS_DE_DEPORTE.filter((categoria) => suyos.has(categoria.deporte)).map((categoria) => categoria.id);
+}
 
 /**
  * Lo que el club tiene que tener para que la idea no sea una tomadura de
@@ -1198,6 +1256,37 @@ export const IDEAS: Idea[] = [
     esNecesidad: true,
     categoriaNecesidad: "limpieza",
   },
+
+  // -------------------------------------------------------------------
+  // Speedsoft y airsoft (solo para clubes de ese deporte)
+  // -------------------------------------------------------------------
+  { id: "speedsoft-jersey", categoria: "speedsoft", tipo: "equipment", periodo: "season", colaboracion: "money", requiere: ["equipos"] },
+  { id: "speedsoft-mangas", categoria: "speedsoft", tipo: "equipment", periodo: "season", colaboracion: "money", requiere: ["equipos"] },
+  { id: "speedsoft-colores-de-la-marca", categoria: "speedsoft", tipo: "equipment", periodo: "season", colaboracion: "money", requiere: ["equipos"] },
+  { id: "speedsoft-pegatinas", categoria: "speedsoft", tipo: "equipment", periodo: "season", colaboracion: "mixed", requiere: ["equipos"] },
+  { id: "speedsoft-vinilo-replicas", categoria: "speedsoft", tipo: "equipment", periodo: "season", colaboracion: "mixed", requiere: ["equipos"] },
+  { id: "speedsoft-carpa", categoria: "speedsoft", tipo: "events_tournaments", periodo: "season", colaboracion: "mixed" },
+  { id: "speedsoft-bandera", categoria: "speedsoft", tipo: "events_tournaments", periodo: "season", colaboracion: "money" },
+  { id: "speedsoft-videos-pov", categoria: "speedsoft", tipo: "social_content", periodo: "month", colaboracion: "money", requiere: ["redes"] },
+  { id: "speedsoft-prueba-de-material", categoria: "speedsoft", tipo: "social_content", periodo: "season", colaboracion: "product", requiere: ["redes"] },
+  { id: "speedsoft-team-building", categoria: "speedsoft", tipo: "events_tournaments", periodo: "event", colaboracion: "money" },
+  { id: "speedsoft-desplazamientos", categoria: "speedsoft", tipo: "venue_matches", periodo: "season", colaboracion: "mixed" },
+  { id: "speedsoft-material-de-juego", categoria: "speedsoft", tipo: "in_kind", periodo: "season", colaboracion: "product" },
+
+  // -------------------------------------------------------------------
+  // Running (solo para clubes y grupos de corredores)
+  // -------------------------------------------------------------------
+  { id: "running-carrera-con-nombre", categoria: "running", tipo: "events_tournaments", periodo: "event", colaboracion: "money" },
+  { id: "running-dorsales", categoria: "running", tipo: "events_tournaments", periodo: "event", colaboracion: "money" },
+  { id: "running-avituallamiento", categoria: "running", tipo: "events_tournaments", periodo: "event", colaboracion: "product" },
+  { id: "running-medallas", categoria: "running", tipo: "events_tournaments", periodo: "event", colaboracion: "mixed" },
+  { id: "running-camiseta-del-grupo", categoria: "running", tipo: "equipment", periodo: "season", colaboracion: "money" },
+  { id: "running-salida-desde-el-negocio", categoria: "running", tipo: "venue_matches", periodo: "month", colaboracion: "mixed" },
+  { id: "running-beca-corredor", categoria: "running", tipo: "equipment", periodo: "season", colaboracion: "money" },
+  { id: "running-reto-de-kilometros", categoria: "running", tipo: "social_content", periodo: "month", colaboracion: "money", requiere: ["redes"] },
+  { id: "running-fotos", categoria: "running", tipo: "social_content", periodo: "month", colaboracion: "money", requiere: ["redes"] },
+  { id: "running-descuento-miembros", categoria: "running", tipo: "in_kind", periodo: "season", colaboracion: "product" },
+  { id: "running-para-empresas", categoria: "running", tipo: "events_tournaments", periodo: "event", colaboracion: "money" },
 ];
 
 // ---------------------------------------------------------------------
@@ -1327,4 +1416,8 @@ export function descripcionDeLaIdea(idea: Pick<Idea, "id">, t: TraducirIdeas): s
 }
 
 /** Cuántas ideas tiene el catálogo, para poder decirlo sin mentir. */
-export const TOTAL_DE_IDEAS = IDEAS.length;
+// Sin las de un deporte concreto: la web habla del catálogo que ve
+// cualquier club, y esas solo las ven los clubes de ese deporte.
+export const TOTAL_DE_IDEAS = IDEAS.filter(
+  (idea) => !CATEGORIAS_DE_DEPORTE.some((categoria) => categoria.id === idea.categoria),
+).length;
