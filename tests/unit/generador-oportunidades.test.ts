@@ -106,6 +106,23 @@ describe("generar mis oportunidades", () => {
     }
   });
 
+  it("no vuelve a pedir lo que el club ya pide, aunque lo haya titulado de otra forma", () => {
+    const necesita = generarPropuestas({
+      ...base,
+      eleccion: "servicios",
+      existentes: [{ title: "Buscamos servicio de Fisioterapia", ideaId: null, esNecesidad: true, categoriaNecesidad: "fisioterapia" as never }],
+    });
+    expect(necesita.map((p) => p.ideaId)).not.toContain("necesita-fisioterapia");
+  });
+
+  it("lo que es de todo el club no lleva el nombre de un equipo", () => {
+    const equipaciones = generarPropuestas({ ...base, eleccion: "equipaciones" });
+    const mochilas = equipaciones.find((p) => p.ideaId === "equipacion-mochilas")!;
+    expect(mochilas.title).not.toContain("Senior");
+    expect(mochilas.teamId).toBeNull();
+    expect(generarPropuestas(base).find((p) => p.ideaId === "equipo-empresa-oficial")?.teamId ?? null).toBeNull();
+  });
+
   it("nunca lleva precio: eso lo pone el club", () => {
     expect(generarPropuestas(base).every((p) => !("value" in p))).toBe(true);
   });

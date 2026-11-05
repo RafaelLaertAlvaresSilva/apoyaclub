@@ -102,7 +102,12 @@ export default async function OportunidadesPage() {
           perfil={{ topCategoryMalePhoto: perfil.topCategoryMalePhoto, topCategoryFemalePhoto: perfil.topCategoryFemalePhoto }}
           equipos={equipos}
           requisitos={requisitos}
-          existentes={oportunidades.map((oportunidad) => ({ title: oportunidad.title, ideaId: oportunidad.ideaId ?? null }))}
+          existentes={oportunidades.map((oportunidad) => ({
+            title: oportunidad.title,
+            ideaId: oportunidad.ideaId ?? null,
+            esNecesidad: oportunidad.esNecesidad,
+            categoriaNecesidad: oportunidad.categoriaNecesidad,
+          }))}
           lineaDeDatos={lineaDeDatos}
         />
         <OportunidadesManager

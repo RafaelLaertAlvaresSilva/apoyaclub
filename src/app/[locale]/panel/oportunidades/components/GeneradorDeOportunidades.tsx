@@ -12,7 +12,7 @@ import {
   type EleccionDelGenerador,
   type Propuesta,
 } from "@/lib/generador-oportunidades";
-import type { ClubProfile, ClubTeam } from "@/lib/types";
+import type { CategoriaNecesidad, ClubProfile, ClubTeam } from "@/lib/types";
 import { clasesInput, clasesTextarea } from "../../components/SeccionCard";
 import { publicarPropuestas, type EstadoGuardado } from "../actions";
 
@@ -38,7 +38,7 @@ export function GeneradorDeOportunidades({
   perfil: Pick<ClubProfile, "topCategoryMalePhoto" | "topCategoryFemalePhoto">;
   equipos: ClubTeam[];
   requisitos: RequisitoIdea[];
-  existentes: { title: string; ideaId: string | null }[];
+  existentes: { title: string; ideaId: string | null; esNecesidad: boolean; categoriaNecesidad: CategoriaNecesidad | null }[];
   lineaDeDatos: string | null;
 }) {
   const t = useTranslations("panel.oportunidades.generador");

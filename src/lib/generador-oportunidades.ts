@@ -78,6 +78,17 @@ export const MAXIMO_DE_PROPUESTAS = 8;
 /** Ideas que van con un equipo concreto. */
 const CATEGORIAS_DE_EQUIPO = new Set(["equipos", "equipaciones", "jugadores", "intervalo"]);
 
+/**
+ * Las de esas categorías que son de todo el club y no de un equipo:
+ * "Mochilas y bolsas del club · Senior Masculino" no tiene sentido.
+ */
+const DE_TODO_EL_CLUB = new Set([
+  "equipo-empresa-oficial",
+  "equipacion-chandal",
+  "equipacion-mochilas",
+  "equipacion-presentacion",
+]);
+
 export type Propuesta = {
   ideaId: string;
   title: string;
@@ -136,7 +147,7 @@ export function generarPropuestas({
   equipos: ClubTeam[];
   requisitos: Set<RequisitoIdea>;
   /** Lo que el club ya tiene, para no repetirlo. */
-  existentes: Pick<Opportunity, "title" | "ideaId">[];
+  existentes: (Pick<Opportunity, "title" | "ideaId"> & Partial<Pick<Opportunity, "esNecesidad" | "categoriaNecesidad">>)[];
   tIdeas: TraducirIdeas;
   /** "Senior Masculino": cómo se llama un equipo en el título. */
   nombreDelEquipo: (equipo: ClubTeam) => string;
@@ -146,16 +157,24 @@ export function generarPropuestas({
 }): Propuesta[] {
   const ideasYaUsadas = new Set(existentes.map((una) => una.ideaId).filter(Boolean));
   const titulosYaUsados = existentes.map((una) => normalizar(una.title));
+  // Lo que ya pide, por lo que pide y no por cómo lo ha titulado:
+  // "Buscamos servicio de Fisioterapia" es la misma que "Fisioterapeuta
+  // para el equipo".
+  const necesidadesYaPedidas = new Set(
+    existentes.filter((una) => una.esNecesidad && una.categoriaNecesidad).map((una) => una.categoriaNecesidad),
+  );
   const principal = equipoPrincipal(equipos);
 
   const puede = (idea: Idea) => (idea.requiere ?? []).every((requisito) => requisitos.has(requisito));
   const yaLaTiene = (idea: Idea) =>
     ideasYaUsadas.has(idea.id) ||
+    (!!idea.esNecesidad && !!idea.categoriaNecesidad && necesidadesYaPedidas.has(idea.categoriaNecesidad)) ||
     titulosYaUsados.some((titulo) => titulo.startsWith(normalizar(textosDeLaIdea(idea, tIdeas).titulo)));
 
   const construir = (idea: Idea, marcada: boolean): Propuesta => {
     const textos = textosDeLaIdea(idea, tIdeas);
-    const conEquipo = CATEGORIAS_DE_EQUIPO.has(idea.categoria) && principal && !idea.esNecesidad;
+    const conEquipo =
+      CATEGORIAS_DE_EQUIPO.has(idea.categoria) && !DE_TODO_EL_CLUB.has(idea.id) && principal && !idea.esNecesidad;
     const foto = conEquipo ? fotoDelEquipo(principal, perfil) : null;
     const descripcion = [descripcionDeLaIdea(idea, tIdeas), idea.esNecesidad ? null : lineaDeDatos]
       .filter(Boolean)
