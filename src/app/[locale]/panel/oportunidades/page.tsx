@@ -12,8 +12,12 @@ import {
   opportunityRowToOpportunity,
   type OpportunityRow,
 } from "@/lib/opportunity-mappers";
+import { calcularAlcance, cifraLlana, cifrasDePortada } from "@/lib/alcance";
+import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
+import { intlLocaleDe } from "@/config/locales";
 import { createClient } from "@/lib/supabase/server";
 import { obtenerClubPublico } from "../../club/[slug]/data";
+import { GeneradorDeOportunidades } from "./components/GeneradorDeOportunidades";
 import { OportunidadesManager } from "./components/OportunidadesManager";
 
 export default async function OportunidadesPage() {
@@ -63,6 +67,11 @@ export default async function OportunidadesPage() {
   // entero es del código, no hace falta traérselo de ningún sitio.
   const requisitos = [...requisitosDelClub(perfil, equipos)];
 
+  // "Generar mis oportunidades": la línea con las cifras del club se
+  // calcula aquí; las propuestas, en el navegador, según la categoría
+  // que elija el club (`lib/generador-oportunidades.ts`).
+  const lineaDeDatos = perfil ? await lineaDeDatosDelClub(supabase, user.id, perfil, equipos) : null;
+
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
       <div className="flex items-center justify-between">
@@ -88,6 +97,14 @@ export default async function OportunidadesPage() {
           })}
         </div>
       ) : (
+        <>
+        <GeneradorDeOportunidades
+          perfil={{ topCategoryMalePhoto: perfil.topCategoryMalePhoto, topCategoryFemalePhoto: perfil.topCategoryFemalePhoto }}
+          equipos={equipos}
+          requisitos={requisitos}
+          existentes={oportunidades.map((oportunidad) => ({ title: oportunidad.title, ideaId: oportunidad.ideaId ?? null }))}
+          lineaDeDatos={lineaDeDatos}
+        />
         <OportunidadesManager
           oportunidades={oportunidades}
           equipos={equipos}
@@ -102,7 +119,37 @@ export default async function OportunidadesPage() {
           fichaPublica={perfil?.slug ? (await obtenerClubPublico(perfil.slug)) !== null : false}
           userId={user.id}
         />
+        </>
       )}
     </div>
   );
+}
+
+/**
+ * "Datos del Club…: Público de media en casa: 200 · Jugadores: 52…", la
+ * línea que cierra cada propuesta generada. Las mismas cifras que la
+ * portada del dossier. Null si el club todavía no tiene ninguna.
+ */
+async function lineaDeDatosDelClub(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  clubId: string,
+  perfil: NonNullable<ReturnType<typeof clubRowToProfile>>,
+  equipos: ReturnType<typeof clubTeamRowToTeam>[],
+): Promise<string | null> {
+  const [tAlcance, tGen, locale] = await Promise.all([
+    getTranslations("panel.alcance.informe"),
+    getTranslations("panel.oportunidades.generador"),
+    getLocale(),
+  ]);
+  const intlLocale = intlLocaleDe(locale);
+  const partidos = await obtenerPartidosDelClub(supabase, clubId).catch(() => []);
+  const alcance = calcularAlcance(
+    { perfil, equipos, partidos },
+    (clave, valores) => tAlcance(clave, valores as never),
+    intlLocale,
+  );
+  const cifras = cifrasDePortada(alcance)
+    .map((cifra) => `${cifra.etiqueta}: ${cifraLlana(cifra.valor, intlLocale)}`)
+    .join(" · ");
+  return cifras ? tGen("datos", { club: perfil.name, cifras }) : null;
 }

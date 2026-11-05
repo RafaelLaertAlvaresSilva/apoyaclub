@@ -379,7 +379,8 @@
     "podidoPublicarIntentaloNuevo": "It couldn't be published. Please try again.",
     "podidoCambiarIntentaloNuevo": "It couldn't be changed. Please try again.",
     "podidoArchivarIntentaloNuevo": "It couldn't be archived. Please try again.",
-    "enlaceQrNoValido": "The QR code link is not valid. Paste the full address, for example https://www.yourclub.com"
+    "enlaceQrNoValido": "The QR code link is not valid. Paste the full address, for example https://www.yourclub.com",
+    "marcaAlgunaPropuesta": "Tick at least one opportunity to publish."
   },
   "perfil": {
     "anadeCadaEquipoDel": "Add each of the club’s teams: sport, age group, gender and whether it’s a first team or a youth team.",
@@ -766,6 +767,31 @@
         "partido": "One match",
         "evento": "One event"
       }
+    },
+    "generador": {
+      "titulo": "Not sure what to offer? We'll prepare them for you",
+      "texto": "Using your profile, we suggest several ready-to-publish opportunities at once: shirt, social media, venue, youth teams… You just review them, add a price if you want and publish.",
+      "ninguna": "You already have everything we can suggest with your current profile. Complete your teams, venue, social media and youth section and we'll suggest more.",
+      "boton": "Generate my opportunities",
+      "tituloRevision": "Your opportunities, ready to review",
+      "revisa": "Change anything you like, add a price if you want and untick the ones you don't want. Without a price it shows “price to be agreed”. Nothing is published until you press the button below.",
+      "ofertaEtiqueta": "Publish this one",
+      "necesidadEtiqueta": "Also publish this thing you need",
+      "campoTitulo": "Title",
+      "campoTexto": "Text",
+      "campoDuracion": "Duration",
+      "campoPrecio": "Price",
+      "precioPlaceholder": "Empty = to be agreed",
+      "necesidadPrecio": "In exchange for visibility",
+      "quitarFoto": "Remove photo",
+      "publicar": "Publish the ticked ones ({n})",
+      "cancelar": "Cancel",
+      "publicadas": "Done! Your opportunities are now published in your list. You can change them whenever you like.",
+      "datos": "{club} in figures: {cifras}.",
+      "queCategoria": "What kind would you like?",
+      "queCategoriaTexto": "Pick a category and we'll prepare its opportunities. In brackets, how many we can suggest with your current profile.",
+      "mezcla": "A bit of everything",
+      "otraCategoria": "Choose another category"
     }
   },
   "dossier": {

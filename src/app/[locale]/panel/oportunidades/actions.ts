@@ -16,6 +16,7 @@ import type { User } from "@supabase/supabase-js";
 import { leerCategoriaNecesidad } from "@/lib/opportunities";
 import { createClient } from "@/lib/supabase/server";
 import { fotosLimpias } from "@/lib/fotos-de-oportunidad";
+import { buscarIdea } from "@/lib/catalogo-ideas";
 import type {
   BudgetPeriod,
   CategoriaNecesidad,
@@ -684,4 +685,81 @@ export async function compartirComoPlantilla(
   });
 
   refrescarFichaPublica();
+}
+
+// ---------------------------------------------------------------------
+// Publicar las oportunidades generadas (`lib/generador-oportunidades.ts`)
+// ---------------------------------------------------------------------
+
+/** Cuántas a la vez como mucho: las que propone el generador y algo de margen. */
+const MAXIMO_A_LA_VEZ = 12;
+
+/**
+ * Publica de una vez las propuestas que el club ha dejado marcadas.
+ *
+ * Del formulario solo se cree lo que el club puede tocar: el título, el
+ * texto, el precio, la foto y el equipo (comprobando que el equipo es
+ * suyo). El resto —tipo, periodo, forma de colaboración, si es una
+ * necesidad— se saca otra vez de la idea del catálogo, para que nadie
+ * pueda colar valores raros cambiando el formulario a mano.
+ *
+ * Sin precio, se guarda 0, que en la web sale como "precio a convenir"
+ * (decidido por Rafael: primero sin precio).
+ */
+export async function publicarPropuestas(
+  _estadoPrevio: EstadoGuardado,
+  formData: FormData,
+): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return { error: contexto.error };
+  const { supabase, user } = contexto;
+
+  const indices = formData.getAll("seleccion").map(String).slice(0, MAXIMO_A_LA_VEZ);
+  if (indices.length === 0) return { error: t("marcaAlgunaPropuesta") };
+
+  const { data: filasEquipos } = await supabase.from("club_teams").select("id").eq("club_id", user.id);
+  const equiposDelClub = new Set((filasEquipos ?? []).map((fila) => String(fila.id)));
+
+  const filas = [];
+  for (const indice of indices) {
+    const idea = buscarIdea(String(formData.get(`idea_${indice}`) ?? ""));
+    if (!idea) continue;
+
+    const title = String(formData.get(`title_${indice}`) ?? "").trim().slice(0, 200);
+    if (!title) return { error: t("indicaNombreOportunidad") };
+
+    const textoPrecio = String(formData.get(`value_${indice}`) ?? "").trim().replace(",", ".");
+    const precio = textoPrecio === "" ? 0 : Number.parseFloat(textoPrecio);
+    if (!Number.isFinite(precio) || precio < 0) return { error: t("indicaValorValido0O") };
+
+    const equipo = String(formData.get(`team_${indice}`) ?? "");
+    filas.push({
+      club_id: user.id,
+      idea_id: idea.id,
+      title,
+      description: String(formData.get(`description_${indice}`) ?? "").trim() || null,
+      opportunity_type: idea.tipo,
+      value: idea.esNecesidad ? 0 : precio,
+      duration: String(formData.get(`duration_${indice}`) ?? "").trim() || null,
+      period: idea.periodo,
+      collaboration_type: idea.colaboracion,
+      is_need: !!idea.esNecesidad,
+      need_category: idea.categoriaNecesidad ?? null,
+      team_id: equiposDelClub.has(equipo) ? equipo : null,
+      photos: fotosLimpias(formData.getAll(`fotos_${indice}`).map(String)),
+    });
+  }
+  if (filas.length === 0) return { error: t("marcaAlgunaPropuesta") };
+
+  let { error } = await supabase.from("opportunities").insert(filas);
+  // Si la migración 0059 todavía no se ha ejecutado, la columna no
+  // existe: se publican igual, sin apuntar de qué idea salen.
+  if (error && /idea_id/.test(error.message ?? "")) {
+    ({ error } = await supabase.from("opportunities").insert(filas.map(({ idea_id: _idea, ...resto }) => resto)));
+  }
+  if (error) return fallo("publicar las oportunidades generadas", error, t("podidoCrearOportunidad"));
+
+  refrescarFichaPublica();
+  return { ok: true };
 }

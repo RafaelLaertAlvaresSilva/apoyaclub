@@ -44,6 +44,8 @@ export type OpportunityRow = {
   // Opcional: hay consultas escritas antes de la migración 0052 que no
   // la piden, y el mapeador tiene que sobrevivir a eso.
   photos?: string[] | null;
+  /** Migración 0059. Opcional por lo mismo que `photos`. */
+  idea_id?: string | null;
   archived_at: string | null;
   created_at: string;
   updated_at: string;
@@ -85,6 +87,7 @@ export function opportunityRowToOpportunity(row: OpportunityRow): Opportunity {
     desde: row.starts_on ?? null,
     hasta: row.ends_on ?? null,
     requisitos: row.requirements ?? null,
+    ideaId: row.idea_id ?? null,
     archivedAt: row.archived_at,
     createdAt: row.created_at,
     updatedAt: row.updated_at,

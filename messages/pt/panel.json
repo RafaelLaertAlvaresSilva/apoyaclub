@@ -379,7 +379,8 @@
     "podidoPublicarIntentaloNuevo": "Não foi possível publicar. Tenta novamente.",
     "podidoCambiarIntentaloNuevo": "Não foi possível alterar. Tenta novamente.",
     "podidoArchivarIntentaloNuevo": "Não foi possível arquivar. Tenta novamente.",
-    "enlaceQrNoValido": "O link do código QR não é válido. Cola o endereço completo, por exemplo https://www.oteuclube.pt"
+    "enlaceQrNoValido": "O link do código QR não é válido. Cola o endereço completo, por exemplo https://www.oteuclube.pt",
+    "marcaAlgunaPropuesta": "Marca pelo menos uma oportunidade para publicar."
   },
   "perfil": {
     "anadeCadaEquipoDel": "Adiciona cada equipa do clube: modalidade, escalão, género e se é equipa principal ou de formação.",
@@ -766,6 +767,31 @@
         "partido": "Um jogo",
         "evento": "Um evento"
       }
+    },
+    "generador": {
+      "titulo": "Não sabes o que oferecer? Nós preparamos",
+      "texto": "Com os dados da tua ficha propomos-te de uma vez várias oportunidades prontas a publicar: camisola, redes, pavilhão, formação… Só tens de as rever, pôr preço se quiseres e publicar.",
+      "ninguna": "Já tens todas as que te podemos propor com o que está na tua ficha. Completa as tuas equipas, instalações, redes e formação e proporemos mais.",
+      "boton": "Gerar as minhas oportunidades",
+      "tituloRevision": "As tuas oportunidades, prontas para rever",
+      "revisa": "Muda o que quiseres, põe preço se quiseres e desmarca as que não te interessam. Sem preço aparece «preço a combinar». Nada é publicado até carregares no botão de baixo.",
+      "ofertaEtiqueta": "Publicar esta",
+      "necesidadEtiqueta": "Publicar também isto de que precisam",
+      "campoTitulo": "Título",
+      "campoTexto": "Texto",
+      "campoDuracion": "Duração",
+      "campoPrecio": "Preço",
+      "precioPlaceholder": "Vazio = a combinar",
+      "necesidadPrecio": "Em troca de visibilidade",
+      "quitarFoto": "Retirar foto",
+      "publicar": "Publicar as marcadas ({n})",
+      "cancelar": "Cancelar",
+      "publicadas": "Pronto! As tuas oportunidades já estão publicadas na tua lista. Podes mudá-las quando quiseres.",
+      "datos": "Dados do {club}: {cifras}.",
+      "queCategoria": "De que tipo as queres?",
+      "queCategoriaTexto": "Escolhe uma categoria e preparamos as dela. Entre parênteses, quantas te podemos propor com o que está na tua ficha.",
+      "mezcla": "Um pouco de tudo",
+      "otraCategoria": "Escolher outra categoria"
     }
   },
   "dossier": {

@@ -352,14 +352,16 @@ const estilos = StyleSheet.create({
   // -----------------------------------------------------------------
   // Contacto: la llamada a la acción del documento
   // -----------------------------------------------------------------
-  contacto: { backgroundColor: COLOR_MARCA, borderRadius: 8, padding: 22, marginTop: 4 },
+  // Compacto (pedido por Rafael): con el QR no cabía al final de la
+  // última página y se iba solo a una página nueva.
+  contacto: { backgroundColor: COLOR_MARCA, borderRadius: 8, paddingVertical: 16, paddingHorizontal: 20, marginTop: 4 },
   contactoEtiqueta: { fontSize: 8, fontFamily: "Helvetica-Bold", letterSpacing: 1.2, color: "#7fcfc3" },
-  contactoTitulo: { fontSize: 15, fontFamily: "Helvetica-Bold", color: "#ffffff", marginTop: 4, marginBottom: 6 },
-  contactoQr: { position: "absolute", top: 22, right: 22, width: 92, alignItems: "center" },
-  contactoQrImagen: { width: 92, height: 92, backgroundColor: "#ffffff", padding: 4, borderRadius: 4 },
-  contactoQrTexto: { fontSize: 7, color: "#c7d3e0", marginTop: 5, textAlign: "center", lineHeight: 1.3 },
-  contactoLinea: { fontSize: 11, color: "#ffffff", marginTop: 6 },
-  contactoTenue: { fontSize: 9, color: "#c7d3e0", marginTop: 8 },
+  contactoTitulo: { fontSize: 13.5, fontFamily: "Helvetica-Bold", color: "#ffffff", marginTop: 3, marginBottom: 4 },
+  contactoQr: { position: "absolute", top: 14, right: 18, width: 76, alignItems: "center" },
+  contactoQrImagen: { width: 76, height: 76, backgroundColor: "#ffffff", padding: 3, borderRadius: 4 },
+  contactoQrTexto: { fontSize: 6.5, color: "#c7d3e0", marginTop: 3, textAlign: "center", lineHeight: 1.25 },
+  contactoLinea: { fontSize: 10, color: "#ffffff", marginTop: 3 },
+  contactoTenue: { fontSize: 8.5, color: "#c7d3e0", marginTop: 4 },
 
   pie: {
     position: "absolute",
@@ -1000,7 +1002,7 @@ function DossierDocumento({
             anterior. Antes salía dos veces (en "Quiénes somos" y al final)
             y las dos en gris pequeño, como una nota al pie. */}
         {(emailContacto || (perfil.contactPublicConsent && perfil.contactPhone)) && (
-          <View style={qr ? [estilos.contacto, { paddingRight: 134, minHeight: 160 }] : estilos.contacto} wrap={false}>
+          <View style={qr ? [estilos.contacto, { paddingRight: 110, minHeight: 116 }] : estilos.contacto} wrap={false}>
             {/* El QR a la derecha, en blanco para que el móvil lo lea
                 sobre el azul (`lib/dossier-qr.ts`). */}
             {qr && (

@@ -373,6 +373,11 @@ export type Opportunity = {
   desde: string | null;
   hasta: string | null;
   requisitos: string | null;
+  /** De qué idea del catálogo salió, si la generó la plataforma
+   * (migración 0059). Para no volver a proponerla y, más adelante, para
+   * el precio de referencia de otros clubes. Opcional: los datos de
+   * prueba y las consultas viejas no lo traen. */
+  ideaId?: string | null;
   /** Fecha en la que se archivó (null = activa). Archivar no borra la oportunidad, solo la oculta. */
   archivedAt: string | null;
   createdAt: string;

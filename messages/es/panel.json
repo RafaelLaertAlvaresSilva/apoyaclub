@@ -300,6 +300,31 @@
         "partido": "Un partido",
         "evento": "Un evento"
       }
+    },
+    "generador": {
+      "titulo": "¿No sabes qué ofrecer? Te las preparamos",
+      "texto": "Con los datos de tu ficha te proponemos de golpe varias oportunidades listas para publicar: camiseta, redes, pabellón, cantera… Solo tienes que revisarlas, poner precio si quieres y publicar.",
+      "ninguna": "Ya tienes todas las que podemos proponerte con lo que hay en tu ficha. Completa tus equipos, instalaciones, redes y cantera y te propondremos más.",
+      "boton": "Generar mis oportunidades",
+      "tituloRevision": "Tus oportunidades, listas para revisar",
+      "revisa": "Cambia lo que quieras, pon precio si quieres y desmarca las que no te interesen. Sin precio sale «precio a convenir». No se publica nada hasta que pulses el botón de abajo.",
+      "ofertaEtiqueta": "Publicar esta",
+      "necesidadEtiqueta": "Publicar también esto que necesitáis",
+      "campoTitulo": "Título",
+      "campoTexto": "Texto",
+      "campoDuracion": "Duración",
+      "campoPrecio": "Precio",
+      "precioPlaceholder": "Vacío = a convenir",
+      "necesidadPrecio": "A cambio de visibilidad",
+      "quitarFoto": "Quitar foto",
+      "publicar": "Publicar las marcadas ({n})",
+      "cancelar": "Cancelar",
+      "publicadas": "¡Listo! Tus oportunidades ya están publicadas en tu lista. Puedes cambiarlas cuando quieras.",
+      "datos": "Datos del {club}: {cifras}.",
+      "queCategoria": "¿De qué tipo las quieres?",
+      "queCategoriaTexto": "Elige una categoría y te preparamos las suyas. Entre paréntesis, cuántas podemos proponerte con lo que hay en tu ficha.",
+      "mezcla": "Un poco de todo",
+      "otraCategoria": "Elegir otra categoría"
     }
   },
   "perfil": {
@@ -867,7 +892,8 @@
     "podidoPublicarIntentaloNuevo": "No se ha podido publicar. Inténtalo de nuevo.",
     "podidoCambiarIntentaloNuevo": "No se ha podido cambiar. Inténtalo de nuevo.",
     "podidoArchivarIntentaloNuevo": "No se ha podido archivar. Inténtalo de nuevo.",
-    "enlaceQrNoValido": "El enlace del código QR no es válido. Pega la dirección completa, por ejemplo https://www.tuclub.es"
+    "enlaceQrNoValido": "El enlace del código QR no es válido. Pega la dirección completa, por ejemplo https://www.tuclub.es",
+    "marcaAlgunaPropuesta": "Marca al menos una oportunidad para publicar."
   },
   "tareas": {
     "filtros": {
