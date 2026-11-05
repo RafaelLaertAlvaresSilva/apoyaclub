@@ -86,9 +86,12 @@
         "otro": "Otros"
       },
       "cuantos": "{n, plural, one {# patrocinador} other {# patrocinadores}}",
-      "conLogo": "salen con su logo",
-      "soloNombre": "salen solo con el nombre",
-      "ayuda": "En el dossier van por orden alfabético dentro de cada nivel. El principal y los oficiales salen con su logo (si son más de 9, solo con el nombre); el resto, solo con el nombre y en columnas, para que quepan todos. Para cambiar el nivel de un patrocinador, ve a <enlace>Patrocinadores</enlace>."
+      "ayuda": "Dentro de cada categoría van por orden alfabético. Para cambiar la categoría de un patrocinador, ve a <enlace>Patrocinadores</enlace>.",
+      "comoSalen": "Cómo salen",
+      "conLogos": "Con su logo",
+      "conLogosTexto": "Si lo desmarcas, salen solo los nombres, que ocupa mucho menos. Aun con logo, si en una categoría hay más de 9, esa sale solo con los nombres.",
+      "separar": "Separados por categoría",
+      "separarTexto": "Principal, oficiales, colaboradores… cada uno con su título. Si lo desmarcas, salen todos juntos en una sola lista por orden alfabético."
     },
     "orden": {
       "subir": "Subir «{nombre}»",
@@ -99,6 +102,35 @@
       "sinOportunidades": "Ahora no sale: no hay oportunidades marcadas más abajo.",
       "sinDatosTitulo": "Todavía sin datos",
       "restablecer": "Volver al orden de siempre"
+    },
+    "aviso": {
+      "titulo": "Tu dossier, a tu medida",
+      "texto": "Pon en el dossier solo lo que quieras y en el orden que quieras: marca o desmarca cada apartado, súbelo o bájalo con las flechas, elige qué oportunidades van, si salen las fotos y cómo salen tus patrocinadores. Lo que no marques no sale. Antes de mandarlo, descárgalo y míralo."
+    },
+    "fotos": {
+      "titulo": "Fotos",
+      "descripcion": "Las fotos hacen el dossier mucho más visual. Elige cuáles van.",
+      "oportunidades": "Fotos de las oportunidades",
+      "oportunidadesTexto": "La primera foto de cada oportunidad, junto a su texto. {n, plural, =0 {Ahora ninguna de tus oportunidades tiene foto.} one {Ahora tiene foto # oportunidad.} other {Ahora tienen foto # oportunidades.}}",
+      "masculino": "Foto del primer equipo masculino",
+      "femenino": "Foto del primer equipo femenino",
+      "equipoTexto": "Sale en el apartado «Equipos», con su pie de foto.",
+      "sinFoto": "Todavía no la has subido.",
+      "subirla": "Subirla en tu perfil"
+    },
+    "qr": {
+      "titulo": "Código QR",
+      "descripcion": "Un cuadrado que se escanea con la cámara del móvil. Sale al final, junto al contacto: en un dossier impreso, la empresa lo escanea y llega directa a lo que elijas.",
+      "ficha": "La ficha del club en ApoyaClub",
+      "fichaTexto": "Tu página, con todo lo del club y el botón para contactarte.",
+      "video": "Tu vídeo de presentación",
+      "videoTexto": "El vídeo que has puesto en tu perfil.",
+      "sinVideo": "Todavía no has puesto ningún vídeo en tu perfil.",
+      "enlace": "Otro enlace",
+      "enlaceTexto": "Tu web, tu Instagram, un formulario… Pega aquí la dirección.",
+      "enlacePlaceholder": "https://",
+      "ninguno": "Sin código QR",
+      "enlaceNoValido": "El enlace del código QR no es válido. Pega la dirección completa, por ejemplo https://www.tuclub.es"
     }
   },
   "metricas": {
@@ -834,7 +866,8 @@
     "nombreEmpresaPuedeQuedarseVacio": "El nombre de la empresa no puede quedarse vacío.",
     "podidoPublicarIntentaloNuevo": "No se ha podido publicar. Inténtalo de nuevo.",
     "podidoCambiarIntentaloNuevo": "No se ha podido cambiar. Inténtalo de nuevo.",
-    "podidoArchivarIntentaloNuevo": "No se ha podido archivar. Inténtalo de nuevo."
+    "podidoArchivarIntentaloNuevo": "No se ha podido archivar. Inténtalo de nuevo.",
+    "enlaceQrNoValido": "El enlace del código QR no es válido. Pega la dirección completa, por ejemplo https://www.tuclub.es"
   },
   "tareas": {
     "filtros": {
@@ -1525,7 +1558,17 @@
       "web": "Página web",
       "seguidores": "{n, plural, one {seguidor} other {seguidores}}",
       "origenContado": "Contado en los partidos",
-      "origenDeclarado": "Dato del club"
+      "origenDeclarado": "Dato del club",
+      "primerEquipoMasculino": "Primer equipo masculino",
+      "primerEquipoFemenino": "Primer equipo femenino",
+      "tablaOportunidad": "Oportunidad",
+      "tablaDuracion": "Duración",
+      "tablaPrecio": "Precio",
+      "qr": {
+        "ficha": "Escanea para ver la ficha del club",
+        "video": "Escanea para ver nuestro vídeo",
+        "enlace": "Escanea para saber más"
+      }
     },
     "informe": {
       "portada": "Informe de patrocinio",

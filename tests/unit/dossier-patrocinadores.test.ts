@@ -1,10 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   MAXIMO_CON_LOGO,
-  NOMBRES_EN_PORTADA,
   enFilas,
   nivelesValidos,
-  nombresDePortada,
   patrocinadoresDelDossier,
 } from "@/lib/dossier-patrocinadores";
 import { dossierRowToConfig, type DossierRow } from "@/lib/dossier-mappers";
@@ -64,26 +62,33 @@ describe("patrocinadores del dossier", () => {
     expect(patrocinadoresDelDossier(lista, [])).toEqual([]);
   });
 
-  it("principal y oficiales con logo; el resto, solo con el nombre", () => {
-    const grupos = patrocinadoresDelDossier(lista, null);
-    expect(grupos.map((grupo) => grupo.conLogo)).toEqual([true, true, false, false, false]);
+  it("por defecto, solo con el nombre: con logo, un club con muchos ocupa páginas", () => {
+    expect(patrocinadoresDelDossier(lista, null).every((grupo) => !grupo.conLogo)).toBe(true);
   });
 
-  it("un nivel con logo pasa a ir solo con el nombre si son demasiados", () => {
+  it("con la opción de logos, todos los grupos con logo", () => {
+    const grupos = patrocinadoresDelDossier(lista, null, "es-ES", { conLogos: true });
+    expect(grupos.every((grupo) => grupo.conLogo)).toBe(true);
+  });
+
+  it("aun con logos, un grupo con demasiados pasa a ir solo con el nombre", () => {
     const muchos = Array.from({ length: MAXIMO_CON_LOGO + 1 }, (_, indice) => patrocinador(`Oficial ${indice}`, "oficial"));
-    expect(patrocinadoresDelDossier(muchos, null)[0].conLogo).toBe(false);
-    expect(patrocinadoresDelDossier(muchos.slice(1), null)[0].conLogo).toBe(true);
+    expect(patrocinadoresDelDossier(muchos, null, "es-ES", { conLogos: true })[0].conLogo).toBe(false);
+    expect(patrocinadoresDelDossier(muchos.slice(1), null, "es-ES", { conLogos: true })[0].conLogo).toBe(true);
   });
 
-  it("la portada lleva los de más nivel primero y dice cuántos quedan", () => {
-    const muchos = [
-      ...lista,
-      ...Array.from({ length: 6 }, (_, indice) => patrocinador(`Colaborador ${indice}`, "colaborador")),
-    ];
-    const { nombres, resto } = nombresDePortada(patrocinadoresDelDossier(muchos, null));
-    expect(nombres).toHaveLength(NOMBRES_EN_PORTADA);
-    expect(nombres.slice(0, 3)).toEqual(["Hotel Mar", "Farmacia Centro", "Óptica Visión"]);
-    expect(resto).toBe(muchos.length - NOMBRES_EN_PORTADA);
+  it("sin separar por categoría: una sola lista sin título, por orden alfabético", () => {
+    const grupos = patrocinadoresDelDossier(lista, ["principal", "colaborador"], "es-ES", { separar: false });
+    expect(grupos).toHaveLength(1);
+    expect(grupos[0].etiqueta).toBe("");
+    expect(grupos[0].nivel).toBeNull();
+    expect(grupos[0].patrocinadores.map((p) => p.name)).toEqual([
+      "Academia Sol",
+      "ferretería el clavo",
+      "Hotel Mar",
+      "Zapatería Paso",
+    ]);
+    expect(patrocinadoresDelDossier(lista, [], "es-ES", { separar: false })).toEqual([]);
   });
 
   it("niveles válidos: sin inventados, sin repetir y en orden", () => {

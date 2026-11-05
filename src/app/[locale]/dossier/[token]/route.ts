@@ -123,6 +123,7 @@ export async function GET(_request: Request, { params }: ParametrosRuta) {
     secciones: configuracion.sections,
     orden: configuracion.orden,
     nivelesPatrocinadores: configuracion.sponsorTiers,
+    opciones: configuracion.opciones,
     emailContacto: usuario.user?.email ?? null,
   }, locale);
 

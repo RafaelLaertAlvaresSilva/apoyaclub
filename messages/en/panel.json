@@ -378,7 +378,8 @@
     "nombreEmpresaPuedeQuedarseVacio": "The company name can't be left empty.",
     "podidoPublicarIntentaloNuevo": "It couldn't be published. Please try again.",
     "podidoCambiarIntentaloNuevo": "It couldn't be changed. Please try again.",
-    "podidoArchivarIntentaloNuevo": "It couldn't be archived. Please try again."
+    "podidoArchivarIntentaloNuevo": "It couldn't be archived. Please try again.",
+    "enlaceQrNoValido": "The QR code link is not valid. Paste the full address, for example https://www.yourclub.com"
   },
   "perfil": {
     "anadeCadaEquipoDel": "Add each of the club’s teams: sport, age group, gender and whether it’s a first team or a youth team.",
@@ -836,9 +837,12 @@
         "otro": "Others"
       },
       "cuantos": "{n, plural, one {# sponsor} other {# sponsors}}",
-      "conLogo": "shown with their logo",
-      "soloNombre": "shown by name only",
-      "ayuda": "In the pack they appear in alphabetical order within each level. The main and official sponsors are shown with their logo (if there are more than 9, by name only); the rest by name only, in columns, so they all fit. To change a sponsor’s level, go to <enlace>Sponsors</enlace>."
+      "ayuda": "Within each category they are in alphabetical order. To change a sponsor's category, go to <enlace>Sponsors</enlace>.",
+      "comoSalen": "How they appear",
+      "conLogos": "With their logo",
+      "conLogosTexto": "Untick it and only the names appear, which takes much less space. Even with logos, a category with more than 9 shows names only.",
+      "separar": "Split by category",
+      "separarTexto": "Main, official, partners… each with its heading. Untick it and they all appear together in one alphabetical list."
     },
     "orden": {
       "subir": "Move “{nombre}” up",
@@ -849,6 +853,35 @@
       "sinOportunidades": "Not shown right now: no opportunities are ticked further down.",
       "sinDatosTitulo": "No data yet",
       "restablecer": "Back to the usual order"
+    },
+    "aviso": {
+      "titulo": "Your dossier, your way",
+      "texto": "Put in only what you want, in the order you want: tick or untick each section, move it up or down with the arrows, choose which opportunities go in, whether photos are shown and how your sponsors appear. Anything you don't tick is left out. Download it and check it before you send it."
+    },
+    "fotos": {
+      "titulo": "Photos",
+      "descripcion": "Photos make the dossier much more visual. Choose which ones go in.",
+      "oportunidades": "Opportunity photos",
+      "oportunidadesTexto": "The first photo of each opportunity, next to its text. {n, plural, =0 {Right now none of your opportunities has a photo.} one {Right now # opportunity has a photo.} other {Right now # opportunities have a photo.}}",
+      "masculino": "Men's first team photo",
+      "femenino": "Women's first team photo",
+      "equipoTexto": "Shown in the “Teams” section, with its caption.",
+      "sinFoto": "You haven't uploaded it yet.",
+      "subirla": "Upload it in your profile"
+    },
+    "qr": {
+      "titulo": "QR code",
+      "descripcion": "A square you scan with your phone camera. It appears at the end, next to the contact details: with a printed dossier, the business scans it and goes straight to what you choose.",
+      "ficha": "The club's page on ApoyaClub",
+      "fichaTexto": "Your page, with everything about the club and the button to contact you.",
+      "video": "Your presentation video",
+      "videoTexto": "The video you added to your profile.",
+      "sinVideo": "You haven't added a video to your profile yet.",
+      "enlace": "Another link",
+      "enlaceTexto": "Your website, your Instagram, a form… Paste the address here.",
+      "enlacePlaceholder": "https://",
+      "ninguno": "No QR code",
+      "enlaceNoValido": "The QR code link is not valid. Paste the full address, for example https://www.yourclub.com"
     }
   },
   "metricas": {
@@ -1525,7 +1558,17 @@
       "web": "Website",
       "seguidores": "{n, plural, one {follower} other {followers}}",
       "origenContado": "Counted at matches",
-      "origenDeclarado": "Club figure"
+      "origenDeclarado": "Club figure",
+      "primerEquipoMasculino": "Men's first team",
+      "primerEquipoFemenino": "Women's first team",
+      "tablaOportunidad": "Opportunity",
+      "tablaDuracion": "Duration",
+      "tablaPrecio": "Price",
+      "qr": {
+        "ficha": "Scan to see the club's page",
+        "video": "Scan to watch our video",
+        "enlace": "Scan to find out more"
+      }
     },
     "informe": {
       "portada": "Sponsorship report",

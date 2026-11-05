@@ -1,4 +1,5 @@
 import type { BloqueDossier } from "@/lib/dossier-orden";
+import type { OpcionesDossier } from "@/lib/dossier-opciones";
 import type { Accion, Beneficio } from "@/lib/ficha-oportunidad";
 /**
  * "representante": lleva ApoyaClub en un país (Brasil, Portugal…). Entra
@@ -486,6 +487,8 @@ export type DossierConfig = {
   /** Niveles de patrocinador que salen en el dossier (migración 0056).
    * Null = todos. */
   sponsorTiers: SponsorTier[] | null;
+  /** Fotos y forma de los patrocinadores (ver `lib/dossier-opciones.ts`). */
+  opciones: OpcionesDossier;
   updatedAt: string;
 };
 

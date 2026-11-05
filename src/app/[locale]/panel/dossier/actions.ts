@@ -5,6 +5,7 @@ import { randomBytes } from "crypto";
 import { revalidatePath } from "next/cache";
 import type { User } from "@supabase/supabase-js";
 import { seccionesValidas, type DossierRow } from "@/lib/dossier-mappers";
+import { enlaceValidoParaQr, opcionesDelFormulario, opcionesParaGuardar } from "@/lib/dossier-opciones";
 import { ordenDelDossier, seccionesParaGuardar } from "@/lib/dossier-orden";
 import { nivelesValidos } from "@/lib/dossier-patrocinadores";
 import { getLocale } from "next-intl/server";
@@ -68,10 +69,18 @@ export async function guardarConfiguracionDossier(
 
   // Las secciones marcadas, guardadas en el orden elegido y con
   // "oportunidades" en su sitio (ver `lib/dossier-orden.ts`).
-  const secciones = seccionesParaGuardar(
-    ordenDelDossier(formData.getAll("orden")),
-    seccionesValidas(formData.getAll("sections")),
-  );
+  // Detrás, las opciones (fotos, patrocinadores): van en la misma
+  // columna, ver `lib/dossier-opciones.ts`.
+  const secciones = [
+    ...seccionesParaGuardar(ordenDelDossier(formData.getAll("orden")), seccionesValidas(formData.getAll("sections"))),
+    ...opcionesParaGuardar(opcionesDelFormulario(formData)),
+  ];
+
+  // Si ha elegido "otro enlace" para el QR, tiene que valer: un QR que
+  // no abre nada en el dossier de una empresa es peor que ninguno.
+  if (formData.get("qr") === "enlace" && !enlaceValidoParaQr(formData.get("qrEnlace"))) {
+    return { error: t("enlaceQrNoValido") };
+  }
 
   const idsOportunidadesSolicitados = formData.getAll("opportunityIds").map(String);
   let opportunityIds: string[] = [];

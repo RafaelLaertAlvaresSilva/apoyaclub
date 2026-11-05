@@ -378,7 +378,8 @@
     "nombreEmpresaPuedeQuedarseVacio": "O nome da empresa não pode ficar vazio.",
     "podidoPublicarIntentaloNuevo": "Não foi possível publicar. Tente novamente.",
     "podidoCambiarIntentaloNuevo": "Não foi possível alterar. Tente novamente.",
-    "podidoArchivarIntentaloNuevo": "Não foi possível arquivar. Tente novamente."
+    "podidoArchivarIntentaloNuevo": "Não foi possível arquivar. Tente novamente.",
+    "enlaceQrNoValido": "O link do código QR não é válido. Cole o endereço completo, por exemplo https://www.seuclube.com.br"
   },
   "perfil": {
     "anadeCadaEquipoDel": "Adicione cada equipe do clube: modalidade, categoria, gênero e se é equipe principal ou de base.",
@@ -836,9 +837,12 @@
         "otro": "Outros"
       },
       "cuantos": "{n, plural, one {# patrocinador} other {# patrocinadores}}",
-      "conLogo": "aparecem com o logotipo",
-      "soloNombre": "aparecem só com o nome",
-      "ayuda": "No dossiê aparecem por ordem alfabética dentro de cada nível. O principal e os oficiais aparecem com o logotipo (se forem mais de 9, só com o nome); os restantes, só com o nome e em colunas, para caberem todos. Para mudar o nível de um patrocinador, vai a <enlace>Patrocinadores</enlace>."
+      "ayuda": "Dentro de cada categoria ficam em ordem alfabética. Para mudar a categoria de um patrocinador, vá em <enlace>Patrocinadores</enlace>.",
+      "comoSalen": "Como aparecem",
+      "conLogos": "Com o logo",
+      "conLogosTexto": "Se desmarcar, aparecem só os nomes, o que ocupa bem menos. Mesmo com logo, se uma categoria tiver mais de 9, ela aparece só com os nomes.",
+      "separar": "Separados por categoria",
+      "separarTexto": "Principal, oficiais, colaboradores… cada um com seu título. Se desmarcar, aparecem todos juntos numa só lista em ordem alfabética."
     },
     "orden": {
       "subir": "Subir «{nombre}»",
@@ -849,6 +853,35 @@
       "sinOportunidades": "Não aparece agora: não há oportunidades marcadas mais abaixo.",
       "sinDatosTitulo": "Ainda sem dados",
       "restablecer": "Voltar à ordem habitual"
+    },
+    "aviso": {
+      "titulo": "Seu dossiê, do seu jeito",
+      "texto": "Coloque no dossiê só o que quiser e na ordem que quiser: marque ou desmarque cada seção, suba ou desça com as setas, escolha quais oportunidades entram, se as fotos aparecem e como aparecem seus patrocinadores. O que você não marcar não aparece. Antes de enviar, baixe e confira."
+    },
+    "fotos": {
+      "titulo": "Fotos",
+      "descripcion": "As fotos deixam o dossiê muito mais visual. Escolha quais entram.",
+      "oportunidades": "Fotos das oportunidades",
+      "oportunidadesTexto": "A primeira foto de cada oportunidade, junto com o texto. {n, plural, =0 {No momento nenhuma das suas oportunidades tem foto.} one {No momento # oportunidade tem foto.} other {No momento # oportunidades têm foto.}}",
+      "masculino": "Foto da equipe principal masculina",
+      "femenino": "Foto da equipe principal feminina",
+      "equipoTexto": "Aparece na seção «Equipes», com a legenda.",
+      "sinFoto": "Você ainda não enviou.",
+      "subirla": "Enviar no seu perfil"
+    },
+    "qr": {
+      "titulo": "Código QR",
+      "descripcion": "Um quadrado que se escaneia com a câmera do celular. Aparece no final, junto com o contato: num dossiê impresso, a empresa escaneia e chega direto ao que você escolher.",
+      "ficha": "A página do clube na ApoyaClub",
+      "fichaTexto": "Sua página, com tudo sobre o clube e o botão para entrar em contato.",
+      "video": "Seu vídeo de apresentação",
+      "videoTexto": "O vídeo que você colocou no seu perfil.",
+      "sinVideo": "Você ainda não colocou nenhum vídeo no seu perfil.",
+      "enlace": "Outro link",
+      "enlaceTexto": "Seu site, seu Instagram, um formulário… Cole aqui o endereço.",
+      "enlacePlaceholder": "https://",
+      "ninguno": "Sem código QR",
+      "enlaceNoValido": "O link do código QR não é válido. Cole o endereço completo, por exemplo https://www.seuclube.com.br"
     }
   },
   "metricas": {
@@ -1525,7 +1558,17 @@
       "web": "Site",
       "seguidores": "{n, plural, one {seguidor} other {seguidores}}",
       "origenContado": "Contado nos jogos",
-      "origenDeclarado": "Dado do clube"
+      "origenDeclarado": "Dado do clube",
+      "primerEquipoMasculino": "Equipe principal masculina",
+      "primerEquipoFemenino": "Equipe principal feminina",
+      "tablaOportunidad": "Oportunidade",
+      "tablaDuracion": "Duração",
+      "tablaPrecio": "Preço",
+      "qr": {
+        "ficha": "Escaneie para ver a página do clube",
+        "video": "Escaneie para ver nosso vídeo",
+        "enlace": "Escaneie para saber mais"
+      }
     },
     "informe": {
       "portada": "Relatório de patrocínio",

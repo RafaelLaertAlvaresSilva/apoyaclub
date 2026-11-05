@@ -1,3 +1,4 @@
+import { opcionesGuardadas } from "@/lib/dossier-opciones";
 import { ordenDelDossier } from "@/lib/dossier-orden";
 import { nivelesValidos } from "@/lib/dossier-patrocinadores";
 import type { DossierConfig, DossierSectionKey } from "@/lib/types";
@@ -47,6 +48,7 @@ export function dossierRowToConfig(row: DossierRow): DossierConfig {
     shareToken: row.share_token,
     shareExpiresAt: row.share_expires_at,
     sponsorTiers: Array.isArray(row.sponsor_tiers) ? nivelesValidos(row.sponsor_tiers) : null,
+    opciones: opcionesGuardadas(row.sections ?? []),
     updatedAt: row.updated_at,
   };
 }

@@ -162,9 +162,8 @@ describe("generarDossierWord", () => {
     expect(xml).toContain("Quiénes somos");
     expect(xml).not.toContain("Ascenso a Primera Autonómica");
     expect(xml).not.toContain("Patrocinadores actuales");
-    // Tampoco en la portada: si el club no quiere enseñar a sus
-    // patrocinadores, no salen en ningún sitio (antes seguían en "ya
-    // confían en nosotros").
+    // Tampoco en la portada: los patrocinadores ya no salen allí (salían
+    // dos veces, en la portada y en su apartado).
     expect(xml).not.toContain("YA CONFÍAN EN NOSOTROS");
   });
 
@@ -175,7 +174,8 @@ describe("generarDossierWord", () => {
 
     const conSuNivel = await textoDelDocumento(await generarDossierWord({ ...datos, nivelesPatrocinadores: [nivel] }));
     expect(conSuNivel).toContain(datos.patrocinadores[0].name);
-    expect(conSuNivel).toContain("YA CONFÍAN EN NOSOTROS");
+    // Una sola vez: en su apartado, no también en la portada.
+    expect(conSuNivel).not.toContain("YA CONFÍAN EN NOSOTROS");
 
     const sinSuNivel = await textoDelDocumento(await generarDossierWord({ ...datos, nivelesPatrocinadores: [otro] }));
     expect(sinSuNivel).not.toContain(datos.patrocinadores[0].name);

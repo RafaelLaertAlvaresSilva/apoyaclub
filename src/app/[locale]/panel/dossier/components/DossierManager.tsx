@@ -8,6 +8,13 @@ import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { SECCIONES_DOSSIER } from "@/lib/dossier";
 import { ORDEN_POR_DEFECTO, moverBloque, type BloqueDossier } from "@/lib/dossier-orden";
+import {
+  OPCIONES_POR_DEFECTO,
+  enlaceValidoParaQr,
+  type ClaveOpcion,
+  type OpcionesDossier,
+  type TipoQr,
+} from "@/lib/dossier-opciones";
 import { patrocinadoresDelDossier } from "@/lib/dossier-patrocinadores";
 import { formatoDeValor, textoDelPrecio } from "@/lib/format";
 import type { AppLocale } from "@/i18n/routing";
@@ -56,6 +63,7 @@ export function DossierManager({
   const [enlaceCopiado, setEnlaceCopiado] = useState(false);
 
   const seccionesIniciales = configuracion?.sections ?? seccionesPorDefecto;
+  const opcionesIniciales = configuracion?.opciones ?? OPCIONES_POR_DEFECTO;
   const oportunidadesIniciales = new Set(
     configuracion?.opportunityIds ?? oportunidades.map((oportunidad) => oportunidad.id),
   );
@@ -87,6 +95,18 @@ export function DossierManager({
       for (const valor of datosFormulario.getAll("orden")) cuerpo.append("orden", String(valor));
       for (const valor of datosFormulario.getAll("opportunityIds"))
         cuerpo.append("opportunityIds", String(valor));
+      cuerpo.append("opcionesEnviadas", "1");
+      for (const valor of datosFormulario.getAll("opcion")) cuerpo.append("opcion", String(valor));
+      const qr = String(datosFormulario.get("qr") ?? "");
+      const qrEnlace = String(datosFormulario.get("qrEnlace") ?? "");
+      // Con un enlace que no vale, se avisa en vez de sacar un QR que
+      // no lleva a ninguna parte.
+      if (qr === "enlace" && !enlaceValidoParaQr(qrEnlace)) {
+        setErrorDescarga(t("qr.enlaceNoValido"));
+        return;
+      }
+      cuerpo.append("qr", qr);
+      cuerpo.append("qrEnlace", qrEnlace);
       if (datosFormulario.has("sponsorTiersEnviado")) {
         cuerpo.append("sponsorTiersEnviado", "1");
         for (const valor of datosFormulario.getAll("sponsorTiers")) cuerpo.append("sponsorTiers", String(valor));
@@ -134,6 +154,17 @@ export function DossierManager({
       }}
       className="flex flex-col gap-6"
     >
+      {/* Las opciones (fotos, patrocinadores) viajan como casillas
+          `opcion`; esta marca dice que el formulario las trae, para que
+          una sin marcar cuente como "no" (`lib/dossier-opciones.ts`). */}
+      <input type="hidden" name="opcionesEnviadas" value="1" />
+
+      {/* Lo primero que se lee: que el dossier lo monta él, a su gusto. */}
+      <div className="rounded-xl border border-teal-200 bg-teal-50 p-4 text-sm text-teal-950">
+        <p className="font-semibold">{t("aviso.titulo")}</p>
+        <p className="mt-1 leading-relaxed">{t("aviso.texto")}</p>
+      </div>
+
       <SeccionesYOrden
         seccionesDisponibles={seccionesDisponibles}
         seccionesIniciales={seccionesIniciales}
@@ -141,11 +172,19 @@ export function DossierManager({
         hayOportunidades={hayOportunidades}
       />
 
-      {patrocinadores.length > 0 && (
+      {patrocinadores.length > 0 ? (
         <PatrocinadoresDelDossier
           patrocinadores={patrocinadores}
           nivelesIniciales={configuracion?.sponsorTiers ?? null}
+          opciones={opcionesIniciales}
         />
+      ) : (
+        // Sin patrocinadores no se enseña la tarjeta, pero lo elegido se
+        // conserva para cuando los tenga.
+        <>
+          <OpcionOculta clave="logosPatrocinadores" opciones={opcionesIniciales} />
+          <OpcionOculta clave="separarPatrocinadores" opciones={opcionesIniciales} />
+        </>
       )}
 
       <SeccionCard
@@ -190,6 +229,10 @@ export function DossierManager({
           </div>
         )}
       </SeccionCard>
+
+      <FotosDelDossier perfil={perfil} oportunidades={oportunidades} opciones={opcionesIniciales} />
+
+      <QrDelDossier perfil={perfil} opciones={opcionesIniciales} />
 
       <SeccionCard titulo={t("descargar")} descripcion={t("generaElPdfAl")}>
         <div className="flex flex-col gap-3">
@@ -519,9 +562,11 @@ function BotonDescarga({
 function PatrocinadoresDelDossier({
   patrocinadores,
   nivelesIniciales,
+  opciones,
 }: {
   patrocinadores: ClubSponsor[];
   nivelesIniciales: SponsorTier[] | null;
+  opciones: OpcionesDossier;
 }) {
   const tp = useTranslations("panel.dossier.patrocinadores");
   const locale = useLocale();
@@ -529,7 +574,7 @@ function PatrocinadoresDelDossier({
 
   // Un nivel "otro" puede tener varias etiquetas propias: una casilla
   // para todas ("Otros: Amigos del club, Proveedores").
-  const niveles = Array.from(new Set(grupos.map((grupo) => grupo.nivel)));
+  const niveles = Array.from(new Set(grupos.flatMap((grupo) => (grupo.nivel ? [grupo.nivel] : []))));
 
   return (
     <SeccionCard titulo={tp("titulo")} descripcion={tp("descripcion")}>
@@ -556,7 +601,7 @@ function PatrocinadoresDelDossier({
                 <span className="flex flex-wrap items-baseline gap-x-2">
                   <span className="font-medium text-zinc-900">{nombreNivel}</span>
                   <span className="text-xs text-zinc-500">
-                    {tp("cuantos", { n: total })} · {delNivel.every((grupo) => grupo.conLogo) ? tp("conLogo") : tp("soloNombre")}
+                    {tp("cuantos", { n: total })}
                   </span>
                 </span>
                 <span className="flex flex-wrap gap-1.5">
@@ -575,6 +620,9 @@ function PatrocinadoresDelDossier({
             </label>
           );
         })}
+        <p className="mt-2 text-xs font-bold uppercase tracking-wider text-zinc-500">{tp("comoSalen")}</p>
+        <CasillaOpcion clave="logosPatrocinadores" opciones={opciones} titulo={tp("conLogos")} texto={tp("conLogosTexto")} />
+        <CasillaOpcion clave="separarPatrocinadores" opciones={opciones} titulo={tp("separar")} texto={tp("separarTexto")} />
         <p className="text-xs leading-relaxed text-zinc-500">
           {tp.rich("ayuda", {
             enlace: (trozo) => (
@@ -584,6 +632,162 @@ function PatrocinadoresDelDossier({
             ),
           })}
         </p>
+      </div>
+    </SeccionCard>
+  );
+}
+
+/** Una opción del dossier con su casilla (`lib/dossier-opciones.ts`). */
+function CasillaOpcion({
+  clave,
+  opciones,
+  titulo,
+  texto,
+}: {
+  clave: ClaveOpcion;
+  opciones: OpcionesDossier;
+  titulo: string;
+  texto: React.ReactNode;
+}) {
+  return (
+    <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-zinc-200 p-3 text-sm">
+      <input
+        type="checkbox"
+        name="opcion"
+        value={clave}
+        defaultChecked={opciones[clave]}
+        className="mt-0.5 rounded border-zinc-300 text-teal-600 focus:ring-accion-tinta"
+      />
+      <span className="min-w-0">
+        <span className="block font-medium text-zinc-900">{titulo}</span>
+        <span className="block text-xs text-zinc-500">{texto}</span>
+      </span>
+    </label>
+  );
+}
+
+/** Una opción que no se enseña ahora, para que se guarde tal y como estaba. */
+function OpcionOculta({ clave, opciones }: { clave: ClaveOpcion; opciones: OpcionesDossier }) {
+  return opciones[clave] ? <input type="hidden" name="opcion" value={clave} /> : null;
+}
+
+/**
+ * Qué fotos van en el dossier: la de cada oportunidad y las del primer
+ * equipo masculino y femenino. Las del equipo, si no están subidas, no
+ * tienen casilla sino el enlace a donde se suben.
+ */
+function FotosDelDossier({
+  perfil,
+  oportunidades,
+  opciones,
+}: {
+  perfil: ClubProfile;
+  oportunidades: Opportunity[];
+  opciones: OpcionesDossier;
+}) {
+  const tf = useTranslations("panel.dossier.fotos");
+  const conFoto = oportunidades.filter((oportunidad) => (oportunidad.fotos?.length ?? 0) > 0).length;
+
+  const equipos: { clave: ClaveOpcion; titulo: string; foto: string | null }[] = [
+    { clave: "fotoEquipoMasculino", titulo: tf("masculino"), foto: perfil.topCategoryMalePhoto },
+    { clave: "fotoEquipoFemenino", titulo: tf("femenino"), foto: perfil.topCategoryFemalePhoto },
+  ];
+
+  return (
+    <SeccionCard titulo={tf("titulo")} descripcion={tf("descripcion")}>
+      <div className="flex flex-col gap-3">
+        <CasillaOpcion
+          clave="fotosOportunidades"
+          opciones={opciones}
+          titulo={tf("oportunidades")}
+          texto={tf("oportunidadesTexto", { n: conFoto })}
+        />
+        {equipos.map((equipo) =>
+          equipo.foto ? (
+            <CasillaOpcion
+              key={equipo.clave}
+              clave={equipo.clave}
+              opciones={opciones}
+              titulo={equipo.titulo}
+              texto={tf("equipoTexto")}
+            />
+          ) : (
+            <div key={equipo.clave} className="rounded-lg border border-dashed border-zinc-300 bg-zinc-50/60 p-3 text-sm">
+              <OpcionOculta clave={equipo.clave} opciones={opciones} />
+              <span className="block font-medium text-zinc-500">{equipo.titulo}</span>
+              <span className="block text-xs text-zinc-500">
+                {tf("sinFoto")}{" "}
+                <Link href="/panel/perfil#nivel" className="font-medium text-accion-tinta underline">
+                  {tf("subirla")}
+                </Link>
+              </span>
+            </div>
+          ),
+        )}
+      </div>
+    </SeccionCard>
+  );
+}
+
+/**
+ * Qué abre el código QR del final del dossier: la ficha del club, su
+ * vídeo, otro enlace que pega el club, o ninguno (`lib/dossier-opciones.ts`).
+ */
+function QrDelDossier({ perfil, opciones }: { perfil: ClubProfile; opciones: OpcionesDossier }) {
+  const tq = useTranslations("panel.dossier.qr");
+  const [elegido, setElegido] = useState<TipoQr>(opciones.qr === "video" && !perfil.videoUrl ? "ficha" : opciones.qr);
+
+  const opcionesQr: { tipo: TipoQr; titulo: string; texto?: string; deshabilitado?: boolean }[] = [
+    { tipo: "ficha", titulo: tq("ficha"), texto: tq("fichaTexto") },
+    {
+      tipo: "video",
+      titulo: tq("video"),
+      texto: perfil.videoUrl ? tq("videoTexto") : tq("sinVideo"),
+      deshabilitado: !perfil.videoUrl,
+    },
+    { tipo: "enlace", titulo: tq("enlace"), texto: tq("enlaceTexto") },
+    { tipo: "ninguno", titulo: tq("ninguno") },
+  ];
+
+  return (
+    <SeccionCard titulo={tq("titulo")} descripcion={tq("descripcion")}>
+      <div className="flex flex-col gap-3">
+        {opcionesQr.map((opcion) => (
+          <label
+            key={opcion.tipo}
+            className={`flex items-start gap-3 rounded-lg border p-3 text-sm ${
+              opcion.deshabilitado ? "cursor-not-allowed border-dashed border-zinc-300 bg-zinc-50/60" : "cursor-pointer border-zinc-200"
+            }`}
+          >
+            <input
+              type="radio"
+              name="qr"
+              value={opcion.tipo}
+              checked={elegido === opcion.tipo}
+              disabled={opcion.deshabilitado}
+              onChange={() => setElegido(opcion.tipo)}
+              className="mt-0.5 border-zinc-300 text-teal-600 focus:ring-accion-tinta"
+            />
+            <span className="min-w-0 flex-1">
+              <span className={`block font-medium ${opcion.deshabilitado ? "text-zinc-500" : "text-zinc-900"}`}>
+                {opcion.titulo}
+              </span>
+              {opcion.texto && <span className="block text-xs text-zinc-500">{opcion.texto}</span>}
+              {/* El campo está siempre en el formulario, para no perder lo
+                  pegado si se elige otra cosa; solo se ve con "Otro enlace". */}
+              {opcion.tipo === "enlace" && (
+                <input
+                  type="url"
+                  name="qrEnlace"
+                  inputMode="url"
+                  defaultValue={opciones.qrEnlace ?? ""}
+                  placeholder={tq("enlacePlaceholder")}
+                  className={`${clasesInput} mt-2 ${elegido === "enlace" ? "" : "hidden"}`}
+                />
+              )}
+            </span>
+          </label>
+        ))}
       </div>
     </SeccionCard>
   );

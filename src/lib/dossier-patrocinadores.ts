@@ -2,32 +2,30 @@ import { NIVELES_PATROCINADOR, etiquetaNivelPatrocinador } from "@/lib/types";
 import type { ClubSponsor, SponsorTier } from "@/lib/types";
 
 /**
- * Qué patrocinadores salen en el dossier y cómo (migración 0056).
+ * Qué patrocinadores salen en el dossier y cómo (migraciones 0056 y,
+ * desde el 5-11-2026, las opciones de `dossier-opciones.ts`).
  *
  * El club elige por nivel: todos, solo el principal, principal y
- * oficiales… Un club con treinta colaboradores no los cabe con logo en
- * una página, y metidos a la fuerza se pisaban unos con otros. Así que:
+ * oficiales… Y elige también:
  *
- *   - El principal y los oficiales salen con su logo, que es lo que
- *     pagan, siempre que sean pocos (hasta `MAXIMO_CON_LOGO` por nivel).
- *   - El resto sale solo con el nombre, en columnas: caben muchos en
- *     poco sitio y se leen de un vistazo.
- *   - Dentro de cada nivel, por orden alfabético. Es lo que pidió el
+ *   - Con logo o solo con el nombre. Por defecto solo el nombre: con
+ *     logo, un club con muchos patrocinadores ocupa páginas. Aun con
+ *     logo, un nivel con más de `MAXIMO_CON_LOGO` sale solo con nombres,
+ *     porque metidos a la fuerza se pisaban unos con otros.
+ *   - Separados por categoría (principal, oficial, colaborador…) o todos
+ *     en una sola lista.
+ *   - Dentro de cada grupo, por orden alfabético. Es lo que pidió el
  *     club: nadie tiene que preguntar por qué una tienda va antes que
  *     otra.
  */
-
 /** A partir de aquí, un nivel con logo pasa a ir solo con el nombre. */
 export const MAXIMO_CON_LOGO = 9;
 
-/** Cuántos nombres caben en la portada antes del "y N más". */
-export const NOMBRES_EN_PORTADA = 8;
-
-const CON_LOGO: SponsorTier[] = ["principal", "oficial"];
-
 export type GrupoDePatrocinadores = {
-  nivel: SponsorTier;
-  /** "Patrocinador principal", o la etiqueta propia de un nivel "otro". */
+  /** Null cuando van todos juntos, sin separar por categoría. */
+  nivel: SponsorTier | null;
+  /** "Patrocinador principal", o la etiqueta propia de un nivel "otro".
+   * Vacía cuando van todos juntos: el grupo no lleva título. */
   etiqueta: string;
   conLogo: boolean;
   patrocinadores: ClubSponsor[];
@@ -51,9 +49,17 @@ export function patrocinadoresDelDossier(
   patrocinadores: ClubSponsor[],
   niveles: SponsorTier[] | null,
   intlLocale = "es-ES",
+  { conLogos = false, separar = true }: { conLogos?: boolean; separar?: boolean } = {},
 ): GrupoDePatrocinadores[] {
   const elegidos = niveles ?? NIVELES_PATROCINADOR;
   const alfabetico = new Intl.Collator(intlLocale, { sensitivity: "base", numeric: true });
+  const porNombre = (a: ClubSponsor, b: ClubSponsor) => alfabetico.compare(a.name.trim(), b.name.trim());
+  const llevaLogo = (lista: ClubSponsor[]) => conLogos && lista.length <= MAXIMO_CON_LOGO;
+
+  if (!separar) {
+    const todos = patrocinadores.filter((patrocinador) => elegidos.includes(patrocinador.tier)).sort(porNombre);
+    return todos.length > 0 ? [{ nivel: null, etiqueta: "", conLogo: llevaLogo(todos), patrocinadores: todos }] : [];
+  }
 
   const grupos: GrupoDePatrocinadores[] = [];
   for (const nivel of NIVELES_PATROCINADOR) {
@@ -66,22 +72,11 @@ export function patrocinadoresDelDossier(
     for (const etiqueta of etiquetas) {
       const lista = delNivel
         .filter((patrocinador) => etiquetaNivelPatrocinador(patrocinador) === etiqueta)
-        .sort((a, b) => alfabetico.compare(a.name.trim(), b.name.trim()));
-      grupos.push({
-        nivel,
-        etiqueta,
-        conLogo: CON_LOGO.includes(nivel) && lista.length <= MAXIMO_CON_LOGO,
-        patrocinadores: lista,
-      });
+        .sort(porNombre);
+      grupos.push({ nivel, etiqueta, conLogo: llevaLogo(lista), patrocinadores: lista });
     }
   }
   return grupos;
-}
-
-/** Los nombres de la portada: primero los de más nivel, y cuántos quedan fuera. */
-export function nombresDePortada(grupos: GrupoDePatrocinadores[]): { nombres: string[]; resto: number } {
-  const todos = grupos.flatMap((grupo) => grupo.patrocinadores.map((patrocinador) => patrocinador.name.trim()));
-  return { nombres: todos.slice(0, NOMBRES_EN_PORTADA), resto: Math.max(0, todos.length - NOMBRES_EN_PORTADA) };
 }
 
 /** Parte una lista en filas de `columnas` elementos, para las rejillas. */

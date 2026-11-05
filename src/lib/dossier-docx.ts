@@ -35,11 +35,13 @@ import { ORDEN_POR_DEFECTO, type BloqueDossier } from "@/lib/dossier-orden";
 import { ALTO_LOGO_DOSSIER, ANCHO_LOGO_DOSSIER, logoDelDossier } from "@/lib/dossier-marca";
 import {
   enFilas,
-  nombresDePortada,
   patrocinadoresDelDossier,
   type GrupoDePatrocinadores,
 } from "@/lib/dossier-patrocinadores";
 import { descargarImagen, encajarEn, type ImagenDescargada } from "@/lib/imagenes-remotas";
+import { OPCIONES_POR_DEFECTO } from "@/lib/dossier-opciones";
+import { repartoSinRepetir } from "@/lib/dossier-sin-repetir";
+import { qrDelDossier } from "@/lib/dossier-qr";
 import { precioMasBajo, textoDelPrecio } from "@/lib/format";
 import { textosDeDocumento, type TextosDocumento } from "@/lib/textos-documento";
 import type { DossierSectionKey } from "@/lib/types";
@@ -277,7 +279,9 @@ function grupoDePatrocinadores(
   textos: TextosDocumento,
 ): (Paragraph | Table)[] {
   const { t } = textos;
-  const bloque: (Paragraph | Table)[] = [
+  const bloque: (Paragraph | Table)[] = [];
+  // Sin título cuando van todos juntos, sin separar por categoría.
+  if (grupo.etiqueta) bloque.push(
     new Paragraph({
       keepNext: true,
       spacing: { before: 200, after: 120 },
@@ -292,7 +296,7 @@ function grupoDePatrocinadores(
         }),
       ],
     }),
-  ];
+  );
 
   if (grupo.conLogo) {
     bloque.push(
@@ -355,11 +359,15 @@ function grupoDePatrocinadores(
 export async function generarDossierWord(datos: DatosDossier, idioma?: string): Promise<Buffer> {
   const { perfil, equipos, patrocinadores, oportunidades, partidos, secciones, nivelesPatrocinadores, emailContacto } =
     datos;
+  const opciones = datos.opciones ?? OPCIONES_POR_DEFECTO;
   const textos = await textosDeDocumento(idioma, "dossier");
   const { t, E, tAlcance, numero: formatoNumero, precio: formatoValorOportunidad } = textos;
 
   // Solo los niveles de patrocinador que ha elegido el club.
-  const gruposPatrocinadores = patrocinadoresDelDossier(patrocinadores, nivelesPatrocinadores ?? null, textos.intlLocale);
+  const gruposPatrocinadores = patrocinadoresDelDossier(patrocinadores, nivelesPatrocinadores ?? null, textos.intlLocale, {
+    conLogos: opciones.logosPatrocinadores,
+    separar: opciones.separarPatrocinadores,
+  });
   const patrocinadoresElegidos = gruposPatrocinadores.flatMap((grupo) => grupo.patrocinadores);
 
   const disponibles = seccionesConContenido(perfil, equipos, patrocinadoresElegidos, partidos);
@@ -376,11 +384,26 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
   const conLogo = incluir("patrocinadores")
     ? gruposPatrocinadores.filter((grupo) => grupo.conLogo).flatMap((grupo) => grupo.patrocinadores)
     : [];
-  const [portada, logo, logosPatrocinadores] = await Promise.all([
+  // Las fotos que van: la primera de cada oportunidad y las del primer
+  // equipo, si el club las ha marcado (`lib/dossier-opciones.ts`).
+  const conFoto = opciones.fotosOportunidades ? oportunidades.filter((oportunidad) => oportunidad.fotos?.[0]) : [];
+  const equiposConFoto = [
+    opciones.fotoEquipoMasculino && perfil.topCategoryMalePhoto
+      ? { url: perfil.topCategoryMalePhoto, nombre: t("primerEquipoMasculino"), pie: perfil.topCategoryMalePhotoNote }
+      : null,
+    opciones.fotoEquipoFemenino && perfil.topCategoryFemalePhoto
+      ? { url: perfil.topCategoryFemalePhoto, nombre: t("primerEquipoFemenino"), pie: perfil.topCategoryFemalePhotoNote }
+      : null,
+  ].filter((foto) => foto !== null);
+  const [portada, logo, logosPatrocinadores, fotosOportunidades, fotosEquipo] = await Promise.all([
     descargarImagen(perfil.coverUrl),
     descargarImagen(perfil.logoUrl),
     Promise.all(conLogo.map((patrocinador) => descargarImagen(patrocinador.logoUrl))),
+    Promise.all(conFoto.map((oportunidad) => descargarImagen(oportunidad.fotos?.[0]))),
+    Promise.all(equiposConFoto.map((foto) => descargarImagen(foto.url))),
   ]);
+  const qr = await qrDelDossier(opciones, { ficha: urlPublica, video: perfil.videoUrl });
+  const fotoPorOportunidad = new Map(conFoto.map((oportunidad, indice) => [oportunidad.id, fotosOportunidades[indice]]));
   const logoPorId = new Map(conLogo.map((patrocinador, indice) => [patrocinador.id, logosPatrocinadores[indice]]));
 
 
@@ -392,8 +415,15 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
    */
   const alcance = calcularAlcance({ perfil, equipos, partidos }, tAlcance, textos.intlLocale);
   const cifrasPortada = cifrasDePortada(alcance);
-  const frasesLlanas = resumenLlano(alcance, tAlcance, textos.intlLocale);
-  const cifrasAudiencia = cifrasSencillasDeAudiencia(alcance);
+  // Cada dato una sola vez (ver `lib/dossier-sin-repetir.ts`).
+  const reparto = repartoSinRepetir({
+    perfil,
+    vaIdentidad: incluir("identidad"),
+    cifrasPortada,
+    cifrasAudiencia: cifrasSencillasDeAudiencia(alcance),
+    frasesLlanas: resumenLlano(alcance, tAlcance, textos.intlLocale),
+  });
+  const { cifrasAudiencia, frasesLlanas } = reparto;
 
   // "Redes sociales" sale con "Quiénes somos" o con "Audiencia", que son
   // de donde venían esos datos antes de tener apartado propio.
@@ -431,7 +461,7 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
     cuerpo.push(parrafo([deportes.join(" · "), ubicacion].filter(Boolean).join(" · "), { color: GRIS, tamano: 21, espacioDespues: 240 }));
   }
 
-  if (perfil.description) {
+  if (reparto.resumenEnPortada && perfil.description) {
     cuerpo.push(parrafo(recortar(perfil.description, 300), { espacioDespues: 320, interlineado: 320 }));
   }
 
@@ -461,22 +491,6 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
       ),
     );
     cuerpo.push(separacion(400));
-  }
-
-  // Prueba social, solo si el club ha decidido enseñar sus patrocinadores.
-  if (incluir("patrocinadores")) {
-    const { nombres, resto } = nombresDePortada(gruposPatrocinadores);
-    if (nombres.length > 0) {
-      cuerpo.push(antetitulo(t("yaConfian")));
-      cuerpo.push(
-        parrafo(`${nombres.join("   ·   ")}${resto > 0 ? `   ·   ${t("yMas", { n: resto })}` : ""}`, {
-          color: GRIS,
-          tamano: 19,
-          negrita: true,
-          espacioDespues: 400,
-        }),
-      );
-    }
   }
 
   // El pie de la portada: una franja azul marino con el logo de
@@ -594,6 +608,29 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
       if (oportunidades.length > 0) {
         cuerpo.push(...cabecera(t("propuesta"), t("comoColaborar"), t("comoColaborarTexto")));
 
+        // Primero, todas con su precio de un vistazo, como en el PDF.
+        if (oportunidades.length > 1) {
+          const anchoColumna = 2000;
+          const anchoNombre = ANCHO_UTIL_TWIPS - anchoColumna * 2;
+          const anchosResumen = [anchoNombre, anchoColumna, anchoColumna];
+          const cabeceraResumen = [t("tablaOportunidad"), t("tablaDuracion"), t("tablaPrecio")].map((texto, indice) =>
+            celda(
+              [parrafo(texto.toUpperCase(), { negrita: true, color: TEAL, tamano: 15, espacioDespues: 0, alineacion: indice === 2 ? AlignmentType.RIGHT : undefined })],
+              { ancho: anchosResumen[indice], fondo: TEAL_SUAVE, margen: 80 },
+            ),
+          );
+          const filasResumen = oportunidades.map((oportunidad) => [
+            celda([parrafo(oportunidad.title, { negrita: true, tamano: 19, espacioDespues: 0 })], { ancho: anchoNombre, margen: 80, bordes: { top: BORDE_FINO } }),
+            celda([parrafo(oportunidad.duration ?? "—", { color: GRIS, tamano: 17, espacioDespues: 0 })], { ancho: anchoColumna, margen: 80, bordes: { top: BORDE_FINO } }),
+            celda(
+              [parrafo(textoDelPrecio(oportunidad, formatoValorOportunidad, textos.textosPrecio), { negrita: true, color: TEAL, tamano: 19, espacioDespues: 0, alineacion: AlignmentType.RIGHT })],
+              { ancho: anchoColumna, margen: 80, bordes: { top: BORDE_FINO } },
+            ),
+          ]);
+          cuerpo.push(tabla([cabeceraResumen, ...filasResumen], anchosResumen));
+          cuerpo.push(separacion(200));
+        }
+
         // Una tarjeta por oportunidad: a la izquierda qué es, a la derecha
         // cuánto. Con una raya de color a la izquierda, como en el PDF.
         const anchoPrecio = 1900;
@@ -607,9 +644,15 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
             oportunidad.exclusivity ? t("exclusiva", { sector: oportunidad.exclusivity }) : null,
           ].filter((linea): linea is string => !!linea);
 
-          const izquierda: Paragraph[] = [
+          const foto = fotoPorOportunidad.get(oportunidad.id);
+          const izquierda: Paragraph[] = [];
+          if (foto) {
+            const { ancho, alto } = encajarEn(foto, 200, 200);
+            izquierda.push(imagen(foto, ancho, alto, undefined, 120));
+          }
+          izquierda.push(
             parrafo(oportunidad.title, { negrita: true, tamano: 22, espacioDespues: oportunidad.description || detalles.length ? 80 : 0, interlineado: 270 }),
-          ];
+          );
           if (oportunidad.description) {
             izquierda.push(parrafo(oportunidad.description, { color: GRIS, tamano: 19, espacioDespues: detalles.length ? 80 : 0 }));
           }
@@ -642,6 +685,22 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
     equipos: () => {
       if (incluir("equipos")) {
         cuerpo.push(...cabecera(t("aQuienLlegas"), t("equipos")));
+        const tarjetasFoto = equiposConFoto
+          .map((foto, indice) => ({ foto, imagenFoto: fotosEquipo[indice] }))
+          .filter(({ imagenFoto }) => imagenFoto)
+          .map(({ foto, imagenFoto }) => {
+            const { ancho, alto } = encajarEn(imagenFoto!, 280, 190);
+            const hijos = [
+              imagen(imagenFoto!, ancho, alto, undefined, 80),
+              parrafo(foto.nombre, { negrita: true, tamano: 19, espacioDespues: foto.pie ? 20 : 0 }),
+            ];
+            if (foto.pie) hijos.push(parrafo(foto.pie, { color: GRIS, tamano: 17, espacioDespues: 0 }));
+            return hijos;
+          });
+        if (tarjetasFoto.length > 0) {
+          cuerpo.push(rejillaDeTarjetas(tarjetasFoto, 2));
+          cuerpo.push(separacion(160));
+        }
         cuerpo.push(
           rejillaDeTarjetas(
             equipos.map((equipo) => {
@@ -670,9 +729,9 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
     cantera: () => {
       if (incluir("cantera")) {
         const cifras = [
-          perfil.youthTeamsCount != null ? tarjetaDeCifra(formatoNumero.format(perfil.youthTeamsCount), t("tarjetaEquipos")) : null,
-          perfil.youthPlayersCount != null ? tarjetaDeCifra(formatoNumero.format(perfil.youthPlayersCount), t("tarjetaJugadores")) : null,
-          perfil.youthFamiliesCount != null ? tarjetaDeCifra(formatoNumero.format(perfil.youthFamiliesCount), t("tarjetaFamilias")) : null,
+          reparto.cantera.equipos && perfil.youthTeamsCount != null ? tarjetaDeCifra(formatoNumero.format(perfil.youthTeamsCount), t("tarjetaEquipos")) : null,
+          reparto.cantera.jugadores && perfil.youthPlayersCount != null ? tarjetaDeCifra(formatoNumero.format(perfil.youthPlayersCount), t("tarjetaJugadores")) : null,
+          reparto.cantera.familias && perfil.youthFamiliesCount != null ? tarjetaDeCifra(formatoNumero.format(perfil.youthFamiliesCount), t("tarjetaFamilias")) : null,
         ].filter((cifra): cifra is Paragraph[] => cifra !== null);
 
         if (cifras.length > 0) {
@@ -740,7 +799,28 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
     lineas.push(parrafo(urlLimpia, { color: "C7D3E0", tamano: 18, espacioDespues: 0 }));
 
     cuerpo.push(separacion(360));
-    cuerpo.push(tabla([[celda(lineas, { fondo: NAVY, margen: 280 })]], [ANCHO_UTIL_TWIPS]));
+    if (qr) {
+      // El QR a la derecha, sobre blanco para que el móvil lo lea.
+      const anchoQr = 2300;
+      const columnaQr = [
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          children: [new ImageRun({ type: "png", data: qr.png, transformation: { width: 110, height: 110 } })],
+        }),
+        parrafo(t(`qr.${qr.tipo}`), { color: "C7D3E0", tamano: 15, alineacion: AlignmentType.CENTER, espacioDespues: 0, espacioAntes: 60 }),
+      ];
+      cuerpo.push(
+        tabla(
+          [[
+            celda(lineas, { ancho: ANCHO_UTIL_TWIPS - anchoQr, fondo: NAVY, margen: 280 }),
+            celda(columnaQr, { ancho: anchoQr, fondo: NAVY, margen: 200, centrado: true }),
+          ]],
+          [ANCHO_UTIL_TWIPS - anchoQr, anchoQr],
+        ),
+      );
+    } else {
+      cuerpo.push(tabla([[celda(lineas, { fondo: NAVY, margen: 280 })]], [ANCHO_UTIL_TWIPS]));
+    }
   }
 
   const documento = new Document({

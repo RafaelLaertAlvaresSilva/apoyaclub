@@ -378,7 +378,8 @@
     "nombreEmpresaPuedeQuedarseVacio": "O nome da empresa não pode ficar vazio.",
     "podidoPublicarIntentaloNuevo": "Não foi possível publicar. Tenta novamente.",
     "podidoCambiarIntentaloNuevo": "Não foi possível alterar. Tenta novamente.",
-    "podidoArchivarIntentaloNuevo": "Não foi possível arquivar. Tenta novamente."
+    "podidoArchivarIntentaloNuevo": "Não foi possível arquivar. Tenta novamente.",
+    "enlaceQrNoValido": "O link do código QR não é válido. Cola o endereço completo, por exemplo https://www.oteuclube.pt"
   },
   "perfil": {
     "anadeCadaEquipoDel": "Adiciona cada equipa do clube: modalidade, escalão, género e se é equipa principal ou de formação.",
@@ -836,9 +837,12 @@
         "otro": "Outros"
       },
       "cuantos": "{n, plural, one {# patrocinador} other {# patrocinadores}}",
-      "conLogo": "aparecem com o logótipo",
-      "soloNombre": "aparecem só com o nome",
-      "ayuda": "No dossiê aparecem por ordem alfabética dentro de cada nível. O principal e os oficiais aparecem com o logótipo (se forem mais de 9, só com o nome); os restantes, só com o nome e em colunas, para caberem todos. Para mudar o nível de um patrocinador, vai a <enlace>Patrocinadores</enlace>."
+      "ayuda": "Dentro de cada categoria vão por ordem alfabética. Para mudar a categoria de um patrocinador, vai a <enlace>Patrocinadores</enlace>.",
+      "comoSalen": "Como saem",
+      "conLogos": "Com o logótipo",
+      "conLogosTexto": "Se desmarcares, saem só os nomes, que ocupa muito menos. Mesmo com logótipo, se numa categoria houver mais de 9, essa sai só com os nomes.",
+      "separar": "Separados por categoria",
+      "separarTexto": "Principal, oficiais, colaboradores… cada um com o seu título. Se desmarcares, saem todos juntos numa só lista por ordem alfabética."
     },
     "orden": {
       "subir": "Subir «{nombre}»",
@@ -849,6 +853,35 @@
       "sinOportunidades": "Agora não aparece: não há oportunidades marcadas mais abaixo.",
       "sinDatosTitulo": "Ainda sem dados",
       "restablecer": "Voltar à ordem habitual"
+    },
+    "aviso": {
+      "titulo": "O teu dossier, à tua medida",
+      "texto": "Põe no dossier só o que quiseres e pela ordem que quiseres: marca ou desmarca cada secção, sobe-a ou desce-a com as setas, escolhe que oportunidades entram, se saem as fotos e como saem os teus patrocinadores. O que não marcares não sai. Antes de o enviares, descarrega-o e vê-o."
+    },
+    "fotos": {
+      "titulo": "Fotos",
+      "descripcion": "As fotos tornam o dossier muito mais visual. Escolhe quais entram.",
+      "oportunidades": "Fotos das oportunidades",
+      "oportunidadesTexto": "A primeira foto de cada oportunidade, junto ao seu texto. {n, plural, =0 {Neste momento nenhuma das tuas oportunidades tem foto.} one {Neste momento # oportunidade tem foto.} other {Neste momento # oportunidades têm foto.}}",
+      "masculino": "Foto da equipa principal masculina",
+      "femenino": "Foto da equipa principal feminina",
+      "equipoTexto": "Sai na secção «Equipas», com a legenda.",
+      "sinFoto": "Ainda não a carregaste.",
+      "subirla": "Carregá-la no teu perfil"
+    },
+    "qr": {
+      "titulo": "Código QR",
+      "descripcion": "Um quadrado que se lê com a câmara do telemóvel. Sai no fim, junto ao contacto: num dossier impresso, a empresa lê-o e chega diretamente ao que escolheres.",
+      "ficha": "A ficha do clube na ApoyaClub",
+      "fichaTexto": "A tua página, com tudo sobre o clube e o botão para te contactarem.",
+      "video": "O teu vídeo de apresentação",
+      "videoTexto": "O vídeo que puseste no teu perfil.",
+      "sinVideo": "Ainda não puseste nenhum vídeo no teu perfil.",
+      "enlace": "Outro link",
+      "enlaceTexto": "O teu site, o teu Instagram, um formulário… Cola aqui o endereço.",
+      "enlacePlaceholder": "https://",
+      "ninguno": "Sem código QR",
+      "enlaceNoValido": "O link do código QR não é válido. Cola o endereço completo, por exemplo https://www.oteuclube.pt"
     }
   },
   "metricas": {
@@ -1525,7 +1558,17 @@
       "web": "Site",
       "seguidores": "{n, plural, one {seguidor} other {seguidores}}",
       "origenContado": "Contado nos jogos",
-      "origenDeclarado": "Dado do clube"
+      "origenDeclarado": "Dado do clube",
+      "primerEquipoMasculino": "Equipa principal masculina",
+      "primerEquipoFemenino": "Equipa principal feminina",
+      "tablaOportunidad": "Oportunidade",
+      "tablaDuracion": "Duração",
+      "tablaPrecio": "Preço",
+      "qr": {
+        "ficha": "Lê para ver a ficha do clube",
+        "video": "Lê para ver o nosso vídeo",
+        "enlace": "Lê para saber mais"
+      }
     },
     "informe": {
       "portada": "Relatório de patrocínio",

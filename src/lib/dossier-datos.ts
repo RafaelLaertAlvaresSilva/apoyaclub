@@ -1,6 +1,7 @@
 import { clubRowToProfile, clubSponsorRowToSponsor, clubTeamRowToTeam } from "@/lib/club-mappers";
 import type { ClubRow, ClubSponsorRow, ClubTeamRow } from "@/lib/club-mappers";
 import { seccionesValidas } from "@/lib/dossier-mappers";
+import { opcionesDelFormulario, type OpcionesDossier } from "@/lib/dossier-opciones";
 import { ordenDelDossier, type BloqueDossier } from "@/lib/dossier-orden";
 import { nivelesValidos } from "@/lib/dossier-patrocinadores";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
@@ -29,6 +30,8 @@ export type DatosDossier = {
   orden?: BloqueDossier[];
   /** Qué niveles de patrocinador salen (migración 0056). Null = todos. */
   nivelesPatrocinadores?: SponsorTier[] | null;
+  /** Fotos y forma de los patrocinadores. Sin ellas, las de por defecto. */
+  opciones?: OpcionesDossier;
   emailContacto: string | null;
 };
 
@@ -103,6 +106,7 @@ export async function reunirDatosDelDossier(
     secciones,
     orden,
     nivelesPatrocinadores,
+    opciones: opcionesDelFormulario(formData),
     emailContacto,
   };
 }

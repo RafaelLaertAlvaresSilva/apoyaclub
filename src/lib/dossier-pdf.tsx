@@ -1,3 +1,6 @@
+import { OPCIONES_POR_DEFECTO } from "@/lib/dossier-opciones";
+import { repartoSinRepetir } from "@/lib/dossier-sin-repetir";
+import { qrDelDossier, type QrDelDossier } from "@/lib/dossier-qr";
 import { Fragment } from "react";
 import { Document, Image, Page, StyleSheet, Text, View, renderToBuffer } from "@react-pdf/renderer";
 import {
@@ -19,7 +22,6 @@ import {
 } from "@/lib/dossier";
 import {
   enFilas,
-  nombresDePortada,
   patrocinadoresDelDossier,
   type GrupoDePatrocinadores,
 } from "@/lib/dossier-patrocinadores";
@@ -310,6 +312,36 @@ const estilos = StyleSheet.create({
   // largo, antes se metía por debajo del importe.
   oportunidadTitulo: { fontSize: 11, fontFamily: "Helvetica-Bold", color: COLOR_TEXTO, flex: 1, paddingRight: 14, lineHeight: 1.3 },
   oportunidadValor: { fontSize: 13, fontFamily: "Helvetica-Bold", color: COLOR_ACENTO, flexShrink: 0 },
+  // Resumen de precios: una fila por oportunidad, de un vistazo.
+  resumenPrecios: { borderWidth: 1, borderColor: COLOR_BORDE, borderRadius: 6, marginTop: 10, marginBottom: 6 },
+  resumenPreciosCabecera: {
+    display: "flex",
+    flexDirection: "row",
+    backgroundColor: COLOR_ACENTO_SUAVE,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+  },
+  resumenPreciosFila: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 7,
+    paddingHorizontal: 12,
+    borderTopWidth: 1,
+    borderTopColor: COLOR_BORDE,
+  },
+  resumenPreciosTitulo: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: COLOR_ACENTO, letterSpacing: 0.8 },
+  resumenPreciosNombre: { flex: 1, fontSize: 9.5, fontFamily: "Helvetica-Bold", color: COLOR_TEXTO, paddingRight: 10 },
+  resumenPreciosDuracion: { width: 110, fontSize: 8.5, color: COLOR_TEXTO_SUAVE, paddingRight: 10 },
+  resumenPreciosPrecio: { width: 110, fontSize: 9.5, fontFamily: "Helvetica-Bold", color: COLOR_ACENTO, textAlign: "right" },
+  // Con foto: la foto a la izquierda y el texto a la derecha.
+  oportunidadConFoto: { display: "flex", flexDirection: "row", alignItems: "flex-start" },
+  oportunidadFoto: { width: 120, borderRadius: 4, marginRight: 14 },
+  oportunidadCuerpo: { flex: 1 },
+  fotosEquipo: { display: "flex", flexDirection: "row", paddingBottom: SEPARACION },
+  fotoEquipo: { width: "100%", height: 150, objectFit: "cover", borderRadius: 6 },
+  fotoEquipoNombre: { fontSize: 9, fontFamily: "Helvetica-Bold", color: COLOR_TEXTO, marginTop: 6 },
+  fotoEquipoPie: { fontSize: 8.5, lineHeight: 1.4, color: COLOR_TEXTO_SUAVE, marginTop: 2 },
   oportunidadTexto: { fontSize: 9.5, lineHeight: 1.5, color: COLOR_TEXTO_SUAVE, marginTop: 6 },
   oportunidadDetalles: { display: "flex", flexDirection: "row", flexWrap: "wrap", marginTop: 8 },
   oportunidadDuracion: { fontSize: 8, color: COLOR_TEXTO_SUAVE, marginRight: 14 },
@@ -323,6 +355,9 @@ const estilos = StyleSheet.create({
   contacto: { backgroundColor: COLOR_MARCA, borderRadius: 8, padding: 22, marginTop: 4 },
   contactoEtiqueta: { fontSize: 8, fontFamily: "Helvetica-Bold", letterSpacing: 1.2, color: "#7fcfc3" },
   contactoTitulo: { fontSize: 15, fontFamily: "Helvetica-Bold", color: "#ffffff", marginTop: 4, marginBottom: 6 },
+  contactoQr: { position: "absolute", top: 22, right: 22, width: 92, alignItems: "center" },
+  contactoQrImagen: { width: 92, height: 92, backgroundColor: "#ffffff", padding: 4, borderRadius: 4 },
+  contactoQrTexto: { fontSize: 7, color: "#c7d3e0", marginTop: 5, textAlign: "center", lineHeight: 1.3 },
   contactoLinea: { fontSize: 11, color: "#ffffff", marginTop: 6 },
   contactoTenue: { fontSize: 9, color: "#c7d3e0", marginTop: 8 },
 
@@ -467,10 +502,13 @@ function GrupoDePatrocinadoresEnPdf({ grupo, textos }: { grupo: GrupoDePatrocina
 
   return (
     <View style={estilos.grupoPatrocinadores}>
-      <View wrap={false} style={{ marginBottom: -HUECO_BAJO_SUBTITULO }}>
-        <Text style={estilos.grupoEtiqueta}>{titulo}</Text>
-        <View style={{ height: HUECO_BAJO_SUBTITULO }} />
-      </View>
+      {/* Sin título cuando van todos juntos, sin separar por categoría. */}
+      {grupo.etiqueta && (
+        <View wrap={false} style={{ marginBottom: -HUECO_BAJO_SUBTITULO }}>
+          <Text style={estilos.grupoEtiqueta}>{titulo}</Text>
+          <View style={{ height: HUECO_BAJO_SUBTITULO }} />
+        </View>
+      )}
       {grupo.conLogo ? (
         <Rejilla
           columnas={3}
@@ -511,7 +549,11 @@ function GrupoDePatrocinadoresEnPdf({ grupo, textos }: { grupo: GrupoDePatrocina
 /** Construye el documento y lo renderiza a un Buffer con el PDF final. */
 export async function generarDossierPdf(datos: DatosDossierPdf, idioma?: string): Promise<Buffer> {
   const textos = await textosDeDocumento(idioma, "dossier");
-  return renderToBuffer(<DossierDocumento {...datos} textos={textos} />);
+  const qr = await qrDelDossier(datos.opciones ?? OPCIONES_POR_DEFECTO, {
+    ficha: textos.urlDelClub(datos.perfil.slug),
+    video: datos.perfil.videoUrl,
+  });
+  return renderToBuffer(<DossierDocumento {...datos} textos={textos} qr={qr} />);
 }
 
 function DossierDocumento({
@@ -523,13 +565,18 @@ function DossierDocumento({
   secciones,
   orden,
   nivelesPatrocinadores,
+  opciones = OPCIONES_POR_DEFECTO,
   emailContacto,
   textos,
-}: DatosDossierPdf & { textos: TextosDocumento }) {
+  qr,
+}: DatosDossierPdf & { textos: TextosDocumento; qr: QrDelDossier | null }) {
   const { t, E, numero: formatoNumero, precio: formatoValorOportunidad } = textos;
 
   // Solo los niveles de patrocinador que ha elegido el club.
-  const gruposPatrocinadores = patrocinadoresDelDossier(patrocinadores, nivelesPatrocinadores ?? null, textos.intlLocale);
+  const gruposPatrocinadores = patrocinadoresDelDossier(patrocinadores, nivelesPatrocinadores ?? null, textos.intlLocale, {
+    conLogos: opciones.logosPatrocinadores,
+    separar: opciones.separarPatrocinadores,
+  });
   const patrocinadoresElegidos = gruposPatrocinadores.flatMap((grupo) => grupo.patrocinadores);
 
   const disponibles = seccionesConContenido(perfil, equipos, patrocinadoresElegidos, partidos);
@@ -553,14 +600,11 @@ function DossierDocumento({
   const { tAlcance } = textos;
   const alcance = calcularAlcance({ perfil, equipos, partidos }, tAlcance, textos.intlLocale);
   const cifrasPortada = cifrasDePortada(alcance);
-  const frasesLlanas = resumenLlano(alcance, tAlcance, textos.intlLocale);
 
   // Solo cuentan las que tienen precio: una necesidad no puede dejar
   // "desde 0,00 €" en la portada.
   const masBarata = precioMasBajo(oportunidades);
 
-  // En la portada, solo si el club ha decidido enseñar sus patrocinadores.
-  const portadaPatrocinadores = incluir("patrocinadores") ? nombresDePortada(gruposPatrocinadores) : null;
 
   // "Redes sociales": cada red con su dirección y sus seguidores. Sale
   // con "Quiénes somos" o con "Audiencia", que son de donde venían esos
@@ -568,7 +612,26 @@ function DossierDocumento({
   const redes = redesDelClub(perfil);
   const verRedes =
     (secciones.includes("identidad") || secciones.includes("audiencia")) && (redes.length > 0 || !!perfil.website);
-  const cifrasAudiencia = cifrasSencillasDeAudiencia(alcance);
+  // Cada dato una sola vez (ver `lib/dossier-sin-repetir.ts`).
+  const reparto = repartoSinRepetir({
+    perfil,
+    vaIdentidad: incluir("identidad"),
+    cifrasPortada,
+    cifrasAudiencia: cifrasSencillasDeAudiencia(alcance),
+    frasesLlanas: resumenLlano(alcance, tAlcance, textos.intlLocale),
+  });
+  const { cifrasAudiencia, frasesLlanas } = reparto;
+
+  // Las fotos del primer equipo que van: las que ha marcado el club y
+  // que de verdad están subidas.
+  const fotosPrimerEquipo = [
+    opciones.fotoEquipoMasculino && perfil.topCategoryMalePhoto
+      ? { id: "masculino", url: perfil.topCategoryMalePhoto, nombre: t("primerEquipoMasculino"), pie: perfil.topCategoryMalePhotoNote }
+      : null,
+    opciones.fotoEquipoFemenino && perfil.topCategoryFemalePhoto
+      ? { id: "femenino", url: perfil.topCategoryFemalePhoto, nombre: t("primerEquipoFemenino"), pie: perfil.topCategoryFemalePhotoNote }
+      : null,
+  ].filter((foto) => foto !== null);
 
   // Cada apartado, listo para colocarlo donde diga el orden. Los que no
   // van (sin marcar o sin datos) quedan en `false` y no pintan nada.
@@ -622,31 +685,65 @@ function DossierDocumento({
             titulo={t("comoColaborar")}
             descripcion={t("comoColaborarTexto")}
           >
-            {oportunidades.map((oportunidad) => (
-              <View key={oportunidad.id} style={estilos.oportunidad} wrap={false}>
-                <View style={estilos.oportunidadCabecera}>
-                  <Text style={estilos.oportunidadTitulo}>{oportunidad.title}</Text>
-                  <Text style={estilos.oportunidadValor}>
-                    {textoDelPrecio(oportunidad, formatoValorOportunidad, textos.textosPrecio)}
+            {/* Primero, todas con su precio de un vistazo (pedido por
+                Rafael): quien lo lee suele decidir en dos minutos. Con
+                una sola no hace falta: está justo debajo. */}
+            {oportunidades.length > 1 && (
+              <View style={estilos.resumenPrecios} wrap={false}>
+                <View style={estilos.resumenPreciosCabecera}>
+                  <Text style={[estilos.resumenPreciosTitulo, { flex: 1 }]}>{t("tablaOportunidad").toUpperCase()}</Text>
+                  <Text style={[estilos.resumenPreciosTitulo, { width: 110 }]}>{t("tablaDuracion").toUpperCase()}</Text>
+                  <Text style={[estilos.resumenPreciosTitulo, { width: 110, textAlign: "right" }]}>
+                    {t("tablaPrecio").toUpperCase()}
                   </Text>
                 </View>
-                {oportunidad.description && (
-                  <Text style={estilos.oportunidadTexto}>{oportunidad.description}</Text>
-                )}
-                {(oportunidad.duration || oportunidad.exclusivity) && (
-                  <View style={estilos.oportunidadDetalles}>
-                    {oportunidad.duration && (
-                      <Text style={estilos.oportunidadDuracion}>{oportunidad.duration}</Text>
-                    )}
-                    {oportunidad.exclusivity && (
-                      <Text style={estilos.oportunidadExclusiva}>
-                        {t("exclusiva", { sector: oportunidad.exclusivity })}
-                      </Text>
-                    )}
+                {oportunidades.map((oportunidad) => (
+                  <View key={oportunidad.id} style={estilos.resumenPreciosFila}>
+                    <Text style={estilos.resumenPreciosNombre}>{oportunidad.title}</Text>
+                    <Text style={estilos.resumenPreciosDuracion}>{oportunidad.duration ?? "—"}</Text>
+                    <Text style={estilos.resumenPreciosPrecio}>
+                      {textoDelPrecio(oportunidad, formatoValorOportunidad, textos.textosPrecio)}
+                    </Text>
                   </View>
-                )}
+                ))}
               </View>
-            ))}
+            )}
+            {oportunidades.map((oportunidad) => {
+              const foto = opciones.fotosOportunidades ? oportunidad.fotos?.[0] : undefined;
+              return (
+                <View key={oportunidad.id} style={estilos.oportunidad} wrap={false}>
+                  <View style={foto ? estilos.oportunidadConFoto : undefined}>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text -- Image de @react-pdf/renderer, no la de HTML: no admite alt. */}
+                    {foto && <Image src={foto} style={estilos.oportunidadFoto} />}
+                    {/* `flex: 1` solo al lado de la foto: en columna, sin foto,
+                        lo dejaba sin alto y el texto se montaba encima. */}
+                    <View style={foto ? estilos.oportunidadCuerpo : undefined}>
+                        <View style={estilos.oportunidadCabecera}>
+                          <Text style={estilos.oportunidadTitulo}>{oportunidad.title}</Text>
+                          <Text style={estilos.oportunidadValor}>
+                            {textoDelPrecio(oportunidad, formatoValorOportunidad, textos.textosPrecio)}
+                          </Text>
+                        </View>
+                        {oportunidad.description && (
+                          <Text style={estilos.oportunidadTexto}>{oportunidad.description}</Text>
+                        )}
+                        {(oportunidad.duration || oportunidad.exclusivity) && (
+                          <View style={estilos.oportunidadDetalles}>
+                            {oportunidad.duration && (
+                              <Text style={estilos.oportunidadDuracion}>{oportunidad.duration}</Text>
+                            )}
+                            {oportunidad.exclusivity && (
+                              <Text style={estilos.oportunidadExclusiva}>
+                                {t("exclusiva", { sector: oportunidad.exclusivity })}
+                              </Text>
+                            )}
+                          </View>
+                        )}
+                    </View>
+                  </View>
+                </View>
+              );
+            })}
           </Seccion>
         )}
       </>
@@ -655,6 +752,19 @@ function DossierDocumento({
       <>
         {incluir("equipos") && (
           <Seccion etiqueta={t("aQuienLlegas")} titulo={t("equipos")}>
+            {fotosPrimerEquipo.length > 0 && (
+              <Rejilla
+                columnas={2}
+                celdas={fotosPrimerEquipo.map((foto) => (
+                  <View key={foto.id} wrap={false}>
+                    {/* eslint-disable-next-line jsx-a11y/alt-text -- Image de @react-pdf/renderer, no la de HTML: no admite alt. */}
+                    <Image src={foto.url} style={estilos.fotoEquipo} />
+                    <Text style={estilos.fotoEquipoNombre}>{foto.nombre}</Text>
+                    {foto.pie && <Text style={estilos.fotoEquipoPie}>{foto.pie}</Text>}
+                  </View>
+                ))}
+              />
+            )}
             <Rejilla
               columnas={3}
               celdas={equipos.map((equipo) => (
@@ -680,7 +790,7 @@ function DossierDocumento({
     ),
     cantera: (
       <>
-        {incluir("cantera") && (
+        {incluir("cantera") && (reparto.cantera.equipos || reparto.cantera.jugadores || reparto.cantera.familias) && (
           <Seccion
             etiqueta={t("aQuienLlegas")}
             titulo={t("cantera")}
@@ -689,13 +799,13 @@ function DossierDocumento({
             <Rejilla
               columnas={3}
               celdas={[
-                perfil.youthTeamsCount != null && (
+                reparto.cantera.equipos && perfil.youthTeamsCount != null && (
                   <Tarjeta key="equipos" etiqueta={t("tarjetaEquipos")} valor={formatoNumero.format(perfil.youthTeamsCount)} />
                 ),
-                perfil.youthPlayersCount != null && (
+                reparto.cantera.jugadores && perfil.youthPlayersCount != null && (
                   <Tarjeta key="jugadores" etiqueta={t("tarjetaJugadores")} valor={formatoNumero.format(perfil.youthPlayersCount)} />
                 ),
-                perfil.youthFamiliesCount != null && (
+                reparto.cantera.familias && perfil.youthFamiliesCount != null && (
                   <Tarjeta key="familias" etiqueta={t("tarjetaFamilias")} valor={formatoNumero.format(perfil.youthFamiliesCount)} />
                 ),
               ].filter(Boolean)}
@@ -831,7 +941,7 @@ function DossierDocumento({
               </Text>
             )}
 
-            {perfil.description && (
+            {reparto.resumenEnPortada && perfil.description && (
               <Text style={estilos.portadaResumen}>{recortar(perfil.description, 300)}</Text>
             )}
 
@@ -861,19 +971,6 @@ function DossierDocumento({
           </View>
 
           <View>
-            {/* Prueba social en la portada: que otras empresas ya estén
-                dentro es lo que más convence a la que aún no lo está. Las
-                de más nivel primero, y como mucho ocho nombres. */}
-            {portadaPatrocinadores && portadaPatrocinadores.nombres.length > 0 && (
-              <View style={estilos.confianza}>
-                <Text style={estilos.confianzaEtiqueta}>{t("yaConfian").toUpperCase()}</Text>
-                <Text style={estilos.confianzaNombres}>
-                  {portadaPatrocinadores.nombres.join("   ·   ")}
-                  {portadaPatrocinadores.resto > 0 ? `   ·   ${t("yMas", { n: portadaPatrocinadores.resto })}` : ""}
-                </Text>
-              </View>
-            )}
-
             <View style={estilos.portadaPie}>
               {/* eslint-disable-next-line jsx-a11y/alt-text -- react-pdf no tiene `alt` */}
               <Image src={logoDelDossier(textos.locale)} style={estilos.marcaApoyaClubLogo} />
@@ -903,7 +1000,16 @@ function DossierDocumento({
             anterior. Antes salía dos veces (en "Quiénes somos" y al final)
             y las dos en gris pequeño, como una nota al pie. */}
         {(emailContacto || (perfil.contactPublicConsent && perfil.contactPhone)) && (
-          <View style={estilos.contacto} wrap={false}>
+          <View style={qr ? [estilos.contacto, { paddingRight: 134, minHeight: 160 }] : estilos.contacto} wrap={false}>
+            {/* El QR a la derecha, en blanco para que el móvil lo lea
+                sobre el azul (`lib/dossier-qr.ts`). */}
+            {qr && (
+              <View style={estilos.contactoQr}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text -- Image de @react-pdf/renderer, no la de HTML: no admite alt. */}
+                <Image src={qr.dataUrl} style={estilos.contactoQrImagen} />
+                <Text style={estilos.contactoQrTexto}>{t(`qr.${qr.tipo}`)}</Text>
+              </View>
+            )}
             <Text style={estilos.contactoEtiqueta}>{t("hablemos").toUpperCase()}</Text>
             <Text style={estilos.contactoTitulo}>{t("teInteresa")}</Text>
             {perfil.contactPublicConsent && perfil.contactName && (
