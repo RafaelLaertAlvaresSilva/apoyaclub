@@ -2,8 +2,15 @@ import type Stripe from "stripe";
 import { obtenerStripe } from "@/lib/stripe/client";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Cobro } from "@/lib/comisiones";
+import { fueraDelIvaEspanol } from "@/lib/iva-espana";
 
-type FilaClub = { id: string; name: string | null; stripe_customer_id: string | null };
+type FilaClub = {
+  id: string;
+  name: string | null;
+  stripe_customer_id: string | null;
+  province: string | null;
+  postal_code: string | null;
+};
 
 /**
  * Los cobros de Stripe de unos clubes, con lo que Stripe se quedó de
@@ -19,7 +26,7 @@ export async function cobrosDeClubes(idsClubes: string[]): Promise<Cobro[]> {
   const admin = createAdminClient();
   const { data: filas } = await admin
     .from("clubs")
-    .select("id, name, stripe_customer_id")
+    .select("id, name, stripe_customer_id, province, postal_code")
     .in("id", idsClubes)
     .returns<FilaClub[]>();
 
@@ -57,8 +64,9 @@ export async function cobrosDeClubes(idsClubes: string[]): Promise<Cobro[]> {
         fecha: new Date(cargo.created * 1000).toISOString(),
         cobradoCentimos: Math.round(importe * proporcionCobrada),
         stripeCentimos: movimiento?.fee ?? 0,
-        // Los planes en reales (Brasil) no llevan IVA.
-        conIva: cargo.currency !== "brl",
+        // Los planes en reales (Brasil) no llevan IVA, ni los clubes de
+        // Canarias, Ceuta o Melilla (`lib/iva-espana.ts`).
+        conIva: cargo.currency !== "brl" && !fueraDelIvaEspanol({ province: fila.province, postalCode: fila.postal_code }),
       });
     }
   }

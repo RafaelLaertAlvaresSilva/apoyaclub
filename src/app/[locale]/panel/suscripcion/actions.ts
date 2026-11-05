@@ -7,6 +7,7 @@ import { getLocale } from "next-intl/server";
 import type { User } from "@supabase/supabase-js";
 import { redirect as redirectLocalizado } from "@/i18n/navigation";
 import { SITE_URL } from "@/lib/site";
+import { llevaIvaEspanol, tipoDeIvaDeStripe } from "@/lib/iva-espana";
 import { paisDeLaCuenta } from "@/lib/paises";
 import { esPlanValido, monedaDelPais, priceIdDelPlan, type PlanId } from "@/lib/planes";
 import type Stripe from "stripe";
@@ -69,9 +70,14 @@ export async function iniciarSuscripcion(formData: FormData): Promise<void> {
 
   const { data: filaClub } = await supabase
     .from("clubs")
-    .select("stripe_customer_id, trial_ends_at")
+    .select("stripe_customer_id, trial_ends_at, province, postal_code")
     .eq("id", user.id)
-    .maybeSingle<Pick<SubscriptionRow, "stripe_customer_id" | "trial_ends_at">>();
+    .maybeSingle<
+      Pick<SubscriptionRow, "stripe_customer_id" | "trial_ends_at"> & {
+        province: string | null;
+        postal_code: string | null;
+      }
+    >();
 
   // La prueba no se regala dos veces. Stripe daba 30 días a todo el que
   // contratara, sin mirar si el club ya se había gastado su mes gratis:
@@ -107,13 +113,26 @@ export async function iniciarSuscripcion(formData: FormData): Promise<void> {
   }
 
   const stripe = obtenerStripe();
+  const tipoDeIva =
+    moneda === "EUR" &&
+    llevaIvaEspanol({
+      pais: paisDeLaCuenta(user.app_metadata),
+      province: filaClub?.province,
+      postalCode: filaClub?.postal_code,
+    })
+      ? tipoDeIvaDeStripe()
+      : null;
+
   const crearSesion = (metodos?: Stripe.Checkout.SessionCreateParams.PaymentMethodType[]) =>
     stripe.checkout.sessions.create({
       // En reales, Pix (que exige un banco de Brasil) y tarjeta (que
       // luego se comprueba que sea de Brasil: `lib/pago-brasil.ts`).
       ...(metodos ? { payment_method_types: metodos } : {}),
       mode: "subscription",
-      line_items: [{ price: priceId, quantity: 1 }],
+      // Con el IVA desglosado en la factura, solo a los clubes de España
+      // fuera de Canarias, Ceuta y Melilla (`lib/iva-espana.ts`). El
+      // precio no cambia: el tipo va "incluido en el precio".
+      line_items: [{ price: priceId, quantity: 1, ...(tipoDeIva ? { tax_rates: [tipoDeIva] } : {}) }],
       subscription_data: {
         ...(diasDePrueba > 0 ? { trial_period_days: diasDePrueba } : {}),
         metadata: { plan: planId },
