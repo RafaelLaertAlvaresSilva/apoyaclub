@@ -1568,7 +1568,8 @@
         "ficha": "Lê para ver a ficha do clube",
         "video": "Lê para ver o nosso vídeo",
         "enlace": "Lê para saber mais"
-      }
+      },
+      "audienciaTextoSoloCifras": "Cada número com a sua origem. Não se somam entre si."
     },
     "informe": {
       "portada": "Relatório de patrocínio",

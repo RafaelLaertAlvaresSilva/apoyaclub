@@ -1568,7 +1568,8 @@
         "ficha": "Escaneie para ver a página do clube",
         "video": "Escaneie para ver nosso vídeo",
         "enlace": "Escaneie para saber mais"
-      }
+      },
+      "audienciaTextoSoloCifras": "Cada número com a sua origem. Eles não se somam."
     },
     "informe": {
       "portada": "Relatório de patrocínio",

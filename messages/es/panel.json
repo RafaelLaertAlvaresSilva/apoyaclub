@@ -1568,7 +1568,8 @@
         "ficha": "Escanea para ver la ficha del club",
         "video": "Escanea para ver nuestro vídeo",
         "enlace": "Escanea para saber más"
-      }
+      },
+      "audienciaTextoSoloCifras": "Cada cifra con de dónde sale. No se suman entre sí."
     },
     "informe": {
       "portada": "Informe de patrocinio",

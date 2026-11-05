@@ -820,7 +820,7 @@ function DossierDocumento({
           <Seccion
             etiqueta={t("aQuienLlegas")}
             titulo={t("audiencia")}
-            descripcion={t("audienciaTexto")}
+            descripcion={t(frasesLlanas.length > 0 ? "audienciaTexto" : "audienciaTextoSoloCifras")}
           >
             {/* Primero en cristiano, y debajo las cifras una a una, cada
                 una con una etiqueta corta de dónde sale. Quien abre esto

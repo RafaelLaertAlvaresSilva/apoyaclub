@@ -742,7 +742,7 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
     },
     audiencia: () => {
       if (incluir("audiencia") && alcance.hayCifras && (frasesLlanas.length > 0 || cifrasAudiencia.length > 0)) {
-        cuerpo.push(...cabecera(t("aQuienLlegas"), t("audiencia"), t("audienciaTexto")));
+        cuerpo.push(...cabecera(t("aQuienLlegas"), t("audiencia"), t(frasesLlanas.length > 0 ? "audienciaTexto" : "audienciaTextoSoloCifras")));
 
         // Primero en cristiano, y debajo las cifras una a una, cada una con
         // una etiqueta corta de dónde sale: lo mismo que el PDF.

@@ -1568,7 +1568,8 @@
         "ficha": "Scan to see the club's page",
         "video": "Scan to watch our video",
         "enlace": "Scan to find out more"
-      }
+      },
+      "audienciaTextoSoloCifras": "Each figure with where it comes from. They are not added together."
     },
     "informe": {
       "portada": "Sponsorship report",
