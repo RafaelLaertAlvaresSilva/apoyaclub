@@ -1625,5 +1625,9 @@
       "completaIdentidad": "Fill in the club's identity first.",
       "sinAccionesEmpresa": "There are no activities recorded for that company yet."
     }
+  },
+  "idiomaDelPais": {
+    "texto": "This panel is also available in English.",
+    "boton": "Switch to English"
   }
 }

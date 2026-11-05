@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
-import { getLocale } from "next-intl/server";
+import type { Metadata } from "next";
+import { getLocale, getTranslations } from "next-intl/server";
 import { BarraLogo } from "@/components/BarraLogo";
 import {
   subscriptionRowToInfo,
@@ -8,11 +9,30 @@ import {
 import { COOKIE_MENU_PLEGADO, estaPlegado } from "@/lib/menu-plegado";
 import { leerVisibilidadDelClub } from "@/lib/modo-pruebas";
 import { createClient } from "@/lib/supabase/server";
+import type { AppLocale } from "@/i18n/routing";
+import { paisDeLaCuenta, type Pais } from "@/lib/paises";
 import type { Role } from "@/lib/types";
 import { AvisoModoPruebas, AvisoOcultoPorElClub } from "./components/AvisoModoPruebas";
+import { AvisoIdiomaDelPais } from "./components/AvisoIdiomaDelPais";
 import { AvisoSuscripcion } from "./components/AvisoSuscripcion";
 import { PanelNav } from "./components/PanelNav";
 import { InterruptorDeTema } from "./components/InterruptorDeTema";
+
+/**
+ * El panel no se deja traducir con el traductor del navegador. Es un
+ * formulario detrás de otro, y el traductor cambia el texto por debajo
+ * de React: al guardar, React no encuentra lo que pintó y la página se
+ * rompe ("No hemos podido cargar esta página"). Le pasó a un club de
+ * Brasil el 5-11-2026. El panel ya está en cuatro idiomas; a quien lo
+ * usa en otro que no es el de su país se le ofrece el suyo
+ * (`AvisoIdiomaDelPais`).
+ */
+export const metadata: Metadata = {
+  other: { google: "notranslate" },
+};
+
+/** El idioma de la web de cada país, cuando no es el español. */
+const IDIOMA_DEL_PAIS: Partial<Record<Pais, AppLocale>> = { BR: "br", PT: "pt" };
 
 /**
  * Envuelve todas las páginas de `/panel` (Fase 10) para mostrar, si
@@ -46,8 +66,14 @@ export default async function PanelLayout({
   // sale un aviso arriba.
   let modoPruebas = false;
   let ocultoPorElClub = false;
+  // El idioma de su país, si está usando el panel en otro.
+  let idiomaSugerido: AppLocale | null = null;
+
+  const locale = (await getLocale()) as AppLocale;
 
   if (user && (user.app_metadata?.role as Role | undefined) === "club") {
+    const delPais = IDIOMA_DEL_PAIS[paisDeLaCuenta(user.app_metadata)];
+    if (delPais && delPais !== locale) idiomaSugerido = delPais;
     const { data } = await supabase
       .from("clubs")
       .select(
@@ -64,12 +90,16 @@ export default async function PanelLayout({
     // solo ve el club: la página pública daría "no encontrada".
     if (slug) {
       paginaPublica =
-        !modoPruebas && !ocultoPorElClub ? `/${await getLocale()}/club/${slug}` : `/${await getLocale()}/vista-previa`;
+        !modoPruebas && !ocultoPorElClub ? `/${locale}/club/${slug}` : `/${locale}/vista-previa`;
     }
   }
 
   // Si el club dejó el menú plegado la última vez, llega ya plegado.
   const menuPlegado = estaPlegado((await cookies()).get(COOKIE_MENU_PLEGADO)?.value);
+  // Escrito en el idioma que se le ofrece, que es el que entiende.
+  const tIdioma = idiomaSugerido
+    ? await getTranslations({ locale: idiomaSugerido, namespace: "panel.idiomaDelPais" })
+    : null;
 
   return (
     /*
@@ -84,8 +114,11 @@ export default async function PanelLayout({
      * sin esto, una pantalla corta dejaría ver una franja clara por
      * debajo.
      */
-    <div className="tema-panel flex min-h-dvh flex-1 flex-col bg-zinc-50">
+    <div translate="no" className="tema-panel flex min-h-dvh flex-1 flex-col bg-zinc-50">
       <BarraLogo extra={<InterruptorDeTema />} />
+      {idiomaSugerido && tIdioma && (
+        <AvisoIdiomaDelPais idioma={idiomaSugerido} texto={tIdioma("texto")} boton={tIdioma("boton")} />
+      )}
       {modoPruebas ? <AvisoModoPruebas /> : ocultoPorElClub && <AvisoOcultoPorElClub />}
       {filaSuscripcion && (
         <AvisoSuscripcion

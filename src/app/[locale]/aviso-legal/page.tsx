@@ -1,12 +1,14 @@
+import { getTranslations } from "next-intl/server";
 import { DatosDelTitular } from "@/components/DatosDelTitular";
 import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
 import { LegalPageShell } from "@/components/LegalPageShell";
 import { LEGAL_VERSIONS, formatearFechaLegal } from "@/lib/legal";
 
-export const metadata: Metadata = {
-  title: "Aviso legal",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  // La pestaña, en el idioma de la página (antes, siempre en español).
+  return { title: (await getTranslations("common.tituloPestana"))("avisoLegal") };
+}
 
 /**
  * Aviso legal (Fase 11): identificación del titular del sitio según la

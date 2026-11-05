@@ -1,11 +1,13 @@
+import { getTranslations } from "next-intl/server";
 import { useTranslations } from "next-intl";
 import { BarraLogo } from "@/components/BarraLogo";
 import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Cuenta eliminada",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  // La pestaña, en el idioma de la página (antes, siempre en español).
+  return { title: (await getTranslations("common.tituloPestana"))("cuentaEliminada") };
+}
 
 /** Página de despedida tras eliminar la cuenta (Fase 11, club o empresa). */
 export default function CuentaEliminadaPage() {

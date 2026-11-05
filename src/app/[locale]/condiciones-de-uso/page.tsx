@@ -1,11 +1,13 @@
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
 import { LegalPageShell } from "@/components/LegalPageShell";
 import { LEGAL_VERSIONS, formatearFechaLegal } from "@/lib/legal";
 
-export const metadata: Metadata = {
-  title: "Condiciones de uso",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  // La pestaña, en el idioma de la página (antes, siempre en español).
+  return { title: (await getTranslations("common.tituloPestana"))("condiciones") };
+}
 
 /**
  * Condiciones de uso (Fase 11). PLANTILLA pendiente de revisión

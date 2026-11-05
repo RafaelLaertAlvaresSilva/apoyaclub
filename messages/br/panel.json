@@ -181,7 +181,7 @@
     "visible": "A sua página pública e as suas oportunidades estão visíveis.",
     "noVisible": "A sua página pública e as suas oportunidades NÃO estão visíveis neste momento.",
     "tusFacturas": "As suas faturas",
-    "tusFacturasTexto": "Estão todas nesse mesmo botão, na seção <fuerte>Histórico de faturamento</fuerte>: podem ser baixadas em PDF, com o NIF e o endereço que indicou ao contratar. Aí mesmo pode corrigir esses dados se mudarem, e a fatura seguinte já sai com os novos.",
+    "tusFacturasTexto": "Estão todas nesse mesmo botão, na seção <fuerte>Histórico de faturamento</fuerte>: podem ser baixadas em PDF, com o CNPJ e o endereço que indicou ao contratar. Aí mesmo pode corrigir esses dados se mudarem, e a fatura seguinte já sai com os novos.",
     "accesoGratuitoHasta": "Você já tem acesso gratuito até {fecha}.",
     "accesoGratuitoTexto": "Você não precisa escolher um plano nem informar nenhum cartão até lá. Vamos avisar você por e-mail antes dessa data, para decidir com tempo.",
     "volverASuscribirse": "Assinar de novo",
@@ -439,7 +439,7 @@
     "imagenesTexto": "Salve primeiro o nome e a localidade do seu clube, aqui abaixo. Assim que fizer isso, aparecem aqui os botões para enviar o escudo, a foto de capa e as fotos do clube.",
     "cambiarLogo": "Mudar logotipo",
     "subirLogo": "Enviar logotipo",
-    "avisoMenores": "Não carregue fotos em que se identifiquem claramente menores (por exemplo, closes com o rosto visível) sem o consentimento dos pais ou tutores legais, nem inclua os nomes completos deles em descrições ou títulos. Os dados da base são sempre salvos de forma agregada, nunca com perfis de menores específicos.",
+    "avisoMenores": "Não envie fotos em que se identifiquem claramente menores (por exemplo, closes com o rosto visível) sem o consentimento dos pais ou tutores legais, nem inclua os nomes completos deles em descrições ou títulos. Os dados da base são sempre salvos de forma agregada, nunca com perfis de menores específicos.",
     "fotoDelClub": "Foto do clube",
     "quitarFoto": "Remover foto",
     "anadirFoto": "Adicionar foto",
@@ -1625,5 +1625,9 @@
       "completaIdentidad": "Complete primeiro a identidade do clube.",
       "sinAccionesEmpresa": "Ainda não há ações cadastradas para essa empresa."
     }
+  },
+  "idiomaDelPais": {
+    "texto": "Este painel também está em português do Brasil, sem precisar do tradutor do navegador.",
+    "boton": "Mudar para português do Brasil"
   }
 }

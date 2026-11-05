@@ -1625,5 +1625,9 @@
       "completaIdentidad": "Completa primero la identidad del club.",
       "sinAccionesEmpresa": "Todavía no hay acciones apuntadas para esa empresa."
     }
+  },
+  "idiomaDelPais": {
+    "texto": "Este panel también está en español.",
+    "boton": "Cambiar a español"
   }
 }

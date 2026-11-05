@@ -263,5 +263,14 @@
   "precio": {
     "necesidad": "Em troca de visibilidade",
     "aConvenir": "Preço a combinar"
+  },
+  "tituloPestana": {
+    "avisoLegal": "Aviso legal",
+    "acceder": "Entrar",
+    "cuentaEliminada": "Conta excluída",
+    "condiciones": "Termos de Uso",
+    "cookies": "Política de cookies",
+    "cuentaSuspendida": "Conta suspensa",
+    "privacidad": "Política de privacidade"
   }
 }

@@ -1625,5 +1625,9 @@
       "completaIdentidad": "Completa primeiro a identidade do clube.",
       "sinAccionesEmpresa": "Ainda não há ações registadas para essa empresa."
     }
+  },
+  "idiomaDelPais": {
+    "texto": "Este painel também está disponível em português de Portugal.",
+    "boton": "Mudar para português"
   }
 }

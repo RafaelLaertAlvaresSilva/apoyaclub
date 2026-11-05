@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { DatosDelTitular } from "@/components/DatosDelTitular";
 import { TITULAR } from "@/lib/titular";
 import { Link } from "@/i18n/navigation";
@@ -5,9 +6,10 @@ import type { Metadata } from "next";
 import { LegalPageShell } from "@/components/LegalPageShell";
 import { LEGAL_VERSIONS, formatearFechaLegal } from "@/lib/legal";
 
-export const metadata: Metadata = {
-  title: "Política de privacidad",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  // La pestaña, en el idioma de la página (antes, siempre en español).
+  return { title: (await getTranslations("common.tituloPestana"))("privacidad") };
+}
 
 /**
  * Política de privacidad (Fase 11). PLANTILLA pendiente de revisión

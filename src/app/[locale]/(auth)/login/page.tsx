@@ -1,4 +1,4 @@
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { redirect } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -7,9 +7,10 @@ import { LoginForm } from "./LoginForm";
 
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Acceder",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  // La pestaña, en el idioma de la página (antes, siempre en español).
+  return { title: (await getTranslations("common.tituloPestana"))("acceder") };
+}
 
 /**
  * Quien ya tiene la sesión abierta no ve un formulario de acceso: se le

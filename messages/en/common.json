@@ -263,5 +263,14 @@
   "precio": {
     "necesidad": "In exchange for visibility",
     "aConvenir": "Price on request"
+  },
+  "tituloPestana": {
+    "avisoLegal": "Legal notice",
+    "acceder": "Log in",
+    "cuentaEliminada": "Account deleted",
+    "condiciones": "Terms of use",
+    "cookies": "Cookie policy",
+    "cuentaSuspendida": "Account suspended",
+    "privacidad": "Privacy policy"
   }
 }
