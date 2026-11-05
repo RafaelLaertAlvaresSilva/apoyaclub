@@ -3,7 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { CATEGORIAS_IDEA, TOTAL_DE_IDEAS } from "@/lib/catalogo-ideas";
-import { PLANES_EN_ORDEN, precioFormateado, type Moneda } from "@/lib/planes";
+import { llevaIva, PLANES_EN_ORDEN, precioFormateado, type Moneda } from "@/lib/planes";
 import { LOCALE_CONFIG } from "@/config/locales";
 import type { AppLocale } from "@/i18n/routing";
 import { FormularioContacto } from "./FormularioContacto";
@@ -2275,6 +2275,9 @@ export async function SeccionPrecio({ compacta = false }: { compacta?: boolean }
                   {plan.intervalo === "mes" ? t("planes.alMes") : t("planes.alAnio")}
                 </span>
               </p>
+              {/* Debajo de cada precio, que se vea sin buscarlo (pedido por
+                  Rafael). En reales (Brasil) no hay IVA. */}
+              {llevaIva(moneda) && <p className="mt-1 text-sm text-zinc-500">{t("precio.ivaIncluido")}</p>}
 
               <p className="mt-2 text-base font-medium text-zinc-800">{t(`${textosPlan}.${idPlan}.reclamo`)}</p>
               <p className="mt-2 text-base leading-relaxed text-zinc-600">{t(`${textosPlan}.${idPlan}.detalle`)}</p>

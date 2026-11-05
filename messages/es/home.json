@@ -494,7 +494,8 @@
         "titulo": "Sin ataduras",
         "texto": "Primer mes gratis · Sin permanencia · Cancela cuando quieras · IVA incluido · Comisión del 0 %"
       }
-    ]
+    ],
+    "ivaIncluido": "IVA incluido"
   },
   "faq": {
     "titulo": "Preguntas frecuentes",

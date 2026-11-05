@@ -494,7 +494,8 @@
         "titulo": "Sem amarras",
         "texto": "Primeiro mês grátis · Sem fidelidade · Cancele quando quiser · Comissão de 0 %"
       }
-    ]
+    ],
+    "ivaIncluido": "Impostos inclusos"
   },
   "faq": {
     "titulo": "Perguntas frequentes",

@@ -494,7 +494,8 @@
         "titulo": "No strings attached",
         "texto": "First month free · No commitment · Cancel whenever you like · VAT included · 0% commission"
       }
-    ]
+    ],
+    "ivaIncluido": "VAT included"
   },
   "faq": {
     "titulo": "Frequently asked questions",
