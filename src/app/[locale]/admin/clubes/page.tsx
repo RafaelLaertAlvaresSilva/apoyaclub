@@ -10,6 +10,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { accesoAdminDeLaPagina } from "@/lib/acceso-admin-servidor";
 import { BANDERA_DEL_PAIS, PAISES, esPaisValido } from "@/lib/paises";
 import { SITE_URL } from "@/lib/site";
+import { convieneEscribirle } from "@/lib/avance-club";
 import { AdminNav } from "../components/AdminNav";
 import { FilaClub } from "./components/FilaClub";
 import type { ClubAdminRow } from "./types";
@@ -56,9 +57,10 @@ const AVISOS: Record<string, { bien: boolean }> = {
 export default async function AdminClubesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ aviso?: string; buscar?: string; pais?: string }>;
+  searchParams: Promise<{ aviso?: string; buscar?: string; pais?: string; atascados?: string }>;
 }) {
-  const { aviso, buscar, pais: paisPedido } = await searchParams;
+  const { aviso, buscar, pais: paisPedido, atascados } = await searchParams;
+  const soloAtascados = atascados === "1";
   const busqueda = (buscar ?? "").trim().toLowerCase();
   const t = await getTranslations("admin.clubes");
   const tPais = await getTranslations("admin.paises");
@@ -95,7 +97,31 @@ export default async function AdminClubesPage({
       : { data: [] as ClubRowConAdmin[] };
 
   const clubesPorId = new Map((filasClubes ?? []).map((fila) => [fila.id, fila]));
-  const actividad = await obtenerActividadPorClub(ids);
+  const [actividad, { data: oportunidades }, { data: dossiers }] = await Promise.all([
+    obtenerActividadPorClub(ids),
+    // Para el avance de cada club: sus oportunidades publicadas y si ha
+    // preparado el dossier.
+    ids.length > 0
+      ? admin
+          .from("opportunities")
+          .select("club_id, idea_id")
+          .in("club_id", ids)
+          .eq("status", "available")
+          .is("archived_at", null)
+          .returns<{ club_id: string; idea_id: string | null }[]>()
+      : Promise.resolve({ data: [] as { club_id: string; idea_id: string | null }[] }),
+    ids.length > 0
+      ? admin.from("club_dossiers").select("id, share_enabled").in("id", ids).returns<{ id: string; share_enabled: boolean }[]>()
+      : Promise.resolve({ data: [] as { id: string; share_enabled: boolean }[] }),
+  ]);
+  const oportunidadesPorClub = new Map<string, { total: number; generadas: number }>();
+  for (const oportunidad of oportunidades ?? []) {
+    const cuenta = oportunidadesPorClub.get(oportunidad.club_id) ?? { total: 0, generadas: 0 };
+    cuenta.total += 1;
+    if (oportunidad.idea_id) cuenta.generadas += 1;
+    oportunidadesPorClub.set(oportunidad.club_id, cuenta);
+  }
+  const dossierPorClub = new Map((dossiers ?? []).map((dossier) => [dossier.id, dossier.share_enabled]));
 
   const filas: ClubAdminRow[] = usuarios
     .map((usuario) => {
@@ -123,6 +149,15 @@ export default async function AdminClubesPage({
         origenCampana: usuario.origenCampana,
         pais: usuario.pais,
         traidoPor: usuario.origenCampana ? (representantePorCodigo.get(usuario.origenCampana) ?? null) : null,
+        avance: {
+          correoConfirmado: usuario.correoConfirmado,
+          ficha: perfil?.profileScore ?? 0,
+          oportunidades: oportunidadesPorClub.get(usuario.id)?.total ?? 0,
+          generadas: oportunidadesPorClub.get(usuario.id)?.generadas ?? 0,
+          dossier: dossierPorClub.has(usuario.id),
+          enlaceDossier: dossierPorClub.get(usuario.id) === true,
+          ultimoAcceso: usuario.ultimoAcceso,
+        },
         visitas: actividad.get(usuario.id)?.visitas ?? 0,
         empresas: actividad.get(usuario.id)?.empresas ?? 0,
         contactos: actividad.get(usuario.id)?.contactos ?? 0,
@@ -133,13 +168,17 @@ export default async function AdminClubesPage({
   // Filtro por nombre, localidad o correo. Va por la dirección
   // (`?buscar=`) y no con JavaScript: así el resultado se puede
   // guardar en favoritos y recargar, y funciona igual en el móvil.
-  const visibles = busqueda
+  const porEscribir = filas.filter((fila) => !fila.suspended && convieneEscribirle(fila.avance));
+  const visiblesPorTexto = busqueda
     ? filas.filter((fila) =>
         [fila.name, fila.city, fila.email, fila.contactoNombre, fila.telefono].some((campo) =>
           (campo ?? "").toLowerCase().includes(busqueda),
         ),
       )
     : filas;
+  // "Los que conviene escribir": les falta algún paso y llevan una semana
+  // sin entrar (o no han entrado nunca).
+  const visibles = soloAtascados ? visiblesPorTexto.filter((fila) => porEscribir.includes(fila)) : visiblesPorTexto;
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 bg-zinc-50 px-4 sm:px-6 py-8">
@@ -173,6 +212,28 @@ export default async function AdminClubesPage({
           <p className="mt-1 text-xs text-zinc-500">
             {t("tuEnlaceTexto")}
           </p>
+        </div>
+      )}
+
+      {/* Los clubes que se han atascado: a quién escribir hoy. */}
+      {porEscribir.length > 0 && (
+        <div className="flex flex-wrap items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+          <p className="flex-1">
+            <span className="font-semibold">{t("avance.porEscribir", { n: porEscribir.length })}</span>{" "}
+            {t("avance.porEscribirTexto")}
+          </p>
+          {soloAtascados ? (
+            <Link href="/admin/clubes" className="font-medium text-amber-900 underline">
+              {t("verTodos")}
+            </Link>
+          ) : (
+            <Link
+              href={{ pathname: "/admin/clubes", query: { atascados: "1", ...(paisFiltro && esAdministrador ? { pais: paisFiltro } : {}) } }}
+              className="rounded-lg bg-aviso px-3 py-1.5 font-medium text-sobre-aviso hover:opacity-90"
+            >
+              {t("avance.verlos")}
+            </Link>
+          )}
         </div>
       )}
 
@@ -251,7 +312,7 @@ export default async function AdminClubesPage({
               <tr>
                 <th className="px-4 py-3 font-medium">{t("club")}</th>
                 <th className="px-4 py-3 font-medium">{t("alta")}</th>
-                <th className="px-4 py-3 font-medium">{t("perfil")}</th>
+                <th className="px-4 py-3 font-medium">{t("avance.columna")}</th>
                 <th className="px-4 py-3 font-medium">{t("actividad90")}</th>
                 <th className="px-4 py-3 font-medium">{t("suscripcion")}</th>
                 <th className="px-4 py-3 font-medium">{t("estado")}</th>

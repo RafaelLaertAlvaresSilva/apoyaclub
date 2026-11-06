@@ -7,7 +7,8 @@ import { redirect } from "@/i18n/navigation";
 import { mensajeErrorAuth } from "@/lib/auth-errors";
 import { registrarConsentimiento } from "@/lib/consent";
 import { CONSENT_TYPES, LEGAL_VERSIONS } from "@/lib/legal";
-import { esPaisValido, paisDelIdioma } from "@/lib/paises";
+import { avisarAlEquipo } from "@/lib/avisos-equipo";
+import { esPaisValido, NOMBRE_DEL_PAIS, paisDelIdioma } from "@/lib/paises";
 import { origenDeCampana, plazasPilotoLibres } from "@/lib/piloto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -92,6 +93,21 @@ export async function registrarClub(
       // admin porque, con la confirmación de email activada, todavía
       // no hay sesión (RLS bloquearía el insert con el cliente normal).
       await registrarConsentimiento(admin, data.user.id, CONSENT_TYPES.termsAndPrivacy, LEGAL_VERSIONS.terms);
+      // Aviso a info@. Solo si la cuenta es nueva: con un correo ya
+      // registrado, Supabase devuelve un usuario sin identidades.
+      if ((data.user.identities?.length ?? 0) > 0) {
+        await avisarAlEquipo({
+          asunto: `🆕 Nuevo club: ${nombre}`,
+          lineas: [
+            `Club: ${nombre}`,
+            `Correo: ${email}`,
+            `País: ${NOMBRE_DEL_PAIS[pais]} · web en /${locale}`,
+            piloto ? "Con los 6 meses gratis (programa piloto)." : "Con el mes de prueba normal.",
+            origen ? `Viene de la campaña: ${origen}` : null,
+            "Todavía tiene que confirmar el correo.",
+          ],
+        });
+      }
     } catch {
       return {
         error:

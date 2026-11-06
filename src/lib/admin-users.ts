@@ -6,6 +6,10 @@ export type UsuarioPorRol = {
   id: string;
   email: string | null;
   createdAt: string;
+  /** Si ha confirmado el correo (sin eso no puede entrar en su panel). */
+  correoConfirmado: boolean;
+  /** La última vez que entró, o null si nunca. */
+  ultimoAcceso: string | null;
   /** Se apuntó desde la página del piloto (migración 0057). */
   piloto: boolean;
   /** De qué anuncio de la campaña llegó (`?a=A`), si llegó de uno. */
@@ -45,6 +49,8 @@ export async function obtenerUsuariosPorRol(rol: Role): Promise<UsuarioPorRol[]>
           id: usuario.id,
           email: usuario.email ?? null,
           createdAt: usuario.created_at,
+          correoConfirmado: Boolean(usuario.email_confirmed_at),
+          ultimoAcceso: usuario.last_sign_in_at ?? null,
           piloto: usuario.app_metadata?.piloto === true,
           origenCampana:
             typeof usuario.app_metadata?.origen_campana === "string" ? usuario.app_metadata.origen_campana : null,

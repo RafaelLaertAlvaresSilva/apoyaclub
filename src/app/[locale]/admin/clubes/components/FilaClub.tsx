@@ -17,6 +17,7 @@ import {
 } from "../actions";
 import type { ClubAdminRow } from "../types";
 import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
+import { AvanceDelClub } from "./AvanceDelClub";
 
 
 const ESTILO_SUSCRIPCION: Record<Exclude<SubscriptionStatus, null>, string> = {
@@ -120,7 +121,9 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
       <td className="whitespace-nowrap px-4 py-3 text-zinc-600">
         {formatoFecha.format(new Date(fila.createdAt))}
       </td>
-      <td className="px-4 py-3 text-zinc-600">{fila.profileCompletion}%</td>
+      <td className="px-4 py-3 text-xs text-zinc-600">
+        <AvanceDelClub avance={fila.avance} />
+      </td>
       <td className="whitespace-nowrap px-4 py-3 text-xs text-zinc-600">
         <p className="tabular-nums">
           {tf("visitas", { n: fila.visitas })}
@@ -316,3 +319,4 @@ function BotonDePlazo({ plazo, children }: { plazo: string; children: React.Reac
     </button>
   );
 }
+

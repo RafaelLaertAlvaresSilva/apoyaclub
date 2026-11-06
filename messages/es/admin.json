@@ -72,6 +72,29 @@
       "whatsapp": "Escribir por WhatsApp",
       "sinTelefono": "Sin teléfono en su perfil",
       "pasarASeisMesesGratis": "Pasar a 6 meses gratis"
+    },
+    "avance": {
+      "columna": "Avance",
+      "pasos": {
+        "correo": "Correo confirmado",
+        "ficha": "Ficha",
+        "oportunidades": "Oportunidades",
+        "dossier": "Dossier"
+      },
+      "generadas": "{n} generadas",
+      "enlaceActivo": "enlace activo",
+      "nuncaHaEntrado": "Nunca ha entrado",
+      "entroHoy": "Ha entrado hoy",
+      "ultimoAcceso": "Entró hace {dias} {dias, plural, one {día} other {días}}",
+      "siguiente": {
+        "correo": "Falta: confirmar el correo (mira si le llegó o si está en spam)",
+        "ficha": "Falta: completar la ficha (logo, fotos, equipos)",
+        "oportunidades": "Falta: publicar oportunidades (botón «Generar mis oportunidades»)",
+        "dossier": "Falta: preparar y descargar el dossier"
+      },
+      "porEscribir": "{n, plural, one {# club se ha atascado.} other {# clubes se han atascado.}}",
+      "porEscribirTexto": "Les falta algún paso y llevan una semana sin entrar, o no han entrado nunca. Es buen momento para escribirles.",
+      "verlos": "Ver a quién escribir"
     }
   },
   "empresas": {

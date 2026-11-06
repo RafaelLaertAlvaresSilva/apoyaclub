@@ -1,3 +1,4 @@
+import type { AvanceClub } from "@/lib/avance-club";
 import type { Pais } from "@/lib/paises";
 import type { SubscriptionStatus } from "@/lib/subscription-mappers";
 
@@ -29,6 +30,8 @@ export type ClubAdminRow = {
   pais: Pais;
   /** Si llegó por el enlace propio de un representante, su correo. */
   traidoPor: string | null;
+  /** Sus primeros pasos: correo, ficha, oportunidades, dossier y último acceso. */
+  avance: AvanceClub;
   /** Actividad de los últimos 90 días (migración 0022). */
   visitas: number;
   empresas: number;

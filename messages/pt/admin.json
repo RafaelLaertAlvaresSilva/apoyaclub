@@ -87,6 +87,29 @@
       "whatsapp": "Escrever por WhatsApp",
       "sinTelefono": "Sem telefone no perfil",
       "pasarASeisMesesGratis": "Passar a 6 meses grátis"
+    },
+    "avance": {
+      "columna": "Progresso",
+      "pasos": {
+        "correo": "E-mail confirmado",
+        "ficha": "Ficha",
+        "oportunidades": "Oportunidades",
+        "dossier": "Dossiê"
+      },
+      "generadas": "{n} geradas",
+      "enlaceActivo": "link ativo",
+      "nuncaHaEntrado": "Nunca entrou",
+      "entroHoy": "Entrou hoje",
+      "ultimoAcceso": "Entrou há {dias} {dias, plural, one {dia} other {dias}}",
+      "siguiente": {
+        "correo": "Falta: confirmar o e-mail (vê se lhe chegou ou se está no spam)",
+        "ficha": "Falta: completar a ficha (logótipo, fotos, equipas)",
+        "oportunidades": "Falta: publicar oportunidades (botão «Gerar as minhas oportunidades»)",
+        "dossier": "Falta: preparar e descarregar o dossiê"
+      },
+      "porEscribir": "{n, plural, one {# clube ficou parado.} other {# clubes ficaram parados.}}",
+      "porEscribirTexto": "Falta-lhes algum passo e não entram há uma semana, ou nunca entraram. É boa altura para lhes escrever.",
+      "verlos": "Ver a quem escrever"
     }
   },
   "comisiones": {

@@ -1,3 +1,10 @@
+import {
+  avisarAlEquipo,
+  fechaDeStripe,
+  importeDeStripe,
+  queHaCambiado,
+  type CambioDeSuscripcion,
+} from "@/lib/avisos-equipo";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { planDelPriceId, type PlanId } from "@/lib/planes";
 import { NextResponse } from "next/server";
@@ -65,6 +72,7 @@ export async function POST(request: Request) {
         await vigilarPagoBrasil(stripe, subscriptionId);
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
         await guardarSuscripcionPorClubId(admin, clubId, customerId, subscription);
+        await avisarDeLaSuscripcion(admin, { customerId, subscription, que: "plan-elegido" });
         break;
       }
 
@@ -81,6 +89,11 @@ export async function POST(request: Request) {
           }
         }
         await guardarSuscripcionPorCustomerId(admin, customerId, subscription);
+        if (evento.type === "customer.subscription.updated") {
+          const antes = (evento.data.previous_attributes ?? {}) as Partial<Stripe.Subscription>;
+          const que = queHaCambiado(antes, subscription);
+          if (que) await avisarDeLaSuscripcion(admin, { customerId, subscription, que });
+        }
         break;
       }
 
@@ -100,6 +113,7 @@ export async function POST(request: Request) {
         if (error) {
           avisarDeFallo("stripe-webhook", "No se ha podido marcar la suscripción como cancelada", error);
         }
+        await avisarDeLaSuscripcion(admin, { customerId, subscription, que: "terminada" });
         break;
       }
 
@@ -201,5 +215,66 @@ async function guardarSuscripcionPorCustomerId(
 
   if (error) {
     avisarDeFallo("stripe-webhook", "No se ha podido guardar la suscripción (por customer_id)", error);
+  }
+}
+
+// ---------------------------------------------------------------------
+// Avisos al equipo (pedido por Rafael el 6-11-2026): un correo a info@
+// cuando un club elige plan, paga por primera vez, falla un cobro, se
+// recupera, cancela o se le acaba. Ver `lib/avisos-equipo.ts`.
+// ---------------------------------------------------------------------
+
+const ASUNTO: Record<CambioDeSuscripcion, string> = {
+  "plan-elegido": "💳 Ha elegido plan",
+  "primer-cobro": "🎉 Primer cobro",
+  "cobro-fallido": "⚠️ Cobro fallido",
+  "cobro-recuperado": "✅ Cobro recuperado",
+  cancelada: "👋 Ha cancelado",
+  terminada: "❌ Suscripción terminada",
+};
+
+async function avisarDeLaSuscripcion(
+  admin: ReturnType<typeof createAdminClient>,
+  {
+    customerId,
+    subscription,
+    que,
+  }: { customerId: string; subscription: Stripe.Subscription; que: CambioDeSuscripcion },
+) {
+  try {
+    const { data: club } = await admin
+      .from("clubs")
+      .select("name, city")
+      .eq("stripe_customer_id", customerId)
+      .maybeSingle<{ name: string | null; city: string | null }>();
+    const nombre = club?.name ?? "Un club";
+    const precio = subscription.items.data[0]?.price;
+    const importe = importeDeStripe(precio?.unit_amount, precio?.currency, precio?.recurring?.interval);
+    const plan = planDeLaSuscripcion(subscription);
+    const finDePrueba = fechaDeStripe(subscription.trial_end);
+    const finDePeriodo = fechaDeStripe(obtenerFinPeriodoActual(subscription));
+
+    await avisarAlEquipo({
+      asunto: `${ASUNTO[que]}: ${nombre}`,
+      lineas: [
+        `Club: ${nombre}${club?.city ? ` (${club.city})` : ""}`,
+        plan || importe ? `Plan: ${[plan, importe].filter(Boolean).join(" · ")}` : null,
+        que === "plan-elegido" && subscription.status === "trialing" && finDePrueba
+          ? `Ha dejado su tarjeta. Primer cobro el ${finDePrueba}, al acabar la prueba gratis.`
+          : null,
+        que === "plan-elegido" && subscription.status === "active" ? "Ya ha pagado el primer recibo." : null,
+        que === "primer-cobro" ? "Se le ha cobrado el primer recibo: ya es cliente de pago." : null,
+        que === "cobro-fallido"
+          ? "Stripe no ha podido cobrarle. Lo reintentará solo; conviene escribirle por si tiene que cambiar la tarjeta."
+          : null,
+        que === "cobro-recuperado" ? "El cobro pendiente ya se ha pagado." : null,
+        que === "cancelada" && finDePeriodo ? `Ha cancelado. Sigue teniendo acceso hasta el ${finDePeriodo}.` : null,
+        que === "terminada" ? "Su suscripción ha terminado: su página ya no se ve." : null,
+        `Estado en Stripe: ${subscription.status}`,
+      ],
+    });
+  } catch (excepcion) {
+    // Un aviso que no sale nunca puede hacer fallar el webhook.
+    console.warn("[stripe-webhook] No se ha podido avisar al equipo", excepcion);
   }
 }

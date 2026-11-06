@@ -4,6 +4,8 @@ import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { redirect } from "@/i18n/navigation";
+import { avisarAlEquipo } from "@/lib/avisos-equipo";
+import { SITE_URL } from "@/lib/site";
 import { mensajeErrorAuth } from "@/lib/auth-errors";
 import { registrarConsentimiento } from "@/lib/consent";
 import { CONSENT_TYPES, LEGAL_VERSIONS } from "@/lib/legal";
@@ -82,6 +84,13 @@ export async function registrarEmpresa(
         CONSENT_TYPES.termsAndPrivacy,
         LEGAL_VERSIONS.terms,
       );
+      if ((data.user.identities?.length ?? 0) > 0) {
+        await avisarAlEquipo({
+          asunto: `🏢 Nueva empresa: ${nombre}`,
+          lineas: [`Empresa: ${nombre}`, `Correo: ${email}`, `Web en /${locale}`, "Todavía tiene que confirmar el correo."],
+          enlace: { texto: "Abrir Administración → Empresas", url: `${SITE_URL}/es/admin/empresas` },
+        });
+      }
     } catch {
       return {
         error: tValidacion("problemaTecnico"),

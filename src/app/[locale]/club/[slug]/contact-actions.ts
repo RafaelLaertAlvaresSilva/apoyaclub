@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { enviarEmailNuevaSolicitudContacto } from "@/lib/email/resend";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { consumirLimite, ipDelVisitante, pareceBot } from "@/lib/rate-limit";
+import { avisarAlEquipo } from "@/lib/avisos-equipo";
 import { SITE_URL } from "@/lib/site";
 import { idiomaDe } from "@/lib/idioma-usuario";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -187,6 +188,20 @@ async function notificarClubPorEmail({
     } else {
       console.warn(`[solicitud] El aviso al club NO ha salido: ${resultado.error}`);
     }
+
+    // Y a info@: una empresa escribiendo a un club es lo más importante
+    // que pasa en la plataforma, y conviene ver si el club contesta.
+    await avisarAlEquipo({
+      asunto: `📩 Una empresa escribe a ${clubRow?.name ?? "un club"}`,
+      lineas: [
+        `Club: ${clubRow?.name ?? clubId}`,
+        `Empresa: ${empresa || "(no lo ha dicho)"}`,
+        `Persona: ${nombre} · ${correo}${telefono ? ` · ${telefono}` : ""}`,
+        opportunityTitle ? `Sobre: ${opportunityTitle}` : "Sobre: el club en general",
+        `Mensaje: ${mensaje.length > 400 ? `${mensaje.slice(0, 400)}…` : mensaje}`,
+        resultado.ok ? "Al club ya le ha llegado su aviso." : "OJO: el aviso al club NO ha salido. Conviene avisarle a mano.",
+      ],
+    });
   } catch (excepcion) {
     avisarDeFallo("email", "No se ha podido notificar al club por email", excepcion);
   }
