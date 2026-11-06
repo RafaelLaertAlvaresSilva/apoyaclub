@@ -665,7 +665,7 @@
     "pasos": [
       {
         "titulo": "Veja o que há perto",
-        "texto": "Você filtra por província, esporte, público e quanto quer investir. Cada oportunidade diz o que você recebe, do que o clube se encarrega e com o que você contribui."
+        "texto": "Você filtra por estado, esporte, público e quanto quer investir. Cada oportunidade diz o que você recebe, do que o clube se encarrega e com o que você contribui."
       },
       {
         "titulo": "Escreva para o clube",
@@ -709,7 +709,7 @@
         },
         {
           "titulo": "Avisos por e-mail",
-          "texto": "Quando um clube da sua província pede algo que você oferece, você recebe um aviso. No máximo um por dia, e dá para desligar quando quiser."
+          "texto": "Quando um clube do seu estado pede algo que você oferece, você recebe um aviso. No máximo um por dia, e dá para desligar quando quiser."
         },
         {
           "titulo": "Salve os seus favoritos",
@@ -846,7 +846,7 @@
     "etiquetaPortada": "Vídeo de apresentação do ApoyaClub (em espanhol): o que é, como descobrir oportunidades de patrocínio e como gerenciar os seus patrocinadores.",
     "etiquetaParaClubes": "Vídeo de apresentação para clubes (em espanhol): o que é o ApoyaClub, as mais de 100 ideias de patrocínio, as ferramentas para gerenciar tarefas e acordos, e como comprovar resultados aos seus patrocinadores.",
     "etiquetaPiloto": "Vídeo da campanha (em espanhol): seis meses grátis para os primeiros 20 clubes e, depois, o preço Fundador de 199 € por ano para sempre.",
-    "etiquetaParaEmpresas": "Vídeo de apresentação para empresas e colaboradores (em espanhol): que oportunidades de patrocínio você pode ver sem se cadastrar, como filtrá-las por província, esporte e orçamento, e como contatar o clube diretamente.",
+    "etiquetaParaEmpresas": "Vídeo de apresentação para empresas e colaboradores (em espanhol): que oportunidades de patrocínio você pode ver sem se cadastrar, como filtrá-las por estado, esporte e orçamento, e como contatar o clube diretamente.",
     "irAUnMomento": "Ir para um momento do vídeo",
     "retroceder": "Voltar 10 segundos",
     "avanzar": "Avançar 10 segundos",
