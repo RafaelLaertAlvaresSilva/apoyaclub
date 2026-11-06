@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Header } from "@/components/Header";
 import { Link } from "@/i18n/navigation";
 import { CATEGORIAS_NECESIDAD, leerCategoriaNecesidad } from "@/lib/opportunities";
 import { etiquetador } from "@/lib/etiquetas-traducidas";
 import { buscarOportunidades, obtenerProvinciasDisponibles } from "@/lib/search";
+import { paisDeBusquedaDelIdioma, type PaisBusqueda } from "@/lib/search-types";
+import { BANDERA_DEL_PAIS, PAISES } from "@/lib/paises";
 
 /**
  * Lo que los clubes necesitan, para una empresa.
@@ -49,13 +51,20 @@ export default async function PaginaServicios({
   const categoriaParam = unParametro(params.categoria);
   const categoria = categoriaParam ? (leerCategoriaNecesidad(categoriaParam) ?? undefined) : undefined;
   const provincia = unParametro(params.provincia);
+  // Como en el buscador: primero el país de la web por la que se entra.
+  const paisPedido = unParametro(params.pais);
+  const pais: PaisBusqueda =
+    paisPedido === "ES" || paisPedido === "PT" || paisPedido === "BR" || paisPedido === "todos"
+      ? paisPedido
+      : paisDeBusquedaDelIdioma(await getLocale());
+  const tPaises = await getTranslations("buscar.filtros");
 
   const [pagina, provincias] = await Promise.all([
     buscarOportunidades(
-      { busca: "necesidades", necesidad: categoria, provincia, orden: "novedad" },
+      { busca: "necesidades", necesidad: categoria, provincia, orden: "novedad", pais },
       { offset: 0, limite: 100 },
     ),
-    obtenerProvinciasDisponibles(),
+    obtenerProvinciasDisponibles(pais),
   ]);
   const servicios = pagina.resultados;
 
@@ -93,13 +102,25 @@ export default async function PaginaServicios({
           </label>
 
           <label className="text-sm">
+            <span className="mb-1 block font-medium text-zinc-700">{tPaises("pais")}</span>
+            <select name="pais" defaultValue={pais} className="rounded-lg border border-zinc-300 px-3 py-2 text-sm">
+              {PAISES.map((codigo) => (
+                <option key={codigo} value={codigo}>
+                  {BANDERA_DEL_PAIS[codigo]} {tPaises(`paises.${codigo}`)}
+                </option>
+              ))}
+              <option value="todos">{tPaises("paises.todos")}</option>
+            </select>
+          </label>
+
+          <label className="text-sm">
             <span className="mb-1 block font-medium text-zinc-700">{t("filtroProvincia")}</span>
             <select
               name="provincia"
               defaultValue={provincia ?? ""}
               className="rounded-lg border border-zinc-300 px-3 py-2 text-sm"
             >
-              <option value="">{t("todaEspana")}</option>
+              <option value="">{tPaises("todaEspana")}</option>
               {provincias.map((nombre) => (
                 <option key={nombre} value={nombre}>
                   {nombre}

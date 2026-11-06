@@ -673,3 +673,52 @@ export async function enviarEmailNecesidadesQueEncajan({
     }),
   });
 }
+
+export type PasoDelClubEmail = "oportunidades" | "dossier" | "queFalta";
+
+/**
+ * Los correos que guían a un club nuevo (pedido por Rafael el
+ * 6-11-2026), uno por paso y una sola vez cada uno (`lib/emails-ciclo.ts`
+ * decide cuándo):
+ *
+ *   - "oportunidades": a los 2 días, si aún no ha publicado ninguna;
+ *   - "dossier": a los 5, si ya tiene oportunidades pero no ha preparado
+ *     el dossier, con la búsqueda activa (mandarlo a cinco conocidos);
+ *   - "queFalta": a los 12, una pregunta de Rafael. Las respuestas van
+ *     a `CONTACT_EMAIL` (info@).
+ */
+export async function enviarEmailPasoDelClub({
+  clubEmail,
+  clubName,
+  paso,
+  url,
+  idioma,
+}: {
+  clubEmail: string;
+  clubName: string;
+  paso: PasoDelClubEmail;
+  url: string;
+  idioma?: string;
+}): Promise<ResultadoEnvioEmail> {
+  const t = await traductorEmails(idioma);
+  const club = clubName.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const clave = (texto: string) => `pasosDelClub.${paso}.${texto}`;
+
+  return enviarEmail({
+    to: clubEmail,
+    subject: t(clave("asunto")),
+    // La pregunta de Rafael se contesta a info@, que es quien la lee.
+    replyTo: paso === "queFalta" ? process.env.CONTACT_EMAIL : undefined,
+    html: plantilla({
+      color: "#0f766e",
+      eyebrow: t(clave("eyebrow")),
+      titulo: t(clave("titulo"), { club }),
+      cuerpo: [
+        `<p style="margin:0 0 12px;">${t(clave("texto"))}</p>`,
+        `<p style="margin:0 0 24px;">${t(clave("texto2"))}</p>`,
+      ].join(""),
+      botonTexto: t(clave("boton")),
+      botonUrl: url,
+    }),
+  });
+}

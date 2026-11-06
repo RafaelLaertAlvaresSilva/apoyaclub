@@ -9,6 +9,8 @@ import {
   enviarEmailBienvenidaEmpresa,
   enviarEmailFichaIncompleta,
   enviarEmailFinDePrueba,
+  enviarEmailPasoDelClub,
+  type PasoDelClubEmail,
   enviarEmailSolicitudSinAbrir,
   type ResultadoEnvioEmail,
 } from "@/lib/email/resend";
@@ -444,4 +446,123 @@ export async function soltarPlazasDeFundadorSinPagar(admin: ClienteAdmin): Promi
   }
 
   return typeof data === "number" ? data : 0;
+}
+
+// ---------------------------------------------------------------------
+// 7. Los pasos del club nuevo (pedido por Rafael el 6-11-2026)
+// ---------------------------------------------------------------------
+
+/** Cuándo toca cada correo, en días desde que el club creó su ficha. */
+export const DIAS_DE_CADA_PASO: Record<PasoDelClubEmail, number> = {
+  oportunidades: 2,
+  dossier: 5,
+  queFalta: 12,
+};
+
+/**
+ * Solo clubes que empezaron hace poco: al publicar esto, a los clubes
+ * que llevan meses no les tiene que llegar de golpe "tus primeras
+ * oportunidades".
+ */
+const DIAS_MAXIMOS_PASOS = 45;
+
+export const KIND_DEL_PASO: Record<PasoDelClubEmail, string> = {
+  oportunidades: "paso_oportunidades",
+  dossier: "paso_dossier",
+  queFalta: "paso_que_falta",
+};
+
+/**
+ * Qué correo le toca hoy a un club, o ninguno. Como mucho uno al día, y
+ * cada uno una sola vez. Puro, para poder probarlo.
+ */
+export function pasoQueToca({
+  dias,
+  oportunidades,
+  dossier,
+  yaMandados,
+}: {
+  dias: number;
+  oportunidades: number;
+  dossier: boolean;
+  yaMandados: Set<PasoDelClubEmail>;
+}): PasoDelClubEmail | null {
+  if (dias > DIAS_MAXIMOS_PASOS) return null;
+  if (dias >= DIAS_DE_CADA_PASO.oportunidades && oportunidades === 0 && !yaMandados.has("oportunidades")) {
+    return "oportunidades";
+  }
+  if (dias >= DIAS_DE_CADA_PASO.dossier && oportunidades > 0 && !dossier && !yaMandados.has("dossier")) {
+    return "dossier";
+  }
+  if (dias >= DIAS_DE_CADA_PASO.queFalta && !yaMandados.has("queFalta")) return "queFalta";
+  return null;
+}
+
+type FilaPaso = { id: string; name: string; created_at: string };
+
+export async function guiarClubesNuevos(admin: ClienteAdmin, ahora = new Date()): Promise<number> {
+  const desde = new Date(ahora.getTime() - DIAS_MAXIMOS_PASOS * 24 * 60 * 60 * 1000).toISOString();
+  const { data, error } = await admin
+    .from("clubs")
+    .select("id, name, created_at")
+    .gte("created_at", desde)
+    .in("subscription_status", ["trialing", "active"])
+    .eq("admin_suspended", false)
+    .returns<FilaPaso[]>();
+
+  if (error) {
+    avisarDeFallo("cron-suscripciones", "No se han podido leer los clubes nuevos", error);
+    return 0;
+  }
+  const clubes = data ?? [];
+  if (clubes.length === 0) return 0;
+  const ids = clubes.map((club) => club.id);
+
+  const [enviados, { data: oportunidades }, { data: dossiers }] = await Promise.all([
+    yaEnviados(admin, Object.values(KIND_DEL_PASO), ids),
+    admin
+      .from("opportunities")
+      .select("club_id")
+      .in("club_id", ids)
+      .eq("status", "available")
+      .is("archived_at", null)
+      .returns<{ club_id: string }[]>(),
+    admin.from("club_dossiers").select("id").in("id", ids).returns<{ id: string }[]>(),
+  ]);
+  const cuantas = new Map<string, number>();
+  for (const fila of oportunidades ?? []) cuantas.set(fila.club_id, (cuantas.get(fila.club_id) ?? 0) + 1);
+  const conDossier = new Set((dossiers ?? []).map((fila) => fila.id));
+
+  let total = 0;
+  for (const club of clubes) {
+    const yaMandados = new Set(
+      (Object.keys(KIND_DEL_PASO) as PasoDelClubEmail[]).filter((paso) =>
+        enviados.has(`${club.id}:${KIND_DEL_PASO[paso]}`),
+      ),
+    );
+    const paso = pasoQueToca({
+      dias: diasDesde(club.created_at, ahora) ?? 0,
+      oportunidades: cuantas.get(club.id) ?? 0,
+      dossier: conDossier.has(club.id),
+      yaMandados,
+    });
+    if (!paso) continue;
+
+    const { data: usuario } = await admin.auth.admin.getUserById(club.id);
+    const email = usuario.user?.email;
+    if (!email) continue;
+    const idioma = idiomaDe(usuario.user);
+    const ruta = paso === "oportunidades" ? "/panel/oportunidades" : paso === "dossier" ? "/panel/dossier" : "/panel";
+
+    const resultado = await enviarEmailPasoDelClub({
+      clubEmail: email,
+      clubName: club.name,
+      paso,
+      url: urlEn(idioma, ruta),
+      idioma,
+    });
+    if (seDaPorEnviado(resultado)) await apuntarEnviado(admin, club.id, KIND_DEL_PASO[paso]);
+    if (resultado.ok) total += 1;
+  }
+  return total;
 }

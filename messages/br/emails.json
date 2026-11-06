@@ -108,5 +108,31 @@
   "comun": {
     "tuClub": "o seu clube",
     "tuEmpresa": "a sua empresa"
+  },
+  "pasosDelClub": {
+    "oportunidades": {
+      "asunto": "Suas primeiras oportunidades, em 2 minutos",
+      "eyebrow": "Próximo passo",
+      "titulo": "{club}, o que vocês podem oferecer a uma empresa?",
+      "texto": "As empresas procuram oportunidades concretas: o que recebem, quanto tempo dura e quanto custa. Enquanto você não tiver nenhuma publicada, o seu clube não aparece na busca.",
+      "texto2": "Para não começar do zero, no seu painel tem o botão «Gerar minhas oportunidades»: você escolhe uma categoria (camisa, redes, categorias de base, eventos…) e a gente propõe várias já escritas com os dados do seu clube. É só revisar e publicar.",
+      "boton": "Gerar minhas oportunidades"
+    },
+    "dossier": {
+      "asunto": "Seu dossiê está pronto para enviar",
+      "eyebrow": "Próximo passo",
+      "titulo": "{club}, agora é hora de mostrar",
+      "texto": "Com as suas oportunidades publicadas, o seu dossiê comercial é gerado sozinho, em PDF e em Word, com as suas fotos, os seus preços e um código QR que leva à sua página.",
+      "texto2": "O que funciona melhor é não esperar que encontrem você: envie para cinco pessoas que você já conhece. Pais e mães de jogadores que têm negócio, os comércios onde vocês sempre vão, amigos que têm empresa. Sempre tem alguém que quer apoiar o clube do filho ou da sua cidade.",
+      "boton": "Baixar meu dossiê"
+    },
+    "queFalta": {
+      "asunto": "O que falta para você aproveitar o ApoyaClub?",
+      "eyebrow": "Uma pergunta rápida",
+      "titulo": "{club}, como está indo?",
+      "texto": "Sou o Rafael, do ApoyaClub. Vocês estão com a gente há quase duas semanas e eu queria saber como está indo: o que foi útil, o que não ficou claro e o que está faltando.",
+      "texto2": "Responda a este e-mail com o que quiser, mesmo que seja uma linha. Sou eu que leio, e isso ajuda muito a melhorar a plataforma.",
+      "boton": "Ir para o meu painel"
+    }
   }
 }

@@ -108,5 +108,31 @@
   "comun": {
     "tuClub": "your club",
     "tuEmpresa": "your business"
+  },
+  "pasosDelClub": {
+    "oportunidades": {
+      "asunto": "Your first opportunities, in 2 minutes",
+      "eyebrow": "Next step",
+      "titulo": "{club}, what can you offer a company?",
+      "texto": "Companies look for concrete opportunities: what they get, how long it lasts and how much it costs. Until you publish one, your club doesn't show up in the search.",
+      "texto2": "So you don't start from scratch, your panel has a «Generate my opportunities» button: pick a category (shirt, social media, youth teams, events…) and we suggest several, already written with your club's details. You just review and publish them.",
+      "boton": "Generate my opportunities"
+    },
+    "dossier": {
+      "asunto": "Your sponsorship pack is ready to send",
+      "eyebrow": "Next step",
+      "titulo": "{club}, now it's time to show it",
+      "texto": "With your opportunities published, your sponsorship pack builds itself, as a PDF and a Word file, with your photos, your prices and a QR code to your page.",
+      "texto2": "What works best is not waiting to be found: send it to five people you already know. Players' parents who run a business, the shops you always go to, friends with a company. There's always someone who wants to support their child's or their town's club.",
+      "boton": "Download my pack"
+    },
+    "queFalta": {
+      "asunto": "What's missing for you to get the most out of ApoyaClub?",
+      "eyebrow": "A quick question",
+      "titulo": "{club}, how's it going?",
+      "texto": "I'm Rafael, from ApoyaClub. You've been with us for almost two weeks and I'd love to know how it's going: what's been useful, what isn't clear and what you're missing.",
+      "texto2": "Just reply to this email with anything, even one line. I read every reply myself, and it helps us a lot to improve the platform.",
+      "boton": "Go to my panel"
+    }
   }
 }

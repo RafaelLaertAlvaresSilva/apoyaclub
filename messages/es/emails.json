@@ -108,5 +108,31 @@
   "comun": {
     "tuClub": "tu club",
     "tuEmpresa": "tu empresa"
+  },
+  "pasosDelClub": {
+    "oportunidades": {
+      "asunto": "Tus primeras oportunidades, en 2 minutos",
+      "eyebrow": "Siguiente paso",
+      "titulo": "{club}, ¿qué podéis ofrecer a una empresa?",
+      "texto": "Las empresas buscan oportunidades concretas: qué reciben, cuánto dura y cuánto cuesta. Mientras no tengas ninguna publicada, tu club no aparece en el buscador.",
+      "texto2": "Para no empezar de cero, en tu panel tienes el botón «Generar mis oportunidades»: eliges una categoría (camiseta, redes, cantera, eventos…) y te proponemos varias ya escritas con los datos de tu club. Solo tienes que revisarlas y publicarlas.",
+      "boton": "Generar mis oportunidades"
+    },
+    "dossier": {
+      "asunto": "Tu dossier está listo para enviar",
+      "eyebrow": "Siguiente paso",
+      "titulo": "{club}, ahora toca enseñarlo",
+      "texto": "Con tus oportunidades publicadas, tu dossier comercial se genera solo, en PDF y en Word, con tus fotos, tus precios y un código QR que lleva a tu página.",
+      "texto2": "Lo que mejor funciona es no esperar a que te encuentren: envíalo a cinco personas que ya conoces. Padres y madres de jugadores con negocio, los comercios a los que vais siempre, amigos con empresa. Siempre hay alguien que quiere colaborar con el club de su hijo o de su pueblo.",
+      "boton": "Descargar mi dossier"
+    },
+    "queFalta": {
+      "asunto": "¿Qué te falta para sacarle partido a ApoyaClub?",
+      "eyebrow": "Una pregunta rápida",
+      "titulo": "{club}, ¿cómo lo llevas?",
+      "texto": "Soy Rafael, de ApoyaClub. Lleváis casi dos semanas con nosotros y me gustaría saber cómo os va: qué os ha resultado útil, qué no se entiende y qué echáis en falta.",
+      "texto2": "Responde a este correo con lo que sea, aunque sea una línea. Lo leo yo, y nos ayuda mucho a mejorar la plataforma.",
+      "boton": "Ir a mi panel"
+    }
   }
 }

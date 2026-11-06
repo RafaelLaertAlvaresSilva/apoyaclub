@@ -6,6 +6,7 @@ import {
   avisarFinDePrueba,
   cerrarPruebasVencidas,
   enviarBienvenidas,
+  guiarClubesNuevos,
   recordarFichaIncompleta,
   recordarSolicitudesSinAbrir,
   soltarPlazasDeFundadorSinPagar,
@@ -148,6 +149,7 @@ export async function GET(request: Request) {
     fichasIncompletas,
     plazasSoltadas,
     avisosAEmpresas,
+    pasosDelClub,
   ] = await Promise.all([
     enviarBienvenidas(admin).catch((excepcion) => {
       avisarDeFallo("cron-suscripciones", "Fallo enviando las bienvenidas", excepcion);
@@ -177,6 +179,10 @@ export async function GET(request: Request) {
       avisarDeFallo("cron-suscripciones", "Fallo avisando a las empresas de lo que les encaja", excepcion);
       return 0;
     }),
+    guiarClubesNuevos(admin).catch((excepcion) => {
+      avisarDeFallo("cron-suscripciones", "Fallo guiando a los clubes nuevos", excepcion);
+      return 0;
+    }),
   ]);
 
   return NextResponse.json({
@@ -189,5 +195,6 @@ export async function GET(request: Request) {
     fichasIncompletas,
     plazasSoltadas,
     avisosAEmpresas,
+    pasosDelClub,
   });
 }

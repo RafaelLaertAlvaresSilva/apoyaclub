@@ -108,5 +108,31 @@
   "comun": {
     "tuClub": "o teu clube",
     "tuEmpresa": "a tua empresa"
+  },
+  "pasosDelClub": {
+    "oportunidades": {
+      "asunto": "As tuas primeiras oportunidades, em 2 minutos",
+      "eyebrow": "Próximo passo",
+      "titulo": "{club}, o que podem oferecer a uma empresa?",
+      "texto": "As empresas procuram oportunidades concretas: o que recebem, quanto tempo dura e quanto custa. Enquanto não tiveres nenhuma publicada, o teu clube não aparece na pesquisa.",
+      "texto2": "Para não começares do zero, no teu painel tens o botão «Gerar as minhas oportunidades»: escolhes uma categoria (camisola, redes, formação, eventos…) e propomos-te várias já escritas com os dados do teu clube. Só tens de as rever e publicar.",
+      "boton": "Gerar as minhas oportunidades"
+    },
+    "dossier": {
+      "asunto": "O teu dossiê está pronto para enviar",
+      "eyebrow": "Próximo passo",
+      "titulo": "{club}, agora é altura de o mostrar",
+      "texto": "Com as tuas oportunidades publicadas, o teu dossiê comercial gera-se sozinho, em PDF e em Word, com as tuas fotos, os teus preços e um código QR que leva à tua página.",
+      "texto2": "O que funciona melhor é não esperar que te encontrem: envia-o a cinco pessoas que já conheces. Pais e mães de jogadores com negócio, as lojas a que vão sempre, amigos com empresa. Há sempre alguém que quer colaborar com o clube do filho ou da sua terra.",
+      "boton": "Descarregar o meu dossiê"
+    },
+    "queFalta": {
+      "asunto": "O que te falta para tirar partido do ApoyaClub?",
+      "eyebrow": "Uma pergunta rápida",
+      "titulo": "{club}, como está a correr?",
+      "texto": "Sou o Rafael, do ApoyaClub. Estão connosco há quase duas semanas e gostava de saber como vos está a correr: o que vos foi útil, o que não se percebe e o que vos faz falta.",
+      "texto2": "Responde a este e-mail com o que quiseres, nem que seja uma linha. Sou eu que leio, e ajuda-nos muito a melhorar a plataforma.",
+      "boton": "Ir para o meu painel"
+    }
   }
 }

@@ -4,6 +4,7 @@ import { enviarEmailNecesidadesQueEncajan } from "@/lib/email/resend";
 import { SITE_URL } from "@/lib/site";
 import { getTranslations } from "next-intl/server";
 import { idiomaDe } from "@/lib/idioma-usuario";
+import { paisDelIdioma } from "@/lib/paises";
 import type { createAdminClient } from "@/lib/supabase/admin";
 import type { CategoriaNecesidad } from "@/lib/types";
 
@@ -46,6 +47,8 @@ type FilaNecesidad = {
   club_name: string;
   club_slug: string;
   club_province: string | null;
+  /** País del club (migración 0060). */
+  club_country?: string | null;
   created_at: string;
 };
 
@@ -56,6 +59,8 @@ export type NecesidadQueEncaja = {
   clubNombre: string;
   clubSlug: string;
   clubProvincia: string | null;
+  /** ES, PT o BR; null si la vista aún no lo trae. */
+  clubPais?: string | null;
 };
 
 /**
@@ -117,7 +122,7 @@ export async function avisarDeNecesidadesQueEncajan(
         .returns<FilaOferta[]>(),
       admin
         .from("opportunity_search_view")
-        .select("opportunity_id, title, need_category, club_name, club_slug, club_province, created_at")
+        .select("*")
         .eq("is_need", true)
         .gte("created_at", desde)
         .returns<FilaNecesidad[]>(),
@@ -153,6 +158,7 @@ export async function avisarDeNecesidadesQueEncajan(
       clubNombre: fila.club_name,
       clubSlug: fila.club_slug,
       clubProvincia: fila.club_province,
+      clubPais: fila.club_country ?? null,
     }));
 
   let enviados = 0;
@@ -161,7 +167,14 @@ export async function avisarDeNecesidadesQueEncajan(
     const categorias = categoriasPorEmpresa.get(empresa.id);
     if (!categorias?.size) continue;
 
-    const encajan = loQueLeEncaja(empresa, categorias, candidatas);
+    // Solo lo de su país (pedido por Rafael el 6-11-2026): una empresa
+    // de Brasil no quiere avisos de clubes de Lanzarote. Su país sale
+    // del idioma de su cuenta (/br → Brasil); en inglés, de todos.
+    const { data: cuenta } = await admin.auth.admin.getUserById(empresa.id);
+    const paisDeLaEmpresa = paisDeEmpresa(idiomaDe(cuenta.user));
+    const delPais = candidatas.filter((necesidad) => mismoPais(necesidad.clubPais, paisDeLaEmpresa));
+
+    const encajan = loQueLeEncaja(empresa, categorias, delPais);
     if (encajan.length === 0) continue;
 
     // Lo que ya se le avisó no se repite. Se mira ahora y no al
@@ -181,7 +194,7 @@ export async function avisarDeNecesidadesQueEncajan(
     const nuevas = encajan.filter((necesidad) => !vistas.has(necesidad.id));
     if (nuevas.length === 0) continue;
 
-    const { data: usuario } = await admin.auth.admin.getUserById(empresa.id);
+    const usuario = cuenta;
     const email = usuario.user?.email;
     if (!email) continue;
 
@@ -231,4 +244,20 @@ export async function avisarDeNecesidadesQueEncajan(
   }
 
   return enviados;
+}
+
+/** El país de una empresa, por el idioma de su cuenta. Null = todos (inglés). */
+export function paisDeEmpresa(idioma: string): "ES" | "PT" | "BR" | null {
+  if (idioma === "en") return null;
+  return paisDelIdioma(idioma);
+}
+
+/**
+ * Si una necesidad es del país de la empresa. Sin país en la necesidad
+ * (la vista sin la migración 0060), se cuenta como de España, que es
+ * de donde son todos los clubes de antes.
+ */
+export function mismoPais(paisDelClub: string | null | undefined, paisDeLaEmpresa: string | null): boolean {
+  if (!paisDeLaEmpresa) return true;
+  return (paisDelClub ?? "ES") === paisDeLaEmpresa;
 }
