@@ -6,7 +6,7 @@ import {
   PERIODOS_OPORTUNIDAD,
   TIPOS_OPORTUNIDAD,
 } from "@/lib/opportunities";
-import type { FiltrosBusqueda, OrdenBusqueda, VistaBusqueda } from "@/lib/search-types";
+import type { FiltrosBusqueda, OrdenBusqueda, PaisBusqueda, VistaBusqueda } from "@/lib/search-types";
 import type { CategoriaNecesidad, TeamLevel } from "@/lib/types";
 
 /**
@@ -59,11 +59,19 @@ function numeroDesdeParametro(valor: string | string[] | undefined): number | un
   return Number.isFinite(numero) && numero >= 0 ? numero : undefined;
 }
 
-export function parametrosAFiltros(params: ParametrosURL): { filtros: FiltrosBusqueda; vista: VistaBusqueda } {
+const PAISES_BUSQUEDA = new Set<PaisBusqueda>(["ES", "PT", "BR", "todos"]);
+
+export function parametrosAFiltros(
+  params: ParametrosURL,
+  /** El país si la URL no dice ninguno: el de la web por la que se entra. */
+  paisPorDefecto: PaisBusqueda = "todos",
+): { filtros: FiltrosBusqueda; vista: VistaBusqueda } {
   const nivel = unParametro(params.nivel);
   const orden = unParametro(params.orden);
+  const pais = unParametro(params.pais);
 
   const filtros: FiltrosBusqueda = {
+    pais: pais && PAISES_BUSQUEDA.has(pais as PaisBusqueda) ? (pais as PaisBusqueda) : paisPorDefecto,
     provincia: unParametro(params.provincia),
     ubicacion: unParametro(params.ubicacion),
     radioKm: numeroDesdeParametro(params.radio),
@@ -101,6 +109,8 @@ export function parametrosAFiltros(params: ParametrosURL): { filtros: FiltrosBus
 export function filtrosAQueryString(filtros: FiltrosBusqueda, vista: VistaBusqueda): string {
   const qs = new URLSearchParams();
 
+  // Siempre, también "todos": sin él, la URL volvería al país de la web.
+  if (filtros.pais) qs.set("pais", filtros.pais);
   if (filtros.provincia) qs.set("provincia", filtros.provincia);
   if (filtros.ubicacion) qs.set("ubicacion", filtros.ubicacion);
   if (filtros.radioKm) qs.set("radio", String(filtros.radioKm));

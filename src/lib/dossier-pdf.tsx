@@ -550,7 +550,7 @@ function GrupoDePatrocinadoresEnPdf({ grupo, textos }: { grupo: GrupoDePatrocina
 
 /** Construye el documento y lo renderiza a un Buffer con el PDF final. */
 export async function generarDossierPdf(datos: DatosDossierPdf, idioma?: string): Promise<Buffer> {
-  const textos = await textosDeDocumento(idioma, "dossier");
+  const textos = await textosDeDocumento(idioma, "dossier", datos.perfil.country);
   const qr = await qrDelDossier(datos.opciones ?? OPCIONES_POR_DEFECTO, {
     ficha: textos.urlDelClub(datos.perfil.slug),
     video: datos.perfil.videoUrl,

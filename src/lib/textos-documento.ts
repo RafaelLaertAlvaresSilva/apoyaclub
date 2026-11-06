@@ -61,6 +61,8 @@ export function localeValido(valor: string | null | undefined): AppLocale {
 export async function textosDeDocumento(
   idioma: string | null | undefined,
   documento: "dossier" | "informe",
+  /** El país del club, para que sus precios salgan en su moneda. */
+  paisDelClub?: string | null,
 ): Promise<TextosDocumento> {
   const locale = localeValido(idioma);
   const config = LOCALE_CONFIG[locale];
@@ -83,7 +85,7 @@ export async function textosDeDocumento(
     tAlcance: (clave, valores) => traducir(`panel.alcance.informe.${clave}`, valores),
     E,
     numero: new Intl.NumberFormat(config.intlLocale),
-    precio: formatoDeValor(locale),
+    precio: formatoDeValor(locale, paisDelClub),
     textosPrecio: { necesidad: traducir("common.precio.necesidad"), aConvenir: traducir("common.precio.aConvenir") },
     fechaLarga: (fecha) => formatoFecha.format(fecha),
     nivelPatrocinador: (etiqueta) => (NIVELES_FIJOS[etiqueta] ? E.nivelPatrocinio(NIVELES_FIJOS[etiqueta]) : etiqueta),

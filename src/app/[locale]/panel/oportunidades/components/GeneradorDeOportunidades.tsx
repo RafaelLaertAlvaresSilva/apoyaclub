@@ -5,6 +5,8 @@ import { useActionState, useMemo, useState } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { BotonEnviar } from "@/components/BotonEnviar";
 import { IconoDeCategoria } from "@/components/IconoDeCategoria";
+import { usePaisDelClub } from "@/components/PaisDelClub";
+import { simboloDeMoneda } from "@/lib/format";
 import type { RequisitoIdea } from "@/lib/catalogo-ideas";
 import {
   categoriasDelGenerador,
@@ -152,6 +154,7 @@ function RevisarPropuestas({
   onCancelar: () => void;
 }) {
   const t = useTranslations("panel.oportunidades.generador");
+  const paisDelClub = usePaisDelClub();
   const [estado, accion] = useActionState<EstadoGuardado, FormData>(publicarPropuestas, null);
   const [marcadas, setMarcadas] = useState<Set<number>>(
     () => new Set(propuestas.flatMap((propuesta, indice) => (propuesta.marcada ? [indice] : []))),
@@ -242,7 +245,7 @@ function RevisarPropuestas({
                       <p className="self-end pb-2 text-sm font-medium text-teal-700">{t("necesidadPrecio")}</p>
                     ) : (
                       <label className="text-xs font-medium text-zinc-600">
-                        {t("campoPrecio")}
+                        {t("campoPrecio")} ({simboloDeMoneda(paisDelClub)})
                         <input
                           name={`value_${indice}`}
                           inputMode="decimal"

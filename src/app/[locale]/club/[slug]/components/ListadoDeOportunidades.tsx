@@ -23,16 +23,19 @@ export function ListadoDeOportunidades({
   slug,
   esNecesidad,
   base = `/club/${slug}`,
+  paisDelClub = null,
 }: {
   oportunidades: Opportunity[];
   slug: string;
   esNecesidad: boolean;
+  /** Para la moneda de los precios (la del club, no la del idioma). */
+  paisDelClub?: string | null;
   /** A dónde llevan los enlaces: la ficha pública, o `/vista-previa`. */
   base?: string;
 }) {
   const t = useTranslations("club.listado");
   const E = etiquetador(useTranslations("common.etiquetas"));
-  const precio = formatoDeValor(useLocale() as AppLocale);
+  const precio = formatoDeValor(useLocale() as AppLocale, paisDelClub);
 
   if (oportunidades.length === 0) {
     return (

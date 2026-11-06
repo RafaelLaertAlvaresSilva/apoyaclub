@@ -38,6 +38,7 @@ const CLUB_VACIO: ClubProfile = {
   topCategoryFemalePhoto: null,
   topCategoryMalePhotoNote: null,
   topCategoryFemalePhotoNote: null,
+  country: "ES",
   competitions: null,
   achievements: null,
   youthTeamsCount: null,

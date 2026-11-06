@@ -45,8 +45,8 @@ export default async function Image({
   const locale = hasLocale(routing.locales, pedido) ? pedido : routing.defaultLocale;
   const t = await getTranslations({ locale, namespace: "club.oportunidadPagina.imagen" });
   const E = etiquetador(await getTranslations({ locale, namespace: "common.etiquetas" }));
-  const precio = formatoDeValor(locale);
   const datos = await obtenerClubPublico(slug);
+  const precio = formatoDeValor(locale, datos?.perfil.country);
   const oportunidad = datos?.oportunidades.find((una) => una.id === id);
 
   const nombreClub = datos?.perfil.name ?? "ApoyaClub";

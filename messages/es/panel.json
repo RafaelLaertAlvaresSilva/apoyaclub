@@ -221,7 +221,7 @@
     "eligeQueNecesitas": "Elige qué necesitas",
     "fotos": "Fotos",
     "fotosAyuda": "Opcional, hasta tres. Lo que de verdad convence a una empresa es ver la pared donde irá su lona, el autobús o la equipación.",
-    "valorEuros": "Valor (€) *",
+    "valorEuros": "Valor ({moneda}) *",
     "queRecibeEmpresa": "Qué recibe la empresa y quién hace qué",
     "queRecibeEmpresaResumen": "El detalle del acuerdo, línea a línea. No hace falta para publicar, pero es lo que hace que la empresa entienda qué le estás ofreciendo.",
     "frecuencia": "Frecuencia",
@@ -1419,7 +1419,8 @@
       "apuntar": "Apuntar un partido"
     },
     "verOpcionesPublico": "Ver las opciones de Público",
-    "ocultarOpcionesPublico": "Ocultar las opciones de Público"
+    "ocultarOpcionesPublico": "Ocultar las opciones de Público",
+    "menuDelPanel": "Menú del panel"
   },
   "recomendaciones": {
     "herramientasTePuedenAyudar": "Herramientas que te pueden ayudar",

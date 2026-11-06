@@ -13,6 +13,7 @@ import type { AppLocale } from "@/i18n/routing";
 import { paisDeLaCuenta, type Pais } from "@/lib/paises";
 import type { Role } from "@/lib/types";
 import { AvisoModoPruebas, AvisoOcultoPorElClub } from "./components/AvisoModoPruebas";
+import { PaisDelClubProvider } from "@/components/PaisDelClub";
 import { AvisoIdiomaDelPais } from "./components/AvisoIdiomaDelPais";
 import { AvisoSuscripcion } from "./components/AvisoSuscripcion";
 import { PanelNav } from "./components/PanelNav";
@@ -68,11 +69,14 @@ export default async function PanelLayout({
   let ocultoPorElClub = false;
   // El idioma de su país, si está usando el panel en otro.
   let idiomaSugerido: AppLocale | null = null;
+  // Su país, para la moneda de sus precios en todo el panel.
+  let paisDelClub: Pais | null = null;
 
   const locale = (await getLocale()) as AppLocale;
 
   if (user && (user.app_metadata?.role as Role | undefined) === "club") {
-    const delPais = IDIOMA_DEL_PAIS[paisDeLaCuenta(user.app_metadata)];
+    paisDelClub = paisDeLaCuenta(user.app_metadata);
+    const delPais = IDIOMA_DEL_PAIS[paisDelClub];
     if (delPais && delPais !== locale) idiomaSugerido = delPais;
     const { data } = await supabase
       .from("clubs")
@@ -131,7 +135,9 @@ export default async function PanelLayout({
           decir cuál es su sección (lo deduce de la dirección). */}
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-4 px-4 pt-6 sm:px-6 lg:flex-row lg:gap-6">
         <PanelNav paginaPublica={paginaPublica} perfilCreado={perfilCreado} plegado={menuPlegado} />
-        <div className="flex min-w-0 flex-1 flex-col">{children}</div>
+        <div className="flex min-w-0 flex-1 flex-col">
+          <PaisDelClubProvider pais={paisDelClub}>{children}</PaisDelClubProvider>
+        </div>
       </div>
     </div>
   );

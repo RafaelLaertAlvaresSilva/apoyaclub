@@ -51,6 +51,7 @@ export default async function Pagina({ params }: { params: Promise<{ slug: strin
           <ListadoDeOportunidades
             oportunidades={delListado}
             slug={perfil.slug}
+            paisDelClub={perfil.country}
             esNecesidad={ES_NECESIDAD}
           />
         </div>

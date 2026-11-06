@@ -1,5 +1,6 @@
 import type { AppLocale } from "@/i18n/routing";
 import { LOCALE_CONFIG } from "@/config/locales";
+import { monedaDelPais } from "@/lib/planes";
 
 /**
  * Fase 14: formato de moneda, fecha y número según el idioma actual, en
@@ -35,17 +36,36 @@ export function formatearFecha(
 }
 
 /**
- * El precio de una oportunidad en el idioma de quien la mira: "200,00 €"
- * en español y portugués, "€200.00" en inglés. Mismas reglas que
+ * El precio de una oportunidad en el idioma de quien la mira ("200,00 €"
+ * en español, "€200.00" en inglés) y en la moneda del club que la
+ * publica. Mismas reglas que
  * `formatoValorOportunidad` (que se queda para el panel, los PDF y el
  * dossier, que de momento solo están en español).
  */
-export function formatoDeValor(locale: AppLocale): Intl.NumberFormat {
+export function formatoDeValor(locale: AppLocale, paisDelClub?: string | null): Intl.NumberFormat {
   return new Intl.NumberFormat(LOCALE_CONFIG[locale].intlLocale, {
     style: "currency",
-    currency: LOCALE_CONFIG[locale].currency.code,
+    currency: monedaDeLosPrecios(paisDelClub),
+    // "R$" también en español o inglés (si no, sale "200,00 BRL").
+    currencyDisplay: "narrowSymbol",
     maximumFractionDigits: 2,
   });
+}
+
+/**
+ * La moneda de los precios de un club: la de SU país, no la del idioma
+ * en que se lee la web (pedido por Rafael el 6-11-2026). Un club de
+ * Brasil pone sus precios en reales y se ven en reales también en /es;
+ * uno de España, en euros también en /br. Sin país (una ficha de antes
+ * de la migración 0060), euros.
+ */
+export function monedaDeLosPrecios(paisDelClub: string | null | undefined): "EUR" | "BRL" {
+  return monedaDelPais(paisDelClub);
+}
+
+/** El símbolo de esa moneda, para etiquetas como "Valor (R$)". */
+export function simboloDeMoneda(paisDelClub: string | null | undefined): string {
+  return monedaDeLosPrecios(paisDelClub) === "BRL" ? "R$" : "€";
 }
 
 /**

@@ -360,7 +360,7 @@ export async function generarDossierWord(datos: DatosDossier, idioma?: string): 
   const { perfil, equipos, patrocinadores, oportunidades, partidos, secciones, nivelesPatrocinadores, emailContacto } =
     datos;
   const opciones = datos.opciones ?? OPCIONES_POR_DEFECTO;
-  const textos = await textosDeDocumento(idioma, "dossier");
+  const textos = await textosDeDocumento(idioma, "dossier", perfil.country);
   const { t, E, tAlcance, numero: formatoNumero, precio: formatoValorOportunidad } = textos;
 
   // Solo los niveles de patrocinador que ha elegido el club.

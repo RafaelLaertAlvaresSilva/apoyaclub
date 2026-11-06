@@ -53,7 +53,8 @@ export async function FichaDelClub({
   const sexoDelEquipo = (valor: string) =>
     valor === "Masculino" || valor === "Femenino" || valor === "Mixto" ? tSexo(valor) : valor;
   const formatoNumero = new Intl.NumberFormat(LOCALE_CONFIG[locale].intlLocale);
-  const precio = formatoDeValor(locale);
+  // En la moneda del club (su país), no en la del idioma.
+  const precio = formatoDeValor(locale, datos.perfil.country);
   const tPrecio = await getTranslations("common.precio");
   const textosPrecio = { necesidad: tPrecio("necesidad"), aConvenir: tPrecio("aConvenir") };
 

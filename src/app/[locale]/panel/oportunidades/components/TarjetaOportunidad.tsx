@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { etiquetador } from "@/lib/etiquetas-traducidas";
+import { usePaisDelClub } from "@/components/PaisDelClub";
 import { formatoDeValor, textoDelPrecio } from "@/lib/format";
 import type { AppLocale } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
@@ -56,7 +57,7 @@ export function TarjetaOportunidad({
 }) {
   const t = useTranslations("panel.oportunidades");
   const E = etiquetador(useTranslations("common.etiquetas"));
-  const precio = formatoDeValor(useLocale() as AppLocale);
+  const precio = formatoDeValor(useLocale() as AppLocale, usePaisDelClub());
   const tPrecio = useTranslations("common.precio");
   const [enEdicion, setEnEdicion] = useState(false);
 

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { parametrosAFiltros, type ParametrosURL } from "@/lib/buscar-params";
 import { buscarOportunidades, obtenerOpcionesEquipo, obtenerProvinciasDisponibles } from "@/lib/search";
+import { paisDeBusquedaDelIdioma } from "@/lib/search-types";
 import { FiltrosBuscador } from "./components/FiltrosBuscador";
 import { ResultadosBuscador } from "./components/ResultadosBuscador";
 
@@ -19,13 +20,14 @@ const TAMANO_PAGINA = 20;
 
 export default async function PaginaBuscar({ searchParams }: { searchParams: Promise<ParametrosURL> }) {
   const params = await searchParams;
-  const { filtros, vista } = parametrosAFiltros(params);
+  // Sin país en la URL, el de la web por la que se entra (/br → Brasil).
+  const { filtros, vista } = parametrosAFiltros(params, paisDeBusquedaDelIdioma(await getLocale()));
   const t = await getTranslations("buscar.cabecera");
 
   const [pagina, opcionesEquipo, provincias] = await Promise.all([
     buscarOportunidades(filtros, { offset: 0, limite: TAMANO_PAGINA }),
     obtenerOpcionesEquipo(),
-    obtenerProvinciasDisponibles(),
+    obtenerProvinciasDisponibles(filtros.pais),
   ]);
 
   return (

@@ -125,6 +125,11 @@ export type ClubProfile = {
    */
   topCategoryMalePhotoNote: string | null;
   topCategoryFemalePhotoNote: string | null;
+  /**
+   * País del club: ES, PT o BR (migración 0060; null en una ficha de
+   * antes). Decide la moneda de sus precios (`formatoDeValor`).
+   */
+  country: string | null;
   competitions: string | null;
   achievements: string | null;
 

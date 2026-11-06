@@ -16,6 +16,7 @@ import {
   type TipoQr,
 } from "@/lib/dossier-opciones";
 import { patrocinadoresDelDossier } from "@/lib/dossier-patrocinadores";
+import { usePaisDelClub } from "@/components/PaisDelClub";
 import { formatoDeValor, textoDelPrecio } from "@/lib/format";
 import type { AppLocale } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
@@ -59,6 +60,7 @@ export function DossierManager({
   const [estado, accion] = useActionState<EstadoDossier, FormData>(guardarConfiguracionDossier, null);
   const [descargando, setDescargando] = useState<"pdf" | "word" | null>(null);
   const locale = useLocale();
+  const paisDelClub = usePaisDelClub();
   const [errorDescarga, setErrorDescarga] = useState<string | null>(null);
   const [enlaceCopiado, setEnlaceCopiado] = useState(false);
 
@@ -219,7 +221,7 @@ export function DossierManager({
                   <span className="font-medium text-zinc-900">{oportunidad.title}</span>
                 </span>
                 <span className="whitespace-nowrap font-semibold text-teal-700">
-                  {textoDelPrecio(oportunidad, formatoDeValor(locale as AppLocale), {
+                  {textoDelPrecio(oportunidad, formatoDeValor(locale as AppLocale, paisDelClub), {
                     necesidad: tPrecio("necesidad"),
                     aConvenir: tPrecio("aConvenir"),
                   })}

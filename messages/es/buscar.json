@@ -14,10 +14,10 @@
     "cualquierPeriodo": "Cualquier periodo",
     "cualquiera": "Cualquiera",
     "deporte": "Deporte",
-    "desde": "Desde €",
+    "desde": "Desde {moneda}",
     "formaColaboracion": "Forma de colaboración",
     "genero": "Género",
-    "hasta": "Hasta €",
+    "hasta": "Hasta {moneda}",
     "limpiar": "Limpiar",
     "limpiarFiltros": "Limpiar filtros",
     "nivel": "Nivel",
@@ -29,12 +29,19 @@
     "sinRadio": "Sin radio (coincidencia exacta)",
     "tipoOportunidad": "Tipo de oportunidad",
     "titulo": "Filtros",
-    "todaEspana": "Toda España",
+    "todaEspana": "Cualquier provincia",
     "ubicacion": "Ubicación",
     "ubicacionPlaceholder": "Ciudad o código postal",
     "verResultados": "Ver resultados",
     "queBuscas": "Qué buscas",
-    "cualquierServicio": "Cualquier servicio o producto"
+    "cualquierServicio": "Cualquier servicio o producto",
+    "pais": "País",
+    "paises": {
+      "ES": "España",
+      "PT": "Portugal",
+      "BR": "Brasil",
+      "todos": "🌍 Todos los países"
+    }
   },
   "resultados": {
     "ampliarRadio": "Ampliar radio a {km} km",
@@ -60,7 +67,9 @@
     "verQueNecesitan": "Ver qué necesitan los clubes",
     "verFicha": "Ver ficha",
     "verPaginaDelClub": "Ver página del club",
-    "buscando": "Buscando oportunidades…"
+    "buscando": "Buscando oportunidades…",
+    "otrosPaises": "¿Buscas clubes de otro país?",
+    "verTodosLosPaises": "Ver clubes de todos los países"
   },
   "directorioEmpresas": {
     "metaTitulo": "Empresas que apoyan al deporte de base",

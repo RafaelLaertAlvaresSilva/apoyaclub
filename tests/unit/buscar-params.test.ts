@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { filtrosAQueryString, parametrosAFiltros } from "@/lib/buscar-params";
-import type { FiltrosBusqueda } from "@/lib/search-types";
+import { paisDeBusquedaDelIdioma, type FiltrosBusqueda } from "@/lib/search-types";
+import { formatoDeValor, simboloDeMoneda } from "@/lib/format";
 
 /**
  * Requisito de la Fase 7: una búsqueda se tiene que poder compartir con
@@ -9,6 +10,7 @@ import type { FiltrosBusqueda } from "@/lib/search-types";
  */
 describe("filtros del buscador y URL", () => {
   const filtros: FiltrosBusqueda = {
+    pais: "BR",
     provincia: "Valencia",
     ubicacion: "46001",
     radioKm: 50,
@@ -93,5 +95,31 @@ describe("filtros del buscador y URL", () => {
   it("el nivel de patrocinador viaja en el parámetro patrocinio", () => {
     const qs = filtrosAQueryString({ niveles: ["colaborador"] }, "oportunidad");
     expect(qs).toBe("patrocinio=colaborador");
+  });
+});
+
+describe("país del buscador", () => {
+  it("sin país en la URL, el de la web por la que se entra", () => {
+    expect(parametrosAFiltros({}, paisDeBusquedaDelIdioma("br")).filtros.pais).toBe("BR");
+    expect(parametrosAFiltros({}, paisDeBusquedaDelIdioma("pt")).filtros.pais).toBe("PT");
+    expect(parametrosAFiltros({}, paisDeBusquedaDelIdioma("es")).filtros.pais).toBe("ES");
+    expect(parametrosAFiltros({}, paisDeBusquedaDelIdioma("en")).filtros.pais).toBe("todos");
+  });
+
+  it("el país de la URL manda sobre el de la web, y «todos» se queda en la URL", () => {
+    expect(parametrosAFiltros({ pais: "todos" }, "BR").filtros.pais).toBe("todos");
+    expect(parametrosAFiltros({ pais: "ES" }, "BR").filtros.pais).toBe("ES");
+    expect(parametrosAFiltros({ pais: "XX" }, "BR").filtros.pais).toBe("BR");
+    expect(filtrosAQueryString({ pais: "todos" }, "oportunidad")).toContain("pais=todos");
+  });
+});
+
+describe("moneda de los precios", () => {
+  it("la del país del club, no la del idioma", () => {
+    expect(formatoDeValor("es", "BR").format(200)).toContain("R$");
+    expect(formatoDeValor("br", "ES").format(200)).toContain("€");
+    expect(formatoDeValor("br", null).format(200)).toContain("€");
+    expect(simboloDeMoneda("BR")).toBe("R$");
+    expect(simboloDeMoneda("PT")).toBe("€");
   });
 });

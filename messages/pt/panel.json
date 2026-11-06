@@ -77,7 +77,8 @@
       "apuntar": "Registar um jogo"
     },
     "verOpcionesPublico": "Ver as opções de Público",
-    "ocultarOpcionesPublico": "Ocultar as opções de Público"
+    "ocultarOpcionesPublico": "Ocultar as opções de Público",
+    "menuDelPanel": "Menu do painel"
   },
   "tema": {
     "modoOscuro": "Modo escuro",
@@ -688,7 +689,7 @@
     "eligeQueNecesitas": "Escolhe de que precisas",
     "fotos": "Fotos",
     "fotosAyuda": "Opcional, até três. O que convence mesmo uma empresa é ver a parede onde vai ficar a lona, o autocarro ou o equipamento.",
-    "valorEuros": "Valor (€) *",
+    "valorEuros": "Valor ({moneda}) *",
     "queRecibeEmpresa": "O que a empresa recebe e quem faz o quê",
     "queRecibeEmpresaResumen": "O detalhe do acordo, linha a linha. Não é preciso para publicar, mas é o que faz a empresa perceber o que lhe estás a oferecer.",
     "frecuencia": "Frequência",

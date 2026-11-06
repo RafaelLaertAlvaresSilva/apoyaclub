@@ -26,7 +26,16 @@ import type {
 export type OrdenBusqueda = "recomendado" | "cercania" | "valor" | "novedad";
 export type VistaBusqueda = "oportunidad" | "club";
 
+/** De qué país se ven los clubes: uno, o todos (pedido por Rafael el 6-11-2026). */
+export type PaisBusqueda = "ES" | "PT" | "BR" | "todos";
+
 export type FiltrosBusqueda = {
+  /**
+   * El país de los clubes. Sin elegir, el de la web por la que se entra
+   * (`paisDeBusquedaDelIdioma`): quien llega por /br ve primero Brasil, y
+   * luego puede pedir otro país o todos.
+   */
+  pais?: PaisBusqueda;
   provincia?: string;
   /** Ciudad o código postal, en texto libre. */
   ubicacion?: string;
@@ -70,6 +79,8 @@ export type ResultadoOportunidad = {
   clubCity: string;
   clubProvince: string | null;
   clubLogoUrl: string | null;
+  /** País del club (ES, PT, BR), que decide la moneda de sus precios. Null sin la migración 0060. */
+  clubCountry: string | null;
   title: string;
   description: string | null;
   opportunityType: OpportunityType;
@@ -113,6 +124,7 @@ export type ResultadoClub = {
   clubCity: string;
   clubProvince: string | null;
   clubLogoUrl: string | null;
+  clubCountry: string | null;
   distanceKm: number | null;
   opportunitiesCount: number;
   minValue: number;
@@ -145,6 +157,7 @@ export function agruparPorClub(
         clubCity: oportunidad.clubCity,
         clubProvince: oportunidad.clubProvince,
         clubLogoUrl: oportunidad.clubLogoUrl,
+        clubCountry: oportunidad.clubCountry,
         distanceKm: oportunidad.distanceKm,
         opportunitiesCount: 0,
         // Se rellenan abajo, solo con las que tienen precio: una
@@ -179,4 +192,16 @@ export function agruparPorClub(
   }
 
   return Array.from(mapa.values());
+}
+
+/**
+ * El país que se ve al entrar en el buscador, según la web por la que se
+ * llega: /es España, /pt Portugal, /br Brasil. En inglés no hay un país
+ * natural, así que se ven todos.
+ */
+export function paisDeBusquedaDelIdioma(locale: string): PaisBusqueda {
+  if (locale === "br") return "BR";
+  if (locale === "pt") return "PT";
+  if (locale === "en") return "todos";
+  return "ES";
 }

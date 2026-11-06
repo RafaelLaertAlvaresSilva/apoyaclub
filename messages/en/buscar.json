@@ -14,10 +14,10 @@
     "cualquierPeriodo": "Any period",
     "cualquiera": "Any",
     "deporte": "Sport",
-    "desde": "From €",
+    "desde": "From {moneda}",
     "formaColaboracion": "Type of partnership",
     "genero": "Gender",
-    "hasta": "Up to €",
+    "hasta": "Up to {moneda}",
     "limpiar": "Clear",
     "limpiarFiltros": "Clear filters",
     "nivel": "Level",
@@ -29,12 +29,19 @@
     "sinRadio": "No radius (exact match)",
     "tipoOportunidad": "Type of opportunity",
     "titulo": "Filters",
-    "todaEspana": "All of Spain",
+    "todaEspana": "Any region",
     "ubicacion": "Location",
     "ubicacionPlaceholder": "City or postcode",
     "verResultados": "See results",
     "queBuscas": "What you're looking for",
-    "cualquierServicio": "Any service or product"
+    "cualquierServicio": "Any service or product",
+    "pais": "Country",
+    "paises": {
+      "ES": "Spain",
+      "PT": "Portugal",
+      "BR": "Brazil",
+      "todos": "🌍 All countries"
+    }
   },
   "resultados": {
     "ampliarRadio": "Widen radius to {km} km",
@@ -60,7 +67,9 @@
     "verQueNecesitan": "See what clubs need",
     "verFicha": "See details",
     "verPaginaDelClub": "See the club's page",
-    "buscando": "Searching for opportunities…"
+    "buscando": "Searching for opportunities…",
+    "otrosPaises": "Looking for clubs in another country?",
+    "verTodosLosPaises": "See clubs from all countries"
   },
   "directorioEmpresas": {
     "metaTitulo": "Businesses that support grassroots sport",

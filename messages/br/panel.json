@@ -77,7 +77,8 @@
       "apuntar": "Cadastrar um jogo"
     },
     "verOpcionesPublico": "Ver as opções de Público",
-    "ocultarOpcionesPublico": "Ocultar as opções de Público"
+    "ocultarOpcionesPublico": "Ocultar as opções de Público",
+    "menuDelPanel": "Menu do painel"
   },
   "tema": {
     "modoOscuro": "Modo escuro",
@@ -191,7 +192,7 @@
       "recomendado": "Recomendado",
       "quedan": "Restam {n}",
       "ivaIncluido": "{periodo}, IVA incluído",
-      "empiezas": "Nada é cobrado até terminar o seu período grátis: <fuerte>30 dias</fuerte>, ou <fuerte>6 meses</fuerte> se você entrou com os 6 meses grátis. Se um único patrocinador deixar 300 €, o ano inteiro já está pago."
+      "empiezas": "Nada é cobrado até terminar o seu período grátis: <fuerte>30 dias</fuerte>, ou <fuerte>6 meses</fuerte> se você entrou com os 6 meses grátis. Se um único patrocinador deixar R$ 800, o ano inteiro já está pago."
     }
   },
   "privacidad": {
@@ -665,7 +666,7 @@
     "panelDelClub": "Painel do clube",
     "periodo": "Período",
     "plazas": "É dividida entre várias empresas?",
-    "plazasAyuda": "Número de patrocinadores que você procura. Deixe vazio se for para uma só empresa. Exemplo: 10 empresas de 100 € para o torneio de Natal.",
+    "plazasAyuda": "Número de patrocinadores que você procura. Deixe vazio se for para uma só empresa. Exemplo: 10 empresas de R$ 300 para o torneio de Natal.",
     "plazasCubiertas": "Vagas já preenchidas",
     "plazasCubiertasAyuda": "Quem gerencia é você: a plataforma não reserva vagas nem cobra nada.",
     "queIncluye": "O que inclui",
@@ -688,7 +689,7 @@
     "eligeQueNecesitas": "Escolha do que você precisa",
     "fotos": "Fotos",
     "fotosAyuda": "Opcional, até três. O que convence mesmo uma empresa é ver a parede onde vai ficar a lona, o ônibus ou o uniforme.",
-    "valorEuros": "Valor (€) *",
+    "valorEuros": "Valor ({moneda}) *",
     "queRecibeEmpresa": "O que a empresa recebe e quem faz o quê",
     "queRecibeEmpresaResumen": "O detalhe do acordo, linha a linha. Não é preciso para publicar, mas é o que faz a empresa entender o que você está oferecendo.",
     "frecuencia": "Frequência",
@@ -1280,7 +1281,7 @@
     "cuandoAcaba": "Quando acaba o acordo",
     "queAcordasteis": "O que acordaram",
     "queAcordasteisAyuda": "O que hoje está na cabeça de quem assinou. Quando a diretoria mudar, é a única coisa que fica.",
-    "queAcordasteisEjemplo": "600 € por temporada, logotipo na camisa e duas publicações por mês.",
+    "queAcordasteisEjemplo": "R$ 2.000 por temporada, logotipo na camisa e duas publicações por mês.",
     "guardado": "Salvo.",
     "guardando": "Salvando…",
     "guardar": "Salvar",

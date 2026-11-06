@@ -230,7 +230,8 @@ function TarjetaOportunidad({
   oportunidad: ResultadoOportunidad;
 }) {
   const E = etiquetador(useTranslations("common.etiquetas"));
-  const precio = formatoDeValor(useLocale() as AppLocale);
+  // En la moneda del club: reales si es de Brasil, euros si no.
+  const precio = formatoDeValor(useLocale() as AppLocale, oportunidad.clubCountry);
   const tTarjeta = useTranslations("buscar.resultados");
   const tPrecio = useTranslations("common.precio");
   const etiquetas = [
@@ -390,7 +391,7 @@ function TarjetaOportunidad({
 
 function TarjetaClub({ club }: { club: ResultadoClub }) {
   const E = etiquetador(useTranslations("common.etiquetas"));
-  const precio = formatoDeValor(useLocale() as AppLocale);
+  const precio = formatoDeValor(useLocale() as AppLocale, club.clubCountry);
   const tClub = useTranslations("buscar.resultados");
   const tPrecio = useTranslations("common.precio");
   // Sin ninguna oportunidad con precio (solo necesidades o sin cifra),
@@ -459,7 +460,9 @@ function EstadoVacio({
   // saliera "prueba a quitar algún filtro" sin haber puesto ninguno.
   // Con pocos clubes todavía, ese es el primer mensaje que ve una
   // empresa: un callejón sin salida que además no es verdad.
-  const NO_SON_FILTROS = new Set(["orden", "busca", "vista"]);
+  // El país tampoco: viene puesto por la web por la que se entra.
+  const NO_SON_FILTROS = new Set(["orden", "busca", "vista", "pais"]);
+  const conPais = !!filtros.pais && filtros.pais !== "todos";
   const tieneFiltros = Object.entries(filtros).some(([nombre, valor]) => {
     if (NO_SON_FILTROS.has(nombre)) return false;
     if (Array.isArray(valor)) return valor.length > 0;
@@ -479,6 +482,17 @@ function EstadoVacio({
             : tVacio("vacioSinRadio")}
       </p>
       <div className="mt-4 flex flex-wrap justify-center gap-2">
+        {/* Lo primero que se ofrece si se está viendo un solo país: con
+            pocos clubes en algunos países, lo normal es que esté vacío. */}
+        {conPais && (
+          <button
+            type="button"
+            onClick={() => router.push(`/buscar?${filtrosAQueryString({ ...filtros, pais: "todos", provincia: undefined }, vista)}`)}
+            className="rounded-lg bg-accion px-4 py-2 text-sm font-medium text-sobre-color hover:bg-accion-fuerte"
+          >
+            {tVacio("verTodosLosPaises")}
+          </button>
+        )}
         {filtros.radioKm && (
           <button
             type="button"

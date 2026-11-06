@@ -102,6 +102,8 @@ type FilaBusqueda = {
   club_visibility_bucket: number | null;
   /** Opcional: la vista no la trae hasta aplicar la migración 0052. */
   photos?: string[] | null;
+  /** País del club (migración 0060). */
+  club_country?: string | null;
 };
 
 function filaAResultado(
@@ -116,6 +118,7 @@ function filaAResultado(
     clubCity: fila.club_city,
     clubProvince: fila.club_province,
     clubLogoUrl: fila.club_logo_url,
+    clubCountry: fila.club_country ?? null,
     title: fila.title,
     description: fila.description,
     opportunityType: fila.opportunity_type,
@@ -253,82 +256,95 @@ export async function buscarOportunidades(
     return { resultados: [], hayMas: false, total: 0 };
   }
 
-  let consulta = supabase
-    .from("opportunity_search_view")
-    .select("*", usaGeo ? undefined : { count: "exact" });
+  // Se arma en una función para poder repetirla sin el país: si la web
+  // nueva se publica antes de ejecutar la migración 0060, la vista aún
+  // no tiene `club_country` y el buscador no puede quedarse en blanco.
+  const construirConsulta = (conPais: boolean) => {
+    let consulta = supabase
+      .from("opportunity_search_view")
+      .select("*", usaGeo ? undefined : { count: "exact" });
 
-  if (clubIds) consulta = consulta.in("club_id", clubIds);
-  if (filtros.provincia)
-    consulta = consulta.eq("club_province", filtros.provincia);
-  if (filtros.tipos && filtros.tipos.length > 0)
-    consulta = consulta.in("opportunity_type", filtros.tipos);
-  if (filtros.presupuestoMin != null)
-    consulta = consulta.gte("value", filtros.presupuestoMin);
-  if (filtros.presupuestoMax != null)
-    consulta = consulta.lte("value", filtros.presupuestoMax);
-  if (filtros.periodo) consulta = consulta.eq("period", filtros.periodo);
-  if (filtros.formasColaboracion && filtros.formasColaboracion.length > 0) {
-    consulta = consulta.in("collaboration_type", filtros.formasColaboracion);
-  }
-  if (filtros.objetivos && filtros.objetivos.length > 0) {
-    consulta = consulta.overlaps("objectives", filtros.objetivos);
-  }
-  // Patrocinios o necesidades (migración 0038). "todo" no filtra nada,
-  // que es como se comportaba el buscador antes de que existieran.
-  if (filtros.busca === "patrocinios") consulta = consulta.eq("is_need", false);
-  if (filtros.busca === "necesidades") {
-    consulta = consulta.eq("is_need", true);
-    if (filtros.necesidad)
-      consulta = consulta.eq("need_category", filtros.necesidad);
-  }
-  if (filtros.niveles && filtros.niveles.length > 0) {
-    consulta = consulta.in("sponsor_level", filtros.niveles);
-  }
-
-  if (usaRadio && centro) {
-    const caja = cajaDelimitadora(centro, filtros.radioKm!);
-    consulta = consulta
-      .gte("club_latitude", caja.minLat)
-      .lte("club_latitude", caja.maxLat)
-      .gte("club_longitude", caja.minLon)
-      .lte("club_longitude", caja.maxLon);
-  } else if (filtros.ubicacion) {
-    // Sin radio (o sin haberse podido geocodificar): filtro de texto
-    // simple por ciudad o código postal, sin distancia real.
-    const texto = sanear(filtros.ubicacion);
-    if (texto) {
-      consulta = consulta.or(
-        `club_city.ilike.%${texto}%,club_postal_code.ilike.${texto}%`,
-      );
+    if (clubIds) consulta = consulta.in("club_id", clubIds);
+    // El país de los clubes (migración 0060). "todos" no filtra.
+    if (conPais && filtros.pais && filtros.pais !== "todos")
+      consulta = consulta.eq("club_country", filtros.pais);
+    if (filtros.provincia)
+      consulta = consulta.eq("club_province", filtros.provincia);
+    if (filtros.tipos && filtros.tipos.length > 0)
+      consulta = consulta.in("opportunity_type", filtros.tipos);
+    if (filtros.presupuestoMin != null)
+      consulta = consulta.gte("value", filtros.presupuestoMin);
+    if (filtros.presupuestoMax != null)
+      consulta = consulta.lte("value", filtros.presupuestoMax);
+    if (filtros.periodo) consulta = consulta.eq("period", filtros.periodo);
+    if (filtros.formasColaboracion && filtros.formasColaboracion.length > 0) {
+      consulta = consulta.in("collaboration_type", filtros.formasColaboracion);
     }
-  }
+    if (filtros.objetivos && filtros.objetivos.length > 0) {
+      consulta = consulta.overlaps("objectives", filtros.objetivos);
+    }
+    // Patrocinios o necesidades (migración 0038). "todo" no filtra nada,
+    // que es como se comportaba el buscador antes de que existieran.
+    if (filtros.busca === "patrocinios") consulta = consulta.eq("is_need", false);
+    if (filtros.busca === "necesidades") {
+      consulta = consulta.eq("is_need", true);
+      if (filtros.necesidad)
+        consulta = consulta.eq("need_category", filtros.necesidad);
+    }
+    if (filtros.niveles && filtros.niveles.length > 0) {
+      consulta = consulta.in("sponsor_level", filtros.niveles);
+    }
 
-  if (!usaGeo) {
-    if (filtros.orden === "valor") {
-      consulta = consulta.order("value", { ascending: false });
-    } else if (filtros.orden === "novedad") {
-      consulta = consulta.order("opportunity_created_at", { ascending: false });
-    } else {
-      // Orden por defecto: tramo de ficha completa y, dentro del tramo,
-      // lo más reciente. Ver `OrdenBusqueda` en search-types.
+    if (usaRadio && centro) {
+      const caja = cajaDelimitadora(centro, filtros.radioKm!);
       consulta = consulta
-        .order("club_visibility_bucket", {
-          ascending: false,
-          nullsFirst: false,
-        })
-        .order("opportunity_created_at", { ascending: false });
+        .gte("club_latitude", caja.minLat)
+        .lte("club_latitude", caja.maxLat)
+        .gte("club_longitude", caja.minLon)
+        .lte("club_longitude", caja.maxLon);
+    } else if (filtros.ubicacion) {
+      // Sin radio (o sin haberse podido geocodificar): filtro de texto
+      // simple por ciudad o código postal, sin distancia real.
+      const texto = sanear(filtros.ubicacion);
+      if (texto) {
+        consulta = consulta.or(
+          `club_city.ilike.%${texto}%,club_postal_code.ilike.${texto}%`,
+        );
+      }
     }
-    consulta = consulta.range(
-      paginacion.offset,
-      paginacion.offset + paginacion.limite - 1,
-    );
-  } else {
-    consulta = consulta
-      .order("opportunity_created_at", { ascending: false })
-      .limit(TAMANO_LOTE_GEO);
-  }
 
-  const { data, count } = await consulta.returns<FilaBusqueda[]>();
+    if (!usaGeo) {
+      if (filtros.orden === "valor") {
+        consulta = consulta.order("value", { ascending: false });
+      } else if (filtros.orden === "novedad") {
+        consulta = consulta.order("opportunity_created_at", { ascending: false });
+      } else {
+        // Orden por defecto: tramo de ficha completa y, dentro del tramo,
+        // lo más reciente. Ver `OrdenBusqueda` en search-types.
+        consulta = consulta
+          .order("club_visibility_bucket", {
+            ascending: false,
+            nullsFirst: false,
+          })
+          .order("opportunity_created_at", { ascending: false });
+      }
+      consulta = consulta.range(
+        paginacion.offset,
+        paginacion.offset + paginacion.limite - 1,
+      );
+    } else {
+      consulta = consulta
+        .order("opportunity_created_at", { ascending: false })
+        .limit(TAMANO_LOTE_GEO);
+    }
+    return consulta;
+  };
+
+  let respuesta = await construirConsulta(true).returns<FilaBusqueda[]>();
+  if (respuesta.error && /club_country/.test(respuesta.error.message ?? "")) {
+    respuesta = await construirConsulta(false).returns<FilaBusqueda[]>();
+  }
+  const { data, count } = respuesta;
   let resultados = (data ?? []).map((fila) => filaAResultado(fila, centro));
 
   if (usaRadio) {
@@ -418,14 +434,21 @@ export async function obtenerOpcionesEquipo(): Promise<{
   };
 }
 
-/** Provincias con al menos un club, para el desplegable de ubicación. */
-export async function obtenerProvinciasDisponibles(): Promise<string[]> {
+/**
+ * Provincias (o estados, o distritos) con al menos un club, para el
+ * desplegable de ubicación: solo las del país elegido, si se ha elegido
+ * uno (migración 0060).
+ */
+export async function obtenerProvinciasDisponibles(pais?: string): Promise<string[]> {
   const supabase = createPublicClient();
-  const { data } = await supabase
-    .from("club_public_profiles")
-    .select("province")
-    .not("province", "is", null)
-    .returns<{ province: string | null }[]>();
+  const consulta = (conPais: boolean) => {
+    let q = supabase.from("club_public_profiles").select("province").not("province", "is", null);
+    if (conPais && pais && pais !== "todos") q = q.eq("country", pais);
+    return q.returns<{ province: string | null }[]>();
+  };
+  let { data, error } = await consulta(true);
+  // Sin la migración 0060 la vista no tiene `country`: todas.
+  if (error && /country/.test(error.message ?? "")) ({ data, error } = await consulta(false));
 
   return Array.from(
     new Set(

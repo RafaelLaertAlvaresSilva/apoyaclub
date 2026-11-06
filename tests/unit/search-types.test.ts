@@ -13,6 +13,7 @@ function oportunidad(
     clubCity: "Valencia",
     clubProvince: "Valencia",
     clubLogoUrl: null,
+    clubCountry: "ES",
     foto: null,
     title: "Camiseta de entrenamiento",
     description: null,

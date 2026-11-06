@@ -77,7 +77,8 @@
       "apuntar": "Record a match"
     },
     "verOpcionesPublico": "Show Attendance options",
-    "ocultarOpcionesPublico": "Hide Attendance options"
+    "ocultarOpcionesPublico": "Hide Attendance options",
+    "menuDelPanel": "Panel menu"
   },
   "tema": {
     "modoOscuro": "Dark mode",
@@ -688,7 +689,7 @@
     "eligeQueNecesitas": "Choose what you need",
     "fotos": "Photos",
     "fotosAyuda": "Optional, up to three. What really convinces a business is seeing the wall where its banner will go, the bus or the kit.",
-    "valorEuros": "Amount (€) *",
+    "valorEuros": "Amount ({moneda}) *",
     "queRecibeEmpresa": "What the business gets and who does what",
     "queRecibeEmpresaResumen": "The detail of the deal, line by line. You don’t need it to publish, but it’s what makes the business understand what you’re offering.",
     "frecuencia": "Frequency",

@@ -220,6 +220,10 @@ export async function cambiarPaisClub(formData: FormData): Promise<void> {
   await contexto.admin.auth.admin.updateUserById(id, {
     app_metadata: { ...data.user.app_metadata, pais },
   });
+  // La ficha guarda una copia del país (migración 0060) para la moneda
+  // y el buscador. Tocar la fila hace que el trigger la copie otra vez
+  // de la cuenta, que ya tiene el nuevo.
+  await contexto.admin.from("clubs").update({ country: pais }).eq("id", id);
 
   revalidatePath(RUTA_CLUBES);
   return volverConAviso("pais-cambiado");

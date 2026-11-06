@@ -8,6 +8,8 @@ import type { Accion, Beneficio } from "@/lib/ficha-oportunidad";
 import { EditorDeLaFicha } from "./EditorDeLaFicha";
 import { FotosDeLaOportunidad } from "./FotosDeLaOportunidad";
 import { BotonEnviar } from "@/components/BotonEnviar";
+import { usePaisDelClub } from "@/components/PaisDelClub";
+import { simboloDeMoneda } from "@/lib/format";
 import { etiquetador } from "@/lib/etiquetas-traducidas";
 import {
   CLASES_CAJA_CAMPO,
@@ -110,6 +112,7 @@ export function OportunidadForm({
   primerPaso?: number;
 }) {
   const t = useTranslations("panel.oportunidades");
+  const paisDelClub = usePaisDelClub();
   const tComun = useTranslations("panel.comun");
   const E = etiquetador(useTranslations("common.etiquetas"));
 
@@ -282,7 +285,7 @@ export function OportunidadForm({
            * que poner: lo que se ofrece es el servicio en sí, y a
            * cambio va visibilidad. */}
           {!esNecesidad && (
-            <Campo etiqueta={t("valorEuros")} ayuda={t("loFijasTuLa")}>
+            <Campo etiqueta={t("valorEuros", { moneda: simboloDeMoneda(paisDelClub) })} ayuda={t("loFijasTuLa")}>
               <input
                 name="value"
                 type="number"

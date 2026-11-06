@@ -14,10 +14,10 @@
     "cualquierPeriodo": "Qualquer período",
     "cualquiera": "Qualquer",
     "deporte": "Desporto",
-    "desde": "Desde €",
+    "desde": "Desde {moneda}",
     "formaColaboracion": "Forma de colaboração",
     "genero": "Género",
-    "hasta": "Até €",
+    "hasta": "Até {moneda}",
     "limpiar": "Limpar",
     "limpiarFiltros": "Limpar filtros",
     "nivel": "Nível",
@@ -29,12 +29,19 @@
     "sinRadio": "Sem raio (correspondência exata)",
     "tipoOportunidad": "Tipo de oportunidade",
     "titulo": "Filtros",
-    "todaEspana": "Toda a Espanha",
+    "todaEspana": "Qualquer distrito",
     "ubicacion": "Localização",
     "ubicacionPlaceholder": "Cidade ou código postal",
     "verResultados": "Ver resultados",
     "queBuscas": "O que procuras",
-    "cualquierServicio": "Qualquer serviço ou produto"
+    "cualquierServicio": "Qualquer serviço ou produto",
+    "pais": "País",
+    "paises": {
+      "ES": "Espanha",
+      "PT": "Portugal",
+      "BR": "Brasil",
+      "todos": "🌍 Todos os países"
+    }
   },
   "resultados": {
     "ampliarRadio": "Alargar o raio para {km} km",
@@ -60,7 +67,9 @@
     "verQueNecesitan": "Ver do que precisam os clubes",
     "verFicha": "Ver ficha",
     "verPaginaDelClub": "Ver página do clube",
-    "buscando": "A procurar oportunidades…"
+    "buscando": "A procurar oportunidades…",
+    "otrosPaises": "Procuras clubes de outro país?",
+    "verTodosLosPaises": "Ver clubes de todos os países"
   },
   "directorioEmpresas": {
     "metaTitulo": "Empresas que apoiam o desporto de formação",

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { clasesInput } from "@/app/[locale]/panel/components/SeccionCard";
 import { filtrosAQueryString, RADIOS_KM } from "@/lib/buscar-params";
 import { etiquetador } from "@/lib/etiquetas-traducidas";
+import { simboloDeMoneda } from "@/lib/format";
 import {
   CATEGORIAS_NECESIDAD,
   FORMAS_COLABORACION,
@@ -14,6 +15,7 @@ import {
   PERIODOS_OPORTUNIDAD,
   TIPOS_OPORTUNIDAD,
 } from "@/lib/opportunities";
+import { BANDERA_DEL_PAIS, PAISES } from "@/lib/paises";
 import type { FiltrosBusqueda, VistaBusqueda } from "@/lib/search-types";
 import type {
   BudgetPeriod,
@@ -47,6 +49,7 @@ function leerFiltrosDelFormulario(formData: FormData): FiltrosBusqueda {
   };
 
   return {
+    pais: (texto("pais") as FiltrosBusqueda["pais"]) ?? "todos",
     provincia: texto("provincia"),
     ubicacion: texto("ubicacion"),
     radioKm: numero("radio"),
@@ -92,6 +95,9 @@ export function FiltrosBuscador({
   const E = etiquetador(useTranslations("common.etiquetas"));
   const router = useRouter();
   const [abiertoEnMovil, setAbiertoEnMovil] = useState(false);
+  // La moneda del presupuesto: la del país elegido (reales en Brasil).
+  // Con todos los países mezclados, euros.
+  const moneda = simboloDeMoneda(filtrosIniciales.pais === "todos" ? null : filtrosIniciales.pais);
 
   // El formulario se renderiza dos veces (cajón en móvil, barra lateral
   // en escritorio) para poder mostrar solo uno según el tamaño de
@@ -169,6 +175,28 @@ export function FiltrosBuscador({
       <div>
         <p className={clasesEtiquetaGrupo}>{t("ubicacion")}</p>
         <div className="space-y-2">
+          {/* El país primero: por defecto, el de la web por la que se
+              entra; se cambia aquí para ver otro o todos. Al cambiarlo
+              se quita la provincia, que es de otro país. */}
+          <select
+            name="pais"
+            aria-label={t("pais")}
+            defaultValue={filtrosIniciales.pais ?? "todos"}
+            onChange={(evento) => {
+              const formulario = evento.currentTarget.form!;
+              const provincia = formulario.elements.namedItem("provincia");
+              if (provincia instanceof HTMLSelectElement) provincia.value = "";
+              aplicar(formulario);
+            }}
+            className={clasesInput}
+          >
+            {PAISES.map((pais) => (
+              <option key={pais} value={pais}>
+                {BANDERA_DEL_PAIS[pais]} {t(`paises.${pais}`)}
+              </option>
+            ))}
+            <option value="todos">{t("paises.todos")}</option>
+          </select>
           <select
             name="provincia" aria-label={t("ubicacion")}
             defaultValue={filtrosIniciales.provincia ?? ""}
@@ -250,18 +278,18 @@ export function FiltrosBuscador({
         <p className={clasesEtiquetaGrupo}>{t("presupuesto")}</p>
         <div className="grid grid-cols-2 gap-2">
           <input
-            name="min" aria-label={t("desde")}
+            name="min" aria-label={t("desde", { moneda })}
             type="number"
             min={0}
-            placeholder={t("desde")}
+            placeholder={t("desde", { moneda })}
             defaultValue={filtrosIniciales.presupuestoMin ?? ""}
             className={clasesInput}
           />
           <input
-            name="max" aria-label={t("hasta")}
+            name="max" aria-label={t("hasta", { moneda })}
             type="number"
             min={0}
-            placeholder={t("hasta")}
+            placeholder={t("hasta", { moneda })}
             defaultValue={filtrosIniciales.presupuestoMax ?? ""}
             className={clasesInput}
           />

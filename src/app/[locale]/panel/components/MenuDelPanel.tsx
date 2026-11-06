@@ -638,7 +638,7 @@ export function MenuDelPanel({
             <span className="block h-0.5 w-4 rounded bg-current" />
             <span className="block h-0.5 w-4 rounded bg-current" />
           </span>
-          Menú del panel
+          {t("menuDelPanel")}
           {avisos > 0 && (
             <span className="ml-auto inline-flex min-w-5 items-center justify-center rounded-full bg-peligro px-1.5 py-0.5 text-xs font-bold text-sobre-color">
               {avisos}

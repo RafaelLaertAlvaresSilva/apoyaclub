@@ -39,7 +39,7 @@ export async function VistaDeOportunidad({
   const t = await getTranslations("club");
   const tp = await getTranslations("club.oportunidadPagina");
   const E = etiquetador(await getTranslations("common.etiquetas"));
-  const precio = formatoDeValor(locale);
+  const precio = formatoDeValor(locale, perfil.country);
 
   const esNecesidad = oportunidad.esNecesidad;
   const urlPublica = `${SITE_URL}/${locale}/club/${perfil.slug}/oportunidad/${oportunidad.id}`;
