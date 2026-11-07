@@ -21,6 +21,9 @@ const ENLACES_EMPRESAS = [
   // de barrio sin presupuesto de marketing— no estaba enlazada ni aquí
   // ni en la cabecera. Estaba construida la puerta y faltaba el cartel.
   { href: "/servicios", clave: "queNecesitan" },
+  // El índice de las páginas por deporte y zona (`lib/patrocinar.ts`):
+  // enlazado en todas las páginas, para que Google llegue a todas.
+  { href: "/patrocinar", clave: "porDeporte" },
   { href: "/para-empresas#como", clave: "comoFunciona" },
   { href: "/para-empresas", clave: "accesoGratuito" },
   { href: "/registro-empresa", clave: "publicarOferta" },

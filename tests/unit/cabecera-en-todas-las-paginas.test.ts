@@ -45,11 +45,12 @@ function layoutsQueLaEnvuelven(pagina: string): string[] {
 }
 
 /** Componentes compartidos por varias páginas que pintan ellos la cabecera. */
-const COMPONENTES_CON_CABECERA = ["FichaDelClub", "VistaDeOportunidad", "ListaVistaPrevia"];
+const COMPONENTES_CON_CABECERA = ["FichaDelClub", "VistaDeOportunidad", "ListaVistaPrevia", "PaginaDePatrocinio"];
 const ARCHIVO_DEL_COMPONENTE: Record<string, string> = {
   FichaDelClub: "club/[slug]/components/FichaDelClub.tsx",
   VistaDeOportunidad: "club/[slug]/components/VistaDeOportunidad.tsx",
   ListaVistaPrevia: "vista-previa/ListaVistaPrevia.tsx",
+  PaginaDePatrocinio: "patrocinar/PaginaDePatrocinio.tsx",
 };
 
 describe("los componentes de ficha compartidos llevan cabecera", () => {

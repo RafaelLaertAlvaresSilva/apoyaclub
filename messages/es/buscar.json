@@ -124,5 +124,30 @@
     "oportunidades": "Oportunidades",
     "loNecesitan": "Lo necesitan",
     "soloEnEsteNavegador": "Esto se guarda solo en este navegador: desde otro dispositivo no lo verás, y si borras los datos de navegación se pierde. <enlace>Crea una cuenta gratis</enlace> y se te guarda en todos. Lo que ya tienes marcado se viene contigo."
+  },
+  "patrocinar": {
+    "eyebrow": "Patrocinio deportivo local",
+    "h1Deporte": "Patrocinar clubes de {deporte}",
+    "h1Zona": "Patrocinar clubes de {deporte} en {zona}",
+    "metaDescripcionDeporte": "{n, plural, one {# club de {deporte} busca} other {# clubes de {deporte} buscan}} empresas que les apoyen. Mira qué ofrece cada uno y escríbeles gratis, sin registrarte y sin comisiones.",
+    "metaDescripcionZona": "{n, plural, one {# club de {deporte} en {zona} busca} other {# clubes de {deporte} en {zona} buscan}} empresas que les apoyen. Mira qué ofrece cada uno y escríbeles gratis, sin registrarte y sin comisiones.",
+    "intro": "{n, plural, one {Este club busca} other {Estos # clubes buscan}} empresas que quieran apoyarles. Cada uno explica qué ofrece (camiseta, redes, eventos, cantera…), a qué público llega y cuánto cuesta. Escríbeles directamente desde su página: es gratis, no hace falta registrarse y ApoyaClub no cobra comisión.",
+    "oportunidades": "{n, plural, =0 {Aún sin oportunidades publicadas} one {# oportunidad} other {# oportunidades}}",
+    "desde": "desde {precio}",
+    "verClub": "Ver el club",
+    "porQueTitulo": "Por qué patrocinar un club de {deporte}",
+    "porQue1": "Llegas a las familias y vecinos de la zona: el público que compra en tu negocio.",
+    "porQue2": "Tu marca se asocia a lo que la gente aprecia del deporte: esfuerzo, equipo y deporte base.",
+    "porQue3": "Desde importes pequeños: muchos clubes tienen opciones para cualquier presupuesto, también en especie.",
+    "verOportunidades": "Ver todas las oportunidades",
+    "publicar": "¿Tu empresa ofrece algo a los clubes? Publícalo gratis",
+    "otrasZonas": "Clubes de {deporte} en otras zonas",
+    "otrosDeportes": "Otros deportes en {zona}",
+    "todoElDeporte": "Todos los clubes de {deporte}",
+    "indiceTitulo": "Patrocinar clubes deportivos",
+    "indiceTexto": "Elige un deporte o una zona para ver los clubes que buscan empresas que les apoyen.",
+    "indiceMeta": "Clubes deportivos que buscan patrocinadores, por deporte y por zona. Escríbeles gratis y sin comisiones.",
+    "clubes": "{n, plural, one {# club} other {# clubes}}",
+    "sinClubes": "Todavía no hay clubes publicados aquí."
   }
 }

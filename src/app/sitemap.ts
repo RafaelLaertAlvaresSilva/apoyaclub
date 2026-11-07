@@ -3,6 +3,8 @@ import { routing } from "@/i18n/routing";
 import { LANG_HTML } from "@/config/locales";
 import { SITE_URL } from "@/lib/site";
 import { createPublicClient } from "@/lib/supabase/public";
+import { clubesParaPatrocinar, combinaciones, delPais } from "@/lib/patrocinar";
+import { paisDeBusquedaDelIdioma } from "@/lib/search-types";
 
 /**
  * Mapa del sitio (Fase 15). Hasta ahora las páginas de club tenían
@@ -147,5 +149,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   );
 
-  return [...estaticas, ...fichasDeClub, ...fichasDeEmpresa];
+  // Las páginas para empresas que llegan de Google (`lib/patrocinar.ts`):
+  // en cada idioma, las de los clubes de su país. Sin `alternates`: la
+  // misma dirección en otro idioma enseña clubes de otro país.
+  let paginasDePatrocinio: MetadataRoute.Sitemap = [];
+  try {
+    const todos = await clubesParaPatrocinar();
+    paginasDePatrocinio = routing.locales.flatMap((locale) => {
+      const suyas = combinaciones(delPais(todos, paisDeBusquedaDelIdioma(locale)));
+      if (suyas.length === 0) return [];
+      return [
+        { url: `${SITE_URL}/${locale}/patrocinar`, lastModified: ahora, changeFrequency: "weekly" as const, priority: 0.8 },
+        ...suyas.map((una) => ({
+          url: `${SITE_URL}/${locale}/patrocinar/${una.deporte}${una.zona ? `/${una.zona}` : ""}`,
+          lastModified: ahora,
+          changeFrequency: "weekly" as const,
+          priority: una.zona ? 0.7 : 0.8,
+        })),
+      ];
+    });
+  } catch {
+    // Mejor un mapa sin estas páginas que un 500.
+  }
+
+  return [...estaticas, ...fichasDeClub, ...fichasDeEmpresa, ...paginasDePatrocinio];
 }

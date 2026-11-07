@@ -124,5 +124,30 @@
     "oportunidades": "Opportunities",
     "loNecesitan": "They need this",
     "soloEnEsteNavegador": "This is only saved in this browser: you won't see it from another device, and it's lost if you clear your browsing data. <enlace>Create a free account</enlace> and it's saved on all of them. Everything you've already marked comes with you."
+  },
+  "patrocinar": {
+    "eyebrow": "Local sports sponsorship",
+    "h1Deporte": "Sponsor {deporte} clubs",
+    "h1Zona": "Sponsor {deporte} clubs in {zona}",
+    "metaDescripcionDeporte": "{n, plural, one {# {deporte} club is} other {# {deporte} clubs are}} looking for companies to support them. See what each one offers and write to them for free, with no sign-up and no commission.",
+    "metaDescripcionZona": "{n, plural, one {# {deporte} club in {zona} is} other {# {deporte} clubs in {zona} are}} looking for companies to support them. See what each one offers and write to them for free, with no sign-up and no commission.",
+    "intro": "{n, plural, one {This club is} other {These # clubs are}} looking for companies that want to support them. Each one explains what it offers (shirt, social media, events, youth teams…), who it reaches and what it costs. Write to them directly from their page: it's free, no sign-up needed, and ApoyaClub takes no commission.",
+    "oportunidades": "{n, plural, =0 {No opportunities published yet} one {# opportunity} other {# opportunities}}",
+    "desde": "from {precio}",
+    "verClub": "See the club",
+    "porQueTitulo": "Why sponsor a {deporte} club",
+    "porQue1": "You reach local families and neighbours: the people who buy from your business.",
+    "porQue2": "Your brand is linked to what people value in sport: effort, teamwork and grassroots sport.",
+    "porQue3": "Starting from small amounts: many clubs have options for any budget, including in kind.",
+    "verOportunidades": "See all opportunities",
+    "publicar": "Does your company offer something to clubs? Publish it for free",
+    "otrasZonas": "{deporte} clubs in other areas",
+    "otrosDeportes": "Other sports in {zona}",
+    "todoElDeporte": "All {deporte} clubs",
+    "indiceTitulo": "Sponsor sports clubs",
+    "indiceTexto": "Pick a sport or an area to see the clubs looking for companies to support them.",
+    "indiceMeta": "Sports clubs looking for sponsors, by sport and by area. Write to them for free, with no commission.",
+    "clubes": "{n, plural, one {# club} other {# clubs}}",
+    "sinClubes": "No clubs published here yet."
   }
 }
