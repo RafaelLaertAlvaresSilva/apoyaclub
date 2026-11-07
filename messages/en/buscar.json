@@ -131,7 +131,7 @@
     "h1Zona": "Sponsor {deporte} clubs in {zona}",
     "metaDescripcionDeporte": "{n, plural, one {# {deporte} club is} other {# {deporte} clubs are}} looking for companies to support them. See what each one offers and write to them for free, with no sign-up and no commission.",
     "metaDescripcionZona": "{n, plural, one {# {deporte} club in {zona} is} other {# {deporte} clubs in {zona} are}} looking for companies to support them. See what each one offers and write to them for free, with no sign-up and no commission.",
-    "intro": "{n, plural, one {This club is} other {These # clubs are}} looking for companies that want to support them. Each one explains what it offers (shirt, social media, events, youth teams…), who it reaches and what it costs. Write to them directly from their page: it's free, no sign-up needed, and ApoyaClub takes no commission.",
+    "intro": "{n, plural, one {This club is looking for companies that want to support it. It explains what it offers (shirt, social media, events, youth teams…), who it reaches and what it costs. Write to it directly from its page: it's free, no sign-up needed, and ApoyaClub takes no commission.} other {These # clubs are looking for companies that want to support them. Each one explains what it offers (shirt, social media, events, youth teams…), who it reaches and what it costs. Write to them directly from their page: it's free, no sign-up needed, and ApoyaClub takes no commission.}}",
     "oportunidades": "{n, plural, =0 {No opportunities published yet} one {# opportunity} other {# opportunities}}",
     "desde": "from {precio}",
     "verClub": "See the club",

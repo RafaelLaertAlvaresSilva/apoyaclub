@@ -131,7 +131,7 @@
     "h1Zona": "Patrocinar clubes de {deporte} em {zona}",
     "metaDescripcionDeporte": "{n, plural, one {# clube de {deporte} procura} other {# clubes de {deporte} procuram}} empresas que os apoiem. Veja o que cada um oferece e escreva de graça, sem cadastro e sem comissões.",
     "metaDescripcionZona": "{n, plural, one {# clube de {deporte} em {zona} procura} other {# clubes de {deporte} em {zona} procuram}} empresas que os apoiem. Veja o que cada um oferece e escreva de graça, sem cadastro e sem comissões.",
-    "intro": "{n, plural, one {Este clube procura} other {Estes # clubes procuram}} empresas que queiram apoiá-los. Cada um explica o que oferece (camisa, redes, eventos, categorias de base…), a que público chega e quanto custa. Escreva diretamente pela página do clube: é grátis, não precisa de cadastro e o ApoyaClub não cobra comissão.",
+    "intro": "{n, plural, one {Este clube procura empresas que queiram apoiá-lo. Ele explica o que oferece (camisa, redes, eventos, categorias de base…), a que público chega e quanto custa. Escreva diretamente pela página do clube: é grátis, não precisa de cadastro e o ApoyaClub não cobra comissão.} other {Estes # clubes procuram empresas que queiram apoiá-los. Cada um explica o que oferece (camisa, redes, eventos, categorias de base…), a que público chega e quanto custa. Escreva diretamente pela página do clube: é grátis, não precisa de cadastro e o ApoyaClub não cobra comissão.}}",
     "oportunidades": "{n, plural, =0 {Ainda sem oportunidades publicadas} one {# oportunidade} other {# oportunidades}}",
     "desde": "a partir de {precio}",
     "verClub": "Ver o clube",
