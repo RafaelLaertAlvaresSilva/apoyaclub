@@ -33,6 +33,16 @@ export async function darseDeBajaDeAvisos(formData: FormData): Promise<EstadoBaj
     return { error: t("fallo") };
   }
 
+  // Si no era de una empresa, puede ser un aviso de zona (migración
+  // 0061: "avísame cuando haya un club aquí", sin cuenta).
+  if (!count) {
+    const { count: deZona } = await createAdminClient()
+      .from("zone_alerts")
+      .update({ active: false }, { count: "exact" })
+      .eq("unsubscribe_token", token);
+    if (deZona) return { ok: true };
+  }
+
   // Un enlace viejo o manipulado no encuentra a nadie. Se dice, en vez
   // de fingir que ha funcionado: si alguien sigue recibiendo correos
   // después de darse de baja, lo siguiente es el botón de spam.

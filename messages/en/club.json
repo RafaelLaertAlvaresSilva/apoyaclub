@@ -185,7 +185,10 @@
       "antetituloNecesidad": "WE NEED THIS",
       "antetituloOportunidad": "SPONSORSHIP OPPORTUNITY",
       "plazasLibres": "{n, plural, one {# place left} other {# places left}}"
-    }
+    },
+    "sobreElClub": "About the club",
+    "equipos": "{n, plural, one {# team} other {# teams}}",
+    "masDelClub": "More from {club}"
   },
   "paginaClub": {
     "verLasOportunidades": "{n, plural, one {See the opportunity} other {See all # opportunities}}",

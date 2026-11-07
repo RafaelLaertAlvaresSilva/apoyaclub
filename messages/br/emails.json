@@ -134,5 +134,19 @@
       "texto2": "Responda a este e-mail com o que quiser, mesmo que seja uma linha. Sou eu que leio, e isso ajuda muito a melhorar a plataforma.",
       "boton": "Ir para o meu painel"
     }
+  },
+  "avisoDeZona": {
+    "eyebrow": "Clubes na sua região",
+    "asuntoApuntado": "Vamos te avisar: {zona}",
+    "tituloApuntado": "Vamos te avisar quando houver clubes em {zona}",
+    "textoApuntado": "A ApoyaClub acabou de começar e os clubes estão se cadastrando aos poucos. Assim que um clube da sua região publicar algo, você recebe um e-mail. No máximo um por semana.",
+    "botonApuntado": "Ver o que tem agora",
+    "asuntoNovedades": "{cuantas, plural, one {Algo novo para patrocinar em {zona}} other {# novidades para patrocinar em {zona}}}",
+    "tituloNovedades": "{cuantas, plural, one {Tem algo novo em {zona}} other {Tem # novidades em {zona}}}",
+    "textoNovedades": "Clubes da sua região publicaram isto na ApoyaClub. Você pode escrever para eles diretamente, sem criar conta.",
+    "yMas": "E mais {cuantas} na busca.",
+    "botonNovedades": "Ver na busca",
+    "pie": "Você recebe isto porque pediu para ser avisado pela busca da ApoyaClub. Pode deixar de receber quando quiser: {enlaceBaja}",
+    "enlaceBaja": "cancelar"
   }
 }

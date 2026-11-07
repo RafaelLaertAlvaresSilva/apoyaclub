@@ -80,6 +80,14 @@ export default function PrivacidadPage() {
           terceros, y el club puede pedir en cualquier momento que no se le contacte por
           teléfono o WhatsApp escribiendo a la dirección indicada en el apartado 1.
         </p>
+        <p>
+          Quien pide desde el buscador que le avisemos cuando haya clubes en una zona, sin
+          crear cuenta, nos da su correo y lo que estaba buscando (país, provincia y
+          deporte). Se usa solo para enviarle esos avisos, como mucho uno por semana, y
+          para que el equipo de ApoyaClub sepa en qué zonas hay empresas interesadas. La
+          base legal es su consentimiento, que retira en cualquier momento con el enlace de
+          baja de cada correo.
+        </p>
       </section>
 
       <section>

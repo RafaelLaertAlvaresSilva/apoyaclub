@@ -49,7 +49,9 @@ type FilaNecesidad = {
   club_province: string | null;
   /** País del club (migración 0060). */
   club_country?: string | null;
-  created_at: string;
+  /** En la vista se llama así (no `created_at`): con `created_at` la
+   * consulta fallaba y no salía ningún aviso (arreglado el 7-11-2026). */
+  opportunity_created_at: string;
 };
 
 export type NecesidadQueEncaja = {
@@ -124,7 +126,7 @@ export async function avisarDeNecesidadesQueEncajan(
         .from("opportunity_search_view")
         .select("*")
         .eq("is_need", true)
-        .gte("created_at", desde)
+        .gte("opportunity_created_at", desde)
         .returns<FilaNecesidad[]>(),
     ]);
 

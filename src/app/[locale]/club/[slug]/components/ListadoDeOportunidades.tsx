@@ -8,6 +8,7 @@ import { etiquetador } from "@/lib/etiquetas-traducidas";
 import { formatoDeValor } from "@/lib/format";
 import type { AppLocale } from "@/i18n/routing";
 import { beneficioEnTexto } from "@/lib/ficha-oportunidad";
+import { sinLineaDeDatos } from "@/lib/generador-oportunidades";
 import type { Opportunity } from "@/lib/types";
 
 /**
@@ -24,12 +25,15 @@ export function ListadoDeOportunidades({
   esNecesidad,
   base = `/club/${slug}`,
   paisDelClub = null,
+  nombreClub = "",
 }: {
   oportunidades: Opportunity[];
   slug: string;
   esNecesidad: boolean;
   /** Para la moneda de los precios (la del club, no la del idioma). */
   paisDelClub?: string | null;
+  /** Para quitar la línea de cifras repetida de cada tarjeta. */
+  nombreClub?: string;
   /** A dónde llevan los enlaces: la ficha pública, o `/vista-previa`. */
   base?: string;
 }) {
@@ -102,7 +106,7 @@ export function ListadoDeOportunidades({
             ) : (
               oportunidad.description && (
                 <p className="line-clamp-3 text-sm text-zinc-600">
-                  {oportunidad.description}
+                  {sinLineaDeDatos(oportunidad.description, nombreClub)}
                 </p>
               )
             )}

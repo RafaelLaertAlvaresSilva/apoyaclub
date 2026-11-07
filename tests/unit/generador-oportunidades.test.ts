@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { RequisitoIdea } from "@/lib/catalogo-ideas";
 import {
   categoriasDelGenerador,
+  sinLineaDeDatos,
   IDEAS_DEL_GENERADOR,
   MAXIMO_DE_PROPUESTAS,
   equipoPrincipal,
@@ -174,5 +175,30 @@ describe("publicar las propuestas", () => {
 
   it("sin precio guarda 0 (precio a convenir)", () => {
     expect(publicar).toContain('textoPrecio === "" ? 0');
+  });
+});
+
+describe("sinLineaDeDatos (tarjetas del buscador y del club)", () => {
+  it("quita la línea de cifras que pone el generador, en los cuatro idiomas", () => {
+    const club = "CD Maciot Sport";
+    expect(sinLineaDeDatos(`Logo en la camiseta.\n\nDatos del ${club}: Jugadores: 30 · Equipos: 3.`, club)).toBe(
+      "Logo en la camiseta.",
+    );
+    expect(sinLineaDeDatos(`Logo na camisola.\n\nDados do ${club}: Jogadores: 30.`, club)).toBe("Logo na camisola.");
+    expect(sinLineaDeDatos(`Logo on the shirt.\n\n${club} in figures: Players: 30.`, club)).toBe("Logo on the shirt.");
+  });
+
+  it("no toca una descripción escrita a mano ni la de otro club", () => {
+    expect(sinLineaDeDatos("Datos del partido: el domingo a las 10.", "CD Maciot Sport")).toBe(
+      "Datos del partido: el domingo a las 10.",
+    );
+    expect(sinLineaDeDatos("Texto. Datos del CD Otro: Jugadores: 10.", "CD Maciot Sport")).toBe(
+      "Texto. Datos del CD Otro: Jugadores: 10.",
+    );
+  });
+
+  it("aguanta nombres con signos raros (paréntesis, puntos)", () => {
+    const club = "C.D. Pozo (Alicante)";
+    expect(sinLineaDeDatos(`Algo.\n\nDatos del ${club}: Socios: 300.`, club)).toBe("Algo.");
   });
 });

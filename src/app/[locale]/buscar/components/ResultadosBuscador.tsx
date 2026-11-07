@@ -10,8 +10,10 @@ import { filtrosAQueryString, OPCIONES_ORDEN } from "@/lib/buscar-params";
 import { CLASES_NIVEL_PATROCINIO, esPorPlazas, plazasLibres } from "@/lib/opportunities";
 import { etiquetador } from "@/lib/etiquetas-traducidas";
 import { formatoDeValor, textoDelPrecio, tienePrecio } from "@/lib/format";
+import { sinLineaDeDatos } from "@/lib/generador-oportunidades";
 import type { AppLocale } from "@/i18n/routing";
 import { BarraDePlazas } from "@/components/BarraDePlazas";
+import { AvisoYInvitacion } from "./AvisoYInvitacion";
 import {
   agruparPorClub,
   type FiltrosBusqueda,
@@ -241,6 +243,7 @@ function TarjetaOportunidad({
       ? E.formaColaboracion(oportunidad.collaborationType)
       : null,
   ].filter((etiqueta): etiqueta is string => !!etiqueta);
+  const descripcion = oportunidad.description ? sinLineaDeDatos(oportunidad.description, oportunidad.clubName) : "";
 
   return (
     <li className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4">
@@ -309,9 +312,11 @@ function TarjetaOportunidad({
             {oportunidad.teamLabel}
           </p>
         )}
-        {oportunidad.description && (
+        {/* Sin la línea de cifras del club: repetida en cada tarjeta del
+            mismo club no aporta nada (se ve en la ficha). */}
+        {descripcion && (
           <p className="mt-1 line-clamp-2 text-sm text-zinc-600">
-            {oportunidad.description}
+            {descripcion}
           </p>
         )}
         {oportunidad.exclusivity && (
@@ -469,8 +474,23 @@ function EstadoVacio({
     return valor != null && valor !== "" && valor !== "todo";
   });
 
+  // La zona en palabras, para "Avísame cuando haya clubes en …".
+  const tFiltros = useTranslations("buscar.filtros");
+  const E = etiquetador(useTranslations("common.etiquetas"));
+  const nombrePais = conPais ? tFiltros(`paises.${filtros.pais}` as never) : null;
+  const nombreDeporte = filtros.deporte ? E.deporte(filtros.deporte).toLowerCase() : null;
+  const zona = filtros.provincia
+    ? [filtros.provincia, nombreDeporte].filter(Boolean).join(" · ")
+    : [nombreDeporte, nombrePais ?? tVacio("tuZona")].filter(Boolean).join(" · ");
+
+  // Con provincia (o radio) en un país, lo primero es ver todo ese país:
+  // a una empresa de Alicante le sirve antes un club de Valencia que uno
+  // de Brasil (pedido por Rafael el 7-11-2026).
+  const conZona = !!filtros.provincia || !!filtros.radioKm;
+  const verTodoElPais = conPais && conZona;
+
   return (
-    <div className="rounded-xl border border-dashed border-zinc-300 bg-white p-8 text-center">
+    <div className="rounded-xl border border-dashed border-zinc-300 bg-white p-6 text-center sm:p-8">
       <p className="font-medium text-zinc-900">
         {tieneFiltros ? tVacio("vacioTitulo") : tVacio("vacioSinFiltrosTitulo")}
       </p>
@@ -482,15 +502,17 @@ function EstadoVacio({
             : tVacio("vacioSinRadio")}
       </p>
       <div className="mt-4 flex flex-wrap justify-center gap-2">
-        {/* Lo primero que se ofrece si se está viendo un solo país: con
-            pocos clubes en algunos países, lo normal es que esté vacío. */}
-        {conPais && (
+        {verTodoElPais && (
           <button
             type="button"
-            onClick={() => router.push(`/buscar?${filtrosAQueryString({ ...filtros, pais: "todos", provincia: undefined }, vista)}`)}
+            onClick={() =>
+              router.push(
+                `/buscar?${filtrosAQueryString({ ...filtros, provincia: undefined, radioKm: undefined }, vista)}`,
+              )
+            }
             className="rounded-lg bg-accion px-4 py-2 text-sm font-medium text-sobre-color hover:bg-accion-fuerte"
           >
-            {tVacio("verTodosLosPaises")}
+            {tVacio("verTodoElPais", { pais: nombrePais ?? "" })}
           </button>
         )}
         {filtros.radioKm && (
@@ -501,9 +523,28 @@ function EstadoVacio({
                 `/buscar?${filtrosAQueryString({ ...filtros, radioKm: filtros.radioKm! * 2 }, vista)}`,
               )
             }
-            className="rounded-lg bg-accion px-4 py-2 text-sm font-medium text-sobre-color hover:bg-accion-fuerte"
+            className={
+              verTodoElPais
+                ? "rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
+                : "rounded-lg bg-accion px-4 py-2 text-sm font-medium text-sobre-color hover:bg-accion-fuerte"
+            }
           >
             {tVacio("ampliarRadio", { km: filtros.radioKm! * 2 })}
+          </button>
+        )}
+        {/* Otros países, después: con pocos clubes en algunos países, lo
+            normal es que esté vacío. */}
+        {conPais && (
+          <button
+            type="button"
+            onClick={() => router.push(`/buscar?${filtrosAQueryString({ ...filtros, pais: "todos", provincia: undefined, radioKm: undefined }, vista)}`)}
+            className={
+              verTodoElPais || filtros.radioKm
+                ? "rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
+                : "rounded-lg bg-accion px-4 py-2 text-sm font-medium text-sobre-color hover:bg-accion-fuerte"
+            }
+          >
+            {tVacio("verTodosLosPaises")}
           </button>
         )}
         {tieneFiltros ? (
@@ -523,6 +564,13 @@ function EstadoVacio({
           </Link>
         )}
       </div>
+
+      <AvisoYInvitacion
+        zona={zona}
+        pais={conPais ? (filtros.pais ?? null) : null}
+        provincia={filtros.provincia ?? null}
+        deporte={filtros.deporte ?? null}
+      />
     </div>
   );
 }

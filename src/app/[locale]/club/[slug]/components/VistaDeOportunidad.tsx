@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { etiquetador } from "@/lib/etiquetas-traducidas";
-import { formatoDeValor } from "@/lib/format";
+import { nombreDelDeporte } from "@/lib/deportes";
+import { formatoDeValor, textoDelPrecio } from "@/lib/format";
 import type { AppLocale } from "@/i18n/routing";
 import { Header } from "@/components/Header";
 import { Link } from "@/i18n/navigation";
@@ -17,6 +18,9 @@ import { PieDeLaFichaImpresa } from "./PieDeLaFichaImpresa";
 import { SolicitarContactoBoton } from "./SolicitarContactoBoton";
 import type { ClubPublico } from "../data";
 
+/** Cuántas otras oportunidades del club se enseñan debajo. */
+const OTRAS_A_LA_VISTA = 3;
+
 /**
  * Una oportunidad, en su propia página (migración 0049). Sin la ruta
  * alrededor: la usan la página pública y la vista previa del club.
@@ -30,16 +34,29 @@ export async function VistaDeOportunidad({
   perfil,
   oportunidad,
   vistaPrevia = false,
+  equipos = [],
+  otras = [],
 }: {
   locale: AppLocale;
   perfil: ClubPublico["perfil"];
   oportunidad: ClubPublico["oportunidades"][number];
   vistaPrevia?: boolean;
+  /** Para el recuadro "Sobre el club" (pedido por Rafael el 7-11-2026). */
+  equipos?: ClubPublico["equipos"];
+  /** Las demás oportunidades del club, para "Más de este club". */
+  otras?: ClubPublico["oportunidades"];
 }) {
   const t = await getTranslations("club");
   const tp = await getTranslations("club.oportunidadPagina");
   const E = etiquetador(await getTranslations("common.etiquetas"));
   const precio = formatoDeValor(locale, perfil.country);
+  const tPrecio = await getTranslations("common.precio");
+  const tEtiquetas = await getTranslations("common.etiquetas");
+  const deportes = [
+    ...new Set(equipos.map((equipo) => nombreDelDeporte(equipo.sport, (clave) => tEtiquetas(clave as never)))),
+  ];
+  const lugar = [perfil.city, perfil.province].filter(Boolean).join(", ");
+  const masDelClub = otras.filter((otra) => otra.id !== oportunidad.id).slice(0, OTRAS_A_LA_VISTA);
 
   const esNecesidad = oportunidad.esNecesidad;
   const urlPublica = `${SITE_URL}/${locale}/club/${perfil.slug}/oportunidad/${oportunidad.id}`;
@@ -132,6 +149,11 @@ export async function VistaDeOportunidad({
               )}
             </p>
           )}
+          {/* Sin precio, se dice: una empresa que no ve ninguna cifra no
+              sabe si se ha olvidado o si se puede hablar. */}
+          {!esNecesidad && !(oportunidad.value > 0) && (
+            <p className="mt-4 text-lg font-semibold text-zinc-700">{tPrecio("aConvenir")}</p>
+          )}
 
           {esPorPlazas(oportunidad) && (
             <div className="mt-4">
@@ -180,14 +202,76 @@ export async function VistaDeOportunidad({
           <PieDeLaFichaImpresa url={urlPublica} nombreClub={perfil.name} />
         </article>
 
-        <p className="mt-6 text-center text-sm text-zinc-500 print:hidden">
-          <Link
-            href={base}
-            className="font-medium text-accion-tinta hover:underline"
-          >
-            {tp("verFichaCompleta", { club: perfil.name })}
-          </Link>
-        </p>
+        {/* Sobre el club: quien llega por un enlace o desde el buscador
+            no sabe quién hay detrás. Dónde está, qué deporte y cuántos
+            equipos, que es lo primero que pregunta una empresa. */}
+        <section className="mt-6 rounded-2xl border border-zinc-200 bg-white p-5 print:hidden">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-zinc-500">{tp("sobreElClub")}</h2>
+          <div className="mt-3 flex items-start gap-3">
+            {perfil.logoUrl ? (
+              <Image
+                src={perfil.logoUrl}
+                alt=""
+                width={48}
+                height={48}
+                className="h-12 w-12 shrink-0 rounded-lg border border-zinc-200 bg-white object-contain p-0.5"
+              />
+            ) : (
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-lg font-bold text-teal-700">
+                {perfil.name.charAt(0)}
+              </span>
+            )}
+            <div className="min-w-0 flex-1">
+              <p className="font-semibold text-zinc-900">{perfil.name}</p>
+              {lugar && <p className="text-sm text-zinc-600">{lugar}</p>}
+              {(deportes.length > 0 || equipos.length > 0) && (
+                <p className="mt-0.5 text-sm text-zinc-600">
+                  {[deportes.join(", "), equipos.length > 0 ? tp("equipos", { n: equipos.length }) : null]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </p>
+              )}
+              {perfil.description && (
+                <p className="mt-2 line-clamp-3 text-sm text-zinc-700">{perfil.description}</p>
+              )}
+              <Link href={base} className="mt-2 inline-block text-sm font-medium text-accion-tinta hover:underline">
+                {tp("verFichaCompleta", { club: perfil.name })} →
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Más de este club: si esta no le encaja, a lo mejor otra sí,
+            sin tener que volver al buscador. */}
+        {masDelClub.length > 0 && (
+          <section className="mt-6 print:hidden">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-zinc-500">
+              {tp("masDelClub", { club: perfil.name })}
+            </h2>
+            <ul className="mt-3 grid gap-3 sm:grid-cols-3">
+              {masDelClub.map((otra) => (
+                <li key={otra.id}>
+                  <Link
+                    href={`${base}/oportunidad/${otra.id}`}
+                    className="flex h-full flex-col rounded-xl border border-zinc-200 bg-white p-4 hover:border-accion-tinta"
+                  >
+                    <span className="text-xs font-semibold uppercase tracking-wider text-accion-tinta">
+                      {otra.esNecesidad ? tp("loNecesitamos") : E.tipoOportunidad(otra.opportunityType)}
+                    </span>
+                    <span className="mt-1 font-medium text-zinc-900">{otra.title}</span>
+                    <span className="mt-auto pt-2 text-sm font-semibold text-teal-700">
+                      {textoDelPrecio(
+                        { value: otra.value, esNecesidad: otra.esNecesidad },
+                        precio,
+                        { necesidad: tPrecio("necesidad"), aConvenir: tPrecio("aConvenir") },
+                      )}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
     </div>
   );

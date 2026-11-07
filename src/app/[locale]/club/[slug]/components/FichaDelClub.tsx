@@ -21,6 +21,7 @@ import { IndiceDeSecciones } from "./IndiceDeSecciones";
 import { ListaConVerMas } from "./ListaConVerMas";
 import { RegistrarVisita } from "./RegistrarVisita";
 import { SolicitarContactoBoton } from "./SolicitarContactoBoton";
+import { sinLineaDeDatos } from "@/lib/generador-oportunidades";
 import { deportesDelClub, type ClubPublico } from "../data";
 
 /** El orden en que salen las redes. El nombre de cada una no se
@@ -275,7 +276,7 @@ export async function FichaDelClub({
                     </p>
                   </div>
                   {oportunidad.description && (
-                    <p className="text-sm text-zinc-600">{oportunidad.description}</p>
+                    <p className="text-sm text-zinc-600">{sinLineaDeDatos(oportunidad.description, perfil.name)}</p>
                   )}
                   {oportunidad.exclusivity && (
                     <p className="text-xs font-medium text-accion-tinta">
@@ -386,7 +387,7 @@ export async function FichaDelClub({
                   </div>
 
                   {oportunidad.description && (
-                    <p className="text-sm text-zinc-600">{oportunidad.description}</p>
+                    <p className="text-sm text-zinc-600">{sinLineaDeDatos(oportunidad.description, perfil.name)}</p>
                   )}
 
                   {esPorPlazas(oportunidad) && (

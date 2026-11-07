@@ -41,6 +41,7 @@ export async function ListaVistaPrevia({ esNecesidad }: { esNecesidad: boolean }
               oportunidades={delListado}
               slug={perfil.slug}
               paisDelClub={perfil.country}
+              nombreClub={perfil.name}
               esNecesidad={esNecesidad}
               base="/vista-previa"
             />

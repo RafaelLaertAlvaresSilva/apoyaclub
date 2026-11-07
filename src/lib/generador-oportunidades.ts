@@ -241,3 +241,20 @@ export function generarPropuestas({
 export function categoriasDelGenerador(equipos: Pick<ClubTeam, "sport">[]): CategoriaIdea[] {
   return categoriasDelClub(deportesDeLosEquipos(equipos));
 }
+
+/**
+ * La descripción sin la línea de cifras del club que pone el generador
+ * ("Datos del CD Maciot Sport: Jugadores: 30 · …"). Para las tarjetas del
+ * buscador (pedido por Rafael el 7-11-2026): con ocho oportunidades del
+ * mismo club, la misma línea ocho veces no dice nada y se come el poco
+ * sitio que hay. En la ficha de la oportunidad sí se ve entera.
+ *
+ * Vale para los cuatro idiomas en que la escribe el generador
+ * (`panel.oportunidades.generador.datos`). Si el club la ha borrado o
+ * cambiado a mano, no se toca nada.
+ */
+export function sinLineaDeDatos(descripcion: string, club: string): string {
+  const nombre = club.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const patron = new RegExp(`\\s*(?:Datos del ${nombre}|Dados do ${nombre}|${nombre} in figures):[^\\n]*$`);
+  return descripcion.replace(patron, "").trim();
+}

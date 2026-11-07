@@ -185,7 +185,10 @@
       "antetituloNecesidad": "PRECISAMOS DISTO",
       "antetituloOportunidad": "OPORTUNIDADE DE PATROCÍNIO",
       "plazasLibres": "{n, plural, one {# vaga livre} other {# vagas livres}}"
-    }
+    },
+    "sobreElClub": "Sobre o clube",
+    "equipos": "{n, plural, one {# equipa} other {# equipas}}",
+    "masDelClub": "Mais de {club}"
   },
   "paginaClub": {
     "verLasOportunidades": "{n, plural, one {Ver a oportunidade} other {Ver as # oportunidades}}",

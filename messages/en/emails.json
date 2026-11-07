@@ -134,5 +134,19 @@
       "texto2": "Just reply to this email with anything, even one line. I read every reply myself, and it helps us a lot to improve the platform.",
       "boton": "Go to my panel"
     }
+  },
+  "avisoDeZona": {
+    "eyebrow": "Clubs near you",
+    "asuntoApuntado": "We'll let you know: {zona}",
+    "tituloApuntado": "We'll let you know when there are clubs in {zona}",
+    "textoApuntado": "ApoyaClub has just started and clubs are joining little by little. As soon as a club in your area publishes something, you'll get an email. At most one a week.",
+    "botonApuntado": "See what's there now",
+    "asuntoNovedades": "{cuantas, plural, one {Something new to sponsor in {zona}} other {# new things to sponsor in {zona}}}",
+    "tituloNovedades": "{cuantas, plural, one {There's something new in {zona}} other {There are # new things in {zona}}}",
+    "textoNovedades": "Clubs in your area have published this on ApoyaClub. You can write to them directly, no account needed.",
+    "yMas": "And {cuantas} more in the search.",
+    "botonNovedades": "See it in the search",
+    "pie": "You're getting this because you asked to be notified from the ApoyaClub search. You can stop it any time: {enlaceBaja}",
+    "enlaceBaja": "unsubscribe"
   }
 }

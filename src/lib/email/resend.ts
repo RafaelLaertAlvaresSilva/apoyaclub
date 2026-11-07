@@ -722,3 +722,101 @@ export async function enviarEmailPasoDelClub({
     }),
   });
 }
+
+// ---------------------------------------------------------------------
+// Avisos de zona (migración 0061): quien pidió "avísame cuando haya un
+// club aquí" desde el buscador vacío, sin cuenta.
+// ---------------------------------------------------------------------
+
+function escaparHtml(texto: string): string {
+  return texto.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+/** El correo de "apuntado": confirma qué zona y cómo darse de baja. */
+export async function enviarEmailAvisoDeZonaApuntado({
+  email,
+  zona,
+  buscarUrl,
+  bajaUrl,
+  idioma,
+}: {
+  email: string;
+  /** "Alicante · fútbol", o el país si no eligió provincia. */
+  zona: string;
+  buscarUrl: string;
+  bajaUrl: string;
+  idioma?: string;
+}): Promise<ResultadoEnvioEmail> {
+  const t = await traductorEmails(idioma);
+  const zonaHtml = escaparHtml(zona);
+  return enviarEmail({
+    to: email,
+    subject: t("avisoDeZona.asuntoApuntado", { zona }),
+    html: plantilla({
+      color: "#047857",
+      eyebrow: t("avisoDeZona.eyebrow"),
+      titulo: t("avisoDeZona.tituloApuntado", { zona: zonaHtml }),
+      cuerpo: `<p style="margin:0 0 20px;">${t("avisoDeZona.textoApuntado")}</p>`,
+      botonTexto: t("avisoDeZona.botonApuntado"),
+      botonUrl: buscarUrl,
+      pie: t("avisoDeZona.pie", {
+        enlaceBaja: `<a href="${bajaUrl}" style="color:#a1a1aa;">${t("avisoDeZona.enlaceBaja")}</a>`,
+      }),
+    }),
+  });
+}
+
+/** Lo nuevo en su zona. Como mucho un correo por semana (lo decide la tarea diaria). */
+export async function enviarEmailNovedadesDeZona({
+  email,
+  zona,
+  oportunidades,
+  cuantasMas,
+  buscarUrl,
+  bajaUrl,
+  idioma,
+}: {
+  email: string;
+  zona: string;
+  oportunidades: { titulo: string; clubNombre: string; url: string }[];
+  cuantasMas: number;
+  buscarUrl: string;
+  bajaUrl: string;
+  idioma?: string;
+}): Promise<ResultadoEnvioEmail> {
+  const t = await traductorEmails(idioma);
+  const zonaHtml = escaparHtml(zona);
+  const lista = oportunidades
+    .map(
+      (una) => `
+        <li style="margin:0 0 12px;">
+          <a href="${una.url}" style="color:#047857;font-weight:600;text-decoration:none;">${escaparHtml(una.titulo)}</a>
+          <br />
+          <span style="color:#71717a;font-size:14px;">${escaparHtml(una.clubNombre)}</span>
+        </li>`,
+    )
+    .join("");
+
+  return enviarEmail({
+    to: email,
+    subject: t("avisoDeZona.asuntoNovedades", { cuantas: oportunidades.length + cuantasMas, zona }),
+    html: plantilla({
+      color: "#047857",
+      eyebrow: t("avisoDeZona.eyebrow"),
+      titulo: t("avisoDeZona.tituloNovedades", { cuantas: oportunidades.length + cuantasMas, zona: zonaHtml }),
+      cuerpo: `
+        <p style="margin:0 0 16px;">${t("avisoDeZona.textoNovedades")}</p>
+        <ul style="margin:0 0 20px;padding-left:20px;line-height:1.5;">${lista}</ul>
+        ${
+          cuantasMas > 0
+            ? `<p style="margin:0 0 24px;color:#71717a;font-size:14px;">${t("avisoDeZona.yMas", { cuantas: cuantasMas })}</p>`
+            : ""
+        }`,
+      botonTexto: t("avisoDeZona.botonNovedades"),
+      botonUrl: buscarUrl,
+      pie: t("avisoDeZona.pie", {
+        enlaceBaja: `<a href="${bajaUrl}" style="color:#a1a1aa;">${t("avisoDeZona.enlaceBaja")}</a>`,
+      }),
+    }),
+  });
+}

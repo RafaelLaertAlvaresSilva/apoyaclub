@@ -63,5 +63,13 @@ export default async function PaginaOportunidad({
   if (!encontrado) notFound();
 
   const locale = (await getLocale()) as AppLocale;
-  return <VistaDeOportunidad locale={locale} perfil={encontrado.perfil} oportunidad={encontrado.oportunidad} />;
+  return (
+    <VistaDeOportunidad
+      locale={locale}
+      perfil={encontrado.perfil}
+      oportunidad={encontrado.oportunidad}
+      equipos={encontrado.equipos}
+      otras={encontrado.oportunidades}
+    />
+  );
 }

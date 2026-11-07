@@ -2,6 +2,7 @@ import { avisarDeFallo } from "@/lib/monitoring";
 import { NextResponse } from "next/server";
 import { enviarEmailAvisoCaducidadSuscripcion } from "@/lib/email/resend";
 import { avisarDeNecesidadesQueEncajan } from "@/lib/avisos-empresa";
+import { avisarDeZonas } from "@/lib/avisos-zona";
 import {
   avisarFinDePrueba,
   cerrarPruebasVencidas,
@@ -150,6 +151,7 @@ export async function GET(request: Request) {
     plazasSoltadas,
     avisosAEmpresas,
     pasosDelClub,
+    avisosDeZona,
   ] = await Promise.all([
     enviarBienvenidas(admin).catch((excepcion) => {
       avisarDeFallo("cron-suscripciones", "Fallo enviando las bienvenidas", excepcion);
@@ -183,6 +185,10 @@ export async function GET(request: Request) {
       avisarDeFallo("cron-suscripciones", "Fallo guiando a los clubes nuevos", excepcion);
       return 0;
     }),
+    avisarDeZonas(admin).catch((excepcion) => {
+      avisarDeFallo("cron-suscripciones", "Fallo con los avisos de zona", excepcion);
+      return 0;
+    }),
   ]);
 
   return NextResponse.json({
@@ -196,5 +202,6 @@ export async function GET(request: Request) {
     plazasSoltadas,
     avisosAEmpresas,
     pasosDelClub,
+    avisosDeZona,
   });
 }

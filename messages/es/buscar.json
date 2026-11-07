@@ -69,7 +69,9 @@
     "verPaginaDelClub": "Ver página del club",
     "buscando": "Buscando oportunidades…",
     "otrosPaises": "¿Buscas clubes de otro país?",
-    "verTodosLosPaises": "Ver clubes de todos los países"
+    "verTodosLosPaises": "Ver clubes de todos los países",
+    "verTodoElPais": "Ver clubes en todo el país ({pais})",
+    "tuZona": "tu zona"
   },
   "directorioEmpresas": {
     "metaTitulo": "Empresas que apoyan al deporte de base",
@@ -149,5 +151,23 @@
     "indiceMeta": "Clubes deportivos que buscan patrocinadores, por deporte y por zona. Escríbeles gratis y sin comisiones.",
     "clubes": "{n, plural, one {# club} other {# clubes}}",
     "sinClubes": "Todavía no hay clubes publicados aquí."
+  },
+  "avisoZona": {
+    "titulo": "Avísame cuando haya clubes en {zona}",
+    "texto": "Déjanos tu correo y te escribimos cuando un club de aquí publique algo. Sin crear cuenta. Como mucho, un correo por semana.",
+    "email": "Tu correo",
+    "boton": "Avísame",
+    "enviando": "Guardando…",
+    "ok": "Hecho. Te hemos enviado un correo de confirmación y te escribiremos en cuanto haya algo aquí.",
+    "legal": "Solo usamos tu correo para esto. Te puedes dar de baja en cada correo. <privacidad>Privacidad</privacidad>",
+    "errorEmail": "Escribe un correo válido.",
+    "errorLimite": "Lo has intentado varias veces seguidas. Espera un rato.",
+    "errorGuardar": "No se ha podido guardar ahora mismo. Inténtalo en unos minutos.",
+    "invitarTitulo": "¿Conoces un club de aquí?",
+    "invitarTexto": "Mándale ApoyaClub. Crear su página es gratis el primer mes y así podrás patrocinarlo desde aquí.",
+    "whatsapp": "Invitarlo por WhatsApp",
+    "copiar": "Copiar el mensaje",
+    "copiado": "Copiado",
+    "mensajeInvitacion": "Hola, estoy buscando clubes para patrocinar en ApoyaClub. Si publicáis allí lo que ofrecéis, os puedo encontrar y escribir directamente: {url}"
   }
 }

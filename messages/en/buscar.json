@@ -69,7 +69,9 @@
     "verPaginaDelClub": "See the club's page",
     "buscando": "Searching for opportunities…",
     "otrosPaises": "Looking for clubs in another country?",
-    "verTodosLosPaises": "See clubs from all countries"
+    "verTodosLosPaises": "See clubs from all countries",
+    "verTodoElPais": "See clubs across {pais}",
+    "tuZona": "your area"
   },
   "directorioEmpresas": {
     "metaTitulo": "Businesses that support grassroots sport",
@@ -149,5 +151,23 @@
     "indiceMeta": "Sports clubs looking for sponsors, by sport and by area. Write to them for free, with no commission.",
     "clubes": "{n, plural, one {# club} other {# clubs}}",
     "sinClubes": "No clubs published here yet."
+  },
+  "avisoZona": {
+    "titulo": "Let me know when there are clubs in {zona}",
+    "texto": "Leave your email and we'll write when a club here publishes something. No account needed. At most one email a week.",
+    "email": "Your email",
+    "boton": "Notify me",
+    "enviando": "Saving…",
+    "ok": "Done. We've sent you a confirmation email and we'll write as soon as there's something here.",
+    "legal": "We only use your email for this. You can unsubscribe from any email. <privacidad>Privacy</privacidad>",
+    "errorEmail": "Enter a valid email.",
+    "errorLimite": "You've tried several times in a row. Please wait a while.",
+    "errorGuardar": "It couldn't be saved right now. Try again in a few minutes.",
+    "invitarTitulo": "Know a club here?",
+    "invitarTexto": "Send them ApoyaClub. Their page is free for the first month, and then you can sponsor them from here.",
+    "whatsapp": "Invite on WhatsApp",
+    "copiar": "Copy the message",
+    "copiado": "Copied",
+    "mensajeInvitacion": "Hi, I'm looking for clubs to sponsor on ApoyaClub. If you publish what you offer there, I can find you and write to you directly: {url}"
   }
 }
