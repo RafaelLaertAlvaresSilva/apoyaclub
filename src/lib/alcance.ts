@@ -544,6 +544,45 @@ export function cifrasDePortada(informe: InformeDeAlcance, cuantas = 4): CifraDe
 }
 
 /**
+ * Lo mínimo para que una cifra ayude a vender (pedido por Rafael el
+ * 7-11-2026, tras ver "Seguidores en Instagram: 80" en las oportunidades
+ * generadas de un club). Por debajo, a una empresa le resta más de lo que
+ * suma, así que no se pone. Las que no están aquí no tienen mínimo.
+ */
+export const MINIMO_PARA_VENDER: Record<string, number> = {
+  publicoMedio: 50,
+  jugadores: 20,
+  familias: 20,
+  socios: 50,
+  equipos: 2,
+};
+/** Para cualquier red social (`seguidores-instagram`, `seguidores-tiktok`…). */
+export const MINIMO_SEGUIDORES = 500;
+
+export function cifraQueSuma(cifra: CifraDeAlcance): boolean {
+  const minimo = cifra.id.startsWith("seguidores-") ? MINIMO_SEGUIDORES : MINIMO_PARA_VENDER[cifra.id];
+  return minimo == null || cifra.valor >= minimo;
+}
+
+/**
+ * Las cifras de la portada que valen para un texto de venta: las mismas
+ * que `cifrasDePortada`, sin las que se quedan cortas. Si ninguna llega,
+ * vacío, y el texto va sin cifras.
+ */
+export function cifrasParaVender(informe: InformeDeAlcance, cuantas = 4): CifraDeAlcance[] {
+  const todas = cifrasDelInforme(informe);
+  const redesQueSuman = todas.filter((c) => c.id.startsWith("seguidores-") && cifraQueSuma(c));
+  const mayorRed = redesQueSuman.reduce<CifraDeAlcance | null>(
+    (mayor, c) => (mayor == null || c.valor > mayor.valor ? c : mayor),
+    null,
+  );
+  const porId = (id: string) => todas.find((c) => c.id === id) ?? null;
+  return [porId("publicoMedio"), porId("jugadores"), porId("familias"), porId("socios"), mayorRed, porId("equipos")]
+    .filter((c): c is CifraDeAlcance => c !== null && cifraQueSuma(c))
+    .slice(0, cuantas);
+}
+
+/**
  * Una cifra escrita para que se lea de un vistazo.
  *
  * Hasta diez mil se dice entera: 240 es 240, y redondear una media

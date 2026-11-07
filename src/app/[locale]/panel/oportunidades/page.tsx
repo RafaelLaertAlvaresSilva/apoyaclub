@@ -12,7 +12,7 @@ import {
   opportunityRowToOpportunity,
   type OpportunityRow,
 } from "@/lib/opportunity-mappers";
-import { calcularAlcance, cifraLlana, cifrasDePortada } from "@/lib/alcance";
+import { calcularAlcance, cifraLlana, cifrasParaVender } from "@/lib/alcance";
 import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
 import { intlLocaleDe } from "@/config/locales";
 import { createClient } from "@/lib/supabase/server";
@@ -153,7 +153,7 @@ async function lineaDeDatosDelClub(
     (clave, valores) => tAlcance(clave, valores as never),
     intlLocale,
   );
-  const cifras = cifrasDePortada(alcance)
+  const cifras = cifrasParaVender(alcance)
     .map((cifra) => `${cifra.etiqueta}: ${cifraLlana(cifra.valor, intlLocale)}`)
     .join(" · ");
   return cifras ? tGen("datos", { club: perfil.name, cifras }) : null;

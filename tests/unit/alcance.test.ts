@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   calcularAlcance,
   cifrasDePortada,
+  cifrasParaVender,
+  cifraQueSuma,
   cifraLlana,
   cifrasDelInforme,
   resumenLlano,
@@ -243,6 +245,49 @@ describe("cifrasDePortada", () => {
     const portada = cifrasDePortada(informe);
     expect(portada).toHaveLength(4);
     expect(portada[0]?.id).toBe("publicoMedio");
+  });
+});
+
+describe("cifrasParaVender (línea de cifras del generador)", () => {
+  it("quita los 80 seguidores de Instagram y deja lo que sí suma", () => {
+    const informe = conTextos.calcularAlcance({
+      perfil: perfilDePrueba({ membersCount: 320, followersByNetwork: { instagram: 80 } }),
+      equipos: [],
+      partidos: [partido({ fecha: "2025-09-14", publico: 240 })],
+    });
+
+    const ids = cifrasParaVender(informe).map((c) => c.id);
+    expect(ids).toContain("publicoMedio");
+    expect(ids).toContain("socios");
+    expect(ids.some((id) => id.startsWith("seguidores-"))).toBe(false);
+    // La portada del dossier sigue enseñándolos: ahí decide el club.
+    expect(cifrasDePortada(informe).some((c) => c.id === "seguidores-instagram")).toBe(true);
+  });
+
+  it("si la red más grande no llega pero otra sí, usa la que llega", () => {
+    const informe = conTextos.calcularAlcance({
+      perfil: perfilDePrueba({ followersByNetwork: { instagram: 1200, facebook: 300 } }),
+      equipos: [],
+      partidos: [],
+    });
+    const red = cifrasParaVender(informe).find((c) => c.id.startsWith("seguidores-"));
+    expect(red?.valor).toBe(1200);
+  });
+
+  it("un club con todo pequeño se queda sin cifras (el texto va sin línea de datos)", () => {
+    const informe = conTextos.calcularAlcance({
+      perfil: perfilDePrueba({ membersCount: 12, followersByNetwork: { instagram: 80 } }),
+      equipos: [],
+      partidos: [partido({ fecha: "2025-09-14", publico: 15 })],
+    });
+    expect(cifrasParaVender(informe)).toEqual([]);
+  });
+
+  it("cifraQueSuma: justo en el mínimo vale", () => {
+    const base = { etiqueta: "", unidad: "personas", origen: "declarado", procedencia: "", cuenta: null } as const;
+    expect(cifraQueSuma({ ...base, id: "seguidores-tiktok", valor: 500 })).toBe(true);
+    expect(cifraQueSuma({ ...base, id: "seguidores-tiktok", valor: 499 })).toBe(false);
+    expect(cifraQueSuma({ ...base, id: "algo-sin-minimo", valor: 1 })).toBe(true);
   });
 });
 
