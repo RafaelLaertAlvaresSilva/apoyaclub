@@ -64,6 +64,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   // compartir la página pública de un club por WhatsApp, Fase 5) se
   // resuelvan como absolutas.
   metadataBase: new URL(SITE_URL),
+  // Google Search Console (dado de alta por Rafael el 7-11-2026 como
+  // https://apoyaclub.com/). No quitar: si desaparece, Google deja de
+  // considerar verificada la web.
+  verification: { google: "DvKAd7PjW6wLfOjCCiri6JeR0gdcorcv5g8KQXtmIi8" },
   // Con plantilla, para que cada página solo tenga que poner su nombre
   // y no repetir "| ApoyaClub" a mano en cada archivo. Las pantallas de
   // acceso y registro no ponían ninguno: la pestaña decía "ApoyaClub" a
