@@ -99,7 +99,9 @@
   "imagenCompartir": {
     "eslogan": "CONNECT · BOOST · GROW",
     "titular": "Connect your sports club with businesses that want to sponsor it.",
-    "gratis": "For businesses it's free, with no account needed."
+    "gratis": "For businesses it's free, with no account needed.",
+    "titularClubes": "Your club, your sponsors and everything you promise them, in one place.",
+    "gratisClubes": "1 month free · No commitment"
   },
   "etiquetas": {
     "tipoOportunidad": {

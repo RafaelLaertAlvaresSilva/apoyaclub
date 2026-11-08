@@ -99,7 +99,9 @@
   "imagenCompartir": {
     "eslogan": "CONECTA · IMPULSIONA · CRESCE",
     "titular": "Conecte o seu clube esportivo a empresas que o querem patrocinar.",
-    "gratis": "Para as empresas é grátis e sem conta."
+    "gratis": "Para as empresas é grátis e sem conta.",
+    "titularClubes": "Seu clube, seus patrocinadores e tudo o que você promete a eles, em um só lugar.",
+    "gratisClubes": "1 mês grátis · Sem fidelidade"
   },
   "etiquetas": {
     "tipoOportunidad": {
