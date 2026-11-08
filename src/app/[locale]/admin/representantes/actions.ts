@@ -23,9 +23,10 @@ export type AvisoRepresentantes =
   | "fallo"
   | "no-admin";
 
-async function volver(aviso: AvisoRepresentantes): Promise<void> {
+async function volver(aviso: AvisoRepresentantes, detalle?: string): Promise<void> {
   const locale = await getLocale();
-  redirect({ href: `${RUTA}?aviso=${aviso}`, locale });
+  const extra = detalle ? `&detalle=${encodeURIComponent(detalle.slice(0, 200))}` : "";
+  redirect({ href: `${RUTA}?aviso=${aviso}${extra}`, locale });
 }
 
 /** El idioma de la web de cada país, para el enlace del correo. */
@@ -166,7 +167,10 @@ export async function cambiarCorreoRepresentante(formData: FormData): Promise<vo
     email_confirm: true,
   });
   if (error) {
-    return volver(/already|registered|exists/i.test(error.message) ? "ya-existe" : "fallo");
+    // Con el motivo de Supabase a la vista: "no se ha podido" a secas no
+    // deja saber qué pasa (le pasó a Rafael el 8-11-2026).
+    const yaExiste = /already|registered|exists|email_exists/i.test(`${error.message} ${error.code ?? ""}`);
+    return volver(yaExiste ? "ya-existe" : "fallo", `${error.code ?? error.status ?? ""} ${error.message}`.trim());
   }
 
   const pais = esPaisValido(contexto.usuario.app_metadata.pais) ? contexto.usuario.app_metadata.pais : "ES";

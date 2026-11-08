@@ -51,9 +51,9 @@ const IDIOMA_DEL_PAIS = { ES: "es", PT: "pt", BR: "br" } as const;
  * su contraseña. Quitarle el acceso no borra nada: se le bloquea la
  * entrada y se conserva su historial.
  */
-export default async function RepresentantesPage({ searchParams }: { searchParams: Promise<{ aviso?: string }> }) {
+export default async function RepresentantesPage({ searchParams }: { searchParams: Promise<{ aviso?: string; detalle?: string }> }) {
   await soloAdministrador();
-  const { aviso } = await searchParams;
+  const { aviso, detalle } = await searchParams;
   const mensaje = aviso ? AVISOS[aviso] : undefined;
 
   const [representantes, clubes] = await Promise.all([
@@ -73,7 +73,12 @@ export default async function RepresentantesPage({ searchParams }: { searchParam
 
       <AdminNav activo="representantes" />
 
-      {mensaje && (mensaje.bien ? <AvisoExito mensaje={mensaje.texto} /> : <AvisoError mensaje={mensaje.texto} />)}
+      {mensaje &&
+        (mensaje.bien ? (
+          <AvisoExito mensaje={mensaje.texto} />
+        ) : (
+          <AvisoError mensaje={detalle ? `${mensaje.texto} Motivo: ${detalle}` : mensaje.texto} />
+        ))}
 
       <section className="rounded-xl border border-zinc-200 bg-white p-5">
         <h2 className="text-base font-semibold text-zinc-900">Dar de alta un representante</h2>
