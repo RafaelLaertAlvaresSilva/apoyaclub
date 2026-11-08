@@ -154,7 +154,7 @@
   },
   "avisoZona": {
     "titulo": "Avisa-me quando houver clubes em {zona}",
-    "texto": "Deixa o teu e-mail e escrevemos-te quando um clube daqui publicar algo. Sem criar conta. No máximo, um e-mail por semana.",
+    "texto": "Deixa o teu e-mail e escrevemos-te quando um clube daqui publicar algo. Sem criar conta.",
     "email": "O teu e-mail",
     "boton": "Avisa-me",
     "enviando": "A guardar…",

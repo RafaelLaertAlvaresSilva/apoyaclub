@@ -139,7 +139,7 @@
     "eyebrow": "Clubes na tua zona",
     "asuntoApuntado": "Vamos avisar-te: {zona}",
     "tituloApuntado": "Vamos avisar-te quando houver clubes em {zona}",
-    "textoApuntado": "A ApoyaClub acabou de começar e os clubes vão-se registando aos poucos. Assim que um clube da tua zona publicar algo, recebes um e-mail. No máximo um por semana.",
+    "textoApuntado": "A ApoyaClub acabou de começar e os clubes vão-se registando aos poucos. Assim que um clube da tua zona publicar algo, recebes um e-mail.",
     "botonApuntado": "Ver o que há agora",
     "asuntoNovedades": "{cuantas, plural, one {Algo novo para patrocinar em {zona}} other {# novidades para patrocinar em {zona}}}",
     "tituloNovedades": "{cuantas, plural, one {Há algo novo em {zona}} other {Há # novidades em {zona}}}",

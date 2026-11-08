@@ -83,7 +83,7 @@ export default function PrivacidadPage() {
         <p>
           Quien pide desde el buscador que le avisemos cuando haya clubes en una zona, sin
           crear cuenta, nos da su correo y lo que estaba buscando (país, provincia y
-          deporte). Se usa solo para enviarle esos avisos, como mucho uno por semana, y
+          deporte). Se usa solo para enviarle esos avisos y
           para que el equipo de ApoyaClub sepa en qué zonas hay empresas interesadas. La
           base legal es su consentimiento, que retira en cualquier momento con el enlace de
           baja de cada correo.

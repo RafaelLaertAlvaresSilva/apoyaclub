@@ -154,7 +154,7 @@
   },
   "avisoZona": {
     "titulo": "Let me know when there are clubs in {zona}",
-    "texto": "Leave your email and we'll write when a club here publishes something. No account needed. At most one email a week.",
+    "texto": "Leave your email and we'll write when a club here publishes something. No account needed.",
     "email": "Your email",
     "boton": "Notify me",
     "enviando": "Saving…",
