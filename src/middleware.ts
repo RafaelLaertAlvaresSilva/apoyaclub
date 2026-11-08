@@ -10,6 +10,9 @@ import { RUTA_POR_ROL, type Role } from "@/lib/types";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
+/** El idioma del admin de cada representante, por su país (`app_metadata.pais`). */
+const IDIOMA_DEL_REPRESENTANTE: Record<string, string> = { BR: "br", PT: "pt", ES: "es" };
+
 /** Quita el prefijo de idioma ("/es/panel" -> "/panel") para comparar contra RUTA_POR_ROL. */
 function sinPrefijoDeIdioma(pathname: string): string {
   const patron = new RegExp(`^/(${routing.locales.join("|")})(?=/|$)`);
@@ -111,6 +114,19 @@ export async function middleware(request: NextRequest) {
   const entraComoRepresentante = rol === "representante" && rolDeLaRuta === "admin";
   if (rolDeLaRuta !== rol && !entraComoRepresentante) {
     return NextResponse.redirect(new URL(`/${locale}${RUTA_POR_ROL[rol]}`, request.url));
+  }
+
+  // El representante ve el admin siempre en el idioma de su país
+  // (pedido por Rafael el 8-11-2026): el de Brasil, en /br aunque haya
+  // entrado por /es. Así la lista de clubes y sus comisiones le salen
+  // en portugués de Brasil y en reales.
+  if (entraComoRepresentante) {
+    const idiomaDelRepresentante = IDIOMA_DEL_REPRESENTANTE[String(user.app_metadata?.pais ?? "")];
+    if (idiomaDelRepresentante && idiomaDelRepresentante !== locale) {
+      const destino = new URL(`/${idiomaDelRepresentante}${rutaSinIdioma}`, request.url);
+      destino.search = request.nextUrl.search;
+      return NextResponse.redirect(destino);
+    }
   }
 
   // Fase 12: un club suspendido por un admin pierde el acceso a su

@@ -35,10 +35,8 @@ export default async function ComisionesPage({ searchParams }: { searchParams: P
   // En el idioma con el que entra: el representante de Brasil, en /br.
   const t = await getTranslations("admin.comisiones");
   const idioma = intlLocaleDe(await getLocale());
-  const formatoEuros = new Intl.NumberFormat(idioma, { style: "currency", currency: "EUR", minimumFractionDigits: 2 });
   const formatoMes = new Intl.DateTimeFormat(idioma, { month: "long", year: "numeric", timeZone: "UTC" });
   const formatoFecha = new Intl.DateTimeFormat(idioma, { day: "numeric", month: "short", timeZone: "Europe/Madrid" });
-  const euros = (centimos: number) => formatoEuros.format(centimos / 100);
   const nombreDelMes = (mes: string) => {
     const texto = formatoMes.format(new Date(`${mes}-01T00:00:00Z`));
     return texto.charAt(0).toUpperCase() + texto.slice(1);
@@ -82,13 +80,26 @@ export default async function ComisionesPage({ searchParams }: { searchParams: P
   if (liquidacion) {
     const idsDelPais = clubes.filter((club) => club.pais === liquidacion.pais).map((club) => club.id);
     try {
-      meses = comisionPorMes(await cobrosDeClubes(idsDelPais), liquidacion.porcentaje, liquidacion.desde);
+      meses = comisionPorMes(
+        await cobrosDeClubes(idsDelPais, { enMonedaDelCobro: liquidacion.pais === "BR" }),
+        liquidacion.porcentaje,
+        liquidacion.desde,
+      );
     } catch {
       falloStripe = true;
     }
   }
 
   const total = meses.reduce((suma, mes) => suma + mes.parteCentimos, 0);
+
+  // En reales para Brasil (lo que dice su contrato), en euros el resto.
+  const formatoMoneda = new Intl.NumberFormat(idioma, {
+    style: "currency",
+    currency: liquidacion?.pais === "BR" ? "BRL" : "EUR",
+    currencyDisplay: "narrowSymbol",
+    minimumFractionDigits: 2,
+  });
+  const importe = (centimos: number) => formatoMoneda.format(centimos / 100);
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 bg-zinc-50 px-4 py-8 sm:px-6">
@@ -139,7 +150,7 @@ export default async function ComisionesPage({ searchParams }: { searchParams: P
               {esAdministrador && <>{liquidacion.email} · </>}
               {BANDERA_DEL_PAIS[liquidacion.pais]} {t("clubesDe", { pais: liquidacion.pais })} · {liquidacion.porcentaje} %
             </p>
-            <p className="mt-1 text-3xl font-semibold text-zinc-900 tabular-nums">{euros(total)}</p>
+            <p className="mt-1 text-3xl font-semibold text-zinc-900 tabular-nums">{importe(total)}</p>
             <p className="mt-1 text-sm text-zinc-600">
               {esAdministrador ? t("suParte") : t("tuParte")}
             </p>
@@ -185,11 +196,11 @@ export default async function ComisionesPage({ searchParams }: { searchParams: P
                           · {t("cobros", { n: mes.cobros.length })}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-right tabular-nums">{euros(mes.cobradoCentimos)}</td>
-                      <td className="px-4 py-3 text-right tabular-nums">−{euros(mes.ivaCentimos)}</td>
-                      <td className="px-4 py-3 text-right tabular-nums">−{euros(mes.stripeCentimos)}</td>
-                      <td className="px-4 py-3 text-right tabular-nums">{euros(mes.netoCentimos)}</td>
-                      <td className="px-4 py-3 text-right tabular-nums text-accion-tinta">{euros(mes.parteCentimos)}</td>
+                      <td className="px-4 py-3 text-right tabular-nums">{importe(mes.cobradoCentimos)}</td>
+                      <td className="px-4 py-3 text-right tabular-nums">−{importe(mes.ivaCentimos)}</td>
+                      <td className="px-4 py-3 text-right tabular-nums">−{importe(mes.stripeCentimos)}</td>
+                      <td className="px-4 py-3 text-right tabular-nums">{importe(mes.netoCentimos)}</td>
+                      <td className="px-4 py-3 text-right tabular-nums text-accion-tinta">{importe(mes.parteCentimos)}</td>
                     </tr>
                     {mes.cobros.map((cobro) => (
                       <tr key={cobro.id} className="text-zinc-600">
@@ -197,11 +208,11 @@ export default async function ComisionesPage({ searchParams }: { searchParams: P
                           {cobro.clubNombre}{" "}
                           <span className="text-xs text-zinc-400">{formatoFecha.format(new Date(cobro.fecha))}</span>
                         </td>
-                        <td className="px-4 py-2 text-right tabular-nums">{euros(cobro.cobradoCentimos)}</td>
-                        <td className="px-4 py-2 text-right tabular-nums">−{euros(cobro.ivaCentimos)}</td>
-                        <td className="px-4 py-2 text-right tabular-nums">−{euros(cobro.stripeCentimos)}</td>
-                        <td className="px-4 py-2 text-right tabular-nums">{euros(cobro.netoCentimos)}</td>
-                        <td className="px-4 py-2 text-right tabular-nums">{euros(cobro.parteCentimos)}</td>
+                        <td className="px-4 py-2 text-right tabular-nums">{importe(cobro.cobradoCentimos)}</td>
+                        <td className="px-4 py-2 text-right tabular-nums">−{importe(cobro.ivaCentimos)}</td>
+                        <td className="px-4 py-2 text-right tabular-nums">−{importe(cobro.stripeCentimos)}</td>
+                        <td className="px-4 py-2 text-right tabular-nums">{importe(cobro.netoCentimos)}</td>
+                        <td className="px-4 py-2 text-right tabular-nums">{importe(cobro.parteCentimos)}</td>
                       </tr>
                     ))}
                   </tbody>

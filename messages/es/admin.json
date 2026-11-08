@@ -163,6 +163,6 @@
     "columnaTuParte": "Tu parte ({porcentaje} %)",
     "cobros": "{n, plural, one {# cobro} other {# cobros}}",
     "panel": "Panel de administración",
-    "comoSeCalculaSinIva": "Cómo se calcula, en cada cobro: lo que paga el club, menos lo que Stripe se queda de ese cobro (en Brasil no hay IVA). De lo que queda, el {porcentaje} %. Cuentan todos los clubes de {pais, select, BR {Brasil} PT {Portugal} other {España}} y las devoluciones ya están descontadas."
+    "comoSeCalculaSinIva": "Cómo se calcula, en cada cobro: lo que paga el club, menos lo que Stripe se queda de ese cobro (en Brasil no hay IVA). De lo que queda, el {porcentaje} %. Cuentan todos los clubes de {pais, select, BR {Brasil} PT {Portugal} other {España}} y las devoluciones ya están descontadas. En Brasil, en reales."
   }
 }

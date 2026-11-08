@@ -12,6 +12,7 @@ import {
   desactivarRepresentante,
   reactivarRepresentante,
   reenviarCorreo,
+  cambiarCorreoRepresentante,
 } from "./actions";
 
 const formatoFecha = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric" });
@@ -25,6 +26,11 @@ const AVISOS: Record<string, { texto: string; bien: boolean }> = {
   "correo-enviado": { texto: "Correo enviado otra vez.", bien: true },
   desactivado: { texto: "Acceso quitado. Ya no puede entrar. Su historial de comisiones se conserva.", bien: true },
   reactivado: { texto: "Acceso devuelto. Ya puede volver a entrar.", bien: true },
+  "correo-cambiado": {
+    texto:
+      "Correo cambiado. Le ha llegado al correo nuevo el de poner la contraseña. Conserva su código, su fecha de alta y su historial.",
+    bien: true,
+  },
   datos: { texto: "Revisa el correo, el país y el porcentaje (entre 1 y 100).", bien: false },
   "ya-existe": {
     texto:
@@ -205,6 +211,27 @@ export default async function RepresentantesPage({ searchParams }: { searchParam
                           </button>
                         </form>
                       </div>
+                      {/* Para un correo mal escrito al darlo de alta. */}
+                      <details className="mt-2">
+                        <summary className="cursor-pointer text-xs font-medium text-accion-tinta">Cambiar correo</summary>
+                        <form action={cambiarCorreoRepresentante} className="mt-2 flex flex-wrap gap-2">
+                          <input type="hidden" name="id" value={representante.id} />
+                          <input
+                            type="email"
+                            name="email"
+                            required
+                            placeholder="Correo correcto"
+                            aria-label="Correo correcto"
+                            className="min-w-0 flex-1 rounded-lg border border-zinc-300 px-2 py-1.5 text-xs"
+                          />
+                          <button
+                            type="submit"
+                            className="rounded-lg bg-accion px-3 py-1.5 text-xs font-medium text-sobre-color hover:bg-accion-fuerte"
+                          >
+                            Guardar y enviar contraseña
+                          </button>
+                        </form>
+                      </details>
                     </td>
                   </tr>
                 );

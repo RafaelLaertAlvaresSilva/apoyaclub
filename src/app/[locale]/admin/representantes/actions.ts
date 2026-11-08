@@ -17,6 +17,7 @@ export type AvisoRepresentantes =
   | "correo-enviado"
   | "desactivado"
   | "reactivado"
+  | "correo-cambiado"
   | "datos"
   | "ya-existe"
   | "fallo"
@@ -143,4 +144,33 @@ export async function reactivarRepresentante(formData: FormData): Promise<void> 
   });
   revalidatePath(RUTA);
   return volver("reactivado");
+}
+
+/**
+ * Le cambia el correo (pedido por Rafael el 8-11-2026: dio de alta a un
+ * representante con el correo mal escrito y no había forma de
+ * arreglarlo). Se cambia en la misma cuenta, así que conserva su código
+ * (BR1…), su fecha de alta y su historial, y se le manda al correo nuevo
+ * el de poner la contraseña. Al viejo ya no le llega nada.
+ */
+export async function cambiarCorreoRepresentante(formData: FormData): Promise<void> {
+  const contexto = await representanteDelFormulario(formData);
+  if (!contexto) return volver("no-admin");
+
+  const nuevo = String(formData.get("email") ?? "").trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(nuevo)) return volver("datos");
+  if (nuevo === contexto.usuario.email) return volver("correo-cambiado");
+
+  const { error } = await contexto.admin.auth.admin.updateUserById(contexto.usuario.id, {
+    email: nuevo,
+    email_confirm: true,
+  });
+  if (error) {
+    return volver(/already|registered|exists/i.test(error.message) ? "ya-existe" : "fallo");
+  }
+
+  const pais = esPaisValido(contexto.usuario.app_metadata.pais) ? contexto.usuario.app_metadata.pais : "ES";
+  await mandarCorreoDeContrasena(nuevo, pais);
+  revalidatePath(RUTA);
+  return volver("correo-cambiado");
 }

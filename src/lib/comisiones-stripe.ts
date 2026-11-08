@@ -20,7 +20,21 @@ type FilaClub = {
  * (`balance_transaction`), que es donde Stripe apunta su comisión real
  * y el importe ya pasado a euros si el club pagó en otra moneda.
  */
-export async function cobrosDeClubes(idsClubes: string[]): Promise<Cobro[]> {
+export async function cobrosDeClubes(
+  idsClubes: string[],
+  {
+    enMonedaDelCobro = false,
+  }: {
+    /**
+     * En la moneda en que pagó el club, no en euros. Para el
+     * representante de Brasil (pedido por Rafael el 8-11-2026): su
+     * contrato dice que la comisión se calcula y se paga en reales, así
+     * que la ve en reales, con la comisión de Stripe pasada a reales al
+     * mismo cambio que usó Stripe.
+     */
+    enMonedaDelCobro?: boolean;
+  } = {},
+): Promise<Cobro[]> {
   if (idsClubes.length === 0) return [];
 
   const admin = createAdminClient();
@@ -55,7 +69,15 @@ export async function cobrosDeClubes(idsClubes: string[]): Promise<Cobro[]> {
       // moneda, el movimiento ya trae el importe convertido; la parte
       // devuelta se descuenta en la misma proporción.
       const proporcionCobrada = cargo.amount > 0 ? (cargo.amount - cargo.amount_refunded) / cargo.amount : 0;
-      const importe = movimiento ? movimiento.amount : cargo.amount;
+      const cambio = movimiento?.exchange_rate ?? null;
+      const importe = enMonedaDelCobro || !movimiento ? cargo.amount : movimiento.amount;
+      // `exchange_rate` es cuántos euros vale cada real: para pasar la
+      // comisión de Stripe (en euros) a reales, se divide.
+      const comisionStripe = !movimiento
+        ? 0
+        : enMonedaDelCobro && cambio
+          ? Math.round(movimiento.fee / cambio)
+          : movimiento.fee;
 
       cobros.push({
         id: cargo.id,
@@ -63,7 +85,7 @@ export async function cobrosDeClubes(idsClubes: string[]): Promise<Cobro[]> {
         clubNombre: fila.name || "(club sin nombre)",
         fecha: new Date(cargo.created * 1000).toISOString(),
         cobradoCentimos: Math.round(importe * proporcionCobrada),
-        stripeCentimos: movimiento?.fee ?? 0,
+        stripeCentimos: comisionStripe,
         // Los planes en reales (Brasil) no llevan IVA, ni los clubes de
         // Canarias, Ceuta o Melilla (`lib/iva-espana.ts`).
         conIva: cargo.currency !== "brl" && !fueraDelIvaEspanol({ province: fila.province, postalCode: fila.postal_code }),
