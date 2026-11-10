@@ -96,7 +96,7 @@
   },
   "primerosPasos": {
     "titulo": "Start here",
-    "subtitulo": "Three steps and your club is ready to show to a business.",
+    "subtitulo": "Four steps and your club is ready to show to a business.",
     "identidad": {
       "titulo": "Upload your logo and tell people who you are",
       "texto": "With your logo and four lines of description, your page already has a face.",
@@ -109,8 +109,13 @@
     },
     "oportunidad": {
       "titulo": "Publish your first opportunity",
-      "texto": "Even if it’s just €50. Without opportunities you don’t show up in search.",
-      "accion": "Create opportunity"
+      "texto": "With “Generate my opportunities” we write them for you with your club’s details: just review and publish.",
+      "accion": "Generate my opportunities"
+    },
+    "dossier": {
+      "titulo": "Download your sponsorship pack and send it",
+      "texto": "It builds itself from your profile and opportunities. Send it to five local businesses: that’s how sponsorships start.",
+      "accion": "See my pack"
     }
   },
   "solicitudes": {

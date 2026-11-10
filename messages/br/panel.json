@@ -96,7 +96,7 @@
   },
   "primerosPasos": {
     "titulo": "Comece por aqui",
-    "subtitulo": "Três passos e o seu clube já pode ser mostrado a uma empresa.",
+    "subtitulo": "Quatro passos e o seu clube já pode ser mostrado a uma empresa.",
     "identidad": {
       "titulo": "Envie o seu logotipo e conte quem vocês são",
       "texto": "Com o logotipo e quatro linhas de descrição, a sua página já tem cara.",
@@ -109,8 +109,13 @@
     },
     "oportunidad": {
       "titulo": "Publique a sua primeira oportunidade",
-      "texto": "Mesmo que seja de R$ 200. Sem oportunidades você não aparece na busca.",
-      "accion": "Criar oportunidade"
+      "texto": "Com «Gerar minhas oportunidades» deixamos tudo escrito com os dados do seu clube: é só revisar e publicar.",
+      "accion": "Gerar minhas oportunidades"
+    },
+    "dossier": {
+      "titulo": "Baixe o seu dossiê e envie",
+      "texto": "Ele se monta sozinho com a sua ficha e as suas oportunidades. Envie para cinco empresas da sua região: é assim que começam os patrocínios.",
+      "accion": "Ver meu dossiê"
     }
   },
   "solicitudes": {

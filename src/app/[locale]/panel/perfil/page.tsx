@@ -12,6 +12,11 @@ import { huecosDelPerfil } from "@/lib/profile-completion";
 import { createClient } from "@/lib/supabase/server";
 import { BarraProgreso } from "../components/BarraProgreso";
 import { PanelTabs } from "../components/PanelTabs";
+import { tituloDelPanel } from "@/lib/titulo-del-panel";
+
+export async function generateMetadata() {
+  return tituloDelPanel("perfil");
+}
 
 /**
  * La ficha del club: el formulario largo.

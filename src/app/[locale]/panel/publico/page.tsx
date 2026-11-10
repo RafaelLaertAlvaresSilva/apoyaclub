@@ -5,8 +5,13 @@ import { etiquetaEquipo } from "@/lib/opportunities";
 import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
 import { createClient } from "@/lib/supabase/server";
 import { RegistroDePublico } from "./components/RegistroDePublico";
+import { tituloDelPanel } from "@/lib/titulo-del-panel";
 
 type FilaEquipo = { id: string; sport: string; category: string | null; gender: string | null };
+
+export async function generateMetadata() {
+  return tituloDelPanel("publico");
+}
 
 /**
  * El registro de público en los partidos (migración 0037).

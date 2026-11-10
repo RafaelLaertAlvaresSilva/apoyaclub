@@ -3,9 +3,9 @@ import { onboardingCompleto, primerosPasos, siguientePaso } from "@/lib/onboardi
 import { equipoDePrueba, perfilDePrueba } from "../fixtures/club";
 
 describe("primeros pasos del club", () => {
-  it("un club recién creado los tiene los tres pendientes", () => {
+  it("un club recién creado los tiene los cuatro pendientes", () => {
     const pasos = primerosPasos(perfilDePrueba(), [], 0);
-    expect(pasos.map((paso) => paso.hecho)).toEqual([false, false, false]);
+    expect(pasos.map((paso) => paso.hecho)).toEqual([false, false, false, false]);
     expect(siguientePaso(pasos)?.id).toBe("identidad");
     expect(onboardingCompleto(pasos)).toBe(false);
   });
@@ -27,11 +27,12 @@ describe("primeros pasos del club", () => {
     expect(primerosPasos(perfilDePrueba(), [equipoDePrueba()], 0)[1].hecho).toBe(true);
   });
 
-  it("desaparece cuando los tres están hechos", () => {
+  it("desaparece cuando los cuatro están hechos", () => {
     const pasos = primerosPasos(
       perfilDePrueba({ logoUrl: "https://ejemplo/logo.png", description: "Club de barrio." }),
       [equipoDePrueba()],
       2,
+      true,
     );
     expect(onboardingCompleto(pasos)).toBe(true);
     expect(siguientePaso(pasos)).toBeNull();
@@ -41,5 +42,16 @@ describe("primeros pasos del club", () => {
     const pasos = primerosPasos(null, [], 0);
     expect(pasos[0].hecho).toBe(false);
     expect(siguientePaso(pasos)?.href).toBe("/panel/perfil#identidad");
+  });
+});
+
+describe("cuarto paso: el dossier", () => {
+  it("queda pendiente hasta que el club abre su dossier, y lleva a su página", () => {
+    const sin = primerosPasos(null, [], 0);
+    const con = primerosPasos(null, [], 0, true);
+    const pasoSin = sin.find((paso) => paso.id === "dossier");
+    expect(pasoSin?.hecho).toBe(false);
+    expect(pasoSin?.href).toBe("/panel/dossier");
+    expect(con.find((paso) => paso.id === "dossier")?.hecho).toBe(true);
   });
 });

@@ -16,7 +16,10 @@ import { CAJA_METRICA, CUERPO_METRICA, TITULO_METRICA } from "./estilos-metricas
  */
 export function DetalleDeVisitas({ resumen }: { resumen: ResumenDeVisitas }) {
   const t = useTranslations("panel.metricas");
-  const [ventana, setVentana] = useState<"semana" | "mes">("semana");
+  // Por defecto el mes, como las tarjetas de arriba ("Últimos 30
+  // días"): con la semana, arriba salían 2 visitas y aquí 0, y parecía
+  // un error (visto el 10-11-2026).
+  const [ventana, setVentana] = useState<"semana" | "mes">("mes");
   const datos = ventana === "semana" ? resumen.semana : resumen.mes;
 
   const sinNada = resumen.totalVisitas === 0 && resumen.totalContactos === 0;

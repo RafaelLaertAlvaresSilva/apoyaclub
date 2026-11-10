@@ -5,6 +5,11 @@ import { leerVisibilidadDelClub } from "@/lib/modo-pruebas";
 import { createClient } from "@/lib/supabase/server";
 import { cambiarVisibilidadClub } from "./actions";
 import { EliminarCuentaForm } from "./components/EliminarCuentaForm";
+import { tituloDelPanel } from "@/lib/titulo-del-panel";
+
+export async function generateMetadata() {
+  return tituloDelPanel("privacidad");
+}
 
 /**
  * Visibilidad, privacidad y datos del club: si se le ve en la web

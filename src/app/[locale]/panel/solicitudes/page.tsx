@@ -3,10 +3,15 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { contactRequestRowToContactRequest, type ContactRequestRow } from "@/lib/contact-request-mappers";
 import { createClient } from "@/lib/supabase/server";
 import { SolicitudCard } from "./components/SolicitudCard";
+import { tituloDelPanel } from "@/lib/titulo-del-panel";
 
 type ContactRequestConOportunidad = ContactRequestRow & {
   opportunities: { title: string } | null;
 };
+
+export async function generateMetadata() {
+  return tituloDelPanel("solicitudes");
+}
 
 /** Panel del club: solicitudes de contacto recibidas (Fase 8). */
 export default async function SolicitudesPage() {

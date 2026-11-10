@@ -6,6 +6,11 @@ import { clubSponsorRowToSponsor, type ClubSponsorRow } from "@/lib/club-mappers
 import { contarRenovacionesQueAvisan, ordenarPorRenovacion, temporadaDe } from "@/lib/renovaciones";
 import { createClient } from "@/lib/supabase/server";
 import { ListaDeRenovaciones } from "./components/ListaDeRenovaciones";
+import { tituloDelPanel } from "@/lib/titulo-del-panel";
+
+export async function generateMetadata() {
+  return tituloDelPanel("renovaciones");
+}
 
 /**
  * Renovaciones: cuándo acaba cada patrocinio y qué escribir.

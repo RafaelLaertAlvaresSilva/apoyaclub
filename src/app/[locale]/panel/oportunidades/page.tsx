@@ -19,6 +19,11 @@ import { createClient } from "@/lib/supabase/server";
 import { obtenerClubPublico } from "../../club/[slug]/data";
 import { GeneradorDeOportunidades } from "./components/GeneradorDeOportunidades";
 import { OportunidadesManager } from "./components/OportunidadesManager";
+import { tituloDelPanel } from "@/lib/titulo-del-panel";
+
+export async function generateMetadata() {
+  return tituloDelPanel("oportunidades");
+}
 
 export default async function OportunidadesPage() {
   const t = await getTranslations("panel.oportunidades");

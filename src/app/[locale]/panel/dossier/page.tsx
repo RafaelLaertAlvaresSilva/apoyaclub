@@ -9,6 +9,11 @@ import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportun
 import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
 import { createClient } from "@/lib/supabase/server";
 import { DossierManager } from "./components/DossierManager";
+import { tituloDelPanel } from "@/lib/titulo-del-panel";
+
+export async function generateMetadata() {
+  return tituloDelPanel("dossier");
+}
 
 export default async function DossierPage() {
   const t = await getTranslations("panel.dossier");

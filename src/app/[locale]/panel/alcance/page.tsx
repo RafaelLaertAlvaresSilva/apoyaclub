@@ -8,6 +8,11 @@ import { reunirDatosDeAlcance } from "@/lib/alcance-datos";
 import { formatearNumero } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import { AvisoDeOrigen, Bloque, Cifra } from "./components/BloquesDeAlcance";
+import { tituloDelPanel } from "@/lib/titulo-del-panel";
+
+export async function generateMetadata() {
+  return tituloDelPanel("alcance");
+}
 
 /**
  * El informe de alcance del club.

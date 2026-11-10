@@ -6,6 +6,11 @@ import { clubSponsorRowToSponsor, type ClubSponsorRow } from "@/lib/club-mappers
 import { documentosDelClub } from "@/lib/documentos-datos";
 import { createClient } from "@/lib/supabase/server";
 import { PatrocinadoresForm } from "../components/PatrocinadoresForm";
+import { tituloDelPanel } from "@/lib/titulo-del-panel";
+
+export async function generateMetadata() {
+  return tituloDelPanel("patrocinadores");
+}
 
 /**
  * Los patrocinadores del club, en su propia sección del panel.

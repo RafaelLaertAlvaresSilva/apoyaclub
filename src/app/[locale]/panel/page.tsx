@@ -23,6 +23,11 @@ import { PrimerosPasos } from "./components/PrimerosPasos";
 import { Recomendaciones } from "./components/Recomendaciones";
 import { RecordatorioInforme } from "./tareas/components/RecordatorioInforme";
 import { TareasDeHoy } from "./components/TareasDeHoy";
+import { tituloDelPanel } from "@/lib/titulo-del-panel";
+
+export async function generateMetadata() {
+  return tituloDelPanel("inicio");
+}
 
 export default async function PanelPage() {
   const t = await getTranslations("panel.perfil");
@@ -43,6 +48,7 @@ export default async function PanelPage() {
     { data: filasEquipos },
     { data: filasPatrocinadores },
     { count: oportunidadesPublicadas },
+    { count: dossiers },
   ] = await Promise.all([
       supabase.from("clubs").select("*").eq("id", user.id).maybeSingle<ClubRow>(),
       supabase
@@ -65,6 +71,8 @@ export default async function PanelPage() {
         .select("id", { count: "exact", head: true })
         .eq("club_id", user.id)
         .is("archived_at", null),
+      // Solo si existe: es el cuarto de los primeros pasos.
+      supabase.from("club_dossiers").select("id", { count: "exact", head: true }).eq("id", user.id),
     ]);
 
   // Las métricas se piden aparte porque van con la clave de servicio
@@ -83,7 +91,7 @@ export default async function PanelPage() {
   const equipos = (filasEquipos ?? []).map(clubTeamRowToTeam);
   const patrocinadores = (filasPatrocinadores ?? []).map(clubSponsorRowToSponsor);
 
-  const pasosIniciales = primerosPasos(perfil, equipos, oportunidadesPublicadas ?? 0);
+  const pasosIniciales = primerosPasos(perfil, equipos, oportunidadesPublicadas ?? 0, (dossiers ?? 0) > 0);
 
   // Mientras no haya ficha, el título grande era la dirección de correo
   // con la que el club se registró. Es lo primero que se ve al entrar y

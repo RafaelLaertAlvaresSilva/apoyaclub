@@ -14,7 +14,7 @@ import type { ClubProfile, ClubTeam } from "@/lib/types";
  */
 
 export type PasoInicial = {
-  id: "identidad" | "equipos" | "oportunidad";
+  id: "identidad" | "equipos" | "oportunidad" | "dossier";
   hecho: boolean;
   /** Ruta a la que lleva el paso cuando está pendiente. */
   href: string;
@@ -35,6 +35,12 @@ export function primerosPasos(
   perfil: ClubProfile | null,
   equipos: ClubTeam[],
   oportunidadesPublicadas: number,
+  /**
+   * Si ya ha abierto su dossier (hay fila en `club_dossiers`). Cuarto
+   * paso desde el 10-11-2026: con ficha y oportunidades el club todavía
+   * no ha hecho lo que trae patrocinios, que es mandárselo a empresas.
+   */
+  tieneDossier = false,
 ): PasoInicial[] {
   return [
     {
@@ -55,6 +61,12 @@ export function primerosPasos(
       id: "oportunidad",
       hecho: oportunidadesPublicadas > 0,
       href: "/panel/oportunidades",
+      anclaDelPanel: null,
+    },
+    {
+      id: "dossier",
+      hecho: tieneDossier,
+      href: "/panel/dossier",
       anclaDelPanel: null,
     },
   ];

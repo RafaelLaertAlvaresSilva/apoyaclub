@@ -18,6 +18,7 @@ import { obtenerStripe } from "@/lib/stripe/client";
 import { abrirPortalCliente } from "./actions";
 import { SelectorDePlan } from "./components/SelectorDePlan";
 import { estaEscondido } from "@/lib/modo-pruebas";
+import { tituloDelPanel } from "@/lib/titulo-del-panel";
 
 /** Los `?error=` que pueden llegar de las acciones, con su texto en `errores`. */
 const ERRORES_CONOCIDOS = new Set(["sesion", "checkout", "portal", "sin-suscripcion", "sin-plazas", "tarjeta-extranjera"]);
@@ -33,6 +34,10 @@ const ESTADOS_CONOCIDOS = new Set([
   "incomplete_expired",
   "paused",
 ]);
+
+export async function generateMetadata() {
+  return tituloDelPanel("suscripcion");
+}
 
 export default async function SuscripcionPage({
   searchParams,

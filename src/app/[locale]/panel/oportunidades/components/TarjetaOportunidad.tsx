@@ -76,6 +76,14 @@ export function TarjetaOportunidad({
     equipos.find((equipo) => equipo.id === oportunidad.teamId) ?? null;
   const portada = fotoDePortada(oportunidad.fotos);
 
+  const clasePrecio = `whitespace-nowrap font-bold ${
+    oportunidad.esNecesidad || oportunidad.value <= 0 ? "text-sm text-orange-700" : "text-lg text-teal-700"
+  }`;
+  const textoPrecio = textoDelPrecio(oportunidad, precio, {
+    necesidad: tPrecio("necesidad"),
+    aConvenir: tPrecio("aConvenir"),
+  });
+
   return (
     // El color dice qué es de un vistazo: verde lo que el club ofrece,
     // naranja lo que necesita (un servicio o un producto a cambio de
@@ -137,41 +145,42 @@ export function TarjetaOportunidad({
                 {t("enExclusiva", { sector: oportunidad.exclusivity })}
               </p>
             )}
-            {oportunidad.description && (
-              /* En un recuadro blanco, como los botones de abajo: suelto
-                 sobre el fondo verde se perdía (pedido por Rafael). */
-              <p className="mt-3 whitespace-pre-line rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700">
-                {oportunidad.description}
-              </p>
-            )}
-
-            {/* Cuando hace falta más de una empresa, el club necesita ver
-              cuántas lleva sin ponerse a restar. */}
-            {esPorPlazas(oportunidad) && (
-              <div className="mt-3 max-w-xs">
-                <BarraDePlazas
-                  slotsTotal={oportunidad.slotsTotal}
-                  slotsTaken={oportunidad.slotsTaken}
-                  etiqueta={
-                    oportunidad.esNecesidad ? "colaboradores" : "plazas"
-                  }
-                />
-              </div>
-            )}
+            {/* En el móvil el precio va aquí, debajo del título: a la
+                derecha le quitaba tanto sitio al texto que la descripción
+                salía una palabra por línea (visto el 10-11-2026). */}
+            <p className={`mt-1 sm:hidden ${clasePrecio}`}>{textoPrecio}</p>
           </div>
         </div>
 
         {/* Una necesidad no tiene precio: lo que recibe la empresa es
             visibilidad. Antes salía "0,00 €". Va en naranja, como el
             resto de lo que el club necesita. */}
-        <p
-          className={`whitespace-nowrap font-bold ${
-            oportunidad.esNecesidad || oportunidad.value <= 0 ? "text-sm text-orange-700" : "text-lg text-teal-700"
-          }`}
-        >
-          {textoDelPrecio(oportunidad, precio, { necesidad: tPrecio("necesidad"), aConvenir: tPrecio("aConvenir") })}
-        </p>
+        <p className={`hidden sm:block ${clasePrecio}`}>{textoPrecio}</p>
       </div>
+
+      {/* La descripción y las plazas, a todo el ancho de la tarjeta (no
+          en la columna del título, al lado de la foto). */}
+      {oportunidad.description && (
+        /* En un recuadro blanco, como los botones de abajo: suelto
+           sobre el fondo verde se perdía (pedido por Rafael). */
+        <p className="mt-3 whitespace-pre-line rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700">
+          {oportunidad.description}
+        </p>
+      )}
+
+      {/* Cuando hace falta más de una empresa, el club necesita ver
+        cuántas lleva sin ponerse a restar. */}
+      {esPorPlazas(oportunidad) && (
+        <div className="mt-3 max-w-xs">
+          <BarraDePlazas
+            slotsTotal={oportunidad.slotsTotal}
+            slotsTaken={oportunidad.slotsTaken}
+            etiqueta={
+              oportunidad.esNecesidad ? "colaboradores" : "plazas"
+            }
+          />
+        </div>
+      )}
 
       <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-zinc-100 pt-4">
         {!oportunidad.archivedAt && (

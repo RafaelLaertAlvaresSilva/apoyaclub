@@ -575,7 +575,7 @@
   },
   "primerosPasos": {
     "titulo": "Empieza por aquí",
-    "subtitulo": "Tres pasos y tu club ya se puede enseñar a una empresa.",
+    "subtitulo": "Cuatro pasos y tu club ya se puede enseñar a una empresa.",
     "identidad": {
       "titulo": "Sube tu logo y cuenta quiénes sois",
       "texto": "Con el logo y cuatro líneas de descripción tu página ya tiene cara.",
@@ -588,8 +588,13 @@
     },
     "oportunidad": {
       "titulo": "Publica tu primera oportunidad",
-      "texto": "Aunque sea de 50 €. Sin oportunidades no apareces en el buscador.",
-      "accion": "Crear oportunidad"
+      "texto": "Con «Generar mis oportunidades» te las dejamos escritas con los datos de tu club: solo tienes que revisarlas y publicar.",
+      "accion": "Generar mis oportunidades"
+    },
+    "dossier": {
+      "titulo": "Descarga tu dossier y mándalo",
+      "texto": "Se hace solo con tu ficha y tus oportunidades. Mándalo a cinco empresas de tu zona: así empiezan los patrocinios.",
+      "accion": "Ver mi dossier"
     }
   },
   "privacidad": {

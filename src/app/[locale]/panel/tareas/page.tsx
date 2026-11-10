@@ -8,6 +8,11 @@ import type { ClubSponsorRow } from "@/lib/club-mappers";
 import { TareasDeHoy } from "../components/TareasDeHoy";
 import { RecordatorioInforme } from "./components/RecordatorioInforme";
 import { TareasManager } from "./components/TareasManager";
+import { tituloDelPanel } from "@/lib/titulo-del-panel";
+
+export async function generateMetadata() {
+  return tituloDelPanel("tareas");
+}
 
 /**
  * La agenda de compromisos con los patrocinadores (migración 0030).

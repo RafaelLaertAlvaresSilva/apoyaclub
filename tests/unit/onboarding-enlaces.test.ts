@@ -32,7 +32,7 @@ const PESTANAS_DEL_PANEL = new Set([
 ]);
 
 /** Rutas del panel que no son pestañas, sino páginas aparte. */
-const PAGINAS_DEL_PANEL = new Set(["/panel/patrocinadores", "/panel/oportunidades"]);
+const PAGINAS_DEL_PANEL = new Set(["/panel/patrocinadores", "/panel/oportunidades", "/panel/dossier"]);
 
 describe("enlaces de los primeros pasos", () => {
   const pasos = primerosPasos(perfilDePrueba(), [], 0);

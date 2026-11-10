@@ -115,6 +115,9 @@ export async function obtenerMetricasClub(
   return { dias, ...porClave, visitasTotales };
 }
 
+/** Lo mínimo que tiene que haber en el periodo anterior para comparar en %. */
+export const MINIMO_PARA_COMPARAR = 20;
+
 /**
  * Variación entre las dos ventanas, en porcentaje redondeado. Null
  * cuando no hay con qué comparar (el mes anterior estaba a cero): en ese
@@ -122,7 +125,11 @@ export async function obtenerMetricasClub(
  * que suena a truco.
  */
 export function variacion({ actual, anterior }: MetricaClub): number | null {
-  if (anterior === 0) return null;
+  // Con cifras pequeñas el porcentaje engaña: de 17 a 2 visitas sale
+  // "−88 %" en rojo, y un club que empieza se desanima por nada. Por
+  // debajo de este mínimo en el mes anterior, solo la cifra (pedido por
+  // Rafael el 10-11-2026).
+  if (anterior < MINIMO_PARA_COMPARAR) return null;
   return Math.round(((actual - anterior) / anterior) * 100);
 }
 

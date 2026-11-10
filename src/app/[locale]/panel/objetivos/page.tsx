@@ -11,6 +11,11 @@ import { obtenerProspectosDelClub } from "@/lib/prospectos-datos";
 import { SITE_URL } from "@/lib/site";
 import { createClient } from "@/lib/supabase/server";
 import { ListaDeObjetivos } from "./components/ListaDeObjetivos";
+import { tituloDelPanel } from "@/lib/titulo-del-panel";
+
+export async function generateMetadata() {
+  return tituloDelPanel("objetivos");
+}
 
 /**
  * A quién escribir (migración 0041).

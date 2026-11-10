@@ -23,14 +23,18 @@ function metricas(
 
 describe("variación entre los dos periodos", () => {
   it("calcula el porcentaje de subida y de bajada", () => {
-    expect(variacion({ actual: 12, anterior: 6 })).toBe(100);
-    expect(variacion({ actual: 3, anterior: 6 })).toBe(-50);
-    expect(variacion({ actual: 6, anterior: 6 })).toBe(0);
+    expect(variacion({ actual: 60, anterior: 30 })).toBe(100);
+    expect(variacion({ actual: 15, anterior: 30 })).toBe(-50);
+    expect(variacion({ actual: 30, anterior: 30 })).toBe(0);
   });
 
   it("no inventa un porcentaje cuando el periodo anterior estaba a cero", () => {
     expect(variacion({ actual: 9, anterior: 0 })).toBeNull();
     expect(variacion({ actual: 0, anterior: 0 })).toBeNull();
+    // Con cifras pequeñas, sin porcentaje: de 17 a 2 no es "−88 %".
+    expect(variacion({ actual: 2, anterior: 17 })).toBeNull();
+    expect(variacion({ actual: 40, anterior: 19 })).toBeNull();
+    expect(variacion({ actual: 10, anterior: 20 })).toBe(-50);
   });
 });
 
