@@ -7,6 +7,8 @@ import { areaPrivadaDe } from "@/lib/areas-privadas";
 import type { SubscriptionStatus } from "@/lib/subscription-mappers";
 import { avisarDeFallo } from "@/lib/monitoring";
 import { RUTA_POR_ROL, type Role } from "@/lib/types";
+import { cabeceraLinkSeo } from "@/lib/enlaces-seo";
+import { SITE_URL } from "@/lib/site";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
@@ -70,6 +72,9 @@ export async function middleware(request: NextRequest) {
   // Ruta pública: dejamos pasar (la respuesta ya lleva las cookies de
   // sesión refrescadas por updateSession y el idioma resuelto).
   if (!rutaProtegida) {
+    // Para Google: la dirección buena de la página y sus otros idiomas.
+    const enlaces = cabeceraLinkSeo(SITE_URL, pathname);
+    if (enlaces) intlResponse.headers.set("Link", enlaces);
     return intlResponse;
   }
 

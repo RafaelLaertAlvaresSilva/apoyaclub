@@ -22,6 +22,9 @@ export const routing = defineRouting({
   locales: ["es", "pt", "en", "br"],
   defaultLocale: "es",
   localePrefix: "always",
+  // La cabecera de idiomas la pone `lib/enlaces-seo.ts` (next-intl usaba
+  // "br" como idioma, que para Google es bretón).
+  alternateLinks: false,
 });
 
 export type AppLocale = (typeof routing.locales)[number];
