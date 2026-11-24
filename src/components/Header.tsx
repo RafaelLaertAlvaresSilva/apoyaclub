@@ -100,8 +100,15 @@ export async function Header() {
             <Image
               src={logosDelIdioma(locale).claro}
               alt="ApoyaClub"
-              width={950}
-              height={210}
+              // El tamaño al que se ve como mucho (48 px de alto en el
+              // ordenador), no el del archivo (950 × 210). Con 950, Next
+              // servía el logo a 1920 px de ancho en los móviles (hasta
+              // 111 KB en la prueba de Lighthouse), en cada página y
+              // compitiendo con la foto de portada. Con 218 × 48 sirve
+              // 256 y 640 px: igual de nítido en pantallas de alta
+              // densidad y bastante más ligero.
+              width={218}
+              height={48}
               priority
               className="h-10 w-auto sm:h-12"
             />
