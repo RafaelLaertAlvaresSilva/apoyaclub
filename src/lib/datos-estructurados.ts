@@ -101,6 +101,61 @@ export function grafoDePreguntas(preguntas: { pregunta: string; respuesta: strin
 }
 
 /**
+ * Una guía: el artículo (con autor y fechas, que Google y las IA usan
+ * para fiarse de la fuente) y la miga de pan Inicio › Guías › guía.
+ * Las preguntas van aparte, con `grafoDePreguntas`.
+ */
+export function grafoDeGuia(
+  siteUrl: string,
+  datos: {
+    url: string;
+    titulo: string;
+    descripcion: string;
+    portada: string;
+    publicada: string;
+    actualizada: string;
+    palabras: number;
+  },
+): Nodo {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        headline: datos.titulo,
+        description: datos.descripcion,
+        image: `${siteUrl}${datos.portada}`,
+        datePublished: datos.publicada,
+        dateModified: datos.actualizada,
+        wordCount: datos.palabras,
+        inLanguage: "es",
+        mainEntityOfPage: datos.url,
+        author: {
+          "@type": "Person",
+          "@id": `${siteUrl}/#fundador`,
+          name: "Rafael Alvares",
+          url: `${siteUrl}/es/quienes-somos`,
+        },
+        publisher: {
+          "@type": "Organization",
+          "@id": `${siteUrl}/#organizacion`,
+          name: "ApoyaClub",
+          logo: { "@type": "ImageObject", url: `${siteUrl}/icon-512.png` },
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Inicio", item: `${siteUrl}/es` },
+          { "@type": "ListItem", position: 2, name: "Guías", item: `${siteUrl}/es/guias` },
+          { "@type": "ListItem", position: 3, name: datos.titulo, item: datos.url },
+        ],
+      },
+    ],
+  };
+}
+
+/**
  * El JSON va dentro de un <script>: un `</script>` en un texto (una
  * respuesta de la FAQ, por ejemplo) cerraría la etiqueta antes de
  * tiempo. Se escapa el `<` para que nunca pueda pasar.

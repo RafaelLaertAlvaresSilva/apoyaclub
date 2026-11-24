@@ -29,7 +29,8 @@
     },
     "apoyaclub": "ApoyaClub",
     "derechosReservados": "Todos los derechos reservados.",
-    "quienesSomos": "Quiénes somos"
+    "quienesSomos": "Quiénes somos",
+    "guias": "Guías"
   },
   "componentes": {
     "aceptar": "Aceptar",
@@ -72,7 +73,8 @@
     "iniciarSesion": "Iniciar sesión",
     "irALaPortada": "Ir a la portada de ApoyaClub",
     "volverALaPortada": "Volver a la portada",
-    "quienesSomos": "Quiénes somos"
+    "quienesSomos": "Quiénes somos",
+    "guias": "Guías"
   },
   "idioma": {
     "elegir": "Idioma"

@@ -55,10 +55,11 @@ function llamadas(): { pagina: string; llamada: string }[] {
 describe("la foto de fondo de las portadas", () => {
   const usos = llamadas();
 
-  it("la usan las tres portadas, la página del piloto y quiénes somos", () => {
-    // La del piloto (campaña de Instagram) y "Quiénes somos" llevan la
-    // misma foto que "Para clubes", con el mismo velo fuerte.
-    expect(usos.length).toBe(5);
+  it("la usan las tres portadas, la página del piloto, quiénes somos y las guías", () => {
+    // La del piloto (campaña de Instagram), "Quiénes somos" y el índice
+    // de las guías llevan la misma foto que "Para clubes", con el mismo
+    // velo fuerte.
+    expect(usos.length).toBe(6);
   });
 
   it("cada una pide su tono", () => {

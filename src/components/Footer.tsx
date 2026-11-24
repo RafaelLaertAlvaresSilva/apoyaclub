@@ -1,6 +1,7 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { SelectorDeIdioma } from "@/components/SelectorDeIdioma";
+import { hayGuiasEn } from "@/lib/guias";
 
 // Cada columna apunta a la página de su público, no a la portada. La
 // portada solo pregunta cuál de los dos eres; el detalle está en
@@ -57,6 +58,7 @@ const ENLACES_LEGALES = [
  */
 export function Footer() {
   const t = useTranslations("common.footer");
+  const locale = useLocale();
 
   return (
     <footer className="border-t border-zinc-200 bg-brand-navy-dark print:hidden">
@@ -68,6 +70,11 @@ export function Footer() {
             <Link href="/quienes-somos" className="mt-2 flex min-h-11 items-center text-sm font-medium text-sobre-color/70 hover:text-sobre-color sm:min-h-9">
               {t("quienesSomos")}
             </Link>
+            {hayGuiasEn(locale) && (
+              <Link href="/guias" className="flex min-h-11 items-center text-sm font-medium text-sobre-color/70 hover:text-sobre-color sm:min-h-9">
+                {t("guias")}
+              </Link>
+            )}
             <Link href="/para-clubes#contacto" className="flex min-h-11 items-center text-sm font-medium text-sobre-color/70 hover:text-sobre-color sm:min-h-9">
               {t("contacto")}
             </Link>

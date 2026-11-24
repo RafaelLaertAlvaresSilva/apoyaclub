@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { CerrarSesionBoton } from "@/components/CerrarSesionBoton";
 import { MenuDeLaCabecera } from "@/components/MenuDeLaCabecera";
 import { SelectorDeIdioma } from "@/components/SelectorDeIdioma";
+import { hayGuiasEn } from "@/lib/guias";
 
 /**
  * Cabecera pública compartida.
@@ -70,10 +71,13 @@ export async function Header() {
   const rol = user?.app_metadata?.role as Role | undefined;
   const accesoDirecto =
     user && rol ? { href: RUTA_POR_ROL[rol], etiqueta: t("irAMiPanel") } : null;
-  const enlaces = (accesoDirecto ? ENLACES_CON_SESION : ENLACES_DE_VISITA).map((enlace) => ({
+  const enlaces: { href: string; etiqueta: string }[] = (accesoDirecto ? ENLACES_CON_SESION : ENLACES_DE_VISITA).map((enlace) => ({
     href: enlace.href,
     etiqueta: t(enlace.clave),
   }));
+  // Las guías, donde existen (de momento solo en español): enlazadas
+  // desde todas las páginas para que Google y quien busca las encuentre.
+  if (hayGuiasEn(locale)) enlaces.push({ href: "/guias", etiqueta: t("guias") });
 
   return (
     <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white print:hidden">

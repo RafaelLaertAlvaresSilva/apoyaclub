@@ -27,6 +27,13 @@ export function cabeceraLinkSeo(siteUrl: string, pathname: string): string | nul
   const ruta = resto.length && resto.join("/") ? `/${resto.join("/")}` : "";
   const url = (locale: string) => `${siteUrl}/${locale}${ruta}`;
   const enlaces = [`<${url(idioma)}>; rel="canonical"`];
+  // Las guías solo existen en español (`IDIOMAS_DE_GUIAS`): anunciar
+  // versiones en otros idiomas mandaría a Google a redirecciones.
+  if (resto[0] === "guias") {
+    enlaces.push(`<${url("es")}>; rel="alternate"; hreflang="es"`);
+    enlaces.push(`<${url("es")}>; rel="alternate"; hreflang="x-default"`);
+    return enlaces.join(", ");
+  }
   for (const locale of routing.locales) {
     enlaces.push(`<${url(locale)}>; rel="alternate"; hreflang="${LANG_HTML[locale]}"`);
   }

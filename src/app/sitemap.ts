@@ -5,6 +5,7 @@ import { SITE_URL } from "@/lib/site";
 import { createPublicClient } from "@/lib/supabase/public";
 import { clubesParaPatrocinar, combinaciones, delPais } from "@/lib/patrocinar";
 import { paisDeBusquedaDelIdioma } from "@/lib/search-types";
+import { GUIAS, IDIOMAS_DE_GUIAS } from "@/lib/guias";
 
 /**
  * Mapa del sitio (Fase 15). Hasta ahora las páginas de club tenían
@@ -174,5 +175,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Mejor un mapa sin estas páginas que un 500.
   }
 
-  return [...estaticas, ...fichasDeClub, ...fichasDeEmpresa, ...paginasDePatrocinio];
+  // Las guías, solo en los idiomas en que existen (de momento, español).
+  const guias: MetadataRoute.Sitemap = IDIOMAS_DE_GUIAS.flatMap((locale) => [
+    { url: `${SITE_URL}/${locale}/guias`, lastModified: ahora, changeFrequency: "weekly" as const, priority: 0.8 },
+    ...GUIAS.map((guia) => ({
+      url: `${SITE_URL}/${locale}/guias/${guia.slug}`,
+      lastModified: new Date(`${guia.actualizada}T00:00:00Z`),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
+  ]);
+
+  return [...estaticas, ...fichasDeClub, ...fichasDeEmpresa, ...paginasDePatrocinio, ...guias];
 }

@@ -29,7 +29,8 @@
     },
     "apoyaclub": "ApoyaClub",
     "derechosReservados": "All rights reserved.",
-    "quienesSomos": "About us"
+    "quienesSomos": "About us",
+    "guias": "Guides"
   },
   "componentes": {
     "aceptar": "Accept",
@@ -72,7 +73,8 @@
     "iniciarSesion": "Sign in",
     "irALaPortada": "Go to the ApoyaClub home page",
     "volverALaPortada": "Back to home",
-    "quienesSomos": "About us"
+    "quienesSomos": "About us",
+    "guias": "Guides"
   },
   "idioma": {
     "elegir": "Language"
