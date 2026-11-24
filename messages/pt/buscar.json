@@ -150,7 +150,21 @@
     "indiceTexto": "Escolhe um desporto ou uma zona para ver os clubes que procuram empresas que os apoiem.",
     "indiceMeta": "Clubes desportivos que procuram patrocinadores, por desporto e por zona. Escreve-lhes de graça e sem comissões.",
     "clubes": "{n, plural, one {# clube} other {# clubes}}",
-    "sinClubes": "Ainda não há clubes publicados aqui."
+    "sinClubes": "Ainda não há clubes publicados aqui.",
+    "comoTitulo": "Como patrocinar um clube de {deporte}",
+    "como1Titulo": "Vê o que cada clube oferece",
+    "como1Texto": "Camisola, redes sociais, eventos, formação… e a que público chega cada um.",
+    "como2Titulo": "Escreve-lhe a partir da página dele",
+    "como2Texto": "É grátis, não é preciso registo e não há intermediários.",
+    "como3Titulo": "Combinem o que a tua empresa recebe",
+    "como3Texto": "O que aparece, onde e durante quanto tempo. O pagamento combina-se diretamente com o clube: a ApoyaClub não cobra comissão.",
+    "faqTitulo": "Perguntas frequentes",
+    "faq1P": "Quanto custa patrocinar um clube de {deporte}?",
+    "faq1R": "Depende do clube e do que escolheres: há opções para orçamentos pequenos, colaborações em espécie e também o patrocínio principal. Cada clube explica na sua página o que oferece e combinam diretamente.",
+    "faq2P": "O que recebe a minha empresa em troca?",
+    "faq2R": "Visibilidade junto das famílias e vizinhos da zona: a tua marca no equipamento ou no pavilhão, menções nas redes do clube, presença em torneios e eventos, e a imagem de um negócio que apoia o desporto de formação.",
+    "faq3P": "Tenho de me registar na ApoyaClub?",
+    "faq3R": "Não. Podes ver os clubes e escrever-lhes sem criar conta. Se quiseres, podes registar a tua empresa gratuitamente para aparecer no diretório e publicar o que ofereces aos clubes."
   },
   "avisoZona": {
     "titulo": "Avisa-me quando houver clubes em {zona}",

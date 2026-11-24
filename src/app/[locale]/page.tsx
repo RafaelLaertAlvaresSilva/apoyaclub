@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Header } from "@/components/Header";
+import { DatosEstructurados } from "@/components/DatosEstructurados";
+import { grafoDeLaPortada } from "@/lib/datos-estructurados";
+import { SITE_URL } from "@/lib/site";
 import { VideoDeLaPortada } from "./components/VideoDeLaPortada";
 import { CtaFijoMovil } from "./components/CtaFijoMovil";
 import { EntradaAlBajar } from "./components/EntradaAlBajar";
@@ -74,9 +77,13 @@ const VIDEO_DE_LA_PORTADA: Record<string, string> = {
 export default async function Home() {
   const t = await getTranslations("home");
   const locale = await getLocale();
+  const tMeta = await getTranslations("home.meta");
 
   return (
     <div className="flex flex-1 flex-col bg-zinc-50">
+      {/* Qué es ApoyaClub, quién está detrás y cuánto cuesta, para Google
+          y para los buscadores con IA. */}
+      <DatosEstructurados datos={grafoDeLaPortada(SITE_URL, locale, tMeta("descripcion"))} />
       <Header />
       <FranjaSeisMeses />
 

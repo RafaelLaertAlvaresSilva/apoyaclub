@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
+import { DatosEstructurados } from "@/components/DatosEstructurados";
+import { grafoDePreguntas } from "@/lib/datos-estructurados";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { CtaFijoMovil } from "../components/CtaFijoMovil";
@@ -55,9 +57,13 @@ export default async function ParaClubesPage() {
   const locale = await getLocale();
   const tMenu = await getTranslations("home.paraClubes.menu");
   const t = await getTranslations("home");
+  const preguntas = t.raw("faq.preguntas") as { pregunta: string; respuesta: string }[];
 
   return (
     <div className="flex flex-1 flex-col bg-zinc-50">
+      {/* Las preguntas frecuentes de la página, marcadas para Google y
+          las IA: es el formato que más citan. */}
+      <DatosEstructurados datos={grafoDePreguntas(preguntas)} />
       <Header />
       <FranjaSeisMeses />
 

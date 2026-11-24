@@ -1,0 +1,43 @@
+# ApoyaClub
+
+> ApoyaClub es una plataforma web para que los clubes deportivos consigan patrocinadores y los mantengan, y para que las empresas encuentren clubes de su zona a los que apoyar. Funciona en España, Portugal y Brasil, para cualquier deporte (fútbol, baloncesto, balonmano, voleibol, tenis, rugby, atletismo y más). Para las empresas es gratis y no cobra comisión sobre los patrocinios.
+
+ApoyaClub la creó Rafael Alvares, fisioterapeuta deportivo con más de diez años en el deporte de base (Real Federación Española de Balonmano, Club Balonmano Benidorm, Club Balonmano Guadalajara, Club Rugby Alcalá). Sede en Benidorm (Alicante, España). Contacto: info@apoyaclub.com.
+
+## Para clubes deportivos
+
+Qué tiene un club en ApoyaClub:
+
+- Una página pública del club, profesional, para enseñar a las empresas lo que ofrece.
+- Oportunidades de patrocinio: más de 100 ideas en 16 categorías (equipaciones, torneos, redes sociales, eventos, campus, vallas, autobús del equipo, calendario, lotería de Navidad…). El club elige las que encajan y decide las condiciones de cada una.
+- Un dossier de patrocinio en PDF y en Word que el club monta a su medida: elige qué apartados, qué oportunidades y en qué orden, según la empresa a la que lo envía.
+- «A quién escribir»: la lista de empresas a las que el club quiere proponer el patrocinio, con pistas de por dónde empezar (familias del club, comercios de la zona, empresas que ya patrocinan a otros), el correo ya redactado para cada situación y recordatorios para volver a llamar.
+- Seguimiento de patrocinadores: qué se ha prometido a cada empresa, tareas, fechas y renovaciones.
+- Informe para el patrocinador y estadísticas, para enseñar resultados y que la empresa renueve.
+
+Precio en España (IVA incluido): plan Fundador 199 €/año (plazas limitadas, precio congelado), temporada 249 €/año o 29,90 €/mes sin permanencia. Prueba gratis. ApoyaClub no gestiona el cobro del patrocinio: el club y la empresa lo acuerdan directamente, con un 0 % de comisión.
+
+- [Para clubes](https://apoyaclub.com/es/para-clubes): cómo funciona, herramientas, precio y preguntas frecuentes.
+- [Crear la página del club](https://apoyaclub.com/es/registro-club)
+
+## Para empresas y colaboradores
+
+Una empresa puede buscar clubes deportivos por deporte y por zona, ver qué ofrece cada uno y escribirles directamente, gratis y sin crear una cuenta. También puede registrarse gratis para aparecer en el directorio de empresas que apoyan el deporte base y publicar lo que ofrece (servicios, productos o patrocinio).
+
+- [Para empresas](https://apoyaclub.com/es/para-empresas): ventajas de patrocinar a un club local y preguntas frecuentes.
+- [Buscar oportunidades de patrocinio](https://apoyaclub.com/es/buscar)
+- [Patrocinar clubes por deporte y zona](https://apoyaclub.com/es/patrocinar)
+- [Qué necesitan los clubes](https://apoyaclub.com/es/servicios): servicios a cambio de visibilidad (fisioterapia, transporte, imprenta, comidas).
+- [Directorio de empresas](https://apoyaclub.com/es/empresas)
+
+## Sobre ApoyaClub
+
+- [Quiénes somos](https://apoyaclub.com/es/quienes-somos)
+- [Condiciones de uso](https://apoyaclub.com/es/condiciones-de-uso)
+- [Privacidad](https://apoyaclub.com/es/privacidad)
+
+## Otros idiomas
+
+- [Português (Portugal)](https://apoyaclub.com/pt)
+- [Português (Brasil)](https://apoyaclub.com/br)
+- [English](https://apoyaclub.com/en)

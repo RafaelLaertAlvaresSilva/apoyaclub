@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
+import { DatosEstructurados } from "@/components/DatosEstructurados";
+import { grafoDePreguntas } from "@/lib/datos-estructurados";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
 import { VideoDeLaPortada } from "../components/VideoDeLaPortada";
@@ -63,6 +65,7 @@ export default async function ParaEmpresasPage() {
 
   return (
     <div className="flex flex-1 flex-col bg-zinc-50">
+      <DatosEstructurados datos={grafoDePreguntas(preguntas)} />
       <Header />
 
       <main id="contenido" className="flex-1">

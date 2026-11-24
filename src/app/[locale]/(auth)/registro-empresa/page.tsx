@@ -4,7 +4,10 @@ import { RegistroEmpresaForm } from "./RegistroEmpresaForm";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("auth.titulos");
-  return { title: t("registroEmpresa") };
+  return {
+    title: t("registroEmpresa"),
+    description: (await getTranslations("common.descripcionPagina"))("registroEmpresa"),
+  };
 }
 
 /* El formulario vive aparte porque necesita ejecutarse en el navegador,

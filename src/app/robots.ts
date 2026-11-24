@@ -16,7 +16,20 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/auth/", "/*/panel", "/*/empresa", "/*/admin", "/*/dossier/"],
+        // `/*/empresa` a secas también tapaba `/es/empresas` y cada ficha
+        // de empresa: Google compara por el principio de la ruta, y
+        // "/es/empresas" empieza por "/es/empresa". Por eso el panel de
+        // empresa se cierra con la barra y con `$` (la ruta exacta), y
+        // el directorio público queda abierto.
+        disallow: [
+          "/api/",
+          "/auth/",
+          "/*/panel",
+          "/*/empresa$",
+          "/*/empresa/",
+          "/*/admin",
+          "/*/dossier/",
+        ],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

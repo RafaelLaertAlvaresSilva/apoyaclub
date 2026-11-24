@@ -9,7 +9,12 @@ import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
   // La pestaña, en el idioma de la página (antes, siempre en español).
-  return { title: (await getTranslations("common.tituloPestana"))("acceder") };
+  // No indexable: la pantalla de acceso no aporta nada en Google y le
+  // quita sitio a las páginas que sí deben salir. Los enlaces se siguen.
+  return {
+    title: (await getTranslations("common.tituloPestana"))("acceder"),
+    robots: { index: false, follow: true },
+  };
 }
 
 /**

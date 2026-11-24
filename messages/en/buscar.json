@@ -150,7 +150,21 @@
     "indiceTexto": "Pick a sport or an area to see the clubs looking for companies to support them.",
     "indiceMeta": "Sports clubs looking for sponsors, by sport and by area. Write to them for free, with no commission.",
     "clubes": "{n, plural, one {# club} other {# clubs}}",
-    "sinClubes": "No clubs published here yet."
+    "sinClubes": "No clubs published here yet.",
+    "comoTitulo": "How to sponsor a {deporte} club",
+    "como1Titulo": "See what each club offers",
+    "como1Texto": "Kit, social media, events, youth teams… and the audience each one reaches.",
+    "como2Titulo": "Message them from their page",
+    "como2Texto": "It's free, no sign-up needed and no middlemen.",
+    "como3Titulo": "Agree on what your business gets",
+    "como3Texto": "What appears, where and for how long. Payment is agreed directly with the club: ApoyaClub takes no commission.",
+    "faqTitulo": "Frequently asked questions",
+    "faq1P": "How much does it cost to sponsor a {deporte} club?",
+    "faq1R": "It depends on the club and what you choose: there are options for small budgets, in-kind collaborations and the main sponsorship too. Each club explains on its page what it offers and you agree on it directly.",
+    "faq2P": "What does my business get in return?",
+    "faq2R": "Visibility with local families and neighbours: your brand on the kit or at the venue, mentions on the club's social media, a presence at tournaments and events, and the image of a business that supports grassroots sport.",
+    "faq3P": "Do I need to sign up to ApoyaClub?",
+    "faq3R": "No. You can browse clubs and message them without an account. If you like, you can register your business for free to appear in the directory and publish what you offer clubs."
   },
   "avisoZona": {
     "titulo": "Let me know when there are clubs in {zona}",

@@ -81,7 +81,7 @@
     "aviso": "Aviso de cookies",
     "corto": "Usamos cookies técnicas.",
     "largo": "Usamos cookies técnicas necesarias para que ApoyaClub funcione. Puedes aceptar o rechazar las cookies no técnicas; más información en nuestra",
-    "masInformacion": "Más información"
+    "masInformacion": "Más sobre cookies"
   },
   "favoritos": {
     "guardar": "Guardar {nombre}",
@@ -275,5 +275,13 @@
     "cookies": "Política de cookies",
     "cuentaSuspendida": "Cuenta suspendida",
     "privacidad": "Política de privacidad"
+  },
+  "descripcionPagina": {
+    "avisoLegal": "Datos del titular de ApoyaClub, la plataforma que conecta clubes deportivos con empresas patrocinadoras.",
+    "privacidad": "Cómo trata ApoyaClub los datos personales de clubes, empresas y visitantes, y cómo ejercer tus derechos.",
+    "cookies": "Qué cookies usa ApoyaClub, para qué sirven y cómo puedes aceptarlas o rechazarlas.",
+    "condiciones": "Condiciones de uso de ApoyaClub para clubes deportivos y empresas: cuentas, suscripción, contenido y responsabilidades.",
+    "registroClub": "Crea gratis la página de tu club en ApoyaClub: publica tus oportunidades de patrocinio y prepara un dossier para cada empresa.",
+    "registroEmpresa": "Registra tu empresa en ApoyaClub para aparecer en el directorio, publicar lo que ofreces y apoyar a clubes deportivos de tu zona. Gratis."
   }
 }

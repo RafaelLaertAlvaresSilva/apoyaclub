@@ -1,5 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Header } from "@/components/Header";
+import { DatosEstructurados } from "@/components/DatosEstructurados";
+import { grafoDePreguntas } from "@/lib/datos-estructurados";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { formatoDeValor } from "@/lib/format";
@@ -48,8 +50,22 @@ export async function PaginaDePatrocinio({
     },
   };
 
+  // Cómo se patrocina y tres preguntas de quien llega desde Google
+  // (auditoría SEO, nov 2026): con uno o dos clubes la página se quedaba
+  // en unas 300 palabras, poco para que Google la tome en serio. Las
+  // preguntas van también marcadas para Google y las IA.
+  const pasos = [1, 2, 3].map((n) => ({
+    titulo: t(`como${n}Titulo`),
+    texto: t(`como${n}Texto`),
+  }));
+  const preguntas = [1, 2, 3].map((n) => ({
+    pregunta: t(`faq${n}P`, { deporte: nombreDeporte }),
+    respuesta: t(`faq${n}R`),
+  }));
+
   return (
     <div className="flex flex-1 flex-col bg-zinc-50">
+      <DatosEstructurados datos={grafoDePreguntas(preguntas)} />
       <Header />
 
       <header className="border-b border-zinc-200 bg-white">
@@ -125,6 +141,33 @@ export async function PaginaDePatrocinio({
             <li>{t("porQue2")}</li>
             <li>{t("porQue3")}</li>
           </ul>
+        </section>
+
+        <section className="mt-8">
+          <h2 className="text-lg font-semibold text-zinc-900">{t("comoTitulo", { deporte: nombreDeporte })}</h2>
+          <ol className="mt-3 grid gap-3 sm:grid-cols-3">
+            {pasos.map((paso, i) => (
+              <li key={paso.titulo} className="rounded-xl border border-zinc-200 bg-white p-4">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 text-sm font-bold text-teal-800">
+                  {i + 1}
+                </span>
+                <h3 className="mt-2 font-semibold text-zinc-900">{paso.titulo}</h3>
+                <p className="mt-1 text-sm text-zinc-600">{paso.texto}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="mt-8">
+          <h2 className="text-lg font-semibold text-zinc-900">{t("faqTitulo")}</h2>
+          <div className="mt-3 divide-y divide-zinc-200 rounded-xl border border-zinc-200 bg-white">
+            {preguntas.map((p) => (
+              <details key={p.pregunta} className="group p-4">
+                <summary className="cursor-pointer font-medium text-zinc-900">{p.pregunta}</summary>
+                <p className="mt-2 text-sm text-zinc-600">{p.respuesta}</p>
+              </details>
+            ))}
+          </div>
         </section>
 
         {(otrasZonas.length > 0 || otrosDeportes.length > 0 || zona) && (

@@ -7,7 +7,11 @@ import { LEGAL_VERSIONS, formatearFechaLegal } from "@/lib/legal";
 
 export async function generateMetadata(): Promise<Metadata> {
   // La pestaña, en el idioma de la página (antes, siempre en español).
-  return { title: (await getTranslations("common.tituloPestana"))("avisoLegal") };
+  return {
+    title: (await getTranslations("common.tituloPestana"))("avisoLegal"),
+    // Una descripción propia: antes heredaba la genérica de toda la web.
+    description: (await getTranslations("common.descripcionPagina"))("avisoLegal"),
+  };
 }
 
 /**

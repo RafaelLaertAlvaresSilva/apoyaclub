@@ -39,7 +39,9 @@ const RUTAS_ESTATICAS: { ruta: string; prioridad: number; frecuencia: "daily" | 
   // Google nunca se le dijo que existiera la puerta de entrada del
   // otro lado del mercado.
   { ruta: "/registro-empresa", prioridad: 0.8, frecuencia: "monthly" },
-  { ruta: "/login", prioridad: 0.3, frecuencia: "monthly" },
+  // /login no va: nadie busca en Google la pantalla de acceso de una
+  // web que no conoce, y es una página más compitiendo con las buenas.
+  // La propia página se marca como no indexable.
   { ruta: "/aviso-legal", prioridad: 0.2, frecuencia: "monthly" },
   { ruta: "/privacidad", prioridad: 0.2, frecuencia: "monthly" },
   { ruta: "/cookies", prioridad: 0.2, frecuencia: "monthly" },

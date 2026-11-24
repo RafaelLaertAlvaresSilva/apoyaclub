@@ -81,7 +81,7 @@
     "aviso": "Cookie notice",
     "corto": "We use technical cookies.",
     "largo": "We use the technical cookies ApoyaClub needs to work. You can accept or reject non-technical cookies; find out more in our",
-    "masInformacion": "Find out more"
+    "masInformacion": "About cookies"
   },
   "favoritos": {
     "guardar": "Save {nombre}",
@@ -275,5 +275,13 @@
     "cookies": "Cookie policy",
     "cuentaSuspendida": "Account suspended",
     "privacidad": "Privacy policy"
+  },
+  "descripcionPagina": {
+    "avisoLegal": "Legal information about ApoyaClub, the platform that connects sports clubs with sponsoring businesses.",
+    "privacidad": "How ApoyaClub handles the personal data of clubs, businesses and visitors, and how to exercise your rights.",
+    "cookies": "Which cookies ApoyaClub uses, what they are for and how you can accept or reject them.",
+    "condiciones": "ApoyaClub terms of use for sports clubs and businesses: accounts, subscription, content and responsibilities.",
+    "registroClub": "Create your club's page on ApoyaClub for free: publish your sponsorship opportunities and prepare a dossier for each business.",
+    "registroEmpresa": "Register your business on ApoyaClub to appear in the directory, publish what you offer and support sports clubs near you. Free."
   }
 }

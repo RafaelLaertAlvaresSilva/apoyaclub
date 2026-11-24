@@ -5,7 +5,10 @@ import { RegistroClubForm } from "./RegistroClubForm";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("auth.titulos");
-  return { title: t("registroClub") };
+  return {
+    title: t("registroClub"),
+    description: (await getTranslations("common.descripcionPagina"))("registroClub"),
+  };
 }
 
 /* El formulario vive aparte porque necesita ejecutarse en el navegador,

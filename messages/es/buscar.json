@@ -150,7 +150,21 @@
     "indiceTexto": "Elige un deporte o una zona para ver los clubes que buscan empresas que les apoyen.",
     "indiceMeta": "Clubes deportivos que buscan patrocinadores, por deporte y por zona. Escríbeles gratis y sin comisiones.",
     "clubes": "{n, plural, one {# club} other {# clubes}}",
-    "sinClubes": "Todavía no hay clubes publicados aquí."
+    "sinClubes": "Todavía no hay clubes publicados aquí.",
+    "comoTitulo": "Cómo patrocinar un club de {deporte}",
+    "como1Titulo": "Mira qué ofrece cada club",
+    "como1Texto": "Camiseta, redes, eventos, cantera… y a qué público llega cada uno.",
+    "como2Titulo": "Escríbele desde su página",
+    "como2Texto": "Es gratis, no hace falta registrarse y no hay intermediarios.",
+    "como3Titulo": "Acordad lo que recibe tu empresa",
+    "como3Texto": "Qué aparece, dónde y durante cuánto tiempo. El pago se acuerda directamente con el club: ApoyaClub no cobra comisión.",
+    "faqTitulo": "Preguntas frecuentes",
+    "faq1P": "¿Cuánto cuesta patrocinar un club de {deporte}?",
+    "faq1R": "Depende del club y de lo que elijas: hay opciones para presupuestos pequeños, colaboraciones en especie y también el patrocinio principal. Cada club explica en su página lo que ofrece y lo acordáis directamente.",
+    "faq2P": "¿Qué recibe mi empresa a cambio?",
+    "faq2R": "Visibilidad ante las familias y vecinos de la zona: tu marca en la equipación o en el pabellón, menciones en las redes del club, presencia en torneos y eventos, y la imagen de un negocio que apoya al deporte base.",
+    "faq3P": "¿Tengo que registrarme en ApoyaClub?",
+    "faq3R": "No. Puedes ver los clubes y escribirles sin crear una cuenta. Si quieres, puedes registrar tu empresa gratis para aparecer en el directorio y publicar lo que ofreces a los clubes."
   },
   "avisoZona": {
     "titulo": "Avísame cuando haya clubes en {zona}",
