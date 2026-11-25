@@ -1,7 +1,9 @@
 # Plantillas de correo (Supabase → Authentication → Emails → Templates)
 
 Estos son los correos que recibe un club cuando se registra o cuando
-pierde la contraseña. Por defecto llegan en inglés y firmados por
+pierde la contraseña. Desde el 25-11-2026 llevan el mismo marco que los
+correos que manda la web (`src/lib/email/marco.ts`): el logo de verdad
+en PNG arriba, la línea verde y el botón verde de la marca. Por defecto llegan en inglés y firmados por
 "Supabase Auth", que es exactamente lo que no queremos que vea alguien
 a quien estamos pidiendo 29,90 € al mes.
 
@@ -32,8 +34,8 @@ cualquier dispositivo.
 ```html
 <div style="margin:0;padding:24px 0;background:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
   <div style="max-width:520px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0;">
-    <div style="background:#14304f;padding:24px 32px;">
-      <span style="color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.5px;">Apoya<span style="color:#14b8a6;">Club</span></span>
+    <div style="background:#ffffff;padding:24px 32px 18px;border-top:4px solid #0f766e;border-bottom:1px solid #f1f5f9;">
+      <a href="{{ .SiteURL }}" style="text-decoration:none;"><img src="https://apoyaclub.com/correo/logo.png" width="190" alt="ApoyaClub" style="display:block;border:0;width:190px;height:auto;"></a>
     </div>
     <div style="padding:32px;">
       <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;color:#0f172a;">Ya casi está</h1>
@@ -42,7 +44,7 @@ cualquier dispositivo.
       </p>
       <p style="margin:0 0 28px;">
         <a href="{{ .SiteURL }}/es/auth/confirm?token_hash={{ .TokenHash }}&type=signup"
-           style="display:inline-block;background:#14b8a6;color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;padding:14px 28px;border-radius:10px;">
+           style="display:inline-block;background:#0f766e;color:#ffffff;text-decoration:none;font-size:16px;font-weight:700;padding:14px 28px;border-radius:10px;">
           Confirmar mi correo
         </a>
       </p>
@@ -75,8 +77,8 @@ cualquier dispositivo.
 ```html
 <div style="margin:0;padding:24px 0;background:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
   <div style="max-width:520px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0;">
-    <div style="background:#14304f;padding:24px 32px;">
-      <span style="color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.5px;">Apoya<span style="color:#14b8a6;">Club</span></span>
+    <div style="background:#ffffff;padding:24px 32px 18px;border-top:4px solid #0f766e;border-bottom:1px solid #f1f5f9;">
+      <a href="{{ .SiteURL }}" style="text-decoration:none;"><img src="https://apoyaclub.com/correo/logo.png" width="190" alt="ApoyaClub" style="display:block;border:0;width:190px;height:auto;"></a>
     </div>
     <div style="padding:32px;">
       <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;color:#0f172a;">Cambiar la contraseña</h1>
@@ -85,7 +87,7 @@ cualquier dispositivo.
       </p>
       <p style="margin:0 0 28px;">
         <a href="{{ .SiteURL }}/es/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/actualizar-password"
-           style="display:inline-block;background:#14b8a6;color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;padding:14px 28px;border-radius:10px;">
+           style="display:inline-block;background:#0f766e;color:#ffffff;text-decoration:none;font-size:16px;font-weight:700;padding:14px 28px;border-radius:10px;">
           Elegir contraseña nueva
         </a>
       </p>
@@ -118,8 +120,8 @@ cualquier dispositivo.
 ```html
 <div style="margin:0;padding:24px 0;background:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
   <div style="max-width:520px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0;">
-    <div style="background:#14304f;padding:24px 32px;">
-      <span style="color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.5px;">Apoya<span style="color:#14b8a6;">Club</span></span>
+    <div style="background:#ffffff;padding:24px 32px 18px;border-top:4px solid #0f766e;border-bottom:1px solid #f1f5f9;">
+      <a href="{{ .SiteURL }}" style="text-decoration:none;"><img src="https://apoyaclub.com/correo/logo.png" width="190" alt="ApoyaClub" style="display:block;border:0;width:190px;height:auto;"></a>
     </div>
     <div style="padding:32px;">
       <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;color:#0f172a;">Confirma el correo nuevo</h1>
@@ -128,7 +130,7 @@ cualquier dispositivo.
       </p>
       <p style="margin:0 0 28px;">
         <a href="{{ .SiteURL }}/es/auth/confirm?token_hash={{ .TokenHash }}&type=email_change"
-           style="display:inline-block;background:#14b8a6;color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;padding:14px 28px;border-radius:10px;">
+           style="display:inline-block;background:#0f766e;color:#ffffff;text-decoration:none;font-size:16px;font-weight:700;padding:14px 28px;border-radius:10px;">
           Confirmar el cambio
         </a>
       </p>
@@ -165,8 +167,8 @@ reciba nunca un correo en inglés.
 ```html
 <div style="margin:0;padding:24px 0;background:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
   <div style="max-width:520px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0;">
-    <div style="background:#14304f;padding:24px 32px;">
-      <span style="color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.5px;">Apoya<span style="color:#14b8a6;">Club</span></span>
+    <div style="background:#ffffff;padding:24px 32px 18px;border-top:4px solid #0f766e;border-bottom:1px solid #f1f5f9;">
+      <a href="{{ .SiteURL }}" style="text-decoration:none;"><img src="https://apoyaclub.com/correo/logo.png" width="190" alt="ApoyaClub" style="display:block;border:0;width:190px;height:auto;"></a>
     </div>
     <div style="padding:32px;">
       <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;color:#0f172a;">Entra en tu cuenta</h1>
@@ -175,7 +177,7 @@ reciba nunca un correo en inglés.
       </p>
       <p style="margin:0 0 28px;">
         <a href="{{ .SiteURL }}/es/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink"
-           style="display:inline-block;background:#14b8a6;color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;padding:14px 28px;border-radius:10px;">
+           style="display:inline-block;background:#0f766e;color:#ffffff;text-decoration:none;font-size:16px;font-weight:700;padding:14px 28px;border-radius:10px;">
           Entrar en ApoyaClub
         </a>
       </p>
