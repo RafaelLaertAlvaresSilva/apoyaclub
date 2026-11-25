@@ -9,12 +9,14 @@ import { CtaFijoMovil } from "./components/CtaFijoMovil";
 import { EntradaAlBajar } from "./components/EntradaAlBajar";
 import { FranjaSeisMeses, TarjetaSeisMeses } from "./components/AvisoSeisMeses";
 import {
+  CintasDelHero,
   FondoDeHeroe,
   FuncionesDestacadas,
   SeccionComoFunciona,
   SeccionCtaFinal,
   SeccionHerramientasClave,
   PuertasDelHero,
+  TituloConResalte,
   SeccionPrecio,
   SeccionSector,
   SeccionVideo,
@@ -94,6 +96,7 @@ export default async function Home() {
         <section className="relative overflow-hidden border-b border-zinc-200 bg-gradient-to-b from-white to-zinc-50 px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-16">
           {/* ============ EL FONDO ============ */}
           <FondoDeHeroe archivo="/fondo-hero.webp" tono="claro" />
+          <CintasDelHero />
 
           {/* ============ DOS COLUMNAS: EL MENSAJE Y EL VÍDEO ============
               Antes el mensaje iba centrado y a todo el ancho, y el vídeo
@@ -131,7 +134,7 @@ export default async function Home() {
                 * peor. Dos listas seguidas de las mismas cosas no
                 * convencen el doble: cansan. */}
             <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-titular sm:text-4xl lg:text-5xl">
-              {t("hero.tituloParte1")}
+              <TituloConResalte texto={t("hero.tituloParte1")} resalta={t("hero.tituloResalta")} />
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-xl font-bold leading-snug text-accion-tinta sm:text-2xl lg:mx-0">
               {t("hero.tituloParte2")}

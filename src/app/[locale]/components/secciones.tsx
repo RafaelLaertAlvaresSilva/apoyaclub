@@ -2714,26 +2714,31 @@ export async function FuncionesDestacadas({ enColumna = false }: { enColumna?: b
        media pantalla, cuatro columnas dejan a "Más de 100 ideas de
        patrocinio" en cinco líneas. */
     <ul
-      className={`mt-9 grid gap-x-6 gap-y-5 text-left sm:grid-cols-2 ${
+      className={`relative mt-9 grid gap-x-10 gap-y-5 text-left sm:grid-cols-2 ${
         enColumna ? "max-w-none" : "mx-auto max-w-4xl lg:grid-cols-4"
       }`}
     >
+      {/* La raya fina entre las dos columnas, solo en el héroe: separa
+          los dos pares sin cajas alrededor. */}
+      {enColumna && (
+        <li aria-hidden="true" className="pointer-events-none absolute inset-y-1 left-1/2 hidden w-px bg-zinc-300/70 sm:block" />
+      )}
       {funciones.map((funcion) => (
-        <li key={funcion.clave} className="flex items-start gap-3">
+        <li key={funcion.clave} className="flex items-center gap-3.5">
           {/* El icono en su cuadrado de color, que es lo que hace que
               la fila se escanee sin leerla: primero se ven cuatro
               marcas, y solo después el texto de la que interesa. */}
-          <span className="flex size-10 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-accion-tinta">
+          <span className="flex size-12 flex-none items-center justify-center rounded-2xl bg-brand-teal-light text-accion-tinta shadow-sm shadow-brand-teal/20 ring-1 ring-brand-teal/15">
             <IconoHerramienta clave={funcion.clave} />
           </span>
           <span className="min-w-0">
-            <span className="block text-[14px] font-bold leading-snug text-titular">
+            <span className="block text-[15px] font-bold leading-snug text-titular">
               {funcion.titulo}
             </span>
             {/* zinc-600 y no zinc-500: estas dos líneas caen encima de
                 la foto del fondo, y el gris más claro se quedaba corto
                 de contraste justo donde la imagen se ve más. */}
-            <span className="mt-0.5 block text-[12.5px] leading-snug text-zinc-600">
+            <span className="mt-0.5 block text-[13px] leading-snug text-zinc-600">
               {funcion.detalle}
             </span>
           </span>
@@ -2763,15 +2768,21 @@ export async function PuertasDelHero({ enColumna = false }: { enColumna?: boolea
       href: "/para-clubes",
       cta: t("puertas.clubCta"),
       pie: t("puertas.clubPie"),
+      // En el club el pie va entero igual; en la empresa, lo de "gratis
+      // y sin cuenta" en negrita, que es lo que le quita el miedo.
+      resaltaFinal: false,
+      icono: ICONO_PUERTA_CLUB,
       clases:
-        "bg-brand-teal-dark text-sobre-color hover:bg-brand-teal focus-visible:outline-accion-tinta",
+        "bg-gradient-to-r from-brand-teal-dark to-[#0f766e] text-sobre-color shadow-lg shadow-brand-teal/30 hover:from-brand-navy hover:to-brand-navy focus-visible:outline-accion-tinta",
     },
     {
       href: "/para-empresas",
       cta: t("puertas.empresaCta"),
       pie: t("puertas.empresaPie"),
+      resaltaFinal: true,
+      icono: ICONO_PUERTA_EMPRESA,
       clases:
-        "border-2 border-titular bg-white text-titular hover:bg-brand-navy hover:text-sobre-color",
+        "border-2 border-titular bg-white text-titular shadow-lg shadow-brand-navy/10 hover:bg-brand-navy hover:text-sobre-color",
     },
   ] as const;
 
@@ -2783,8 +2794,20 @@ export async function PuertasDelHero({ enColumna = false }: { enColumna?: boolea
         <div key={puerta.href}>
           <Link
             href={puerta.href}
-            className={`group flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-base font-bold transition-colors sm:text-lg ${puerta.clases}`}
+            className={`group flex w-full items-center justify-center gap-2.5 rounded-2xl px-4 py-4 xl:whitespace-nowrap text-base font-bold transition duration-300 hover:-translate-y-0.5 xl:text-lg ${puerta.clases}`}
           >
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              className="size-6 flex-none lg:max-xl:hidden"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.8}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              {puerta.icono}
+            </svg>
             {puerta.cta}
             {/* La flecha se mueve al pasar por encima: es lo que
                 distingue un botón de una caja de color. */}
@@ -2800,10 +2823,99 @@ export async function PuertasDelHero({ enColumna = false }: { enColumna?: boolea
               enColumna ? "text-center lg:text-left" : "text-center"
             }`}
           >
-            {puerta.pie}
+            {puerta.resaltaFinal ? <PieConFinalEnNegrita texto={puerta.pie} /> : puerta.pie}
           </p>
         </div>
       ))}
+    </div>
+  );
+}
+
+/** Iconos de las dos puertas (Lucide, licencia ISC): el grupo de
+ * personas para el club y el edificio para la empresa. */
+const ICONO_PUERTA_CLUB = (
+  <>
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+  </>
+);
+const ICONO_PUERTA_EMPRESA = (
+  <>
+    <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
+    <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4" />
+  </>
+);
+
+/** El pie de una puerta con la última frase en negrita: "Encuentra
+ * oportunidades cerca de ti. **Gratis y sin cuenta.**" */
+function PieConFinalEnNegrita({ texto }: { texto: string }) {
+  const punto = texto.indexOf(". ");
+  if (punto < 0) return <>{texto}</>;
+  return (
+    <>
+      {texto.slice(0, punto + 1)}{" "}
+      <strong className="font-bold text-titular">{texto.slice(punto + 2)}</strong>
+    </>
+  );
+}
+
+/**
+ * Un titular con unas palabras subrayadas a mano, como en el diseño de
+ * Rafael para la portada ("Cada club tiene algo **que ofrecer**."). Si
+ * en un idioma el resalte no aparece tal cual en el titular, sale el
+ * titular sin más.
+ */
+export function TituloConResalte({ texto, resalta }: { texto: string; resalta: string }) {
+  const corte = resalta ? texto.indexOf(resalta) : -1;
+  if (corte < 0) return <>{texto}</>;
+  return (
+    <>
+      {texto.slice(0, corte)}
+      <span className="relative inline-block whitespace-nowrap">
+        {resalta}
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 200 16"
+          preserveAspectRatio="none"
+          className="absolute -bottom-2 left-0 h-3 w-full text-brand-teal-dark sm:-bottom-3 sm:h-4"
+        >
+          <path d="M3 10C60 4 130 3 197 9" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
+        </svg>
+      </span>
+      {texto.slice(corte + resalta.length)}
+    </>
+  );
+}
+
+/**
+ * Las cintas verdes que entran por las esquinas de la portada, del
+ * diseño de Rafael: arriba a la izquierda y abajo a la derecha. Dan
+ * movimiento al fondo sin tapar nada (van detrás del texto y del vídeo).
+ */
+export function CintasDelHero() {
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden overflow-hidden sm:block">
+      <svg viewBox="0 0 400 300" className="absolute -left-10 -top-6 h-56 w-80 lg:h-72 lg:w-[26rem]" fill="none">
+        <defs>
+          <linearGradient id="cinta-arriba" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stopColor="#0f766e" />
+            <stop offset="100%" stopColor="#2dd4bf" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path d="M-20 170C60 80 170 30 400 -10" stroke="url(#cinta-arriba)" strokeWidth="34" strokeLinecap="round" />
+        <path d="M-20 215C80 120 200 70 380 40" stroke="url(#cinta-arriba)" strokeWidth="8" strokeLinecap="round" opacity="0.6" />
+      </svg>
+      <svg viewBox="0 0 400 300" className="absolute -bottom-8 -right-10 h-56 w-80 lg:h-72 lg:w-[26rem]" fill="none">
+        <defs>
+          <linearGradient id="cinta-abajo" x1="1" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0f766e" />
+            <stop offset="100%" stopColor="#2dd4bf" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path d="M420 130C340 220 230 270 0 310" stroke="url(#cinta-abajo)" strokeWidth="34" strokeLinecap="round" />
+        <path d="M420 85C320 180 200 230 20 262" stroke="url(#cinta-abajo)" strokeWidth="8" strokeLinecap="round" opacity="0.6" />
+      </svg>
     </div>
   );
 }
