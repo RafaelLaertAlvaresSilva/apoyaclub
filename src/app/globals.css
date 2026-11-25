@@ -792,3 +792,64 @@ p {
     transform: scaleX(1);
   }
 }
+
+/* ¿Y SI ME REGISTRO? (`CuentaEmpresa`, /para-empresas). La ficha y las
+ * cajas flotan, el balón bota, el sobre se asoma, el "1" del aviso late
+ * y los corazones de favoritos se encienden uno detrás de otro. */
+.cuenta-flota {
+  animation: como-flota 4.5s ease-in-out infinite;
+}
+.cuenta-bota {
+  animation: cuenta-bota 2.4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-box: fill-box;
+  transform-origin: bottom;
+}
+@keyframes cuenta-bota {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  45% {
+    transform: translateY(-9px);
+  }
+}
+.cuenta-sobre {
+  animation: cuenta-sobre 3s ease-in-out infinite;
+}
+@keyframes cuenta-sobre {
+  0%,
+  100% {
+    transform: translateY(2px) scale(0.94);
+  }
+  50% {
+    transform: translateY(-2px) scale(1);
+  }
+}
+.cuenta-aviso {
+  animation: cuenta-aviso 2.4s ease-in-out infinite;
+}
+@keyframes cuenta-aviso {
+  0%,
+  60%,
+  100% {
+    transform: scale(1);
+  }
+  70% {
+    transform: scale(1.25);
+  }
+}
+.cuenta-corazon {
+  animation: cuenta-corazon 2.4s ease-in-out infinite;
+}
+@keyframes cuenta-corazon {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.25);
+  }
+  30% {
+    transform: scale(1);
+  }
+}

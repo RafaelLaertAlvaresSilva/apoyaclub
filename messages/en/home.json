@@ -740,6 +740,7 @@
     "cuenta": {
       "eyebrow": "Optional and free",
       "titulo": "What if I sign up?",
+      "tituloResalta": "sign up",
       "texto": "You don't need to in order to browse and write to a club. The account is free and lets clubs find you, instead of you having to look for them every time.",
       "ventajas": [
         {

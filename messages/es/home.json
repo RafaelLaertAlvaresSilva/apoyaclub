@@ -740,6 +740,7 @@
     "cuenta": {
       "eyebrow": "Opcional y gratis",
       "titulo": "¿Y si me registro?",
+      "tituloResalta": "registro",
       "texto": "Para mirar y escribir a un club no hace falta. La cuenta es gratuita y sirve para que los clubes te encuentren a ti, en vez de tener que buscarlos tú cada vez.",
       "ventajas": [
         {

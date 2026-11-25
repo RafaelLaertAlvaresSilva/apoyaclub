@@ -9,12 +9,12 @@ import { MenuDeSecciones } from "../components/MenuDeSecciones";
 import { EntradaAlBajar } from "../components/EntradaAlBajar";
 import { SeccionComoFuncionaEmpresa } from "../components/ComoFuncionaEmpresa";
 import { SeccionColaborarEmpresa } from "../components/ColaborarEmpresa";
+import { SeccionCuentaEmpresa } from "../components/CuentaEmpresa";
 import {
   FondoDeHeroe,
   SeccionBeneficiosEmpresa,
   SeccionBuscadorEmpresas,
   SeccionContacto,
-  Tic,
 } from "../components/secciones";
 
 /**
@@ -60,7 +60,6 @@ export default async function ParaEmpresasPage() {
   const tMenu = await getTranslations("home.paraEmpresas.menu");
   const t = await getTranslations("home.paraEmpresas");
   const tVideo = await getTranslations("home.video");
-  const ventajas = t.raw("cuenta.ventajas") as { titulo: string; texto: string }[];
   const preguntas = t.raw("faq.preguntas") as { pregunta: string; respuesta: string }[];
 
   return (
@@ -147,48 +146,7 @@ export default async function ParaEmpresasPage() {
         <SeccionColaborarEmpresa />
 
         {/* ============ LA CUENTA, GRATIS ============ */}
-        <section id="cuenta" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
-              {t("cuenta.eyebrow")}
-            </p>
-            <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-titular sm:text-4xl">
-              {t("cuenta.titulo")}
-            </h2>
-            <p className="mt-4 leading-relaxed text-zinc-600">{t("cuenta.texto")}</p>
-          </div>
-
-          <div className="mt-12 grid gap-5 sm:grid-cols-2">
-            {ventajas.map((ventaja) => (
-              <div
-                key={ventaja.titulo}
-                className="flex gap-3.5 rounded-2xl border border-zinc-200 bg-white p-6"
-              >
-                <Tic className="mt-1 flex-none text-brand-teal" tamano={18} />
-                <div>
-                  <h3 className="font-extrabold text-titular">{ventaja.titulo}</h3>
-                  <p className="mt-1.5 text-base leading-relaxed text-zinc-600">{ventaja.texto}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-12 flex flex-col items-center gap-3">
-            <Link
-              href="/registro-empresa"
-              className="inline-flex items-center justify-center rounded-full bg-brand-teal-dark px-10 py-4 text-lg font-bold text-sobre-color shadow-lg shadow-brand-teal/30 transition-colors hover:bg-brand-navy"
-            >
-              {t("cuenta.cta")}
-            </Link>
-            <p className="text-[15px] text-zinc-600">{t("cuenta.condiciones")}</p>
-            <Link
-              href="/empresas"
-              className="mt-1 text-base font-semibold text-accion-tinta underline decoration-brand-teal/40 underline-offset-4 transition-colors hover:decoration-brand-teal-dark"
-            >
-              {t("cuenta.directorio")}
-            </Link>
-          </div>
-        </section>
+        <SeccionCuentaEmpresa />
 
         {/* ============ PREGUNTAS ============ */}
         <section id="faq" className="mx-auto max-w-3xl scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
