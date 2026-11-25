@@ -736,3 +736,59 @@ p {
     transform: translateX(100%);
   }
 }
+
+/* CÓMO FUNCIONA PARA TI (`ComoFuncionaEmpresa`, /para-empresas).
+ * Los iconos del primer dibujo flotan, cada uno a su ritmo
+ * (`--retraso`); el sobre del segundo sube y vuelve como si saliera; el
+ * tic del tercero late; la línea de búsqueda se "escribe". */
+.como-flota {
+  animation: como-flota 4.5s ease-in-out infinite;
+  animation-delay: var(--retraso, 0ms);
+}
+@keyframes como-flota {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.como-sobre {
+  animation: como-sobre 3.6s ease-in-out infinite;
+}
+@keyframes como-sobre {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-6deg);
+  }
+  50% {
+    transform: translate(6px, -10px) rotate(4deg);
+  }
+}
+.como-tic {
+  animation: como-tic 2.8s ease-in-out infinite;
+}
+@keyframes como-tic {
+  0%,
+  70%,
+  100% {
+    transform: scale(1);
+  }
+  80% {
+    transform: scale(1.15);
+  }
+}
+.como-escribe {
+  animation: como-escribe 3.2s ease-in-out infinite;
+  transform-origin: left;
+}
+@keyframes como-escribe {
+  0% {
+    transform: scaleX(0.1);
+  }
+  55%,
+  100% {
+    transform: scaleX(1);
+  }
+}

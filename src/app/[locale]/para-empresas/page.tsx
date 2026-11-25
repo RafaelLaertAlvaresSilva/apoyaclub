@@ -7,6 +7,7 @@ import { Header } from "@/components/Header";
 import { VideoDeLaPortada } from "../components/VideoDeLaPortada";
 import { MenuDeSecciones } from "../components/MenuDeSecciones";
 import { EntradaAlBajar } from "../components/EntradaAlBajar";
+import { SeccionComoFuncionaEmpresa } from "../components/ComoFuncionaEmpresa";
 import {
   FondoDeHeroe,
   SeccionBeneficiosEmpresa,
@@ -58,7 +59,6 @@ export default async function ParaEmpresasPage() {
   const tMenu = await getTranslations("home.paraEmpresas.menu");
   const t = await getTranslations("home.paraEmpresas");
   const tVideo = await getTranslations("home.video");
-  const pasos = t.raw("pasos") as { titulo: string; texto: string }[];
   const formas = t.raw("formas.lista") as string[];
   const ventajas = t.raw("cuenta.ventajas") as { titulo: string; texto: string }[];
   const preguntas = t.raw("faq.preguntas") as { pregunta: string; respuesta: string }[];
@@ -135,35 +135,7 @@ export default async function ParaEmpresasPage() {
 
         <SeccionBuscadorEmpresas />
 
-        {/* ============ CÓMO FUNCIONA PARA TI ============ */}
-        <section id="como" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
-              {t("comoEyebrow")}
-            </p>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
-              {t("comoTitulo")}
-            </h2>
-          </div>
-
-          <ol className="mt-14 grid gap-6 sm:grid-cols-3">
-            {pasos.map((paso, indice) => (
-              <li key={paso.titulo} className="rounded-3xl border border-zinc-200 bg-white p-7">
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-teal-light text-base font-extrabold text-accion-tinta">
-                  {indice + 1}
-                </span>
-                <h3 className="mt-4 text-lg font-extrabold leading-snug text-titular">
-                  {paso.titulo}
-                </h3>
-                <p className="mt-3 text-base leading-relaxed text-zinc-600">{paso.texto}</p>
-              </li>
-            ))}
-          </ol>
-
-          <p className="mx-auto mt-10 max-w-2xl text-center text-base leading-relaxed text-zinc-600 sm:text-lg">
-            {t("comoCierre")}
-          </p>
-        </section>
+        <SeccionComoFuncionaEmpresa />
 
         {/* ============ NO HACE FALTA QUE SEA DINERO ============ */}
         {/* La sección que más falta hacía. Por aquí entran tres personas

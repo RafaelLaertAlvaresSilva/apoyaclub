@@ -703,6 +703,7 @@
     "gratis": "Gratis, sin cuenta y sin intermediarios.",
     "comoEyebrow": "En tres pasos",
     "comoTitulo": "Cómo funciona para ti",
+    "comoTituloResalta": "funciona",
     "pasos": [
       {
         "titulo": "Miras lo que hay cerca",
