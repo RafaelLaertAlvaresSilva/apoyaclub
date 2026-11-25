@@ -155,28 +155,69 @@
     },
     "resultados": [
       {
-        "categoria": "Kit",
-        "titulo": "Football club · Youth teams · Alicante",
-        "texto": "Kit sponsorship for the season.",
+        "club": "EF Las Palmeras",
+        "lugar": "Elche, Alicante",
+        "distancia": "18 km away",
+        "titulo": "Youth teams sponsor",
+        "equipo": "Under-10 and under-12 · 60 kids",
+        "texto": "Your logo on the youth teams' training kit and a mention at every tournament of the season.",
         "precio": "€450"
       },
       {
-        "categoria": "Social media",
-        "titulo": "Basketball club · Families · Alicante",
-        "texto": "Mentions and social media content during the league.",
-        "precio": "€500"
+        "club": "CBM Las Gaviotas",
+        "lugar": "Benidorm, Alicante",
+        "distancia": "40 km away",
+        "titulo": "Match day sponsor",
+        "equipo": "Handball · Senior women",
+        "texto": "A home game with your name on it: banner in the sports hall, PA announcement and a social media post.",
+        "precio": "€150"
       },
       {
-        "categoria": "Facilities",
-        "titulo": "Padel club · All audiences · Alicante",
-        "texto": "Brand presence on the courts and in the changing rooms.",
-        "precio": "€480"
+        "club": "Club Pádel Brisa",
+        "lugar": "Alicante",
+        "distancia": "3 km away",
+        "titulo": "Physio for the tournament",
+        "equipo": "Christmas tournament · 120 players",
+        "texto": "We're looking for a physio for the tournament weekend. In return, your brand on the poster, on the centre court and on social media.",
+        "precio": ""
       }
     ],
-    "avisoEjemplos": "Sample results — for illustration only, not real clubs.",
     "texto": "Tell us how much you want to invest, where, and who you want to reach. And see what's there.",
     "gratis": "Free, no account and no middlemen.",
-    "nota": "Mock-up of the search. The opportunities shown are samples."
+    "nota": "Mock-up of the search. The opportunities shown are samples.",
+    "ventajas": [
+      {
+        "titulo": "Real clubs",
+        "texto": "Near you or anywhere in Spain"
+      },
+      {
+        "titulo": "On your budget",
+        "texto": "Filter by what you want to invest"
+      },
+      {
+        "titulo": "Impact on your community",
+        "texto": "Your brand where your customers live"
+      }
+    ],
+    "garantias": [
+      {
+        "titulo": "Free",
+        "texto": "No account, no cost"
+      },
+      {
+        "titulo": "No middlemen",
+        "texto": "You talk directly to the club"
+      },
+      {
+        "titulo": "Everything clear",
+        "texto": "What you get and what for, on every listing"
+      }
+    ],
+    "buscando": "Searching for opportunities…",
+    "encontradas": "3 opportunities found",
+    "muestra": "Sample",
+    "loNecesitan": "They need this",
+    "verReales": "See the real opportunities"
   },
   "paginaClub": {
     "eyebrow": "Your club's page",

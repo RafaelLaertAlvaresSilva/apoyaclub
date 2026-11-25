@@ -155,28 +155,69 @@
     },
     "resultados": [
       {
-        "categoria": "Equipamentos",
-        "titulo": "Clube de futebol · Formação · Alicante",
-        "texto": "Patrocínio dos equipamentos para a época.",
+        "club": "EF Las Palmeras",
+        "lugar": "Elche, Alicante",
+        "distancia": "a 18 km",
+        "titulo": "Patrocinador da formação",
+        "equipo": "Sub-10 e sub-12 · 60 crianças",
+        "texto": "O teu logótipo na roupa de treino da formação e uma menção em cada torneio da época.",
         "precio": "450 €"
       },
       {
-        "categoria": "Redes sociais",
-        "titulo": "Clube de basquetebol · Famílias · Alicante",
-        "texto": "Menções e conteúdo nas redes durante o campeonato.",
-        "precio": "500 €"
+        "club": "CBM Las Gaviotas",
+        "lugar": "Benidorm, Alicante",
+        "distancia": "a 40 km",
+        "titulo": "Patrocinador de jornada",
+        "equipo": "Andebol · Sénior feminino",
+        "texto": "Um jogo em casa com o teu nome: lona no pavilhão, menção no sistema de som e publicação nas redes.",
+        "precio": "150 €"
       },
       {
-        "categoria": "Instalações",
-        "titulo": "Clube de padel · Todos os públicos · Alicante",
-        "texto": "Presença de marca nos campos e nos balneários.",
-        "precio": "480 €"
+        "club": "Club Pádel Brisa",
+        "lugar": "Alicante",
+        "distancia": "a 3 km",
+        "titulo": "Fisioterapeuta para o torneio",
+        "equipo": "Torneio de Natal · 120 jogadores",
+        "texto": "Procuramos um fisioterapeuta para o fim de semana do torneio. Em troca, a tua marca no cartaz, no campo central e nas redes.",
+        "precio": ""
       }
     ],
-    "avisoEjemplos": "Resultados de exemplo — ilustrativos, não são clubes reais.",
     "texto": "Dizes quanto queres investir, onde e a quem queres chegar. E vês o que há.",
     "gratis": "Grátis, sem conta e sem intermediários.",
-    "nota": "Maqueta da pesquisa. As oportunidades que aparecem são de amostra."
+    "nota": "Maqueta da pesquisa. As oportunidades que aparecem são de amostra.",
+    "ventajas": [
+      {
+        "titulo": "Clubes reais",
+        "texto": "Da tua zona ou de toda a Espanha"
+      },
+      {
+        "titulo": "À medida do teu orçamento",
+        "texto": "Filtra pelo que queres investir"
+      },
+      {
+        "titulo": "Impacto na tua comunidade",
+        "texto": "A tua marca onde vivem os teus clientes"
+      }
+    ],
+    "garantias": [
+      {
+        "titulo": "Grátis",
+        "texto": "Sem conta e sem custos"
+      },
+      {
+        "titulo": "Sem intermediários",
+        "texto": "Falas diretamente com o clube"
+      },
+      {
+        "titulo": "Tudo claro",
+        "texto": "O que recebes e em troca de quê, em cada ficha"
+      }
+    ],
+    "buscando": "A procurar oportunidades…",
+    "encontradas": "3 oportunidades encontradas",
+    "muestra": "Exemplo",
+    "loNecesitan": "Precisam disto",
+    "verReales": "Ver as oportunidades reais"
   },
   "paginaClub": {
     "eyebrow": "A página do teu clube",

@@ -58,7 +58,11 @@ export function EntradaAlBajar() {
 
     for (const seccion of secciones) {
       const yaSeVe = seccion.getBoundingClientRect().top < window.innerHeight;
-      const todas = Array.from(seccion.querySelectorAll<HTMLElement>(PIEZAS));
+      // Lo que lleva su propia animación (la maqueta del buscador) no se
+      // toca: dos animaciones sobre la misma pieza se pisan.
+      const todas = Array.from(seccion.querySelectorAll<HTMLElement>(PIEZAS)).filter(
+        (pieza) => !pieza.closest("[data-animacion-propia]"),
+      );
       // Solo la pieza de fuera: si se mueven una tarjeta y su párrafo a
       // la vez, el párrafo sube el doble.
       const piezas = todas.filter((pieza) => !todas.some((otra) => otra !== pieza && otra.contains(pieza)));

@@ -155,28 +155,69 @@
     },
     "resultados": [
       {
-        "categoria": "Uniformes",
-        "titulo": "Clube de futebol · Base · Campinas",
-        "texto": "Patrocínio dos uniformes para a temporada.",
+        "club": "EF Palmeiras do Vale",
+        "lugar": "Valinhos, SP",
+        "distancia": "a 12 km",
+        "titulo": "Patrocinador da base",
+        "equipo": "Sub-9 e sub-11 · 60 crianças",
+        "texto": "Sua logo no uniforme de treino da base e uma menção em cada torneio da temporada.",
         "precio": "R$ 1.200"
       },
       {
-        "categoria": "Redes sociais",
-        "titulo": "Clube de basquete · Famílias · Campinas",
-        "texto": "Menções e conteúdo nas redes durante o campeonato.",
-        "precio": "R$ 1.500"
+        "club": "Handebol Gaivotas",
+        "lugar": "Campinas, SP",
+        "distancia": "a 5 km",
+        "titulo": "Patrocinador de rodada",
+        "equipo": "Handebol · Adulto feminino",
+        "texto": "Um jogo em casa com o seu nome: faixa no ginásio, menção no sistema de som e post nas redes.",
+        "precio": "R$ 400"
       },
       {
-        "categoria": "Instalações",
-        "titulo": "Clube de padel · Todos os públicos · Campinas",
-        "texto": "Presença de marca nas quadras e nos vestiários.",
-        "precio": "R$ 1.400"
+        "club": "Padel Brisa",
+        "lugar": "Campinas, SP",
+        "distancia": "a 3 km",
+        "titulo": "Fisioterapeuta para o torneio",
+        "equipo": "Torneio de fim de ano · 120 atletas",
+        "texto": "Procuramos fisio para o fim de semana do torneio. Em troca, sua marca no cartaz, na quadra central e nas redes.",
+        "precio": ""
       }
     ],
-    "avisoEjemplos": "Resultados de exemplo — ilustrativos, não são clubes reais.",
     "texto": "Você diz quanto quer investir, onde e quem quer alcançar. E vê o que há.",
     "gratis": "Grátis, sem conta e sem intermediários.",
-    "nota": "Maquete da busca. As oportunidades que aparecem são de amostra."
+    "nota": "Maquete da busca. As oportunidades que aparecem são de amostra.",
+    "ventajas": [
+      {
+        "titulo": "Clubes reais",
+        "texto": "Da sua região ou de todo o Brasil"
+      },
+      {
+        "titulo": "No seu orçamento",
+        "texto": "Filtre pelo que quer investir"
+      },
+      {
+        "titulo": "Impacto na sua comunidade",
+        "texto": "Sua marca onde seus clientes vivem"
+      }
+    ],
+    "garantias": [
+      {
+        "titulo": "Grátis",
+        "texto": "Sem cadastro e sem custo"
+      },
+      {
+        "titulo": "Sem intermediários",
+        "texto": "Você fala direto com o clube"
+      },
+      {
+        "titulo": "Tudo claro",
+        "texto": "O que você recebe e em troca de quê, em cada ficha"
+      }
+    ],
+    "buscando": "Buscando oportunidades…",
+    "encontradas": "3 oportunidades encontradas",
+    "muestra": "Exemplo",
+    "loNecesitan": "Eles precisam",
+    "verReales": "Ver as oportunidades reais"
   },
   "paginaClub": {
     "eyebrow": "A página do seu clube",

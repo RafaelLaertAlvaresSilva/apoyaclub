@@ -668,3 +668,71 @@ p {
   color: #71717a;
   opacity: 1;
 }
+
+/* LA MAQUETA ANIMADA DEL BUSCADOR (`DemoDelBuscador`, /para-empresas).
+ * `demo-aparece`: el valor de cada casilla al rellenarse, con su cursor.
+ * `demo-tarjeta`: las tres oportunidades, una detrás de otra
+ * (`--retraso`). `demo-esqueleto`: el gris que late mientras "busca".
+ * `demo-brillo`: un reflejo que cruza el botón cada pocos segundos, para
+ * que se note que se puede pulsar. Con "reducir movimiento" la maqueta
+ * no arranca y nada de esto se usa. */
+.demo-aparece {
+  animation: demo-aparece 0.35s ease-out both;
+}
+@keyframes demo-aparece {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.demo-cursor {
+  animation: demo-cursor 0.8s steps(1) infinite;
+}
+@keyframes demo-cursor {
+  50% {
+    opacity: 0;
+  }
+}
+.demo-tarjeta {
+  animation: demo-tarjeta 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: var(--retraso, 0ms);
+}
+@keyframes demo-tarjeta {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.demo-esqueleto {
+  animation: demo-esqueleto 1s ease-in-out infinite;
+}
+@keyframes demo-esqueleto {
+  50% {
+    opacity: 0.45;
+  }
+}
+.demo-brillo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.35) 50%, transparent 65%);
+  transform: translateX(-100%);
+  animation: demo-brillo 4s ease-in-out 1s infinite;
+  pointer-events: none;
+}
+@keyframes demo-brillo {
+  0% {
+    transform: translateX(-100%);
+  }
+  30%,
+  100% {
+    transform: translateX(100%);
+  }
+}

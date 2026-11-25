@@ -8,6 +8,7 @@ import { LOCALE_CONFIG } from "@/config/locales";
 import type { AppLocale } from "@/i18n/routing";
 import { FormularioContacto } from "./FormularioContacto";
 import { QuePuedesOfrecer } from "./QuePuedesOfrecer";
+import { DemoDelBuscador } from "./DemoDelBuscador";
 
 /**
  * Las secciones largas de la portada, sueltas.
@@ -1005,82 +1006,89 @@ export async function SeccionBeneficiosEmpresa() {
   );
 }
 
+/** Los iconos de las dos franjas de la sección del buscador, en orden. */
+const ICONOS_VENTAJAS_BUSCADOR: React.ReactNode[] = [
+  <path key="v1" d="M12 21s-7-4.4-7-11a7 7 0 0 1 14 0c0 6.6-7 11-7 11zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />,
+  <path key="v2" d="M3 3v16a2 2 0 0 0 2 2h16M7 16v-3M12 16V9M17 16V5" />,
+  <path key="v3" d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z" />,
+];
+const ICONOS_GARANTIAS_BUSCADOR: React.ReactNode[] = [
+  <path key="g1" d="M13 2 3 14h9l-1 8 10-12h-9z" />,
+  ICONO_DE_LA_VENTAJA.oportunidades,
+  <path key="g3" d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10zM9 12l2 2 4-4" />,
+];
+
+function IconoDeFranja({ children }: { children: React.ReactNode }) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      {children}
+    </svg>
+  );
+}
+
+/**
+ * "Descubre qué puedes patrocinar": la sección de /para-empresas que
+ * enseña el buscador. Arriba, las tres razones; en medio, la maqueta
+ * animada (`DemoDelBuscador`), con tarjetas iguales a las del buscador
+ * de verdad; abajo, lo que la empresa no tiene que hacer (pagar, pasar
+ * por nadie, adivinar qué recibe).
+ */
 export async function SeccionBuscadorEmpresas() {
   const t = await getTranslations("home");
-  const resultadosEjemplo = t.raw("empresas.resultados") as {
-    categoria: string;
-    titulo: string;
-    texto: string;
-    precio: string;
-  }[];
+  const ventajas = t.raw("empresas.ventajas") as { titulo: string; texto: string }[];
+  const garantias = t.raw("empresas.garantias") as { titulo: string; texto: string }[];
 
   return (
-    <section id="empresas" className="scroll-mt-32 bg-zinc-50 px-4 py-20 sm:px-6 sm:py-28">
-      <div className="mx-auto max-w-6xl">
+    <section id="empresas" className="relative scroll-mt-32 overflow-hidden bg-zinc-50 px-4 py-20 sm:px-6 sm:py-28">
+      {/* La foto del pabellón, muy velada, solo en la parte de arriba:
+          da ambiente sin competir con las tarjetas. */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[34rem]">
+        <Image src="/fondo-clubes.webp" alt="" fill sizes="100vw" className="object-cover opacity-30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-zinc-50/70 via-zinc-50/85 to-zinc-50" />
+      </div>
+      <div aria-hidden className="pointer-events-none absolute -left-32 top-1/2 h-96 w-96 rounded-full bg-brand-teal/10 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-brand-navy/10 blur-3xl" />
+
+      <div className="relative mx-auto max-w-6xl">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
-            {t("empresas.eyebrow")}
-          </p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
-            {t("empresas.titulo")}
-          </h2>
+          <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">{t("empresas.eyebrow")}</p>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">{t("empresas.titulo")}</h2>
           <p className="mt-4 leading-relaxed text-zinc-600">{t("empresas.texto")}</p>
         </div>
 
-        {/* El aviso de que esto es una maqueta va ANTES, no debajo en
-            gris claro cuando ya has intentado escribir en las casillas.
-            Y el recuadro entero es un enlace al buscador de verdad:
-            antes se podían tocar cuatro cosas que no respondían, en la
-            única sección pensada para la empresa. */}
+        <ul className="mx-auto mt-10 grid max-w-5xl gap-3 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-zinc-200">
+          {ventajas.map((ventaja, indice) => (
+            <li key={ventaja.titulo} className="flex items-center gap-3 sm:justify-center sm:px-5">
+              <span className="flex h-11 w-11 flex-none items-center justify-center rounded-2xl bg-white text-brand-teal-dark shadow-sm ring-1 ring-zinc-200">
+                <IconoDeFranja>{ICONOS_VENTAJAS_BUSCADOR[indice]}</IconoDeFranja>
+              </span>
+              <span>
+                <span className="block font-bold leading-tight text-titular">{ventaja.titulo}</span>
+                <span className="block text-sm text-zinc-600">{ventaja.texto}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        {/* El aviso de que es una maqueta va ANTES, no debajo cuando ya
+            has intentado tocar las casillas. */}
         <p className="mt-10 text-center text-[15px] font-medium text-zinc-600">{t("empresas.nota")}</p>
 
-        <Link
-          href="/buscar"
-          className="mx-auto mt-3 block max-w-3xl rounded-3xl border border-zinc-200 bg-white p-5 shadow-lg shadow-brand-navy/5 transition-colors hover:border-brand-teal sm:p-7"
-        >
-          <div className="grid gap-3 sm:grid-cols-2">
-            <CasillaFiltro
-              etiqueta={t("empresas.filtros.presupuestoEtiqueta")}
-              valor={t("empresas.filtros.presupuestoValor")}
-            />
-            <CasillaFiltro
-              etiqueta={t("empresas.filtros.ubicacionEtiqueta")}
-              valor={t("empresas.filtros.ubicacionValor")}
-            />
-            <CasillaFiltro
-              etiqueta={t("empresas.filtros.deporteEtiqueta")}
-              valor={t("empresas.filtros.deporteValor")}
-            />
-            <CasillaFiltro
-              etiqueta={t("empresas.filtros.publicoEtiqueta")}
-              valor={t("empresas.filtros.publicoValor")}
-            />
-          </div>
+        <DemoDelBuscador />
 
-          <span className="mt-5 flex w-full items-center justify-center rounded-2xl bg-brand-teal-dark px-6 py-4 text-base font-bold text-sobre-color">
-            {t("empresas.filtros.buscar")}
-          </span>
-        </Link>
-
-        <div className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-3">
-          {resultadosEjemplo.map((resultado) => (
-            <div
-              key={resultado.titulo}
-              className="flex flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm"
-            >
-              <Badge tone="teal" className="mb-3 self-start">
-                {resultado.categoria.toUpperCase()}
-              </Badge>
-              <h3 className="text-base font-bold leading-snug text-titular">
-                {resultado.titulo}
-              </h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-zinc-600">{resultado.texto}</p>
-              <div className="mt-4 text-xl font-extrabold text-titular">{resultado.precio}</div>
-            </div>
+        <ul className="mx-auto mt-12 grid max-w-4xl gap-4 rounded-3xl border border-zinc-200 bg-white/80 p-5 shadow-sm sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-zinc-200 sm:p-6">
+          {garantias.map((garantia, indice) => (
+            <li key={garantia.titulo} className="flex items-center gap-3 sm:px-5">
+              <span className="flex-none text-brand-teal-dark">
+                <IconoDeFranja>{ICONOS_GARANTIAS_BUSCADOR[indice]}</IconoDeFranja>
+              </span>
+              <span>
+                <span className="block font-bold leading-tight text-titular">{garantia.titulo}</span>
+                <span className="block text-sm text-zinc-600">{garantia.texto}</span>
+              </span>
+            </li>
           ))}
-        </div>
-
-        <p className="mt-5 text-center text-base font-medium text-zinc-600">{t("empresas.gratis")}</p>
+        </ul>
       </div>
     </section>
   );
@@ -2803,16 +2811,6 @@ export async function PuertasDelHero({ enColumna = false }: { enColumna?: boolea
 /* ============================================================
    PIEZAS SUELTAS
    ============================================================ */
-
-/** Una casilla del buscador de empresas: la pregunta y la respuesta. */
-function CasillaFiltro({ etiqueta, valor }: { etiqueta: string; valor: string }) {
-  return (
-    <div className="rounded-2xl border border-zinc-200 px-5 py-3.5">
-      <div className="text-[12px] font-bold uppercase tracking-wide text-zinc-600">{etiqueta}</div>
-      <div className="mt-0.5 text-base font-bold text-titular">{valor}</div>
-    </div>
-  );
-}
 
 /** Hoja del dossier: líneas grises, sin texto inventado. */
 /** `pequena` es la que va dentro de la tarjeta de la herramienta, que
