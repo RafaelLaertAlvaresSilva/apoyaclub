@@ -35,24 +35,49 @@ export function SolicitudCard({
   return (
     <li className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 className="font-semibold text-zinc-900">{titular}</h3>
-            <span
-              className={`rounded-full px-2 py-0.5 text-xs font-medium ${ESTILO_ESTADO[solicitud.status]}`}
-            >
-              {t(`estados.${solicitud.status}`)}
-            </span>
+        <div className="flex min-w-0 items-start gap-3">
+          {/* La inicial de quien escribe, como en cualquier bandeja de
+              correo: las solicitudes se distinguen de un vistazo. */}
+          <span
+            aria-hidden="true"
+            className="flex size-11 flex-none items-center justify-center rounded-full bg-gradient-to-br from-brand-teal-dark to-brand-navy text-base font-extrabold text-sobre-color shadow-sm"
+          >
+            {titular.trim().charAt(0).toUpperCase() || "?"}
+          </span>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="font-bold text-titular">{titular}</h3>
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${ESTILO_ESTADO[solicitud.status]}`}
+              >
+                <span aria-hidden="true" className="size-1.5 rounded-full bg-current opacity-80" />
+                {t(`estados.${solicitud.status}`)}
+              </span>
+            </div>
+            <p className="mt-0.5 text-sm text-zinc-500">
+              {opportunityTitle ? t("sobre", { titulo: opportunityTitle }) : t("sobreElClub")}
+              {" · "}
+              {formatoFecha.format(new Date(solicitud.createdAt))}
+            </p>
           </div>
-          <p className="mt-0.5 text-sm text-zinc-500">
-            {opportunityTitle ? t("sobre", { titulo: opportunityTitle }) : t("sobreElClub")}
-            {" · "}
-            {formatoFecha.format(new Date(solicitud.createdAt))}
-          </p>
         </div>
+
+        {/* Responder sin copiar la dirección: abre el correo del club
+            con la empresa ya puesta. */}
+        {solicitud.remitenteEmail && (
+          <a
+            href={`mailto:${solicitud.remitenteEmail}`}
+            className="inline-flex flex-none items-center gap-2 rounded-lg bg-accion px-3.5 py-2 text-sm font-semibold text-sobre-color shadow-sm transition-colors hover:bg-accion-fuerte"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+              <path d="m9 17-5-5 5-5M20 18v-2a4 4 0 0 0-4-4H4" />
+            </svg>
+            {t("responder")}
+          </a>
+        )}
       </div>
 
-      <div className="mt-3 grid gap-1 text-sm text-zinc-600 sm:grid-cols-2">
+      <div className="mt-3 grid gap-1 text-sm text-zinc-600 sm:grid-cols-2 sm:pl-14">
         {solicitud.remitenteNombre && solicitud.remitenteEmpresa && (
           <p>{t("persona", { nombre: solicitud.remitenteNombre })}</p>
         )}
@@ -80,11 +105,11 @@ export function SolicitudCard({
         )}
       </div>
 
-      <div className="mt-3 whitespace-pre-line rounded-lg bg-zinc-50 p-4 text-sm text-zinc-700">
+      <div className="mt-3 whitespace-pre-line rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-sm leading-relaxed text-zinc-700 sm:ml-14">
         {solicitud.message}
       </div>
 
-      <div className="mt-4 flex w-fit overflow-hidden rounded-lg border border-zinc-300">
+      <div className="mt-4 flex w-fit max-w-full overflow-x-auto overflow-y-hidden rounded-lg border border-zinc-300 sm:ml-14">
         {ESTADOS_SOLICITUD.map((estadoOpcion) => (
           <form key={estadoOpcion.id} action={cambiarEstadoSolicitud}>
             <input type="hidden" name="id" value={solicitud.id} />
@@ -92,7 +117,7 @@ export function SolicitudCard({
             <button
               type="submit"
               disabled={solicitud.status === estadoOpcion.id}
-              className={`px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-default ${
+              className={`whitespace-nowrap px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-default ${
                 solicitud.status === estadoOpcion.id
                   ? ESTILO_ESTADO[estadoOpcion.id]
                   : "bg-white text-zinc-500 hover:bg-zinc-50"

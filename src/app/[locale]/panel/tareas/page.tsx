@@ -9,6 +9,7 @@ import { TareasDeHoy } from "../components/TareasDeHoy";
 import { RecordatorioInforme } from "./components/RecordatorioInforme";
 import { TareasManager } from "./components/TareasManager";
 import { tituloDelPanel } from "@/lib/titulo-del-panel";
+import { CabeceraDePagina } from "../components/CabeceraDePagina";
 
 export async function generateMetadata() {
   return tituloDelPanel("tareas");
@@ -59,13 +60,7 @@ export default async function TareasPage({
 
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-teal-700">{t("panel")}</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("titulo")}</h1>
-          <p className="mt-1 text-sm text-zinc-600">{t("texto")}</p>
-        </div>
-      </div>
+      <CabeceraDePagina icono="tareas" etiqueta={t("panel")} titulo={t("titulo")} texto={t("texto")} />
 
 
       <TareasDeHoy tareas={tareas} />

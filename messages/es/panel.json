@@ -647,7 +647,8 @@
     "correo": "Correo:",
     "telefono": "Teléfono:",
     "cerradaTexto": "Acuerdo cerrado. Apunta lo que le has prometido y ApoyaClub te lo irá recordando.",
-    "cerradaApuntar": "Apuntar lo prometido →"
+    "cerradaApuntar": "Apuntar lo prometido →",
+    "responder": "Responder"
   },
   "suscripcion": {
     "estado": "Estado",

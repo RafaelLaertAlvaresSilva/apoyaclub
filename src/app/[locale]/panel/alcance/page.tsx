@@ -9,6 +9,7 @@ import { formatearNumero } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import { AvisoDeOrigen, Bloque, Cifra } from "./components/BloquesDeAlcance";
 import { tituloDelPanel } from "@/lib/titulo-del-panel";
+import { CabeceraDePagina } from "../components/CabeceraDePagina";
 
 export async function generateMetadata() {
   return tituloDelPanel("alcance");
@@ -50,15 +51,7 @@ export default async function AlcancePage() {
 
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-teal-700">{t("panelClub")}</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("alcanceClub")}</h1>
-          <p className="mt-1 max-w-3xl text-sm text-zinc-600">
-            {t("cuantaGenteLlegasDicho")}
-          </p>
-        </div>
-      </div>
+      <CabeceraDePagina icono="alcance" etiqueta={t("panelClub")} titulo={t("alcanceClub")} texto={t("cuantaGenteLlegasDicho")} />
 
 
       {informe.titular && (

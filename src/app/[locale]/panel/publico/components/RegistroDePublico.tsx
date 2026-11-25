@@ -17,6 +17,7 @@ import {
 } from "@/lib/publico-partidos";
 import { guardarPartido, usarMediaEnLaFicha } from "../actions";
 import { PartidoFila } from "./PartidoFila";
+import { EstadoVacio } from "../../components/EstadoVacio";
 
 const clasesInput =
   "w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none transition-colors focus:border-teal-600 focus:ring-2 focus:ring-teal-100";
@@ -403,9 +404,7 @@ export function RegistroDePublico({
 
       {/* ---- La lista, por temporadas ---- */}
       {temporadas.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-zinc-300 bg-white p-8 text-center text-sm text-zinc-500">
-          {t("ningunPartido")}
-        </p>
+        <EstadoVacio icono="publico">{t("ningunPartido")}</EstadoVacio>
       ) : (
         temporadas.map((temporada) => (
           <section

@@ -19,6 +19,7 @@ import { abrirPortalCliente } from "./actions";
 import { SelectorDePlan } from "./components/SelectorDePlan";
 import { estaEscondido } from "@/lib/modo-pruebas";
 import { tituloDelPanel } from "@/lib/titulo-del-panel";
+import { CabeceraDePagina } from "../components/CabeceraDePagina";
 
 /** Los `?error=` que pueden llegar de las acciones, con su texto en `errores`. */
 const ERRORES_CONOCIDOS = new Set(["sesion", "checkout", "portal", "sin-suscripcion", "sin-plazas", "tarjeta-extranjera"]);
@@ -138,13 +139,7 @@ export default async function SuscripcionPage({
 
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("suscripcion")}</h1>
-          <p className="mt-1 max-w-2xl text-sm text-zinc-600">{t("intro")}</p>
-        </div>
-      </div>
+      <CabeceraDePagina icono="suscripcion" etiqueta={t("panelDelClub")} titulo={t("suscripcion")} texto={t("intro")} />
 
 
       <section className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-6">

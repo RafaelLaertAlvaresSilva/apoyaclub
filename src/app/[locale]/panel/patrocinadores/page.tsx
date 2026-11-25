@@ -7,6 +7,7 @@ import { documentosDelClub } from "@/lib/documentos-datos";
 import { createClient } from "@/lib/supabase/server";
 import { PatrocinadoresForm } from "../components/PatrocinadoresForm";
 import { tituloDelPanel } from "@/lib/titulo-del-panel";
+import { CabeceraDePagina } from "../components/CabeceraDePagina";
 
 export async function generateMetadata() {
   return tituloDelPanel("patrocinadores");
@@ -55,15 +56,7 @@ export default async function PatrocinadoresPage() {
 
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-teal-700">{t("panelClub")}</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("patrocinadores")}</h1>
-          <p className="mt-1 max-w-2xl text-sm text-zinc-600">
-            {t("empresasYaColaboranContigo")}
-          </p>
-        </div>
-      </div>
+      <CabeceraDePagina icono="patrocinadores" etiqueta={t("panelClub")} titulo={t("patrocinadores")} texto={t("empresasYaColaboranContigo")} />
 
 
       {/* Sin club creado no hay a qué colgar un patrocinador: la fila

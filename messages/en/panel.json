@@ -139,7 +139,8 @@
     "correo": "Email:",
     "telefono": "Phone:",
     "cerradaTexto": "Deal closed. Note down what you promised and ApoyaClub will keep reminding you.",
-    "cerradaApuntar": "Add what you promised →"
+    "cerradaApuntar": "Add what you promised →",
+    "responder": "Reply"
   },
   "suscripcion": {
     "estado": "Status",

@@ -13,6 +13,7 @@ import { createClient } from "@/lib/supabase/server";
 import { BarraProgreso } from "../components/BarraProgreso";
 import { PanelTabs } from "../components/PanelTabs";
 import { tituloDelPanel } from "@/lib/titulo-del-panel";
+import { CabeceraDePagina } from "../components/CabeceraDePagina";
 
 export async function generateMetadata() {
   return tituloDelPanel("perfil");
@@ -67,13 +68,7 @@ export default async function PerfilDelClubPage() {
 
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
-      <div>
-        <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
-        <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("perfilClub")}</h1>
-        <p className="mt-1 text-sm text-zinc-600">
-          {t("todoEmpresaVeTi")}
-        </p>
-      </div>
+      <CabeceraDePagina icono="perfil" etiqueta={t("panelDelClub")} titulo={t("perfilClub")} texto={t("todoEmpresaVeTi")} />
 
       {/* Lo que falta, arriba del formulario: es lo único que hay que
           hacer en esta página, y antes quedaba enterrado entre las

@@ -10,6 +10,7 @@ import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
 import { createClient } from "@/lib/supabase/server";
 import { DossierManager } from "./components/DossierManager";
 import { tituloDelPanel } from "@/lib/titulo-del-panel";
+import { CabeceraDePagina } from "../components/CabeceraDePagina";
 
 export async function generateMetadata() {
   return tituloDelPanel("dossier");
@@ -76,15 +77,7 @@ export default async function DossierPage() {
 
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("dossierComercialEnPdf")}</h1>
-          <p className="mt-1 max-w-2xl text-sm text-zinc-600">
-            {t("documentoLePasasEmpresa")}
-          </p>
-        </div>
-      </div>
+      <CabeceraDePagina icono="dossier" etiqueta={t("panelDelClub")} titulo={t("dossierComercialEnPdf")} texto={t("documentoLePasasEmpresa")} />
 
 
       {!perfil ? (

@@ -4,6 +4,8 @@ import { contactRequestRowToContactRequest, type ContactRequestRow } from "@/lib
 import { createClient } from "@/lib/supabase/server";
 import { SolicitudCard } from "./components/SolicitudCard";
 import { tituloDelPanel } from "@/lib/titulo-del-panel";
+import { CabeceraDePagina } from "../components/CabeceraDePagina";
+import { EstadoVacio } from "../components/EstadoVacio";
 
 type ContactRequestConOportunidad = ContactRequestRow & {
   opportunities: { title: string } | null;
@@ -45,19 +47,11 @@ export default async function SolicitudesPage() {
 
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("solicitudesDeContacto")}</h1>
-          <p className="mt-1 max-w-2xl text-sm text-zinc-600">
-            {t("empresasHanEscritoDesde")}
-          </p>
-        </div>
-      </div>
+      <CabeceraDePagina icono="solicitudes" etiqueta={t("panelDelClub")} titulo={t("solicitudesDeContacto")} texto={t("empresasHanEscritoDesde")} />
 
 
       {solicitudes.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-zinc-300 bg-white p-6 text-center text-sm text-zinc-500">{t("todaviaNoHasRecibido")}</p>
+        <EstadoVacio icono="solicitudes">{t("todaviaNoHasRecibido")}</EstadoVacio>
       ) : (
         <ul className="space-y-4">
           {solicitudes.map(({ solicitud, opportunityTitle }) => (

@@ -139,7 +139,8 @@
     "correo": "E-mail:",
     "telefono": "Telefone:",
     "cerradaTexto": "Acordo fechado. Regista o que lhe prometeste e o ApoyaClub vai-te lembrando.",
-    "cerradaApuntar": "Registar o prometido →"
+    "cerradaApuntar": "Registar o prometido →",
+    "responder": "Responder"
   },
   "suscripcion": {
     "estado": "Estado",

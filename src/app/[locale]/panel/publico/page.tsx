@@ -6,6 +6,7 @@ import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
 import { createClient } from "@/lib/supabase/server";
 import { RegistroDePublico } from "./components/RegistroDePublico";
 import { tituloDelPanel } from "@/lib/titulo-del-panel";
+import { CabeceraDePagina } from "../components/CabeceraDePagina";
 
 type FilaEquipo = { id: string; sport: string; category: string | null; gender: string | null };
 
@@ -62,15 +63,7 @@ export default async function PublicoPage() {
 
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-teal-700">{t("panelClub")}</p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("publicoPartidos")}</h1>
-          <p className="mt-1 text-sm text-zinc-600">
-            {t("apuntaCuantaGenteHubo")}
-          </p>
-        </div>
-      </div>
+      <CabeceraDePagina icono="publico" etiqueta={t("panelClub")} titulo={t("publicoPartidos")} texto={t("apuntaCuantaGenteHubo")} />
 
 
       <RegistroDePublico

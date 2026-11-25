@@ -7,6 +7,7 @@ import { contarRenovacionesQueAvisan, ordenarPorRenovacion, temporadaDe } from "
 import { createClient } from "@/lib/supabase/server";
 import { ListaDeRenovaciones } from "./components/ListaDeRenovaciones";
 import { tituloDelPanel } from "@/lib/titulo-del-panel";
+import { CabeceraDePagina } from "../components/CabeceraDePagina";
 
 export async function generateMetadata() {
   return tituloDelPanel("renovaciones");
@@ -78,11 +79,7 @@ export default async function RenovacionesPage() {
 
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
-      <div>
-        <p className="text-sm font-medium text-teal-700">{t("cabecera.panel")}</p>
-        <h1 className="mt-1 text-2xl font-semibold text-zinc-900">{t("cabecera.titulo")}</h1>
-        <p className="mt-1 max-w-2xl text-sm text-zinc-600">{t("cabecera.texto")}</p>
-      </div>
+      <CabeceraDePagina icono="renovaciones" etiqueta={t("cabecera.panel")} titulo={t("cabecera.titulo")} texto={t("cabecera.texto")} />
 
       {avisan > 0 && (
         /* Mismo molde que `AvisoError` y `AvisoExito`

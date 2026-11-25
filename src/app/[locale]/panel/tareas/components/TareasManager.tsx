@@ -15,6 +15,7 @@ import {
 import { crearTareas } from "../actions";
 import { BotonInforme } from "./BotonInforme";
 import { TareaFila } from "./TareaFila";
+import { EstadoVacio } from "../../components/EstadoVacio";
 
 type Filtro = "pendientes" | "caducadas" | "hechas" | "todas";
 
@@ -155,11 +156,11 @@ export function TareasManager({
         </div>
 
         {grupos.length === 0 ? (
-          <p className="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 p-5 text-sm text-zinc-600">
+          <EstadoVacio icono="tareas">
             {tareas.length === 0
               ? t("nadaApuntado")
               : t("nadaEnFiltro")}
-          </p>
+          </EstadoVacio>
         ) : (
           <div className="flex flex-col gap-6">
             {grupos.map((grupo) => (

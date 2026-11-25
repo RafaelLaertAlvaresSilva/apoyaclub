@@ -8,6 +8,7 @@ import type { RequisitoIdea } from "@/lib/catalogo-ideas";
 import { ESTADOS_OPORTUNIDAD } from "@/lib/opportunities";
 import { NuevaOportunidad } from "./NuevaOportunidad";
 import { TarjetaOportunidad } from "./TarjetaOportunidad";
+import { EstadoVacio } from "../../components/EstadoVacio";
 
 type FiltroEstado = "todas" | OpportunityStatus;
 type Orden = "recientes" | "valor_desc" | "valor_asc";
@@ -117,11 +118,11 @@ export function OportunidadesManager({
       </div>
 
       {visibles.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-zinc-300 p-6 text-center text-sm text-zinc-500">
+        <EstadoVacio icono="oportunidades">
           {oportunidades.length === 0
             ? t("ningunaCreada")
             : t("ningunaConFiltros")}
-        </p>
+        </EstadoVacio>
       ) : (
         <ul className="space-y-3">
           {visibles.map((oportunidad) => (

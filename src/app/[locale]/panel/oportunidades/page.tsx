@@ -20,6 +20,7 @@ import { obtenerClubPublico } from "../../club/[slug]/data";
 import { GeneradorDeOportunidades } from "./components/GeneradorDeOportunidades";
 import { OportunidadesManager } from "./components/OportunidadesManager";
 import { tituloDelPanel } from "@/lib/titulo-del-panel";
+import { CabeceraDePagina } from "../components/CabeceraDePagina";
 
 export async function generateMetadata() {
   return tituloDelPanel("oportunidades");
@@ -79,17 +80,7 @@ export default async function OportunidadesPage() {
 
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-teal-700">
-            {t("panelDelClub")}
-          </p>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900">
-            {t("oportunidadesDePatrocinio")}
-          </h1>
-          <p className="mt-1 max-w-2xl text-sm text-zinc-600">{t("introPagina")}</p>
-        </div>
-      </div>
+      <CabeceraDePagina icono="oportunidades" etiqueta={t("panelDelClub")} titulo={t("oportunidadesDePatrocinio")} texto={t("introPagina")} />
 
       {!perfil ? (
         <div className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-6 text-sm text-zinc-600">
