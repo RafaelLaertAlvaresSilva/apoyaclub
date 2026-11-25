@@ -8,6 +8,7 @@ import { VideoDeLaPortada } from "../components/VideoDeLaPortada";
 import { MenuDeSecciones } from "../components/MenuDeSecciones";
 import { EntradaAlBajar } from "../components/EntradaAlBajar";
 import { SeccionComoFuncionaEmpresa } from "../components/ComoFuncionaEmpresa";
+import { SeccionColaborarEmpresa } from "../components/ColaborarEmpresa";
 import {
   FondoDeHeroe,
   SeccionBeneficiosEmpresa,
@@ -59,7 +60,6 @@ export default async function ParaEmpresasPage() {
   const tMenu = await getTranslations("home.paraEmpresas.menu");
   const t = await getTranslations("home.paraEmpresas");
   const tVideo = await getTranslations("home.video");
-  const formas = t.raw("formas.lista") as string[];
   const ventajas = t.raw("cuenta.ventajas") as { titulo: string; texto: string }[];
   const preguntas = t.raw("faq.preguntas") as { pregunta: string; respuesta: string }[];
 
@@ -144,34 +144,7 @@ export default async function ParaEmpresasPage() {
             que pone 50 €— son las que un club de barrio consigue de
             verdad, y hasta ahora no se les decía en ningún sitio que lo
             suyo también valía. */}
-        <section id="colaborar" className="scroll-mt-32 bg-brand-navy px-4 py-20 sm:px-6 sm:py-28">
-          <div className="mx-auto max-w-4xl">
-            <div className="mx-auto max-w-2xl text-center">
-              <p className="text-xs font-bold uppercase tracking-wider text-brand-teal">
-                {t("formas.eyebrow")}
-              </p>
-              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-sobre-color sm:text-4xl">
-                {t("formas.titulo")}
-              </h2>
-              <p className="mt-4 leading-relaxed text-sobre-color/70">{t("formas.texto")}</p>
-            </div>
-
-            <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {formas.map((forma) => (
-                <div
-                  key={forma}
-                  className="rounded-2xl bg-white/[0.07] px-4 py-5 text-center text-[15px] font-bold text-sobre-color sm:text-base"
-                >
-                  {forma}
-                </div>
-              ))}
-            </div>
-
-            <p className="mt-10 text-center text-base leading-relaxed text-sobre-color/80">
-              {t("formas.cierre")}
-            </p>
-          </div>
-        </section>
+        <SeccionColaborarEmpresa />
 
         {/* ============ LA CUENTA, GRATIS ============ */}
         <section id="cuenta" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">

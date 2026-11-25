@@ -722,6 +722,7 @@
     "formas": {
       "eyebrow": "No solo dinero",
       "titulo": "Colaborar no siempre es firmar un cheque",
+      "tituloResalta": "cheque",
       "texto": "La mayoría de lo que un club necesita no se compra con presupuesto de marketing. Se resuelve con lo que tu negocio ya hace.",
       "lista": [
         "Un autobús para un desplazamiento",
