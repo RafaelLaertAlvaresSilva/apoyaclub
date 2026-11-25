@@ -78,7 +78,8 @@
     },
     "verOpcionesPublico": "Show Attendance options",
     "ocultarOpcionesPublico": "Hide Attendance options",
-    "menuDelPanel": "Panel menu"
+    "menuDelPanel": "Panel menu",
+    "tuPanel": "Club dashboard"
   },
   "tema": {
     "modoOscuro": "Dark mode",
@@ -116,7 +117,8 @@
       "titulo": "Download your sponsorship pack and send it",
       "texto": "It builds itself from your profile and opportunities. Send it to five local businesses: that’s how sponsorships start.",
       "accion": "See my pack"
-    }
+    },
+    "deTantos": "{hechos} of {total}"
   },
   "solicitudes": {
     "panelDelClub": "Club dashboard",
@@ -1635,5 +1637,30 @@
   "idiomaDelPais": {
     "texto": "This panel is also available in English.",
     "boton": "Switch to English"
+  },
+  "inicio": {
+    "eyebrow": "Club dashboard",
+    "saludo": "Here's what's happening at your club today.",
+    "nuevaOportunidad": "New opportunity",
+    "verMiPagina": "View my page",
+    "cifras": {
+      "ultimosDias": "Last {dias} days",
+      "visitas": {
+        "etiqueta": "Visits to your page"
+      },
+      "contactos": {
+        "etiqueta": "Contact details opened"
+      },
+      "solicitudes": {
+        "etiqueta": "Unopened requests",
+        "hayQueMirar": "A business is waiting for a reply",
+        "alDia": "All answered"
+      },
+      "vencidas": {
+        "etiqueta": "Overdue tasks",
+        "hayQueMirar": "Time to catch up",
+        "alDia": "All up to date"
+      }
+    }
   }
 }

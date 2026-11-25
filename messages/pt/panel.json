@@ -78,7 +78,8 @@
     },
     "verOpcionesPublico": "Ver as opções de Público",
     "ocultarOpcionesPublico": "Ocultar as opções de Público",
-    "menuDelPanel": "Menu do painel"
+    "menuDelPanel": "Menu do painel",
+    "tuPanel": "Painel do clube"
   },
   "tema": {
     "modoOscuro": "Modo escuro",
@@ -116,7 +117,8 @@
       "titulo": "Descarrega o teu dossier e envia-o",
       "texto": "Faz-se sozinho com a tua ficha e as tuas oportunidades. Envia-o a cinco empresas da tua zona: é assim que começam os patrocínios.",
       "accion": "Ver o meu dossier"
-    }
+    },
+    "deTantos": "{hechos} de {total}"
   },
   "solicitudes": {
     "panelDelClub": "Painel do clube",
@@ -1635,5 +1637,30 @@
   "idiomaDelPais": {
     "texto": "Este painel também está disponível em português de Portugal.",
     "boton": "Mudar para português"
+  },
+  "inicio": {
+    "eyebrow": "Painel do clube",
+    "saludo": "Isto é o que se passa hoje no teu clube.",
+    "nuevaOportunidad": "Nova oportunidade",
+    "verMiPagina": "Ver a minha página",
+    "cifras": {
+      "ultimosDias": "Últimos {dias} dias",
+      "visitas": {
+        "etiqueta": "Visitas à tua ficha"
+      },
+      "contactos": {
+        "etiqueta": "Contactos abertos"
+      },
+      "solicitudes": {
+        "etiqueta": "Pedidos por abrir",
+        "hayQueMirar": "Uma empresa espera resposta",
+        "alDia": "Todos respondidos"
+      },
+      "vencidas": {
+        "etiqueta": "Tarefas fora de prazo",
+        "hayQueMirar": "É preciso pôr em dia",
+        "alDia": "Tudo em dia"
+      }
+    }
   }
 }

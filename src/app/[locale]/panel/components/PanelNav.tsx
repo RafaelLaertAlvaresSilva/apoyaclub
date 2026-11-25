@@ -1,7 +1,8 @@
 import { contarSolicitudesNuevas } from "@/lib/contact-requests";
 import { contarRenovacionesQueAvisanDelClub } from "@/lib/renovaciones-datos";
 import { contarTareasVencidas } from "@/lib/tareas-datos";
-import { MenuDelPanel } from "./MenuDelPanel";
+import { createClient } from "@/lib/supabase/server";
+import { MenuDelPanel, type ClubDelMenu } from "./MenuDelPanel";
 
 /**
  * Navegación entre las secciones del panel del club.
@@ -29,10 +30,11 @@ export async function PanelNav({
   /** Si el club dejó el menú plegado (cookie, ver `menu-plegado.ts`). */
   plegado: boolean;
 }) {
-  const [sinAbrir, vencidas, renovaciones] = await Promise.all([
+  const [sinAbrir, vencidas, renovaciones, club] = await Promise.all([
     contarSolicitudesNuevas(),
     contarTareasVencidas(),
     contarRenovacionesQueAvisanDelClub(),
+    leerClubDelMenu(),
   ]);
 
   return (
@@ -43,6 +45,27 @@ export async function PanelNav({
       paginaPublica={paginaPublica}
       perfilCreado={perfilCreado}
       plegadoInicial={plegado}
+      club={club}
     />
   );
+}
+
+/** El nombre y el escudo de la tarjeta de arriba del menú. */
+async function leerClubDelMenu(): Promise<ClubDelMenu | null> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return null;
+    const { data } = await supabase
+      .from("clubs")
+      .select("name, logo_url")
+      .eq("id", user.id)
+      .maybeSingle<{ name: string | null; logo_url: string | null }>();
+    if (!data?.name) return null;
+    return { nombre: data.name, logoUrl: data.logo_url };
+  } catch {
+    return null;
+  }
 }

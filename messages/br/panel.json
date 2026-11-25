@@ -78,7 +78,8 @@
     },
     "verOpcionesPublico": "Ver as opções de Público",
     "ocultarOpcionesPublico": "Ocultar as opções de Público",
-    "menuDelPanel": "Menu do painel"
+    "menuDelPanel": "Menu do painel",
+    "tuPanel": "Painel do clube"
   },
   "tema": {
     "modoOscuro": "Modo escuro",
@@ -116,7 +117,8 @@
       "titulo": "Baixe o seu dossiê e envie",
       "texto": "Ele se monta sozinho com a sua ficha e as suas oportunidades. Envie para cinco empresas da sua região: é assim que começam os patrocínios.",
       "accion": "Ver meu dossiê"
-    }
+    },
+    "deTantos": "{hechos} de {total}"
   },
   "solicitudes": {
     "panelDelClub": "Painel do clube",
@@ -1635,5 +1637,30 @@
   "idiomaDelPais": {
     "texto": "Este painel também está em português do Brasil, sem precisar do tradutor do navegador.",
     "boton": "Mudar para português do Brasil"
+  },
+  "inicio": {
+    "eyebrow": "Painel do clube",
+    "saludo": "Isto é o que está acontecendo hoje no seu clube.",
+    "nuevaOportunidad": "Nova oportunidade",
+    "verMiPagina": "Ver minha página",
+    "cifras": {
+      "ultimosDias": "Últimos {dias} dias",
+      "visitas": {
+        "etiqueta": "Visitas ao seu perfil"
+      },
+      "contactos": {
+        "etiqueta": "Contatos abertos"
+      },
+      "solicitudes": {
+        "etiqueta": "Solicitações não abertas",
+        "hayQueMirar": "Uma empresa espera resposta",
+        "alDia": "Todas respondidas"
+      },
+      "vencidas": {
+        "etiqueta": "Tarefas atrasadas",
+        "hayQueMirar": "É hora de pôr em dia",
+        "alDia": "Tudo em dia"
+      }
+    }
   }
 }

@@ -16,11 +16,28 @@ export function PrimerosPasos({ pasos }: { pasos: PasoInicial[] }) {
   if (onboardingCompleto(pasos)) return null;
 
   const indicePendiente = pasos.findIndex((paso) => !paso.hecho);
+  const hechos = pasos.filter((paso) => paso.hecho).length;
+  const porcentaje = Math.round((hechos / pasos.length) * 100);
 
   return (
-    <section className="rounded-xl border border-brand-teal/30 bg-brand-teal-light/40 p-5">
-      <h2 className="text-base font-semibold text-titular">{t("titulo")}</h2>
+    <section className="rounded-2xl border border-brand-teal/30 bg-brand-teal-light/40 p-5 shadow-sm">
+      <div className="flex items-baseline justify-between gap-3">
+        <h2 className="text-base font-bold text-titular">{t("titulo")}</h2>
+        <p className="text-sm font-bold tabular-nums text-accion-tinta">{t("deTantos", { hechos, total: pasos.length })}</p>
+      </div>
       <p className="mt-1 text-sm text-zinc-600">{t("subtitulo")}</p>
+      {/* La barra de cuánto queda: con ella, "Empieza por aquí" se lee
+          como algo que se termina, no como una lista más. */}
+      <div
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={porcentaje}
+        aria-label={t("titulo")}
+        className="mt-3 h-2 w-full overflow-hidden rounded-full bg-white/80 ring-1 ring-brand-teal/20"
+      >
+        <div className="h-full rounded-full bg-medidor transition-[width] duration-700" style={{ width: `${porcentaje}%` }} />
+      </div>
 
       <ol className="mt-4 flex flex-col gap-2">
         {pasos.map((paso, indice) => (
@@ -37,7 +54,10 @@ export function PrimerosPasos({ pasos }: { pasos: PasoInicial[] }) {
               {paso.hecho ? "✓" : indice + 1}
             </span>
 
-            <div className="min-w-0 flex-1">
+            {/* Al menos todo el ancho menos el círculo: así el botón
+                cae debajo del texto en vez de estrujarlo, ahora que la
+                lista vive en la columna estrecha de la derecha. */}
+            <div className="min-w-0 flex-1 basis-[calc(100%-2.25rem)]">
               <p className={`text-sm font-medium ${paso.hecho ? "text-zinc-500 line-through" : "text-zinc-900"}`}>
                 {t(`${paso.id}.titulo`)}
               </p>
@@ -53,14 +73,14 @@ export function PrimerosPasos({ pasos }: { pasos: PasoInicial[] }) {
                 // parecía muerto.
                 <a
                   href={`#${paso.anclaDelPanel}`}
-                  className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-brand-navy"
+                  className="ml-9 rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-brand-navy"
                 >
                   {t(`${paso.id}.accion`)}
                 </a>
               ) : (
                 <Link
                   href={paso.href}
-                  className="rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-brand-navy"
+                  className="ml-9 rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-brand-navy"
                 >
                   {t(`${paso.id}.accion`)}
                 </Link>

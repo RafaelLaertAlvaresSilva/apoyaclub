@@ -595,7 +595,8 @@
       "titulo": "Descarga tu dossier y mándalo",
       "texto": "Se hace solo con tu ficha y tus oportunidades. Mándalo a cinco empresas de tu zona: así empiezan los patrocinios.",
       "accion": "Ver mi dossier"
-    }
+    },
+    "deTantos": "{hechos} de {total}"
   },
   "privacidad": {
     "descargaUnArchivoCon": "Descarga un archivo con todos los datos de tu cuenta: perfil del club, equipos, patrocinadores, oportunidades, dossier, solicitudes de contacto recibidas y el registro de tus consentimientos.",
@@ -1425,7 +1426,8 @@
     },
     "verOpcionesPublico": "Ver las opciones de Público",
     "ocultarOpcionesPublico": "Ocultar las opciones de Público",
-    "menuDelPanel": "Menú del panel"
+    "menuDelPanel": "Menú del panel",
+    "tuPanel": "Panel del club"
   },
   "recomendaciones": {
     "herramientasTePuedenAyudar": "Herramientas que te pueden ayudar",
@@ -1635,5 +1637,30 @@
   "idiomaDelPais": {
     "texto": "Este panel también está en español.",
     "boton": "Cambiar a español"
+  },
+  "inicio": {
+    "eyebrow": "Panel del club",
+    "saludo": "Esto es lo que pasa hoy en tu club.",
+    "nuevaOportunidad": "Nueva oportunidad",
+    "verMiPagina": "Ver mi página",
+    "cifras": {
+      "ultimosDias": "Últimos {dias} días",
+      "visitas": {
+        "etiqueta": "Visitas a tu ficha"
+      },
+      "contactos": {
+        "etiqueta": "Contactos abiertos"
+      },
+      "solicitudes": {
+        "etiqueta": "Solicitudes sin abrir",
+        "hayQueMirar": "Una empresa espera respuesta",
+        "alDia": "Todas respondidas"
+      },
+      "vencidas": {
+        "etiqueta": "Tareas pasadas de fecha",
+        "hayQueMirar": "Hay que ponerse al día",
+        "alDia": "Todo al día"
+      }
+    }
   }
 }

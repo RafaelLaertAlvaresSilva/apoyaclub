@@ -9,7 +9,8 @@ import {
   type ClubTeamRow,
 } from "@/lib/club-mappers";
 import { obtenerMetricasClub, obtenerResumenDeVisitas } from "@/lib/club-metrics";
-import { hoyISO } from "@/lib/tareas-patrocinio";
+import { estadoVisible, hoyISO } from "@/lib/tareas-patrocinio";
+import { onboardingCompleto } from "@/lib/onboarding";
 import { obtenerTareasDelClub, obtenerUltimosInformes } from "@/lib/tareas-datos";
 import { contarSolicitudesNuevas } from "@/lib/contact-requests";
 import { primerosPasos } from "@/lib/onboarding";
@@ -23,6 +24,8 @@ import { PrimerosPasos } from "./components/PrimerosPasos";
 import { Recomendaciones } from "./components/Recomendaciones";
 import { RecordatorioInforme } from "./tareas/components/RecordatorioInforme";
 import { TareasDeHoy } from "./components/TareasDeHoy";
+import { CabeceraDelInicio } from "./components/CabeceraDelInicio";
+import { CifrasDelInicio } from "./components/CifrasDelInicio";
 import { tituloDelPanel } from "@/lib/titulo-del-panel";
 
 export async function generateMetadata() {
@@ -77,7 +80,7 @@ export default async function PanelPage() {
 
   // Las métricas se piden aparte porque van con la clave de servicio
   // (el club no lee las tablas de eventos, solo sus números agregados).
-  const [metricas, resumenDeVisitas, tareas, ultimosInformes] =
+  const [metricas, resumenDeVisitas, tareas, ultimosInformes, sinAbrir] =
     await Promise.all([
       obtenerMetricasClub(user.id),
       obtenerResumenDeVisitas(user.id),
@@ -85,6 +88,7 @@ export default async function PanelPage() {
       // agenda privada y de eso se encarga RLS (migraciones 0030, 0031).
       obtenerTareasDelClub(supabase, user.id),
       obtenerUltimosInformes(supabase, user.id),
+      contarSolicitudesNuevas(),
     ]);
 
   const perfil = filaClub ? clubRowToProfile(filaClub) : null;
@@ -104,43 +108,69 @@ export default async function PanelPage() {
   const porcentaje = perfil?.profileScore ?? 0;
   const huecos = huecosDelPerfil(perfil, equipos, patrocinadores);
 
+  // Las mismas que cuenta el aviso rojo de "Hoy toca esto".
+  const hoy = hoyISO();
+  const tareasVencidas = tareas.filter((tarea) => estadoVisible(tarea, hoy) === "caducada").length;
+
+  // La dirección de "Ver mi página": la pública si se ve, la vista previa
+  // si está en pruebas u oculta (lo mismo que hace el menú).
+  const locale = await getLocale();
+  const filaVisibilidad = filaClub as (ClubRow & { admin_test_mode?: boolean | null; hidden_by_club?: boolean | null }) | null;
+  const escondido = filaVisibilidad?.admin_test_mode === true || filaVisibilidad?.hidden_by_club === true;
+  const paginaPublica = filaClub?.slug
+    ? escondido
+      ? `/${locale}/vista-previa`
+      : `/${locale}/club/${filaClub.slug}`
+    : null;
+
+  // La columna de la derecha solo existe si tiene algo dentro: con los
+  // primeros pasos hechos y la ficha completa, lo de la izquierda ocupa
+  // todo el ancho en vez de dejar un hueco esperando.
+  const hayColumnaDerecha = !onboardingCompleto(pasosIniciales) || huecos.length > 0;
+
   return (
     <div className="flex w-full flex-1 flex-col gap-6 py-6">
-      <div>
-        <p className="text-sm font-medium text-teal-700">{t("panelDelClub")}</p>
-        <h1 className="mt-1 text-2xl font-semibold text-zinc-900">
-          {perfil?.name ?? nombreProvisional}
-        </h1>
-        {!perfil && <p className="mt-1 text-sm text-zinc-500">{user.email}</p>}
-      </div>
+      <CabeceraDelInicio
+        nombre={perfil?.name ?? nombreProvisional}
+        logoUrl={perfil?.logoUrl ?? null}
+        correo={perfil ? null : (user.email ?? null)}
+        paginaPublica={paginaPublica}
+        hayFicha={perfil !== null}
+      />
 
-      <AvisoSolicitudes sinAbrir={await contarSolicitudesNuevas()} />
+      <CifrasDelInicio
+        visitas={metricas.visitas.actual}
+        contactos={metricas.contactos.actual}
+        dias={metricas.dias}
+        solicitudesSinAbrir={sinAbrir}
+        tareasVencidas={tareasVencidas}
+      />
 
-      <TareasDeHoy tareas={tareas} />
+      <div className={hayColumnaDerecha ? "grid items-start gap-6 lg:grid-cols-3" : "flex flex-col gap-6"}>
+        {/* Lo que pide hacer algo, a la izquierda y arriba. */}
+        <div className="flex min-w-0 flex-col gap-6 lg:col-span-2">
+          <AvisoSolicitudes sinAbrir={sinAbrir} />
 
-      {/* Dos veces por temporada y solo mientras quede alguna empresa
-          sin su informe. Va también aquí, en la portada, porque es
-          donde entra el club: si solo estuviera en la pestaña de
-          tareas, se lo perdería justo quien menos entra a mirarlas. */}
-      <RecordatorioInforme tareas={tareas} ultimosInformes={ultimosInformes} hoy={hoyISO()} />
+          <TareasDeHoy tareas={tareas} />
 
-      <PrimerosPasos pasos={pasosIniciales} />
+          {/* Dos veces por temporada y solo mientras quede alguna empresa
+              sin su informe. Va también aquí, en la portada, porque es
+              donde entra el club: si solo estuviera en la pestaña de
+              tareas, se lo perdería justo quien menos entra a mirarlas. */}
+          <RecordatorioInforme tareas={tareas} ultimosInformes={ultimosInformes} hoy={hoy} />
 
-      {/* Las dos juntas, y el progreso a un tercio: es un recordatorio,
-          no el contenido principal. Cuando la ficha está completa,
-          `BarraProgreso` no pinta nada, así que aquí se deja de partir
-          la fila y las métricas ocupan todo el ancho — si no, quedaría
-          medio panel vacío esperando a una tarjeta que ya no existe. */}
-      {huecos.length > 0 ? (
-        <div className="grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <MetricasClub metricas={metricas} resumen={resumenDeVisitas} />
-          </div>
-          <BarraProgreso porcentaje={porcentaje} huecos={huecos} />
+          <MetricasClub metricas={metricas} resumen={resumenDeVisitas} />
         </div>
-      ) : (
-        <MetricasClub metricas={metricas} resumen={resumenDeVisitas} />
-      )}
+
+        {/* Lo que va completando la cuenta, a la derecha: los primeros
+            pasos con su barra y lo que le falta a la ficha. */}
+        {hayColumnaDerecha && (
+          <div className="flex min-w-0 flex-col gap-6">
+            <PrimerosPasos pasos={pasosIniciales} />
+            <BarraProgreso porcentaje={porcentaje} huecos={huecos} />
+          </div>
+        )}
+      </div>
 
       <Recomendaciones recomendaciones={obtenerRecomendaciones()} />
     </div>
