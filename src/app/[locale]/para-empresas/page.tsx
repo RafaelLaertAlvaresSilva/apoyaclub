@@ -10,6 +10,7 @@ import { EntradaAlBajar } from "../components/EntradaAlBajar";
 import { SeccionComoFuncionaEmpresa } from "../components/ComoFuncionaEmpresa";
 import { SeccionColaborarEmpresa } from "../components/ColaborarEmpresa";
 import { SeccionCuentaEmpresa } from "../components/CuentaEmpresa";
+import { SeccionPreguntasEmpresa } from "../components/PreguntasEmpresa";
 import {
   FondoDeHeroe,
   SeccionBeneficiosEmpresa,
@@ -149,28 +150,7 @@ export default async function ParaEmpresasPage() {
         <SeccionCuentaEmpresa />
 
         {/* ============ PREGUNTAS ============ */}
-        <section id="faq" className="mx-auto max-w-3xl scroll-mt-32 px-4 py-20 sm:px-6 sm:py-28">
-          <h2 className="text-center text-3xl font-extrabold tracking-tight text-titular sm:text-4xl">
-            {t("faq.titulo")}
-          </h2>
-
-          <div className="mt-12 space-y-3">
-            {preguntas.map((item) => (
-              <details
-                key={item.pregunta}
-                className="group rounded-2xl border border-zinc-200 bg-white p-6 open:border-brand-teal/40"
-              >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-titular marker:content-none">
-                  {item.pregunta}
-                  <span className="flex-none text-zinc-500 transition-transform group-open:rotate-45">
-                    +
-                  </span>
-                </summary>
-                <p className="mt-3 text-base leading-relaxed text-zinc-600">{item.respuesta}</p>
-              </details>
-            ))}
-          </div>
-        </section>
+        <SeccionPreguntasEmpresa />
 
         {/* ============ CTA FINAL ============ */}
         <section className="relative overflow-hidden bg-gradient-to-br from-brand-navy to-brand-navy-dark px-4 py-24 text-center sm:px-6 sm:py-28">

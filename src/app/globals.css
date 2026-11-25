@@ -853,3 +853,52 @@ p {
     transform: scale(1);
   }
 }
+
+/* PREGUNTAS FRECUENTES (`PreguntasEmpresa`, /para-empresas).
+ * La respuesta baja suave al abrir la pregunta, la burbuja del "?" se
+ * balancea y el balón de la esquina bota despacio. */
+details[open] > .faq-respuesta {
+  animation: faq-abre 0.35s ease-out;
+}
+@keyframes faq-abre {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.faq-burbuja {
+  animation: faq-burbuja 4s ease-in-out infinite;
+  transform-origin: bottom left;
+}
+@keyframes faq-burbuja {
+  0%,
+  70%,
+  100% {
+    transform: rotate(0);
+  }
+  78% {
+    transform: rotate(-8deg);
+  }
+  86% {
+    transform: rotate(6deg);
+  }
+  94% {
+    transform: rotate(-3deg);
+  }
+}
+.faq-bota {
+  animation: faq-bota 3.2s ease-in-out infinite;
+}
+@keyframes faq-bota {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(-14px) rotate(12deg);
+  }
+}

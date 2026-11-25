@@ -766,6 +766,8 @@
     },
     "faq": {
       "titulo": "Preguntas frecuentes",
+      "tituloResalta": "frecuentes",
+      "texto": "Resolvemos tus dudas para que colabores con los clubes con total confianza.",
       "preguntas": [
         {
           "pregunta": "¿Me cobráis algo?",

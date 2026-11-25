@@ -766,6 +766,8 @@
     },
     "faq": {
       "titulo": "Frequently asked questions",
+      "tituloResalta": "questions",
+      "texto": "We answer your questions so you can work with clubs with complete confidence.",
       "preguntas": [
         {
           "pregunta": "Do you charge me anything?",
