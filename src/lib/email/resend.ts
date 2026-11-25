@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { esIdioma } from "@/lib/idioma-usuario";
 import { direccionDe, limpiarCabecera } from "@/lib/email/cabeceras";
+import { envolverCorreo } from "@/lib/email/marco";
 /**
  * Envío de email transaccional con Resend (Fase 8), usando `fetch`
  * directamente contra su API HTTP (https://resend.com/docs/api-reference/emails/send-email)
@@ -70,7 +71,9 @@ export async function enviarEmail({
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ from, to, subject, html, reply_to: replyTo }),
+      // Todos los correos salen con el mismo marco (logo, tarjeta y pie).
+      // Los que van a nombre de un club, sin el logo de ApoyaClub.
+      body: JSON.stringify({ from, to, subject, html: envolverCorreo(html, { conLogo: !remitenteNombre }), reply_to: replyTo }),
     });
 
     if (!respuesta.ok) {
@@ -163,7 +166,7 @@ export async function enviarEmailNuevaSolicitudContacto({
       }
       ${filasDetalle ? `<table style="border-collapse:collapse;margin:0 0 16px;font-size:14px;">${filasDetalle}</table>` : ""}
       <div style="background:#f4f4f5;border-radius:8px;padding:16px;margin:0 0 24px;white-space:pre-line;">${message}</div>
-      <a href="${panelUrl}" style="display:inline-block;background:#059669;color:#ffffff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:600;">${t("solicitudContacto.boton")}</a>
+      <a href="${panelUrl}" style="display:inline-block;background:#0f766e;color:#ffffff;text-decoration:none;padding:12px 22px;border-radius:10px;font-weight:700;">${t("solicitudContacto.boton")}</a>
       <p style="color:#a1a1aa;font-size:12px;margin-top:24px;">
         ${t("solicitudContacto.pie")}
       </p>
@@ -209,7 +212,7 @@ export async function enviarEmailAvisoCaducidadSuscripcion({
       <h1 style="font-size:20px;margin:0 0 16px;">${t("caducidadSuscripcion.titulo", { dias: diasRestantes, club: clubName })}</h1>
       <p style="margin:0 0 16px;">${t("caducidadSuscripcion.texto", { fecha: fechaFin })}</p>
       <p style="margin:0 0 24px;">${t("caducidadSuscripcion.texto2")}</p>
-      <a href="${panelUrl}" style="display:inline-block;background:#059669;color:#ffffff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:600;">${t("caducidadSuscripcion.boton")}</a>
+      <a href="${panelUrl}" style="display:inline-block;background:#0f766e;color:#ffffff;text-decoration:none;padding:12px 22px;border-radius:10px;font-weight:700;">${t("caducidadSuscripcion.boton")}</a>
     </div>
   `;
 
@@ -295,7 +298,7 @@ function plantilla({
       <p style="color:${color};font-weight:600;font-size:14px;margin:0 0 8px;">${eyebrow}</p>
       <h1 style="font-size:20px;margin:0 0 16px;">${titulo}</h1>
       ${cuerpo}
-      <a href="${botonUrl}" style="display:inline-block;background:#059669;color:#ffffff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:600;">${botonTexto}</a>
+      <a href="${botonUrl}" style="display:inline-block;background:#0f766e;color:#ffffff;text-decoration:none;padding:12px 22px;border-radius:10px;font-weight:700;">${botonTexto}</a>
       ${pie ? `<p style="color:#a1a1aa;font-size:12px;margin-top:24px;">${pie}</p>` : ""}
     </div>
   `;
