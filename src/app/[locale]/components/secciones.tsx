@@ -2571,70 +2571,127 @@ export async function SeccionHerramientasClave() {
     .filter((herramienta): herramienta is Herramienta => herramienta !== undefined);
 
   const cuantasMas = todas.length - destacadas.length;
+  // Las que no salen en tarjeta, en el orden de la lista larga: son las
+  // pastillas del "y hay más".
+  const resto = todas.filter((herramienta) => !claves.includes(herramienta.clave));
 
-  /* Un campo azul marino entero: a la izquierda el titular y lo que
-     significa, a la derecha las seis tarjetas blancas con su dibujo. El
-     cambio de color separa esta sección de las dos claras que la rodean,
-     y las tarjetas blancas resaltan encima. La etiqueta "Todo incluido" de encima del
-     titular se queda: Rafael prefiere las etiquetas en mayúsculas, que
-     en el teléfono ahorran una línea de texto. */
+  /* Un campo azul marino con el estadio de noche detrás: a la izquierda
+     el titular, lo que significa, el "y hay más" y el portátil con el
+     dossier; a la derecha las seis tarjetas blancas. Diseño de Rafael
+     (noviembre de 2026). La etiqueta "Todo incluido" se queda en
+     mayúsculas: Rafael las prefiere así. */
   return (
-    <section id="herramientas" className="scroll-mt-32 bg-brand-navy px-4 py-20 sm:px-6 sm:py-28">
-      {/* Tres piezas en una rejilla: en el ordenador, el titular y el
-          "y hay más" a la izquierda y las tarjetas a la derecha; en el
-          teléfono, titular, tarjetas y al final el "y hay más", para no
-          tener dos párrafos seguidos antes de ver ninguna herramienta. */}
-      <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-x-16 lg:gap-y-8">
+    <section id="herramientas" className="relative scroll-mt-32 overflow-hidden bg-brand-navy px-4 py-20 sm:px-6 sm:py-28">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <Image src="/fondo-hero.webp" alt="" fill sizes="100vw" className="object-cover opacity-15 mix-blend-luminosity" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(45,212,191,0.16),transparent_55%)]" />
+        {/* Las cintas verdes de las esquinas, como en la portada. */}
+        <svg viewBox="0 0 400 200" className="absolute -bottom-10 -right-10 h-48 w-96 lg:w-[36rem]" fill="none">
+          <path d="M0 230C140 120 280 100 440 110" stroke="#2dd4bf" strokeOpacity="0.7" strokeWidth="34" strokeLinecap="round" />
+          <path d="M40 240C170 150 300 140 440 150" stroke="#99f6e4" strokeOpacity="0.35" strokeWidth="8" strokeLinecap="round" />
+        </svg>
+      </div>
+
+      {/* Cinco piezas en una rejilla. En el ordenador: a la izquierda el
+          titular, el botón y el portátil; a la derecha las seis tarjetas
+          y, debajo, el "y hay más". En el teléfono van en el orden del
+          código —titular, tarjetas, "y hay más", botón—, para no tener
+          dos párrafos seguidos antes de ver ninguna herramienta. */}
+      <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:grid-rows-[auto_auto_1fr] lg:gap-x-14 lg:gap-y-6">
         <div className="lg:col-start-1 lg:row-start-1">
-          <p className="text-xs font-bold uppercase tracking-wider text-brand-teal-light">
+          <p className="inline-block rounded-full border border-brand-teal/70 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-teal-light">
             {t("herramientas.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-sobre-color sm:text-4xl">
-            {t.rich("herramientas.titulo", { resalte: (trozo) => <span className="text-brand-teal-light">{trozo}</span> })}
+          <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-sobre-color sm:text-5xl">
+            {t.rich("herramientas.titulo", {
+              resalte: (trozo) => (
+                <span className="relative inline-block text-brand-teal">
+                  {trozo}
+                  <svg aria-hidden="true" viewBox="0 0 200 16" preserveAspectRatio="none" className="absolute -bottom-2 left-0 h-3 w-full text-brand-teal sm:-bottom-3 sm:h-4">
+                    <path d="M3 11C50 4 120 2 197 8" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
+                  </svg>
+                </span>
+              ),
+            })}
           </h2>
-          <p className="mt-5 max-w-md text-lg leading-relaxed text-sobre-color/85">
+          <p className="mt-7 max-w-md text-lg leading-relaxed text-sobre-color/85">
             {t("herramientas.texto")}
           </p>
         </div>
 
-        {/* Las seis, en sus tarjetas blancas con el dibujo de siempre,
-            encima del azul: así resaltan y se reconocen de un vistazo. */}
-        <div className="grid content-start gap-4 sm:grid-cols-2 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+        {/* Las seis, en tarjetas blancas: el icono en su cuadrado, una
+            raya fina y el texto, como en el diseño. */}
+        <ul className="grid content-start gap-4 sm:grid-cols-2 lg:col-start-2 lg:row-span-2 lg:row-start-1">
           {destacadas.map((herramienta) => (
-            <div
+            <li
               key={herramienta.clave}
-              className="flex gap-4 rounded-2xl bg-white p-5"
+              className="group flex items-center gap-3.5 rounded-2xl bg-white p-4 sm:p-5 shadow-lg shadow-black/20 ring-1 ring-white/10 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-teal/25"
             >
-              <span className="inline-flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-brand-teal-light text-accion-tinta">
+              <span className="flex size-12 flex-none items-center justify-center rounded-2xl bg-brand-teal-light text-accion-tinta shadow-sm shadow-brand-teal/20 ring-1 ring-brand-teal/20 transition duration-300 group-hover:scale-110 [&>svg]:size-6">
                 <IconoHerramienta clave={herramienta.clave} />
               </span>
-              <div>
-                <h3 className="font-extrabold leading-snug text-titular">
+              <span aria-hidden="true" className="h-12 w-px flex-none self-center bg-brand-teal/40" />
+              <div className="min-w-0">
+                <h3 className="font-extrabold leading-snug text-titular sm:text-[17px]">
                   {herramienta.titulo}
                 </h3>
                 <p className="mt-1 text-sm leading-relaxed text-zinc-600">{herramienta.corto}</p>
               </div>
-            </div>
+            </li>
           ))}
+        </ul>
+
+        {/* El "y hay más", destacado: el número grande y las otras
+            herramientas en pastillas con su icono, para que se vea de un
+            vistazo que no son seis sino doce. El número sale de la resta,
+            no escrito a mano. */}
+        {cuantasMas > 0 && (
+          <div className="lg:col-start-2 lg:row-start-3">
+            <div className="rounded-3xl border border-white/15 bg-white/[0.06] p-5 backdrop-blur sm:p-6">
+              <p className="flex items-center gap-3 text-lg font-extrabold text-sobre-color sm:text-xl">
+                <span className="flex size-10 flex-none items-center justify-center rounded-xl bg-brand-teal text-lg font-black text-brand-navy shadow-lg shadow-brand-teal/30">
+                  +
+                </span>
+                {t("herramientas.masTitulo", { cuantas: cuantasMas })}
+              </p>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {resto.map((herramienta) => (
+                  <li
+                    key={herramienta.clave}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-white/10 py-1.5 pl-2 pr-3 text-[13px] font-semibold text-sobre-color/90 ring-1 ring-white/15 [&_svg]:size-4"
+                  >
+                    <span className="text-brand-teal-light">
+                      <IconoHerramienta clave={herramienta.clave} />
+                    </span>
+                    {herramienta.titulo}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+
+        <div className="lg:col-start-1 lg:row-start-2">
+            <Link
+              href="/para-clubes#herramientas"
+              className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-teal-dark to-brand-teal px-7 py-3.5 text-base font-bold text-sobre-color shadow-lg shadow-brand-teal/30 transition hover:-translate-y-0.5 hover:shadow-xl"
+            >
+              {t("herramientas.verTodas", { total: todas.length })}
+              <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
+            </Link>
         </div>
 
-          {/* El "y hay más". El número sale de la resta, no escrito a
-              mano: el día que se añada una herramienta, la portada lo
-              dice sola. */}
-          {cuantasMas > 0 && (
-            <div className="max-w-md lg:col-start-1 lg:row-start-2">
-              <p className="text-base leading-relaxed text-sobre-color/75">
-                {t("herramientas.hayMas", { cuantas: cuantasMas })}
-              </p>
-              <Link
-                href="/para-clubes#herramientas"
-                className="mt-5 inline-flex items-center gap-2 rounded-full bg-brand-teal-dark px-6 py-3 text-base font-bold text-sobre-color transition-colors hover:bg-brand-teal"
-              >
-                {t("herramientas.verTodas", { total: todas.length })}
-                <span aria-hidden="true">→</span>
-              </Link>
-            </div>
-          )}
+        {/* El portátil con el panel y el dossier, del diseño de Rafael.
+            Solo en el ordenador, abajo a la izquierda. */}
+        <div aria-hidden="true" className="pointer-events-none relative hidden aspect-[1260/513] w-full max-w-[30rem] self-end lg:col-start-1 lg:row-start-3 lg:block">
+          <Image
+            src="/herramientas/portatil-y-dossier.webp"
+            alt=""
+            fill
+            sizes="30rem"
+            className="object-cover [mask-image:linear-gradient(to_right,transparent,black_10%,black_80%,transparent),linear-gradient(to_bottom,transparent,black_18%,black_88%,transparent)] [mask-composite:intersect]"
+          />
+        </div>
       </div>
     </section>
   );

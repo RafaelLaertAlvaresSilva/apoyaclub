@@ -335,7 +335,7 @@
       "dossier",
       "informe"
     ],
-    "hayMas": "And {cuantas} more tools: attendance at each match, your page statistics, your sponsors with their logos, your notebook of businesses to write to, the club's community work and the services you need.",
+    "masTitulo": "And {cuantas} more tools",
     "verTodas": "See all {total} tools, one by one"
   },
   "panel": {

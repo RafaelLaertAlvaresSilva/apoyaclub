@@ -335,7 +335,7 @@
       "dossier",
       "informe"
     ],
-    "hayMas": "Y {cuantas} herramientas más: el público de cada partido, las estadísticas de tu ficha, tus patrocinadores con su logo, tu libreta de empresas a las que escribir, la acción social del club y los servicios que necesitas.",
+    "masTitulo": "Y {cuantas} herramientas más",
     "verTodas": "Ver las {total} herramientas, una por una"
   },
   "panel": {

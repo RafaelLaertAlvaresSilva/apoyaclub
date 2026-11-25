@@ -24,7 +24,7 @@ const HERRAMIENTAS = JSON.parse(
 ).herramientas as {
   lista: { clave: string; titulo: string; corto: string; texto: string }[];
   destacadas: string[];
-  hayMas: string;
+  masTitulo: string;
   verTodas: string;
 };
 
@@ -128,8 +128,8 @@ describe("las seis de la portada", () => {
   });
 
   it("los números de los textos se calculan, no se escriben a mano", () => {
-    expect(HERRAMIENTAS.hayMas).toContain("{cuantas}");
+    expect(HERRAMIENTAS.masTitulo).toContain("{cuantas}");
     expect(HERRAMIENTAS.verTodas).toContain("{total}");
-    expect(HERRAMIENTAS.hayMas).not.toMatch(/\b(seis|6)\b/);
+    expect(HERRAMIENTAS.masTitulo).not.toMatch(/\b(seis|6)\b/);
   });
 });
