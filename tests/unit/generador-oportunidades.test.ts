@@ -133,6 +133,22 @@ describe("generar mis oportunidades", () => {
     expect(categoriasDelGenerador([{ sport: "Runners" }])[0]).toBe("running");
   });
 
+  it("los clubes de tenis, pádel y bádminton ven primero las ideas de raqueta", () => {
+    expect(categoriasDelGenerador([{ sport: "Bádminton" }])[0]).toBe("raqueta");
+    expect(categoriasDelGenerador([{ sport: "badminton" }])[0]).toBe("raqueta");
+    expect(categoriasDelGenerador([{ sport: "Tenis" }])[0]).toBe("raqueta");
+    expect(categoriasDelGenerador([{ sport: "Pádel" }])[0]).toBe("raqueta");
+    expect(categoriasDelGenerador([{ sport: "Balonmano" }])).not.toContain("raqueta");
+    // Un club de tenis y pádel no la ve dos veces.
+    expect(categoriasDelGenerador([{ sport: "Tenis" }, { sport: "Pádel" }]).filter((c) => c === "raqueta")).toHaveLength(1);
+  });
+
+  it("un club de bádminton ve ideas de raqueta en la mezcla", () => {
+    const badminton = { ...base, equipos: [{ ...equipo("a", "Mixto"), sport: "Bádminton" } as ClubTeam] };
+    const mezcla = generarPropuestas(badminton);
+    expect(mezcla.some((p) => p.ideaId.startsWith("raqueta-"))).toBe(true);
+  });
+
   it("un club de speedsoft ve sus ideas en la mezcla, con su equipo en las de equipación", () => {
     const speedsoft = { ...base, equipos: [{ ...equipo("a", "Masculino"), sport: "Airsoft" } as ClubTeam] };
     const mezcla = generarPropuestas(speedsoft);

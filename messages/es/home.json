@@ -984,6 +984,10 @@
     "running": {
       "etiqueta": "Running",
       "pista": "Carreras, dorsales, avituallamiento y las salidas del grupo."
+    },
+    "raqueta": {
+      "etiqueta": "Deportes de raqueta",
+      "pista": "Pistas, torneos, la escuela, las bolas o volantes y clases para empresas."
     }
   },
   "planes": {

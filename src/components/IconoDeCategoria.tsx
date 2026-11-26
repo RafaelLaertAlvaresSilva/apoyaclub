@@ -118,6 +118,14 @@ const FORMA_DE_LA_CATEGORIA: Record<string, React.ReactNode> = {
       <path d="M3 20h18" />
     </>
   ),
+  // Una raqueta y una bola.
+  raqueta: (
+    <>
+      <ellipse cx="10" cy="9" rx="5.5" ry="6" transform="rotate(-40 10 9)" />
+      <path d="M13.5 13l6 6.5" />
+      <circle cx="18.5" cy="5.5" r="1.8" />
+    </>
+  ),
   servicios: (
     <>
       <path d="M14.5 6.5a3.5 3.5 0 004.8 4.8l-8 8a2.4 2.4 0 01-3.4-3.4l8-8z" />

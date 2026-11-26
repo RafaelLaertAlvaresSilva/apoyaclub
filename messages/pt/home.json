@@ -984,6 +984,10 @@
     "running": {
       "etiqueta": "Corrida",
       "pista": "Provas, dorsais, abastecimento e os treinos do grupo."
+    },
+    "raqueta": {
+      "etiqueta": "Desportos de raquete",
+      "pista": "Campos, torneios, a escola, as bolas ou volantes e aulas para empresas."
     }
   },
   "planes": {

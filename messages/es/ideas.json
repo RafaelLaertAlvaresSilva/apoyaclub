@@ -905,6 +905,60 @@
       "queEs": "El grupo organiza una salida o un entrenamiento para los trabajadores de una empresa, adaptado a todos los niveles.",
       "queRecibe": "Una actividad saludable para su plantilla, dirigida por corredores con experiencia, y la publicación en las redes del grupo.",
       "duracion": "Una jornada"
+    },
+    "raqueta-pista-con-nombre": {
+      "titulo": "Una pista con el nombre de la empresa",
+      "queEs": "Una de las pistas del club pasa a llamarse como la empresa durante toda la temporada, con su cartel a la entrada.",
+      "queRecibe": "Su nombre en la pista, en el cartel, en las reservas y cada vez que el club anuncia un partido o una clase en ella.",
+      "duracion": "Una temporada"
+    },
+    "raqueta-lona-de-fondo": {
+      "titulo": "Lona en el fondo de la pista",
+      "queEs": "Una lona con el logo de la empresa en el fondo o el lateral de una pista, justo detrás de los jugadores.",
+      "queRecibe": "Su logo en la pista todos los días de juego y en todas las fotos y vídeos que se hagan en ella.",
+      "duracion": "Una temporada"
+    },
+    "raqueta-torneo-con-nombre": {
+      "titulo": "Un torneo con el nombre de la empresa",
+      "queEs": "El club organiza un torneo (de Navidad, de verano, de fin de temporada) que lleva el nombre de la empresa.",
+      "queRecibe": "Su nombre en el torneo, en los carteles, en el cuadro de partidos, en los trofeos y en todo lo que el club publique sobre él.",
+      "duracion": "Un torneo"
+    },
+    "raqueta-escuela": {
+      "titulo": "Patrocinador de la escuela",
+      "queEs": "La empresa patrocina la escuela del club: los niños que aprenden a jugar durante toda la temporada.",
+      "queRecibe": "Su logo en la ropa o el material de la escuela, en las redes y en los mensajes a las familias, que son clientes cercanos.",
+      "duracion": "Una temporada"
+    },
+    "raqueta-bolas-y-volantes": {
+      "titulo": "Bolas o volantes para la temporada",
+      "queEs": "La empresa aporta las bolas o los volantes que el club usa en entrenamientos y partidos.",
+      "queRecibe": "Aparecer como proveedora del club en sus redes y en su página, y su logo en los tubos o las cajas si los personaliza.",
+      "duracion": "Una temporada"
+    },
+    "raqueta-clases-para-empresas": {
+      "titulo": "Clases para la plantilla de una empresa",
+      "queEs": "El club da una jornada de clases para los trabajadores de una empresa, con entrenadores del club y para todos los niveles.",
+      "queRecibe": "Una actividad saludable y diferente para su plantilla, y la publicación en las redes del club.",
+      "duracion": "Una jornada"
+    },
+    "raqueta-horas-de-pista-para-clientes": {
+      "titulo": "Horas de pista para los clientes de la empresa",
+      "queEs": "La empresa compra un bono de horas de pista y lo regala a sus clientes o trabajadores.",
+      "queRecibe": "Un regalo original para sus clientes, con su nombre, y aparecer como colaboradora del club.",
+      "duracion": "Una temporada"
+    },
+    "raqueta-ranking-de-la-temporada": {
+      "titulo": "El ranking del club, con el nombre de la empresa",
+      "queEs": "La liga o el ranking interno del club, que juegan los socios toda la temporada, lleva el nombre de la empresa.",
+      "queRecibe": "Su nombre en la clasificación, en cada actualización que el club publica y en los premios del final.",
+      "duracion": "Una temporada"
+    },
+    "raqueta-beca-de-competicion": {
+      "titulo": "Beca para un jugador o jugadora de competición",
+      "queEs": "La empresa ayuda a pagar las inscripciones y los viajes de un jugador o jugadora del club que compite.",
+      "queRecibe": "Su logo en la ropa de competición de esa persona y en cada resultado que el club publique de ella.",
+      "duracion": "Una temporada"
     }
   },
   "falta": {

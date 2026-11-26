@@ -984,6 +984,10 @@
     "running": {
       "etiqueta": "Running",
       "pista": "Races, bibs, refreshment stations and group runs."
+    },
+    "raqueta": {
+      "etiqueta": "Racket sports",
+      "pista": "Courts, tournaments, the school, balls or shuttlecocks and lessons for companies."
     }
   },
   "planes": {

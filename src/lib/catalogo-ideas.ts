@@ -50,7 +50,8 @@ export type CategoriaIdea =
   // Las de un deporte: solo las ve un club que tiene un equipo de ese
   // deporte (`CATEGORIAS_DE_DEPORTE`).
   | "speedsoft"
-  | "running";
+  | "running"
+  | "raqueta";
 
 export const CATEGORIAS_IDEA: {
   id: CategoriaIdea;
@@ -86,21 +87,31 @@ export const CATEGORIAS_IDEA: {
  */
 export const CATEGORIAS_DE_DEPORTE: {
   id: CategoriaIdea;
-  deporte: string;
+  /** Las claves de `lib/deportes.ts` que ven esta categoría. */
+  deportes: string[];
   etiqueta: string;
   pista: string;
 }[] = [
   {
     id: "speedsoft",
-    deporte: "airsoft",
+    deportes: ["airsoft"],
     etiqueta: "Speedsoft y airsoft",
     pista: "Jersey, máscaras, réplicas y la zona de equipos, sin tocar el campo de juego.",
   },
   {
     id: "running",
-    deporte: "running",
+    deportes: ["running"],
     etiqueta: "Running",
     pista: "Carreras, dorsales, avituallamiento y las salidas del grupo.",
+  },
+  {
+    // Pedido por Rafael el 26-11-2026: entraron un club de tenis
+    // (Malgrat) y uno de bádminton (Arlanzón), y lo de "pabellón",
+    // "intervalo del partido" o "camiseta del equipo" no va con ellos.
+    id: "raqueta",
+    deportes: ["tenis", "padel", "badminton", "tenisMesa"],
+    etiqueta: "Deportes de raqueta",
+    pista: "Pistas, torneos, la escuela, las bolas o volantes y clases para empresas.",
   },
 ];
 
@@ -116,7 +127,7 @@ export const ETIQUETA_CATEGORIA_IDEA: Record<CategoriaIdea, string> = [...CATEGO
 export function categoriasDelClub(deportes: Iterable<string>): CategoriaIdea[] {
   const suyos = new Set(deportes);
   return [
-    ...CATEGORIAS_DE_DEPORTE.filter((categoria) => suyos.has(categoria.deporte)).map((categoria) => categoria.id),
+    ...CATEGORIAS_DE_DEPORTE.filter((categoria) => categoria.deportes.some((deporte) => suyos.has(deporte))).map((categoria) => categoria.id),
     ...CATEGORIAS_IDEA.map((categoria) => categoria.id),
   ];
 }
@@ -131,7 +142,7 @@ export function deportesDeLosEquipos(equipos: Pick<ClubTeam, "sport">[]): string
 /** Las categorías de deporte de un club (las que no son de todos). */
 export function categoriasDeDeporteDelClub(deportes: Iterable<string>): CategoriaIdea[] {
   const suyos = new Set(deportes);
-  return CATEGORIAS_DE_DEPORTE.filter((categoria) => suyos.has(categoria.deporte)).map((categoria) => categoria.id);
+  return CATEGORIAS_DE_DEPORTE.filter((categoria) => categoria.deportes.some((deporte) => suyos.has(deporte))).map((categoria) => categoria.id);
 }
 
 /**
@@ -1287,6 +1298,20 @@ export const IDEAS: Idea[] = [
   { id: "running-fotos", categoria: "running", tipo: "social_content", periodo: "month", colaboracion: "money", requiere: ["redes"] },
   { id: "running-descuento-miembros", categoria: "running", tipo: "in_kind", periodo: "season", colaboracion: "product" },
   { id: "running-para-empresas", categoria: "running", tipo: "events_tournaments", periodo: "event", colaboracion: "money" },
+
+  // -------------------------------------------------------------------
+  // Deportes de raqueta: tenis, pádel, bádminton, tenis de mesa
+  // (solo para clubes de esos deportes)
+  // -------------------------------------------------------------------
+  { id: "raqueta-pista-con-nombre", categoria: "raqueta", tipo: "venue_matches", periodo: "season", colaboracion: "money", requiere: ["instalaciones"] },
+  { id: "raqueta-lona-de-fondo", categoria: "raqueta", tipo: "venue_matches", periodo: "season", colaboracion: "money", requiere: ["instalaciones"] },
+  { id: "raqueta-torneo-con-nombre", categoria: "raqueta", tipo: "events_tournaments", periodo: "event", colaboracion: "money" },
+  { id: "raqueta-escuela", categoria: "raqueta", tipo: "youth", periodo: "season", colaboracion: "money", requiere: ["cantera"] },
+  { id: "raqueta-bolas-y-volantes", categoria: "raqueta", tipo: "in_kind", periodo: "season", colaboracion: "product" },
+  { id: "raqueta-clases-para-empresas", categoria: "raqueta", tipo: "events_tournaments", periodo: "event", colaboracion: "money" },
+  { id: "raqueta-horas-de-pista-para-clientes", categoria: "raqueta", tipo: "in_kind", periodo: "season", colaboracion: "money", requiere: ["instalaciones"] },
+  { id: "raqueta-ranking-de-la-temporada", categoria: "raqueta", tipo: "events_tournaments", periodo: "season", colaboracion: "money" },
+  { id: "raqueta-beca-de-competicion", categoria: "raqueta", tipo: "equipment", periodo: "season", colaboracion: "money", requiere: ["equipos"] },
 ];
 
 // ---------------------------------------------------------------------

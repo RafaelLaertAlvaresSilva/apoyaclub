@@ -905,6 +905,60 @@
       "queEs": "The group organises a run or training session for a company's employees, suitable for every level.",
       "queRecibe": "A healthy activity for its staff, led by experienced runners, and a post on the group's social media.",
       "duracion": "One day"
+    },
+    "raqueta-pista-con-nombre": {
+      "titulo": "A court named after the company",
+      "queEs": "One of the club's courts takes the company's name for the whole season, with its sign at the entrance.",
+      "queRecibe": "Its name on the court, on the sign, in bookings and every time the club announces a match or a lesson there.",
+      "duracion": "One season"
+    },
+    "raqueta-lona-de-fondo": {
+      "titulo": "Banner at the back of the court",
+      "queEs": "A banner with the company's logo at the back or side of a court, right behind the players.",
+      "queRecibe": "Its logo on court every playing day and in every photo and video taken there.",
+      "duracion": "One season"
+    },
+    "raqueta-torneo-con-nombre": {
+      "titulo": "A tournament named after the company",
+      "queEs": "The club runs a tournament (Christmas, summer or end of season) that carries the company's name.",
+      "queRecibe": "Its name on the tournament, the posters, the draw, the trophies and everything the club posts about it.",
+      "duracion": "One tournament"
+    },
+    "raqueta-escuela": {
+      "titulo": "Sponsor of the club's school",
+      "queEs": "The company sponsors the club's school: the children learning to play throughout the season.",
+      "queRecibe": "Its logo on the school's kit or equipment, on social media and in messages to families, who are local customers.",
+      "duracion": "One season"
+    },
+    "raqueta-bolas-y-volantes": {
+      "titulo": "Balls or shuttlecocks for the season",
+      "queEs": "The company supplies the balls or shuttlecocks the club uses in training and matches.",
+      "queRecibe": "Being named as the club's supplier on its social media and page, and its logo on the tubes or boxes if it customises them.",
+      "duracion": "One season"
+    },
+    "raqueta-clases-para-empresas": {
+      "titulo": "Lessons for a company's staff",
+      "queEs": "The club runs a day of lessons for a company's employees, with the club's coaches and for every level.",
+      "queRecibe": "A healthy, different activity for its staff, and a post on the club's social media.",
+      "duracion": "One day"
+    },
+    "raqueta-horas-de-pista-para-clientes": {
+      "titulo": "Court hours for the company's customers",
+      "queEs": "The company buys a block of court hours and gives them to its customers or staff.",
+      "queRecibe": "An original gift for its customers, with its name on it, and being named as a club partner.",
+      "duracion": "One season"
+    },
+    "raqueta-ranking-de-la-temporada": {
+      "titulo": "The club ladder, named after the company",
+      "queEs": "The club's internal league or ladder, played by members all season, carries the company's name.",
+      "queRecibe": "Its name on the standings, on every update the club posts and on the end-of-season prizes.",
+      "duracion": "One season"
+    },
+    "raqueta-beca-de-competicion": {
+      "titulo": "Grant for a competing player",
+      "queEs": "The company helps pay the entry fees and travel of one of the club's competing players.",
+      "queRecibe": "Its logo on that player's competition kit and on every result the club posts about them.",
+      "duracion": "One season"
     }
   },
   "falta": {
