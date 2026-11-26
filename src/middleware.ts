@@ -9,6 +9,7 @@ import { avisarDeFallo } from "@/lib/monitoring";
 import { RUTA_POR_ROL, type Role } from "@/lib/types";
 import { cabeceraLinkSeo } from "@/lib/enlaces-seo";
 import { SITE_URL } from "@/lib/site";
+import { debeSerPermanente } from "@/lib/redireccion-permanente";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
@@ -50,7 +51,13 @@ export async function middleware(request: NextRequest) {
   // ese caso no hace falta mirar la sesión todavía, se comprobará en la
   // siguiente petición, ya con el prefijo puesto.
   const intlResponse = intlMiddleware(request);
-  if (intlResponse.headers.get("location")) {
+  const destinoIntl = intlResponse.headers.get("location");
+  if (destinoIntl) {
+    // "/buscar" → "/es/buscar" permanente para que Google deje de tomar
+    // la dirección corta como la buena (ver redireccion-permanente.ts).
+    if (intlResponse.status === 307 && debeSerPermanente(request.nextUrl.pathname, destinoIntl, request.method)) {
+      return new NextResponse(null, { status: 308, headers: intlResponse.headers });
+    }
     return intlResponse;
   }
 
