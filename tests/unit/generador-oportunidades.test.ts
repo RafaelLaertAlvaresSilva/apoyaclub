@@ -124,9 +124,10 @@ describe("generar mis oportunidades", () => {
     expect(generarPropuestas(base).find((p) => p.ideaId === "equipo-empresa-oficial")?.teamId ?? null).toBeNull();
   });
 
-  it("las categorías de un deporte solo le salen a un club de ese deporte, y las primeras", () => {
-    expect(categoriasDelGenerador([{ sport: "Balonmano" }])).not.toContain("speedsoft");
-    expect(categoriasDelGenerador([{ sport: "Balonmano" }])).not.toContain("running");
+  it("las categorías de su deporte le salen al club las primeras; las de otros deportes, al final", () => {
+    const balonmano = categoriasDelGenerador([{ sport: "Balonmano" }]);
+    expect(balonmano[0]).toBe("equipos");
+    expect(balonmano.slice(-4)).toEqual(["speedsoft", "running", "raqueta", "individual"]);
     expect(categoriasDelGenerador([{ sport: "Airsoft" }])[0]).toBe("speedsoft");
     // Escrito a mano también vale: "speedsoft" y "runners" son sinónimos.
     expect(categoriasDelGenerador([{ sport: "speedsoft" }])[0]).toBe("speedsoft");
@@ -138,7 +139,6 @@ describe("generar mis oportunidades", () => {
     expect(categoriasDelGenerador([{ sport: "badminton" }])[0]).toBe("raqueta");
     expect(categoriasDelGenerador([{ sport: "Tenis" }])[0]).toBe("raqueta");
     expect(categoriasDelGenerador([{ sport: "Pádel" }])[0]).toBe("raqueta");
-    expect(categoriasDelGenerador([{ sport: "Balonmano" }])).not.toContain("raqueta");
     // Un club de tenis y pádel no la ve dos veces.
     expect(categoriasDelGenerador([{ sport: "Tenis" }, { sport: "Pádel" }]).filter((c) => c === "raqueta")).toHaveLength(1);
   });
@@ -172,6 +172,36 @@ describe("generar mis oportunidades", () => {
 
   it("nunca lleva precio: eso lo pone el club", () => {
     expect(generarPropuestas(base).every((p) => !("value" in p))).toBe(true);
+  });
+});
+
+describe("los deportes individuales y los que no juegan partidos", () => {
+  const conDeporte = (deporte: string) => ({ ...base, equipos: [{ ...equipo("a", "Mixto"), sport: deporte } as ClubTeam] });
+
+  it("un club de natación, atletismo o judo ve primero sus ideas", () => {
+    for (const deporte of ["Natación", "Atletismo", "Judo", "Triatlón", "Gimnasia"]) {
+      expect(categoriasDelGenerador([{ sport: deporte }])[0]).toBe("individual");
+      expect(generarPropuestas(conDeporte(deporte))[0].ideaId.startsWith("individual-")).toBe(true);
+    }
+    // Uno de natación también ve las de raqueta, al final, y no repite la suya.
+    const natacion = categoriasDelGenerador([{ sport: "Natación" }]);
+    expect(natacion.at(-1)).toBe("raqueta");
+    expect(natacion.filter((c) => c === "individual")).toHaveLength(1);
+  });
+
+  it("a un club sin partidos no se le propone el descanso, la lona ni la camiseta de juego", () => {
+    for (const deporte of ["Natación", "Tenis", "Running"]) {
+      const ids = generarPropuestas(conDeporte(deporte)).map((p) => p.ideaId);
+      expect(ids).not.toContain("intervalo-patrocinador-del-descanso");
+      expect(ids).not.toContain("equipacion-pecho");
+      expect(ids).not.toContain("instalaciones-lona");
+    }
+  });
+
+  it("a uno de balonmano, sí; y a uno que mezcla natación y waterpolo, también", () => {
+    expect(generarPropuestas(conDeporte("Balonmano")).map((p) => p.ideaId)).toContain("intervalo-patrocinador-del-descanso");
+    const mixto = { ...base, equipos: [{ ...equipo("a", "Mixto"), sport: "Natación" }, { ...equipo("b", "Masculino"), sport: "Waterpolo" }] as ClubTeam[] };
+    expect(generarPropuestas(mixto).map((p) => p.ideaId)).toContain("equipacion-pecho");
   });
 });
 

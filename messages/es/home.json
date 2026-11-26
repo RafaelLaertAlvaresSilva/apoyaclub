@@ -988,6 +988,10 @@
     "raqueta": {
       "etiqueta": "Deportes de raqueta",
       "pista": "Pistas, torneos, la escuela, las bolas o volantes y clases para empresas."
+    },
+    "individual": {
+      "etiqueta": "Deportes individuales",
+      "pista": "La equipación de competición, la prueba del club, la escuela, los viajes y los podios."
     }
   },
   "planes": {

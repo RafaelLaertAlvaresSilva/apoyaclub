@@ -11,6 +11,7 @@ import {
   type RequisitoIdea,
   type TraducirIdeas,
 } from "@/lib/catalogo-ideas";
+import { DEPORTES_SIN_PARTIDOS } from "@/lib/deportes";
 import type {
   BudgetPeriod,
   CategoriaNecesidad,
@@ -70,6 +71,19 @@ export const IDEAS_DEL_GENERADOR = [
   "local-escaparate",
   "eventos-dia-del-club",
 ] as const;
+
+/**
+ * Las de la mezcla que son de partidos: la camiseta de juego, el
+ * descanso, la lona del pabellón y el partido con nombre. A un club que
+ * solo tiene deportes sin partidos (raqueta, individuales, running) no
+ * se le proponen: tiene sus propias ideas para lo mismo.
+ */
+const DE_PARTIDOS = new Set([
+  "equipacion-pecho",
+  "intervalo-patrocinador-del-descanso",
+  "instalaciones-lona",
+  "equipo-patrocinador-de-partido",
+]);
 
 /** Lo que el club necesita: se proponen sin marcar. */
 export const NECESIDADES_DEL_GENERADOR = ["necesita-material", "necesita-fisioterapia"] as const;
@@ -222,12 +236,14 @@ export function generarPropuestas({
 
   // Un club de un deporte con ideas propias (speedsoft, running) ve
   // primero unas cuantas de las suyas y luego las de todos.
-  const deSuDeporte = categoriasDeDeporteDelClub(deportesDeLosEquipos(equipos))
+  const susDeportes = deportesDeLosEquipos(equipos);
+  const sinPartidos = susDeportes.length > 0 && susDeportes.every((deporte) => DEPORTES_SIN_PARTIDOS.includes(deporte));
+  const deSuDeporte = categoriasDeDeporteDelClub(susDeportes)
     .flatMap((categoria) => elegir(ideasDeCategoria(categoria).map((idea) => idea.id)))
     .slice(0, DE_SU_DEPORTE_EN_LA_MEZCLA);
 
   return [
-    ...[...deSuDeporte, ...elegir(IDEAS_DEL_GENERADOR)]
+    ...[...deSuDeporte, ...elegir(IDEAS_DEL_GENERADOR.filter((id) => !(sinPartidos && DE_PARTIDOS.has(id))))]
       .slice(0, MAXIMO_DE_PROPUESTAS)
       .map((idea) => construir(idea, true)),
     ...elegir(NECESIDADES_DEL_GENERADOR).map((idea) => construir(idea, false)),

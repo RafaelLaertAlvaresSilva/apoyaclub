@@ -959,6 +959,60 @@
       "queEs": "The company helps pay the entry fees and travel of one of the club's competing players.",
       "queRecibe": "Its logo on that player's competition kit and on every result the club posts about them.",
       "duracion": "One season"
+    },
+    "individual-equipacion-de-competicion": {
+      "titulo": "Logo on the competition kit",
+      "queEs": "The swimsuit and cap, the cycling jersey, the trisuit, the gi or the leotard the club's athletes compete in.",
+      "queRecibe": "Its logo on the whole club's competition kit for the season: on every podium, every photo and every result that gets published.",
+      "duracion": "One season"
+    },
+    "individual-prueba-con-nombre": {
+      "titulo": "Race or trophy named after the company",
+      "queEs": "The club organises a race, a trophy or a championship and it carries the company's name: the company's Swimming Trophy or Cross-Country.",
+      "queRecibe": "The name on the event, the posters, the race numbers or the certificates, at the prize-giving and in everything published about it.",
+      "duracion": "One event day"
+    },
+    "individual-escuela": {
+      "titulo": "Sponsor of the school",
+      "queEs": "The company sponsors the club's school: the children learning the sport throughout the season.",
+      "queRecibe": "Its logo on the school's clothing or equipment, on social media and in the messages to families, who are local customers.",
+      "duracion": "One season"
+    },
+    "individual-podios": {
+      "titulo": "Podium sponsor",
+      "queEs": "Every medal, record or podium the club posts on social media carries the company's name: \"Podium sponsored by…\".",
+      "queRecibe": "Its name and logo on every results post of the season, which are the ones that get shared the most.",
+      "duracion": "One season"
+    },
+    "individual-viajes-a-campeonatos": {
+      "titulo": "Trip to a championship",
+      "queEs": "The company covers the club's travel, hotel or meals to get to a regional or national championship.",
+      "queRecibe": "Its logo on the travel wear or the minibus, and a mention in everything the club shares about the trip and the results.",
+      "duracion": "One championship"
+    },
+    "individual-beca-de-competicion": {
+      "titulo": "Grant for a competing athlete",
+      "queEs": "The company helps pay the licence, entry fees and travel of one of the club's competing athletes.",
+      "queRecibe": "Its logo on that athlete's kit and on every result the club publishes about them.",
+      "duracion": "One season"
+    },
+    "individual-material-de-entrenamiento": {
+      "titulo": "Training equipment",
+      "queEs": "The company provides or pays for training equipment: kickboards and fins, hurdles and cones, rollers, mats or protective gear.",
+      "queRecibe": "Its brand on the equipment, used at every session, and a mention from the club on social media.",
+      "duracion": "One season"
+    },
+    "individual-exhibicion-fin-de-temporada": {
+      "titulo": "End-of-season show",
+      "queEs": "The exhibition or show the club ends the season with, in front of all the families, carries the company's name.",
+      "queRecibe": "The name on the show, the posters and the certificates, and the chance to be there that day with its product.",
+      "duracion": "One day"
+    },
+    "individual-clases-para-empresas": {
+      "titulo": "Classes or a day out for the company's staff",
+      "queEs": "The club runs classes or a day of its sport for the company's employees: health and team spirit.",
+      "queRecibe": "Something different for its staff, with qualified coaches, and a mention from the club as a company that looks after its people.",
+      "duracion": "One day or one term"
     }
   },
   "falta": {

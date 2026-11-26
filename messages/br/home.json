@@ -988,6 +988,10 @@
     "raqueta": {
       "etiqueta": "Esportes de raquete",
       "pista": "Quadras, torneios, a escolinha, as bolinhas ou petecas e aulas para empresas."
+    },
+    "individual": {
+      "etiqueta": "Esportes individuais",
+      "pista": "O uniforme de competição, a prova do clube, a escolinha, as viagens e os pódios."
     }
   },
   "planes": {

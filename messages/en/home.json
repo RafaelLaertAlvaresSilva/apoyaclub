@@ -988,6 +988,10 @@
     "raqueta": {
       "etiqueta": "Racket sports",
       "pista": "Courts, tournaments, the school, balls or shuttlecocks and lessons for companies."
+    },
+    "individual": {
+      "etiqueta": "Individual sports",
+      "pista": "The competition kit, the club's own event, the school, the trips and the podiums."
     }
   },
   "planes": {

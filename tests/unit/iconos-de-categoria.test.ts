@@ -25,7 +25,7 @@ describe("los símbolos de las categorías", () => {
   it("siguen siendo dieciséis, más las de deporte", () => {
     // A mano a propósito: si alguien añade o quita una, que se entere.
     expect(CATEGORIAS_IDEA).toHaveLength(16);
-    expect(CATEGORIAS_DE_DEPORTE.map((c) => c.id)).toEqual(["speedsoft", "running", "raqueta"]);
+    expect(CATEGORIAS_DE_DEPORTE.map((c) => c.id)).toEqual(["speedsoft", "running", "raqueta", "individual"]);
   });
 });
 

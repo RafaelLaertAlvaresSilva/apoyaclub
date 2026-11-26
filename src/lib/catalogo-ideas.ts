@@ -1,4 +1,4 @@
-import { DEPORTES_DE_RAQUETA, deporteDeLaLista } from "@/lib/deportes";
+import { DEPORTES_DE_RAQUETA, DEPORTES_INDIVIDUALES, deporteDeLaLista } from "@/lib/deportes";
 import type {
   BudgetPeriod,
   CategoriaNecesidad,
@@ -51,7 +51,8 @@ export type CategoriaIdea =
   // deporte (`CATEGORIAS_DE_DEPORTE`).
   | "speedsoft"
   | "running"
-  | "raqueta";
+  | "raqueta"
+  | "individual";
 
 export const CATEGORIAS_IDEA: {
   id: CategoriaIdea;
@@ -79,11 +80,10 @@ export const CATEGORIAS_IDEA: {
 
 /**
  * Categorías de un deporte concreto (pedido por Rafael el 5-11-2026,
- * para Orphan's Dynasty y Santa Ana Runners). Solo le salen a un club
- * que tiene un equipo de ese deporte (`deporte` es la clave de
- * `lib/deportes.ts`), y le salen las primeras. Al resto de clubes, y en
- * la página pública, no: un club de balonmano no vende pegatinas en los
- * cargadores.
+ * para Orphan's Dynasty y Santa Ana Runners). A un club que tiene un
+ * equipo de ese deporte (`deporte` es la clave de `lib/deportes.ts`) le
+ * salen las primeras, y en "un poco de todo" se mezclan con las demás.
+ * Al resto le salen al final de la lista, por si tiene otras secciones.
  */
 export const CATEGORIAS_DE_DEPORTE: {
   id: CategoriaIdea;
@@ -113,6 +113,14 @@ export const CATEGORIAS_DE_DEPORTE: {
     etiqueta: "Deportes de raqueta",
     pista: "Pistas, torneos, la escuela, las bolas o volantes y clases para empresas.",
   },
+  {
+    // Pedido por Rafael el 26-11-2026: natación, atletismo, ciclismo…
+    // no tienen partidos, ni descanso, ni camiseta de juego.
+    id: "individual",
+    deportes: DEPORTES_INDIVIDUALES,
+    etiqueta: "Deportes individuales",
+    pista: "La equipación de competición, la prueba del club, la escuela, los viajes y los podios.",
+  },
 ];
 
 export const ETIQUETA_CATEGORIA_IDEA: Record<CategoriaIdea, string> = [...CATEGORIAS_IDEA, ...CATEGORIAS_DE_DEPORTE].reduce(
@@ -121,14 +129,18 @@ export const ETIQUETA_CATEGORIA_IDEA: Record<CategoriaIdea, string> = [...CATEGO
 );
 
 /**
- * Las categorías que ve un club: primero las de sus deportes, luego las
- * de todos. `deportes` son las claves de `lib/deportes.ts`.
+ * Las categorías que ve un club: todas. Primero las de sus deportes,
+ * luego las de todos y al final las de los demás deportes, por si tiene
+ * una sección que aún no ha añadido como equipo (Rafael, 26-11-2026:
+ * "puede que haya un club que tenga otros deportes"). `deportes` son las
+ * claves de `lib/deportes.ts`.
  */
 export function categoriasDelClub(deportes: Iterable<string>): CategoriaIdea[] {
-  const suyos = new Set(deportes);
+  const suyas = categoriasDeDeporteDelClub(deportes);
   return [
-    ...CATEGORIAS_DE_DEPORTE.filter((categoria) => categoria.deportes.some((deporte) => suyos.has(deporte))).map((categoria) => categoria.id),
+    ...suyas,
     ...CATEGORIAS_IDEA.map((categoria) => categoria.id),
+    ...CATEGORIAS_DE_DEPORTE.map((categoria) => categoria.id).filter((id) => !suyas.includes(id)),
   ];
 }
 
@@ -1312,6 +1324,20 @@ export const IDEAS: Idea[] = [
   { id: "raqueta-horas-de-pista-para-clientes", categoria: "raqueta", tipo: "in_kind", periodo: "season", colaboracion: "money", requiere: ["instalaciones"] },
   { id: "raqueta-ranking-de-la-temporada", categoria: "raqueta", tipo: "events_tournaments", periodo: "season", colaboracion: "money" },
   { id: "raqueta-beca-de-competicion", categoria: "raqueta", tipo: "equipment", periodo: "season", colaboracion: "money", requiere: ["equipos"] },
+
+  // -------------------------------------------------------------------
+  // Deportes individuales: atletismo, natación, ciclismo, triatlón,
+  // gimnasia, patinaje y artes marciales (solo para esos clubes)
+  // -------------------------------------------------------------------
+  { id: "individual-equipacion-de-competicion", categoria: "individual", tipo: "equipment", periodo: "season", colaboracion: "money", requiere: ["equipos"] },
+  { id: "individual-prueba-con-nombre", categoria: "individual", tipo: "events_tournaments", periodo: "event", colaboracion: "money" },
+  { id: "individual-escuela", categoria: "individual", tipo: "youth", periodo: "season", colaboracion: "money", requiere: ["cantera"] },
+  { id: "individual-podios", categoria: "individual", tipo: "social_content", periodo: "season", colaboracion: "money" },
+  { id: "individual-viajes-a-campeonatos", categoria: "individual", tipo: "events_tournaments", periodo: "event", colaboracion: "mixed" },
+  { id: "individual-beca-de-competicion", categoria: "individual", tipo: "equipment", periodo: "season", colaboracion: "money", requiere: ["equipos"] },
+  { id: "individual-material-de-entrenamiento", categoria: "individual", tipo: "in_kind", periodo: "season", colaboracion: "product" },
+  { id: "individual-exhibicion-fin-de-temporada", categoria: "individual", tipo: "events_tournaments", periodo: "event", colaboracion: "money" },
+  { id: "individual-clases-para-empresas", categoria: "individual", tipo: "events_tournaments", periodo: "event", colaboracion: "money" },
 ];
 
 // ---------------------------------------------------------------------
@@ -1441,8 +1467,9 @@ export function descripcionDeLaIdea(idea: Pick<Idea, "id">, t: TraducirIdeas): s
 }
 
 /** Cuántas ideas tiene el catálogo, para poder decirlo sin mentir. */
-// Sin las de un deporte concreto: la web habla del catálogo que ve
-// cualquier club, y esas solo las ven los clubes de ese deporte.
+// Sin las de un deporte concreto: la web habla de las ideas de las
+// dieciséis categorías generales ("128 ideas en 16 categorías"), y las de
+// cada deporte son un extra para quien las necesita.
 export const TOTAL_DE_IDEAS = IDEAS.filter(
   (idea) => !CATEGORIAS_DE_DEPORTE.some((categoria) => categoria.id === idea.categoria),
 ).length;

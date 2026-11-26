@@ -126,6 +126,14 @@ const FORMA_DE_LA_CATEGORIA: Record<string, React.ReactNode> = {
       <circle cx="18.5" cy="5.5" r="1.8" />
     </>
   ),
+  // Una medalla con su cinta.
+  individual: (
+    <>
+      <path d="M8 3l4 7 4-7" />
+      <circle cx="12" cy="15" r="5.5" />
+      <path d="M12 12.5v5" />
+    </>
+  ),
   servicios: (
     <>
       <path d="M14.5 6.5a3.5 3.5 0 004.8 4.8l-8 8a2.4 2.4 0 01-3.4-3.4l8-8z" />

@@ -111,6 +111,19 @@ export function nombreDelDeporte(texto: string, t: (clave: string) => string): s
  */
 export const DEPORTES_DE_RAQUETA = ["tenis", "padel", "badminton", "tenisMesa"];
 
+/**
+ * Los deportes individuales que no son de raqueta ni running (que tienen
+ * sus propias ideas). Pedido por Rafael el 26-11-2026: a un club de
+ * natación le salía "Patrocinador del descanso", que es de partidos.
+ */
+export const DEPORTES_INDIVIDUALES = ["atletismo", "natacion", "ciclismo", "triatlon", "gimnasia", "patinaje", "artesMarciales"];
+
+/**
+ * Los que no juegan partidos con descanso, lona de pabellón y camiseta
+ * de juego: a un club solo de estos no se le proponen esas ideas.
+ */
+export const DEPORTES_SIN_PARTIDOS = [...DEPORTES_DE_RAQUETA, ...DEPORTES_INDIVIDUALES, "running"];
+
 export function esDeporteDeRaqueta(deporte: string | null | undefined): boolean {
   const clave = deporte ? deporteDeLaLista(deporte)?.clave : undefined;
   return !!clave && DEPORTES_DE_RAQUETA.includes(clave);

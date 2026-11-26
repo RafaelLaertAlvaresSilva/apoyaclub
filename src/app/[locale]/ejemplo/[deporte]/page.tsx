@@ -334,7 +334,7 @@ export default async function PaginaDeEjemplo({ params }: { params: Promise<{ lo
     tIdeas: (clave) => tIdeas(clave),
     nombreDelEquipo: (uno) => (uno.gender === "Mixto" ? (uno.category ?? "") : `${uno.category} ${grupos(`sexo.${uno.gender}`)}`),
     lineaDeDatos: null,
-    eleccion: esRaqueta ? "raqueta" : "mezcla",
+    eleccion: esRaqueta ? "raqueta" : datos.tipo === "individual" ? "individual" : "mezcla",
   });
   const oportunidades: Opportunity[] = propuestas
     .filter((propuesta) => !propuesta.esNecesidad)

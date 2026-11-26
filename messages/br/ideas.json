@@ -959,6 +959,60 @@
       "queEs": "A empresa ajuda a pagar as inscrições e as viagens de um atleta do clube que compete.",
       "queRecibe": "Seu logo na roupa de competição dessa pessoa e em cada resultado que o clube publicar sobre ela.",
       "duracion": "Uma temporada"
+    },
+    "individual-equipacion-de-competicion": {
+      "titulo": "Logo no uniforme de competição",
+      "queEs": "A sunga ou o maiô e a touca, a camisa de ciclismo, o macaquinho de triatlo, o quimono ou o collant com que competem os atletas do clube.",
+      "queRecibe": "O seu logo no uniforme de competição de todo o clube durante a temporada: em cada pódio, cada foto e cada resultado publicado.",
+      "duracion": "Uma temporada"
+    },
+    "individual-prueba-con-nombre": {
+      "titulo": "Prova ou troféu com o nome da empresa",
+      "queEs": "O clube organiza uma prova, um troféu ou um campeonato com o nome da empresa: o Troféu de natação ou a Corrida da empresa.",
+      "queRecibe": "O nome na prova, nos cartazes, nos números de peito ou nos certificados, na premiação e em tudo o que for publicado sobre ela.",
+      "duracion": "Um dia de prova"
+    },
+    "individual-escuela": {
+      "titulo": "Patrocinador da escolinha",
+      "queEs": "A empresa patrocina a escolinha do clube: as crianças que aprendem o esporte durante toda a temporada.",
+      "queRecibe": "O seu logo na roupa ou no material da escolinha, nas redes e nas mensagens às famílias, que são clientes próximos.",
+      "duracion": "Uma temporada"
+    },
+    "individual-podios": {
+      "titulo": "Patrocinador dos pódios",
+      "queEs": "Cada medalha, recorde ou pódio do clube publicado nas redes leva o nome da empresa: «Pódio patrocinado por…».",
+      "queRecibe": "O seu nome e logo em todas as publicações de resultados da temporada, que são as mais compartilhadas.",
+      "duracion": "Uma temporada"
+    },
+    "individual-viajes-a-campeonatos": {
+      "titulo": "Viagem para um campeonato",
+      "queEs": "A empresa cobre o transporte, o hotel ou as refeições do clube para ir a um campeonato estadual ou nacional.",
+      "queRecibe": "O seu logo na roupa de viagem ou na van, e uma menção em tudo o que o clube contar da viagem e dos resultados.",
+      "duracion": "Um campeonato"
+    },
+    "individual-beca-de-competicion": {
+      "titulo": "Bolsa para um atleta de competição",
+      "queEs": "A empresa ajuda a pagar a filiação, as inscrições e as viagens de um atleta do clube que compete.",
+      "queRecibe": "O seu logo no uniforme dessa pessoa e em cada resultado que o clube publicar sobre ela.",
+      "duracion": "Uma temporada"
+    },
+    "individual-material-de-entrenamiento": {
+      "titulo": "Material de treino",
+      "queEs": "A empresa doa ou paga material de treino: pranchas e nadadeiras, barreiras e cones, rolos, colchonetes ou proteções.",
+      "queRecibe": "A sua marca no material, usado em cada treino, e uma menção do clube nas redes.",
+      "duracion": "Uma temporada"
+    },
+    "individual-exhibicion-fin-de-temporada": {
+      "titulo": "Festival de fim de temporada",
+      "queEs": "A apresentação ou o festival com que o clube encerra a temporada, com todas as famílias, leva o nome da empresa.",
+      "queRecibe": "O nome no festival, nos cartazes e nos certificados, e a possibilidade de estar presente nesse dia com o seu produto.",
+      "duracion": "Um dia"
+    },
+    "individual-clases-para-empresas": {
+      "titulo": "Aulas ou evento para os funcionários da empresa",
+      "queEs": "O clube organiza aulas ou um evento do seu esporte para os funcionários da empresa: saúde e espírito de equipe.",
+      "queRecibe": "Uma atividade diferente para a equipe, com treinadores formados, e a menção do clube como empresa que cuida do seu pessoal.",
+      "duracion": "Um dia ou um trimestre"
     }
   },
   "falta": {
