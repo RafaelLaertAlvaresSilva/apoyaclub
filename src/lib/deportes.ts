@@ -102,3 +102,16 @@ export function nombreDelDeporte(texto: string, t: (clave: string) => string): s
   const deporte = deporteDeLaLista(texto);
   return deporte ? t(`deporte.${deporte.clave}`) : texto;
 }
+
+/**
+ * Los deportes de raqueta (pedido por Rafael el 26-11-2026). Comparten
+ * ideas de patrocinio (`catalogo-ideas.ts`) y, al dar de alta un equipo,
+ * no se piensan en "cadete" o "sénior" sino en escuela, competición y
+ * socios (`EquiposForm`).
+ */
+export const DEPORTES_DE_RAQUETA = ["tenis", "padel", "badminton", "tenisMesa"];
+
+export function esDeporteDeRaqueta(deporte: string | null | undefined): boolean {
+  const clave = deporte ? deporteDeLaLista(deporte)?.clave : undefined;
+  return !!clave && DEPORTES_DE_RAQUETA.includes(clave);
+}

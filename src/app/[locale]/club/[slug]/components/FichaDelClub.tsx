@@ -439,18 +439,18 @@ export async function FichaDelClub({
       nodo: (
         <Seccion id="quienes-somos" titulo={t("secciones.quienesSomos")}>
           {perfil.description && (
-            <p className="whitespace-pre-line text-zinc-700">{perfil.description}</p>
+            <p className="whitespace-pre-line text-[17px] leading-8 text-zinc-700">{perfil.description}</p>
           )}
           {galeria.length > 0 && (
-            <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
               {galeria.map((foto) => (
-                <div key={foto} className="relative aspect-square overflow-hidden rounded-lg bg-zinc-100">
+                <div key={foto} className="group relative aspect-square overflow-hidden rounded-xl bg-zinc-100 shadow-sm">
                   <Image
                     src={foto}
                     alt={tc("fotoDe", { club: perfil.name })}
                     fill
                     sizes="(min-width: 640px) 33vw, 50vw"
-                    className="object-cover"
+                    className="object-cover transition duration-500 group-hover:scale-105"
                   />
                   {/* Recortadas a cuadrado se pierde medio equipo. Sin
                       rótulo: seis rótulos taparían justo lo que se
@@ -485,36 +485,44 @@ export async function FichaDelClub({
           {agruparEquiposPorSexo(equipos).map(({ titulo, equipos: delGrupo }) => (
             <div key={titulo ?? "sin-grupo"} className={titulo ? "mb-6 last:mb-0" : ""}>
               {titulo && (
-                <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500">
+                <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-zinc-500">
                   {tc.has(`gruposEquipos.${titulo}`) ? tc(`gruposEquipos.${titulo}`) : titulo}
                 </h3>
               )}
-              <ul className="grid gap-3 sm:grid-cols-2">
+              {/* `items-start`: una tarjeta sin foto no se estira hasta la
+                  altura de la de al lado y se queda en un recuadro vacío. */}
+              <ul className="grid gap-3 sm:grid-cols-2 sm:items-start">
                 {delGrupo.map((equipo) => (
-              <li key={equipo.id} className="overflow-hidden rounded-xl border border-zinc-200">
-                {equipo.photoUrl && (
+              <li key={equipo.id} className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-md">
+                {equipo.photoUrl ? (
                   <Image
                     src={equipo.photoUrl}
                     alt={`${equipo.sport}${equipo.category ? ` · ${equipo.category}` : ""}`}
                     width={640}
                     height={320}
-                    className="h-40 w-full object-cover"
+                    className="h-44 w-full object-cover"
                   />
+                ) : (
+                  // Sin foto, una franja de color: la tarjeta sigue
+                  // teniendo cabeza y no parece un recuadro vacío.
+                  <div aria-hidden="true" className="h-1.5 bg-gradient-to-r from-teal-500 to-teal-800" />
                 )}
-                <div className="p-4">
-                <p className="font-medium text-zinc-900">
-                  {E.deporte(equipo.sport)}
-                  {equipo.category ? ` · ${equipo.category}` : ""}
+                <div className="p-5">
+                <p className="text-xs font-bold uppercase tracking-wider text-teal-700">{E.deporte(equipo.sport)}</p>
+                <p className="mt-0.5 text-lg font-bold text-zinc-900">
+                  {equipo.category || E.nivelEquipo(equipo.teamLevel)}
                 </p>
-                <p className="mt-1 text-sm text-zinc-500">
-                  {E.nivelEquipo(equipo.teamLevel)}
-                  {equipo.gender ? ` · ${sexoDelEquipo(equipo.gender)}` : ""}
-                  {equipo.playerCount != null
-                    ? ` · ${tc("jugadores", { n: formatoNumero.format(equipo.playerCount) })}`
-                    : ""}
-                </p>
+                <div className="mt-3 flex flex-wrap gap-1.5 text-xs font-medium text-zinc-600">
+                  <span className="rounded-full bg-zinc-100 px-2.5 py-1">{E.nivelEquipo(equipo.teamLevel)}</span>
+                  {equipo.gender && <span className="rounded-full bg-zinc-100 px-2.5 py-1">{sexoDelEquipo(equipo.gender)}</span>}
+                  {equipo.playerCount != null && (
+                    <span className="rounded-full bg-teal-50 px-2.5 py-1 text-teal-800">
+                      {tc("jugadores", { n: formatoNumero.format(equipo.playerCount) })}
+                    </span>
+                  )}
+                </div>
                 {equipo.competitionLevel && (
-                  <p className="mt-2 text-sm font-medium text-accion-tinta">
+                  <p className="mt-3 text-sm font-semibold text-accion-tinta">
                     {equipo.competitionLevel}
                   </p>
                 )}
@@ -662,21 +670,21 @@ export async function FichaDelClub({
               </div>
             )}
             {!perfil.topCategoryMale && !perfil.topCategoryFemale && perfil.topCategory && (
-              <div>
-                <p className="text-sm font-medium text-zinc-500">{t("secciones.maximaCategoria")}</p>
-                <p className="text-zinc-900">{perfil.topCategory}</p>
+              <div className="rounded-xl border-l-4 border-teal-600 bg-zinc-50 px-5 py-4">
+                <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">{t("secciones.maximaCategoria")}</p>
+                <p className="mt-1 font-semibold text-zinc-900">{perfil.topCategory}</p>
               </div>
             )}
             {perfil.competitions && (
-              <div>
-                <p className="text-sm font-medium text-zinc-500">{t("secciones.competiciones")}</p>
-                <p className="whitespace-pre-line text-zinc-900">{perfil.competitions}</p>
+              <div className="rounded-xl border-l-4 border-teal-600 bg-zinc-50 px-5 py-4">
+                <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">{t("secciones.competiciones")}</p>
+                <p className="mt-1 whitespace-pre-line font-semibold text-zinc-900">{perfil.competitions}</p>
               </div>
             )}
             {perfil.achievements && (
-              <div>
-                <p className="text-sm font-medium text-zinc-500">{t("secciones.logros")}</p>
-                <p className="whitespace-pre-line text-zinc-900">{perfil.achievements}</p>
+              <div className="rounded-xl border-l-4 border-amber-400 bg-zinc-50 px-5 py-4">
+                <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">{t("secciones.logros")}</p>
+                <p className="mt-1 whitespace-pre-line font-semibold text-zinc-900">{perfil.achievements}</p>
               </div>
             )}
           </div>
@@ -692,13 +700,15 @@ export async function FichaDelClub({
       nodo: (
         <Seccion id="historia" titulo={t("secciones.historia")}>
           {perfil.foundingYear != null && (
-            <p className="text-zinc-700">
-              {t("secciones.fundadoEn")}{" "}
-              <span className="font-medium text-zinc-900">{perfil.foundingYear}</span>.
-            </p>
+            // El año grande, como un sello: "desde 1998" dice solidez
+            // a una empresa antes de leer nada más.
+            <div className="inline-flex items-baseline gap-3 rounded-xl border border-teal-100 bg-gradient-to-br from-teal-50 to-white px-5 py-4">
+              <span className="text-sm font-medium text-zinc-600">{t("secciones.fundadoEn")}</span>
+              <span className="text-3xl font-extrabold tabular-nums tracking-tight text-teal-800">{perfil.foundingYear}</span>
+            </div>
           )}
           {perfil.milestones.length > 0 && (
-            <ul className="mt-4 space-y-3 border-l-2 border-teal-200 pl-4">
+            <ul className="mt-6 space-y-4 border-l-2 border-teal-200 pl-5">
               {perfil.milestones
                 .slice()
                 .sort((a, b) => a.year - b.year)
@@ -768,7 +778,7 @@ export async function FichaDelClub({
             {perfil.communityActions.map((accion, indice) => (
               <li
                 key={`${accion.title}-${indice}`}
-                className="overflow-hidden rounded-xl border border-zinc-200"
+                className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm"
               >
                 {accion.photo && (
                   <Image
@@ -802,25 +812,25 @@ export async function FichaDelClub({
           <div className="space-y-6">
             {agruparPatrocinadoresPorNivel(patrocinadores).map((grupo) => (
               <div key={grupo.etiqueta}>
-                <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-zinc-500">
                   {traducirNivelDePatrocinador(grupo.etiqueta)}
                 </h3>
                 <ul className="grid gap-3 sm:grid-cols-2">
                   {grupo.patrocinadores.map((patrocinador) => (
                     <li
                       key={patrocinador.id}
-                      className="flex items-start gap-3 rounded-xl border border-zinc-200 p-4"
+                      className="flex items-start gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm"
                     >
                       {patrocinador.logoUrl ? (
                         <Image
                           src={patrocinador.logoUrl}
                           alt={patrocinador.name}
-                          width={40}
-                          height={40}
-                          className="h-10 w-10 shrink-0 rounded bg-white object-contain"
+                          width={48}
+                          height={48}
+                          className="h-12 w-12 shrink-0 rounded-lg border border-zinc-200 bg-white object-contain p-1"
                         />
                       ) : (
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-zinc-100 text-sm font-semibold text-zinc-500">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-base font-bold text-teal-700">
                           {patrocinador.name.charAt(0).toUpperCase()}
                         </div>
                       )}
@@ -864,7 +874,7 @@ export async function FichaDelClub({
     etiqueta: t("secciones.contacto"),
     nodo: (
       <Seccion id="contacto" titulo={t("secciones.contacto")}>
-        <div className="rounded-xl border border-zinc-200 p-5">
+        <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-5">
           {/* Nada de esto se pinta en el servidor: si el teléfono o el
               correo quedan escritos en el HTML, los robots que rastrean
               la web se los llevan y el club acaba en listas de spam.
@@ -1092,6 +1102,34 @@ function agruparParaElOrdenador(secciones: SeccionDeLaFicha[]): SeccionDeLaFicha
   return grupos;
 }
 
+/**
+ * El icono de cada sección (Lucide, licencia ISC). Antes cada sección
+ * era un título suelto y un texto sobre el fondo gris, y la ficha se
+ * leía como un documento a medio maquetar. Con su tarjeta blanca y su
+ * icono se lee como lo que es: la presentación de un club a una empresa.
+ */
+const ICONOS_DE_SECCION: Record<string, string> = {
+  "quienes-somos":
+    "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",
+  equipos:
+    "M20.4 3.5 16 2a4 4 0 0 1-8 0L3.6 3.5a2 2 0 0 0-1.3 2.2l.6 3.5a1 1 0 0 0 1 .8H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.2a1 1 0 0 0 1-.8l.6-3.5a2 2 0 0 0-1.4-2.2z",
+  "redes-sociales":
+    "M18 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6M6 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6M18 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6M8.6 13.5l6.8 4M15.4 6.5l-6.8 4",
+  instalaciones:
+    "M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18ZM6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4",
+  cantera: "M7 20h10M10 20c5.5-2.5.8-6.4 3-10M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8zM14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z",
+  palmares:
+    "M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z",
+  historia: "M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z",
+  audiencia: "M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0",
+  comunidad:
+    "M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z",
+  patrocinadores:
+    "m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526M18 8a6 6 0 1 1-12 0 6 6 0 0 1 12 0",
+  contacto:
+    "M13.83 16.57a1 1 0 0 0 1.21-.3l.36-.47A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.47.35a1 1 0 0 0-.29 1.23 14 14 0 0 0 6.39 6.39",
+};
+
 function Seccion({
   titulo,
   descripcion,
@@ -1103,20 +1141,44 @@ function Seccion({
   id?: string;
   children: React.ReactNode;
 }) {
+  const trazo = id ? ICONOS_DE_SECCION[id] : undefined;
   return (
-    <section id={id} className="scroll-mt-24 border-t border-zinc-100 py-8">
-      <h2 className="text-xl font-semibold text-zinc-900 sm:text-2xl">{titulo}</h2>
-      {descripcion && <p className="mt-1 text-sm text-zinc-500">{descripcion}</p>}
-      <div className="mt-4">{children}</div>
+    <section
+      id={id}
+      className="mt-6 scroll-mt-24 rounded-2xl border border-zinc-200/80 bg-white p-6 shadow-sm shadow-zinc-900/[0.03] sm:p-8"
+    >
+      <div className="flex items-start gap-4">
+        {trazo && (
+          <span className="flex size-11 flex-none items-center justify-center rounded-xl bg-gradient-to-br from-teal-600 to-teal-800 text-sobre-color shadow-md shadow-teal-700/20">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.9"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-5 w-5"
+            >
+              <path d={trazo} />
+            </svg>
+          </span>
+        )}
+        <div className="min-w-0 pt-0.5">
+          <h2 className="text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl">{titulo}</h2>
+          {descripcion && <p className="mt-1 text-sm text-zinc-500">{descripcion}</p>}
+        </div>
+      </div>
+      <div className="mt-6">{children}</div>
     </section>
   );
 }
 
 function TarjetaEstadistica({ etiqueta, valor }: { etiqueta: string; valor: string }) {
   return (
-    <div className="min-w-32 flex-1 rounded-xl border border-zinc-200 p-4 sm:flex-none">
-      <p className="text-2xl font-bold text-zinc-900">{valor}</p>
-      <p className="mt-1 text-sm text-zinc-500">{etiqueta}</p>
+    <div className="min-w-32 flex-1 rounded-xl border border-teal-100 bg-gradient-to-br from-teal-50 to-white p-5 sm:flex-none">
+      <p className="text-3xl font-extrabold tabular-nums tracking-tight text-teal-800">{valor}</p>
+      <p className="mt-1 text-sm font-medium text-zinc-600">{etiqueta}</p>
     </div>
   );
 }
@@ -1155,13 +1217,15 @@ function EquipoDestacado({
   pie: string | null;
 }) {
   return (
-    <div className="overflow-hidden rounded-xl border border-zinc-200">
-      {foto && (
-        <Image src={foto} alt={pie || etiqueta} width={640} height={320} className="h-40 w-full object-cover" />
+    <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
+      {foto ? (
+        <Image src={foto} alt={pie || etiqueta} width={640} height={320} className="h-44 w-full object-cover" />
+      ) : (
+        <div aria-hidden="true" className="h-1.5 bg-gradient-to-r from-amber-400 to-teal-700" />
       )}
-      <div className="p-4">
-        <p className="text-sm font-medium text-zinc-500">{etiqueta}</p>
-        <p className="text-zinc-900">{categoria}</p>
+      <div className="p-5">
+        <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">{etiqueta}</p>
+        <p className="mt-0.5 text-lg font-bold text-zinc-900">{categoria}</p>
 
         {/* El pie, cuando el club lo ha escrito. "Primera Autonómica"
             no le dice nada a quien no es del mundillo; esta línea sí.

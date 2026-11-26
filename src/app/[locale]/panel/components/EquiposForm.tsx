@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useActionState, useState, useTransition } from "react";
 import { AvisoError, AvisoExito } from "@/components/AvisoError";
 import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
 import { BotonEnviar } from "@/components/BotonEnviar";
-import { DEPORTES, deporteDeLaLista } from "@/lib/deportes";
+import { DEPORTES, deporteDeLaLista, esDeporteDeRaqueta } from "@/lib/deportes";
+import { tieneEjemplo } from "@/lib/ejemplos-club";
 import { etiquetador } from "@/lib/etiquetas-traducidas";
 import { etiquetaEquipo } from "@/lib/opportunities";
 import type { ClubTeam } from "@/lib/types";
@@ -21,6 +22,19 @@ const SEXOS = ["Masculino", "Femenino", "Mixto"];
 export function EquiposForm({ equipos, userId }: { equipos: ClubTeam[]; userId: string }) {
   const t = useTranslations("panel.perfil");
   const [estado, formAction] = useActionState(agregarEquipo, null);
+  // Lo que se va eligiendo, para adaptar el formulario a los deportes de
+  // raqueta: un club de tenis o de bádminton no tiene "cadetes" y
+  // "sénior", tiene escuela, competición y socios.
+  const [deporte, setDeporte] = useState("");
+  const [categoria, setCategoria] = useState("");
+  const [nivel, setNivel] = useState<"primer_equipo" | "cantera">("primer_equipo");
+  const raqueta = esDeporteDeRaqueta(deporte);
+  // Si su deporte tiene página de club de ejemplo (`/ejemplo/...`), se
+  // la enseñamos: es lo que más anima a rellenar lo suyo.
+  const claveDeporte = deporteDeLaLista(deporte)?.clave;
+  const ejemplo = tieneEjemplo(claveDeporte) ? claveDeporte : null;
+  const locale = useLocale();
+  const grupos = raqueta ? (t.raw("gruposRaqueta") as { etiqueta: string; cantera: boolean }[]) : [];
 
   return (
     <SeccionCard
@@ -44,23 +58,84 @@ export function EquiposForm({ equipos, userId }: { equipos: ClubTeam[]; userId: 
       <form key={equipos.length} action={formAction} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <Campo etiqueta={t("deporte")}>
-            <SelectorDeDeporte />
+            <SelectorDeDeporte alCambiar={setDeporte} />
           </Campo>
-          <Campo etiqueta={t("categoria")}>
-            <input name="category" placeholder={t("cadeteSenior")} className={clasesInput} />
+          <Campo etiqueta={raqueta ? t("grupo") : t("categoria")}>
+            <input
+              name="category"
+              value={categoria}
+              onChange={(evento) => setCategoria(evento.target.value)}
+              placeholder={raqueta ? t("categoriaRaqueta") : t("cadeteSenior")}
+              className={clasesInput}
+            />
           </Campo>
+        </div>
+
+        {ejemplo && (
+          <a
+            href={`/${locale}/ejemplo/${ejemplo}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm transition-colors hover:border-accion"
+          >
+            <span aria-hidden="true" className="flex size-9 flex-none items-center justify-center rounded-lg bg-accion text-sobre-color">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4.5 w-4.5">
+                <path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+              </svg>
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block font-semibold text-titular">{t("verEjemplo")} ↗</span>
+              <span className="block text-zinc-600">{t("verEjemploAyuda")}</span>
+            </span>
+          </a>
+        )}
+
+        {/* En raqueta, los grupos de siempre a un clic. "Escuela" va como
+            cantera, que es lo que entienden el buscador y las ideas. */}
+        {raqueta && (
+          <div className="rounded-xl border border-brand-teal/30 bg-brand-teal-light/40 p-4">
+            <p className="text-sm text-zinc-700">{t("ayudaRaqueta")}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {grupos.map((grupo) => (
+                <button
+                  key={grupo.etiqueta}
+                  type="button"
+                  onClick={() => {
+                    setCategoria(grupo.etiqueta);
+                    setNivel(grupo.cantera ? "cantera" : "primer_equipo");
+                  }}
+                  aria-pressed={categoria === grupo.etiqueta}
+                  className={`rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${
+                    categoria === grupo.etiqueta
+                      ? "border-accion bg-accion text-sobre-color"
+                      : "border-zinc-300 bg-white text-zinc-700 hover:border-accion hover:text-accion-tinta"
+                  }`}
+                >
+                  {grupo.etiqueta}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="grid gap-4 sm:grid-cols-2">
           <Campo etiqueta={t("genero")}>
             <SelectorDeSexo nombre="gender" />
           </Campo>
-          <Campo etiqueta={t("numeroDeJugadores")}>
+          <Campo etiqueta={raqueta ? t("numeroDeJugadoresRaqueta") : t("numeroDeJugadores")}>
             <input name="playerCount" type="number" min={0} className={clasesInput} />
           </Campo>
         </div>
 
         <Campo etiqueta={t("tipoDeEquipo")}>
-          <select name="teamLevel" defaultValue="primer_equipo" className={clasesInput}>
-            <option value="primer_equipo">{t("primerEquipo")}</option>
-            <option value="cantera">{t("cantera")}</option>
+          <select
+            name="teamLevel"
+            value={nivel}
+            onChange={(evento) => setNivel(evento.target.value as "primer_equipo" | "cantera")}
+            className={clasesInput}
+          >
+            <option value="primer_equipo">{raqueta ? t("primerEquipoRaqueta") : t("primerEquipo")}</option>
+            <option value="cantera">{raqueta ? t("canteraRaqueta") : t("cantera")}</option>
           </select>
         </Campo>
 
@@ -293,7 +368,7 @@ const OTRO_DEPORTE = "__otro";
  * como tres deportes distintos. "Otro" deja escribirlo para lo que no
  * está en la lista. Lo que se envía es siempre un único campo `sport`.
  */
-function SelectorDeDeporte({ valor }: { valor?: string }) {
+function SelectorDeDeporte({ valor, alCambiar }: { valor?: string; alCambiar?: (deporte: string) => void }) {
   const t = useTranslations("panel.perfil");
   const tEtiquetas = useTranslations("common.etiquetas");
   const deLaLista = valor ? deporteDeLaLista(valor) : null;
@@ -311,7 +386,10 @@ function SelectorDeDeporte({ valor }: { valor?: string }) {
       <select
         required
         value={elegido}
-        onChange={(evento) => setElegido(evento.target.value)}
+        onChange={(evento) => {
+          setElegido(evento.target.value);
+          alCambiar?.(evento.target.value);
+        }}
         className={clasesInput}
       >
         <option value="" disabled>

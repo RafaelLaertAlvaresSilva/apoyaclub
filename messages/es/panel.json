@@ -460,7 +460,37 @@
     "correoContactoEjemplo": "patrocinios@tuclub.es",
     "eligeDeporte": "Elige el deporte…",
     "otroDeporte": "Otro (escríbelo)",
-    "escribeDeporte": "Escribe el deporte"
+    "escribeDeporte": "Escribe el deporte",
+    "grupo": "Grupo",
+    "categoriaRaqueta": "Escuela, competición, socios…",
+    "ayudaRaqueta": "En tenis, pádel y bádminton, añade cada grupo del club por separado: la escuela, el equipo de competición, los socios… Elige uno para empezar:",
+    "gruposRaqueta": [
+      {
+        "etiqueta": "Escuela",
+        "cantera": true
+      },
+      {
+        "etiqueta": "Competición",
+        "cantera": false
+      },
+      {
+        "etiqueta": "Socios",
+        "cantera": false
+      },
+      {
+        "etiqueta": "Veteranos",
+        "cantera": false
+      },
+      {
+        "etiqueta": "Adaptado",
+        "cantera": false
+      }
+    ],
+    "numeroDeJugadoresRaqueta": "Número de jugadores o alumnos",
+    "primerEquipoRaqueta": "Competición o socios",
+    "canteraRaqueta": "Escuela (niños y niñas)",
+    "verEjemplo": "Mira cómo queda la página de un club de tu deporte",
+    "verEjemploAyuda": "Un club de ejemplo, ya relleno: así lo verán las empresas."
   },
   "perfil2": {
     "accionesSocialesEducativasO": "Acciones sociales, educativas o benéficas del club: lo que lo hace más que un resultado deportivo.",

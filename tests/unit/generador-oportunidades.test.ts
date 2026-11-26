@@ -218,3 +218,15 @@ describe("sinLineaDeDatos (tarjetas del buscador y del club)", () => {
     expect(sinLineaDeDatos(`Algo.\n\nDatos del ${club}: Socios: 300.`, club)).toBe("Algo.");
   });
 });
+
+describe("qué es un deporte de raqueta", () => {
+  it("reconoce tenis, pádel, bádminton y tenis de mesa, escritos como sea", async () => {
+    const { esDeporteDeRaqueta } = await import("@/lib/deportes");
+    for (const deporte of ["Tenis", "tennis", "Pádel", "padel", "Bádminton", "badminton", "Tenis de mesa", "ping pong"]) {
+      expect(esDeporteDeRaqueta(deporte)).toBe(true);
+    }
+    for (const deporte of ["Balonmano", "Fútbol", "Running", "", null, undefined, "__otro"]) {
+      expect(esDeporteDeRaqueta(deporte)).toBe(false);
+    }
+  });
+});

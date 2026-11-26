@@ -1,4 +1,4 @@
-import { deporteDeLaLista } from "@/lib/deportes";
+import { DEPORTES_DE_RAQUETA, deporteDeLaLista } from "@/lib/deportes";
 import type {
   BudgetPeriod,
   CategoriaNecesidad,
@@ -109,7 +109,7 @@ export const CATEGORIAS_DE_DEPORTE: {
     // (Malgrat) y uno de bádminton (Arlanzón), y lo de "pabellón",
     // "intervalo del partido" o "camiseta del equipo" no va con ellos.
     id: "raqueta",
-    deportes: ["tenis", "padel", "badminton", "tenisMesa"],
+    deportes: DEPORTES_DE_RAQUETA,
     etiqueta: "Deportes de raqueta",
     pista: "Pistas, torneos, la escuela, las bolas o volantes y clases para empresas.",
   },

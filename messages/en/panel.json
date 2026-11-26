@@ -524,7 +524,37 @@
     "correoContactoEjemplo": "sponsorship@yourclub.co.uk",
     "eligeDeporte": "Choose the sport…",
     "otroDeporte": "Other (type it in)",
-    "escribeDeporte": "Type the sport"
+    "escribeDeporte": "Type the sport",
+    "grupo": "Group",
+    "categoriaRaqueta": "School, competition, members…",
+    "ayudaRaqueta": "In tennis, padel and badminton, add each group in the club separately: the school, the competition squad, the members… Pick one to start:",
+    "gruposRaqueta": [
+      {
+        "etiqueta": "School",
+        "cantera": true
+      },
+      {
+        "etiqueta": "Competition",
+        "cantera": false
+      },
+      {
+        "etiqueta": "Members",
+        "cantera": false
+      },
+      {
+        "etiqueta": "Veterans",
+        "cantera": false
+      },
+      {
+        "etiqueta": "Adaptive",
+        "cantera": false
+      }
+    ],
+    "numeroDeJugadoresRaqueta": "Number of players or pupils",
+    "primerEquipoRaqueta": "Competition or members",
+    "canteraRaqueta": "School (children)",
+    "verEjemplo": "See what a club page in your sport looks like",
+    "verEjemploAyuda": "An example club, already filled in: this is how companies will see it."
   },
   "perfil2": {
     "accionesSocialesEducativasO": "The club’s social, educational or charity work: what makes it more than a sports result.",

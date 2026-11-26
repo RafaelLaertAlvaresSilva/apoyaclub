@@ -524,7 +524,37 @@
     "correoContactoEjemplo": "patrocinios@seuclube.com.br",
     "eligeDeporte": "Escolha a modalidade…",
     "otroDeporte": "Outra (escreva qual)",
-    "escribeDeporte": "Escreva a modalidade"
+    "escribeDeporte": "Escreva a modalidade",
+    "grupo": "Grupo",
+    "categoriaRaqueta": "Escolinha, competição, sócios…",
+    "ayudaRaqueta": "No tênis, padel e badminton, adicione cada grupo do clube separadamente: a escolinha, a equipe de competição, os sócios… Escolha um para começar:",
+    "gruposRaqueta": [
+      {
+        "etiqueta": "Escolinha",
+        "cantera": true
+      },
+      {
+        "etiqueta": "Competição",
+        "cantera": false
+      },
+      {
+        "etiqueta": "Sócios",
+        "cantera": false
+      },
+      {
+        "etiqueta": "Veteranos",
+        "cantera": false
+      },
+      {
+        "etiqueta": "Adaptado",
+        "cantera": false
+      }
+    ],
+    "numeroDeJugadoresRaqueta": "Número de atletas ou alunos",
+    "primerEquipoRaqueta": "Competição ou sócios",
+    "canteraRaqueta": "Escolinha (crianças)",
+    "verEjemplo": "Veja como fica a página de um clube do seu esporte",
+    "verEjemploAyuda": "Um clube de exemplo, já preenchido: é assim que as empresas vão ver."
   },
   "perfil2": {
     "accionesSocialesEducativasO": "Ações sociais, educativas ou solidárias do clube: o que o torna mais do que um resultado esportivo.",

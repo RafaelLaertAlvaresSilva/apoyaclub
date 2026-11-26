@@ -213,5 +213,137 @@
       "Equipos mixtos": "Mixed teams",
       "Otros equipos": "Other teams"
     }
+  },
+  "ejemplo": {
+    "nombreClub": "Example {deporte} club",
+    "ciudad": "Your town",
+    "instalaciones": "{pistas} courts of its own, changing rooms and a small stand.",
+    "descripcion": "A local {deporte} club with {socios} members and a school of {escuela} children. We run tournaments all year round and have players competing in the federation's championships.",
+    "competiciones": "Regional federation championships and the county tournament circuit.",
+    "aviso": "Example: this is what a {deporte} club's page looks like on ApoyaClub.",
+    "avisoTexto": "The club and its details are made up. The opportunities are the ones the site suggests for your sport.",
+    "crearLaMia": "Create my club's page",
+    "hitos": [
+      {
+        "year": 1998,
+        "text": "A group of friends founds the club at the local sports hall."
+      },
+      {
+        "year": 2012,
+        "text": "We run our first open tournament in the county."
+      },
+      {
+        "year": 2024,
+        "text": "The school passes forty pupils for the first time."
+      }
+    ],
+    "instalacionesPabellon": "We play at the municipal sports hall: indoor court, changing rooms and seating for {grada} people.",
+    "instalacionesCampo": "Artificial grass pitch with changing rooms, a stand for {grada} people and a clubhouse bar.",
+    "instalacionesAirsoft": "Our own playing field with barricades, a safe zone, parking and a bar.",
+    "descripcionEquipo": "A local {deporte} club with {socios} members and {cantera} boys and girls in our youth section. Every weekend we play at home in front of our supporters and, in summer, we run a tournament that fills the town.",
+    "descripcionAirsoft": "An airsoft club with {socios} members. We run open games every month at our field and have a speedsoft team competing in the league.",
+    "competicionesEquipo": "Regional federation leagues, for the senior side and every youth age group.",
+    "competicionesAirsoft": "Speedsoft league and open games at other fields in the area.",
+    "hitosEquipo": [
+      {
+        "year": 1998,
+        "text": "A group of parents founds the club so their children had somewhere to play."
+      },
+      {
+        "year": 2012,
+        "text": "The senior team is promoted to the regional division."
+      },
+      {
+        "year": 2024,
+        "text": "The youth section passes one hundred children for the first time."
+      }
+    ],
+    "hitosAirsoft": [
+      {
+        "year": 2009,
+        "text": "A group of friends founds the club to play at weekends."
+      },
+      {
+        "year": 2016,
+        "text": "We form our first speedsoft team."
+      },
+      {
+        "year": 2024,
+        "text": "We open our own playing field."
+      }
+    ],
+    "categorias": {
+      "senior": "Senior",
+      "juvenil": "Under-18",
+      "cadete": "Under-16",
+      "infantil": "Under-14",
+      "speedsoft": "Speedsoft team",
+      "partidas": "Game-day members",
+      "speedball": "Speedball team"
+    },
+    "instalacionesDe": {
+      "voleyPlaya": "Four sand courts by the beach, with changing rooms and seating for {grada} people.",
+      "rugby": "Grass pitch with changing rooms, a stand for {grada} people and the clubhouse bar for the third half.",
+      "hockeyHierba": "Water-based artificial pitch with changing rooms and a stand for {grada} people.",
+      "waterpolo": "Indoor 25-metre pool, changing rooms and seating for {grada} people.",
+      "tenisMesa": "Our own hall with eight competition tables, changing rooms and a small stand.",
+      "atletismo": "We train at the municipal athletics track: eight lanes, jump pits and a throwing area.",
+      "natacion": "Indoor 25-metre municipal pool, with lanes booked for the club every afternoon.",
+      "ciclismo": "Clubhouse with a workshop and bike storage; we ride the local roads every weekend.",
+      "triatlon": "We train at the municipal pool, the athletics track and on the local roads.",
+      "gimnasia": "Gymnastics hall with a floor, apparatus and a foam pit, at the municipal sports centre.",
+      "patinaje": "Indoor rink at the sports centre, with changing rooms and seating for shows.",
+      "artesMarciales": "Our own dojo with a 200 m² mat, changing rooms and a weights room.",
+      "running": "We set off from the clubhouse three days a week, with a cloakroom and showers for members.",
+      "paintball": "Our own playing field with inflatable bunkers, a safe zone, parking and a bar."
+    },
+    "descripcionIndividual": "A local {deporte} club with {socios} members and a school of {escuela} children. We train all week and our athletes compete in the federation's events.",
+    "descripcionRunning": "A running club with {socios} members. We run together three days a week, organise a fun run every year and go to the county's races as a group.",
+    "descripcionPaintball": "A paintball club with {socios} members. We run open games every month at our field and have a speedball team competing in the league.",
+    "competicionesIndividual": "Regional and national federation championships, and events across the county.",
+    "competicionesRunning": "Fun runs, trail races and half marathons across the county, plus our own annual race.",
+    "competicionesPaintball": "Speedball league and open tournaments at other fields in the area.",
+    "hitosIndividual": [
+      {
+        "year": 1998,
+        "text": "A group of friends founds the club at the local sports centre."
+      },
+      {
+        "year": 2012,
+        "text": "One of our athletes wins their first regional championship."
+      },
+      {
+        "year": 2024,
+        "text": "The school passes one hundred children for the first time."
+      }
+    ],
+    "hitosRunning": [
+      {
+        "year": 2010,
+        "text": "A group of friends starts running together on Sundays."
+      },
+      {
+        "year": 2015,
+        "text": "We organise our first fun run."
+      },
+      {
+        "year": 2024,
+        "text": "We pass two hundred members for the first time."
+      }
+    ],
+    "hitosPaintball": [
+      {
+        "year": 2008,
+        "text": "A group of friends founds the club to play at weekends."
+      },
+      {
+        "year": 2015,
+        "text": "We form our first speedball team."
+      },
+      {
+        "year": 2024,
+        "text": "We open our own playing field."
+      }
+    ]
   }
 }

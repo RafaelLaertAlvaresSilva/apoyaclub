@@ -213,5 +213,137 @@
       "Equipos mixtos": "Equipes mistas",
       "Otros equipos": "Outras equipes"
     }
+  },
+  "ejemplo": {
+    "nombreClub": "Clube de {deporte} de exemplo",
+    "ciudad": "Sua cidade",
+    "instalaciones": "{pistas} quadras próprias, vestiários e uma pequena arquibancada.",
+    "descripcion": "Um clube de {deporte} de bairro, com {socios} sócios e uma escolinha de {escuela} crianças. Organizamos torneios o ano todo e temos atletas que competem nos campeonatos da federação.",
+    "competiciones": "Campeonatos estaduais da federação e circuito de torneios da região.",
+    "aviso": "Exemplo: assim fica a página de um clube de {deporte} no ApoyaClub.",
+    "avisoTexto": "O clube e os dados são inventados. As oportunidades são as que a plataforma propõe para o seu esporte.",
+    "crearLaMia": "Criar a página do meu clube",
+    "hitos": [
+      {
+        "year": 1998,
+        "text": "Um grupo de amigos funda o clube no ginásio do bairro."
+      },
+      {
+        "year": 2012,
+        "text": "Organizamos nosso primeiro torneio aberto da região."
+      },
+      {
+        "year": 2024,
+        "text": "A escolinha passa pela primeira vez dos quarenta alunos."
+      }
+    ],
+    "instalacionesPabellon": "Jogamos no ginásio municipal: quadra coberta, vestiários e arquibancada para {grada} pessoas.",
+    "instalacionesCampo": "Campo de grama sintética com vestiários, arquibancada para {grada} pessoas e lanchonete.",
+    "instalacionesAirsoft": "Campo de jogo próprio com barricadas, área de segurança, estacionamento e lanchonete.",
+    "descripcionEquipo": "Um clube de {deporte} de bairro, com {socios} sócios e uma base de {cantera} crianças. Todo fim de semana jogamos em casa diante da nossa torcida e, nas férias, organizamos um torneio que lota a cidade.",
+    "descripcionAirsoft": "Um clube de airsoft com {socios} sócios. Organizamos jogos abertos todo mês no nosso campo e temos um time de speedsoft que disputa a liga.",
+    "competicionesEquipo": "Campeonatos da federação estadual, no adulto e em todas as categorias de base.",
+    "competicionesAirsoft": "Liga de speedsoft e jogos abertos em outros campos da região.",
+    "hitosEquipo": [
+      {
+        "year": 1998,
+        "text": "Um grupo de pais funda o clube para que os filhos tivessem onde jogar."
+      },
+      {
+        "year": 2012,
+        "text": "O time adulto sobe para a divisão estadual."
+      },
+      {
+        "year": 2024,
+        "text": "A base passa pela primeira vez das cem crianças."
+      }
+    ],
+    "hitosAirsoft": [
+      {
+        "year": 2009,
+        "text": "Um grupo de amigos funda o clube para jogar nos fins de semana."
+      },
+      {
+        "year": 2016,
+        "text": "Formamos nosso primeiro time de speedsoft."
+      },
+      {
+        "year": 2024,
+        "text": "Abrimos nosso próprio campo de jogo."
+      }
+    ],
+    "categorias": {
+      "senior": "Adulto",
+      "juvenil": "Sub-20",
+      "cadete": "Sub-17",
+      "infantil": "Sub-15",
+      "speedsoft": "Time de speedsoft",
+      "partidas": "Sócios dos jogos",
+      "speedball": "Time de speedball"
+    },
+    "instalacionesDe": {
+      "voleyPlaya": "Quatro quadras de areia junto à praia, com vestiários e arquibancada para {grada} pessoas.",
+      "rugby": "Campo de grama com vestiários, arquibancada para {grada} pessoas e a lanchonete do terceiro tempo.",
+      "hockeyHierba": "Campo de grama sintética com vestiários e arquibancada para {grada} pessoas.",
+      "waterpolo": "Piscina coberta de 25 metros, vestiários e arquibancada para {grada} pessoas.",
+      "tenisMesa": "Salão próprio com oito mesas oficiais, vestiários e uma pequena arquibancada.",
+      "atletismo": "Treinamos na pista municipal de atletismo: oito raias, caixas de salto e área de arremessos.",
+      "natacion": "Piscina municipal coberta de 25 metros, com raias reservadas para o clube todas as tardes.",
+      "ciclismo": "Sede do clube com oficina e depósito de bikes; pedalamos todo fim de semana pelas estradas da região.",
+      "triatlon": "Treinamos na piscina municipal, na pista de atletismo e nas estradas da região.",
+      "gimnasia": "Sala de ginástica com tablado, aparelhos e fosso de espuma, no ginásio municipal.",
+      "patinaje": "Pista coberta do ginásio, com vestiários e arquibancada para as apresentações.",
+      "artesMarciales": "Dojô próprio com tatame de 200 m², vestiários e sala de musculação.",
+      "running": "Saímos da sede do clube três dias por semana, com guarda-volumes e chuveiros para os sócios.",
+      "paintball": "Campo de jogo próprio com barricadas infláveis, área de segurança, estacionamento e lanchonete."
+    },
+    "descripcionIndividual": "Um clube de {deporte} de bairro, com {socios} sócios e uma escolinha de {escuela} crianças. Treinamos a semana toda e nossos atletas competem nas provas da federação.",
+    "descripcionRunning": "Um clube de corrida com {socios} sócios. Corremos juntos três dias por semana, organizamos uma corrida de rua todo ano e vamos em grupo às provas da região.",
+    "descripcionPaintball": "Um clube de paintball com {socios} sócios. Organizamos jogos abertos todo mês no nosso campo e temos um time de speedball que disputa a liga.",
+    "competicionesIndividual": "Campeonatos estaduais e nacionais da federação, e provas da região.",
+    "competicionesRunning": "Corridas de rua, trails e meias maratonas da região, e nossa própria corrida anual.",
+    "competicionesPaintball": "Liga de speedball e torneios abertos em outros campos da região.",
+    "hitosIndividual": [
+      {
+        "year": 1998,
+        "text": "Um grupo de amigos funda o clube no ginásio do bairro."
+      },
+      {
+        "year": 2012,
+        "text": "Um dos nossos atletas ganha seu primeiro campeonato estadual."
+      },
+      {
+        "year": 2024,
+        "text": "A escolinha passa pela primeira vez das cem crianças."
+      }
+    ],
+    "hitosRunning": [
+      {
+        "year": 2010,
+        "text": "Um grupo de amigos começa a correr junto aos domingos."
+      },
+      {
+        "year": 2015,
+        "text": "Organizamos nossa primeira corrida de rua."
+      },
+      {
+        "year": 2024,
+        "text": "Passamos pela primeira vez dos duzentos sócios."
+      }
+    ],
+    "hitosPaintball": [
+      {
+        "year": 2008,
+        "text": "Um grupo de amigos funda o clube para jogar nos fins de semana."
+      },
+      {
+        "year": 2015,
+        "text": "Formamos nosso primeiro time de speedball."
+      },
+      {
+        "year": 2024,
+        "text": "Abrimos nosso próprio campo de jogo."
+      }
+    ]
   }
 }

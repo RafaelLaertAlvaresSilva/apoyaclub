@@ -524,7 +524,37 @@
     "correoContactoEjemplo": "patrocinios@oteuclube.pt",
     "eligeDeporte": "Escolhe a modalidade…",
     "otroDeporte": "Outra (escreve-a)",
-    "escribeDeporte": "Escreve a modalidade"
+    "escribeDeporte": "Escreve a modalidade",
+    "grupo": "Grupo",
+    "categoriaRaqueta": "Escola, competição, sócios…",
+    "ayudaRaqueta": "No ténis, padel e badminton, adiciona cada grupo do clube em separado: a escola, a equipa de competição, os sócios… Escolhe um para começar:",
+    "gruposRaqueta": [
+      {
+        "etiqueta": "Escola",
+        "cantera": true
+      },
+      {
+        "etiqueta": "Competição",
+        "cantera": false
+      },
+      {
+        "etiqueta": "Sócios",
+        "cantera": false
+      },
+      {
+        "etiqueta": "Veteranos",
+        "cantera": false
+      },
+      {
+        "etiqueta": "Adaptado",
+        "cantera": false
+      }
+    ],
+    "numeroDeJugadoresRaqueta": "Número de jogadores ou alunos",
+    "primerEquipoRaqueta": "Competição ou sócios",
+    "canteraRaqueta": "Escola (crianças)",
+    "verEjemplo": "Vê como fica a página de um clube do teu desporto",
+    "verEjemploAyuda": "Um clube de exemplo, já preenchido: é assim que as empresas o verão."
   },
   "perfil2": {
     "accionesSocialesEducativasO": "Ações sociais, educativas ou solidárias do clube: o que o torna mais do que um resultado desportivo.",
