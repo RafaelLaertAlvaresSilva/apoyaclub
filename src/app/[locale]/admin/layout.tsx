@@ -33,7 +33,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <>
       <BarraLogo />
-      {children}
+      <main id="contenido" className="flex flex-1 flex-col">
+        {children}
+      </main>
     </>
   );
 }

@@ -71,10 +71,11 @@ export function OportunidadesManager({
       <div className="tonal tonal-auto rounded-xl border border-(--tono-borde) border-l-[6px] border-l-(--tono-fuerte) bg-white shadow-sm p-4">
         <div className="flex flex-wrap items-end gap-4">
           <div>
-            <label className="mb-1 block text-xs font-medium text-zinc-500">
+            <label htmlFor="filtro-estado" className="mb-1 block text-xs font-medium text-zinc-500">
               {t("estado")}
             </label>
             <select
+              id="filtro-estado"
               value={filtroEstado}
               onChange={(evento) =>
                 setFiltroEstado(evento.target.value as FiltroEstado)
@@ -91,10 +92,11 @@ export function OportunidadesManager({
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-medium text-zinc-500">
+            <label htmlFor="filtro-orden" className="mb-1 block text-xs font-medium text-zinc-500">
               {t("ordenarPorValor")}
             </label>
             <select
+              id="filtro-orden"
               value={orden}
               onChange={(evento) => setOrden(evento.target.value as Orden)}
               className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm"

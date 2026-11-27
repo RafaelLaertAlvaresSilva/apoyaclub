@@ -5,6 +5,7 @@ import { requisitosDelClub } from "@/lib/catalogo-ideas";
 import { clubRowToProfile, clubTeamRowToTeam, type ClubRow, type ClubTeamRow } from "@/lib/club-mappers";
 import { deporteDeLaLista } from "@/lib/deportes";
 import { tieneEjemplo } from "@/lib/ejemplos-club";
+import { IDS_PASOS, primerosPasos, type IdPaso } from "@/lib/onboarding";
 import { opportunityRowToOpportunity, type OpportunityRow } from "@/lib/opportunity-mappers";
 import { createClient } from "@/lib/supabase/server";
 import { EquiposForm } from "../components/EquiposForm";
@@ -33,8 +34,7 @@ export async function generateMetadata() {
  * formularios que el resto del panel, salvo el primero, que es la parte
  * mínima de "Identidad" (`guardarLoBasico`).
  */
-const PASOS = ["club", "imagenes", "equipos", "oportunidades", "compartir"] as const;
-type IdPaso = (typeof PASOS)[number];
+const PASOS = IDS_PASOS;
 
 export default async function EmpezarPage({ searchParams }: { searchParams: Promise<{ paso?: string | string[] }> }) {
   const t = await getTranslations("panel.empezar");
@@ -57,13 +57,9 @@ export default async function EmpezarPage({ searchParams }: { searchParams: Prom
   const oportunidades = (filasOportunidades ?? []).map(opportunityRowToOpportunity);
   const publicadas = oportunidades.filter((oportunidad) => !oportunidad.archivedAt).length;
 
-  const hecho: Record<IdPaso, boolean> = {
-    club: !!perfil?.name && !!perfil?.description,
-    imagenes: !!perfil?.logoUrl && !!perfil?.coverUrl,
-    equipos: equipos.length > 0,
-    oportunidades: publicadas > 0,
-    compartir: (dossiers ?? 0) > 0,
-  };
+  const hecho = Object.fromEntries(
+    primerosPasos(perfil, equipos, publicadas, (dossiers ?? 0) > 0).map((paso) => [paso.id, paso.hecho]),
+  ) as Record<IdPaso, boolean>;
   const hechos = PASOS.filter((id) => hecho[id]).length;
 
   // Sin ficha guardada solo se puede hacer el primero: los demás guardan

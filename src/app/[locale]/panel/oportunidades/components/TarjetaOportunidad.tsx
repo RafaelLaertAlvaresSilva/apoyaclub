@@ -7,7 +7,7 @@ import { usePaisDelClub } from "@/components/PaisDelClub";
 import { formatoDeValor, textoDelPrecio } from "@/lib/format";
 import type { AppLocale } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
 import type { ClubTeam, Opportunity, OpportunityStatus } from "@/lib/types";
 import {
@@ -36,6 +36,43 @@ const ESTILO_ESTADO: Record<OpportunityStatus, string> = {
 
 /** Las acciones de la tarjeta, con borde para que se vean como botones
  * y no como palabras sueltas sobre el fondo (pedido por Rafael). */
+const ELEMENTO_MENU =
+  "w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100";
+
+/**
+ * El botón "Más ⋯" de cada oportunidad: abre una lista con las acciones
+ * de menos uso. Es un `<details>` (funciona aunque falle el JavaScript y
+ * se maneja con el teclado); lo único que se añade es cerrarlo al tocar
+ * fuera o pulsar Escape, que es lo que espera cualquiera de un menú.
+ */
+function MenuMas({ etiqueta, children }: { etiqueta: string; children: React.ReactNode }) {
+  const menu = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    const cerrar = (evento: Event) => {
+      const el = menu.current;
+      if (!el?.open) return;
+      if (evento instanceof KeyboardEvent ? evento.key === "Escape" : !el.contains(evento.target as Node)) el.open = false;
+    };
+    document.addEventListener("pointerdown", cerrar);
+    document.addEventListener("keydown", cerrar);
+    return () => {
+      document.removeEventListener("pointerdown", cerrar);
+      document.removeEventListener("keydown", cerrar);
+    };
+  }, []);
+  return (
+    <details ref={menu} className="group relative">
+      <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50 [&::-webkit-details-marker]:hidden">
+        {etiqueta}
+        <span aria-hidden="true" className="text-base leading-none">⋯</span>
+      </summary>
+      <div className="absolute right-0 z-20 mt-2 flex w-60 flex-col gap-0.5 rounded-xl border border-zinc-200 bg-white p-1.5 shadow-lg sm:left-0 sm:right-auto">
+        {children}
+      </div>
+    </details>
+  );
+}
+
 const BOTON_ACCION =
   "rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50";
 
@@ -244,56 +281,61 @@ export function TarjetaOportunidad({
           {t("editar")}
         </button>
 
-        <form action={compartirComoPlantilla}>
-          <input type="hidden" name="id" value={oportunidad.id} />
-          <button
-            type="submit"
-            title={t("compartirPlantillaAyuda")}
-            className={BOTON_ACCION}
-          >
-            {t("compartirPlantilla")}
-          </button>
-        </form>
-
-        <form action={duplicarOportunidad}>
-          <input type="hidden" name="id" value={oportunidad.id} />
-          <button
-            type="submit"
-            className={BOTON_ACCION}
-          >
-            {t("duplicar")}
-          </button>
-        </form>
-
-        {oportunidad.archivedAt ? (
-          <form action={restaurarOportunidad}>
+        {/* Lo de cada día (estado, Visualizar, Editar) a la vista; lo
+            demás, en "Más". Con los siete botones sueltos, en el móvil
+            cada tarjeta acababa con cuatro filas de botones. */}
+        <MenuMas etiqueta={t("mas")}>
+          <form action={compartirComoPlantilla}>
             <input type="hidden" name="id" value={oportunidad.id} />
             <button
               type="submit"
-              className={BOTON_ACCION}
+              title={t("compartirPlantillaAyuda")}
+              className={ELEMENTO_MENU}
             >
-              {t("restaurar")}
+              {t("compartirPlantilla")}
             </button>
           </form>
-        ) : (
-          <form action={archivarOportunidad}>
+
+          <form action={duplicarOportunidad}>
             <input type="hidden" name="id" value={oportunidad.id} />
             <button
               type="submit"
-              className={BOTON_ACCION}
+              className={ELEMENTO_MENU}
             >
-              {t("archivar")}
+              {t("duplicar")}
             </button>
           </form>
-        )}
 
-        <AccionConConfirmacion
-          accion={eliminarOportunidad}
-          id={oportunidad.id}
-          nombre={oportunidad.title}
-          etiqueta={t("eliminar")}
-          clases="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50"
-        />
+          {oportunidad.archivedAt ? (
+            <form action={restaurarOportunidad}>
+              <input type="hidden" name="id" value={oportunidad.id} />
+              <button
+                type="submit"
+                className={ELEMENTO_MENU}
+              >
+                {t("restaurar")}
+              </button>
+            </form>
+          ) : (
+            <form action={archivarOportunidad}>
+              <input type="hidden" name="id" value={oportunidad.id} />
+              <button
+                type="submit"
+                className={ELEMENTO_MENU}
+              >
+                {t("archivar")}
+              </button>
+            </form>
+          )}
+
+          <AccionConConfirmacion
+            accion={eliminarOportunidad}
+            id={oportunidad.id}
+            nombre={oportunidad.title}
+            etiqueta={t("eliminar")}
+            clases="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+          />
+        </MenuMas>
       </div>
     </li>
   );

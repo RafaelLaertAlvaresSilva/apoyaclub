@@ -97,27 +97,7 @@
   },
   "primerosPasos": {
     "titulo": "Começa por aqui",
-    "subtitulo": "Quatro passos e o teu clube já pode ser mostrado a uma empresa.",
-    "identidad": {
-      "titulo": "Carrega o teu logótipo e conta quem são",
-      "texto": "Com o logótipo e quatro linhas de descrição, a tua página já tem cara.",
-      "accion": "Completar"
-    },
-    "equipos": {
-      "titulo": "Adiciona as tuas equipas e a tua formação",
-      "texto": "É a primeira coisa que uma empresa vê: a quantas pessoas chega o teu clube.",
-      "accion": "Adicionar equipas"
-    },
-    "oportunidad": {
-      "titulo": "Publica a tua primeira oportunidade",
-      "texto": "Com «Gerar as minhas oportunidades» deixamo-las escritas com os dados do teu clube: só tens de as rever e publicar.",
-      "accion": "Gerar as minhas oportunidades"
-    },
-    "dossier": {
-      "titulo": "Descarrega o teu dossier e envia-o",
-      "texto": "Faz-se sozinho com a tua ficha e as tuas oportunidades. Envia-o a cinco empresas da tua zona: é assim que começam os patrocínios.",
-      "accion": "Ver o meu dossier"
-    },
+    "subtitulo": "Cinco passos e o teu clube já pode ser mostrado a uma empresa.",
     "deTantos": "{hechos} de {total}",
     "pasoAPaso": "Fazer passo a passo →"
   },
@@ -832,7 +812,8 @@
       "queCategoriaTexto": "Escolhe uma categoria e preparamos as dela. Entre parênteses, quantas te podemos propor com o que está na tua ficha.",
       "mezcla": "Um pouco de tudo",
       "otraCategoria": "Escolher outra categoria"
-    }
+    },
+    "mas": "Mais"
   },
   "dossier": {
     "activarEnlacePublico": "Ativar ligação pública",

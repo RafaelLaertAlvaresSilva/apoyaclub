@@ -109,7 +109,9 @@ export function SolicitudCard({
         {solicitud.message}
       </div>
 
-      <div className="mt-4 flex w-fit max-w-full overflow-x-auto overflow-y-hidden rounded-lg border border-zinc-300 sm:ml-14">
+      {/* En el móvil, dos por fila: los cuatro seguidos no cabían y
+          "Cerrada" se salía por la derecha. */}
+      <div className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-zinc-300 bg-zinc-300 sm:ml-14 sm:inline-flex [&>*:last-child:nth-child(odd)]:col-span-2">
         {ESTADOS_SOLICITUD.map((estadoOpcion) => (
           <form key={estadoOpcion.id} action={cambiarEstadoSolicitud}>
             <input type="hidden" name="id" value={solicitud.id} />
@@ -117,7 +119,7 @@ export function SolicitudCard({
             <button
               type="submit"
               disabled={solicitud.status === estadoOpcion.id}
-              className={`whitespace-nowrap px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-default ${
+              className={`w-full whitespace-nowrap px-3 py-2 text-xs font-medium transition-colors disabled:cursor-default sm:py-1.5 ${
                 solicitud.status === estadoOpcion.id
                   ? ESTILO_ESTADO[estadoOpcion.id]
                   : "bg-white text-zinc-500 hover:bg-zinc-50"

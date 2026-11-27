@@ -97,27 +97,7 @@
   },
   "primerosPasos": {
     "titulo": "Start here",
-    "subtitulo": "Four steps and your club is ready to show to a business.",
-    "identidad": {
-      "titulo": "Upload your logo and tell people who you are",
-      "texto": "With your logo and four lines of description, your page already has a face.",
-      "accion": "Complete"
-    },
-    "equipos": {
-      "titulo": "Add your teams and youth teams",
-      "texto": "It’s the first thing a business looks at: how many people your club reaches.",
-      "accion": "Add teams"
-    },
-    "oportunidad": {
-      "titulo": "Publish your first opportunity",
-      "texto": "With “Generate my opportunities” we write them for you with your club’s details: just review and publish.",
-      "accion": "Generate my opportunities"
-    },
-    "dossier": {
-      "titulo": "Download your sponsorship pack and send it",
-      "texto": "It builds itself from your profile and opportunities. Send it to five local businesses: that’s how sponsorships start.",
-      "accion": "See my pack"
-    },
+    "subtitulo": "Five steps and your club is ready to show to a business.",
     "deTantos": "{hechos} of {total}",
     "pasoAPaso": "Do it step by step →"
   },
@@ -832,7 +812,8 @@
       "queCategoriaTexto": "Pick a category and we'll prepare its opportunities. In brackets, how many we can suggest with your current profile.",
       "mezcla": "A bit of everything",
       "otraCategoria": "Choose another category"
-    }
+    },
+    "mas": "More"
   },
   "dossier": {
     "activarEnlacePublico": "Turn on public link",

@@ -37,23 +37,12 @@ const PAGINAS_DEL_PANEL = new Set(["/panel/patrocinadores", "/panel/oportunidade
 describe("enlaces de los primeros pasos", () => {
   const pasos = primerosPasos(perfilDePrueba(), [], 0);
 
-  it("los pasos que se quedan en el panel llevan ancla de pestaña", () => {
-    for (const paso of pasos.filter((candidato) => candidato.anclaDelPanel !== null)) {
-      expect(PESTANAS_DEL_PANEL.has(paso.anclaDelPanel!)).toBe(true);
-      // El href tiene que ir de la mano del ancla: si se separan, el
-      // botón lleva a un sitio y abre otro.
-      expect(paso.href).toBe(`/panel/perfil#${paso.anclaDelPanel}`);
-    }
+  it("cada paso lleva a su pantalla del asistente, en orden", () => {
+    expect(pasos.map((paso) => paso.href)).toEqual([1, 2, 3, 4, 5].map((n) => `/panel/empezar?paso=${n}`));
   });
 
   it("ningún paso apunta al panel pelado, que no haría nada", () => {
     expect(pasos.map((paso) => paso.href)).not.toContain("/panel");
-  });
-
-  it("el paso que sale del panel no lleva ancla", () => {
-    const oportunidad = pasos.find((paso) => paso.id === "oportunidad");
-    expect(oportunidad?.anclaDelPanel).toBeNull();
-    expect(oportunidad?.href).toBe("/panel/oportunidades");
   });
 });
 

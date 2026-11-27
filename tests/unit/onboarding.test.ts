@@ -2,34 +2,40 @@ import { describe, expect, it } from "vitest";
 import { onboardingCompleto, primerosPasos, siguientePaso } from "@/lib/onboarding";
 import { equipoDePrueba, perfilDePrueba } from "../fixtures/club";
 
+/**
+ * Los cinco pasos del asistente, que son también los de "Empieza por
+ * aquí" del inicio: antes eran dos listas y un mismo club veía "3 de 4"
+ * en un sitio y "4 de 5" en el otro.
+ */
 describe("primeros pasos del club", () => {
-  it("un club recién creado los tiene los cuatro pendientes", () => {
-    const pasos = primerosPasos(perfilDePrueba(), [], 0);
-    expect(pasos.map((paso) => paso.hecho)).toEqual([false, false, false, false]);
-    expect(siguientePaso(pasos)?.id).toBe("identidad");
+  it("sin club todavía, están los cinco pendientes y se empieza por el club", () => {
+    const pasos = primerosPasos(null, [], 0);
+    expect(pasos.map((paso) => paso.id)).toEqual(["club", "imagenes", "equipos", "oportunidades", "compartir"]);
+    expect(pasos.every((paso) => !paso.hecho)).toBe(true);
+    expect(siguientePaso(pasos)?.id).toBe("club");
     expect(onboardingCompleto(pasos)).toBe(false);
   });
 
-  it("la identidad necesita logo y descripción, no solo una de las dos", () => {
-    const soloLogo = primerosPasos(perfilDePrueba({ logoUrl: "https://ejemplo/logo.png" }), [], 0);
-    expect(soloLogo[0].hecho).toBe(false);
+  it("el club necesita nombre y descripción", () => {
+    expect(primerosPasos(perfilDePrueba({ description: null }), [], 0)[0].hecho).toBe(false);
+    expect(primerosPasos(perfilDePrueba({ description: "Club de barrio." }), [], 0)[0].hecho).toBe(true);
+  });
 
-    const completa = primerosPasos(
-      perfilDePrueba({ logoUrl: "https://ejemplo/logo.png", description: "Club de barrio." }),
-      [],
-      0,
-    );
-    expect(completa[0].hecho).toBe(true);
+  it("las imágenes necesitan escudo y portada, no solo una de las dos", () => {
+    expect(primerosPasos(perfilDePrueba({ logoUrl: "https://ejemplo/logo.png" }), [], 0)[1].hecho).toBe(false);
+    expect(
+      primerosPasos(perfilDePrueba({ logoUrl: "https://ejemplo/logo.png", coverUrl: "https://ejemplo/portada.jpg" }), [], 0)[1].hecho,
+    ).toBe(true);
   });
 
   it("los datos de cantera cuentan como equipos, para un club que solo tiene base", () => {
-    expect(primerosPasos(perfilDePrueba({ youthTeamsCount: 6 }), [], 0)[1].hecho).toBe(true);
-    expect(primerosPasos(perfilDePrueba(), [equipoDePrueba()], 0)[1].hecho).toBe(true);
+    expect(primerosPasos(perfilDePrueba({ youthTeamsCount: 6 }), [], 0)[2].hecho).toBe(true);
+    expect(primerosPasos(perfilDePrueba(), [equipoDePrueba()], 0)[2].hecho).toBe(true);
   });
 
-  it("desaparece cuando los cuatro están hechos", () => {
+  it("desaparece cuando los cinco están hechos", () => {
     const pasos = primerosPasos(
-      perfilDePrueba({ logoUrl: "https://ejemplo/logo.png", description: "Club de barrio." }),
+      perfilDePrueba({ logoUrl: "https://ejemplo/logo.png", coverUrl: "https://ejemplo/portada.jpg", description: "Club de barrio." }),
       [equipoDePrueba()],
       2,
       true,
@@ -38,20 +44,8 @@ describe("primeros pasos del club", () => {
     expect(siguientePaso(pasos)).toBeNull();
   });
 
-  it("sin club todavía, el primer paso sigue siendo la identidad", () => {
-    const pasos = primerosPasos(null, [], 0);
-    expect(pasos[0].hecho).toBe(false);
-    expect(siguientePaso(pasos)?.href).toBe("/panel/perfil#identidad");
-  });
-});
-
-describe("cuarto paso: el dossier", () => {
-  it("queda pendiente hasta que el club abre su dossier, y lleva a su página", () => {
-    const sin = primerosPasos(null, [], 0);
-    const con = primerosPasos(null, [], 0, true);
-    const pasoSin = sin.find((paso) => paso.id === "dossier");
-    expect(pasoSin?.hecho).toBe(false);
-    expect(pasoSin?.href).toBe("/panel/dossier");
-    expect(con.find((paso) => paso.id === "dossier")?.hecho).toBe(true);
+  it("el último paso queda pendiente hasta que el club abre su dossier", () => {
+    expect(primerosPasos(null, [], 0).at(-1)?.hecho).toBe(false);
+    expect(primerosPasos(null, [], 0, true).at(-1)?.hecho).toBe(true);
   });
 });

@@ -84,7 +84,7 @@ export default function AuthLayout({
             </div>
           </aside>
 
-          <div className="p-8 sm:p-10 lg:p-12">{children}</div>
+          <main id="contenido" className="p-8 sm:p-10 lg:p-12">{children}</main>
         </div>
       </div>
     </>

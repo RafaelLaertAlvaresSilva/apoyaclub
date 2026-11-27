@@ -135,9 +135,12 @@ export default async function PanelLayout({
           decir cuál es su sección (lo deduce de la dirección). */}
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-4 px-4 pt-6 sm:px-6 lg:flex-row lg:gap-6">
         <PanelNav paginaPublica={paginaPublica} perfilCreado={perfilCreado} plegado={menuPlegado} />
-        <div className="flex min-w-0 flex-1 flex-col">
+        {/* `main#contenido`: a donde lleva "Saltar al contenido" (el primer
+            enlace de la página, para quien navega con teclado o lector de
+            pantalla). Sin él, ese enlace no llevaba a ninguna parte. */}
+        <main id="contenido" className="flex min-w-0 flex-1 flex-col">
           <PaisDelClubProvider pais={paisDelClub}>{children}</PaisDelClubProvider>
-        </div>
+        </main>
       </div>
     </div>
   );

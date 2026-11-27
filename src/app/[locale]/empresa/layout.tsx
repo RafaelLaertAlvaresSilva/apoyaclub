@@ -42,7 +42,9 @@ export default async function EmpresaLayout({ children }: { children: React.Reac
           {t("avisoModoPruebas")}
         </div>
       )}
-      {children}
+      <main id="contenido" className="flex flex-1 flex-col">
+        {children}
+      </main>
     </>
   );
 }

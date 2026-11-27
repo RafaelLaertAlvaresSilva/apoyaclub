@@ -3,15 +3,16 @@ import { Link } from "@/i18n/navigation";
 import { onboardingCompleto, type PasoInicial } from "@/lib/onboarding";
 
 /**
- * Los tres pasos del primer día, arriba del panel. Desaparece solo en
- * cuanto están los tres hechos: la barra de progreso ya se encarga a
- * partir de ahí.
+ * "Empieza por aquí", arriba a la derecha del inicio: los cinco pasos
+ * del asistente (`lib/onboarding.ts`), con su barra y el botón para
+ * hacerlos de uno en uno. Desaparece en cuanto están todos hechos.
  *
- * El paso pendiente más antiguo es el que lleva el botón; los demás se
- * ven, pero no compiten por la atención.
+ * Cada paso lleva a su pantalla del asistente; el pendiente más antiguo
+ * es el que lleva el botón, los demás se ven pero no compiten.
  */
 export function PrimerosPasos({ pasos }: { pasos: PasoInicial[] }) {
   const t = useTranslations("panel.primerosPasos");
+  const tPasos = useTranslations("panel.empezar.pasos");
 
   if (onboardingCompleto(pasos)) return null;
 
@@ -26,17 +27,6 @@ export function PrimerosPasos({ pasos }: { pasos: PasoInicial[] }) {
         <p className="text-sm font-bold tabular-nums text-accion-tinta">{t("deTantos", { hechos, total: pasos.length })}</p>
       </div>
       <p className="mt-1 text-sm text-zinc-600">{t("subtitulo")}</p>
-      {/* El asistente (`/panel/empezar`): lo mismo, de uno en uno y con
-          el club de ejemplo al lado. Para el que no sabe por dónde
-          seguir, que es casi todo el que se queda a medias. */}
-      <Link
-        href="/panel/empezar"
-        className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-accion px-4 py-2.5 text-sm font-bold text-sobre-color shadow-sm transition hover:bg-accion-fuerte"
-      >
-        {t("pasoAPaso")}
-      </Link>
-      {/* La barra de cuánto queda: con ella, "Empieza por aquí" se lee
-          como algo que se termina, no como una lista más. */}
       <div
         role="progressbar"
         aria-valuemin={0}
@@ -50,53 +40,43 @@ export function PrimerosPasos({ pasos }: { pasos: PasoInicial[] }) {
 
       <ol className="mt-4 flex flex-col gap-2">
         {pasos.map((paso, indice) => (
-          <li
-            key={paso.id}
-            className="flex flex-wrap items-center gap-3 rounded-lg border border-sobre-color bg-white/70 px-4 py-3"
-          >
-            <span
-              aria-hidden
-              className={`flex h-6 w-6 flex-none items-center justify-center rounded-full text-xs font-bold ${
-                paso.hecho ? "bg-brand-teal-dark text-sobre-color" : "bg-white text-zinc-500 ring-1 ring-zinc-300"
+          <li key={paso.id}>
+            <Link
+              href={paso.href}
+              className={`flex items-center gap-3 rounded-lg border px-4 py-3 transition-colors ${
+                indice === indicePendiente
+                  ? "border-accion bg-white shadow-sm"
+                  : "border-sobre-color bg-white/70 hover:border-zinc-300 hover:bg-white"
               }`}
             >
-              {paso.hecho ? "✓" : indice + 1}
-            </span>
-
-            {/* Al menos todo el ancho menos el círculo: así el botón
-                cae debajo del texto en vez de estrujarlo, ahora que la
-                lista vive en la columna estrecha de la derecha. */}
-            <div className="min-w-0 flex-1 basis-[calc(100%-2.25rem)]">
-              <p className={`text-sm font-medium ${paso.hecho ? "text-zinc-500 line-through" : "text-zinc-900"}`}>
-                {t(`${paso.id}.titulo`)}
-              </p>
-              {!paso.hecho && <p className="text-xs text-zinc-500">{t(`${paso.id}.texto`)}</p>}
-            </div>
-
-            {indice === indicePendiente &&
-              (paso.anclaDelPanel ? (
-                // Enlace normal a propósito, no el <Link> de Next: este
-                // salto se queda en la misma página, y el <Link> cambia
-                // la dirección de una forma que el navegador no anuncia,
-                // así que la pestaña no llegaba a abrirse y el botón
-                // parecía muerto.
-                <a
-                  href={`#${paso.anclaDelPanel}`}
-                  className="ml-9 rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-brand-navy"
-                >
-                  {t(`${paso.id}.accion`)}
-                </a>
-              ) : (
-                <Link
-                  href={paso.href}
-                  className="ml-9 rounded-lg bg-brand-teal-dark px-3 py-1.5 text-xs font-semibold text-sobre-color transition-colors hover:bg-brand-navy"
-                >
-                  {t(`${paso.id}.accion`)}
-                </Link>
-              ))}
+              <span
+                aria-hidden
+                className={`flex h-6 w-6 flex-none items-center justify-center rounded-full text-xs font-bold ${
+                  paso.hecho ? "bg-brand-teal-dark text-sobre-color" : "bg-white text-zinc-500 ring-1 ring-zinc-300"
+                }`}
+              >
+                {paso.hecho ? "✓" : indice + 1}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className={`block text-sm font-medium ${paso.hecho ? "text-zinc-500 line-through" : "text-zinc-900"}`}>
+                  {tPasos(`${paso.id}.nombre`)}
+                </span>
+                {indice === indicePendiente && (
+                  <span className="mt-0.5 block text-xs text-zinc-600">{tPasos(`${paso.id}.texto`)}</span>
+                )}
+              </span>
+              {!paso.hecho && <span aria-hidden="true" className="text-accion-tinta">→</span>}
+            </Link>
           </li>
         ))}
       </ol>
+
+      <Link
+        href={pasos[indicePendiente]?.href ?? "/panel/empezar"}
+        className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-accion px-4 py-2.5 text-sm font-bold text-sobre-color shadow-sm transition hover:bg-accion-fuerte"
+      >
+        {t("pasoAPaso")}
+      </Link>
     </section>
   );
 }

@@ -1,78 +1,47 @@
 import type { ClubProfile, ClubTeam } from "@/lib/types";
 
 /**
- * Los tres pasos del primer día de un club.
+ * Los primeros pasos de un club: los mismos cinco del asistente
+ * (`/panel/empezar`) y de la lista "Empieza por aquí" del inicio.
  *
- * La barra de progreso del perfil dice cuánto falta, pero no por dónde
- * empezar: un club que acaba de registrarse aterriza en un panel vacío y
- * decide solo. Esto le da un orden — identidad, equipos, primera
- * oportunidad — y desaparece en cuanto los tres están hechos, para no
- * estorbar al club que ya lleva meses.
+ * Hasta el 27-11-2026 eran dos listas distintas —cuatro pasos en el
+ * inicio y cinco en el asistente— y un mismo club veía "3 de 4" en un
+ * sitio y "4 de 5" en el otro. Ahora salen de aquí las dos.
  *
  * Función pura para poder probarla: la decisión de qué está hecho no
  * depende de cómo se pinte.
  */
 
+export const IDS_PASOS = ["club", "imagenes", "equipos", "oportunidades", "compartir"] as const;
+export type IdPaso = (typeof IDS_PASOS)[number];
+
 export type PasoInicial = {
-  id: "identidad" | "equipos" | "oportunidad" | "dossier";
+  id: IdPaso;
   hecho: boolean;
-  /** Ruta a la que lleva el paso cuando está pendiente. */
+  /** El paso del asistente que lo resuelve. */
   href: string;
-  /**
-   * Pestaña del propio panel que abre el paso, o null si lleva a otra
-   * página.
-   *
-   * Se distingue de `href` porque el botón tiene que pintarse distinto:
-   * un enlace de Next navega cambiando el historial sin avisar al
-   * navegador, y un salto dentro de la misma página no se entera. Los
-   * pasos con ancla se pintan como enlace normal (`<a href="#equipos">`),
-   * que sí dispara el aviso que `PanelTabs` escucha.
-   */
-  anclaDelPanel: "identidad" | "equipos" | null;
 };
 
 export function primerosPasos(
   perfil: ClubProfile | null,
   equipos: ClubTeam[],
   oportunidadesPublicadas: number,
-  /**
-   * Si ya ha abierto su dossier (hay fila en `club_dossiers`). Cuarto
-   * paso desde el 10-11-2026: con ficha y oportunidades el club todavía
-   * no ha hecho lo que trae patrocinios, que es mandárselo a empresas.
-   */
+  /** Si ya ha abierto su dossier (hay fila en `club_dossiers`). */
   tieneDossier = false,
 ): PasoInicial[] {
-  return [
-    {
-      id: "identidad",
-      // Con logo y descripción la página ya se puede enseñar; el resto
-      // del perfil suma, pero no bloquea.
-      hecho: !!perfil?.logoUrl && !!perfil?.description,
-      href: "/panel/perfil#identidad",
-      anclaDelPanel: "identidad",
-    },
-    {
-      id: "equipos",
-      hecho: equipos.length > 0 || perfil?.youthTeamsCount != null,
-      href: "/panel/perfil#equipos",
-      anclaDelPanel: "equipos",
-    },
-    {
-      id: "oportunidad",
-      hecho: oportunidadesPublicadas > 0,
-      href: "/panel/oportunidades",
-      anclaDelPanel: null,
-    },
-    {
-      id: "dossier",
-      hecho: tieneDossier,
-      href: "/panel/dossier",
-      anclaDelPanel: null,
-    },
-  ];
+  const hecho: Record<IdPaso, boolean> = {
+    // Con nombre y unas líneas la página ya se puede enseñar.
+    club: !!perfil?.name && !!perfil?.description,
+    imagenes: !!perfil?.logoUrl && !!perfil?.coverUrl,
+    // Los datos de cantera cuentan: hay clubes que solo tienen base.
+    equipos: equipos.length > 0 || perfil?.youthTeamsCount != null,
+    oportunidades: oportunidadesPublicadas > 0,
+    compartir: tieneDossier,
+  };
+  return IDS_PASOS.map((id, indice) => ({ id, hecho: hecho[id], href: `/panel/empezar?paso=${indice + 1}` }));
 }
 
-/** true cuando ya no hay nada que enseñar: los tres pasos están hechos. */
+/** true cuando ya no hay nada que enseñar: todos los pasos están hechos. */
 export function onboardingCompleto(pasos: PasoInicial[]): boolean {
   return pasos.every((paso) => paso.hecho);
 }

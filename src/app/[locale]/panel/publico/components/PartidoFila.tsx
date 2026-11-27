@@ -14,15 +14,18 @@ export function PartidoFila({ partido }: { partido: Partido }) {
 
   return (
     <li className="flex flex-wrap items-center gap-3 tonal tonal-auto rounded-lg border border-(--tono-borde) border-l-4 border-l-(--tono-fuerte) bg-white shadow-sm p-3">
+      {/* En el móvil la fecha y el partido van en dos líneas, y las
+          personas y "Borrar" debajo: todo en una fila dejaba el nombre
+          del rival en columnas de una palabra. */}
       <span className="w-20 flex-none text-sm tabular-nums text-zinc-500">
         {fechaCorta(partido.fecha)}
       </span>
 
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 basis-48">
         <p className="truncate text-sm font-medium text-zinc-900">
           {t(partido.enCasa ? "contra" : "enCampoDe", { rival: partido.rival })}
         </p>
-        <p className="truncate text-xs text-zinc-500">
+        <p className="text-xs text-zinc-500">
           {[
             partido.enCasa ? t("enCasa") : t("fuera"),
             partido.equipo,
@@ -33,11 +36,11 @@ export function PartidoFila({ partido }: { partido: Partido }) {
         </p>
       </div>
 
-      <span className="flex-none text-right">
+      <span className="ml-auto flex-none text-right">
         <span className="block text-base font-semibold tabular-nums text-zinc-900">
           {formatoNumero.format(partido.publico)}
         </span>
-        <span className="block text-[11px] text-zinc-500">{t("personas")}</span>
+        <span className="block text-xs text-zinc-500">{t("personas")}</span>
       </span>
 
       <form action={borrar} className="flex-none">

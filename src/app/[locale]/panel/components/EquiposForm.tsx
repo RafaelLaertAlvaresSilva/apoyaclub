@@ -206,7 +206,9 @@ function FilaEquipo({
         </div>
       )}
 
-      <div className="min-w-0 flex-1">
+      {/* Con un ancho mínimo: en el móvil los datos bajan debajo de la
+          foto en vez de quedar en una columna de una palabra. */}
+      <div className="min-w-0 flex-1 basis-56">
         <p className="font-medium text-zinc-900">
           {E.deporte(equipo.sport)}
           {equipo.category ? ` · ${equipo.category}` : ""}
