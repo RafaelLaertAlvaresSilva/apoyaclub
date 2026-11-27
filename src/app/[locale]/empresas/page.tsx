@@ -62,104 +62,107 @@ export default async function PaginaEmpresas({
   return (
     <div className="flex flex-1 flex-col bg-zinc-50">
       <Header />
+      {/* `main#contenido`: a donde lleva "Saltar al contenido". */}
+      <main id="contenido" className="flex flex-1 flex-col">
 
-      <header className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 py-8">
-          <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
-            {t("eyebrow")}
-          </p>
-          <h1 className="mt-2 text-2xl font-bold text-zinc-900 sm:text-3xl">
-            {t("titulo")}
-          </h1>
-          <p className="mt-2 max-w-2xl text-zinc-600">
-            {t("intro")}
-          </p>
-        </div>
-      </header>
-
-      <div className="mx-auto w-full max-w-5xl flex-1 px-4 sm:px-6 py-6">
-        {/* Filtros: un formulario normal con GET, sin estado en cliente. */}
-        <form
-          method="get"
-          className="flex flex-wrap items-end gap-3 rounded-xl border border-zinc-200 bg-white p-4"
-        >
-          <label className="text-sm">
-            <span className="mb-1 block font-medium text-zinc-700">{t("queBuscas")}</span>
-            <select
-              name="categoria"
-              defaultValue={categoria ?? ""}
-              className="rounded-lg border border-zinc-300 px-3 py-2 text-sm"
-            >
-              <option value="">{t("todo")}</option>
-              {CATEGORIAS_NECESIDAD.map((opcion) => (
-                <option key={opcion.id} value={opcion.id}>
-                  {E.categoriaNecesidad(opcion.id)}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="text-sm">
-            <span className="mb-1 block font-medium text-zinc-700">{t("deQueTipo")}</span>
-            <select
-              name="tipo"
-              defaultValue={tipo ?? ""}
-              className="rounded-lg border border-zinc-300 px-3 py-2 text-sm"
-            >
-              <option value="">{t("cualquiera")}</option>
-              {TIPOS_DE_OFERTA.map((opcion) => (
-                <option key={opcion.id} value={opcion.id}>
-                  {E.tipoOferta(opcion.id)}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="text-sm">
-            <span className="mb-1 block font-medium text-zinc-700">{t("provincia")}</span>
-            <select
-              name="provincia"
-              defaultValue={provincia ?? ""}
-              className="rounded-lg border border-zinc-300 px-3 py-2 text-sm"
-            >
-              <option value="">{t("todaEspana")}</option>
-              {provincias.map((nombre) => (
-                <option key={nombre} value={nombre}>
-                  {nombre}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <button
-            type="submit"
-            className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
-          >
-            {t("filtrar")}
-          </button>
-        </form>
-
-        {ofertas.length === 0 ? (
-          <div className="mt-6 rounded-xl border border-dashed border-zinc-300 bg-white p-8 text-center">
-            <p className="font-medium text-zinc-900">{t("vacioTitulo")}</p>
-            <p className="mx-auto mt-1 max-w-md text-sm text-zinc-500">
-              {t("vacioTexto")}
+        <header className="border-b border-zinc-200 bg-white">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 py-8">
+            <p className="text-xs font-bold uppercase tracking-wider text-accion-tinta">
+              {t("eyebrow")}
             </p>
-            <Link
-              href="/registro-empresa"
-              className="mt-4 inline-block rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
-            >
-              {t("publicarLoQueOfrezco")}
-            </Link>
+            <h1 className="mt-2 text-2xl font-bold text-zinc-900 sm:text-3xl">
+              {t("titulo")}
+            </h1>
+            <p className="mt-2 max-w-2xl text-zinc-600">
+              {t("intro")}
+            </p>
           </div>
-        ) : (
-          <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-            {ofertas.map((oferta) => (
-              <TarjetaOfertaPublica key={oferta.id} oferta={oferta} />
-            ))}
-          </ul>
-        )}
-      </div>
+        </header>
+
+        <div className="mx-auto w-full max-w-5xl flex-1 px-4 sm:px-6 py-6">
+          {/* Filtros: un formulario normal con GET, sin estado en cliente. */}
+          <form
+            method="get"
+            className="flex flex-wrap items-end gap-3 rounded-xl border border-zinc-200 bg-white p-4"
+          >
+            <label className="text-sm">
+              <span className="mb-1 block font-medium text-zinc-700">{t("queBuscas")}</span>
+              <select
+                name="categoria"
+                defaultValue={categoria ?? ""}
+                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm"
+              >
+                <option value="">{t("todo")}</option>
+                {CATEGORIAS_NECESIDAD.map((opcion) => (
+                  <option key={opcion.id} value={opcion.id}>
+                    {E.categoriaNecesidad(opcion.id)}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="text-sm">
+              <span className="mb-1 block font-medium text-zinc-700">{t("deQueTipo")}</span>
+              <select
+                name="tipo"
+                defaultValue={tipo ?? ""}
+                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm"
+              >
+                <option value="">{t("cualquiera")}</option>
+                {TIPOS_DE_OFERTA.map((opcion) => (
+                  <option key={opcion.id} value={opcion.id}>
+                    {E.tipoOferta(opcion.id)}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="text-sm">
+              <span className="mb-1 block font-medium text-zinc-700">{t("provincia")}</span>
+              <select
+                name="provincia"
+                defaultValue={provincia ?? ""}
+                className="rounded-lg border border-zinc-300 px-3 py-2 text-sm"
+              >
+                <option value="">{t("todaEspana")}</option>
+                {provincias.map((nombre) => (
+                  <option key={nombre} value={nombre}>
+                    {nombre}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <button
+              type="submit"
+              className="rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
+            >
+              {t("filtrar")}
+            </button>
+          </form>
+
+          {ofertas.length === 0 ? (
+            <div className="mt-6 rounded-xl border border-dashed border-zinc-300 bg-white p-8 text-center">
+              <p className="font-medium text-zinc-900">{t("vacioTitulo")}</p>
+              <p className="mx-auto mt-1 max-w-md text-sm text-zinc-500">
+                {t("vacioTexto")}
+              </p>
+              <Link
+                href="/registro-empresa"
+                className="mt-4 inline-block rounded-lg bg-brand-teal-dark px-4 py-2 text-sm font-medium text-sobre-color transition-colors hover:bg-brand-navy"
+              >
+                {t("publicarLoQueOfrezco")}
+              </Link>
+            </div>
+          ) : (
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+              {ofertas.map((oferta) => (
+                <TarjetaOfertaPublica key={oferta.id} oferta={oferta} />
+              ))}
+            </ul>
+          )}
+        </div>
+      </main>
     </div>
   );
 }

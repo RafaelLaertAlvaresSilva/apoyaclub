@@ -33,37 +33,40 @@ export default async function PaginaBuscar({ searchParams }: { searchParams: Pro
   return (
     <div className="flex flex-1 flex-col bg-zinc-50">
       <Header />
+      {/* `main#contenido`: a donde lleva "Saltar al contenido". */}
+      <main id="contenido" className="flex flex-1 flex-col">
 
-      <header className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8">
-          <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl">{t("titulo")}</h1>
-          <p className="mt-2 text-zinc-600">{t("texto")}</p>
-          {/* La otra dirección: lo que los clubes necesitan (migración 0016). */}
-          <Link
-            href="/servicios"
-            className="mt-3 inline-block text-sm font-medium text-accion-tinta hover:underline"
-          >
-            {t("verServicios")}
-          </Link>
+        <header className="border-b border-zinc-200 bg-white">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8">
+            <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl">{t("titulo")}</h1>
+            <p className="mt-2 text-zinc-600">{t("texto")}</p>
+            {/* La otra dirección: lo que los clubes necesitan (migración 0016). */}
+            <Link
+              href="/servicios"
+              className="mt-3 inline-block text-sm font-medium text-accion-tinta hover:underline"
+            >
+              {t("verServicios")}
+            </Link>
+          </div>
+        </header>
+
+        <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 sm:px-6 py-6 lg:flex-row lg:items-start">
+          <FiltrosBuscador
+            filtrosIniciales={filtros}
+            vistaInicial={vista}
+            opcionesEquipo={opcionesEquipo}
+            provincias={provincias}
+          />
+
+          {/* La clave fuerza a reiniciar el estado acumulado ("Cargar más") cuando cambian los filtros de la URL. */}
+          <ResultadosBuscador
+            key={JSON.stringify(filtros)}
+            filtros={filtros}
+            vistaInicial={vista}
+            paginaInicial={pagina}
+          />
         </div>
-      </header>
-
-      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 sm:px-6 py-6 lg:flex-row lg:items-start">
-        <FiltrosBuscador
-          filtrosIniciales={filtros}
-          vistaInicial={vista}
-          opcionesEquipo={opcionesEquipo}
-          provincias={provincias}
-        />
-
-        {/* La clave fuerza a reiniciar el estado acumulado ("Cargar más") cuando cambian los filtros de la URL. */}
-        <ResultadosBuscador
-          key={JSON.stringify(filtros)}
-          filtros={filtros}
-          vistaInicial={vista}
-          paginaInicial={pagina}
-        />
-      </div>
+      </main>
     </div>
   );
 }

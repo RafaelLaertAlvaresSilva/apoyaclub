@@ -22,19 +22,22 @@ export default function PaginaFavoritos() {
   return (
     <div className="flex flex-1 flex-col bg-zinc-50">
       <Header />
+      {/* `main#contenido`: a donde lleva "Saltar al contenido". */}
+      <main id="contenido" className="flex flex-1 flex-col">
 
-      <header className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
-          <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl">{t("titulo")}</h1>
-          <p className="mt-2 max-w-2xl text-zinc-600">
-            {t("intro")}
-          </p>
+        <header className="border-b border-zinc-200 bg-white">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
+            <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl">{t("titulo")}</h1>
+            <p className="mt-2 max-w-2xl text-zinc-600">
+              {t("intro")}
+            </p>
+          </div>
+        </header>
+
+        <div className="mx-auto w-full max-w-4xl flex-1 px-4 sm:px-6 py-8">
+          <ListaDeGuardados />
         </div>
-      </header>
-
-      <div className="mx-auto w-full max-w-4xl flex-1 px-4 sm:px-6 py-8">
-        <ListaDeGuardados />
-      </div>
+      </main>
     </div>
   );
 }

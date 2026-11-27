@@ -36,27 +36,30 @@ export default async function Pagina({ params }: { params: Promise<{ slug: strin
   return (
     <div className="flex flex-1 flex-col bg-zinc-50">
       <Header />
+      {/* `main#contenido`: a donde lleva "Saltar al contenido". */}
+      <main id="contenido" className="flex flex-1 flex-col">
 
-      <div className="mx-auto w-full max-w-4xl flex-1 px-4 sm:px-6 py-6">
-        <nav className="text-sm text-zinc-500">
-          <Link href={`/club/${perfil.slug}`} className="font-medium text-accion-tinta hover:underline">
-            {perfil.name}
-          </Link>
-        </nav>
+        <div className="mx-auto w-full max-w-4xl flex-1 px-4 sm:px-6 py-6">
+          <nav className="text-sm text-zinc-500">
+            <Link href={`/club/${perfil.slug}`} className="font-medium text-accion-tinta hover:underline">
+              {perfil.name}
+            </Link>
+          </nav>
 
-        <h1 className="mt-3 text-2xl font-bold text-zinc-900 sm:text-3xl">{t("necesidades.titulo")}</h1>
-        <p className="mt-2 max-w-2xl text-zinc-600">{t("necesidades.intro")}</p>
+          <h1 className="mt-3 text-2xl font-bold text-zinc-900 sm:text-3xl">{t("necesidades.titulo")}</h1>
+          <p className="mt-2 max-w-2xl text-zinc-600">{t("necesidades.intro")}</p>
 
-        <div className="mt-6">
-          <ListadoDeOportunidades
-            oportunidades={delListado}
-            slug={perfil.slug}
-            paisDelClub={perfil.country}
-            nombreClub={perfil.name}
-            esNecesidad={ES_NECESIDAD}
-          />
+          <div className="mt-6">
+            <ListadoDeOportunidades
+              oportunidades={delListado}
+              slug={perfil.slug}
+              paisDelClub={perfil.country}
+              nombreClub={perfil.name}
+              esNecesidad={ES_NECESIDAD}
+            />
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
