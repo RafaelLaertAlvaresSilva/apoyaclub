@@ -4,6 +4,7 @@ import {
   agruparPorMes,
   agruparPorTemporada,
   fechaCorta,
+  fechaMedia,
   fechaLarga,
   hoyParaElFormulario,
   mediaParaLaFicha,
@@ -136,6 +137,9 @@ describe("fechas", () => {
   it("no se va un día al formatear, pase lo que pase con la zona horaria", () => {
     expect(fechaLarga("2026-01-01")).toBe("1 de enero de 2026");
     expect(fechaCorta("2026-01-01")).toBe("01/01/2026");
+    expect(fechaMedia("2026-09-12")).toBe("12 sept 2026");
+    expect(fechaMedia("2026-09-12", "en-GB")).toBe("12 Sept 2026");
+    expect(fechaMedia("raro")).toBe("raro");
   });
 
   it("usa la fecha local del navegador y no la de UTC", () => {

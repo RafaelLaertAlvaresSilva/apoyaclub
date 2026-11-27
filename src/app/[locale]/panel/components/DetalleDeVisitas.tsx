@@ -25,6 +25,19 @@ export function DetalleDeVisitas({ resumen }: { resumen: ResumenDeVisitas }) {
   const sinNada = resumen.totalVisitas === 0 && resumen.totalContactos === 0;
   if (sinNada) return null;
 
+  // Sin nada en el último mes, las dos cajas en 0 repetían lo que ya
+  // dicen las cifras de arriba del inicio y "Tu mes en ApoyaClub" (tres
+  // veces el mismo cero, visto el 27-11-2026). Queda solo lo que no se
+  // dice en ningún otro sitio: lo que lleva desde que entró.
+  const mesVacio = resumen.mes.visitas === 0 && resumen.mes.contactos === 0;
+  if (mesVacio) {
+    return (
+      <p className="mt-4 border-t border-zinc-100 pt-3 text-xs text-zinc-500">
+        {t("desdeQueEstas", { visitas: resumen.totalVisitas, contactos: resumen.totalContactos })}
+      </p>
+    );
+  }
+
   return (
     <div className="mt-5 border-t border-zinc-100 pt-4">
       <div className="flex flex-wrap items-center justify-between gap-3">

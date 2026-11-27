@@ -173,6 +173,19 @@ export function fechaLarga(fechaISO: string, intlLocale = "es-ES"): string {
   }).format(Date.UTC(anio, mes - 1, dia));
 }
 
+/**
+ * "12 may 2026" (con el mes corto del idioma): el formato del resto del
+ * panel —tareas, informes—. La lista de partidos era la única que ponía
+ * "12/05/2026" (27-11-2026).
+ */
+export function fechaMedia(fechaISO: string, intlLocale = "es-ES"): string {
+  const [anio, mes, dia] = fechaISO.split("-").map(Number);
+  if (!anio || !mes || !dia || mes > 12) return fechaISO;
+  return new Intl.DateTimeFormat(intlLocale, { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(
+    Date.UTC(anio, mes - 1, dia),
+  );
+}
+
 /** "12/05/2026", para las tablas donde no cabe la fecha larga. */
 export function fechaCorta(fechaISO: string): string {
   const [anio, mes, dia] = fechaISO.split("-");

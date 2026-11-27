@@ -249,7 +249,7 @@ export function RegistroDePublico({
                 </p>
               ) : (
                 <form action={copiarMedia} className="flex flex-wrap items-center gap-3">
-                  <p className="min-w-0 flex-1 text-sm text-zinc-600">
+                  <p className="min-w-0 flex-1 basis-56 text-sm text-zinc-600">
                     {t.rich(mediaEnLaFicha != null ? "fichaPone" : "fichaSinMedia", {
                       enFicha: mediaEnLaFicha != null ? formatoNumero.format(mediaEnLaFicha) : "",
                       media: formatoNumero.format(media),

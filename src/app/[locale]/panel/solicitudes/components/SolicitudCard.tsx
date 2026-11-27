@@ -137,7 +137,7 @@ export function SolicitudCard({
           abre Tareas con esta empresa ya elegida. */}
       {solicitud.status === "closed" && (
         <div className="mt-4 flex flex-wrap items-center gap-3 rounded-lg border border-teal-200 bg-teal-50 p-3">
-          <p className="min-w-0 flex-1 text-sm text-teal-900">{t("cerradaTexto")}</p>
+          <p className="min-w-0 flex-1 basis-56 text-sm text-teal-900">{t("cerradaTexto")}</p>
           <Link
             href={
               solicitud.remitenteEmpresa || solicitud.remitenteNombre
