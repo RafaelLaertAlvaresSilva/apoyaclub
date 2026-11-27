@@ -136,12 +136,12 @@ export default async function EmpezarPage({ searchParams }: { searchParams: Prom
                 >
                   {hecho[id] ? "✓" : indice + 1}
                 </span>
-                <span className={`hidden text-xs font-semibold leading-tight sm:block ${activo ? "text-titular" : "text-zinc-600"}`}>
+                <span className={`sr-only text-xs font-semibold leading-tight xl:not-sr-only xl:block ${activo ? "text-titular" : "text-zinc-600"}`}>
                   {t(`pasos.${id}.nombre`)}
                 </span>
               </>
             );
-            const clases = `flex h-full flex-col items-center gap-1.5 rounded-xl border px-2 py-3 text-center transition sm:flex-row sm:text-left ${
+            const clases = `flex h-full flex-col items-center gap-1.5 rounded-xl border px-2 py-3 text-center transition xl:flex-row xl:text-left ${
               activo ? "border-accion bg-white shadow-sm" : "border-zinc-200 bg-white/60 hover:border-zinc-300"
             }`;
             return (
