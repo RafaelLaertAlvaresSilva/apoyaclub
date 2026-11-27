@@ -143,7 +143,7 @@ export default async function RepresentantesPage({ searchParams }: { searchParam
       {representantes.length === 0 ? (
         <p className="text-sm text-zinc-500">Todavía no hay ningún representante.</p>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
+        <div className="relative overflow-x-auto rounded-xl border border-zinc-200 bg-white">
           <table className="w-full min-w-[760px] text-left text-sm">
             <thead className={CABECERA_TABLA}>
               <tr>

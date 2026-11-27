@@ -204,7 +204,7 @@ export function RegistroDePublico({
               <h3 className="text-sm font-semibold text-zinc-900">{t("mesAMes")}</h3>
               <p className="mt-0.5 text-xs text-zinc-500">{t("mesAMesTexto")}</p>
 
-              <div className="mt-3 overflow-x-auto">
+              <div className="relative mt-3 overflow-x-auto">
                 <table className="w-full min-w-[380px] text-left text-sm">
                   <thead className="text-xs uppercase tracking-wide text-zinc-500">
                     <tr>

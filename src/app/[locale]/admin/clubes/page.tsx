@@ -218,7 +218,7 @@ export default async function AdminClubesPage({
       {/* Los clubes que se han atascado: a quién escribir hoy. */}
       {porEscribir.length > 0 && (
         <div className="flex flex-wrap items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-          <p className="flex-1">
+          <p className="min-w-0 flex-1 basis-56">
             <span className="font-semibold">{t("avance.porEscribir", { n: porEscribir.length })}</span>{" "}
             {t("avance.porEscribirTexto")}
           </p>
@@ -306,7 +306,7 @@ export default async function AdminClubesPage({
           {t("ningunoCoincide", { busqueda: buscar ?? "" })}
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
+        <div className="relative overflow-x-auto rounded-xl border border-zinc-200 bg-white">
           <table className="w-full min-w-[840px] text-left text-sm">
             <thead className={CABECERA_TABLA}>
               <tr>

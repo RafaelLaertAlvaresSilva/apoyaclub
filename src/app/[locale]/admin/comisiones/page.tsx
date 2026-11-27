@@ -171,7 +171,7 @@ export default async function ComisionesPage({ searchParams }: { searchParams: P
               {t("sinCobros", { pais: liquidacion.pais })}
             </p>
           ) : (
-            <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
+            <div className="relative overflow-x-auto rounded-xl border border-zinc-200 bg-white">
               <table className="w-full min-w-[720px] text-left text-sm">
                 <thead className={CABECERA_TABLA}>
                   <tr>

@@ -197,7 +197,7 @@ export default async function AdminEmpresasPage({
       ) : visibles.length === 0 ? (
         <p className="text-sm text-zinc-500">Ninguna empresa coincide con «{buscar}».</p>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
+        <div className="relative overflow-x-auto rounded-xl border border-zinc-200 bg-white">
           <table className="w-full min-w-[840px] text-left text-sm">
             <thead className={CABECERA_TABLA}>
               <tr>

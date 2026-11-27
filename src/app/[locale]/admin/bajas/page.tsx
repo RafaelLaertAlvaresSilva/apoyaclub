@@ -112,7 +112,7 @@ export default async function BajasPage() {
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
+          <div className="relative overflow-x-auto rounded-xl border border-zinc-200 bg-white">
             <table className="w-full min-w-[820px] text-left text-sm">
               <thead className={CABECERA_TABLA}>
                 <tr>

@@ -87,7 +87,7 @@ function BloqueGuia({ bloque }: { bloque: Bloque }) {
         <figure className="mt-7">
           {/* En el teléfono la tabla se desliza de lado en vez de
               aplastar las columnas. */}
-          <div className="overflow-x-auto rounded-2xl border border-zinc-200 bg-white shadow-sm">
+          <div className="relative overflow-x-auto rounded-2xl border border-zinc-200 bg-white shadow-sm">
             <table className="w-full min-w-[34rem] border-collapse text-left text-[0.95rem] leading-snug">
               <thead>
                 <tr className="bg-brand-navy text-sobre-color">

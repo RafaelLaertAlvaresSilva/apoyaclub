@@ -108,7 +108,7 @@ export default async function FinanzasPage() {
 
       <section>
         <h2 className="text-sm font-semibold text-zinc-500">Reparto por plan</h2>
-        <div className="mt-3 overflow-x-auto rounded-xl border border-zinc-200 bg-white">
+        <div className="relative mt-3 overflow-x-auto rounded-xl border border-zinc-200 bg-white">
           <table className="w-full min-w-[520px] text-left text-sm">
             <thead className={CABECERA_TABLA}>
               <tr>
@@ -168,7 +168,7 @@ export default async function FinanzasPage() {
 
       <section>
         <h2 className="text-sm font-semibold text-zinc-500">Club a club</h2>
-        <div className="mt-3 overflow-x-auto rounded-xl border border-zinc-200 bg-white">
+        <div className="relative mt-3 overflow-x-auto rounded-xl border border-zinc-200 bg-white">
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead className={CABECERA_TABLA}>
               <tr>
