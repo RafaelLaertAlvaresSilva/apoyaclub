@@ -279,7 +279,9 @@ function TarjetaOportunidad({
           alt=""
           width={600}
           height={300}
-          unoptimized
+          // Que la sirva Next a su tamaño: era la foto original del club
+          // (1600 px o más) para una miniatura del listado.
+          sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
           className="aspect-[2/1] w-full rounded-lg border border-zinc-200 bg-zinc-50 object-contain"
         />
       )}

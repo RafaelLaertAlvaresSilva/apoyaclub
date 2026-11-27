@@ -671,7 +671,9 @@
     }
   },
   "ctaFijo": {
-    "texto": "Prueba 1 mes gratis"
+    "texto": "Prueba 1 mes gratis",
+    "seisMeses": "Consigue {meses} meses gratis",
+    "seisMesesCondiciones": "{n, plural, one {Queda # plaza} other {Quedan # plazas}} · Sin tarjeta · Sin permanencia"
   },
   "paraClubes": {
     "meta": {

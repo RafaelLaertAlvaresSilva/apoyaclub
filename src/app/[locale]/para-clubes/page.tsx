@@ -4,11 +4,10 @@ import { DatosEstructurados } from "@/components/DatosEstructurados";
 import { grafoDePreguntas } from "@/lib/datos-estructurados";
 import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/Header";
-import { CtaFijoMovil } from "../components/CtaFijoMovil";
 import { VideoDeLaPortada } from "../components/VideoDeLaPortada";
 import { MenuDeSecciones } from "../components/MenuDeSecciones";
 import { EntradaAlBajar } from "../components/EntradaAlBajar";
-import { FranjaSeisMeses } from "../components/AvisoSeisMeses";
+import { CtaFijoSegunPlazas, FranjaSeisMeses } from "../components/AvisoSeisMeses";
 import {
   FondoDeHeroe,
   FuncionesDestacadas,
@@ -146,10 +145,7 @@ export default async function ParaClubesPage() {
       </main>
 
       <EntradaAlBajar />
-      <CtaFijoMovil
-        texto={t("ctaFijo.texto")}
-        condiciones={t("ctaFinal.condiciones")}
-      />
+      <CtaFijoSegunPlazas />
     </div>
   );
 }

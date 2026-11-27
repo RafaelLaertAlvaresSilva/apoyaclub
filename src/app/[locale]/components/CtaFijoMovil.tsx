@@ -66,7 +66,16 @@ function ocultoEnElServidor(): boolean {
   return false;
 }
 
-export function CtaFijoMovil({ texto, condiciones }: { texto: string; condiciones: string }) {
+export function CtaFijoMovil({
+  texto,
+  condiciones,
+  href = "/registro-club",
+}: {
+  texto: string;
+  condiciones: string;
+  /** A dónde lleva. Mientras quedan plazas de los 6 meses, a su página. */
+  href?: string;
+}) {
   const visible = useSyncExternalStore(suscribirse, debeVerse, ocultoEnElServidor);
 
   if (!visible) return null;
@@ -74,7 +83,7 @@ export function CtaFijoMovil({ texto, condiciones }: { texto: string; condicione
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-zinc-200 bg-white/95 px-4 py-3 backdrop-blur sm:hidden">
       <Link
-        href="/registro-club"
+        href={href}
         className="flex w-full items-center justify-center rounded-full bg-brand-teal-dark px-6 py-3.5 text-base font-bold text-sobre-color"
       >
         {texto}

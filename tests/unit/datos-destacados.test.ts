@@ -146,7 +146,7 @@ describe("las medidas de la ficha en el teléfono", () => {
     ["el hueco de dentro", "gap-1.5", "sm:gap-2"],
     ["el cuadro del icono", "h-7 w-7", "sm:h-8 sm:w-8"],
     ["el icono", "h-4 w-4", "sm:h-[18px] sm:w-[18px]"],
-    ["el rótulo", "text-[10px]", "sm:text-[11px]"],
+    ["el rótulo", "text-[11px]", "sm:text-xs"],
     ["el valor", "text-[13px]", "sm:text-sm"],
   ])("%s se encoge en el teléfono y vuelve a su tamaño en el ordenador", (_, movil, ordenador) => {
     expect(TARJETAS).toContain(movil);

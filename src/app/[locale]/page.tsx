@@ -5,9 +5,8 @@ import { DatosEstructurados } from "@/components/DatosEstructurados";
 import { grafoDeLaPortada } from "@/lib/datos-estructurados";
 import { SITE_URL } from "@/lib/site";
 import { VideoDeLaPortada } from "./components/VideoDeLaPortada";
-import { CtaFijoMovil } from "./components/CtaFijoMovil";
 import { EntradaAlBajar } from "./components/EntradaAlBajar";
-import { FranjaSeisMeses, TarjetaSeisMeses } from "./components/AvisoSeisMeses";
+import { CtaFijoSegunPlazas, FranjaSeisMeses, TarjetaSeisMeses } from "./components/AvisoSeisMeses";
 import {
   CintasDelHero,
   FondoDeHeroe,
@@ -175,7 +174,7 @@ export default async function Home() {
       </main>
 
       <EntradaAlBajar />
-      <CtaFijoMovil texto={t("ctaFijo.texto")} condiciones={t("ctaFinal.condiciones")} />
+      <CtaFijoSegunPlazas />
     </div>
   );
 }

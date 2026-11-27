@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { paisDelIdioma } from "@/lib/paises";
 import { MESES_PILOTO, PLAZAS_PILOTO, plazasPilotoLibres } from "@/lib/piloto";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { CtaFijoMovil } from "./CtaFijoMovil";
 import { TarjetaCerrable } from "./TarjetaCerrable";
 
 /**
@@ -115,4 +116,27 @@ export async function TarjetaSeisMeses() {
       </TarjetaCerrable>
     </section>
   );
+}
+
+/**
+ * El botón fijo de abajo en el teléfono (portada y "Para clubes").
+ *
+ * Mientras quedan plazas de los 6 meses, lleva a su página y lo dice: con
+ * la franja de arriba anunciando "6 meses gratis" y este botón diciendo
+ * "Prueba 1 mes gratis", un club no sabía cuál de los dos era (decidido
+ * por Rafael el 27-11-2026: hasta completar los 20 clubes). Cuando se
+ * llenan, vuelve a ser el de siempre.
+ */
+export async function CtaFijoSegunPlazas() {
+  const [libres, tHome] = await Promise.all([plazasLibres(), getTranslations("home")]);
+  if (libres) {
+    return (
+      <CtaFijoMovil
+        href={ENLACE}
+        texto={tHome("ctaFijo.seisMeses", { meses: MESES_PILOTO })}
+        condiciones={tHome("ctaFijo.seisMesesCondiciones", { n: libres })}
+      />
+    );
+  }
+  return <CtaFijoMovil texto={tHome("ctaFijo.texto")} condiciones={tHome("ctaFinal.condiciones")} />;
 }

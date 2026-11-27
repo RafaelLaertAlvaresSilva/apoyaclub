@@ -24,7 +24,15 @@ import { FichaDelClub } from "../../club/[slug]/components/FichaDelClub";
  * mande una solicitud a un club que no existe. Y no se indexa: no es
  * un club de verdad y no debe salir en Google.
  */
-export const metadata: Metadata = { robots: { index: false, follow: false } };
+export async function generateMetadata({ params }: { params: Promise<{ deporte: string }> }): Promise<Metadata> {
+  const { deporte } = await params;
+  const robots = { index: false, follow: false };
+  if (!tieneEjemplo(deporte)) return { robots };
+  // "Club de Baloncesto de ejemplo": el nombre de la pestaña decía solo
+  // "ApoyaClub — Conecta tu club…", igual en los 24 ejemplos.
+  const [t, tDeporte] = await Promise.all([getTranslations("club.ejemplo"), getTranslations("common.etiquetas.deporte")]);
+  return { title: t("nombreClub", { deporte: tDeporte(deporte) }), robots };
+}
 
 /** Fotos de Pexels (licencia libre), elegidas por Rafael. */
 type Fotos = { portada: string | null; galeria: string[] };

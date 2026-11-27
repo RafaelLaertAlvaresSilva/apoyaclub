@@ -671,7 +671,9 @@
     }
   },
   "ctaFijo": {
-    "texto": "Experimenta 1 mês grátis"
+    "texto": "Experimenta 1 mês grátis",
+    "seisMeses": "Ganha {meses} meses grátis",
+    "seisMesesCondiciones": "{n, plural, one {Resta # vaga} other {Restam # vagas}} · Sem cartão · Sem fidelização"
   },
   "paraClubes": {
     "meta": {

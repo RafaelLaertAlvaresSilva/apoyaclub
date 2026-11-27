@@ -671,7 +671,9 @@
     }
   },
   "ctaFijo": {
-    "texto": "Try 1 month free"
+    "texto": "Try 1 month free",
+    "seisMeses": "Get {meses} months free",
+    "seisMesesCondiciones": "{n, plural, one {# place left} other {# places left}} · No card · No commitment"
   },
   "paraClubes": {
     "meta": {

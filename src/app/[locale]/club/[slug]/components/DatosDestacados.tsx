@@ -188,7 +188,7 @@ export function DatosDestacados({ datos }: { datos: Dato[] }) {
           </span>
 
           <div className="min-w-0">
-            <dt className="text-[10px] font-medium uppercase tracking-wide text-zinc-500 sm:text-[11px]">
+            <dt className="text-[11px] font-medium uppercase tracking-wide text-zinc-500 sm:text-xs">
               {dato.etiqueta}
             </dt>
             {/* Sin `truncate`: el valor se parte en dos líneas antes

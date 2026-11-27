@@ -48,7 +48,7 @@ export function FotosDeLaOportunidad({
         alt={t("fotoPrincipal", { titulo })}
         width={1200}
         height={800}
-        unoptimized
+        sizes="(min-width: 640px) 66vw, 100vw"
         className="mx-auto h-auto max-h-[70vh] w-full rounded-xl border border-zinc-200 bg-zinc-50 object-contain sm:w-2/3 print:max-h-[7cm] print:w-auto"
       />
 
@@ -61,7 +61,7 @@ export function FotosDeLaOportunidad({
                 alt={t("fotoN", { titulo, numero: posicion + 2 })}
                 width={600}
                 height={400}
-                unoptimized
+                sizes="50vw"
                 className="aspect-[3/2] w-full rounded-lg border border-zinc-200 bg-zinc-50 object-contain"
               />
             </li>
