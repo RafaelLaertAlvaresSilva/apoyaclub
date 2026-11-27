@@ -99,3 +99,27 @@ export function precioMasBajo(oportunidades: { value: number; esNecesidad?: bool
   const conPrecio = oportunidades.filter(tienePrecio).map((oportunidad) => oportunidad.value);
   return conPrecio.length > 0 ? Math.min(...conPrecio) : null;
 }
+
+/**
+ * Fecha con el mes abreviado: "1 sept 2026", "1 Sept 2026", "1 de set.
+ * de 2026"... y "1 set. 2026" en portugués de Portugal.
+ *
+ * Hace falta porque `Intl` en pt-PT ignora el `month: "short"` cuando va
+ * con el día y lo pone en números: "1/09/2026", que en una lista donde
+ * el resto de idiomas dice el mes con letras queda a medias. Para pt-PT
+ * se arma a mano con el día, el mes corto suelto ("set.") y el año.
+ */
+export function formatoConMesCorto(
+  intlLocale: string,
+  { anio = true, timeZone }: { anio?: boolean; timeZone?: string } = {},
+): { format: (fecha: Date | number) => string } {
+  const opciones: Intl.DateTimeFormatOptions = { day: "numeric", month: "short", ...(anio ? { year: "numeric" } : {}), timeZone };
+  if (intlLocale !== "pt-PT") return new Intl.DateTimeFormat(intlLocale, opciones);
+
+  const dia = new Intl.DateTimeFormat(intlLocale, { day: "numeric", timeZone });
+  const mes = new Intl.DateTimeFormat(intlLocale, { month: "short", timeZone });
+  const año = new Intl.DateTimeFormat(intlLocale, { year: "numeric", timeZone });
+  return {
+    format: (fecha) => [dia.format(fecha), mes.format(fecha), ...(anio ? [año.format(fecha)] : [])].join(" "),
+  };
+}

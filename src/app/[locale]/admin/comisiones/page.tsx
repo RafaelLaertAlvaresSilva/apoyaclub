@@ -10,6 +10,7 @@ import { cobrosDeClubes } from "@/lib/comisiones-stripe";
 import { BANDERA_DEL_PAIS, type Pais } from "@/lib/paises";
 import { AdminNav } from "../components/AdminNav";
 import { CABECERA_TABLA } from "../components/estilos";
+import { formatoConMesCorto } from "@/lib/format";
 
 type Liquidacion = {
   email: string;
@@ -36,7 +37,7 @@ export default async function ComisionesPage({ searchParams }: { searchParams: P
   const t = await getTranslations("admin.comisiones");
   const idioma = intlLocaleDe(await getLocale());
   const formatoMes = new Intl.DateTimeFormat(idioma, { month: "long", year: "numeric", timeZone: "UTC" });
-  const formatoFecha = new Intl.DateTimeFormat(idioma, { day: "numeric", month: "short", timeZone: "Europe/Madrid" });
+  const formatoFecha = formatoConMesCorto(idioma, { anio: false, timeZone: "Europe/Madrid" });
   const nombreDelMes = (mes: string) => {
     const texto = formatoMes.format(new Date(`${mes}-01T00:00:00Z`));
     return texto.charAt(0).toUpperCase() + texto.slice(1);

@@ -1,3 +1,5 @@
+import { formatoConMesCorto } from "@/lib/format";
+
 /**
  * El registro de público en los partidos (migración 0037).
  *
@@ -181,7 +183,7 @@ export function fechaLarga(fechaISO: string, intlLocale = "es-ES"): string {
 export function fechaMedia(fechaISO: string, intlLocale = "es-ES"): string {
   const [anio, mes, dia] = fechaISO.split("-").map(Number);
   if (!anio || !mes || !dia || mes > 12) return fechaISO;
-  return new Intl.DateTimeFormat(intlLocale, { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(
+  return formatoConMesCorto(intlLocale, { timeZone: "UTC" }).format(
     Date.UTC(anio, mes - 1, dia),
   );
 }

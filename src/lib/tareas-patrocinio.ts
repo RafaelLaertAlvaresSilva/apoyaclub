@@ -1,3 +1,5 @@
+import { formatoConMesCorto } from "@/lib/format";
+
 /**
  * Las tareas que el club le debe a cada patrocinador (migración 0030).
  *
@@ -178,7 +180,7 @@ export function agruparPorEmpresa(
 /** "4 sept 2026" a partir de "2026-09-04", sin pasar por UTC. */
 export function fechaLegible(fechaISO: string, intlLocale = "es-ES"): string {
   const [anio, mes, dia] = fechaISO.split("-").map(Number);
-  return new Intl.DateTimeFormat(intlLocale, { day: "numeric", month: "short", year: "numeric" }).format(
+  return formatoConMesCorto(intlLocale).format(
     new Date(anio, mes - 1, dia),
   );
 }

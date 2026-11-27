@@ -18,6 +18,7 @@ import {
 import type { ClubAdminRow } from "../types";
 import { AccionConConfirmacion } from "@/components/AccionConConfirmacion";
 import { AvanceDelClub } from "./AvanceDelClub";
+import { formatoConMesCorto } from "@/lib/format";
 
 
 const ESTILO_SUSCRIPCION: Record<Exclude<SubscriptionStatus, null>, string> = {
@@ -39,11 +40,7 @@ export function FilaClub({ fila, esAdministrador }: { fila: ClubAdminRow; esAdmi
   const tf = useTranslations("admin.clubes.fila");
   const tPais = useTranslations("admin.paises");
   const tEstado = useTranslations("panel.suscripcion.estados");
-  const formatoFecha = new Intl.DateTimeFormat(intlLocaleDe(useLocale()), {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
+  const formatoFecha = formatoConMesCorto(intlLocaleDe(useLocale()));
 
   // Un club "invitado" no es un estado nuevo en la base de datos: es una
   // prueba gratuita que dura mucho más que el mes normal. Ver

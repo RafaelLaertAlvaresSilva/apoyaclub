@@ -133,5 +133,36 @@
     "cobros": "{n, plural, one {# cobrança} other {# cobranças}}",
     "panel": "Painel de administração",
     "comoSeCalculaSinIva": "Como se calcula, em cada cobrança: o que o clube paga, menos o que a Stripe fica dessa cobrança (no Brasil não há IVA). Do que resta, {porcentaje} %. Contam todos os clubes {pais, select, BR {do Brasil} PT {de Portugal} other {de Espanha}} e os reembolsos já estão descontados. No Brasil, em reais."
+  },
+  "empresas": {
+    "alta": "Registo",
+    "email": "Email",
+    "empresa": "Empresa",
+    "empresas": "Empresas",
+    "localidad": "Localidade",
+    "panelDeAdministracion": "Painel de administração",
+    "sector": "Setor",
+    "todaviaNoSeHa": "Ainda não se registou nenhuma empresa."
+  },
+  "panel": {
+    "actividad": "Atividade",
+    "busquedasRealizadas": "Pesquisas feitas",
+    "cancelados": "Cancelados",
+    "clubesDePago": "Clubes pagantes",
+    "clubesEnPrueba": "Clubes em teste",
+    "clubesRegistrados": "Clubes registados",
+    "clubesSuspendidos": "Clubes suspensos",
+    "clubesVerificados": "Clubes verificados",
+    "clubesYEmpresas": "Clubes e empresas",
+    "conversionDePruebaA": "Conversão de teste para pago",
+    "empresasRegistradas": "Empresas registadas",
+    "moderacion": "Moderação",
+    "nuncaHanEmpezado": "Nunca começaram",
+    "oportunidadesPublicadas": "Oportunidades publicadas",
+    "pagoPendiente": "Pagamento pendente",
+    "panelDeAdministracion": "Painel de administração",
+    "resumen": "Resumo",
+    "solicitudesDeContactoEnviadas": "Pedidos de contacto enviados",
+    "suscripcion": "Subscrição"
   }
 }

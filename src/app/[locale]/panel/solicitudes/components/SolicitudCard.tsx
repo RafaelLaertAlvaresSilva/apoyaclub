@@ -4,6 +4,7 @@ import { useIntlLocale } from "@/i18n/use-intl-locale";
 import { ESTADOS_SOLICITUD } from "@/lib/contact-requests";
 import type { ContactRequest, ContactRequestStatus } from "@/lib/types";
 import { cambiarEstadoSolicitud } from "../actions";
+import { formatoConMesCorto } from "@/lib/format";
 
 const ESTILO_ESTADO: Record<ContactRequestStatus, string> = {
   new: "bg-accion text-sobre-color",
@@ -24,11 +25,7 @@ export function SolicitudCard({
   // identifica al remitente es lo que escribió en el formulario. Las
   // solicitudes de antes no lo traen: ahí el nombre no se puede saber.
   const t = useTranslations("panel.solicitudes");
-  const formatoFecha = new Intl.DateTimeFormat(useIntlLocale(), {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
+  const formatoFecha = formatoConMesCorto(useIntlLocale());
   const titular =
     solicitud.remitenteEmpresa || solicitud.remitenteNombre || t("solicitudAnterior");
 
