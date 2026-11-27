@@ -626,7 +626,8 @@
       "texto": "Se hace solo con tu ficha y tus oportunidades. Mándalo a cinco empresas de tu zona: así empiezan los patrocinios.",
       "accion": "Ver mi dossier"
     },
-    "deTantos": "{hechos} de {total}"
+    "deTantos": "{hechos} de {total}",
+    "pasoAPaso": "Hacerlo paso a paso →"
   },
   "privacidad": {
     "descargaUnArchivoCon": "Descarga un archivo con todos los datos de tu cuenta: perfil del club, equipos, patrocinadores, oportunidades, dossier, solicitudes de contacto recibidas y el registro de tus consentimientos.",
@@ -1691,6 +1692,65 @@
         "etiqueta": "Tareas pasadas de fecha",
         "hayQueMirar": "Hay que ponerse al día",
         "alDia": "Todo al día"
+      }
+    }
+  },
+  "empezar": {
+    "tituloPestana": "Primeros pasos",
+    "etiqueta": "Primeros pasos",
+    "titulo": "Vamos a dejar lista la página de vuestro club",
+    "subtitulo": "Cinco pasos, unos diez minutos. Podéis parar cuando queráis: lo que guardéis se queda, y volvéis aquí desde el inicio del panel.",
+    "deTantos": "{hechos} de {total} hechos",
+    "pasoDe": "Paso {numero} de {total}",
+    "atras": "← Atrás",
+    "seguir": "Seguir →",
+    "saltar": "Saltar por ahora →",
+    "completar": "Completar",
+    "consejo": "Un consejo",
+    "ejemplo": {
+      "titulo": "Así queda un club de ejemplo",
+      "texto": "La página de un club inventado de vuestro deporte, ya completa: para que veáis adónde vais a llegar.",
+      "boton": "Ver el ejemplo ↗"
+    },
+    "pasos": {
+      "club": {
+        "nombre": "Vuestro club",
+        "titulo": "Cómo se llama y quiénes sois",
+        "texto": "Con el nombre, la localidad y unas líneas sobre el club, vuestra página ya existe.",
+        "quienesSomos": "Quiénes somos",
+        "ayudaDescripcion": "Cuántos sois, qué equipos tenéis y qué os hace especiales. Es lo primero que lee una empresa.",
+        "ejemploDescripcion": "Por ejemplo: «Club de baloncesto de barrio con 310 socios y 140 niños y niñas en la cantera. Jugamos cada fin de semana en el pabellón municipal y en verano organizamos un torneo que llena el pueblo».",
+        "boton": "Guardar y seguir →",
+        "consejo": "No hace falta que quede perfecto: lo podéis cambiar cuando queráis desde Perfil del club."
+      },
+      "imagenes": {
+        "nombre": "Escudo y portada",
+        "titulo": "Vuestro escudo y una foto de portada",
+        "texto": "El escudo y una buena foto arriba son lo que hace que la página parezca la de un club serio.",
+        "consejo": "Para la portada, una foto apaisada del equipo o de la grada llena. Si sale gente menor de edad, aseguraos de tener el permiso de las familias."
+      },
+      "equipos": {
+        "nombre": "Equipos",
+        "titulo": "Vuestros equipos",
+        "texto": "Añadid cada equipo con su deporte y su categoría. Si tenéis varios deportes, cada equipo lleva el suyo.",
+        "consejo": "Con el número de jugadores de cada equipo, la página calcula sola a cuánta gente llega el club, que es lo que más mira una empresa."
+      },
+      "oportunidades": {
+        "nombre": "Oportunidades",
+        "titulo": "Vuestras primeras oportunidades",
+        "texto": "Lo que podéis ofrecer a una empresa. Pulsad el botón y os las dejamos escritas con los datos de vuestro club: elegid las que os encajen y publicadlas.",
+        "yaTienes": "Ya tenéis {n, plural, one {# oportunidad publicada} other {# oportunidades publicadas}}.",
+        "aMano": "¿Preferís escribirlas vosotros? Id a <enlace>Oportunidades</enlace>.",
+        "consejo": "Mejor tres o cuatro bien elegidas que veinte. Siempre podéis añadir más."
+      },
+      "compartir": {
+        "nombre": "¡Lista!",
+        "titulo": "Vuestra página ya se puede enseñar",
+        "texto": "Ahora toca darla a conocer: mirad cómo ha quedado y descargad el dossier para mandarlo a cinco empresas de vuestra zona.",
+        "verPagina": "Ver mi página",
+        "dossier": "Descargar mi dossier",
+        "inicio": "Volver al inicio",
+        "consejo": "Las empresas que más responden son las cercanas: la de los padres y madres del club, la del bar de al lado, la del taller de siempre."
       }
     }
   }

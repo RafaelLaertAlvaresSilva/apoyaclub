@@ -26,6 +26,15 @@ export function PrimerosPasos({ pasos }: { pasos: PasoInicial[] }) {
         <p className="text-sm font-bold tabular-nums text-accion-tinta">{t("deTantos", { hechos, total: pasos.length })}</p>
       </div>
       <p className="mt-1 text-sm text-zinc-600">{t("subtitulo")}</p>
+      {/* El asistente (`/panel/empezar`): lo mismo, de uno en uno y con
+          el club de ejemplo al lado. Para el que no sabe por dónde
+          seguir, que es casi todo el que se queda a medias. */}
+      <Link
+        href="/panel/empezar"
+        className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-accion px-4 py-2.5 text-sm font-bold text-sobre-color shadow-sm transition hover:bg-accion-fuerte"
+      >
+        {t("pasoAPaso")}
+      </Link>
       {/* La barra de cuánto queda: con ella, "Empieza por aquí" se lee
           como algo que se termina, no como una lista más. */}
       <div

@@ -118,7 +118,8 @@
       "texto": "It builds itself from your profile and opportunities. Send it to five local businesses: that’s how sponsorships start.",
       "accion": "See my pack"
     },
-    "deTantos": "{hechos} of {total}"
+    "deTantos": "{hechos} of {total}",
+    "pasoAPaso": "Do it step by step →"
   },
   "solicitudes": {
     "panelDelClub": "Club dashboard",
@@ -1691,6 +1692,65 @@
         "etiqueta": "Overdue tasks",
         "hayQueMirar": "Time to catch up",
         "alDia": "All up to date"
+      }
+    }
+  },
+  "empezar": {
+    "tituloPestana": "First steps",
+    "etiqueta": "First steps",
+    "titulo": "Let's get your club's page ready",
+    "subtitulo": "Five steps, about ten minutes. You can stop whenever you like: whatever you save stays saved, and you can come back here from the panel home.",
+    "deTantos": "{hechos} of {total} done",
+    "pasoDe": "Step {numero} of {total}",
+    "atras": "← Back",
+    "seguir": "Next →",
+    "saltar": "Skip for now →",
+    "completar": "Complete",
+    "consejo": "A tip",
+    "ejemplo": {
+      "titulo": "What an example club looks like",
+      "texto": "The page of a made-up club in your sport, already complete: so you can see where you're heading.",
+      "boton": "See the example ↗"
+    },
+    "pasos": {
+      "club": {
+        "nombre": "Your club",
+        "titulo": "Your club's name and who you are",
+        "texto": "With the name, the town and a few lines about the club, your page already exists.",
+        "quienesSomos": "About us",
+        "ayudaDescripcion": "How many you are, which teams you have and what makes you special. It's the first thing a company reads.",
+        "ejemploDescripcion": "For example: \"Local basketball club with 310 members and 140 boys and girls in the youth section. We play every weekend at the municipal sports hall and in summer we run a tournament that fills the town\".",
+        "boton": "Save and continue →",
+        "consejo": "It doesn't need to be perfect: you can change it any time from Club profile."
+      },
+      "imagenes": {
+        "nombre": "Crest and cover",
+        "titulo": "Your crest and a cover photo",
+        "texto": "The crest and a good photo at the top are what make the page look like a serious club's.",
+        "consejo": "For the cover, a landscape photo of the team or a full stand. If children appear, make sure you have their families' permission."
+      },
+      "equipos": {
+        "nombre": "Teams",
+        "titulo": "Your teams",
+        "texto": "Add each team with its sport and age group. If you have several sports, each team has its own.",
+        "consejo": "With the number of players in each team, the page works out on its own how many people the club reaches, which is what companies look at most."
+      },
+      "oportunidades": {
+        "nombre": "Opportunities",
+        "titulo": "Your first opportunities",
+        "texto": "What you can offer a company. Press the button and we'll write them for you with your club's details: pick the ones that fit and publish them.",
+        "yaTienes": "You already have {n, plural, one {# published opportunity} other {# published opportunities}}.",
+        "aMano": "Rather write them yourselves? Go to <enlace>Opportunities</enlace>.",
+        "consejo": "Three or four well-chosen ones are better than twenty. You can always add more."
+      },
+      "compartir": {
+        "nombre": "Ready!",
+        "titulo": "Your page is ready to show",
+        "texto": "Now it's time to spread the word: see how it looks and download the dossier to send to five companies in your area.",
+        "verPagina": "See my page",
+        "dossier": "Download my dossier",
+        "inicio": "Back to home",
+        "consejo": "The companies that respond most are the local ones: the club parents' businesses, the café next door, the garage you always use."
       }
     }
   }

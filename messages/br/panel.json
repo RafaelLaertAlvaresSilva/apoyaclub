@@ -118,7 +118,8 @@
       "texto": "Ele se monta sozinho com a sua ficha e as suas oportunidades. Envie para cinco empresas da sua região: é assim que começam os patrocínios.",
       "accion": "Ver meu dossiê"
     },
-    "deTantos": "{hechos} de {total}"
+    "deTantos": "{hechos} de {total}",
+    "pasoAPaso": "Fazer passo a passo →"
   },
   "solicitudes": {
     "panelDelClub": "Painel do clube",
@@ -1691,6 +1692,65 @@
         "etiqueta": "Tarefas atrasadas",
         "hayQueMirar": "É hora de pôr em dia",
         "alDia": "Tudo em dia"
+      }
+    }
+  },
+  "empezar": {
+    "tituloPestana": "Primeiros passos",
+    "etiqueta": "Primeiros passos",
+    "titulo": "Vamos deixar pronta a página do seu clube",
+    "subtitulo": "Cinco passos, uns dez minutos. Você pode parar quando quiser: o que salvar fica salvo, e dá para voltar aqui pelo início do painel.",
+    "deTantos": "{hechos} de {total} feitos",
+    "pasoDe": "Passo {numero} de {total}",
+    "atras": "← Voltar",
+    "seguir": "Avançar →",
+    "saltar": "Pular por enquanto →",
+    "completar": "Completar",
+    "consejo": "Uma dica",
+    "ejemplo": {
+      "titulo": "Assim fica um clube de exemplo",
+      "texto": "A página de um clube inventado do seu esporte, já completa: para você ver aonde vai chegar.",
+      "boton": "Ver o exemplo ↗"
+    },
+    "pasos": {
+      "club": {
+        "nombre": "Seu clube",
+        "titulo": "Como se chama e quem vocês são",
+        "texto": "Com o nome, a cidade e algumas linhas sobre o clube, sua página já existe.",
+        "quienesSomos": "Quem somos",
+        "ayudaDescripcion": "Quantos vocês são, que times têm e o que os torna especiais. É a primeira coisa que uma empresa lê.",
+        "ejemploDescripcion": "Por exemplo: «Clube de basquete de bairro com 310 sócios e 140 crianças nas categorias de base. Jogamos todo fim de semana no ginásio municipal e nas férias organizamos um torneio que lota a cidade».",
+        "boton": "Salvar e avançar →",
+        "consejo": "Não precisa ficar perfeito: dá para mudar quando quiser em Perfil do clube."
+      },
+      "imagenes": {
+        "nombre": "Escudo e capa",
+        "titulo": "Seu escudo e uma foto de capa",
+        "texto": "O escudo e uma boa foto no topo são o que faz a página parecer a de um clube sério.",
+        "consejo": "Para a capa, uma foto horizontal do time ou da arquibancada cheia. Se aparecerem menores de idade, garanta a autorização das famílias."
+      },
+      "equipos": {
+        "nombre": "Times",
+        "titulo": "Seus times",
+        "texto": "Adicione cada time com o esporte e a categoria. Se o clube tem vários esportes, cada time leva o seu.",
+        "consejo": "Com o número de atletas de cada time, a página calcula sozinha quantas pessoas o clube alcança, que é o que uma empresa mais olha."
+      },
+      "oportunidades": {
+        "nombre": "Oportunidades",
+        "titulo": "Suas primeiras oportunidades",
+        "texto": "O que vocês podem oferecer a uma empresa. Clique no botão e deixamos tudo escrito com os dados do seu clube: escolha as que fazem sentido e publique.",
+        "yaTienes": "Vocês já têm {n, plural, one {# oportunidade publicada} other {# oportunidades publicadas}}.",
+        "aMano": "Prefere escrevê-las você mesmo? Vá em <enlace>Oportunidades</enlace>.",
+        "consejo": "Melhor três ou quatro bem escolhidas do que vinte. Sempre dá para adicionar mais."
+      },
+      "compartir": {
+        "nombre": "Pronta!",
+        "titulo": "Sua página já pode ser mostrada",
+        "texto": "Agora é divulgar: veja como ficou e baixe o dossiê para mandar a cinco empresas da sua região.",
+        "verPagina": "Ver minha página",
+        "dossier": "Baixar meu dossiê",
+        "inicio": "Voltar ao início",
+        "consejo": "As empresas que mais respondem são as próximas: a dos pais do clube, a lanchonete ao lado, a oficina de sempre."
       }
     }
   }

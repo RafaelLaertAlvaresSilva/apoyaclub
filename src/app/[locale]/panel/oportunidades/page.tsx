@@ -12,12 +12,10 @@ import {
   opportunityRowToOpportunity,
   type OpportunityRow,
 } from "@/lib/opportunity-mappers";
-import { calcularAlcance, cifraLlana, cifrasParaVender } from "@/lib/alcance";
-import { obtenerPartidosDelClub } from "@/lib/partidos-datos";
-import { intlLocaleDe } from "@/config/locales";
 import { createClient } from "@/lib/supabase/server";
 import { obtenerClubPublico } from "../../club/[slug]/data";
 import { GeneradorDeOportunidades } from "./components/GeneradorDeOportunidades";
+import { lineaDeDatosDelClub } from "./linea-de-datos";
 import { OportunidadesManager } from "./components/OportunidadesManager";
 import { tituloDelPanel } from "@/lib/titulo-del-panel";
 import { CabeceraDePagina } from "../components/CabeceraDePagina";
@@ -124,33 +122,4 @@ export default async function OportunidadesPage() {
       )}
     </div>
   );
-}
-
-/**
- * "Datos del Club…: Público de media en casa: 200 · Jugadores: 52…", la
- * línea que cierra cada propuesta generada. Las mismas cifras que la
- * portada del dossier. Null si el club todavía no tiene ninguna.
- */
-async function lineaDeDatosDelClub(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  clubId: string,
-  perfil: NonNullable<ReturnType<typeof clubRowToProfile>>,
-  equipos: ReturnType<typeof clubTeamRowToTeam>[],
-): Promise<string | null> {
-  const [tAlcance, tGen, locale] = await Promise.all([
-    getTranslations("panel.alcance.informe"),
-    getTranslations("panel.oportunidades.generador"),
-    getLocale(),
-  ]);
-  const intlLocale = intlLocaleDe(locale);
-  const partidos = await obtenerPartidosDelClub(supabase, clubId).catch(() => []);
-  const alcance = calcularAlcance(
-    { perfil, equipos, partidos },
-    (clave, valores) => tAlcance(clave, valores as never),
-    intlLocale,
-  );
-  const cifras = cifrasParaVender(alcance)
-    .map((cifra) => `${cifra.etiqueta}: ${cifraLlana(cifra.valor, intlLocale)}`)
-    .join(" · ");
-  return cifras ? tGen("datos", { club: perfil.name, cifras }) : null;
 }

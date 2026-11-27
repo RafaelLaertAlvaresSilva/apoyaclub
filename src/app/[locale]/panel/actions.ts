@@ -211,6 +211,57 @@ export async function guardarIdentidad(
   return { ok: true };
 }
 
+/**
+ * El primer paso del asistente (`/panel/empezar`): solo nombre,
+ * localidad, provincia y descripción.
+ *
+ * No se reutiliza `guardarIdentidad` porque esa guarda el formulario
+ * entero: con solo cuatro campos dejaría en blanco la web, las redes y
+ * el contacto de un club que ya los tuviera. Aquí se mandan solo estas
+ * columnas, y el `upsert` deja el resto como estaba (o crea la fila si
+ * es la primera vez, que es lo normal en este paso).
+ */
+export async function guardarLoBasico(
+  _estadoPrevio: EstadoGuardado,
+  formData: FormData,
+): Promise<EstadoGuardado> {
+  const t = await getTranslations("panel.acciones");
+  const contexto = await obtenerClubActual();
+  if ("error" in contexto) return { error: contexto.error };
+  const { supabase, user } = contexto;
+
+  const name = leerTexto(formData, "name");
+  const city = leerTexto(formData, "city");
+  if (!name) return { error: t("indicaNombreClub") };
+  if (!city) return { error: t("indicaLocalidadClub") };
+
+  const province = leerTexto(formData, "province");
+  const datosClub: Record<string, unknown> = {
+    id: user.id,
+    name,
+    city,
+    province,
+    description: leerTexto(formData, "description"),
+  };
+
+  // Con el código postal que ya tuviera guardado, si lo tiene: sin él,
+  // las coordenadas serían las del centro del pueblo y se perdería
+  // precisión en el buscador por distancia.
+  const { data: previo } = await supabase.from("clubs").select("postal_code").eq("id", user.id).maybeSingle<{ postal_code: string | null }>();
+  const coordenadas = await geocodificarDireccion({ city, province, postalCode: previo?.postal_code ?? null });
+  if (coordenadas) {
+    datosClub.latitude = coordenadas.latitude;
+    datosClub.longitude = coordenadas.longitude;
+    datosClub.geocoded_at = new Date().toISOString();
+  }
+
+  const { error } = await supabase.from("clubs").upsert(datosClub, { onConflict: "id" });
+  if (error) return fallo("guardarLoBasico", error, t("podidoGuardarIntentaloNuevo"));
+
+  revalidatePath(RUTA_PANEL);
+  return { ok: true };
+}
+
 /** Guarda la URL del logo ya subido a Storage (ver ImageUploader). */
 export async function guardarLogo(url: string): Promise<EstadoGuardado> {
   const t = await getTranslations("panel.acciones");
