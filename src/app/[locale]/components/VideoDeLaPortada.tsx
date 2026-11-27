@@ -22,6 +22,13 @@ import { useTranslations } from "next-intl";
  * de cabecera: ningún navegador deja que algo suene sin que lo pidas, y
  * un vídeo parado con un triángulo encima no lo pulsa casi nadie.
  *
+ * PERO SOLO CUANDO SE VE. Son entre 2 y 4 MB, y en el móvil el vídeo
+ * queda por debajo de la primera pantalla: quien no baja no tiene por
+ * qué pagarlos con sus datos, y mientras tanto no le roban ancho de
+ * banda al resto de la página. Hasta que asoma se ve la imagen fija.
+ * Quien tiene activado el ahorro de datos no lo descarga hasta que le
+ * da al play.
+ *
  * LOS MANDOS VAN DEBAJO DEL TELÉFONO, no encima del vídeo. Encima
  * taparían los últimos 40 px de la imagen, que es justo donde este
  * vídeo pone "sin permanencia · sin comisiones · www.apoyaclub.com".
@@ -40,7 +47,9 @@ export function VideoDeLaPortada({
   const t = useTranslations("home.video");
   const video = useRef<HTMLVideoElement>(null);
   const [conSonido, setConSonido] = useState(false);
-  const [enMarcha, setEnMarcha] = useState(true);
+  const [enMarcha, setEnMarcha] = useState(false);
+  /** Si lo ha parado la persona, no lo volvemos a arrancar nosotros. */
+  const paradoAMano = useRef(false);
   const [momento, setMomento] = useState(0);
   const [duracion, setDuracion] = useState(0);
 
@@ -70,8 +79,24 @@ export function VideoDeLaPortada({
       setEnMarcha(!elemento.paused);
     }
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
-      elemento.pause();
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const conexion = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    if (conexion?.saveData) return;
+
+    // Arranca al asomar y se para al salir de la pantalla (no gasta
+    // batería en algo que no se ve), salvo que lo haya parado la persona.
+    const observador = new IntersectionObserver(
+      ([entrada]) => {
+        if (entrada.isIntersecting) {
+          if (!paradoAMano.current && elemento.paused) void elemento.play().catch(() => {});
+        } else if (!elemento.paused) {
+          elemento.pause();
+        }
+      },
+      { threshold: 0.25 },
+    );
+    observador.observe(elemento);
+    return () => observador.disconnect();
   }, []);
 
   /**
@@ -103,8 +128,13 @@ export function VideoDeLaPortada({
   function alternarMarcha() {
     const elemento = video.current;
     if (!elemento) return;
-    if (elemento.paused) void elemento.play();
-    else elemento.pause();
+    if (elemento.paused) {
+      paradoAMano.current = false;
+      void elemento.play();
+    } else {
+      paradoAMano.current = true;
+      elemento.pause();
+    }
   }
 
   function alternarSonido() {
@@ -115,7 +145,10 @@ export function VideoDeLaPortada({
     setConSonido(!conSonido);
 
     // Pedir sonido es pedir verlo: si estaba parado, arranca.
-    if (elemento.paused) void elemento.play();
+    if (elemento.paused) {
+      paradoAMano.current = false;
+      void elemento.play();
+    }
   }
 
   /**
@@ -156,11 +189,10 @@ export function VideoDeLaPortada({
 
         <video
           ref={video}
-          autoPlay
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="none"
           poster={poster}
           aria-label={etiqueta}
           onPlay={alPonerse}
