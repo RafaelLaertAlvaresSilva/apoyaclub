@@ -110,6 +110,11 @@
       "porEscribir": "{n, plural, one {# clube ficou parado.} other {# clubes ficaram parados.}}",
       "porEscribirTexto": "Falta algum passo e não entram há uma semana, ou nunca entraram. É um bom momento para escrever para eles.",
       "verlos": "Ver para quem escrever"
+    },
+    "errores": {
+      "sesionCaducada": "Sua sessão expirou. Faça login novamente.",
+      "clubNoExiste": "Esse clube não existe.",
+      "otroPais": "Esse clube não é do seu país."
     }
   },
   "comisiones": {

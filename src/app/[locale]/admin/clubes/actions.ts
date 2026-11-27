@@ -1,6 +1,6 @@
 "use server";
 
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "@/i18n/navigation";
 import { fechaDeAccesoValida, fechaDelPlazo, finalDelDia } from "@/lib/acceso-gratuito";
@@ -60,8 +60,10 @@ async function obtenerAdminActual(
   idClub: string,
 ): Promise<{ admin: ReturnType<typeof createAdminClient>; acceso: AccesoAdmin } | { error: string }> {
   const acceso = await accesoAdminDeLaAccion();
+  // En el idioma del panel: un representante de Brasil lo ve en portugués.
+  const t = await getTranslations("admin.clubes.errores");
   if (!acceso || !idClub) {
-    return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
+    return { error: t("sesionCaducada") };
   }
 
   const admin = createAdminClient();
@@ -70,10 +72,10 @@ async function obtenerAdminActual(
     const { data } = await admin.auth.admin.getUserById(idClub);
     const cuenta = data?.user;
     if (!cuenta || cuenta.app_metadata?.role !== "club") {
-      return { error: "Ese club no existe." };
+      return { error: t("clubNoExiste") };
     }
     if (!puedeGestionarPais(acceso, paisDeLaCuenta(cuenta.app_metadata))) {
-      return { error: "Ese club no es de tu país." };
+      return { error: t("otroPais") };
     }
   }
 

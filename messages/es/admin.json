@@ -95,6 +95,11 @@
       "porEscribir": "{n, plural, one {# club se ha atascado.} other {# clubes se han atascado.}}",
       "porEscribirTexto": "Les falta algún paso y llevan una semana sin entrar, o no han entrado nunca. Es buen momento para escribirles.",
       "verlos": "Ver a quién escribir"
+    },
+    "errores": {
+      "sesionCaducada": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
+      "clubNoExiste": "Ese club no existe.",
+      "otroPais": "Ese club no es de tu país."
     }
   },
   "empresas": {
