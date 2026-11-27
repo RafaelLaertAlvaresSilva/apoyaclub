@@ -1,11 +1,12 @@
 import type { Bloque, CategoriaDeGuia, Guia } from "./tipos";
 import { comoConseguirPatrocinadores } from "@/content/guias/como-conseguir-patrocinadores";
+import { GUIAS_DE_DEPORTE } from "@/content/guias/deportes";
 
 export type { Bloque, CategoriaDeGuia, Guia } from "./tipos";
 
 /** Las guías publicadas, de la más nueva a la más antigua. Una guía
  * nueva se añade aquí arriba. */
-export const GUIAS: Guia[] = [comoConseguirPatrocinadores];
+export const GUIAS: Guia[] = [comoConseguirPatrocinadores, ...GUIAS_DE_DEPORTE];
 
 /** Las guías solo están en español por ahora (los clubes y empresas que
  * llegan hoy son de España). Cuando haya traducción, se añade aquí. */
